@@ -1,30 +1,69 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+    <v-app>    
+        <v-navigation-drawer v-model="drawer" absolute temporary>
+            <v-card class="mx-auto" width="300">
+                <v-list>
+                
+                    <v-list-item>
+                        <v-list-item-content>
+                            <v-list-item-title class="title">Money Money</v-list-item-title>
+                            <v-list-item-subtitle>{{ $store.state.version }}</v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
+
+                    <v-divider></v-divider>
+                
+<!--                     HELP -->
+                    <v-list-group :value="false" prepend-icon="mdi-lifebuoy">
+                        <template v-slot:activator>
+                            <v-list-item-title>{{ $t("Help") }}</v-list-item-title>
+                        </template>
+                      
+                        <v-list-item key="1" href="https://github.com/turulomio/vipcontacts/" target="_blank">
+                            <v-list-item-title>{{ $t('Vip Contacts Github') }}</v-list-item-title>
+                        </v-list-item>
+                        
+                        <v-list-item key="2" href="https://github.com/turulomio/django_vipcontacts/" target="_blank">
+                            <v-list-item-title>{{ $t('Django Vip Contacts Github') }}</v-list-item-title>
+                        </v-list-item>
+                    </v-list-group>
+                </v-list>
+            </v-card>
+        </v-navigation-drawer>
+        
+        <v-app-bar color="primary" dark  fixed fill-height app >
+            <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+            <v-btn color="primary" :to="{ name: 'home'}"><v-icon dark>mdi-home</v-icon></v-btn>
+            <v-spacer />
+            <h1 class="font-weight-black text-no-wrap text-truncate" >{{ $t("Money Money. Another way to manage your finances") }}</h1>
+            <v-spacer />
+            <SwitchLanguages />
+            <btnLogIn v-show="!this.$store.state.logged"/>
+            <btnLogOut v-show="this.$store.state.logged"/>
+
+        </v-app-bar>
+        <v-main>   
+            <router-view></router-view>
+        </v-main>
+    </v-app>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+<script>
+import btnLogIn from './components/btnLogIn';
+import btnLogOut from './components/btnLogOut';
+import SwitchLanguages from './components/SwitchLanguages.vue';
+export default {
+    name: 'App',
+    components: {
+        btnLogIn,
+        btnLogOut,
+        SwitchLanguages,
+    },
+    data () {
+        return {
+            logged:false,
+            drawer: false,
+        }
+    },
+};
+</script>

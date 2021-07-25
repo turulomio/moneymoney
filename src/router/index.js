@@ -2,11 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 
 const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
+  { path: `${process.env.VUE_APP_PUBLIC_PATH}/home/`, name: 'home', component: Home },
   {
     path: '/about',
     name: 'About',
