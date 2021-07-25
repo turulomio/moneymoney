@@ -1,6 +1,6 @@
 <template>
     <div>
-    <v-btn @click.native.stop="dialog = true" color="primary">
+    <v-btn @click.stop="dialog = true" color="primary">
         <v-icon>mdi-account</v-icon>
         <span class="mr-2 text-no-wrap text-truncate">{{ $t("Log in") }}</span>
     </v-btn>    
@@ -13,8 +13,8 @@
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click.native="login()" :disabled="!form_valid">{{ $t("Log in") }}</v-btn>
-                <v-btn color="error" @click.native="dialog = false">{{ $t("Cancel") }}</v-btn>
+                <v-btn color="primary" @click="login()" :disabled="!form_valid">{{ $t("Log in") }}</v-btn>
+                <v-btn color="error" @click="dialog = false">{{ $t("Cancel") }}</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -45,7 +45,7 @@
                 const formData = new FormData();
                 formData.append('username', this.user);
                 formData.append('password', this.password);
-              
+                console.log(this.$store.state)
                 axios.post(`${this.$store.state.apiroot}/login/`, formData)
                 .then((response) => {
                     if (this.parseResponse(response)==true){

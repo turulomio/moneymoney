@@ -18,7 +18,7 @@ export const store = new Vuex.Store({
         logged:false,
         version: "0.3.0",
         versiondate: new Date(2021, 3, 23, 9, 22),
-        apiroot: process.env.VUE_APP_DJANGO_VIPCONTACTS_URL,
+        apiroot: process.env.VUE_APP_DJANGO_MONEYMONEY_URL,
         publicPath: process.env.VUE_APP_PUBLIC_PATH,
         catalogs: {
             addresstype: [],
