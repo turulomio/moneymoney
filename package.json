@@ -1,36 +1,64 @@
 {
-  "name": "moneymoney",
-  "version": "0.1.0",
+  "name": "vipcontacts",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --port 8004",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "serve": "vue-cli-service serve --port 8003 --config webpack.dev.js",
+    "build": "vue-cli-service build --config webpack.prod.js",
+    "lint": "vue-cli-service lint",
+    "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\""
   },
   "dependencies": {
-    "@mdi/font": "5.9.55",
+    "@intlify/vue-i18n-loader": "^1.1.0",
+    "@mdi/font": "^5.9.55",
+    "@mdi/js": "^5.9.55",
     "axios": "^0.21.1",
-    "core-js": "^3.6.5",
+    "babel-eslint": "^10.1.0",
+    "core-js": "^3.15.1",
+    "echarts": "^5.1.2",
+    "eslint-plugin-vue": "^7.12.1",
+    "ics": "^2.29.0",
+    "jspdf": "^2.3.1",
     "moment": "^2.29.1",
-    "roboto-fontface": "*",
-    "vue": "^3.0.0",
-    "vue-i18n": "^9.1.7",
-    "vue-router": "^4.0.0-0",
-    "vuetify": "^3.0.0-alpha.0",
-    "vuex": "^4.0.0-0"
+    "npm-check-updates": "^11.7.1",
+    "vcards-js": "^2.10.0",
+    "vue": "^2.6.14",
+    "vue-cli-plugin-vuetify": "^2.4.1",
+    "vue-echarts": "*",
+    "vue-i18n": "^8.24.5",
+    "vue-qrcode-component": "^2.1.1",
+    "vue-router": "^3.5.2",
+    "vuetify": "^2.5.5",
+    "vuetify-loader": "^1.7.2",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-plugin-vuex": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0",
-    "sass": "~1.32.0",
-    "sass-loader": "^10.0.0",
-    "vue-cli-plugin-vuetify": "~2.4.1"
-  }
+    "@vue/cli-plugin-babel": "~4.5.13",
+    "@vue/cli-plugin-eslint": "~4.5.13",
+    "@vue/cli-service": "~4.5.13",
+    "@vue/composition-api": "*",
+    "sass": "^1.35.1",
+    "sass-loader": "^10.2.0",
+    "vue-cli-plugin-i18n": "~2.1.1",
+    "vue-template-compiler": "^2.6.14"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }
