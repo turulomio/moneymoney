@@ -12,6 +12,17 @@
                     </v-list-item>
 
                     <v-divider></v-divider>
+
+<!--                     HOME -->
+                    <v-list-item link router :to="{ name: 'home'}">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-home</v-icon></v-list-item-icon>
+                        <v-list-item-title>Home</v-list-item-title>
+                    </v-list-item>
+<!--                     BANKS -->
+                    <v-list-item link router :to="{ name: 'banks_list'}">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-home</v-icon></v-list-item-icon>
+                        <v-list-item-title>{{ $t("Banks") }}</v-list-item-title>
+                    </v-list-item>
                 
 <!--                     HELP -->
                     <v-list-group :value="false" prepend-icon="mdi-lifebuoy">

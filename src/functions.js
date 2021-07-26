@@ -1,7 +1,32 @@
 import moment from 'moment';
 import axios from 'axios'
 
-
+// Function to use "{0} {1}".format(a, b) style
+String.prototype.format = function() {
+    var formatted = this;
+    for (var i = 0; i < arguments.length; i++) {
+        var regexp = new RegExp('\\{'+i+'\\}', 'gi');
+        formatted = formatted.replace(regexp, arguments[i]);
+    }
+    return formatted;
+};
+export function currency_symbol(currency){
+    if (currency=='EUR'){
+        return '€';
+    } 
+    else if (currency=='USD'){
+        return'$';
+    }
+    else if (currency=='u'){
+        return'u';
+    }
+    else {
+            return "???";
+    }
+}
+export function my_round(num, decimals = 2) {
+    return Math.round(num*Math.pow(10, decimals))/Math.pow(10, decimals)
+}
 
 export function age_today(birth_iso_string) {
     return age_in_a_date(birth_iso_string, new Date().toISOString())
@@ -95,6 +120,8 @@ export function myheaders_formdata(){
 }
 
 export function vuex_update_catalogs(){   
+    return
+    /*
     axios.options(`${this.$store.state.apiroot}/api/persons/`, this.myheaders())
     .then((response) => {
         this.$store.state.catalogs.persongender= sortObjectsArray(response.data.actions.POST.gender.choices, "display_name")
@@ -109,7 +136,7 @@ export function vuex_update_catalogs(){
         return
     }, (error) => {
         this.parseResponseError(error)
-    });
+    });*/
 }
 
 export function logout(){
@@ -222,4 +249,44 @@ export function arrayobjects_to_stringofstrings(l, key){
     var s=""
     l.forEach(o => s=s+o[key].toString() + ", ")
     return s.slice(0,-2)
+}
+
+export function percentage_generic_string(num, locale, decimals=2){
+    if (isNaN(num)) return "- - - %"
+    return "{0} %".format(my_round(num*100,decimals).toLocaleString(locale,{ minimumFractionDigits: decimals,  }));
+}
+
+export function percentage_generic_html(num, locale, decimals=2){
+    if (num>=0 || isNaN(num)){
+        return "<span>{0}</span>".format(percentage_generic_string(num, locale, decimals))
+    } else {
+        return "<span class='vuered'>{0}</span>".format(percentage_generic_string(num, locale, decimals));
+    }
+}
+export function currency_generic_string(num, currency, locale, decimals=2){
+    return "{0} {1}".format(my_round(num,decimals).toLocaleString(locale, { minimumFractionDigits: decimals,  }), currency_symbol(currency));
+}
+
+export function currency_generic_html(num, currency, locale, decimals=2){
+    if (num>=0){
+        return currency_generic_string(num, currency, locale, decimals)
+    } else {
+        return "<span class='vuered'>{0}</span>".format(currency_generic_string(num, currency, locale, decimals));
+    }
+}
+
+
+export function listobjects_sum(lo,key){
+    return lo.reduce((accum,item) => accum + item[key], 0)
+}
+
+export function listobjects_average_ponderated(lo,key1, key2){
+    var prod=0;
+    var total=0;
+    var i;
+    for (i = 0; i < lo.length; i++) {
+        prod=prod+lo[i][key1]*lo[i][key2]
+        total=total+lo[i][key2]
+    } 
+    return prod/total
 }

@@ -30,9 +30,13 @@ export const store = new Vuex.Store({
             mimetype:[],
         },
         lastsearch: "",
+        localcurrency:"EUR",
+        localzone:"Europe/Madrid",
     },
 })
 import About from './components/about';
+import Home from './components/Home';
+import BanksList from './components/BanksList';
 import Settings from './components/Settings';
 import Statistics from './components/Statistics';
 
@@ -44,22 +48,52 @@ const router = new VueRouter({
   base: __dirname,
   routes: [
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/about/`, name: 'about', component: About },
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/home/`, name: 'home', component: Home },
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/banks_list/`, name: 'banks_list', component: BanksList },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/settings/`, name: 'settings', component: Settings },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/statistics/`, name: 'statistics', component: Statistics },
   ]
 });
 
 // MIXIN GLOBAL
-import {myheaders,parseResponse,parseResponseError,getLocalStorage,myheaders_formdata} from './functions.js'
+import {myheaders,parseResponse,parseResponseError,getLocalStorage, listobjects_sum,myheaders_formdata,currency_generic_html,currency_generic_string,percentage_generic_html,percentage_generic_string} from './functions.js'
 
 Vue.mixin({
-  methods: {
-    myheaders,
-    myheaders_formdata,
-    parseResponse,
-    parseResponseError,
-    getLocalStorage,
-  }
+    data: function () {
+        return {
+        }
+    },
+    methods: {
+        myheaders,
+        myheaders_formdata,
+        parseResponse,
+        parseResponseError,
+        getLocalStorage,
+
+        listobjects_sum,
+
+
+        currency_string(num, currency, decimals=2){
+            return currency_generic_string(num, currency, this.$i18n.locale,decimals )
+        },
+        currency_html(num, currency, decimals=2){
+            return currency_generic_html(num, currency, this.$i18n.locale,decimals )
+        },
+        percentage_string(num, decimals=2){
+            return percentage_generic_string(num,this.$i18n.locale,decimals )
+        },
+        percentage_html(num, decimals=2){
+            return percentage_generic_html(num,this.$i18n.locale,decimals )
+        },
+        localcurrency_string(num, decimals=2){
+            return currency_generic_string(num, this.$store.state.localcurrency, this.$i18n.locale,decimals )
+        },
+        localcurrency_html(num, decimals=2){
+            return currency_generic_html(num, this.$store.state.localcurrency, this.$i18n.locale,decimals )
+        },
+
+
+    }
 })
 
 new Vue({
