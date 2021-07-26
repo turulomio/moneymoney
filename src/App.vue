@@ -20,7 +20,7 @@
                     </v-list-item>
 <!--                     BANKS -->
                     <v-list-item link router :to="{ name: 'banks_list'}">
-                        <v-list-item-icon><v-icon color="#757575;">mdi-home</v-icon></v-list-item-icon>
+                        <v-list-item-icon><v-icon color="#757575;">mdi-bank</v-icon></v-list-item-icon>
                         <v-list-item-title>{{ $t("Banks") }}</v-list-item-title>
                     </v-list-item>
                 
@@ -30,6 +30,11 @@
                             <v-list-item-title>{{ $t("Help") }}</v-list-item-title>
                         </template>
                       
+                        <v-list-item link router :to="{ name: 'about'}">
+                            <v-list-item-icon><v-icon color="#757575;">mdi-home</v-icon></v-list-item-icon>
+                            <v-list-item-title>{{ $t("About")}}</v-list-item-title>
+                        </v-list-item>
+
                         <v-list-item key="1" href="https://github.com/turulomio/vipcontacts/" target="_blank">
                             <v-list-item-title>{{ $t('Vip Contacts Github') }}</v-list-item-title>
                         </v-list-item>
@@ -78,3 +83,9 @@ export default {
     },
 };
 </script>
+<style >
+h1   {
+    text-align: center;
+    font-weight: bold;
+}
+</style>
