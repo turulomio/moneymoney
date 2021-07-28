@@ -21,6 +21,7 @@
                     <div v-html="localcurrency_html(item.balance_total )"></div>
                 </template>  
                 <template v-slot:[`item.actions`]="{ item }">
+                    <v-icon small class="mr-2" @click="viewItem(item)">mdi-eye</v-icon>
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small @click="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
                 </template>                            
@@ -55,14 +56,22 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <v-dialog v-model="dialog_view" max-width="800px" max-height="800px">
+            <v-card class="pa-4">
+                <BanksView :bank="bank" :key="key"></BanksView>
+            </v-card>
+        </v-dialog>
+
     </div>
 </template>
 <script>
     import axios from 'axios'
     import MyMenuInline from './MyMenuInline.vue'
+    import BanksView from './BanksView.vue'
     export default {
         components:{
             MyMenuInline,
+            BanksView,
         },
         data(){ 
             return{
@@ -97,6 +106,9 @@
                 bank: this.empty_bank(),
                 editing:false,
                 loading_table:false,
+
+                dialog_view:false,
+                key:0,
             }
         },
         methods: {
@@ -120,6 +132,11 @@
                 this.editing=true
                 this.bank=item
                 this.dialog=true
+            },
+            viewItem (item) {
+                this.key=this.key+1
+                this.bank=item
+                this.dialog_view=true
             },
             deleteItem (item) {
                var r = confirm(this.$t("Do you want to delete this item?"))

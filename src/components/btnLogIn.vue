@@ -6,7 +6,7 @@
     </v-btn>    
     <v-dialog v-model="dialog" max-width="450">
         <v-card  class="login">
-            <v-card-title class="headline">{{ $t("Login in Vip Contacts") }}</v-card-title>
+            <v-card-title class="headline">{{ $t("Login in Money Money") }}</v-card-title>
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <v-text-field v-model="user" type="text" :counter="75" :label="$t('User')" required :placeholder="$t('Enter user')" autofocus :rules="RulesTextRequired75"/>
                 <v-text-field v-model="password" type="password" :label="$t('Password')" :counter="75" :placeholder="$t('Enter password')" :rules="RulesTextRequired75"/>
