@@ -49,7 +49,7 @@ const router = new VueRouter({
   routes: [
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/about/`, name: 'about', component: About },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/home/`, name: 'home', component: Home },
-    { path: `${process.env.VUE_APP_PUBLIC_PATH}/banks_list/`, name: 'banks_list', component: BanksList },
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/banks/list/`, name: 'banks_list', component: BanksList },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/settings/`, name: 'settings', component: Settings },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/statistics/`, name: 'statistics', component: Statistics },
   ]

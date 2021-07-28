@@ -87,5 +87,6 @@ export default {
 h1   {
     text-align: center;
     font-weight: bold;
+    padding-top: 6px;
 }
 </style>
