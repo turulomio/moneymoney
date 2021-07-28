@@ -47,6 +47,7 @@ const router = new VueRouter({
   mode: 'history',
   base: __dirname,
   routes: [
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/`, redirect: `${process.env.VUE_APP_PUBLIC_PATH}/home/` }, 
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/about/`, name: 'about', component: About },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/home/`, name: 'home', component: Home },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/banks/list/`, name: 'banks_list', component: BanksList },

@@ -7,7 +7,7 @@
         </h1>
         <v-card outlined class="ma-4 pa-4">
             <v-checkbox v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" ></v-checkbox>
-            <v-data-table :headers="headers" :items="data" sort-by="name" class="elevation-1" hide-default-footer>
+            <v-data-table :headers="headers" :items="data" sort-by="name" class="elevation-1" hide-default-footer :loading="loading_table">
                 <template v-slot:[`item.active`]="{ item }">
                     <v-icon small v-if="item.active" >mdi-check-outline</v-icon>
                 </template>  
@@ -96,6 +96,7 @@
                 form_valid: false,
                 bank: this.empty_bank(),
                 editing:false,
+                loading_table:false,
             }
         },
         methods: {
@@ -138,10 +139,12 @@
                 });
             },
             update_table(){
+                this.loading_table=true
                 axios.get(`${this.$store.state.apiroot}/api/bankswithbalance?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
                     this.data=response.data
                     console.log(response);
+                    this.loading_table=false
                 }, (error) => {
                     this.parseResponseError(error)
                 });

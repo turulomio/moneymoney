@@ -2,6 +2,8 @@
     <div class="paragraph">
         <h1>{{ $t(`Wellcome to Money Money`) }}</h1>
         <h2>{{ `${$store.state.version} (${$store.state.versiondate.toISOString().slice(0,10)})` }}</h2>
+
+        <v-img src="@/assets/moneymoney.png" height="200px" contain ></v-img>
     </div>
 </template>
 
