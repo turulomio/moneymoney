@@ -13,11 +13,6 @@
 
                     <v-divider></v-divider>
 
-<!--                     HOME -->
-                    <v-list-item link router :to="{ name: 'home'}">
-                        <v-list-item-icon><v-icon color="#757575;">mdi-home</v-icon></v-list-item-icon>
-                        <v-list-item-title>Home</v-list-item-title>
-                    </v-list-item>
 <!--                     BANKS -->
                     <v-list-item link router :to="{ name: 'banks_list'}">
                         <v-list-item-icon><v-icon color="#757575;">mdi-bank</v-icon></v-list-item-icon>
@@ -45,12 +40,12 @@
                             <v-list-item-title>{{ $t("About")}}</v-list-item-title>
                         </v-list-item>
 
-                        <v-list-item key="1" href="https://github.com/turulomio/vipcontacts/" target="_blank">
-                            <v-list-item-title>{{ $t('Vip Contacts Github') }}</v-list-item-title>
+                        <v-list-item key="1" href="https://github.com/turulomio/moneymoney/" target="_blank">
+                            <v-list-item-title>{{ $t('Money Money Github') }}</v-list-item-title>
                         </v-list-item>
                         
-                        <v-list-item key="2" href="https://github.com/turulomio/django_vipcontacts/" target="_blank">
-                            <v-list-item-title>{{ $t('Django Vip Contacts Github') }}</v-list-item-title>
+                        <v-list-item key="2" href="https://github.com/turulomio/django_moneymoney/" target="_blank">
+                            <v-list-item-title>{{ $t('Django Money Money Github') }}</v-list-item-title>
                         </v-list-item>
                     </v-list-group>
                 </v-list>
