@@ -23,6 +23,16 @@
                         <v-list-item-icon><v-icon color="#757575;">mdi-bank</v-icon></v-list-item-icon>
                         <v-list-item-title>{{ $t("Banks") }}</v-list-item-title>
                     </v-list-item>
+<!--                     ACCOUNTS -->
+                    <v-list-item link router :to="{ name: 'accounts_list'}">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-bank</v-icon></v-list-item-icon>
+                        <v-list-item-title>{{ $t("Accounts") }}</v-list-item-title>
+                    </v-list-item>
+<!--                     INVESTMENTS -->
+                    <v-list-item link router :to="{ name: 'investments_list'}">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-bank</v-icon></v-list-item-icon>
+                        <v-list-item-title>{{ $t("Investments") }}</v-list-item-title>
+                    </v-list-item>
                 
 <!--                     HELP -->
                     <v-list-group :value="false" prepend-icon="mdi-lifebuoy">
@@ -88,5 +98,13 @@ h1   {
     text-align: center;
     font-weight: bold;
     padding-top: 6px;
+}
+
+span.vuered{
+    color:red;
+}
+.vuegreen{
+    color: Green;
+    font-weight: 900;
 }
 </style>
