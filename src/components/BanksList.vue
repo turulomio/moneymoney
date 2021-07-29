@@ -26,7 +26,7 @@
                     <v-icon small @click="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
                 </template>                            
                 <template v-slot:[`body.append`]="{headers}">
-                    <tr style="background-color: lightgrey">
+                    <tr style="background-color: WhiteSmoke">
                         <td v-for="(header,i) in headers" :key="i">
                             <div v-if="header.value == 'name'">
                                 Total
@@ -56,7 +56,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-        <v-dialog v-model="dialog_view" max-width="800px" max-height="800px">
+        <v-dialog v-model="dialog_view">
             <v-card class="pa-4">
                 <BanksView :bank="bank" :key="key"></BanksView>
             </v-card>

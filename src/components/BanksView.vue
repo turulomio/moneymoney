@@ -11,16 +11,16 @@
                 <template v-slot:[`item.active`]="{ item }">
                     <v-icon small v-if="item.active" >mdi-check-outline</v-icon>
                 </template>  
-                <template v-slot:[`item.balance_accounts`]="{ item }">
-                    <div v-html="localcurrency_html(item.balance_accounts )"></div>
+                <template v-slot:[`item.balance_user`]="{ item }">
+                    <div v-html="localcurrency_html(item.balance_user )"></div>
                 </template>                          
                 <template v-slot:[`body.append`]="{headers}">
-                    <tr style="background-color: lightgrey">
+                    <tr style="background-color: WhiteSmoke">
                         <td v-for="(header,i) in headers" :key="i">
                             <div v-if="header.value == 'name'">
                                 Total
                             </div>
-                            <div v-if="header.value == 'balance_accounts'" align="right" v-html="localcurrency_html(listobjects_sum(accounts_items,'balance_accounts'))">
+                            <div v-if="header.value == 'balance_user'" align="right" v-html="localcurrency_html(listobjects_sum(accounts_items,'balance_user'))">
                             </div>
                         </td>
                     </tr>
@@ -33,16 +33,16 @@
                 <template v-slot:[`item.active`]="{ item }">
                     <v-icon small v-if="item.active" >mdi-check-outline</v-icon>
                 </template>  
-                <template v-slot:[`item.balance_investments`]="{ item }">
-                    <div v-html="localcurrency_html(item.balance_investments )"></div>
+                <template v-slot:[`item.balance_user`]="{ item }">
+                    <div v-html="localcurrency_html(item.balance_user )"></div>
                 </template>                          
                 <template v-slot:[`body.append`]="{headers}">
-                    <tr style="background-color: lightgrey">
+                    <tr style="background-color: WhiteSmoke">
                         <td v-for="(header,i) in headers" :key="i">
                             <div v-if="header.value == 'name'">
                                 Total
                             </div>
-                            <div v-if="header.value == 'balance_investments'" align="right" v-html="localcurrency_html(listobjects_sum(investments_items,'balance_investments'))">
+                            <div v-if="header.value == 'balance_user'" align="right" v-html="localcurrency_html(listobjects_sum(investments_items,'balance_user'))">
                             </div>
                         </td>
                     </tr>
@@ -65,12 +65,12 @@
                 accounts_headers: [
                     { text: this.$t('Name'), sortable: true, value: 'name'},
                     { text: this.$t('Active'), value: 'active',  width: "12%"},
-                    { text: this.$t('Balance'), value: 'balance_accounts', align:'right',  width: "12%"},
+                    { text: this.$t('Balance'), value: 'balance_user', align:'right',  width: "12%"},
                 ],
                 investments_headers: [
                     { text: this.$t('Name'), sortable: true, value: 'name'},
                     { text: this.$t('Active'), value: 'active',  width: "12%"},
-                    { text: this.$t('Balance'), value: 'balance_accounts', align:'right',  width: "12%"},
+                    { text: this.$t('Balance'), value: 'balance_user', align:'right',  width: "12%"},
                 ],
                 accounts_items:[],
                 investments_items:[],
@@ -82,7 +82,7 @@
         methods: {
             update_accounts(){
                 this.loading_accounts=true
-                axios.get(`${this.$store.state.apiroot}/api/accounts?bank=${this.bank.id}`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/api/accountswithbalance?bank=${this.bank.id}`, this.myheaders())
                 .then((response) => {
                     this.loading_accounts=false
                     this.accounts_items=response.data
@@ -94,7 +94,7 @@
             },
             update_investments(){
                 this.loading_investments=true
-                axios.get(`${this.$store.state.apiroot}/api/investments?bank=${this.bank.id}`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/api/investmentswithbalance?bank=${this.bank.id}`, this.myheaders())
                 .then((response) => {
                     this.key=this.key+1
                     this.loading_investments=false
