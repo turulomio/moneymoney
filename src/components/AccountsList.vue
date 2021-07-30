@@ -79,7 +79,7 @@
                 showActive:true,
                 accounts_headers: [
                     { text: this.$t('Name'), sortable: true, value: 'name'},
-                    { text: this.$t('Bank'), sortable: true, value: 'banks.name'},
+                    { text: this.$t('Bank'), sortable: true, value: 'banks__name'},
                     { text: this.$t('Active'), value: 'active',  width: "8%"},
                     { text: this.$t('Number'), value: 'number',  width: "8%", align:'right'},
                     { text: this.$t('Balance'), value: 'balance_account',  width: "8%", align:'right'},
