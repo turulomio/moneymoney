@@ -16,7 +16,10 @@
                 </template>     
                 <template v-slot:[`item.balance_account`]="{ item }">
                     <div v-html="currency_html(item.balance_account, item.currency )"></div>
-                </template>          
+                </template>                   
+                <template v-slot:[`item.active`]="{ item }">
+                    <v-icon small v-if="item.active" >mdi-check-outline</v-icon>
+                </template>         
 
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small class="mr-2" @click="viewItem(item)">mdi-eye</v-icon>
@@ -39,12 +42,12 @@
         <v-dialog v-model="dialog" max-width="550">
             <v-card class="pa-4">
                 <v-card-title class="headline">{{dialog_title()}}</v-card-title>
-                <v-form ref="form" v-model="form_valid" lazy-validation>
-                    <v-text-field v-model="account.name" type="text" :label="$t('Bank name')" required :placeholder="$t('Bank name')" autofocus/>
+                <v-form ref="form" v-model="form_valid" >
+                    <v-text-field v-model="account.name" type="text" :label="$t('Account name')" required :placeholder="$t('Account name')" autofocus :rules="RulesString(200,false)" counter="200"/>
                     <v-checkbox v-model="account.active" :label="$t('Is active?')" ></v-checkbox>
-                    <v-text-field v-model="account.number" type="text" :label="$t('Account number')" required :placeholder="$t('Account number')"/>
-                    <v-text-field v-model="account.currency" type="text" :label="$t('Account currency')" required :placeholder="$t('Account currency')"/>
-<v-text-field v-model="account.bank" type="text" :label="$t('Account bank')" required :placeholder="$t('Account bank')"/>
+                    <v-text-field v-model="account.number" type="text" :label="$t('Account number')" required :placeholder="$t('Account number')" :rules="RulesString(30,true)" counter="30"/>
+                    <v-autocomplete :items="$store.state.catalogs.currencies" v-model="account.currency" :label="$t('Select a currency')" item-text="fullname" item-value="id" required :rules="RulesSelection(false)"></v-autocomplete>
+                    <v-autocomplete :items="$store.state.catalogs.banks.filter(v =>v.active==true)" v-model="account.bank" :label="$t('Select a bank')" item-text="name" item-value="url" required :rules="RulesSelection(false)"></v-autocomplete>
                 </v-form>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -76,6 +79,7 @@
                 showActive:true,
                 accounts_headers: [
                     { text: this.$t('Name'), sortable: true, value: 'name'},
+                    { text: this.$t('Bank'), sortable: true, value: 'banks.name'},
                     { text: this.$t('Active'), value: 'active',  width: "8%"},
                     { text: this.$t('Number'), value: 'number',  width: "8%", align:'right'},
                     { text: this.$t('Balance'), value: 'balance_account',  width: "8%", align:'right'},
@@ -159,10 +163,10 @@
             },
             update_table(){
                 this.loading_accounts=true
-                axios.get(`${this.$store.state.apiroot}/api/accountswithbalance?active=${this.showActive}`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/accounts/withbalance?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
                     this.accounts_items=response.data
-                    console.log(response);
+                    console.log(response.data);
                     this.loading_accounts=false
                 }, (error) => {
                     this.parseResponseError(error)
@@ -179,6 +183,7 @@
                 }
             },
             acceptDialog(){
+                console.log(this.account)
                 if (this.editing==true){               
                     axios.put(this.account.url, this.account, this.myheaders())
                     .then((response) => {

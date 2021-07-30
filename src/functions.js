@@ -28,25 +28,6 @@ export function my_round(num, decimals = 2) {
     return Math.round(num*Math.pow(10, decimals))/Math.pow(10, decimals)
 }
 
-export function age_today(birth_iso_string) {
-    return age_in_a_date(birth_iso_string, new Date().toISOString())
-}
-
-export function age_in_a_date(birth_iso_string, date_iso_string) {
-    //The magic number: 31557600000 is 24 * 3600 * 365.25 * 1000 
-    // ~~ Math.floor  
-    var birth = new Date(birth_iso_string)
-    var date = new Date(date_iso_string)
-    if (birth.getDate()==date.getDate() && birth.getMonth()==date.getMonth()){ // To avoid decimal errors in birthday
-        return date.getFullYear()-birth.getFullYear()
-    } else {
-        return ~~((date - birth ) / (31557600000));
-    }
-}
-
-export function fullName(person){
-    return `${person.name} ${person.surname} ${person.surname2}`
-}
 
 export function localtime(value){
     if (value){
@@ -75,30 +56,6 @@ export function AddressTypeName(value){
     return retypes.display_name;
 }
 
-export function CountryName(value){
-    var retypes=this.$store.state.catalogs.countries.find(t => t.value==value);
-    return retypes.display_name;
-}
-
-export function MailTypeName(value){
-    var retypes=this.$store.state.catalogs.mailtype.find(t => t.value==value);
-    return retypes.display_name;
-}
-
-export function LogTypeName(value){
-    var retypes=this.$store.state.catalogs.logtype.find(t => t.value==value);
-    return retypes.display_name;
-}
-
-export function PhoneTypeName(value){
-    var retypes=this.$store.state.catalogs.phonetype.find(t => t.value==value);
-    return retypes.display_name;
-}
-
-export function RelationshipTypeName(value){
-    var retypes=this.$store.state.catalogs.relationshiptype.find(t => t.value==value);
-    return retypes.display_name;
-}
 
 export function myheaders(){
     return {
@@ -120,23 +77,45 @@ export function myheaders_formdata(){
 }
 
 export function vuex_update_catalogs(){   
-    return
-    /*
-    axios.options(`${this.$store.state.apiroot}/api/persons/`, this.myheaders())
+    this.$store.state.catalogs.currencies=[
+        {
+            id: "EUR",
+            name: this.$t("Euro"),
+            fullname: this.$t("Euro")+ " (€)",
+            symbol: "€",
+        },
+        {
+            id: "USD",
+            name: this.$t("American dolar"),
+            fullname: this.$t("American dolar")+ " ($)",
+            symbol: "$",
+        },
+    ]
+
+
+    axios.get(`${this.$store.state.apiroot}/api/banks/`, this.myheaders())
     .then((response) => {
-        this.$store.state.catalogs.persongender= sortObjectsArray(response.data.actions.POST.gender.choices, "display_name")
-        this.$store.state.catalogs.countries= sortObjectsArray(response.data.actions.POST.address.child.children.country.choices, "display_name")
-        this.$store.state.catalogs.addresstype= sortObjectsArray(response.data.actions.POST.address.child.children.retypes.choices, "display_name")
-        this.$store.state.catalogs.mailtype= sortObjectsArray(response.data.actions.POST.mail.child.children.retypes.choices, "display_name")
-        this.$store.state.catalogs.phonetype= sortObjectsArray(response.data.actions.POST.phone.child.children.retypes.choices, "display_name")
-        this.$store.state.catalogs.logtype= sortObjectsArray(response.data.actions.POST.log.child.children.retypes.choices, "display_name")
-        this.$store.state.catalogs.relationshiptype=sortObjectsArray(response.data.actions.POST.relationship.child.children.retypes.choices, "display_name")
-        this.$store.state.catalogs.mimetype= sortObjectsArray(response.data.actions.POST.blob.child.children.mime.choices, "display_name")
-        console.log("Updated catalogs")
-        return
+        this.$store.state.catalogs.banks= sortObjectsArray(response.data, "name")
+        console.log("Updated banks")
+        console.log(response.data)
+        console.log(response.data.filter((v)=>v.active==true ))
     }, (error) => {
         this.parseResponseError(error)
-    });*/
+    });
+    axios.get(`${this.$store.state.apiroot}/api/accounts/`, this.myheaders())
+    .then((response) => {
+        this.$store.state.catalogs.accounts= sortObjectsArray(response.data, "name")
+        console.log("Updated accounts")
+    }, (error) => {
+        this.parseResponseError(error)
+    });
+    axios.get(`${this.$store.state.apiroot}/api/investments/`, this.myheaders())
+    .then((response) => {
+        this.$store.state.catalogs.investments= sortObjectsArray(response.data, "name")
+        console.log("Updated investments")
+    }, (error) => {
+        this.parseResponseError(error)
+    });
 }
 
 export function logout(){

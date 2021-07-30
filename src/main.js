@@ -62,7 +62,7 @@ const router = new VueRouter({
 
 // MIXIN GLOBAL
 import {myheaders,parseResponse,parseResponseError,getLocalStorage, listobjects_sum,myheaders_formdata,currency_generic_html,currency_generic_string,percentage_generic_html,percentage_generic_string} from './functions.js'
-
+import {RulesFloat,RulesInteger,RulesString,RulesSelection} from './rules.js'
 Vue.mixin({
     data: function () {
         return {
@@ -76,6 +76,10 @@ Vue.mixin({
         getLocalStorage,
 
         listobjects_sum,
+        RulesFloat,
+        RulesInteger,
+        RulesString,
+        RulesSelection,
 
 
         currency_string(num, currency, decimals=2){
