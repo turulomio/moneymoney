@@ -116,6 +116,17 @@ export function vuex_update_catalogs(){
     }, (error) => {
         this.parseResponseError(error)
     });
+    axios.get(`${this.$store.state.apiroot}/api/concepts/`, this.myheaders())
+    .then((response) => {
+        this.$store.state.catalogs.concepts= sortObjectsArray(response.data, "name")
+        console.log("Updated concepts")
+    }, (error) => {
+        this.parseResponseError(error)
+    });
+}
+
+export function get_concept(url){
+    return this.$store.state.catalogs.concepts.find(o => o.url==url)
 }
 
 export function logout(){

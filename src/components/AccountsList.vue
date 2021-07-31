@@ -89,7 +89,7 @@
                 accounts_items:[],
                 menuinline_items: [
                     {
-                        subheader: this.$t("Bank options"),
+                        subheader: this.$t("Account options"),
                         children: [
                             {
                                 name:"Add a new account",

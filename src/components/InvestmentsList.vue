@@ -75,7 +75,7 @@
         </v-dialog>
         <v-dialog v-model="dialog_view">
             <v-card class="pa-4">
-                <InvestmentsView :investment="investment" :key="key"></InvestmentsView>
+                <InvestmentsView :investment="investment" :key="key" :account="account"></InvestmentsView>
             </v-card>
         </v-dialog>
 
@@ -110,7 +110,7 @@
                 investments_items:[],
                 menuinline_items: [
                     {
-                        subheader: this.$t("Bank options"),
+                        subheader: this.$t("Investment options"),
                         children: [
                             {
                                 name:"Add a new investment",
