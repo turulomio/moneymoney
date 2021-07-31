@@ -67,19 +67,19 @@
             return this.currency_generic_html(value, this.currency_account, this.locale)
         },
         editAO(item){
-            window.location.href=`${this.url_root}accountoperation/update/${item.id}`
+            this.$emit('editAO', item)
         },
         deleteAO(item){
-            window.location.href=`${this.url_root}accountoperation/delete/${item.id}`
+            this.$emit('deleteAO', item)
         },
         table_headers(){
             return [
-                { text: this.$t('Date and time'), value: 'datetime', sortable: true },
-                { text: this.$t('Concept'), value: 'concepts', sortable: true },
-                { text: this.$t('Amount'), value: 'amount', sortable: false, align:"right"},
-                { text: this.$t('Balance'), value: 'balance', sortable: false, align:"right"},
+                { text: this.$t('Date and time'), value: 'datetime', sortable: true, width:"10%" },
+                { text: this.$t('Concept'), value: 'concepts', sortable: true, width:"20%"},
+                { text: this.$t('Amount'), value: 'amount', sortable: false, align:"right", width:"8%"},
+                { text: this.$t('Balance'), value: 'balance', sortable: false, align:"right", width:"8%"},
                 { text: this.$t('Comment'), value: 'comment', sortable: true, width:"30%"},
-                { text: this.$t('Actions'), value: 'actions', sortable: false },
+                { text: this.$t('Actions'), value: 'actions', sortable: false , width:"6%"},
             ]
         },
         gotoLastRow(){

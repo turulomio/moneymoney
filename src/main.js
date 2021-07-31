@@ -4,6 +4,7 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import i18n from './i18n'
 import VueRouter from 'vue-router';
+import DatetimePicker from 'vuetify-datetime-picker'
 
 import "echarts";
 import ECharts from 'vue-echarts'
@@ -11,6 +12,7 @@ Vue.component('v-chart', ECharts)
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
+Vue.use(DatetimePicker)
 
 export const store = new Vuex.Store({
     state: {
@@ -61,7 +63,19 @@ const router = new VueRouter({
 });
 
 // MIXIN GLOBAL
-import {myheaders,parseResponse,parseResponseError,getLocalStorage, listobjects_sum,myheaders_formdata,currency_generic_html,currency_generic_string,percentage_generic_html,percentage_generic_string} from './functions.js'
+import {
+    myheaders,
+    parseResponse,
+    parseResponseError,
+    getLocalStorage, 
+    listobjects_sum,
+    myheaders_formdata,
+    currency_generic_html,
+    currency_generic_string,
+    percentage_generic_html,
+    percentage_generic_string, 
+    get_concept
+} from './functions.js'
 import {RulesFloat,RulesInteger,RulesString,RulesSelection} from './rules.js'
 Vue.mixin({
     data: function () {
@@ -74,6 +88,7 @@ Vue.mixin({
         parseResponse,
         parseResponseError,
         getLocalStorage,
+        get_concept,
 
         listobjects_sum,
         RulesFloat,
