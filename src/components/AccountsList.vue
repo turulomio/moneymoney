@@ -47,7 +47,7 @@
                     <v-checkbox v-model="account.active" :label="$t('Is active?')" ></v-checkbox>
                     <v-text-field v-model="account.number" type="text" :label="$t('Account number')" required :placeholder="$t('Account number')" :rules="RulesString(30,true)" counter="30"/>
                     <v-autocomplete :items="$store.state.catalogs.currencies" v-model="account.currency" :label="$t('Select a currency')" item-text="fullname" item-value="id" required :rules="RulesSelection(false)"></v-autocomplete>
-                    <v-autocomplete :items="$store.state.catalogs.banks.filter(v =>v.active==true)" v-model="account.bank" :label="$t('Select a bank')" item-text="name" item-value="url" required :rules="RulesSelection(false)"></v-autocomplete>
+                    <v-autocomplete ref="autocompleteBanks" :items="$store.state.catalogs.banks.filter(v =>v.active==true)" v-model="account.banks" :label="$t('Select a bank')" item-text="name" item-value="url" required :rules="RulesSelection(false)"></v-autocomplete>
                 </v-form>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -128,15 +128,15 @@
                     active: true,
                     number: "",
                     currency: "EUR",    
-                    bank:null,
+                    banks:null,
                 }
             },
             MyMenuInlineSelection(item){
                 item.code(this)
             },
             editItem (item) {
-                this.editing=true
                 this.account=item
+                this.editing=true
                 this.dialog=true
             },
             viewItem (item) {
@@ -184,6 +184,7 @@
             },
             acceptDialog(){
                 console.log(this.account)
+                console.log(this.$refs)
                 if (this.editing==true){               
                     axios.put(this.account.url, this.account, this.myheaders())
                     .then((response) => {
