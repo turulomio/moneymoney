@@ -36,7 +36,6 @@
                         </template>
                       
                         <v-list-item link router :to="{ name: 'about'}">
-                            <v-list-item-icon><v-icon color="#757575;">mdi-home</v-icon></v-list-item-icon>
                             <v-list-item-title>{{ $t("About")}}</v-list-item-title>
                         </v-list-item>
 
