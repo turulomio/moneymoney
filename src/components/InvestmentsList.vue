@@ -37,7 +37,7 @@
                 </template>              
                 <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small @click="viewItem(item)">mdi-pencil</v-icon>
-                <v-icon small v-if="(new Date()>new Date(item.selling_expiration)) && item.selling_expiration!=null" @click="editInvestment(item)">mdi-alarm</v-icon>          
+                <v-icon small class="ml-2" v-if="(new Date()>new Date(item.selling_expiration)) && item.selling_expiration!=null" @click="editInvestment(item)">mdi-alarm</v-icon>          
   
                 </template>                
                 <template v-slot:[`body.append`]="{headers}">
@@ -96,16 +96,16 @@
                 showActive:true,
                 investments_headers: [
                     { text: this.$t('Name'), sortable: true, value: 'name'},
-                    { text: this.$t('Last datetime'), value: 'last_datetime',  width: "8%"},
-                    { text: this.$t('Last'), value: 'last',  width: "8%", align:'right'},
-                    { text: this.$t('Daily difference'), value: 'daily_difference',  width: "8%", align:'right'},
-                    { text: this.$t('Daily percentage'), value: 'daily_percentage',  width: "8%", align:'right'},
-                    { text: this.$t('Invested'), value: 'invested_user', align:'right',  width: "8%"},
-                    { text: this.$t('Gains'), value: 'gains_user', align:'right',  width: "8%"},
-                    { text: this.$t('Balance'), value: 'balance_user', align:'right',  width: "8%"},
-                    { text: this.$t('% Invested'), value: 'percentage_invested', align:'right',  width: "8%"},
-                    { text: this.$t('% Selling point'), value: 'percentage_selling_point', align:'right',  width: "8%"},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false , width: "8%"},
+                    { text: this.$t('Last datetime'), value: 'last_datetime',  width: "9%"},
+                    { text: this.$t('Last'), value: 'last',  width: "7%", align:'right'},
+                    { text: this.$t('Daily difference'), value: 'daily_difference',  width: "7%", align:'right'},
+                    { text: this.$t('Daily percentage'), value: 'daily_percentage',  width: "7%", align:'right'},
+                    { text: this.$t('Invested'), value: 'invested_user', align:'right',  width: "7%"},
+                    { text: this.$t('Gains'), value: 'gains_user', align:'right',  width: "7%"},
+                    { text: this.$t('Balance'), value: 'balance_user', align:'right',  width: "7%"},
+                    { text: this.$t('% Invested'), value: 'percentage_invested', align:'right',  width: "7%"},
+                    { text: this.$t('% Selling point'), value: 'percentage_selling_point', align:'right',  width: "7%"},
+                    { text: this.$t('Actions'), value: 'actions', sortable: false , width: "4%"},
                 ],
                 investments_items:[],
                 menuinline_items: [

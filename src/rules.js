@@ -23,22 +23,22 @@ export function RulesFloat(maxdigits,required){
     return r
 }
 
-export function RulesString(maxdigits,empty){
+export function RulesString(maxdigits,required){
     var r= [
         v => !!v || this.$t('String is required'),
         v =>  v && !!v.trim() || this.$t(`String can't be empty`),
         v =>  v.length <= maxdigits || this.$t(`String must be at most ${maxdigits} characters`)
     ]
-    if (empty==true){
+    if (required==false){
         r.shift()
         r.shift()
     }
     return r
 }
 
-export function RulesSelection(empty){
+export function RulesSelection(required){
     var r= []
-    if (empty==false){
+    if (required==true){
         r.push((v) => !!v || this.$t('Selection is required'))
     }
     return r

@@ -41,9 +41,6 @@
         currency_account: {
             required: true
         },
-        url_root:{
-            required:true
-        },
         homogeneous:{
             required:true,
             default:true,
