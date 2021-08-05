@@ -4,7 +4,6 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import i18n from './i18n'
 import VueRouter from 'vue-router';
-import DatetimePicker from 'vuetify-datetime-picker'
 
 import "echarts";
 import ECharts from 'vue-echarts'
@@ -12,7 +11,6 @@ Vue.component('v-chart', ECharts)
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
-Vue.use(DatetimePicker)
 
 export const store = new Vuex.Store({
     state: {
