@@ -47,8 +47,7 @@
                 <v-card-title class="headline">{{dialog_title_ao()}}</v-card-title>
                 <v-form ref="form" v-model="form_valid_ao" lazy-validation>
                     <v-autocomplete :items="$store.state.catalogs.accounts.filter(v =>v.active==true)" v-model="ao.accounts" :label="$t('Select an account')" item-text="name" item-value="url" required :rules="RulesSelection(false)"></v-autocomplete>
-                    <v-datetime-picker label="Select operation date and time" v-model="ao.datetime" timeFormat="hh:mm:ss" :timePickerProps="{
-      format: '24hr', useSeconds:true }"> </v-datetime-picker>
+                    <MyDateTimePicker label="Select operation date and time" v-model="ao.datetime"> </MyDateTimePicker>
                     <v-autocomplete :items="$store.state.catalogs.concepts" v-model="ao.concepts" :label="$t('Select a concept')" item-text="name" item-value="url" required :rules="RulesSelection(false)"></v-autocomplete>
                     <v-text-field v-model="ao.amount" type="number" :label="$t('Operation amount')" required :placeholder="$t('Account number')" :rules="RulesString(30,true)" counter="30"/>
                     <v-text-field v-model="ao.comment" type="text" :label="$t('Operation comment')" required :placeholder="$t('Operation comment')" autofocus  counter="200"/>
@@ -94,12 +93,14 @@
     import axios from 'axios' 
     import MyMenuInline from './MyMenuInline.vue'
     import CreditcardsView from './CreditcardsView.vue'
+    import MyDateTimePicker from './MyDateTimePicker.vue'
     import TableAccountOperations from './TableAccountOperations.vue'
     export default {
         components:{
             MyMenuInline,
             TableAccountOperations,
             CreditcardsView,
+            MyDateTimePicker,
         },
         props:{
             account:{
