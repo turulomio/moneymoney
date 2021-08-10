@@ -20,15 +20,29 @@
                     </v-list-item>
 <!--                     ACCOUNTS -->
                     <v-list-item link router :to="{ name: 'accounts_list'}">
-                        <v-list-item-icon><v-img color="#757575;" src="@/assets/account.svg"></v-img></v-list-item-icon>
+                        <v-list-item-icon><v-img color="#757575;" src="@/assets/account.svg"  :height="height" :width="width"></v-img></v-list-item-icon>
                         <v-list-item-title>{{ $t("Accounts") }}</v-list-item-title>
                     </v-list-item>
 <!--                     INVESTMENTS -->
                     <v-list-item link router :to="{ name: 'investments_list'}">
-                        <v-list-item-icon><v-img color="#757575;"  src="@/assets/investment.svg"></v-img></v-list-item-icon>
+                        <v-list-item-icon><v-img color="#757575;"  src="@/assets/investment.svg"  :height="height" :width="width"></v-img></v-list-item-icon>
                         <v-list-item-title>{{ $t("Investments") }}</v-list-item-title>
                     </v-list-item>
                 
+<!--                     PRODUCTS -->
+                    <v-list-group :value="false" >
+                        <template #prependIcon>
+                            <v-img color="#757575;" src="@/assets/product.svg" :height="height" :width="width"></v-img>
+                        </template>
+                        <template #activator>
+                            {{ $t("Products")}}
+                        </template>
+                        <v-list-item link router :to="{ name: 'products_update'}">
+                            <v-list-item-title>{{ $t("Update") }}</v-list-item-title>
+                        </v-list-item>
+                    </v-list-group>
+
+
 <!--                     HELP -->
                     <v-list-group :value="false" prepend-icon="mdi-lifebuoy">
                         <template v-slot:activator>
@@ -83,6 +97,8 @@ export default {
         return {
             logged:false,
             drawer: false,
+            height:22,
+            width:22,
         }
     },
 };
