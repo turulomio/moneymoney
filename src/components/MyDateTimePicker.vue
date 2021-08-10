@@ -14,12 +14,14 @@
                     <v-icon class="ml-1" x-small @click="localValue=''">mdi-backspace</v-icon>
                 </v-row>
             </template>
-            <v-row>
-            <v-date-picker no-title v-model="date" @change="on_date_change()" locale="locale" first-day-of-week="1"></v-date-picker>
-            <v-time-picker ref="time" no-title scrollable  format="24hr" v-model="time" use-seconds @click:hour="on_time_click()" @click:minute="on_time_click()" @click:second="on_time_click()" locale="locale"></v-time-picker>
-            <v-text-field v-model="milliseconds" type="number" :label="$t('Milliseconds')" required :placeholder="$t('Milliseconds')" :rules="RulesString(3,true)" counter="3" @change="on_milliseconds_change()"/>        
-            </v-row>
-            <v-btn class="ml-4" color="error" @click="on_close()" >{{buttonCloseText}}</v-btn>
+            <v-card >
+                <v-date-picker class="pa-5" no-title v-model="date" @change="on_date_change()" locale="locale" first-day-of-week="1"></v-date-picker>
+                <v-time-picker class="pa-5" ref="time" no-title scrollable  format="24hr" v-model="time" use-seconds @click:hour="on_time_click()" @click:minute="on_time_click()" @click:second="on_time_click()" locale="locale"></v-time-picker>
+                <v-text-field class="pa-5" v-model="milliseconds" type="number" :label="$t('Milliseconds')" required :placeholder="$t('Milliseconds')" :rules="RulesString(3,true)" counter="3" @change="on_milliseconds_change()"></v-text-field>        
+                <v-card-actions>
+                    <v-btn class="ml-4" color="error" @click="on_close()" >{{$t("Set")+ " '" + this.representation + "'"}}</v-btn>
+                </v-card-actions>            
+            </v-card>
         </v-menu>
     </div>
 </template>
@@ -42,7 +44,6 @@
                 time: "",
                 milliseconds: "",
                 localValue: "",
-                buttonCloseText: this.$t("Close"),
                 representation:""
             }
         },

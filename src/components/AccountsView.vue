@@ -171,7 +171,7 @@
                 form_valid_ao:true,
                 dialog_ao:false,
                 editing_ao:false,
-                folowing_ao:false,
+                following_ao:false,
                 ao: this.empty_account_operation(),
 
                 // DIALOG CREDIT CARDS VIEW
@@ -308,9 +308,12 @@
                     .then((response) => {
                             console.log(response.data)
                             this.refreshTable()                             
-                            if (this.folowing_ao==true){
+                            if (this.following_ao==true){
                                 this.dialog_ao=true
-                                this.ao.datetime=this.date2zulu(this.zulu2date(this.ao.datetime).setSeconds(this.ao.datetime.getSeconds()+1))
+                                var dt=this.zulu2date(this.ao.datetime)
+                                var olddtseconds=this.zulu2date(this.ao.datetime).getSeconds()
+                                dt.setSeconds(olddtseconds+60)
+                                this.ao.datetime=this.date2zulu(dt)
                             } else {  
                                 this.dialog_ao=false
                             }
