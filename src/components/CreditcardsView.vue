@@ -13,9 +13,8 @@
                 <v-card-title class="headline">{{dialog_title()}}</v-card-title>
 
                 <v-form ref="form" v-model="form_valid_cco" lazy-validation>
-                    <v-autocomplete :items="$store.state.catalogs.accounts.filter(v =>v.active==true)" v-model="cco.creditcards" :label="$t('Select a credit card')" item-text="name" item-value="url" required :rules="RulesSelection(false)"></v-autocomplete>
-                    <v-datetime-picker label="Select operation date and time" v-model="cco.datetime" timeFormat="hh:mm:ss" :timePickerProps="{
-      format: '24hr', useSeconds:true }"> </v-datetime-picker>
+                    <v-autocomplete :items="$store.state.catalogs.creditcards.filter(v =>v.active==true)" v-model="cco.creditcards" :label="$t('Select a credit card')" item-text="name" item-value="url" required :rules="RulesSelection(false)"></v-autocomplete>
+                    <MyDateTimePicker label="Select operation date and time" v-model="cco.datetime" ></MyDateTimePicker>
                     <v-autocomplete :items="$store.state.catalogs.concepts" v-model="cco.concepts" :label="$t('Select a concept')" item-text="name" item-value="url" required :rules="RulesSelection(false)"></v-autocomplete>
                     <v-text-field v-model="cco.amount" type="number" :label="$t('Operation amount')" required :placeholder="$t('Account number')" :rules="RulesString(30,true)" counter="30"/>
                     <v-text-field v-model="cco.comment" type="text" :label="$t('Operation comment')" required :placeholder="$t('Operation comment')" autofocus  counter="200"/>
@@ -32,12 +31,14 @@
 <script>
     import axios from 'axios'
     import MyMenuInline from './MyMenuInline.vue'
+    import MyDateTimePicker from './MyDateTimePicker.vue'
     import TableAccountOperations from './TableAccountOperations.vue'
     import {localtime} from '../functions.js'
     export default {
         components:{
             MyMenuInline,
             TableAccountOperations,
+            MyDateTimePicker,
         },
         props:{
             cc:{
@@ -93,6 +94,8 @@
                     amount: 0,
                     comment: "",    
                     creditcards: this.cc.url,
+                    paid:false,
+                    paid_datetime:null,
                 }
             },
             MyMenuInlineSelection(item){
@@ -136,8 +139,7 @@
                 });
             },
             acceptDialog(){
-                console.log(this.cc)
-                console.log(this.$refs)
+                this.cco.operationstypes=this.get_concept(this.cco.concepts).operationstypes
                 if (this.editing==true){               
                     axios.put(this.cco.url, this.cco, this.myheaders())
                     .then((response) => {
@@ -149,7 +151,7 @@
                         this.parseResponseError(error)
                     })
                 } else{
-                    axios.post(`${this.$store.state.apiroot}/api/creditcardoperations/`, this.cco,  this.myheaders())
+                    axios.post(`${this.$store.state.apiroot}/api/creditcardsoperations/`, this.cco,  this.myheaders())
                     .then((response) => {
                             console.log(response.data)
                             this.update_table()     

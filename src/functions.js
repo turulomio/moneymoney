@@ -147,6 +147,13 @@ export function vuex_update_catalogs(){
     }, (error) => {
         this.parseResponseError(error)
     });
+    axios.get(`${this.$store.state.apiroot}/api/creditcards/`, this.myheaders())
+    .then((response) => {
+        this.$store.state.catalogs.creditcards= sortObjectsArray(response.data, "name")
+        console.log("Updated creditcards")
+    }, (error) => {
+        this.parseResponseError(error)
+    });
     axios.get(`${this.$store.state.apiroot}/api/investments/`, this.myheaders())
     .then((response) => {
         this.$store.state.catalogs.investments= sortObjectsArray(response.data, "name")
