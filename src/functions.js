@@ -29,7 +29,13 @@ export function my_round(num, decimals = 2) {
 }
 
 
+// Value es un utc iso string with T and Z
 export function localtime(value){
+    return zulu2py(value)
+}   
+
+// Uses .local()
+export function zulu2py(value){
     if (value){
         var dateFormat = 'YYYY-MM-DD HH:mm:ss';
         var testDateUtc = moment.utc(value);
@@ -39,6 +45,38 @@ export function localtime(value){
     console.log("REALLY");
     return null;
 }   
+// Uses .local()
+export function zulu2date(value){
+    return new Date(value)
+}   
+// Uses .local()
+export function date2zulu(value){
+    return value.toISOString()
+}   
+
+
+// Without time zone but using .local()
+export function date2py(value){
+    if (value){
+        var dateFormat = 'YYYY-MM-DD HH:mm:ss.SSS';
+        var testDateUtc = moment(value);
+        var localDate = testDateUtc.local();
+        return (localDate.format(dateFormat)); // 2015-30-01 02:00:00
+    }
+    console.log("REALLY");
+    return null;
+}   
+
+
+// Without time zone but using .local()
+export function py2date(value){
+    if (value){
+        return new Date(value);
+    }
+    console.log("REALLY");
+    return null;
+}   
+
 
 export function moment_day_start(isostring){
     if (isostring){

@@ -72,7 +72,12 @@ import {
     currency_generic_string,
     percentage_generic_html,
     percentage_generic_string, 
-    get_concept
+    get_concept,
+    zulu2py,
+    date2py,
+    zulu2date,
+    date2zulu,
+    py2date,
 } from './functions.js'
 import {RulesFloat,RulesInteger,RulesString,RulesSelection} from './rules.js'
 Vue.mixin({
@@ -87,6 +92,11 @@ Vue.mixin({
         parseResponseError,
         getLocalStorage,
         get_concept,
+        zulu2py,
+        date2py,
+        py2date,
+        zulu2date,
+        date2zulu,
 
         listobjects_sum,
         RulesFloat,

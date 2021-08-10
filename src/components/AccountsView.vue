@@ -117,7 +117,6 @@
                             { 
                                 name:this.$t('Add an account transfer'), 
                                 code: function(this_){
-                                    console.log("HOLA")
                                     this_.editing_ao=false
                                     this_.account=this_.empty_account_operation()
                                     this_.dialog_ao=true
@@ -208,7 +207,7 @@
             },
             empty_account_operation(){
                 return {
-                    datetime: new Date(),
+                    datetime: new Date().toISOString(),
                     concepts: null,
                     operationstypes:null,
                     amount: 0,
@@ -234,6 +233,7 @@
                 axios.get(`${this.$store.state.apiroot}/accountsoperations/withbalance/?account=${this.account.id}&year=${this.monthpicker.slice(0,4)}&month=${this.monthpicker.slice(5,7)}`, this.myheaders())                
                 .then((response) => {
                     this.items_ao=response.data;
+                    console.log(this.items_ao)
                     this.$refs.table_ao.gotoLastRow()
                 }) 
                 .catch((error) => {
@@ -309,8 +309,8 @@
                             console.log(response.data)
                             this.refreshTable()                             
                             if (this.folowing_ao==true){
-                                this.ao.datetime=this.ao.datetime.setSeconds(this.ao.datetime.getSeconds()+1)
                                 this.dialog_ao=true
+                                this.ao.datetime=this.date2zulu(this.zulu2date(this.ao.datetime).setSeconds(this.ao.datetime.getSeconds()+1))
                             } else {  
                                 this.dialog_ao=false
                             }
