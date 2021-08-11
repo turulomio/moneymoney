@@ -28,7 +28,13 @@
                         <v-list-item-icon><v-img color="#757575;"  src="@/assets/investment.svg"  :height="height" :width="width"></v-img></v-list-item-icon>
                         <v-list-item-title>{{ $t("Investments") }}</v-list-item-title>
                     </v-list-item>
-                
+                            
+<!--                     ORDERS -->
+                    <v-list-item link router :to="{ name: 'banks_list'}">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-cart</v-icon></v-list-item-icon>
+                        <v-list-item-title>{{ $t("Orders") }}</v-list-item-title>
+                    </v-list-item>
+
 <!--                     PRODUCTS -->
                     <v-list-group :value="false" >
                         <template #prependIcon>
