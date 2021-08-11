@@ -40,7 +40,23 @@
                         <v-list-item link router :to="{ name: 'products_update'}">
                             <v-list-item-title>{{ $t("Update") }}</v-list-item-title>
                         </v-list-item>
+                    </v-list-group>        
+            
+<!--                     REPORTS -->
+                    <v-list-group :value="false" prepend-icon="mdi-file-chart-outline">
+                        <template v-slot:activator>
+                            <v-list-item-title>{{ $t("Reports") }}</v-list-item-title>
+                        </template>
+                        <v-list-item link router :to="{ name: 'reports_total'}">
+                            <v-list-item-title>{{ $t("Annual") }}</v-list-item-title>
+                        </v-list-item>
                     </v-list-group>
+            
+<!--                     STRATEGIES -->
+                    <v-list-item link router :to="{ name: 'banks_list'}">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-strategy</v-icon></v-list-item-icon>
+                        <v-list-item-title>{{ $t("Strategies") }}</v-list-item-title>
+                    </v-list-item>
 
 
 <!--                     HELP -->
