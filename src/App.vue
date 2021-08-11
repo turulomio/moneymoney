@@ -53,7 +53,7 @@
                         <template v-slot:activator>
                             <v-list-item-title>{{ $t("Reports") }}</v-list-item-title>
                         </template>
-                        <v-list-item link router :to="{ name: 'reports_total'}">
+                        <v-list-item link router :to="{ name: 'reports_annual'}">
                             <v-list-item-title>{{ $t("Annual") }}</v-list-item-title>
                         </v-list-item>
                     </v-list-group>

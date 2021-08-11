@@ -40,6 +40,7 @@ import AccountsList from './components/AccountsList';
 import BanksList from './components/BanksList';
 import InvestmentsList from './components/InvestmentsList';
 import ProductsUpdate from './components/ProductsUpdate';
+import ReportsAnnual from './components/ReportsAnnual';
 import Settings from './components/Settings';
 import Statistics from './components/Statistics';
 
@@ -57,6 +58,7 @@ const router = new VueRouter({
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/banks/list/`, name: 'banks_list', component: BanksList },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/investments/list/`, name: 'investments_list', component: InvestmentsList },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/products/update/`, name: 'products_update', component: ProductsUpdate },
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/annual/`, name: 'reports_annual', component: ReportsAnnual },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/settings/`, name: 'settings', component: Settings },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/statistics/`, name: 'statistics', component: Statistics },
   ]

@@ -75,7 +75,7 @@
         </v-dialog>
         <v-dialog v-model="dialog_view">
             <v-card class="pa-4">
-                <InvestmentsView :investment="investment" :key="key" :account="account"></InvestmentsView>
+                <InvestmentsView :investment="investment" :key="key"></InvestmentsView>
             </v-card>
         </v-dialog>
 

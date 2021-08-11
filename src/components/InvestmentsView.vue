@@ -55,7 +55,7 @@
     import axios from 'axios'
     export default {
         props: {
-            bank: {
+            investment: {
                 required: true
             },
         },
