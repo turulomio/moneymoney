@@ -45,11 +45,11 @@
         <v-dialog v-model="dialog_ao" max-width="550">
             <v-card class="pa-4">
                 <v-card-title class="headline">{{dialog_title_ao()}}</v-card-title>
-                <v-form ref="form" v-model="form_valid_ao" lazy-validation>
-                    <v-autocomplete :items="$store.state.catalogs.accounts.filter(v =>v.active==true)" v-model="ao.accounts" :label="$t('Select an account')" item-text="name" item-value="url" required :rules="RulesSelection(false)"></v-autocomplete>
+                <v-form ref="form_ao" v-model="form_valid_ao" lazy-validation>
+                    <v-autocomplete :items="$store.state.catalogs.accounts.filter(v =>v.active==true)" v-model="ao.accounts" :label="$t('Select an account')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
                     <MyDateTimePicker label="Select operation date and time" v-model="ao.datetime"> </MyDateTimePicker>
-                    <v-autocomplete :items="$store.state.catalogs.concepts" v-model="ao.concepts" :label="$t('Select a concept')" item-text="name" item-value="url" required :rules="RulesSelection(false)"></v-autocomplete>
-                    <v-text-field v-model="ao.amount" type="number" :label="$t('Operation amount')" required :placeholder="$t('Account number')" :rules="RulesString(30,true)" counter="30"/>
+                    <v-autocomplete :items="$store.state.catalogs.concepts" v-model="ao.concepts" :label="$t('Select a concept')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
+                    <v-text-field ref="ao_amount" v-model="ao.amount" type="number" :label="$t('Operation amount')" required :placeholder="$t('Account number')" :rules="RulesFloat(30,true)" counter="30"/>
                     <v-text-field v-model="ao.comment" type="text" :label="$t('Operation comment')" required :placeholder="$t('Operation comment')" autofocus  counter="200"/>
                 </v-form>
                 <v-card-actions>
@@ -187,7 +187,7 @@
             CCONotDeferred(item){
                 this.editing_ao=false
                 this.ao=this.empty_account_operation()
-                this.ao.comment=item.name +". "
+                this.ao.comment=item.name + ". "
                 this.dialog_ao=true
                 
             },
@@ -290,10 +290,20 @@
                 }
             },
             acceptDialogAO(){
-                console.log(this.ao)
-                console.log(this.get_concept(this.ao.concepts))
-                this.ao.operationstypes=this.get_concept(this.ao.concepts).operationstypes
-                console.log(this.ao.operationstypes)
+                //Validation
+                if( this.$refs.form_ao.validate()==false) return
+                var operationtype=this.get_operationstypes_from_concept(this.ao.concepts)
+                this.ao.operationstypes=operationtype.url
+                if (operationtype.id==1 && this.ao.amount>0){
+                     alert(this.$t("Amount must be negative"))
+                     return
+                }
+                if (operationtype.id==2 && this.ao.amount<0) {
+                    alert(this.$t("Amount must be positive"))
+                    return
+                }
+
+                //Accept
                 if (this.editing_ao==true){               
                     axios.put(this.ao.url, this.ao, this.myheaders())
                     .then((response) => {

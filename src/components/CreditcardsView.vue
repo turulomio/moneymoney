@@ -12,10 +12,10 @@
             <v-card class="pa-4">
                 <v-card-title class="headline">{{dialog_title()}}</v-card-title>
 
-                <v-form ref="form" v-model="form_valid_cco" lazy-validation>
-                    <v-autocomplete :items="$store.state.catalogs.creditcards.filter(v =>v.active==true)" v-model="cco.creditcards" :label="$t('Select a credit card')" item-text="name" item-value="url" required :rules="RulesSelection(false)"></v-autocomplete>
+                <v-form ref="form_cco" v-model="form_valid_cco" lazy-validation>
+                    <v-autocomplete :items="$store.state.catalogs.creditcards.filter(v =>v.active==true)" v-model="cco.creditcards" :label="$t('Select a credit card')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
                     <MyDateTimePicker label="Select operation date and time" v-model="cco.datetime" ></MyDateTimePicker>
-                    <v-autocomplete :items="$store.state.catalogs.concepts" v-model="cco.concepts" :label="$t('Select a concept')" item-text="name" item-value="url" required :rules="RulesSelection(false)"></v-autocomplete>
+                    <v-autocomplete :items="$store.state.catalogs.concepts" v-model="cco.concepts" :label="$t('Select a concept')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
                     <v-text-field v-model="cco.amount" type="number" :label="$t('Operation amount')" required :placeholder="$t('Account number')" :rules="RulesString(30,true)" counter="30"/>
                     <v-text-field v-model="cco.comment" type="text" :label="$t('Operation comment')" required :placeholder="$t('Operation comment')" autofocus  counter="200"/>
                 </v-form>
@@ -114,11 +114,7 @@
                var r = confirm(this.$t("Do you want to delete this credit card operation?"))
                if(r == false) {
                   return
-               } 
-               r = confirm(this.$t("This credit card operation will be deleted. Do you want to continue?"))
-               if(r == false) {
-                  return
-               } 
+               }
                 axios.delete(item.url, this.myheaders())
                 .then((response) => {
                     console.log(response);
@@ -139,7 +135,20 @@
                 });
             },
             acceptDialog(){
-                this.cco.operationstypes=this.get_concept(this.cco.concepts).operationstypes
+                //Validation
+                if( this.$refs.form_cco.validate()==false) return
+                var operationtype=this.get_operationstypes_from_concept(this.cco.concepts)
+                this.cco.operationstypes=operationtype.url
+                if (operationtype.id==1 && this.cco.amount>0){
+                     alert(this.$t("Amount must be negative"))
+                     return
+                }
+                if (operationtype.id==2 && this.cco.amount<0) {
+                    alert(this.$t("Amount must be positive"))
+                    return
+                }
+
+                //Accept
                 if (this.editing==true){               
                     axios.put(this.cco.url, this.cco, this.myheaders())
                     .then((response) => {

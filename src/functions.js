@@ -168,10 +168,23 @@ export function vuex_update_catalogs(){
     }, (error) => {
         this.parseResponseError(error)
     });
+    axios.get(`${this.$store.state.apiroot}/api/operationstypes/`, this.myheaders())
+    .then((response) => {
+        this.$store.state.catalogs.operationstypes= sortObjectsArray(response.data, "name")
+        console.log(this.$store.state.catalogs.operationstypes)
+        console.log("Updated operationstypes")
+    }, (error) => {
+        this.parseResponseError(error)
+    });
 }
 
 export function get_concept(url){
     return this.$store.state.catalogs.concepts.find(o => o.url==url)
+}
+export function get_operationstypes_from_concept(url){
+    var concept=this.$store.state.catalogs.concepts.find(o => o.url==url)
+    return this.$store.state.catalogs.operationstypes.find(o => o.url==concept.operationstypes)
+
 }
 
 export function logout(){
@@ -232,7 +245,7 @@ export function parseResponse(response){
     } else if (response.status==201){// Created
         
     } else if (response.status==204){// Deleted
-        
+        this.ao
     } else {
         alert (`${response.status}: ${response.data}`)
         return false
@@ -264,9 +277,6 @@ export function parseResponseError(error){
         } else if (error.response.status == 500){
             alert (this.$t("There is a server error"))
             console.log(error.response)
-        } else {
-            alert (this.$t("Unknown error"))
-            
         }
         
     } else if (error.request) {

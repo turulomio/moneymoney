@@ -23,6 +23,34 @@ export function RulesFloat(maxdigits,required){
     return r
 }
 
+
+export function RulesFloatPositive(maxdigits,required){
+    var r= [
+        v => !!v || this.$t('Number is required'),
+        v => (v && v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
+        v => (v && !isNaN(parseFloat(v))) || this.$t('Must be a number'),
+        v => (v && v>=0) || this.$t('Must be a positive number')
+    ]
+    if (required==false){
+        r.shift()
+    }
+    return r
+}
+export function RulesFloatNegative(maxdigits,required){
+    var r= [
+        v => !!v || this.$t('Number is required'),
+        v => (v && v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
+        v => (v && !isNaN(parseFloat(v))) || this.$t('Must be a number'),
+        v => (v && v<=0) || this.$t('Must be a negative number')
+    ]
+    if (required==false){
+        r.shift()
+    }
+    return r
+}
+
+
+
 export function RulesString(maxdigits,required){
     var r= [
         v => !!v || this.$t('String is required'),
