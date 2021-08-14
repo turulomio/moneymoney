@@ -43,6 +43,7 @@ import ProductsUpdate from './components/ProductsUpdate';
 import ReportsAnnual from './components/ReportsAnnual';
 import Settings from './components/Settings';
 import Statistics from './components/Statistics';
+import StrategiesList from './components/StrategiesList';
 
 
 
@@ -61,6 +62,7 @@ const router = new VueRouter({
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/annual/`, name: 'reports_annual', component: ReportsAnnual },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/settings/`, name: 'settings', component: Settings },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/statistics/`, name: 'statistics', component: Statistics },
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/strategies/list/`, name: 'strategies_list', component: StrategiesList },
   ]
 });
 

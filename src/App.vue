@@ -59,7 +59,7 @@
                     </v-list-group>
             
 <!--                     STRATEGIES -->
-                    <v-list-item link router :to="{ name: 'banks_list'}">
+                    <v-list-item link router :to="{ name: 'strategies_list'}">
                         <v-list-item-icon><v-icon color="#757575;">mdi-strategy</v-icon></v-list-item-icon>
                         <v-list-item-title>{{ $t("Strategies") }}</v-list-item-title>
                     </v-list-item>
