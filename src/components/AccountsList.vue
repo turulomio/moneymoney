@@ -7,7 +7,7 @@
         </h1>
         <v-card outlined class="ma-4 pa-4">
             <v-checkbox v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" ></v-checkbox>
-            <v-data-table dense :headers="accounts_headers" :items="accounts_items" sort-by="percentage_selling_point" class="elevation-1" hide-default-footer disable-pagination :loading="loading_accounts" :key="key">
+            <v-data-table dense :headers="accounts_headers" :items="accounts_items" sort-by="percentage_selling_point" class="elevation-1" hide-default-footer disable-pagination :loading="loading_accounts" :key="key" >
                 <template v-slot:[`item.last_datetime`]="{ item }">
                     {{localtime(item.last_datetime)}}
                 </template>  
@@ -58,7 +58,7 @@
         </v-dialog>
         <v-dialog v-model="dialog_view">
             <v-card class="pa-4">
-                <AccountsView :account="account" :key="key"></AccountsView>
+                <AccountsView :account="account" :key="key" @changed="AccountsView_changed"></AccountsView>
             </v-card>
         </v-dialog>
 
@@ -115,6 +115,9 @@
         },
         methods: {
             localtime,
+            AccountsView_changed(){
+                this.update_table()
+            },
             dialog_title(){
                 if(this.editing==true){
                     return this.$t("Updating account")

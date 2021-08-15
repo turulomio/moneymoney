@@ -309,6 +309,7 @@
                     .then((response) => {
                             console.log(response.data)
                             this.refreshTable()     
+                            this.$emit('changed', this.ao)
                             this.dialog_ao=false
                     }, (error) => {
                         this.parseResponseError(error)
@@ -326,6 +327,7 @@
                                 this.ao.datetime=this.date2zulu(dt)
                             } else {  
                                 this.dialog_ao=false
+                            this.$emit('changed', this.ao)
                             }
                     }, (error) => {
                         this.parseResponseError(error)
@@ -370,6 +372,7 @@
                 axios.delete(item.url, this.myheaders())
                 .then((response) => {
                     console.log(response);
+                    this.$emit('changed', this.ao)
                     this.refreshTable()
                 }, (error) => {
                     this.parseResponseError(error)

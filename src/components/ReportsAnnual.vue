@@ -43,6 +43,9 @@
                                     <div v-if="header.value == 'diff_lastmonth'" align="right">
                                         <div v-html="localcurrency_html(listobjects_sum(total_annual,'diff_lastmonth'))"></div>
                                     </div>
+                                    <div v-if="header.value == 'percentage_year'" align="right">
+                                        <div v-html="percentage_html(listobjects_sum(total_annual,'diff_lastmonth')/last_year_balance)"></div>
+                                    </div>
                                 </td>
                             </tr>
                             
@@ -88,6 +91,9 @@
                                     </div>
                                     <div v-if="header.value == 'dividends'" align="right">
                                         <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'dividends'))"></div>
+                                    </div>
+                                    <div v-if="header.value == 'total'" align="right">
+                                        <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'total'))"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -179,6 +185,7 @@
                     { text: this.$t('Net dividends'), value: 'dividends_net', sortable: true, align:'right'},
                 ],   
                 year: 2021,
+                last_year_balance:0,
                 last_year_balance_string: "",
                 loading_annual:true,
                 loading_annual_incomes:true,
@@ -215,6 +222,7 @@
                 axios.get(`${this.$store.state.apiroot}/reports/annual/${this.year}/`, this.myheaders())
                 .then((response) => {
                         console.log(response.data)
+                        this.last_year_balance=response.data.last_year_balance
                         this.last_year_balance_string=this.$t(`Last year balance (${this.localtime(response.data.dtaware_last_year)}) is ${this.localcurrency_html(response.data.last_year_balance)}`) 
                         this.total_annual=response.data.data
                         this.loading_annual=false
