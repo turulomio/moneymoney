@@ -32,14 +32,14 @@
                 <template v-slot:[`item.percentage_invested`]="{ item }">
                     <div v-html="percentage_html(item.percentage_invested )"></div>
                 </template>  
-                <template v-slot:[`item.percentage_selling_point`]="{ item }">
-                <div  :class="item.percentage_selling_point<0.05 ? 'vuegreen' : ''" v-html="percentage_html(item.percentage_selling_point)"></div>
+                <template v-slot:[`item.percentage_selling_point`]="{ item }">     
+                    <div  :class="item.percentage_selling_point<0.05 ? 'vuegreen' : ''" v-html="percentage_html(item.percentage_selling_point)"></div>
                 </template>              
                 <template v-slot:[`item.actions`]="{ item }">
-                <v-icon small @click="editItem(item)">mdi-pencil</v-icon>
-                <v-icon small class="ml-2" @click="viewItem(item)">mdi-eye</v-icon>
-                <v-icon small class="ml-2" v-if="(new Date()>new Date(item.selling_expiration)) && item.selling_expiration!=null" @click="editInvestment(item)">mdi-alarm</v-icon>          
-  
+                    <v-icon small @click="editItem(item)">mdi-pencil</v-icon>
+                    <v-icon small class="ml-1" @click="viewItem(item)">mdi-eye</v-icon>
+                    <v-icon small class="ml-1" @click="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
+                    <v-icon small class="ml-1" v-if="(new Date()>new Date(item.selling_expiration)) && item.selling_expiration!=null" @click="editInvestment(item)">mdi-alarm</v-icon>     
                 </template>                
                 <template v-slot:[`body.append`]="{headers}">
                     <tr style="background-color: WhiteSmoke">
@@ -176,23 +176,19 @@
                 this.investment=item
                 this.dialog_view=true
             },
-            // deleteItem (item) {
-            //    var r = confirm(this.$t("Do you want to delete this item?"))
-            //    if(r == false) {
-            //       return
-            //    } 
-            //    r = confirm(this.$t("This investment will be deleted. Do you want to continue?"))
-            //    if(r == false) {
-            //       return
-            //    } 
-            //     axios.delete(item.url, this.myheaders())
-            //     .then((response) => {
-            //         console.log(response);
-            //         this.update_table()
-            //     }, (error) => {
-            //         this.parseResponseError(error)
-            //     });
-            // },
+            deleteItem (item) {
+               var r = confirm(this.$t("Do you want to delete this investment?"))
+               if(r == false) {
+                  return
+               } 
+                axios.delete(item.url, this.myheaders())
+                .then((response) => {
+                    console.log(response);
+                    this.update_table()
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
+            },
             update_table(){
                 this.loading_investments=true
                 axios.get(`${this.$store.state.apiroot}/investments/withbalance?active=${this.showActive}`, this.myheaders())
@@ -215,6 +211,7 @@
                 }
             },
             acceptDialog(){
+                if (this.$refs.form.validate()==false) return
                 if (this.editing==true){               
                     axios.put(this.investment.url, this.investment, this.myheaders())
                     .then((response) => {
