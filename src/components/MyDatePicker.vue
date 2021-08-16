@@ -1,10 +1,4 @@
-Vue.component('my-datepicker', {
-    props: {
-        value: {
-            required: true
-        },
-    },
-    template: `
+<template>
     <div>
         <v-menu v-model="menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
             <template v-slot:activator="{ on, attrs }">
@@ -16,19 +10,31 @@ Vue.component('my-datepicker', {
             <v-date-picker v-model="localValue" @input="menu = false"></v-date-picker>
         </v-menu>
     </div>
-    `,
-    data: function(){
-        return {
-            menu: false,
-            localValue: null,
-        }
-    },
-    watch: {
-        localValue (newValue) {
-            this.$emit('input', newValue)
+</template>
+<script>
+    export default {    
+        props: {
+            value: {
+                required: true
+            },
+            // locale:  {
+            //     required:true,
+            //     default: 'en',
+            // }
         },
-        value (newValue) {
-            this.localValue = newValue
-        }
-    },
-})
+        data: function(){
+            return {
+                menu: false,
+                localValue: null,
+            }
+        },
+        watch: {
+            localValue (newValue) {
+                this.$emit('input', newValue)
+            },
+            value (newValue) {
+                this.localValue = newValue
+            }
+        },
+    }
+</script>

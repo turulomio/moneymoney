@@ -14,12 +14,6 @@
             }
         },
         mounted(){
-            var now= new Date()
-            console.log(now)
-            var py= this.date2py(now)
-            console.log(py)
-            var dat= this.py2date(py)
-            console.log(dat)
         }
     }
 </script>

@@ -36,7 +36,8 @@
                 <div  :class="item.percentage_selling_point<0.05 ? 'vuegreen' : ''" v-html="percentage_html(item.percentage_selling_point)"></div>
                 </template>              
                 <template v-slot:[`item.actions`]="{ item }">
-                <v-icon small @click="viewItem(item)">mdi-pencil</v-icon>
+                <v-icon small @click="editItem(item)">mdi-pencil</v-icon>
+                <v-icon small class="ml-2" @click="viewItem(item)">mdi-eye</v-icon>
                 <v-icon small class="ml-2" v-if="(new Date()>new Date(item.selling_expiration)) && item.selling_expiration!=null" @click="editInvestment(item)">mdi-alarm</v-icon>          
   
                 </template>                
@@ -63,8 +64,13 @@
             <v-card class="pa-4">
                 <v-card-title class="headline">{{dialog_title()}}</v-card-title>
                 <v-form ref="form" v-model="form_valid" lazy-validation>
-                    <v-text-field v-model="investment.name" type="text" :label="$t('Bank name')" required :placeholder="$t('Bank name')" autofocus/>
+                    <v-autocomplete :items="$store.state.catalogs.accounts.filter(v =>v.active==true)" v-model="investment.accounts" :label="$t('Select an account')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
+                    <v-text-field v-model="investment.name" type="text" :label="$t('Investment name')" required :placeholder="$t('Investment name')" autofocus/>
+                    <v-autocomplete :items="$store.state.catalogs.products" v-model="investment.products" :label="$t('Select a product')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
+                    <v-text-field v-model="investment.selling_price" type="number" :label="$t('Set an investment selling price')" required :placeholder="$t('Investment selling price')" :rules="RulesInteger(10,true)" counter="10"/>
+                    <MyDatePicker v-model="investment.selling_expiration" :label="$t('Set a selling expiration date')"></MyDatePicker>
                     <v-checkbox v-model="investment.active" :label="$t('Is active?')" ></v-checkbox>
+                    <v-checkbox v-model="investment.daily_adjustment" :label="$t('Has daily adjustment?')" ></v-checkbox>
                 </v-form>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -85,11 +91,13 @@
     import axios from 'axios'
     import MyMenuInline from './MyMenuInline.vue'
     import InvestmentsView from './InvestmentsView.vue'
+    import MyDatePicker from './MyDatePicker.vue'
     import {localtime} from '../functions.js'
     export default {
         components:{
             MyMenuInline,
             InvestmentsView,
+            MyDatePicker,
         },
         data(){ 
             return{
@@ -105,7 +113,7 @@
                     { text: this.$t('Balance'), value: 'balance_user', align:'right',  width: "7%"},
                     { text: this.$t('% Invested'), value: 'percentage_invested', align:'right',  width: "7%"},
                     { text: this.$t('% Selling point'), value: 'percentage_selling_point', align:'right',  width: "7%"},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false , width: "4%"},
+                    { text: this.$t('Actions'), value: 'actions', sortable: false , width: "7%"},
                 ],
                 investments_items:[],
                 menuinline_items: [
@@ -147,6 +155,12 @@
                 return {
                     name: "",
                     active: true,
+                    daily_adjustment: false,
+                    selling_price: 0,
+                    products: null,
+                    selling_expiration: null,
+                    balance_percentage: 100,
+                    accounts: null,
                 }
             },
             MyMenuInlineSelection(item){
@@ -162,23 +176,23 @@
                 this.investment=item
                 this.dialog_view=true
             },
-            deleteItem (item) {
-               var r = confirm(this.$t("Do you want to delete this item?"))
-               if(r == false) {
-                  return
-               } 
-               r = confirm(this.$t("This investment will be deleted. Do you want to continue?"))
-               if(r == false) {
-                  return
-               } 
-                axios.delete(item.url, this.myheaders())
-                .then((response) => {
-                    console.log(response);
-                    this.update_table()
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
+            // deleteItem (item) {
+            //    var r = confirm(this.$t("Do you want to delete this item?"))
+            //    if(r == false) {
+            //       return
+            //    } 
+            //    r = confirm(this.$t("This investment will be deleted. Do you want to continue?"))
+            //    if(r == false) {
+            //       return
+            //    } 
+            //     axios.delete(item.url, this.myheaders())
+            //     .then((response) => {
+            //         console.log(response);
+            //         this.update_table()
+            //     }, (error) => {
+            //         this.parseResponseError(error)
+            //     });
+            // },
             update_table(){
                 this.loading_investments=true
                 axios.get(`${this.$store.state.apiroot}/investments/withbalance?active=${this.showActive}`, this.myheaders())

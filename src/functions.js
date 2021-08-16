@@ -176,6 +176,13 @@ export function vuex_update_catalogs(){
     }, (error) => {
         this.parseResponseError(error)
     });
+    axios.get(`${this.$store.state.apiroot}/api/products/`, this.myheaders())
+    .then((response) => {
+        this.$store.state.catalogs.products= sortObjectsArray(response.data, "name")
+        console.log("Updated products")
+    }, (error) => {
+        this.parseResponseError(error)
+    });
 }
 
 export function get_concept(url){
