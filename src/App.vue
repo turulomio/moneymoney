@@ -14,29 +14,29 @@
                     <v-divider></v-divider>
 
 <!--                     BANKS -->
-                    <v-list-item link router :to="{ name: 'banks_list'}">
+                    <v-list-item link router :to="{ name: 'banks_list'}" v-if="$store.state.logged">
                         <v-list-item-icon><v-icon color="#757575;">mdi-bank</v-icon></v-list-item-icon>
                         <v-list-item-title>{{ $t("Banks") }}</v-list-item-title>
                     </v-list-item>
 <!--                     ACCOUNTS -->
-                    <v-list-item link router :to="{ name: 'accounts_list'}">
+                    <v-list-item link router :to="{ name: 'accounts_list'}"  v-if="$store.state.logged">
                         <v-list-item-icon><v-img color="#757575;" src="@/assets/account.svg"  :height="height" :width="width"></v-img></v-list-item-icon>
                         <v-list-item-title>{{ $t("Accounts") }}</v-list-item-title>
                     </v-list-item>
 <!--                     INVESTMENTS -->
-                    <v-list-item link router :to="{ name: 'investments_list'}">
+                    <v-list-item link router :to="{ name: 'investments_list'}" v-if="$store.state.logged">
                         <v-list-item-icon><v-img color="#757575;"  src="@/assets/investment.svg"  :height="height" :width="width"></v-img></v-list-item-icon>
                         <v-list-item-title>{{ $t("Investments") }}</v-list-item-title>
                     </v-list-item>
                             
 <!--                     ORDERS -->
-                    <v-list-item link router :to="{ name: 'banks_list'}">
+                    <v-list-item link router :to="{ name: 'banks_list'}" v-if="$store.state.logged">
                         <v-list-item-icon><v-icon color="#757575;">mdi-cart</v-icon></v-list-item-icon>
                         <v-list-item-title>{{ $t("Orders") }}</v-list-item-title>
                     </v-list-item>
 
 <!--                     PRODUCTS -->
-                    <v-list-group :value="false" >
+                    <v-list-group :value="false"  v-if="$store.state.logged">
                         <template #prependIcon>
                             <v-img color="#757575;" src="@/assets/product.svg" :height="height" :width="width"></v-img>
                         </template>
@@ -49,7 +49,7 @@
                     </v-list-group>        
             
 <!--                     REPORTS -->
-                    <v-list-group :value="false" prepend-icon="mdi-file-chart-outline">
+                    <v-list-group :value="false" prepend-icon="mdi-file-chart-outline"  v-if="$store.state.logged">
                         <template v-slot:activator>
                             <v-list-item-title>{{ $t("Reports") }}</v-list-item-title>
                         </template>
@@ -59,7 +59,7 @@
                     </v-list-group>
             
 <!--                     STRATEGIES -->
-                    <v-list-item link router :to="{ name: 'banks_list'}">
+                    <v-list-item link router :to="{ name: 'banks_list'}" v-if="$store.state.logged">
                         <v-list-item-icon><v-icon color="#757575;">mdi-strategy</v-icon></v-list-item-icon>
                         <v-list-item-title>{{ $t("Strategies") }}</v-list-item-title>
                     </v-list-item>
