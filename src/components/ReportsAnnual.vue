@@ -7,7 +7,7 @@
                 </v-card>
             </div>
 
-        <p>Last year balance () is {{ last_year_balance }}</p>
+        <p>{{ last_year_balance_string }}</p>
 
         <v-tabs  background-color="primary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
             <v-tab key="0">{{ $t("Month evolution") }}</v-tab>
@@ -43,6 +43,9 @@
                                     <div v-if="header.value == 'diff_lastmonth'" align="right">
                                         <div v-html="localcurrency_html(listobjects_sum(total_annual,'diff_lastmonth'))"></div>
                                     </div>
+                                    <div v-if="header.value == 'percentage_year'" align="right">
+                                        <div v-html="percentage_html(listobjects_sum(total_annual,'diff_lastmonth')/last_year_balance)"></div>
+                                    </div>
                                 </td>
                             </tr>
                             
@@ -69,13 +72,13 @@
                             <div v-html="localcurrency_html(item.dividends)"></div>
                         </template>    
                         <template v-slot:[`item.actions`]="{ item }">
-                            <v-icon small class="mr-2" @click="incomeDetails(item)">mdi-pencil</v-icon>headatar
+                            <v-icon small class="mr-2" @click="incomeDetails(item)">mdi-pencil</v-icon>
                         </template> 
                         <template v-slot:[`body.append`]="{headers}">
                             <tr style="background-color: GhostWhite" ref="lr">
                                 <td v-for="(header,i) in headers" :key="i" >
                                     <div v-if="header.value == 'month'">
-                                        TotalProductsUpdate
+                                        Total
                                     </div>
                                     <div v-if="header.value == 'expenses'" align="right">
                                         <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'expenses'))"></div>
@@ -88,6 +91,9 @@
                                     </div>
                                     <div v-if="header.value == 'dividends'" align="right">
                                         <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'dividends'))"></div>
+                                    </div>
+                                    <div v-if="header.value == 'total'" align="right">
+                                        <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'total'))"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -144,7 +150,7 @@
 <script>     
 
     import axios from 'axios'
-    import {listobjects_sum} from '../functions.js'
+    import {listobjects_sum, localtime} from '../functions.js'
     export default {
         components:{
         },
@@ -179,7 +185,8 @@
                     { text: this.$t('Net dividends'), value: 'dividends_net', sortable: true, align:'right'},
                 ],   
                 year: 2021,
-                last_year_balance: 0,
+                last_year_balance:0,
+                last_year_balance_string: "",
                 loading_annual:true,
                 loading_annual_incomes:true,
                 loading_annual_gainsbyproductstypes:true,
@@ -188,6 +195,7 @@
         computed:{
         },
         methods:{
+            localtime,
             years(){
                 var start=1990
                 var end=new Date().getFullYear()
@@ -210,10 +218,13 @@
                 this.loading_annual=true
                 this.loading_annual_incomes=true
                 this.loading_annual_gainsbyproductstypes=true
+                this.last_year_balance_string=""
                 axios.get(`${this.$store.state.apiroot}/reports/annual/${this.year}/`, this.myheaders())
                 .then((response) => {
                         console.log(response.data)
-                        this.total_annual=response.data
+                        this.last_year_balance=response.data.last_year_balance
+                        this.last_year_balance_string=this.$t(`Last year balance (${this.localtime(response.data.dtaware_last_year)}) is ${this.localcurrency_html(response.data.last_year_balance)}`) 
+                        this.total_annual=response.data.data
                         this.loading_annual=false
                 }, (error) => {
                     this.parseResponseError(error)

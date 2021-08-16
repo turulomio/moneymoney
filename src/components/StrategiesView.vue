@@ -1,21 +1,21 @@
 <template>
     <div>
-        <h1>{{ $t(`Account details of '${account.name }'`)}}
+        <h1>{{ $t(`Strategy details of '${strategy.name }'`)}}
         <MyMenuInline :items="items" @selected="MyMenuInlineSelection"></MyMenuInline>  </h1>
 
-        <p><strong>{{ $t('Id')}}: </strong>{{ account.id }}</p>
-        <p><strong>{{ $t('Number')}}: </strong>{{ account.number }}</p>
-        <p><strong>{{ $t('Currency')}}: </strong>{{ account.currency }}</p>
+        <p><strong>{{ $t('Id')}}: </strong>{{ strategy.id }}</p>
+        <p><strong>{{ $t('Number')}}: </strong>{{ strategy.number }}</p>
+        <p><strong>{{ $t('Currency')}}: </strong>{{ strategy.currency }}</p>
 
     
         <v-tabs v-model="tab">
-            <v-tab key="ao">{{ $t("Account operations")}}</v-tab>
+            <v-tab key="ao">{{ $t("Strategy operations")}}</v-tab>
             <v-tab key="cc">{{ $t("Credit cards")}}</v-tab>
             <v-tab-item key="ao">     
                 <v-card class="pa-4 d-flex justify-center" outlined style="min-width: 100px; max-width: 100%;">
                     <v-date-picker dense no-title class="mymonthpicker " ref="monthpicker" v-model="monthpicker" type="month"></v-date-picker>
                     <v-divider class="mx-2" vertical ></v-divider>
-                    <TableAccountOperations homogeneous :items="items_ao" :currency_account="account.currency" height="400" ref="table_ao" class=" flex-grow-1 flex-shrink-0" :locale='this.$i18n.locale' @editAO="editAO" @deleteAO="deleteAO"></TableAccountOperations>
+                    
                 </v-card>
             </v-tab-item>
             <v-tab-item key="cc">
@@ -26,10 +26,10 @@
                             <v-simple-checkbox v-model="item.deferred" disabled></v-simple-checkbox>
                         </template>  
                         <template v-slot:[`item.maximumbalance`]="{ item }">
-                            <div v-html="currency_html(item.maximumbalance, item.account_currency )"></div>
+                            <div v-html="currency_html(item.maximumbalance, item.strategy_currency )"></div>
                         </template>  
                         <template v-slot:[`item.balance`]="{ item }">
-                            <div v-html="currency_html(item.balance, item.account_currency )"></div>
+                            <div v-html="currency_html(item.balance, item.strategy_currency )"></div>
                         </template>     
                         <template v-slot:[`item.actions`]="{ item }">
                             <v-icon v-if="item.deferred" small class="mr-2" @click="viewCC(item)">mdi-eye</v-icon>
@@ -46,10 +46,10 @@
             <v-card class="pa-4">
                 <v-card-title class="headline">{{dialog_title_ao()}}</v-card-title>
                 <v-form ref="form_ao" v-model="form_valid_ao" lazy-validation>
-                    <v-autocomplete :items="$store.state.catalogs.accounts.filter(v =>v.active==true)" v-model="ao.accounts" :label="$t('Select an account')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
+                    <v-autocomplete :items="$store.state.catalogs.strategies.filter(v =>v.active==true)" v-model="ao.strategies" :label="$t('Select an strategy')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
                     <MyDateTimePicker label="Select operation date and time" v-model="ao.datetime"> </MyDateTimePicker>
                     <v-autocomplete :items="$store.state.catalogs.concepts" v-model="ao.concepts" :label="$t('Select a concept')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
-                    <v-text-field ref="ao_amount" v-model="ao.amount" type="number" :label="$t('Operation amount')" required :placeholder="$t('Account number')" :rules="RulesFloat(30,true)" counter="30"/>
+                    <v-text-field ref="ao_amount" v-model="ao.amount" type="number" :label="$t('Operation amount')" required :placeholder="$t('Strategy number')" :rules="RulesFloat(30,true)" counter="30"/>
                     <v-text-field v-model="ao.comment" type="text" :label="$t('Operation comment')" required :placeholder="$t('Operation comment')" autofocus  counter="200"/>
                 </v-form>
                 <v-card-actions>
@@ -65,7 +65,7 @@
             <v-card class="pa-4">
                 <v-card-title class="headline">{{dialog_title_cc()}}</v-card-title>
                 <v-form ref="form" v-model="form_valid_cc" lazy-validation>
-                    <v-autocomplete :items="$store.state.catalogs.accounts.filter(v =>v.active==true)" v-model="cc.accounts" :label="$t('Select an account')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
+                    <v-autocomplete :items="$store.state.catalogs.strategies.filter(v =>v.active==true)" v-model="cc.strategies" :label="$t('Select an strategy')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
                     <v-text-field v-model="cc.name" type="text" :label="$t('Credit card name')" required :placeholder="$t('Credit card name')" autofocus  counter="200" :rules="RulesString(200,true)"/>
                     <v-text-field v-model="cc.number" type="text" :label="$t('Credit card number')" required :placeholder="$t('Credit card number')" counter="30" :rules="RulesString(30,false)"/>
                     <v-text-field v-model="cc.maximumbalance" type="number" :label="$t('Credit card maximum balance')" required :placeholder="$t('Credit card maximum balance')" :rules="RulesInteger(10,true)" counter="10"/>
@@ -84,7 +84,7 @@
         <!-- DIALOG CREDIT CARD VIEW -->
         <v-dialog v-model="dialog_ccview">
             <v-card class="pa-4">
-                <CreditcardsView :cc="cc" :account="account"></CreditcardsView>
+                <CreditcardsView :cc="cc" :strategy="strategy"></CreditcardsView>
             </v-card>
         </v-dialog>
     </div>
@@ -94,16 +94,14 @@
     import MyMenuInline from './MyMenuInline.vue'
     import CreditcardsView from './CreditcardsView.vue'
     import MyDateTimePicker from './MyDateTimePicker.vue'
-    import TableAccountOperations from './TableAccountOperations.vue'
     export default {
         components:{
             MyMenuInline,
-            TableAccountOperations,
             CreditcardsView,
             MyDateTimePicker,
         },
         props:{
-            account:{
+            strategy:{
                 required:true,
             }
         },
@@ -113,24 +111,24 @@
                 tab:0,
                 items_ao: [],           
                 items: [
-                    { subheader:this.$t('Account orders'), children: [
+                    { subheader:this.$t('Strategy orders'), children: [
                             { 
-                                name:this.$t('Add an account transfer'), 
+                                name:this.$t('Add an strategy transfer'), 
                                 code: function(this_){
                                     this_.editing_ao=false
-                                    this_.account=this_.empty_account_operation()
+                                    this_.strategy=this_.empty_strategy()
                                     this_.dialog_ao=true
                                 },
                                 icon: "mdi-plus" 
                             },
                         ]
                     },
-                    { subheader:this.$t('Account operations orders'), children: [
+                    { subheader:this.$t('Strategy operations orders'), children: [
                             { 
-                                name:this.$t('Add an account operation'), 
+                                name:this.$t('Add an strategy operation'), 
                                 code: function(this_){
                                     this_.editing_ao=false
-                                    this_.ao=this_.empty_account_operation()
+                                    this_.ao=this_.empty_strategy()
                                     this_.dialog_ao=true
                                 },
                                 icon: "mdi-plus" 
@@ -172,7 +170,7 @@
                 dialog_ao:false,
                 editing_ao:false,
                 following_ao:false,
-                ao: this.empty_account_operation(),
+                ao: this.empty_strategy(),
 
                 // DIALOG CREDIT CARDS VIEW
                 dialog_ccview:false,
@@ -186,16 +184,16 @@
         methods: {
             CCONotDeferred(item){
                 this.editing_ao=false
-                this.ao=this.empty_account_operation()
+                this.ao=this.empty_strategy()
                 this.ao.comment=item.name + ". "
                 this.dialog_ao=true
                 
             },
             dialog_title_ao(){
                 if(this.editing_ao==true){
-                    return this.$t("Updating account operation")
+                    return this.$t("Updating strategy operation")
                 } else {
-                    return this.$t("Creating a new account operation")
+                    return this.$t("Creating a new strategy operation")
                 }
             },
             dialog_title_cc(){
@@ -205,14 +203,14 @@
                     return this.$t("Creating a new credit card")
                 }
             },
-            empty_account_operation(){
+            empty_strategy(){
                 return {
                     datetime: new Date().toISOString(),
                     concepts: null,
                     operationstypes:null,
                     amount: 0,
                     comment: "",    
-                    accounts: this.account.url,
+                    strategies: this.strategy.url,
                 }
             },
             empty_credit_card(){
@@ -222,7 +220,7 @@
                     deferred: false,
                     maximumbalance: 0,
                     active: true,   
-                    accounts: this.account.url,
+                    strategies: this.strategy.url,
                 }
             },
             MyMenuInlineSelection(item){
@@ -230,7 +228,7 @@
             },
             refreshTable(){
                 //var this_=this //Needs this inside axios seems with browser vue method
-                axios.get(`${this.$store.state.apiroot}/accountsoperations/withbalance/?account=${this.account.id}&year=${this.monthpicker.slice(0,4)}&month=${this.monthpicker.slice(5,7)}`, this.myheaders())                
+                axios.get(`${this.$store.state.apiroot}/strategiesoperations/withbalance/?strategy=${this.strategy.id}&year=${this.monthpicker.slice(0,4)}&month=${this.monthpicker.slice(5,7)}`, this.myheaders())                
                 .then((response) => {
                     this.items_ao=response.data;
                     console.log(this.items_ao)
@@ -243,7 +241,7 @@
             },
             refreshTableCC(){
                 //var this_=this //Needs this inside axios seems with browser vue method
-                axios.get(`${this.$store.state.apiroot}/creditcards/withbalance/?account=${this.account.id}&active=${this.showActiveCC}`, this.myheaders())                
+                axios.get(`${this.$store.state.apiroot}/creditcards/withbalance/?strategy=${this.strategy.id}&active=${this.showActiveCC}`, this.myheaders())                
                 .then((response) => {
                     this.table_cc=response.data;
                 }) 
@@ -309,13 +307,12 @@
                     .then((response) => {
                             console.log(response.data)
                             this.refreshTable()     
-                            this.$emit('changed', this.ao)
                             this.dialog_ao=false
                     }, (error) => {
                         this.parseResponseError(error)
                     })
                 } else{
-                    axios.post(`${this.$store.state.apiroot}/api/accountsoperations/`, this.ao,  this.myheaders())
+                    axios.post(`${this.$store.state.apiroot}/api/strategiesoperations/`, this.ao,  this.myheaders())
                     .then((response) => {
                             console.log(response.data)
                             this.refreshTable()                             
@@ -327,7 +324,6 @@
                                 this.ao.datetime=this.date2zulu(dt)
                             } else {  
                                 this.dialog_ao=false
-                            this.$emit('changed', this.ao)
                             }
                     }, (error) => {
                         this.parseResponseError(error)
@@ -365,14 +361,13 @@
                 this.dialog_ao=true
             },
             deleteAO (item) {
-                var r = confirm(this.$t("Do you want to delete this account operation?"))
+                var r = confirm(this.$t("Do you want to delete this strategy operation?"))
                 if(r == false) {
                     return
                 }  
                 axios.delete(item.url, this.myheaders())
                 .then((response) => {
                     console.log(response);
-                    this.$emit('changed', this.ao)
                     this.refreshTable()
                 }, (error) => {
                     this.parseResponseError(error)
