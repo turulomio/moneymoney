@@ -1,5 +1,5 @@
 <template>
-    <v-data-table dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header v-bind="$attrs"  :ref="$vnode.tag">
+    <v-data-table :show-select="showselected" v-model="selected" dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header v-bind="$attrs"  :ref="$vnode.tag" :single-select="false" item-key="datetime">
         <template v-slot:[`item.datetime`]="{ item }" >
         {{ localtime(item.datetime)}}
         </template>      
@@ -48,11 +48,21 @@
         locale:{
             required:true,
             default: "es",
+        },
+        showselected:{
+            required:false,
+            default: false,
         }
     },
 
     data: function(){
         return {
+            selected: [],
+        }
+    },
+    watch: {
+        selected(){
+            this.$emit("changeSelected",this.selected)
         }
     },
     methods: {

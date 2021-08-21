@@ -6,7 +6,7 @@
 
         </h1>
         <v-card outlined class="ma-4 pa-4">
-            <TableAccountOperations homogeneous :items="items_cco" :currency_account="account.currency" height="400" ref="table_cc" class=" flex-grow-1 flex-shrink-0" :locale='this.$i18n.locale' @editAO="editCCO" @deleteAO="deleteCCO"></TableAccountOperations>
+            <TableAccountOperations :showselected="paying" homogeneous :items="items_cco" :currency_account="account.currency" height="400" ref="table_cc" class=" flex-grow-1 flex-shrink-0" :locale='this.$i18n.locale' @editAO="editCCO" @deleteAO="deleteCCO" @changeSelected="changeSelected" :key="key"></TableAccountOperations>
         </v-card>
         <v-dialog v-model="dialog" max-width="550">
             <v-card class="pa-4">
@@ -26,6 +26,11 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <v-card outlined class="ma-4 pa-4" v-if="paying">
+            <MyDateTimePicker label="Select payment date and time" v-model="dt_payment" ></MyDateTimePicker>
+            <v-btn color="primary" @click="acceptPayment()" :disabled="this.selected_items.length==0">{{ paying_string }}</v-btn>
+            <v-btn class="ml-2" color="error" @click="paying=false" >{{ $t("Close payment mode") }}</v-btn>
+        </v-card>
     </div>
 </template>
 <script>
@@ -33,7 +38,7 @@
     import MyMenuInline from './MyMenuInline.vue'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import TableAccountOperations from './TableAccountOperations.vue'
-    import {localtime} from '../functions.js'
+    import {listobjects_sum, localtime} from '../functions.js'
     export default {
         components:{
             MyMenuInline,
@@ -58,9 +63,18 @@
                                 name:"Add a new credit card operation",
                                 icon: "mdi-plus",
                                 code: function(this_){
+                                    this_.paying=false
                                     this_.editing=false
                                     this_.cco=this_.empty_cco()
                                     this_.dialog=true
+                                },
+                            },
+                            {
+                                name:"Make a credit card payment",
+                                icon: "mdi-cart",
+                                code: function(this_){
+                                    this_.paying=true
+                                    this_.key=this_.key+1
                                 },
                             },
                         ]
@@ -75,10 +89,21 @@
 
                 dialog_view:false,
                 key:0,
+
+                //Payment
+                paying:false,
+                dt_payment:new Date().toISOString(),
+                paying_string:this.$t("You cant't pay, please select operations"),
+                selected_items:[],
+
             }
         },
         methods: {
             localtime,
+            changeSelected(selected_items){
+                this.selected_items=selected_items
+                this.paying_string=this.$t(`Make a payment of ${selected_items.length} operations valued in ${listobjects_sum(selected_items,"amount")}`) 
+            },
             dialog_title(){
                 if(this.editing==true){
                     return this.$t("Updating credit card operation")
@@ -170,6 +195,26 @@
                         this.parseResponseError(error)
                     })
                 }
+            },
+            acceptPayment(){
+                //Validation
+                //Accept              
+                var ids=[]
+                this.selected_items.forEach(item => ids.push(item.id))
+
+                const formData= new FormData()
+                formData.append('cco', ids)
+                formData.append('dt_payment',this.dt_payment)
+                axios.post(`${this.$store.state.apiroot}/creditcardsoperations/payment/${this.cc.id}/`, formData, this.myheaders_formdata())
+                .then((response) => {
+                        console.log(response.data)
+                        this.update_table()     
+                        this.dialog=false
+                        this.editing=false
+                }, (error) => {
+                    this.parseResponseError(error)
+                })
+
             },
         },
         mounted(){
