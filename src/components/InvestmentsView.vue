@@ -82,7 +82,7 @@
             </v-tab-item>
             <v-tab-item key="dividends">     
                 <v-card class="padding" v-if="!loading_ios">
-                    <TableDividends :items="items_dividends" currency_account="EUR"  height="400" output="user" :key="key" heterogeneus></TableDividends>
+                    <TableDividends :items="dividends" currency_account="EUR"  height="400" output="user" :key="key" heterogeneus></TableDividends>
                 </v-card>
             </v-tab-item>
         </v-tabs-items> 
@@ -118,7 +118,7 @@
                 io_current: [],
                 io_historical: [],
                 loading_ios:true,
-                items_dividends: [],
+                dividends: [],
                 selling_expiration_message:"",
                 selling_point_message:"",
                 leverage_message:"",
@@ -126,12 +126,6 @@
                     {
                         subheader:this.$t('Investment orders'),
                         children: [
-                            {
-                                name:this.$t('Update this investment'),
-                                type: "redirection",
-                                command: "{% url 'investment_update' pk=investment.id %}",
-                                icon: "mdi-pencil",
-                            },
                             {
                                 name:this.$t('Change active status'),
                                 type: "redirection",
@@ -242,12 +236,27 @@
                     if (this.investment_io.gains_at_sellingpoint){
                         this.selling_point_message=this.selling_point_message+ this.$t(`, to gain ${this.currency_string(this.investment_io.gains_at_sellingpoint, this.investment.currency)}`)
                     }
+
+                    this.update_dividends()
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
+            },
+            update_dividends(){
+                var from=""
+                if (this.io_current.length>0){
+                    from=`&from=${this.io_current[0].datetime}`
+                }
+                axios.get(`${this.$store.state.apiroot}/api/dividends?investments=${this.investment.id}${from}`, this.myheaders())
+                .then((response) => {
+                    console.log(response.data)
+                    this.dividends=response.data
                     this.loading_ios=false
                     this.key=this.key+1
                 }, (error) => {
                     this.parseResponseError(error)
                 });
-            }
+            },
         },
         mounted(){
             this.loading_ios=true
