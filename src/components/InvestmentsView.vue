@@ -1,26 +1,20 @@
 
 <template>
     <div>
-        <h1>{{ $t(`Investment details of 'investment.name'`)}}</h1>
+        <h1>{{ $t(`Investment details of '${investment.name}'`)}}</h1>
         <v-layout style="justify-content: center;">
             <v-card class="padding" style="width:50%;">
-                <p><strong>{{ $t('Id') }}: </strong>{{ investment.id }}</p>
-                <p><strong>{{ $t('Name') }}: </strong>{{ investment.fullName }}</p>
-                <p><strong>{{ $t('Product Id') }}: </strong>{{ investment.products.fullName }}</p>
-                <p><strong>{{ $t('Active') }}: </strong>{{ investment.active }}</p>
-                <p><strong>{{ $t('Selling point') }}: </strong>{{ investment.selling_price }}
-                {% with gains_at_selling_price=operations.current_gains_gross_investment_at_selling_price %}  
+                <p class="info"><strong>{{ $t('Id') }}: </strong>{{ investment.id }}</p>
+                <p class="info"><strong>{{ $t('Name') }}: </strong>{{ investment.name }}</p>
+                <p class="info"><strong>{{ $t('Product Id') }}: </strong>{{ investment.products }}</p>
+                <p class="info"><strong>{{ $t('Active') }}: </strong>{{ investment.active }}</p>
+                <p class="info"><strong>{{ $t('Selling point') }}: </strong>{{ investment.selling_price }}
                 {% if gains_at_selling_price %}
-                    . {% blocktrans %} to gain {% gains_at_selling_price %}.{% endblocktrans %}
-                {% endif %}</p>
-                {% endwith %}
-                <p><strong>{{ $t('Selling expiration') }}: </strong>{{ investment.selling_expiration }}
-                {% if investment.selling_expiration_alert %}
-                    . <span class="red">{{ $t('You must set a new selling order.') }}</span>
-                {% endif %}</p>
-                <p><strong>{{ $t('Daily adjustment') }}: </strong>{{ investment.daily_adjustment }}</p>
-                <p><strong>{{ $t('Currency') }}: </strong>{% investment.products.currency %} ({% investment.products.currency_symbol %})</p>
-                <p><strong>{{ $t('Leverage') }}: </strong>{% investment.products.leverages.multiplier %} (Real: {%investment.products.real_leveraged_multiplier%})</p>
+                    . {% blocktrans %} to gain {% gains_at_selling_price %}.{% endblocktrans %}</p>
+                <p v-html="selling_expiration_message"></p>
+                <p class="info"><strong>{{ $t('Daily adjustment') }}: </strong>{{ investment.daily_adjustment }}</p>
+                <p class="info"><strong>{{ $t('Currency') }}: </strong>{{ investment.currency }}</p>
+                <p class="info"><strong>{{ $t('Leverage') }}: </strong>{% investment.products.leverages.multiplier %} (Real: {%investment.products.real_leveraged_multiplier%})</p>
             </v-card>
             <MyMenuInline :items="items" @selected="items_selected"></MyMenuInline>
         </v-layout>
@@ -125,6 +119,7 @@
                 io_historical: [],
                 loading_ios:true,
                 items_dividends: [],
+                selling_expiration_message:"",
                 items: [
                     {
                         subheader:this.$t('Investment orders'),
@@ -232,7 +227,8 @@
             update_investmentsoperations(){
                 axios.get(`${this.$store.state.apiroot}/investmentsoperations/full?investments=${this.investment.id}`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data[0].io_current)
+                     console.log(this.investment)
+                    console.log(response.data[0])
                     this.io=response.data[0].io
                     this.io_current=response.data[0].io_current
                     this.io_historical=response.data[0].io_historical
@@ -243,8 +239,15 @@
                 });
             }
         },
-        created(){
+        mounted(){
             this.loading_ios=true
+
+            this.selling_expiration_message= '<strong>' + this.$t("Selling expiration") + `: </strong>${this.investment.selling_expiration}`
+            if (new Date(this.investment.selling_expiration)<new Date()){
+                this.selling_expiration_message=this.selling_expiration_message+ '<span class="red"> '+ this.$t('You must set a new selling order.') + '</span>'
+            }
+
+
             this.update_investmentsoperations()
 
         }

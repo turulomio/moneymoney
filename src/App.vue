@@ -147,4 +147,8 @@ span.vuered{
     color: Green;
     font-weight: 900;
 }
+.info {
+    margin-bottom: unset;
+    background-color: white;
+}
 </style>

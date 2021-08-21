@@ -1,7 +1,7 @@
 <template>
-    <v-data-table dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" :key="$attrs.key">
-        <template v-slot:[`item.datetime`]="{ item }" >
-           {{ localtime(item.datetime)}}
+    <v-data-table ref="table_oc" dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" :key="$attrs.key">
+        <template v-slot:[`item.datetime`]="{ item, index }" >
+            <div :ref="index">{{ localtime(item.datetime)}}</div>
         </template>                  
         <template v-slot:[`item.price_account`]="{ item }">
             <div v-html="currency(item.price_account)"></div>
@@ -204,7 +204,7 @@
                 return r
             },
             gotoLastRow(){
-              this.$vuetify.goTo(this.$refs.lr, { container:  ".v-data-table__wrapper" }) 
+                this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs.table_oc.$el.childNodes[0] }) 
             },
         },
         mounted(){

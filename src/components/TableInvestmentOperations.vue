@@ -80,7 +80,6 @@
         computed:{
         },
         methods: {
-            // HASN'T MIXIN VIXIBILITY
             localtime,
             table_headers(){
                 var r
