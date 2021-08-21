@@ -147,8 +147,8 @@ span.vuered{
     color: Green;
     font-weight: 900;
 }
-.info {
-    margin-bottom: unset;
-    background-color: white;
+.v-application p.info {
+    margin-bottom: 1px;
+    background-color: white !important;
 }
 </style>

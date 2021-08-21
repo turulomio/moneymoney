@@ -1,9 +1,11 @@
 
 <template>
     <div>
-        <h1>{{ $t(`Investment details of '${investment.name}'`)}}</h1>
+        <h1>{{ $t(`Investment details of '${investment.name}'`)}}
+            <MyMenuInline :items="items" @selected="items_selected"></MyMenuInline>
+        </h1>
         <v-layout style="justify-content: center;">
-            <v-card class="padding" style="width:50%;">
+            <v-card class="pa-4" style="width:50%;">
                 <p class="info"><strong>{{ $t('Id') }}: </strong>{{ investment.id }}</p>
                 <p class="info"><strong>{{ $t('Name') }}: </strong>{{ investment.name }}</p>
                 <p class="info"><strong>{{ $t('Product Id') }}: </strong>{{ investment.products }}</p>
@@ -16,7 +18,6 @@
                 <p class="info"><strong>{{ $t('Currency') }}: </strong>{{ investment.currency }}</p>
                 <p class="info"><strong>{{ $t('Leverage') }}: </strong>{% investment.products.leverages.multiplier %} (Real: {%investment.products.real_leveraged_multiplier%})</p>
             </v-card>
-            <MyMenuInline :items="items" @selected="items_selected"></MyMenuInline>
         </v-layout>
         <p></p>
         <v-tabs  background-color="primary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
@@ -31,7 +32,7 @@
                 <div>
                     <v-tabs vertical  v-model="tabcurrent">
                         <v-tab key="investment">{{ $t('Investment currency') }}</v-tab>
-                        <v-tab key="account">{{ $t('Account currrency') }}</v-tab>
+                        <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card class="padding" v-if="!loading_ios">
                                 <TableInvestmentOperationsCurrent :items="io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="investment" height="400" :key="key"></TableInvestmentOperationsCurrent>
@@ -49,7 +50,7 @@
                 <div>
                     <v-tabs vertical  v-model="tabcurrent">
                         <v-tab key="investment">{{ $t('Investment currency') }}</v-tab>
-                            <v-tab key="account">{{ $t('Account currrency') }}</v-tab>
+                            <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card class="padding" v-if="!loading_ios">
                                 <TableInvestmentOperations :items="io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment"></TableInvestmentOperations>
@@ -67,7 +68,7 @@
                 <div>            
                     <v-tabs vertical  v-model="tabcurrent">
                         <v-tab key="investmenth">{{ $t('Investment currency') }}</v-tab>
-                            <v-tab key="accounth">{{ $t('Account currrency') }}</v-tab>
+                            <v-tab key="accounth">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investmenth">     
                             <v-card class="padding"  v-if="!loading_ios">
                                 <TableInvestmentOperationsHistorical :items="io_historical" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" output="investment" :key="key"></TableInvestmentOperationsHistorical>
