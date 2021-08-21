@@ -6,17 +6,15 @@
         </h1>
         <v-layout style="justify-content: center;">
             <v-card class="pa-4" style="width:50%;">
-                <p class="info"><strong>{{ $t('Id') }}: </strong>{{ investment.id }}</p>
-                <p class="info"><strong>{{ $t('Name') }}: </strong>{{ investment.name }}</p>
-                <p class="info"><strong>{{ $t('Product Id') }}: </strong>{{ investment.products }}</p>
-                <p class="info"><strong>{{ $t('Active') }}: </strong>{{ investment.active }}</p>
-                <p class="info"><strong>{{ $t('Selling point') }}: </strong>{{ investment.selling_price }}
-                {% if gains_at_selling_price %}
-                    . {% blocktrans %} to gain {% gains_at_selling_price %}.{% endblocktrans %}</p>
-                <p v-html="selling_expiration_message"></p>
-                <p class="info"><strong>{{ $t('Daily adjustment') }}: </strong>{{ investment.daily_adjustment }}</p>
-                <p class="info"><strong>{{ $t('Currency') }}: </strong>{{ investment.currency }}</p>
-                <p class="info"><strong>{{ $t('Leverage') }}: </strong>{% investment.products.leverages.multiplier %} (Real: {%investment.products.real_leveraged_multiplier%})</p>
+                <p class="inform"><strong>{{ $t('Id') }}: </strong>{{ investment.id }}</p>
+                <p class="inform"><strong>{{ $t('Name') }}: </strong>{{ investment.name }}</p>
+                <p class="inform"><strong>{{ $t('Product Id') }}: </strong>{{ investment.products }}</p>
+                <p class="inform"><strong>{{ $t('Active') }}: </strong>{{ investment.active }}</p>
+                <p class="inform"><strong>{{ $t('Selling point') }}: </strong><span class="inform" v-html="selling_point_message"></span>
+                <p class="inform"><strong>{{ $t('Selling expiration') }}: </strong><span class="inform" v-html="selling_expiration_message"></span>
+                <p class="inform"><strong>{{ $t('Daily adjustment') }}: </strong>{{ investment.daily_adjustment }}</p>
+                <p class="inform"><strong>{{ $t('Currency') }}: </strong> {{ investment.currency }}</p>
+                <p class="inform"><strong>{{ $t('Leverage') }}: </strong> {{leverage_message}}</p>
             </v-card>
         </v-layout>
         <p></p>
@@ -115,12 +113,15 @@
                 tab:0,
                 tabcurrent:0,
                 key:0,
+                investment_io: null,
                 io: [],
                 io_current: [],
                 io_historical: [],
                 loading_ios:true,
                 items_dividends: [],
                 selling_expiration_message:"",
+                selling_point_message:"",
+                leverage_message:"",
                 items: [
                     {
                         subheader:this.$t('Investment orders'),
@@ -230,9 +231,17 @@
                 .then((response) => {
                      console.log(this.investment)
                     console.log(response.data[0])
+                    this.investment_io=response.data[0].investment
                     this.io=response.data[0].io
                     this.io_current=response.data[0].io_current
                     this.io_historical=response.data[0].io_historical
+
+                    this.leverage_message= this.$t(`${this.investment_io.leverage_multiplier } (Real: ${this.investment_io.leverage_real_multiplier })`)
+
+                    this.selling_point_message=this.currency_string(this.investment.selling_price, this.investment.currency)
+                    if (this.investment_io.gains_at_sellingpoint){
+                        this.selling_point_message=this.selling_point_message+ this.$t(`, to gain ${this.currency_string(this.investment_io.gains_at_sellingpoint, this.investment.currency)}`)
+                    }
                     this.loading_ios=false
                     this.key=this.key+1
                 }, (error) => {
@@ -243,9 +252,9 @@
         mounted(){
             this.loading_ios=true
 
-            this.selling_expiration_message= '<strong>' + this.$t("Selling expiration") + `: </strong>${this.investment.selling_expiration}`
+            this.selling_expiration_message= `${this.investment.selling_expiration}`
             if (new Date(this.investment.selling_expiration)<new Date()){
-                this.selling_expiration_message=this.selling_expiration_message+ '<span class="red"> '+ this.$t('You must set a new selling order.') + '</span>'
+                this.selling_expiration_message=this.selling_expiration_message+ '.<span class="vuered"> '+ this.$t('You must set a new selling order.') + '</span>'
             }
 
 
