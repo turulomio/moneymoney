@@ -1,7 +1,7 @@
 
 <template>
     <div>
-        <h1>{{ $t(`Investment details of '${investment.name}'`)}}
+        <h1>{{ investment.name }}
             <MyMenuInline :items="items" @selected="items_selected"></MyMenuInline>
         </h1>
         <v-layout style="justify-content: center;">
@@ -82,7 +82,8 @@
             </v-tab-item>
             <v-tab-item key="dividends">     
                 <v-card class="padding" v-if="!loading_ios">
-                    <TableDividends :items="dividends" currency_account="EUR"  height="400" output="user" :key="key" heterogeneus></TableDividends>
+                    <v-checkbox v-model="showAllDividends" :label="setChkDividendsLabel()" @click="on_chkDividends()"></v-checkbox>
+                    <TableDividends :items="dividends_filtered" currency_account="EUR"  height="300" output="user" :key="key" heterogeneus></TableDividends>
                 </v-card>
             </v-tab-item>
         </v-tabs-items> 
@@ -119,8 +120,10 @@
                 io_historical: [],
                 loading_ios:true,
                 dividends: [],
+                dividends_filtered: [],
                 selling_expiration_message:"",
                 selling_point_message:"",
+                showAllDividends:false,
                 leverage_message:"",
                 items: [
                     {
@@ -206,6 +209,24 @@
             }
         },
         methods: {
+            setChkDividendsLabel(){
+                if (this.showAllDividends== true){
+                    return this.$t("Uncheck to see dividends of current investment operations")
+                } else {
+                    return this.$t("Check to see all dividends")
+                }
+            },
+            on_chkDividends(){
+                if (this.showAllDividends==true){
+                    this.dividends_filtered=this.dividends
+                } else {
+                    if (this.io_current.length==0){
+                        this.dividends_filtered=[]
+                    } else {
+                        this.dividends_filtered=this.dividends.filter((d)=> new Date(d.datetime)>=new Date(this.io_current[0].datetime))
+                    }
+                }
+            },
             items_selected(item){
                 alert(item)
                 /*if (item.command=="newio_adjusting_cc"){
@@ -243,14 +264,11 @@
                 });
             },
             update_dividends(){
-                var from=""
-                if (this.io_current.length>0){
-                    from=`&from=${this.io_current[0].datetime}`
-                }
-                axios.get(`${this.$store.state.apiroot}/api/dividends?investments=${this.investment.id}${from}`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/api/dividends?investments=${this.investment.id}`, this.myheaders())
                 .then((response) => {
                     console.log(response.data)
                     this.dividends=response.data
+                    this.on_chkDividends()
                     this.loading_ios=false
                     this.key=this.key+1
                 }, (error) => {
