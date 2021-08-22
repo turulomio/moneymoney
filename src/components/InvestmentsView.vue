@@ -1,8 +1,10 @@
-
+<!--
+    Emits, @cruded when a dividend, investment or investment operation is cruded
+-->
 <template>
     <div>
         <h1>{{ investment.name }}
-            <MyMenuInline :items="items" @selected="items_selected"></MyMenuInline>
+            <MyMenuInline :items="items" @selected="MyMenuInlineSelection"></MyMenuInline>
         </h1>
         <v-layout style="justify-content: center;">
             <v-card class="pa-4" style="width:50%;">
@@ -87,10 +89,17 @@
                 </v-card>
             </v-tab-item>
         </v-tabs-items> 
+        <v-dialog v-model="dialog_evolution_chart">
+            <v-card class="pa-4">
+                <InvestmentsoperationsEvolutionChart :investment="investment" :key="key" ></InvestmentsoperationsEvolutionChart>
+            </v-card>
+        </v-dialog>
     </div>  
 </template>
 <script>
     import axios from 'axios'
+    import {listobjects_sum, parseNumber,listobjects_average_ponderated} from '../functions.js'
+    import InvestmentsoperationsEvolutionChart from './InvestmentsoperationsEvolutionChart.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import TableDividends from './TableDividends.vue'
     import TableInvestmentOperations from './TableInvestmentOperations.vue'
@@ -103,6 +112,7 @@
             TableInvestmentOperationsCurrent,
             TableInvestmentOperationsHistorical,
             TableDividends,
+            InvestmentsoperationsEvolutionChart,
         },
         props: {
             investment: {
@@ -131,15 +141,24 @@
                         children: [
                             {
                                 name:this.$t('Change active status'),
-                                type: "redirection",
-                                command:"{% url 'investment_change_active' pk=investment.id %}",
+                                code: function(this_){
+                                    this_.investment.active=!this_.investment.active
+                                    axios.put(this_.investment.url, this_.investment,  this_.myheaders())
+                                    .then((response) => {
+                                            console.log(response.data)
+                                            this_.$emit("cruded")
+                                    }, (error) => {
+                                        this_.parseResponseError(error)
+                                    })
+                                },
                                 icon: "mdi-pencil",
                             },
                             {
                                 name:this.$t('Show evolution chart'),
-                                type: "redirection",
-                                command:"{% url 'investment_view_chart' pk=investment.id %}",
                                 icon: "mdi-chart-areaspline",
+                                code: function(this_){
+                                    this_.dialog_evolution_chart=true
+                                }
                             },
                             {
                                 name:this.$t('Change selling price of investments with the same product'),
@@ -183,8 +202,17 @@
                             },
                             {
                                 name:this.$t('Add an investment operation adjusting currency conversion factor'),
-                                type: "function",
-                                command: "newio_adjusting_cc",
+                                code: function(this_){
+                                    var selling_price_product_currency=parseNumber(prompt( this_.$t("Please add the operation close price in product currency"), 0 ));
+                                    var gains_account_currency=parseNumber(prompt( this_.$t("Please add the final gains in account currency"), 0 ));
+                                    var shares=listobjects_sum(this_.investment_io.io_current,"shares")
+                                    var average_price_current_account=listobjects_average_ponderated(this_.investment_io.io_current,'price_account', 'shares')
+                                    var leverage=this_.investment_io.leverage_real_multiplier
+                                    var currency_conversion=(gains_account_currency+shares*average_price_current_account*leverage)/(shares*selling_price_product_currency*leverage)
+//                                    var url=`{% url 'investmentoperation_new' investments_id=investment.id %}?currency_conversion=${my_round(currency_conversion,10)}&price=${selling_price_product_currency}&shares=${-shares}`;
+//                                   window.location.href=url;
+                                    console.log(currency_conversion)
+                                },
                                 icon: "mdi-book-plus",
                             },
                         ]
@@ -200,7 +228,8 @@
                             },
                         ]
                     },
-                ]
+                ],
+                dialog_evolution_chart:false,
             }  
         },
         watch:{
@@ -209,6 +238,10 @@
             }
         },
         methods: {
+            listobjects_average_ponderated,
+            MyMenuInlineSelection(item){
+                item.code(this)
+            },
             setChkDividendsLabel(){
                 if (this.showAllDividends== true){
                     return this.$t("Uncheck to see dividends of current investment operations")
@@ -227,20 +260,7 @@
                     }
                 }
             },
-            items_selected(item){
-                alert(item)
-                /*if (item.command=="newio_adjusting_cc"){
-                    var selling_price_product_currency=parseNumber(prompt( this.$t("Please add the operation close price in product currency"), 0 ));
-                    var gains_account_currency=parseNumber(prompt( this.$t("Please add the final gains in account currency"), 0 ));
-                    var shares=parseNumber("{{ operations.current_shares|unlocalize}}");
-                    var average_price_current_account=parseNumber("{{operations.current_average_price_account.amount|unlocalize}}");
-                    var leverage=parseNumber("{{operations.investment.products.real_leveraged_multiplier}}")
-                    
-                    var currency_conversion=(gains_account_currency+shares*average_price_current_account*leverage)/(shares*selling_price_product_currency*leverage)
-                    var url=`{% url 'investmentoperation_new' investments_id=investment.id %}?currency_conversion=${my_round(currency_conversion,10)}&price=${selling_price_product_currency}&shares=${-shares}`;
-                    window.location.href=url;
-                }*/
-            },
+
             update_investmentsoperations(){
                 axios.get(`${this.$store.state.apiroot}/investmentsoperations/full?investments=${this.investment.id}`, this.myheaders())
                 .then((response) => {

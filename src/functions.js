@@ -207,6 +207,10 @@ export function logout(){
         });
 }
 
+export function parseNumber(strg){
+    strg = strg.toString().replace(',', '.');
+    return parseFloat(strg);
+}
 
 export function sortObjectsArray(objectsArray, sortKey)
 {

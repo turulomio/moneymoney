@@ -81,7 +81,7 @@
         </v-dialog>
         <v-dialog v-model="dialog_view">
             <v-card class="pa-4">
-                <InvestmentsView :investment="investment" :key="key"></InvestmentsView>
+                <InvestmentsView :investment="investment" :key="key" @cruded="on_InvestmentView_cruded"></InvestmentsView>
             </v-card>
         </v-dialog>
 
@@ -144,6 +144,9 @@
         },
         methods: {
             localtime,
+            on_InvestmentView_cruded(){
+                this.update_table()
+            },
             dialog_title(){
                 if(this.editing==true){
                     return this.$t("Updating investment")
