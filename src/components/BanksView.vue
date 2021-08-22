@@ -3,7 +3,7 @@
     <div>    
         <h1>{{ $t(`Bank details of '${bank.name}' `) }}</h1>
 
-        <p>{{ bank.id}}</p>
+        <DisplayValues :items="displayvalues()" :minimized_items="1"></DisplayValues>
 
         <v-card outlined class="ma-4 pa-4">
             <v-card-title class="headline">{{$t('Accounts')}}</v-card-title>
@@ -53,7 +53,11 @@
 </template>
 <script>
     import axios from 'axios'
+    import DisplayValues from './DisplayValues.vue'
     export default {
+        components: {
+            DisplayValues,
+        },
         props: {
             bank: {
                 required: true
@@ -79,7 +83,13 @@
                 key:0,
             }
         },
-        methods: {
+        methods: {            
+            displayvalues(){
+                return [
+                    {title:this.$t('Active'), value: this.bank.active},
+                    {title:this.$t('Id'), value: this.bank.id},
+                ]
+            },
             update_accounts(){
                 this.loading_accounts=true
                 axios.get(`${this.$store.state.apiroot}/accounts/withbalance?bank=${this.bank.id}`, this.myheaders())

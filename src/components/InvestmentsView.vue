@@ -6,20 +6,8 @@
         <h1>{{ investment.name }}
             <MyMenuInline :items="items" @selected="MyMenuInlineSelection"></MyMenuInline>
         </h1>
-        <v-layout style="justify-content: center;">
-            <v-card class="pa-4" style="width:50%;">
-                <p class="inform"><strong>{{ $t('Id') }}: </strong>{{ investment.id }}</p>
-                <p class="inform"><strong>{{ $t('Name') }}: </strong>{{ investment.name }}</p>
-                <p class="inform"><strong>{{ $t('Product Id') }}: </strong>{{ investment.products }}</p>
-                <p class="inform"><strong>{{ $t('Active') }}: </strong>{{ investment.active }}</p>
-                <p class="inform"><strong>{{ $t('Selling point') }}: </strong><span class="inform" v-html="selling_point_message"></span>
-                <p class="inform"><strong>{{ $t('Selling expiration') }}: </strong><span class="inform" v-html="selling_expiration_message"></span>
-                <p class="inform"><strong>{{ $t('Daily adjustment') }}: </strong>{{ investment.daily_adjustment }}</p>
-                <p class="inform"><strong>{{ $t('Currency') }}: </strong> {{ investment.currency }}</p>
-                <p class="inform"><strong>{{ $t('Leverage') }}: </strong> {{leverage_message}}</p>
-            </v-card>
-        </v-layout>
-        <p></p>
+        <DisplayValues :items="displayvalues()" :key="key"></DisplayValues>
+
         <v-tabs  background-color="primary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
             <v-tab key="current">{{ $t('Current investment operations') }}</v-tab>
             <v-tab key="operations">{{ $t('Investment operations') }}</v-tab>
@@ -94,25 +82,34 @@
                 <InvestmentsoperationsEvolutionChart :investment="investment" :key="key" ></InvestmentsoperationsEvolutionChart>
             </v-card>
         </v-dialog>
+        <v-dialog v-model="dialog_evolution_chart_timeseries">
+            <v-card class="pa-4">
+                <InvestmentsoperationsEvolutionChartTimeseries :investment="investment" :key="key" ></InvestmentsoperationsEvolutionChartTimeseries>
+            </v-card>
+        </v-dialog>
     </div>  
 </template>
 <script>
     import axios from 'axios'
     import {listobjects_sum, parseNumber,listobjects_average_ponderated} from '../functions.js'
     import InvestmentsoperationsEvolutionChart from './InvestmentsoperationsEvolutionChart.vue'
+    import InvestmentsoperationsEvolutionChartTimeseries from './InvestmentsoperationsEvolutionChartTimeseries.vue'
     import MyMenuInline from './MyMenuInline.vue'
+    import DisplayValues from './DisplayValues.vue'
     import TableDividends from './TableDividends.vue'
     import TableInvestmentOperations from './TableInvestmentOperations.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
     export default {
         components:{
+            DisplayValues,
             MyMenuInline,
             TableInvestmentOperations,
             TableInvestmentOperationsCurrent,
             TableInvestmentOperationsHistorical,
             TableDividends,
             InvestmentsoperationsEvolutionChart,
+            InvestmentsoperationsEvolutionChartTimeseries,
         },
         props: {
             investment: {
@@ -158,6 +155,13 @@
                                 icon: "mdi-chart-areaspline",
                                 code: function(this_){
                                     this_.dialog_evolution_chart=true
+                                }
+                            },
+                            {
+                                name:this.$t('Show evolution chart with time series'),
+                                icon: "mdi-chart-areaspline",
+                                code: function(this_){
+                                    this_.dialog_evolution_chart_timeseries=true
                                 }
                             },
                             {
@@ -230,6 +234,7 @@
                     },
                 ],
                 dialog_evolution_chart:false,
+                dialog_evolution_chart_timeseries:false,
             }  
         },
         watch:{
@@ -239,6 +244,18 @@
         },
         methods: {
             listobjects_average_ponderated,
+            displayvalues(){
+                return [
+                    {title:this.$t('Selling point'), value: this.selling_point_message},
+                    {title:this.$t('Selling expiration'), value: this.selling_expiration_message},
+                    {title:this.$t('Active'), value: this.investment.active},
+                    {title:this.$t('Currency'), value: this.investment.currency},
+                    {title:this.$t('Product'), value: this.investment.products},
+                    {title:this.$t('Leverage'), value: this.leverage_message},
+                    {title:this.$t('Daily adjustment'), value: this.investment.daily_adjustment},
+                    {title:this.$t('Id'), value: this.investment.id},
+                ]
+            },
             MyMenuInlineSelection(item){
                 item.code(this)
             },

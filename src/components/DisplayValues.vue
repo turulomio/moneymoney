@@ -3,13 +3,15 @@
         items. Must be a list of objects with the following attrs:
             - title
             - value
+
+    If we have display_values with code, we must set items as a function
 -->
 <template>  
         <v-layout style="justify-content: center;" class="ma-4">
             <v-card class="pa-4" style="width:50%;">
                 <p v-for="(item, index) in items" class="inform" :key="index">
                     <span v-if="must_be_showed(item,index)">
-                        <strong>{{ item.title }}: </strong>{{ item.value }}
+                        <strong>{{ item.title }}: </strong><span v-html="item.value"></span>
                     </span>
                 </p>
             </v-card>
