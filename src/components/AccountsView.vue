@@ -3,9 +3,7 @@
         <h1>{{ $t(`Account details of '${account.name }'`)}}
         <MyMenuInline :items="items" @selected="MyMenuInlineSelection"></MyMenuInline>  </h1>
 
-        <p><strong>{{ $t('Id')}}: </strong>{{ account.id }}</p>
-        <p><strong>{{ $t('Number')}}: </strong>{{ account.number }}</p>
-        <p><strong>{{ $t('Currency')}}: </strong>{{ account.currency }}</p>
+        <DisplayValues :items="displayvalues"></DisplayValues>
 
     
         <v-tabs v-model="tab">
@@ -91,6 +89,7 @@
 </template>  
 <script>     
     import axios from 'axios' 
+    import DisplayValues from './DisplayValues.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import CreditcardsView from './CreditcardsView.vue'
     import MyDateTimePicker from './MyDateTimePicker.vue'
@@ -98,6 +97,7 @@
     export default {
         components:{
             MyMenuInline,
+            DisplayValues,
             TableAccountOperations,
             CreditcardsView,
             MyDateTimePicker,
@@ -109,6 +109,12 @@
         },
         data () {
             return {
+                displayvalues:[
+                    {title:this.$t('Number'), value: this.account.number},
+                    {title:this.$t('Currency'), value: this.account.currency},
+                    {title:this.$t('Active'), value: this.account.active},
+                    {title:this.$t('Id'), value: this.account.id},
+                ],
                 monthpicker: new Date().toISOString().substr(0, 7),
                 tab:0,
                 items_ao: [],           

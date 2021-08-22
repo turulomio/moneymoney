@@ -1,7 +1,7 @@
 
 <template>
     <div>    
-        <h1>{{ $t('Investments operation evolution chart') }}</h1>
+        <h1>{{ $t(`'${investment.name}' evolution`) }}</h1>
         <v-card outlined class="ma-4 pa-4" height="600">
             <v-chart
                 ref="chart"
@@ -24,6 +24,7 @@
         data(){ 
             return{
                 data:null,
+                balance: [],
                 datetimes:[],
                 invested:[],
                 gains:[],
@@ -37,7 +38,7 @@
             chart_option(){
                 return  {
                     legend: {
-                        data: [this.investment.name, this.$t("Invested"), this.$t("Balance"), this.$t("Gains and dividends"),  this.$t("Gains"),  this.$t("Dividends")],
+                        data: [ this.$t("Invested"), this.$t("Balance"), this.$t("Gains and dividends"),  this.$t("Gains"),  this.$t("Dividends")],
                         inactiveColor: '#777',
                     },
                     tooltip: {
@@ -118,6 +119,7 @@
                 this.gains_dividends=response.data.gains_dividends
                 this.gains=response.data.gains
                 this.invested=response.data.invested
+                this.balance=response.data.balance
                 this.loading=false
             }, (error) => {
                 this.parseResponseError(error)
