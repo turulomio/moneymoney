@@ -49,8 +49,7 @@
                         }
                     },
                     xAxis: {
-                        type: 'category',
-                        data: this.datetimes,
+                        type: 'time',
                         axisLine: { lineStyle: { color: '#8392A5' } }
                     },
                     yAxis: {
@@ -137,6 +136,7 @@
                     i=i+1;
                 }
                 this.loading=false
+                console.log(this.invested)
             }, (error) => {
                 this.parseResponseError(error)
             });
