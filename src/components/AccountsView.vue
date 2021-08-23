@@ -85,10 +85,18 @@
                 <CreditcardsView :cc="cc" :account="account"></CreditcardsView>
             </v-card>
         </v-dialog>
+
+        <!-- DIALOG CREDIT CARD VIEW -->
+        <v-dialog v-model="dialog_transfer">
+            <v-card class="pa-4">
+                <AccountsTransfer :origin="account" @accepted="on_AccountTransfer_accepted()"></AccountsTransfer>
+            </v-card>
+        </v-dialog>
     </div>
 </template>  
 <script>     
     import axios from 'axios' 
+    import AccountsTransfer from './AccountsTransfer.vue'
     import DisplayValues from './DisplayValues.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import CreditcardsView from './CreditcardsView.vue'
@@ -96,6 +104,7 @@
     import TableAccountOperations from './TableAccountOperations.vue'
     export default {
         components:{
+            AccountsTransfer,
             MyMenuInline,
             DisplayValues,
             TableAccountOperations,
@@ -123,9 +132,7 @@
                             { 
                                 name:this.$t('Add an account transfer'), 
                                 code: function(this_){
-                                    this_.editing_ao=false
-                                    this_.account=this_.empty_account_operation()
-                                    this_.dialog_ao=true
+                                    this_.dialog_transfer=true
                                 },
                                 icon: "mdi-plus" 
                             },
@@ -182,6 +189,9 @@
 
                 // DIALOG CREDIT CARDS VIEW
                 dialog_ccview:false,
+
+                // DIALOG CREDIT CARDS VIEW
+                dialog_transfer:false,
             }  
         },
         watch:{
@@ -190,6 +200,7 @@
             }
         },
         methods: {
+
             CCONotDeferred(item){
                 this.editing_ao=false
                 this.ao=this.empty_account_operation()
@@ -287,6 +298,10 @@
             },
             on_chkActive_cc(){
                 this.refreshTableCC()
+            },
+            on_AccountTransfer_accepted(){
+                this.refreshTable()     
+                this.$emit('changed')
             },
             setCheckboxLabelCC(){
                 if (this.showActiveCC == true){

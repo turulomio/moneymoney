@@ -144,6 +144,7 @@ export function vuex_update_catalogs(){
     .then((response) => {
         this.$store.state.catalogs.accounts= sortObjectsArray(response.data, "name")
         console.log("Updated accounts")
+        console.log(this.$store.state.catalogs.accounts)
     }, (error) => {
         this.parseResponseError(error)
     });
@@ -192,6 +193,15 @@ export function get_operationstypes_from_concept(url){
     var concept=this.$store.state.catalogs.concepts.find(o => o.url==url)
     return this.$store.state.catalogs.operationstypes.find(o => o.url==concept.operationstypes)
 
+}
+
+export function object2formdata(item){
+    var form_data = new FormData();
+
+    for ( var key in item ) {
+        form_data.append(key, item[key]);
+    }
+    return form_data
 }
 
 export function logout(){
@@ -284,6 +294,9 @@ export function parseResponseError(error){
             this.$store.state.token=null;
             this.$store.state.logged=false;
             if (this.$router.currentRoute.name != "home") this.$router.push("home")
+            console.log(error.response)
+        } else if (error.response.status == 400){ // Used for developer or app errors
+            alert (this.$t("Something wrong with your request"))
             console.log(error.response)
         } else if (error.response.status == 500){
             alert (this.$t("There is a server error"))
