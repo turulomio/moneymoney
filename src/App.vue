@@ -75,6 +75,10 @@
                             <v-list-item-title>{{ $t("About")}}</v-list-item-title>
                         </v-list-item>
 
+                        <v-list-item link router :to="{ name: 'statistics'}">
+                            <v-list-item-title>{{ $t("Statistics")}}</v-list-item-title>
+                        </v-list-item>
+
                         <v-list-item key="1" href="https://github.com/turulomio/moneymoney/" target="_blank">
                             <v-list-item-title>{{ $t('Money Money Github') }}</v-list-item-title>
                         </v-list-item>

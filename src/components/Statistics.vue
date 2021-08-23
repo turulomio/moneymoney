@@ -3,7 +3,7 @@
         <div class="login">
             <h1>{{ $t("Statistics") }}</h1>
             <v-card>
-            <chart-pie :name="$t('Vip Contacts registers')" :items="items" height="600px" :key="key"></chart-pie>
+            <chart-pie :name="$t('Money Money registers')" :items="items" height="600px" :key="key"></chart-pie>
             </v-card>
         </div>
     </div>
@@ -13,7 +13,6 @@
     import ChartPie from './ChartPie.vue'
     import axios from "axios"
     export default {
-        name: 'Statistics',
         components: {
             ChartPie,
         },
@@ -25,7 +24,7 @@
         },
         methods: {
             getStatistics(){
-                axios.get(`${this.$store.state.apiroot}/api/statistics/`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/statistics/`, this.myheaders())
                 .then((response) => {
                     this.parseResponse(response)
                     this.items=response.data 
@@ -40,8 +39,3 @@
         }
     }
 </script>
-<style>
-.login{
-    padding:30px;
-}
-</style>
