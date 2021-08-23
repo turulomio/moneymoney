@@ -245,11 +245,7 @@
             update_foot(){
                 var positives=this.listobjects_sum(this.investments_items.filter((o) => o.gains_user >=0), "gains_user")
                 var negatives=this.listobjects_sum(this.investments_items.filter((o) => o.gains_user <0), "gains_user")
-        // positives=Currency(, request.local_currency)
-        // negatives=Currency(listdict_sum_negatives(listdict, "gains"), request.local_currency)
                 this.foot= "<p>" + this.$t(`Positive gains - Negative gains = ${this.localcurrency_html(positives)} ${this.localcurrency_html(negatives)} = ${this.localcurrency_html(positives+negatives)}`) + "</p>"
-                //foot= foot +"<p>" + this.$t(`Investments balance with futures is {Currency(qso.iotm.current_balance_futures_user(), request.local_currency)}")` + </p>
-
             }
         },
         mounted(){
