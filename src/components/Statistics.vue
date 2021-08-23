@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    import ChartPie from './reusing/ChartPie.vue'
+    import ChartPie from './ChartPie.vue'
     import axios from "axios"
     export default {
         name: 'Statistics',

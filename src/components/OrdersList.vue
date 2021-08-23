@@ -26,24 +26,18 @@
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small class="mr-2" @click="viewItem(item)">mdi-eye</v-icon>
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon small @click="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
+                    <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
                 </template>                            
             </v-data-table>
         </v-card>
-        <v-dialog v-model="dialog" max-width="550">
+        <!-- Order CU dialog -->
+        <v-dialog v-model="dialog_cu" max-width="550">
             <v-card class="pa-4">
-                <v-card-title class="headline">{{dialog_title()}}</v-card-title>
-                <v-form ref="form" v-model="form_valid" lazy-validation>
-                    <v-text-field v-model="order.name" type="text" :label="$t('Order name')" required :placeholder="$t('Order name')" autofocus/>
-                    <v-checkbox v-model="order.active" :label="$t('Is active?')" ></v-checkbox>
-                </v-form>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" @click="acceptDialog()" :disabled="!form_valid">{{ $t("Log in") }}</v-btn>
-                    <v-btn color="error" @click="dialog = false">{{ $t("Cancel") }}</v-btn>
-                </v-card-actions>
+                <OrdersCU :order="order" @cruded="on_OrdersCU_cruded()" :key="key"></OrdersCU>
             </v-card>
         </v-dialog>
+
+        <!-- Order View dialog -->
         <v-dialog v-model="dialog_view">
             <v-card class="pa-4">
             </v-card>
@@ -53,11 +47,13 @@
 </template>
 <script>
     import axios from 'axios'
+    import OrdersCU from './OrdersCU.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import {localtime} from '../functions.js'
     export default {
         components:{
             MyMenuInline,
+            OrdersCU,
         },
         data(){ 
             return{
@@ -77,7 +73,7 @@
                     { text: this.$t('Amount'), value: 'amount', align:'right',  width: "7%"},
                     { text: this.$t('% from price'), value: 'percentage_from_price', align:'right',  width: "7%"},
                     { text: this.$t('Executed'), value: 'executed', align:'right',  width: "10%"},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false , width: "7%"},
+                    { text: this.$t('Actions'), value: 'actions', sortable: false , width: "10%"},
                 ],
                 data:[],
                 menuinline_items: [
@@ -88,18 +84,16 @@
                                 name:"Add a new order",
                                 icon: "mdi-pencil",
                                 code: function(this_){
-                                    this_.editing=false
-                                    this_.order=this_.empty_order()
-                                    this_.dialog=true
+                                    this_.order=null
+                                    this_.dialog_cu=true
+                                    this_.key=this_.key+1
                                 },
                             },
                         ]
                     },
                 ],
-                dialog:false,
-                form_valid: false,
-                order: this.empty_order(),
-                editing:false,
+                dialog_cu:false,
+                order: null,
                 loading_table:false,
 
                 dialog_view:false,
@@ -108,6 +102,10 @@
         },
         methods: {
             localtime,
+            on_OrdersCU_cruded(){
+                this.dialog_cu=false
+                this.update_table()
+            },
             getSort(){
                 if (this.state==0){//Active
                     return "percentage_from_price"
@@ -144,9 +142,9 @@
                 item.code(this)
             },
             editItem (item) {
-                this.editing=true
                 this.order=item
-                this.dialog=true
+                this.key=this.key+1
+                this.dialog_cu=true
             },
             viewItem (item) {
                 this.key=this.key+1
@@ -154,11 +152,7 @@
                 this.dialog_view=true
             },
             deleteItem (item) {
-               var r = confirm(this.$t("Do you want to delete this item?"))
-               if(r == false) {
-                  return
-               } 
-               r = confirm(this.$t("This order will be deleted. Do you want to continue?"))
+               var r = confirm(this.$t("This order will be deleted. Do you want to continue?"))
                if(r == false) {
                   return
                } 
@@ -201,29 +195,7 @@
                     return this.$t("Check to see active orders")
                 }
             },
-            acceptDialog(){
-                if (this.editing==true){               
-                    axios.put(this.order.url, this.order, this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
-                            this.update_table()     
-                            this.dialog=false
-                            this.editing=false
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    })
-                } else{
-                    axios.post(`${this.$store.state.apiroot}/api/orders/`, this.order,  this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
-                            this.update_table()     
-                            this.dialog=false
-                            this.editing=false
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    })
-                }
-            },
+
         },
         mounted(){
             this.update_table()

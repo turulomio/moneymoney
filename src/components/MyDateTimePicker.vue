@@ -2,6 +2,10 @@
     Value is a zulu js string in utc
     Representation is showed in local
     Tuple is in local
+    Puede ser null, en blanco
+    "" para poner actual 
+    y una fecha
+
 -->
 
 
@@ -107,6 +111,9 @@
         mounted(){
             if (this.value==""){
                 this.localValue=this.date2zulu(new Date())
+            }
+            else if (this.value == null){
+                this.localValue=""
             } else {
                 this.localValue=this.value
                 var a=this.zulu2tuple(this.value)

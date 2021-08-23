@@ -114,6 +114,18 @@ export function myheaders_formdata(){
     }
 }
 
+
+export function vuex_update_investments(){
+    axios.get(`${this.$store.state.apiroot}/api/investments/`, this.myheaders())
+    .then((response) => {
+        this.$store.state.catalogs.investments= sortObjectsArray(response.data, "fullname")
+        console.log("Updated investments")
+        console.log(response.data)
+    }, (error) => {
+        this.parseResponseError(error)
+    });
+}
+
 export function vuex_update_catalogs(){   
     this.$store.state.catalogs.currencies=[
         {
@@ -129,7 +141,6 @@ export function vuex_update_catalogs(){
             symbol: "$",
         },
     ]
-
 
     axios.get(`${this.$store.state.apiroot}/api/banks/`, this.myheaders())
     .then((response) => {
@@ -152,13 +163,6 @@ export function vuex_update_catalogs(){
     .then((response) => {
         this.$store.state.catalogs.creditcards= sortObjectsArray(response.data, "name")
         console.log("Updated creditcards")
-    }, (error) => {
-        this.parseResponseError(error)
-    });
-    axios.get(`${this.$store.state.apiroot}/api/investments/`, this.myheaders())
-    .then((response) => {
-        this.$store.state.catalogs.investments= sortObjectsArray(response.data, "name")
-        console.log("Updated investments")
     }, (error) => {
         this.parseResponseError(error)
     });
