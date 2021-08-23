@@ -23,12 +23,12 @@
                         <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card class="padding" v-if="!loading_ios">
-                                <TableInvestmentOperationsCurrent :items="io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="investment" height="400" :key="key"></TableInvestmentOperationsCurrent>
+                                <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="investment" height="400" :key="key"></TableInvestmentOperationsCurrent>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
                                     <v-card class="padding" v-if="!loading_ios">
-                                            <TableInvestmentOperationsCurrent :items="io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="account" height="400" :key="key"></TableInvestmentOperationsCurrent>
+                                            <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="account" height="400" :key="key"></TableInvestmentOperationsCurrent>
                                     </v-card>
                             </v-tab-item>
                     </v-tabs>
@@ -41,12 +41,12 @@
                             <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card class="padding" v-if="!loading_ios">
-                                <TableInvestmentOperations :items="io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment"></TableInvestmentOperations>
+                                <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment"></TableInvestmentOperations>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
                                 <v-card class="padding" v-if="!loading_ios">
-                                    <TableInvestmentOperations :items="io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="account"></TableInvestmentOperations>
+                                    <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="account"></TableInvestmentOperations>
                                 </v-card>
                             </v-tab-item>
                     </v-tabs>
@@ -59,12 +59,12 @@
                             <v-tab key="accounth">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investmenth">     
                             <v-card class="padding"  v-if="!loading_ios">
-                                <TableInvestmentOperationsHistorical :items="io_historical" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" output="investment" :key="key"></TableInvestmentOperationsHistorical>
+                                <TableInvestmentOperationsHistorical :items="list_io_historical" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" output="investment" :key="key"></TableInvestmentOperationsHistorical>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="accounth">
                                 <v-card class="padding" v-if="!loading_ios">
-                                    <TableInvestmentOperationsHistorical :items="io_historical" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" output="account" :key="key"></TableInvestmentOperationsHistorical>
+                                    <TableInvestmentOperationsHistorical :items="list_io_historical" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" output="account" :key="key"></TableInvestmentOperationsHistorical>
                                 </v-card>
                             </v-tab-item>
                     </v-tabs>
@@ -87,11 +87,19 @@
                 <InvestmentsoperationsEvolutionChartTimeseries :investment="investment" :key="key" ></InvestmentsoperationsEvolutionChartTimeseries>
             </v-card>
         </v-dialog>
+
+        <!-- IO CU-->
+        <v-dialog v-model="dialog_io">
+            <v-card class="pa-4">
+                <InvestmentsoperationsCU :io="io" :key="key" ></InvestmentsoperationsCU>
+            </v-card>
+        </v-dialog>
     </div>  
 </template>
 <script>
     import axios from 'axios'
     import {listobjects_sum, parseNumber,listobjects_average_ponderated} from '../functions.js'
+    import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import InvestmentsoperationsEvolutionChart from './InvestmentsoperationsEvolutionChart.vue'
     import InvestmentsoperationsEvolutionChartTimeseries from './InvestmentsoperationsEvolutionChartTimeseries.vue'
     import MyMenuInline from './MyMenuInline.vue'
@@ -108,6 +116,7 @@
             TableInvestmentOperationsCurrent,
             TableInvestmentOperationsHistorical,
             TableDividends,
+            InvestmentsoperationsCU,
             InvestmentsoperationsEvolutionChart,
             InvestmentsoperationsEvolutionChartTimeseries,
         },
@@ -122,9 +131,11 @@
                 tabcurrent:0,
                 key:0,
                 investment_io: null,
-                io: [],
-                io_current: [],
-                io_historical: [],
+                list_io: [],
+                list_io_current: [],
+                list_io_historical: [],
+                dialog_io:false,
+                io:null,
                 loading_ios:true,
                 dividends: [],
                 dividends_filtered: [],
@@ -200,8 +211,10 @@
                         children: [
                             {
                                 name:this.$t('Add an investment operation'),
-                                type: "redirection",
-                                command: "{% url 'investmentoperation_new' investments_id=investment.id %}",
+                                code: function(this_){
+                                    this_.io=null
+                                    this_.dialog_io=true
+                                },
                                 icon: "mdi-book-plus",
                             },
                             {
@@ -270,10 +283,10 @@
                 if (this.showAllDividends==true){
                     this.dividends_filtered=this.dividends
                 } else {
-                    if (this.io_current.length==0){
+                    if (this.list_io_current.length==0){
                         this.dividends_filtered=[]
                     } else {
-                        this.dividends_filtered=this.dividends.filter((d)=> new Date(d.datetime)>=new Date(this.io_current[0].datetime))
+                        this.dividends_filtered=this.dividends.filter((d)=> new Date(d.datetime)>=new Date(this.list_io_current[0].datetime))
                     }
                 }
             },
@@ -284,9 +297,9 @@
                      console.log(this.investment)
                     console.log(response.data[0])
                     this.investment_io=response.data[0].investment
-                    this.io=response.data[0].io
-                    this.io_current=response.data[0].io_current
-                    this.io_historical=response.data[0].io_historical
+                    this.list_io=response.data[0].io
+                    this.list_io_current=response.data[0].io_current
+                    this.list_io_historical=response.data[0].io_historical
 
                     this.leverage_message= this.$t(`${this.investment_io.leverage_multiplier } (Real: ${this.investment_io.leverage_real_multiplier })`)
 

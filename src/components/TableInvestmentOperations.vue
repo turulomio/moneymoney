@@ -1,5 +1,6 @@
 <template>
-            <v-data-table dense v-model="selected" :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" ref="table_o" :key="$attrs.key">
+    <div>
+        <v-data-table dense v-model="selected" :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" ref="table_o" :key="$attrs.key">
             <template v-slot:[`item.datetime`]="{ item,index }">
             <div :ref="index">{{ localtime(item.datetime)}}</div>
             </template>
@@ -37,13 +38,22 @@
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="editIO(item)">mdi-pencil</v-icon>
             </template>
-        </v-data-table>  
+        </v-data-table>         
+        <!-- IO CU-->
+        <v-dialog v-model="dialog_io">
+            <v-card class="pa-4">
+                <InvestmentsoperationsCU :io="io" :key="key" ></InvestmentsoperationsCU>
+            </v-card>
+        </v-dialog>
+    </div>
 </template>
 
 <script>    
     import {localtime} from '../functions.js'
+    import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     export default {
         components:{
+            InvestmentsoperationsCU,
         },
         name:"TableInvestmentOperations",
         props: {
@@ -75,6 +85,9 @@
         data: function(){
             return {
                 selected: [],
+                dialog_io:false,
+                io:null,
+                key:0,  
             }
         },
         computed:{
@@ -136,7 +149,8 @@
                 return r
             },
             editIO(item){
-                window.location.href=`${this.url_root}investmentoperation/update/${item.id}`
+                this.dialog_io=true
+                this.io=item
             },
             gotoLastRow(){
                 this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs.table_o.$el.childNodes[0] }) 
