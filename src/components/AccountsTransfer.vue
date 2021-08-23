@@ -2,8 +2,7 @@
 <template>
     <div>    
         <h1>{{ $t(`Account tranfer`) }}</h1>           
-        <v-card class="pa-4">
-            <v-card-title class="headline">{{ this.$t("Account transfer")}}</v-card-title>
+        <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <MyDateTimePicker v-model="transfer.datetime" :label="$t('Set transfer date and time')"></MyDateTimePicker>
                 <v-autocomplete :items="$store.state.catalogs.accounts.filter(v =>v.active==true)" v-model="transfer.origin" :label="$t('Select an origin account')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>

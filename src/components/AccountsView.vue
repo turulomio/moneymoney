@@ -86,9 +86,9 @@
             </v-card>
         </v-dialog>
 
-        <!-- DIALOG CREDIT CARD VIEW -->
-        <v-dialog v-model="dialog_transfer">
-            <v-card class="pa-4">
+        <!-- DIALOG ACCOUNT TRANSFER -->
+        <v-dialog v-model="dialog_transfer" width="25%">
+            <v-card class="pa-6">
                 <AccountsTransfer :origin="account" @accepted="on_AccountTransfer_accepted()"></AccountsTransfer>
             </v-card>
         </v-dialog>

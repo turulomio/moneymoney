@@ -59,7 +59,9 @@
                     </tr>
                 </template>
             </v-data-table>
+            <div v-html="foot" class="pa-4"></div>
         </v-card>
+        <!-- DIALOG CU INVESTMERNT -->
         <v-dialog v-model="dialog" max-width="550">
             <v-card class="pa-4">
                 <v-card-title class="headline">{{dialog_title()}}</v-card-title>
@@ -79,6 +81,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <!-- DIALOG  VIEW INVESTMERNT -->
         <v-dialog v-model="dialog_view">
             <v-card class="pa-4">
                 <InvestmentsView :investment="investment" :key="key" @cruded="on_InvestmentView_cruded"></InvestmentsView>
@@ -139,6 +142,7 @@
                 loading_investments:false,
 
                 dialog_view:false,
+                foot:"",
                 key:0,
             }
         },
@@ -198,6 +202,7 @@
                 .then((response) => {
                     this.investments_items=response.data
                     console.log(response);
+                    this.update_foot()
                     this.loading_investments=false
                 }, (error) => {
                     this.parseResponseError(error)
@@ -237,6 +242,15 @@
                     })
                 }
             },
+            update_foot(){
+                var positives=this.listobjects_sum(this.investments_items.filter((o) => o.gains_user >=0), "gains_user")
+                var negatives=this.listobjects_sum(this.investments_items.filter((o) => o.gains_user <0), "gains_user")
+        // positives=Currency(, request.local_currency)
+        // negatives=Currency(listdict_sum_negatives(listdict, "gains"), request.local_currency)
+                this.foot= "<p>" + this.$t(`Positive gains - Negative gains = ${this.localcurrency_html(positives)} ${this.localcurrency_html(negatives)} = ${this.localcurrency_html(positives+negatives)}`) + "</p>"
+                //foot= foot +"<p>" + this.$t(`Investments balance with futures is {Currency(qso.iotm.current_balance_futures_user(), request.local_currency)}")` + </p>
+
+            }
         },
         mounted(){
             this.update_table()
