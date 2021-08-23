@@ -300,7 +300,8 @@
                 this.refreshTableCC()
             },
             on_AccountTransfer_accepted(){
-                this.refreshTable()     
+                this.dialog_transfer=false 
+                this.refreshTable()    
                 this.$emit('changed')
             },
             setCheckboxLabelCC(){
@@ -348,8 +349,8 @@
                                 this.ao.datetime=this.date2zulu(dt)
                             } else {  
                                 this.dialog_ao=false
-                            this.$emit('changed', this.ao)
                             }
+                            this.$emit('changed', this.ao)
                     }, (error) => {
                         this.parseResponseError(error)
                     })

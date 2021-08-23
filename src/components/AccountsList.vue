@@ -58,7 +58,7 @@
         </v-dialog>
         <v-dialog v-model="dialog_view">
             <v-card class="pa-4">
-                <AccountsView :account="account" :key="key" @changed="AccountsView_changed"></AccountsView>
+                <AccountsView :account="account" :key="key" @changed="AccountsView_changed()"></AccountsView>
             </v-card>
         </v-dialog>
 
