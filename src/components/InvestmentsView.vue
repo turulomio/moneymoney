@@ -41,12 +41,12 @@
                             <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card class="padding" v-if="!loading_ios">
-                                <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment"></TableInvestmentOperations>
+                                <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment" @cruded="on_InvestmentsoperationsCU_cruded()"></TableInvestmentOperations>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
                                 <v-card class="padding" v-if="!loading_ios">
-                                    <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="account"></TableInvestmentOperations>
+                                    <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="account" @cruded="on_InvestmentsoperationsCU_cruded()"></TableInvestmentOperations>
                                 </v-card>
                             </v-tab-item>
                     </v-tabs>
@@ -89,9 +89,9 @@
         </v-dialog>
 
         <!-- IO CU-->
-        <v-dialog v-model="dialog_io">
-            <v-card class="pa-4">
-                <InvestmentsoperationsCU :io="io" :key="key" ></InvestmentsoperationsCU>
+        <v-dialog v-model="dialog_io"  width="35%">
+            <v-card class="pa-3">
+                <InvestmentsoperationsCU :io="io" :investment="investment" :key="key"  @cruded="on_InvestmentsoperationsCU_cruded()"></InvestmentsoperationsCU>
             </v-card>
         </v-dialog>
     </div>  
@@ -257,6 +257,11 @@
         },
         methods: {
             listobjects_average_ponderated,
+            on_InvestmentsoperationsCU_cruded(){
+                this.dialog_io=false
+                this.update_investmentsoperations()
+                this.$emit("cruded") //Translated to InvestmentsList
+            },
             displayvalues(){
                 return [
                     {title:this.$t('Selling point'), value: this.selling_point_message},

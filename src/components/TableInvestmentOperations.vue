@@ -37,18 +37,20 @@
             
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="editIO(item)">mdi-pencil</v-icon>
+                <v-icon small class="mr-2" @click="deleteIO(item)">mdi-delete</v-icon>
             </template>
         </v-data-table>         
         <!-- IO CU-->
-        <v-dialog v-model="dialog_io">
+        <v-dialog v-model="dialog_io"  width="35%">
             <v-card class="pa-4">
-                <InvestmentsoperationsCU :io="io" :key="key" ></InvestmentsoperationsCU>
+                <InvestmentsoperationsCU :io="io" :key="key" @cruded="on_InvestmentsoperationsCU_cruded()" ></InvestmentsoperationsCU>
             </v-card>
         </v-dialog>
     </div>
 </template>
 
 <script>    
+    import axios from 'axios'
     import {localtime} from '../functions.js'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     export default {
@@ -151,10 +153,28 @@
             editIO(item){
                 this.dialog_io=true
                 this.io=item
+                console.log(this.io)
+            },
+            deleteIO(item){
+                var r = confirm(this.$t("Do you want to delete this investment operation?"))
+                if(r == false) {
+                    return
+                } 
+                axios.delete(`${this.$store.state.apiroot}/api/investmentsoperations/${item.id}/`, this.myheaders())
+                .then((response) => {
+                    console.log(response);
+                    this.$emit("cruded")
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
             },
             gotoLastRow(){
                 this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs.table_o.$el.childNodes[0] }) 
             },
+            on_InvestmentsoperationsCU_cruded(){
+                this.dialog_io=false
+                this.$emit("cruded")
+            }
         },
         mounted(){
             this.gotoLastRow()
