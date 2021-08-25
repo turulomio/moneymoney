@@ -24,6 +24,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import {empty_io} from '../empty_objects.js'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     export default {
         components: {
@@ -45,22 +46,8 @@
                 editing:false,
             }
         },
-        methods: {        
-            empty_io(){
-                return {
-                    datetime: new Date().toISOString(),
-                    operationstypes: `${this.$store.state.apiroot}/api/operationstypes/4/`,
-                    shares:0,
-                    taxes:0,
-                    commission:0,
-                    price:0,
-                    comment:"",
-                    show_in_ranges:true,
-                    currency_conversion:1,
-                    investments: null,
-                    url: null,
-                }
-            },
+        methods: {
+            empty_io,
             title(){
                 if (this.editing){
                     return this.$t("Updating investment operation")
@@ -98,19 +85,26 @@
                     })
                 }
             },
+            setShares(value){
+                this.newio.shares=value
+            }
 
         },
         mounted(){
             console.log(this.io)
             if (this.io!=null){
-                this.newio=Object.create(Object.getPrototypeOf(this.io), Object.getOwnPropertyDescriptors(this.io))
-                console.log(this.io==this.newio)
-                //Due to it comes from django Investmentsoperations class
-                this.newio.investments=`${this.$store.state.apiroot}/api/investments/${this.newio.investments_id}/`
-                this.newio.operationstypes=`${this.$store.state.apiroot}/api/operationstypes/${this.newio.operationstypes_id}/`
-                this.newio.url=`${this.$store.state.apiroot}/api/investmentsoperations/${this.newio.id}/`
-                this.editing=true
-            } else{
+                if ( this.io.url!=null){ // EDITING TIENE IO URL
+                    this.newio=Object.create(Object.getPrototypeOf(this.io), Object.getOwnPropertyDescriptors(this.io))
+                    console.log(this.io==this.newio)
+                    //Due to it comes from django Investmentsoperations class
+                    this.newio.investments=`${this.$store.state.apiroot}/api/investments/${this.newio.investments_id}/`
+                    this.newio.operationstypes=`${this.$store.state.apiroot}/api/operationstypes/${this.newio.operationstypes_id}/`
+                    this.newio.url=`${this.$store.state.apiroot}/api/investmentsoperations/${this.newio.id}/`
+                    this.editing=true
+                } else { // NEW IO BUT SETTING VALUES
+                    this.newio=this.io
+                }
+            } else{ //NEW WITH EMPTY WITHOUT SETTING VALUES
                this.newio.investments=this.investment.url
             }
             console.log(this.newio)

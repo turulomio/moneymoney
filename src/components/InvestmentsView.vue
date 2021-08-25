@@ -89,7 +89,7 @@
         </v-dialog>
 
         <!-- IO CU-->
-        <v-dialog v-model="dialog_io"  width="35%">
+        <v-dialog v-model="dialog_io" width="35%">
             <v-card class="pa-3">
                 <InvestmentsoperationsCU :io="io" :investment="investment" :key="key"  @cruded="on_InvestmentsoperationsCU_cruded()"></InvestmentsoperationsCU>
             </v-card>
@@ -98,6 +98,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import {empty_io} from '../empty_objects.js'
     import {listobjects_sum, parseNumber,listobjects_average_ponderated} from '../functions.js'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import InvestmentsoperationsEvolutionChart from './InvestmentsoperationsEvolutionChart.vue'
@@ -222,13 +223,19 @@
                                 code: function(this_){
                                     var selling_price_product_currency=parseNumber(prompt( this_.$t("Please add the operation close price in product currency"), 0 ));
                                     var gains_account_currency=parseNumber(prompt( this_.$t("Please add the final gains in account currency"), 0 ));
-                                    var shares=listobjects_sum(this_.investment_io.io_current,"shares")
-                                    var average_price_current_account=listobjects_average_ponderated(this_.investment_io.io_current,'price_account', 'shares')
+                                    console.log("AHORA")
+                                    console.log(this_.list_io_current)
+                                    var shares=listobjects_sum(this_.list_io_current,"shares")
+                                    var average_price_current_account=listobjects_average_ponderated(this_.list_io_current,'price_account', 'shares')
                                     var leverage=this_.investment_io.leverage_real_multiplier
                                     var currency_conversion=(gains_account_currency+shares*average_price_current_account*leverage)/(shares*selling_price_product_currency*leverage)
-//                                    var url=`{% url 'investmentoperation_new' investments_id=investment.id %}?currency_conversion=${my_round(currency_conversion,10)}&price=${selling_price_product_currency}&shares=${-shares}`;
-//                                   window.location.href=url;
-                                    console.log(currency_conversion)
+
+                                    this_.io=this_.empty_io()
+                                    this_.io.shares=-shares
+                                    this_.io.currency_conversion=currency_conversion
+                                    this_.io.price=selling_price_product_currency
+                                     
+                                    this_.dialog_io=true
                                 },
                                 icon: "mdi-book-plus",
                             },
@@ -256,6 +263,7 @@
             }
         },
         methods: {
+            empty_io,
             listobjects_average_ponderated,
             on_InvestmentsoperationsCU_cruded(){
                 this.dialog_io=false
