@@ -1,77 +1,102 @@
 <template>
     <div>
         <h1> {{ $t('Product ranges') }}</h1>
-        <form method="post" class="form_table">
-            <table >
-            </table>
-            <button type="submit" name="button">{% trans "Show ranges" %}</button>
-        </form>
+        <v-card class="ma-4 pa-4">   
+            
+            <v-form ref="form" v-model="form_valid" lazy-validation>             
+                <v-autocomplete dense :items="$store.state.catalogs.products" v-model="pr.product" :label="$t('Select a product')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-text-field dense v-model="pr.percentage_between_ranges" type="number" :label="$t('Set percentage_between_ranges x 1000')" :placeholder="$t('Set percentage_between_ranges x 1000')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field dense v-model="pr.percentage_gains" type="number" :label="$t('Set percentage gains x1000')" :placeholder="$t('Set percentage gains x1000')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field dense v-model="pr.amount_to_invest" type="number" :label="$t('Set the amount to invest')" :placeholder="$t('Set the amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field dense v-model="pr.recomendation_methods" type="number" :label="$t('Set recomendation method')" :placeholder="$t('Set recomendation method')" :rules="RulesInteger(10,true)" counter="10"/>  
+                <v-checkbox dense v-model="pr.only_first" :label="$t('Show only first operation?')" ></v-checkbox>
+                <v-autocomplete dense :items="$store.state.catalogs.accounts" v-model="pr.account" :label="$t('Select an account')" item-text="name" item-value="url" :rules="RulesSelection(false)"></v-autocomplete> 
+            </v-form>
 
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" @click="accept()" :disabled="!form_valid">{{ $t("Show ranges") }}</v-btn>
+            </v-card-actions>
+        </v-card>
 
+        <v-card class="ma-6 pa-6">
             <v-tabs v-model="tab">
-                <v-tab key="0">{% trans 'Product ranges table' %}</v-tab>
-                <v-tab key="1">{% trans 'Product ranges chart' %}</v-tab>
+                <v-tab key="0">{{ $t('Product ranges table') }}</v-tab>
+                <v-tab key="1">{{ $t('Product ranges chart') }}</v-tab>
             </v-tabs>
             <v-tabs-items v-model="tab">
             <v-tab-item key="0">
                 <v-card flat>
-                    <v-container>{% trans "Current price: " %}{{prm.product.basic_results.last}}</v-container>
-                    <v-data-table dense :headers="tableHeaders" :items="tableData" sort-by="value" class="elevation-1" disable-pagination  hide-default-footer :sort-by="['value']" :sort-desc="[true]" fixed-header height="400">      
+                    <v-container>{{ $t("Current price: ") }}</v-container>
+                    <v-data-table dense :headers="tableHeaders" :items="tableData" class="elevation-1" disable-pagination  hide-default-footer :sort-by="['value']" :sort-desc="[true]" fixed-header height="400">      
                         <template v-slot:[`item.value`]="{ item }">
-                            <div  @click="showLimits(item)" :class="item.current_in_range ? 'vuegreen' : ''">[[item.value ]]</div>
+                            <div  @click="showLimits(item)" :class="item.current_in_range ? 'vuegreen' : ''">{{item.value }}</div>
                         </template>    
                         <template v-slot:[`item.recomendation_invest`]="{ item }">
                             <v-icon small v-if="item.recomendation_invest" >mdi-check-outline</v-icon>
                         </template>                        
-                        <template v-slot:[`item.investments_inside`]="{ item }">
-                            <a :href="o.url" v-for="o in item.investments_inside" :key="o.name">[[ o.name ]]. Invested: [[ o.invested ]]<br></a>
+                         <template v-slot:[`item.investments_inside`]="{ item }">
+                            <div v-for="o in item.investments_inside" :key="o.name">{{ o.name }}. Invested: {{ o.invested }}<br></div>
                         </template>                      
                         <template v-slot:[`item.orders_inside`]="{ item }">
-                            <a :href="o.url" v-for="o in item.orders_inside" :key="o.name">[[ o.name ]]. Amount: [[ o.amount]]<br></a>
+                            <div  v-for="o in item.orders_inside" :key="o.name">{{ o.name }}. Amount: {{ o.amount}}<br></div>
                         </template>
                         <template v-slot:[`item.actions`]="{ item }">
                             <v-icon small class="mr-2" @click="addOrder(item)" v-if="item.recomendation_invest">mdi-pencil</v-icon>
                         </template>
                     </v-data-table>   
-                </v-card>
-            </v-tab-item>
-            <v-tab-item key="1" >
-                <div style="height: 600px;">
-                    <v-chart autoresize :option="option"/>
-                </div>
-            </v-tab-item>
-        </v-tabs-items>
+                    </v-card>
+                </v-tab-item>
+                <v-tab-item key="1" >
+                    <div style="height: 600px;">
+                        <v-chart autoresize :option="option"/>
+                    </div>
+                </v-tab-item>
+            </v-tabs-items>
+        </v-card>
     </div>
 </template>
 
 
-<script>
-
-    Vue.component("v-chart", VueECharts);  
-    
-    new Vue({
-        ...common_vue_properties(),
-        data:{
-            tab: null,
-            chart: '',                
-            tableHeaders: [
-                { text: 'Value', value: 'value',sortable: true },
-                { text: 'Must Invest', value: 'recomendation_invest',sortable: false},
-                { text: 'Investments',  sortable: false, value: 'investments_inside'},
-                { text: 'Orders',  sortable: false, value: 'orders_inside'},
-                { text: 'Actions', value: 'actions', sortable: false },
-            ],   
-            
-
-            {% if prm.product.basic_results.last %}
-                tableData: {{prm.listdict_json | safe}},
-                option: {{prm.eChartVUE |safe}},
-            {% else %}
-                tableData: [],
+<script>    
+    import {empty_products_ranges} from '../empty_objects.js'
+    import axios from 'axios'
+    export default {
+        components: {
+        },
+        data(){ 
+            return {
+                tab: null,
+                chart: '',                
+                tableHeaders: [
+                    { text: 'Value', value: 'value',sortable: true },
+                    { text: 'Must Invest', value: 'recomendation_invest',sortable: false},
+                    { text: 'Investments',  sortable: false, value: 'investments_inside'},
+                    { text: 'Orders',  sortable: false, value: 'orders_inside'},
+                    { text: 'Actions', value: 'actions', sortable: false },
+                ],   
+                pr:this.empty_products_ranges(),
+                form_valid:false,
+                tableData:[],
                 option: {},
-            {% endif %}
+                loading:false,
+
+            }   
         },
         methods:{
+            empty_products_ranges,
+            accept(){
+                if (this.$refs.form.validate()==false) return
+                this.loading=true
+                axios.get(`${this.$store.state.apiroot}/products/ranges/?product=${this.pr.product}&percentage_between_ranges=${this.pr.percentage_between_ranges}&percentage_gains=${this.pr.percentage_gains}&amount_to_invest=${this.pr.amount_to_invest}&recomendation_methods=${this.pr.recomendation_methods}&only_first=${this.pr.only_first}&account=${this.pr.account}`, this.myheaders())
+                .then((response) => {
+                    console.log(response.data);
+                    this.tableData=response.data
+                    this.loading=false
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
+            },
             addOrder(item){
                 window.location.href = `{{ url_order_add }}?price=${item.value}`
             },
@@ -80,5 +105,5 @@
             }
         
         },
-    })
+    }
 </script>

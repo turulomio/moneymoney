@@ -15,3 +15,16 @@ export function empty_io(){
     }
 }
 
+
+export function empty_products_ranges(){
+    return {
+        product: 0,
+        only_first: true,
+        percentage_between_ranges: 2500,
+        percentage_gains: 2500,
+        amount_to_invest: 10000,
+        recomendation_methods: 1,
+        account: null,
+    }
+}
+
