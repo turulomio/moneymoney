@@ -1,10 +1,13 @@
 <!--
-    Value is a zulu js string in utc
+    Value:
+        Can be:
+            - A Zulu zulu js string in utc new Date().toISOString()
+            - null. Se grabaría como null
+            - emptystring genera now en zulu string
+            
+
     Representation is showed in local
     Tuple is in local
-    Puede ser null, en blanco
-    "" para poner actual 
-    y una fecha
 
 -->
 

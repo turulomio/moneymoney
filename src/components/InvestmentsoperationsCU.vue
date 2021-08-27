@@ -4,17 +4,18 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-autocomplete :items="$store.state.catalogs.investments" v-model="newio.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
-                <MyDateTimePicker v-model="newio.datetime" v-if="editing==true" :label="$t('Set investment operation date and time')"></MyDateTimePicker>
-                <v-autocomplete :items="$store.state.catalogs.operationstypes" v-model="newio.operationstypes" :label="$t('Select an operation type')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field v-model="newio.shares" type="number" :label="$t('Set investment operation shares')" required :placeholder="$t('Set investment operation shares')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field v-model="newio.price" type="number" :label="$t('Set investment operation price')" required :placeholder="$t('Set investment operation price')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field v-model="newio.taxes" type="number" :label="$t('Set investment operation taxes')" required :placeholder="$t('Set investment operation taxes')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field v-model="newio.commission" type="number" :label="$t('Set investment operation commission')" required :placeholder="$t('Set investment operation commission')" :rules="RulesInteger(10,true)" counter="10"/>            
-                <v-text-field v-model="newio.comment" type="text" :label="$t('Set investment operation comment')" required :placeholder="$t('Set investment operation comment')" :rules="RulesString(255,false)" counter="255"/>      
-                <v-text-field v-model="newio.currency_conversion" type="number" :label="$t('Set investment operation currency conversion')" required :placeholder="$t('Set investment operation currency conversion')" :rules="RulesInteger(10,true)" counter="10"/>      
-                <v-checkbox v-model="newio.show_in_ranges" :label="$t('Show in ranges?')" ></v-checkbox>
+                <v-autocomplete dense :items="$store.state.catalogs.investments" v-model="newio.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <MyDateTimePicker v-model="newio.datetime" :label="$t('Set investment operation date and time')"></MyDateTimePicker>
+                <v-autocomplete dense :items="$store.state.catalogs.operationstypes" v-model="newio.operationstypes" :label="$t('Select an operation type')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-text-field dense v-model.number="newio.shares" type="number" :label="$t('Set investment operation shares')" :placeholder="$t('Set investment operation shares')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field dense v-model.number="newio.price" type="number" :label="$t('Set investment operation price')" :placeholder="$t('Set investment operation price')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field dense v-model.number="newio.taxes" type="number" :label="$t('Set investment operation taxes')" :placeholder="$t('Set investment operation taxes')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field dense v-model.number="newio.commission" type="number" :label="$t('Set investment operation commission')" :placeholder="$t('Set investment operation commission')" :rules="RulesInteger(10,true)" counter="10"/>            
+                <v-text-field dense v-model="newio.comment" type="text" :label="$t('Set investment operation comment')" :placeholder="$t('Set investment operation comment')" :rules="RulesString(255,false)" counter="255"/>      
+                <v-text-field dense v-model.number="newio.currency_conversion" type="number" :label="$t('Set investment operation currency conversion')" :placeholder="$t('Set investment operation currency conversion')" :rules="RulesInteger(10,true)" counter="10"/>      
+                <v-checkbox dense v-model="newio.show_in_ranges" :label="$t('Show in ranges?')" ></v-checkbox>
             </v-form>
+            <div v-html="foot()"></div>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" @click="accept()" :disabled="!form_valid">{{ button() }}</v-btn>
@@ -42,7 +43,7 @@
         data(){ 
             return {
                 form_valid:false,
-                newio:this.empty_io(),
+                newio: null,
                 editing:false,
             }
         },
@@ -70,7 +71,6 @@
                             console.log(response.data)
                             this.$emit("cruded")
                             this.editing=false
-                            this.newio=this.empty_io()
                     }, (error) => {
                         this.parseResponseError(error)
                     })
@@ -79,35 +79,33 @@
                     .then((response) => {
                             console.log(response.data)
                             this.$emit("cruded")
-                            this.newio=this.empty_io()
                     }, (error) => {
                         this.parseResponseError(error)
                     })
                 }
+            },
+            foot(){
+                var gross=this.newio.shares*this.newio.price
+                var net=0
+                if (this.newio.shares>0){
+                    net=gross+this.newio.taxes+this.newio.commission
+                } else {
+                    net=gross-this.newio.taxes-this.newio.commission
+                }
+                return this.$t(`Gross balance: ${this.currency_html(gross, this.investment.currency)}. Net balance: ${this.currency_html(net, this.investment.currency)}`)
             },
             setShares(value){
                 this.newio.shares=value
             }
 
         },
-        mounted(){
-            console.log(this.io)
-            if (this.io!=null){
-                if ( this.io.url!=null){ // EDITING TIENE IO URL
-                    this.newio=Object.create(Object.getPrototypeOf(this.io), Object.getOwnPropertyDescriptors(this.io))
-                    console.log(this.io==this.newio)
-                    //Due to it comes from django Investmentsoperations class
-                    this.newio.investments=`${this.$store.state.apiroot}/api/investments/${this.newio.investments_id}/`
-                    this.newio.operationstypes=`${this.$store.state.apiroot}/api/operationstypes/${this.newio.operationstypes_id}/`
-                    this.newio.url=`${this.$store.state.apiroot}/api/investmentsoperations/${this.newio.id}/`
-                    this.editing=true
-                } else { // NEW IO BUT SETTING VALUES
-                    this.newio=this.io
-                }
-            } else{ //NEW WITH EMPTY WITHOUT SETTING VALUES
-               this.newio.investments=this.investment.url
+        created(){
+            if ( this.io.url!=null){ // EDITING TIENE IO URL
+                this.editing=true
+            } else { // NEW IO BUT SETTING VALUES WITH URL=null
+                this.editing=false
             }
-            console.log(this.newio)
+            this.newio=Object.assign({},this.io)
         }
     }
 </script>

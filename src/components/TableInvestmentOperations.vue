@@ -1,3 +1,10 @@
+<!--
+    Actions:
+       - cruded
+       - onedit
+-->
+
+
 <template>
     <div>
         <v-data-table dense v-model="selected" :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" ref="table_o" :key="$attrs.key">
@@ -39,25 +46,14 @@
                 <v-icon small class="mr-2" @click="editIO(item)">mdi-pencil</v-icon>
                 <v-icon small class="mr-2" @click="deleteIO(item)">mdi-delete</v-icon>
             </template>
-        </v-data-table>         
-        <!-- IO CU-->
-        <v-dialog v-model="dialog_io"  width="35%">
-            <v-card class="pa-4">
-                <InvestmentsoperationsCU :io="io" :key="key" @cruded="on_InvestmentsoperationsCU_cruded()" ></InvestmentsoperationsCU>
-            </v-card>
-        </v-dialog>
+        </v-data-table>
     </div>
 </template>
 
 <script>    
     import axios from 'axios'
     import {localtime} from '../functions.js'
-    import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     export default {
-        components:{
-            InvestmentsoperationsCU,
-        },
-        name:"TableInvestmentOperations",
         props: {
             items: {
                 required: true
@@ -79,7 +75,11 @@
                 required:false,
                 default:false
             },
-            output:{
+            showactions:{ //Used to edit io operation
+                required:false,
+                default:true
+            },
+            output:{ // "investmnt", account or user to see table ouput
                 required:true,
                 default: "investment",
             },
@@ -87,8 +87,6 @@
         data: function(){
             return {
                 selected: [],
-                dialog_io:false,
-                io:null,
                 key:0,  
             }
         },
@@ -110,7 +108,6 @@
                         { text: this.$t('Net'), value: 'net_account',sortable: false, align:"right"},
                         { text: this.$t('Currency factor'), value: 'currency_conversion',sortable: false, align:"right"},
                         { text: this.$t('Comment'), value: 'comment',sortable: false},
-                        { text: this.$t('Actions'), value: 'actions', sortable: false },
                     ]
                 } else if (this.output=="investment"){                
                     r= [
@@ -124,7 +121,6 @@
                         { text: this.$t('Net'), value: 'net_investment',sortable: false, align:"right"},
                         { text: this.$t('Currency factor'), value: 'currency_conversion',sortable: false, align:"right"},
                         { text: this.$t('Comment'), value: 'comment',sortable: false},
-                        { text: this.$t('Actions'), value: 'actions', sortable: false },
                     ]
                 } else if (this.output=="user"){
                     r= [
@@ -138,8 +134,11 @@
                         { text: this.$t('Net'), value: 'net_user',sortable: false, align:"right"},
                         { text: this.$t('Currency factor'), value: 'currency_conversion',sortable: false, align:"right"},
                         { text: this.$t('Comment'), value: 'comment',sortable: false},
-                        { text: this.$t('Actions'), value: 'actions', sortable: false },
                     ]
+                }
+
+                if (this.showactions==true){
+                    r.push({ text: this.$t('Actions'), value: 'actions', sortable: false })
                 }
                 
                 if (this.currency_investment==this.currency_account){
@@ -151,9 +150,7 @@
                 return r
             },
             editIO(item){
-                this.dialog_io=true
-                this.io=item
-                console.log(this.io)
+                this.$emit("onedit",item)
             },
             deleteIO(item){
                 var r = confirm(this.$t("Do you want to delete this investment operation?"))

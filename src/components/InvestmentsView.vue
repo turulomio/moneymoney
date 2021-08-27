@@ -41,12 +41,12 @@
                             <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card class="padding" v-if="!loading_ios">
-                                <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment" @cruded="on_InvestmentsoperationsCU_cruded()"></TableInvestmentOperations>
+                                <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment" @cruded="on_TableInvestmentsOperations_cruded()" @onedit="on_TableInvestmentsOperations_edit"></TableInvestmentOperations>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
                                 <v-card class="padding" v-if="!loading_ios">
-                                    <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="account" @cruded="on_InvestmentsoperationsCU_cruded()"></TableInvestmentOperations>
+                                    <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="account" :showactions="false"></TableInvestmentOperations>
                                 </v-card>
                             </v-tab-item>
                     </v-tabs>
@@ -154,8 +154,8 @@
                                     this_.investment.active=!this_.investment.active
                                     axios.put(this_.investment.url, this_.investment,  this_.myheaders())
                                     .then((response) => {
-                                            console.log(response.data)
-                                            this_.$emit("cruded")
+                                        console.log(response.data)
+                                        this_.$emit("cruded")
                                     }, (error) => {
                                         this_.parseResponseError(error)
                                     })
@@ -213,7 +213,9 @@
                             {
                                 name:this.$t('Add an investment operation'),
                                 code: function(this_){
-                                    this_.io=null
+                                    this_.io=this_.empty_io()
+                                    this_.io.investments=this_.investment.url
+                                    this_.key=this_.key+1
                                     this_.dialog_io=true
                                 },
                                 icon: "mdi-book-plus",
@@ -223,8 +225,6 @@
                                 code: function(this_){
                                     var selling_price_product_currency=parseNumber(prompt( this_.$t("Please add the operation close price in product currency"), 0 ));
                                     var gains_account_currency=parseNumber(prompt( this_.$t("Please add the final gains in account currency"), 0 ));
-                                    console.log("AHORA")
-                                    console.log(this_.list_io_current)
                                     var shares=listobjects_sum(this_.list_io_current,"shares")
                                     var average_price_current_account=listobjects_average_ponderated(this_.list_io_current,'price_account', 'shares')
                                     var leverage=this_.investment_io.leverage_real_multiplier
@@ -270,6 +270,15 @@
                 this.update_investmentsoperations()
                 this.$emit("cruded") //Translated to InvestmentsList
             },
+            on_TableInvestmentsOperations_cruded(){//Emited deleting IO
+                this.on_InvestmentsoperationsCU_cruded()
+            },
+            on_TableInvestmentsOperations_edit(io){
+                console.log(io.datetime)
+                this.dialog_io=true
+                this.io=io
+                this.key=this.key+1
+            },
             displayvalues(){
                 return [
                     {title:this.$t('Selling point'), value: this.selling_point_message},
@@ -307,8 +316,6 @@
             update_investmentsoperations(){
                 axios.get(`${this.$store.state.apiroot}/investmentsoperations/full?investments=${this.investment.id}`, this.myheaders())
                 .then((response) => {
-                     console.log(this.investment)
-                    console.log(response.data[0])
                     this.investment_io=response.data[0].investment
                     this.list_io=response.data[0].io
                     this.list_io_current=response.data[0].io_current
