@@ -94,13 +94,21 @@
                 <InvestmentsoperationsCU :io="io" :investment="investment" :key="key"  @cruded="on_InvestmentsoperationsCU_cruded()"></InvestmentsoperationsCU>
             </v-card>
         </v-dialog>
+
+        <!-- DIVIDEND CU-->
+        <v-dialog v-model="dialog_dividend" width="35%">
+            <v-card class="pa-3">
+                <DividendsCU :dividend="dividend" :investment="investment" :key="key"  @cruded="on_DividendsCU_cruded()"></DividendsCU>
+            </v-card>
+        </v-dialog>
     </div>  
 </template>
 <script>
     import axios from 'axios'
-    import {empty_io} from '../empty_objects.js'
+    import {empty_io,empty_dividend} from '../empty_objects.js'
     import {listobjects_sum, parseNumber,listobjects_average_ponderated} from '../functions.js'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
+    import DividendsCU from './DividendsCU.vue'
     import InvestmentsoperationsEvolutionChart from './InvestmentsoperationsEvolutionChart.vue'
     import InvestmentsoperationsEvolutionChartTimeseries from './InvestmentsoperationsEvolutionChartTimeseries.vue'
     import MyMenuInline from './MyMenuInline.vue'
@@ -112,6 +120,7 @@
     export default {
         components:{
             DisplayValues,
+            DividendsCU,
             MyMenuInline,
             TableInvestmentOperations,
             TableInvestmentOperationsCurrent,
@@ -246,8 +255,12 @@
                         children: [
                             {
                                 name:this.$t('Add a dividend'),
-                                type: "redirection",
-                                command: "{% url 'dividend_new' investments_id=investment.id %}",
+                                code: function(this_){
+                                    this_.dividend=this_.empty_dividend()
+                                    this_.dividend.investments=this_.investment.url
+                                     
+                                    this_.dialog_dividend=true
+                                },
                                 icon: "mdi-book-plus",
                             },
                         ]
@@ -255,6 +268,10 @@
                 ],
                 dialog_evolution_chart:false,
                 dialog_evolution_chart_timeseries:false,
+
+                // Dividend CU
+                dialog_dividend:false,
+                dividend: null,
             }  
         },
         watch:{
@@ -263,8 +280,13 @@
             }
         },
         methods: {
+            empty_dividend,
             empty_io,
             listobjects_average_ponderated,
+            on_DividendsCU_cruded(){
+                this.dialog_dividend=false
+                this.update_dividends()
+            },
             on_InvestmentsoperationsCU_cruded(){
                 this.dialog_io=false
                 this.update_investmentsoperations()

@@ -28,3 +28,19 @@ export function empty_products_ranges(){
     }
 }
 
+export function empty_dividend(){
+    return {
+        datetime: new Date().toISOString(),
+        gross: 0,
+        net:0,
+        taxes: 0,
+        commission: 0,
+        dps: 0,
+        investments: null,
+        accountsoperations: null,
+        concepts: null,
+        currency_conversion:1,
+        url: null,
+    }
+}
+
