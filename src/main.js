@@ -44,6 +44,7 @@ import ProductsRanges from './components/ProductsRanges';
 import ProductsUpdate from './components/ProductsUpdate';
 import ReportsAnnual from './components/ReportsAnnual';
 import ReportsEvolution from './components/ReportsEvolution';
+import ReportsRanking from './components/ReportsRanking';
 import Settings from './components/Settings';
 import Statistics from './components/Statistics';
 import StrategiesList from './components/StrategiesList';
@@ -65,6 +66,7 @@ const router = new VueRouter({
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/products/ranges/`, name: 'products_ranges', component: ProductsRanges },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/products/update/`, name: 'products_update', component: ProductsUpdate },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/annual/`, name: 'reports_annual', component: ReportsAnnual },
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/ranking/`, name: 'reports_ranking', component: ReportsRanking },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/evolution/`, name: 'reports_evolution', component: ReportsEvolution },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/settings/`, name: 'settings', component: Settings },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/statistics/`, name: 'statistics', component: Statistics },
