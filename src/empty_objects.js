@@ -21,6 +21,14 @@ export function empty_product(){
     }
 }
 
+export function empty_quote(){
+    return {
+        url: null,
+        datetime: new Date().toISOString(),
+        quote: 0,
+    }
+}
+
 export function empty_products_ranges(){
     return {
         product: 0,
