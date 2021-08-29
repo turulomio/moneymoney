@@ -364,3 +364,9 @@ export function listobjects_average_ponderated(lo,key1, key2){
     } 
     return prod/total
 }
+
+
+export function ifnullempty(value){
+    if (value==null) return ""
+    return value
+}

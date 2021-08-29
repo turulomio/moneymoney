@@ -1,0 +1,103 @@
+<template>
+    <div>
+        <h1>{{ $t(`Products search`)}}
+            <MyMenuInline :items="items" @selected="MyMenuInlineSelection"></MyMenuInline>
+        </h1>
+
+        <v-card width="45%" class="pa-8 ma-3 mx-lg-auto">
+                <v-row>
+                    <v-text-field dense name="search" v-model="search" :label="$t('Search products')"  :placeholder="$t('Enter a string')" autofocus></v-text-field>
+                    <v-btn dense class="ml-4" color="error" @click="submit()">{{ $t("Search") }}</v-btn>
+                </v-row>
+        </v-card>
+
+        <v-card >
+            <v-data-table dense :headers="tableHeaders" :items="tableData"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['value']" :sort-desc="[true]" fixed-header height="600">      
+                <template v-slot:[`item.last`]="{ item }">
+                    {{ currency_string(item.last, item.currency)}}
+                </template>  
+                <template v-slot:[`item.tickers`]="{ item }">
+                    {{ item.tickers.toString()}}
+                </template>  
+                <template v-slot:[`item.name`]="{ item }">
+                    <div :class="class_name(item)">{{item.name}}</div>
+                </template>  
+                <template v-slot:[`item.actions`]="{ item }">
+                    <v-icon small @click="viewProduct(item)">mdi-eye-outline</v-icon>
+                    <v-icon small @click="editProduct(item)" v-if="item.id<0">mdi-pencil</v-icon>
+                </template>
+            </v-data-table>   
+        </v-card>
+    </div>
+</template>  
+<script>     
+    import {ifnullempty} from '../functions.js'
+    import MyMenuInline from './MyMenuInline.vue'
+    export default {
+        components:{
+            MyMenuInline,
+        },
+        data () {
+            return {
+                form_valid: false,
+                search: null,
+                tableHeaders: [
+                    { text: 'Id', value: 'id',sortable: true },
+                    { text: 'Name', value: 'name',sortable: true},
+                    { text: 'ISIN',  sortable: true, value: 'isin'},
+                    { text: 'tickers',  sortable: true, value: 'tickers'},
+                    { text: 'Actions', value: 'actions', sortable: false },
+                ],   
+                tableData: [],
+                items: [
+                    {
+                        subheader:this.$t('Product orders'),
+                        children: [
+                            {
+                                name:this.$t('Add personal product'),
+                                code: function(this_){
+                                    console.log(this_)
+                                },
+                                icon: "mdi-plus",
+                            },
+                        ]
+                    },
+                ],
+            }
+        },
+        methods: {
+            MyMenuInlineSelection(item){
+                item.code(this)
+            },
+            editProduct(item){
+                console.log(item)
+            },
+            ifnullempty,
+            viewProduct(item){
+                console.log(item)
+            },
+            class_name(item){
+                if (item.obsolete==false){
+                    return ""
+                }
+                return "text-decoration-line-through"
+            },
+            submit(){
+                this.refreshTables()
+            },
+            refreshTables(){
+                if (this.search==null){
+                    this.tableData=[]
+                } else {
+                    this.tableData=this.$store.state.catalogs.products.filter(o => 
+                        o.name.toUpperCase().includes(this.search.toUpperCase()) || 
+                        o.tickers.toString().toUpperCase().includes(this.search.toUpperCase()) ||
+                        this.ifnullempty(o.isin).toUpperCase().includes(this.search.toUpperCase())
+                    )
+                }
+            }
+        }
+        
+    }
+</script>
+

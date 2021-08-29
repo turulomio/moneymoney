@@ -46,6 +46,9 @@
                         <v-list-item link router :to="{ name: 'products_update'}">
                             <v-list-item-title>{{ $t("Update") }}</v-list-item-title>
                         </v-list-item>
+                        <v-list-item link router :to="{ name: 'products_search'}">
+                            <v-list-item-title>{{ $t("Search") }}</v-list-item-title>
+                        </v-list-item>
                     </v-list-group>        
             
 <!--                     REPORTS -->
@@ -88,19 +91,19 @@
                             <v-list-item-title>{{ $t("Statistics")}}</v-list-item-title>
                         </v-list-item>
 
-                        <v-list-item key="1" href="https://github.com/turulomio/moneymoney/" target="_blank">
+                        <v-list-item  href="https://github.com/turulomio/moneymoney/" target="_blank">
                             <v-list-item-title>{{ $t('Money Money Github') }}</v-list-item-title>
                         </v-list-item>
                         
-                        <v-list-item key="2" href="https://github.com/turulomio/django_moneymoney/" target="_blank">
+                        <v-list-item href="https://github.com/turulomio/django_moneymoney/" target="_blank">
                             <v-list-item-title>{{ $t('Django Money Money Github') }}</v-list-item-title>
                         </v-list-item>
 
-                        <v-list-item key="2" href="https://github.com/turulomio/xulpymoney/" target="_blank">
+                        <v-list-item href="https://github.com/turulomio/xulpymoney/" target="_blank">
                             <v-list-item-title>{{ $t('Xulpymoney Github') }}</v-list-item-title>
                         </v-list-item>
                         
-                        <v-list-item key="2" href="https://github.com/turulomio/django-money/" target="_blank">
+                        <v-list-item href="https://github.com/turulomio/django-money/" target="_blank">
                             <v-list-item-title>{{ $t('Django Money Github') }}</v-list-item-title>
                         </v-list-item>
                     </v-list-group>
