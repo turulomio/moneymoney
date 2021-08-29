@@ -101,6 +101,13 @@
                 <DividendsCU :dividend="dividend" :investment="investment" :key="key"  @cruded="on_DividendsCU_cruded()"></DividendsCU>
             </v-card>
         </v-dialog>
+
+        <!-- DIVIDEND PRODUCTSVIEW-->
+        <v-dialog v-model="dialog_productview" width="35%">
+            <v-card class="pa-3">
+                <ProductsView :product="product" ></ProductsView>
+            </v-card>
+        </v-dialog>
     </div>  
 </template>
 <script>
@@ -113,6 +120,7 @@
     import InvestmentsoperationsEvolutionChartTimeseries from './InvestmentsoperationsEvolutionChartTimeseries.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import DisplayValues from './DisplayValues.vue'
+    import ProductsView from './ProductsView.vue'
     import TableDividends from './TableDividends.vue'
     import TableInvestmentOperations from './TableInvestmentOperations.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
@@ -122,6 +130,7 @@
             DisplayValues,
             DividendsCU,
             MyMenuInline,
+            ProductsView,
             TableInvestmentOperations,
             TableInvestmentOperationsCurrent,
             TableInvestmentOperationsHistorical,
@@ -198,8 +207,10 @@
                         children: [
                             {
                                 name:this.$t('View product'),
-                                type: "redirection",
-                                command:"{% url 'product_view' pk=investment.products.id %}",
+                                code: function(this_){
+                                    this_.product=this_.$store.state.catalogs.products.find( (o) => o.url=this_.investment.url)
+                                    this_.dialog_productview=true
+                                },
                                 icon: "mdi-magnify",
                             },
                             {
@@ -272,6 +283,10 @@
                 // Dividend CU
                 dialog_dividend:false,
                 dividend: null,
+
+                // Dividend Produts view
+                dialog_productview:false,
+                product: null,
             }  
         },
         watch:{

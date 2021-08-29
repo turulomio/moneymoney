@@ -1,4 +1,3 @@
-
 export function empty_io(){
     return {
         datetime: new Date().toISOString(),
@@ -15,6 +14,12 @@ export function empty_io(){
     }
 }
 
+export function empty_product(){
+    return {
+        url: null,
+        name: null,
+    }
+}
 
 export function empty_products_ranges(){
     return {

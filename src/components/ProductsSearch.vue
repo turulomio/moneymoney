@@ -28,18 +28,25 @@
                 </template>
             </v-data-table>   
         </v-card>
+        <v-dialog v-model="dialog_productsview">
+            <v-card class="pa-4">
+                <ProductsView :product="product"></ProductsView>
+            </v-card>
+        </v-dialog>
     </div>
 </template>  
 <script>     
     import {ifnullempty} from '../functions.js'
+    import {empty_product} from '../empty_objects.js'
     import MyMenuInline from './MyMenuInline.vue'
+    import ProductsView from './ProductsView.vue'
     export default {
         components:{
             MyMenuInline,
+            ProductsView,
         },
         data () {
             return {
-                form_valid: false,
                 search: null,
                 tableHeaders: [
                     { text: 'Id', value: 'id',sortable: true },
@@ -56,13 +63,17 @@
                             {
                                 name:this.$t('Add personal product'),
                                 code: function(this_){
-                                    console.log(this_)
+                                    this_.product=this_.empty_product()
+                                    this_.dialog_productsview=true
                                 },
                                 icon: "mdi-plus",
                             },
                         ]
                     },
                 ],
+                //DIALOG PRODUCTS VIEW
+                dialog_productsview:false,
+                product:null,
             }
         },
         methods: {
@@ -72,9 +83,11 @@
             editProduct(item){
                 console.log(item)
             },
+            empty_product,
             ifnullempty,
             viewProduct(item){
-                console.log(item)
+                this.product=item
+                this.dialog_productsview=true
             },
             class_name(item){
                 if (item.obsolete==false){
