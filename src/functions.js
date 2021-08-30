@@ -126,6 +126,21 @@ export function vuex_update_investments(){
     });
 }
 
+
+export function vuex_update_concepts(){
+    axios.get(`${this.$store.state.apiroot}/api/concepts/`, this.myheaders())
+    .then((response) => {
+        this.$store.state.catalogs.concepts= sortObjectsArray(response.data, "name")
+        console.log("Updated concepts")
+    }, (error) => {
+        this.parseResponseError(error)
+    });
+}
+
+export function concepts_for_dividends(){
+    return this.$store.state.catalogs.concepts.filter( o => [39, 50,59,62,63,65,66,68,70,72,75,76].includes(o.id))
+}
+
 export function vuex_update_catalogs(){   
     this.$store.state.catalogs.currencies=[
         {
@@ -163,13 +178,6 @@ export function vuex_update_catalogs(){
     .then((response) => {
         this.$store.state.catalogs.creditcards= sortObjectsArray(response.data, "name")
         console.log("Updated creditcards")
-    }, (error) => {
-        this.parseResponseError(error)
-    });
-    axios.get(`${this.$store.state.apiroot}/api/concepts/`, this.myheaders())
-    .then((response) => {
-        this.$store.state.catalogs.concepts= sortObjectsArray(response.data, "name")
-        console.log("Updated concepts")
     }, (error) => {
         this.parseResponseError(error)
     });

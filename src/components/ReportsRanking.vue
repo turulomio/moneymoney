@@ -17,7 +17,30 @@
                 </template>  
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small class="mr-2" @click="viewItem(item)">mdi-eye</v-icon>
-                </template>                            
+                </template>    
+                <template v-slot:[`body.append`]="{headers}">
+                    <tr style="background-color: GhostWhite" ref="lr">
+                        <td v-for="(header,i) in headers" :key="i" >
+                            <div v-if="header.value == 'name'">
+                                Total
+                            </div>
+                        
+                            <div v-if="header.value == 'current_net_gains'" align="right">
+                                <div v-html="localcurrency_html(listobjects_sum(data,'current_net_gains'))"></div>
+                            </div>
+                            <div v-if="header.value == 'historical_net_gains'" align="right">
+                                <div v-html="localcurrency_html(listobjects_sum(data,'historical_net_gains'))"></div>
+                            </div>
+                            <div v-if="header.value == 'dividends'" align="right">
+                                <div v-html="localcurrency_html(listobjects_sum(data,'dividends'))"></div>
+                            </div>
+                            <div v-if="header.value == 'total'" align="right">
+                                <div v-html="localcurrency_html(listobjects_sum(data,'total'))"></div>
+                            </div>
+
+                        </td>
+                    </tr>
+                </template>                        
             </v-data-table>
         </v-card>
     </div>

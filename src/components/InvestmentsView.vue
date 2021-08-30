@@ -73,7 +73,7 @@
             <v-tab-item key="dividends">     
                 <v-card class="padding" v-if="!loading_ios">
                     <v-checkbox v-model="showAllDividends" :label="setChkDividendsLabel()" @click="on_chkDividends()"></v-checkbox>
-                    <TableDividends :items="dividends_filtered" currency_account="EUR"  height="300" output="user" :key="key" heterogeneus></TableDividends>
+                    <TableDividends :items="dividends_filtered" currency_account="EUR"  height="300" output="user" :key="key" heterogeneus @cruded="on_TableDividends_cruded()"></TableDividends>
                 </v-card>
             </v-tab-item>
         </v-tabs-items> 
@@ -268,8 +268,7 @@
                                 name:this.$t('Add a dividend'),
                                 code: function(this_){
                                     this_.dividend=this_.empty_dividend()
-                                    this_.dividend.investments=this_.investment.url
-                                     
+                                    this_.dividend.investments=this_.investment.url                                     
                                     this_.dialog_dividend=true
                                 },
                                 icon: "mdi-book-plus",
@@ -300,6 +299,9 @@
             listobjects_average_ponderated,
             on_DividendsCU_cruded(){
                 this.dialog_dividend=false
+                this.update_dividends()
+            },
+            on_TableDividends_cruded(){
                 this.update_dividends()
             },
             on_InvestmentsoperationsCU_cruded(){

@@ -6,145 +6,146 @@
                     <v-select dense label="Select the year from which to display the report" v-model="year" :items="years()" @change="change_year()"></v-select>
                 </v-card>
             </div>
+        <div class="pa-6">
+            <p>{{ last_year_balance_string }}</p>
 
-        <p>{{ last_year_balance_string }}</p>
-
-        <v-tabs  background-color="primary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
-            <v-tab key="0">{{ $t("Month evolution") }}</v-tab>
-            <v-tab key="1">{{ $t("Income report") }}</v-tab>
-            <v-tab key="2">{{ $t("Gains by product type") }}</v-tab>
-            <v-tabs-slider color="yellow"></v-tabs-slider>
-        </v-tabs>
-        <v-tabs-items v-model="tab">
-            <v-tab-item key="0">
-                <v-card class="padding" outlined>            
-                    <v-data-table dense :headers="total_annual_headers" :items="total_annual"  class="elevation-1" disable-pagination  hide-default-footer :loading="loading_annual">      
-                        <template v-slot:[`item.account_balance`]="{ item }">
-                            <div v-html="localcurrency_html(item.account_balance)"></div>
-                        </template>      
-                        <template v-slot:[`item.investment_balance`]="{ item }">
-                            <div v-html="localcurrency_html(item.investment_balance)"></div>
-                        </template>   
-                        <template v-slot:[`item.total`]="{ item }">
-                            <div v-html="localcurrency_html(item.total)"></div>
-                        </template>   
-                        <template v-slot:[`item.diff_lastmonth`]="{ item }">
-                            <div v-html="localcurrency_html(item.diff_lastmonth)"></div>
-                        </template>   
-                        <template v-slot:[`item.percentage_year`]="{ item }">
-                            <div v-html="percentage_html(item.percentage_year)"></div>
-                        </template>   
-                        <template v-slot:[`body.append`]="{headers}">
-                            <tr style="background-color: GhostWhite" ref="lr">
-                                <td v-for="(header,i) in headers" :key="i" >
-                                    <div v-if="header.value == 'month'">
-                                        Total
-                                    </div>
-                                    <div v-if="header.value == 'diff_lastmonth'" align="right">
-                                        <div v-html="localcurrency_html(listobjects_sum(total_annual,'diff_lastmonth'))"></div>
-                                    </div>
-                                    <div v-if="header.value == 'percentage_year'" align="right">
-                                        <div v-html="percentage_html(listobjects_sum(total_annual,'diff_lastmonth')/last_year_balance)"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                        </template>
-                    </v-data-table>   
-                </v-card>
-            </v-tab-item>
-            <v-tab-item key="1">     
-                <v-card class="padding" outlined>            
-                    <v-data-table dense :headers="total_annual_incomes_headers" :items="total_annual_incomes"  class="elevation-1" disable-pagination  hide-default-footer :loading="loading_annual_incomes">      
-                        <template v-slot:[`item.expenses`]="{ item }">
-                            <div v-html="localcurrency_html(item.expenses)"></div>
-                        </template>      
-                        <template v-slot:[`item.incomes`]="{ item }">
-                            <div v-html="localcurrency_html(item.incomes)"></div>
-                        </template>   
-                        <template v-slot:[`item.total`]="{ item }">
-                            <div v-html="localcurrency_html(item.total)"></div>
-                        </template>   
-                        <template v-slot:[`item.gains`]="{ item }">
-                            <div v-html="localcurrency_html(item.gains)"></div>
-                        </template>   data
-                        <template v-slot:[`item.dividends`]="{ item }">
-                            <div v-html="localcurrency_html(item.dividends)"></div>
-                        </template>    
-                        <template v-slot:[`item.actions`]="{ item }">
-                            <v-icon small class="mr-2" @click="incomeDetails(item)">mdi-pencil</v-icon>
-                        </template> 
-                        <template v-slot:[`body.append`]="{headers}">
-                            <tr style="background-color: GhostWhite" ref="lr">
-                                <td v-for="(header,i) in headers" :key="i" >
-                                    <div v-if="header.value == 'month'">
-                                        Total
-                                    </div>
-                                    <div v-if="header.value == 'expenses'" align="right">
-                                        <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'expenses'))"></div>
-                                    </div>
-                                    <div v-if="header.value == 'incomes'" align="right">
-                                        <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'incomes'))"></div>
-                                    </div>
-                                    <div v-if="header.value == 'gains'" align="right">
-                                        <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'gains'))"></div>
-                                    </div>
-                                    <div v-if="header.value == 'dividends'" align="right">
-                                        <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'dividends'))"></div>
-                                    </div>
-                                    <div v-if="header.value == 'total'" align="right">
-                                        <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'total'))"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                        </template>
-                    </v-data-table>
-                </v-card>
-            </v-tab-item>
-            <v-tab-item key="2">     
-                <v-card class="padding" outlined>
-                    <v-data-table dense :headers="total_annual_gainsbyproductstypes_headers" :items="total_annual_gainsbyproductstypes"  class="elevation-1" disable-pagination  hide-default-footer :loading="loading_annual_gainsbyproductstypes">      
-                        <template v-slot:[`item.dividends_gross`]="{ item }">
-                            <div v-html="localcurrency_html(item.dividends_gross)"></div>
-                        </template>      
-                        <template v-slot:[`item.dividends_net`]="{ item }">
-                            <div v-html="localcurrency_html(item.dividends_net)"></div>
-                        </template>   
-                        <template v-slot:[`item.gains_gross`]="{ item }">
-                            <div v-html="localcurrency_html(item.gains_gross)"></div>
-                        </template>   
-                        <template v-slot:[`item.gains_net`]="{ item }">
-                            <div v-html="localcurrency_html(item.gains_net)"></div>
-                        </template>    
-                        <template v-slot:[`body.append`]="{headers}">
-                            <tr style="background-color: GhostWhite" ref="lr">
-                                <td v-for="(header,i) in headers" :key="i" >
-                                    <div v-if="header.value == 'name'">
-                                        Total
-                                    </div>
-                                    <div v-if="header.value == 'dividends_gross'" align="right">
-                                        <div v-html="localcurrency_html(listobjects_sum(total_annual_gainsbyproductstypes,'dividends_gross'))"></div>
-                                    </div>
-                                    <div v-if="header.value == 'dividends_net'" align="right">
-                                        <div v-html="localcurrency_html(listobjects_sum(total_annual_gainsbyproductstypes,'dividends_net'))"></div>
-                                    </div>
-                                    <div v-if="header.value == 'gains_gross'" align="right">
-                                        <div v-html="localcurrency_html(listobjects_sum(total_annual_gainsbyproductstypes,'gains_gross'))"></div>
-                                    </div>
-                                    <div v-if="header.value == 'gains_net'" align="right">
-                                        <div v-html="localcurrency_html(listobjects_sum(total_annual_gainsbyproductstypes,'gains_net'))"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                        </template>
-                    </v-data-table>   
-                    <div v-html="footer_gainsbyproductstypes()"></div>
-                
-                </v-card>
-            </v-tab-item>
-        </v-tabs-items>     
+            <v-tabs  background-color="primary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
+                <v-tab key="0">{{ $t("Month evolution") }}</v-tab>
+                <v-tab key="1">{{ $t("Income report") }}</v-tab>
+                <v-tab key="2">{{ $t("Gains by product type") }}</v-tab>
+                <v-tabs-slider color="yellow"></v-tabs-slider>
+            </v-tabs>
+            <v-tabs-items v-model="tab">
+                <v-tab-item key="0">
+                    <v-card class="padding" outlined>            
+                        <v-data-table dense :headers="total_annual_headers" :items="total_annual"  class="elevation-1" disable-pagination  hide-default-footer :loading="loading_annual">      
+                            <template v-slot:[`item.account_balance`]="{ item }">
+                                <div v-html="localcurrency_html(item.account_balance)"></div>
+                            </template>      
+                            <template v-slot:[`item.investment_balance`]="{ item }">
+                                <div v-html="localcurrency_html(item.investment_balance)"></div>
+                            </template>   
+                            <template v-slot:[`item.total`]="{ item }">
+                                <div v-html="localcurrency_html(item.total)"></div>
+                            </template>   
+                            <template v-slot:[`item.diff_lastmonth`]="{ item }">
+                                <div v-html="localcurrency_html(item.diff_lastmonth)"></div>
+                            </template>   
+                            <template v-slot:[`item.percentage_year`]="{ item }">
+                                <div v-html="percentage_html(item.percentage_year)"></div>
+                            </template>   
+                            <template v-slot:[`body.append`]="{headers}">
+                                <tr style="background-color: GhostWhite" ref="lr">
+                                    <td v-for="(header,i) in headers" :key="i" >
+                                        <div v-if="header.value == 'month'">
+                                            Total
+                                        </div>
+                                        <div v-if="header.value == 'diff_lastmonth'" align="right">
+                                            <div v-html="localcurrency_html(listobjects_sum(total_annual,'diff_lastmonth'))"></div>
+                                        </div>
+                                        <div v-if="header.value == 'percentage_year'" align="right">
+                                            <div v-html="percentage_html(listobjects_sum(total_annual,'diff_lastmonth')/last_year_balance)"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                            </template>
+                        </v-data-table>   
+                    </v-card>
+                </v-tab-item>
+                <v-tab-item key="1">     
+                    <v-card class="padding" outlined>            
+                        <v-data-table dense :headers="total_annual_incomes_headers" :items="total_annual_incomes"  class="elevation-1" disable-pagination  hide-default-footer :loading="loading_annual_incomes">      
+                            <template v-slot:[`item.expenses`]="{ item }">
+                                <div v-html="localcurrency_html(item.expenses)"></div>
+                            </template>      
+                            <template v-slot:[`item.incomes`]="{ item }">
+                                <div v-html="localcurrency_html(item.incomes)"></div>
+                            </template>   
+                            <template v-slot:[`item.total`]="{ item }">
+                                <div v-html="localcurrency_html(item.total)"></div>
+                            </template>   
+                            <template v-slot:[`item.gains`]="{ item }">
+                                <div v-html="localcurrency_html(item.gains)"></div>
+                            </template>   data
+                            <template v-slot:[`item.dividends`]="{ item }">
+                                <div v-html="localcurrency_html(item.dividends)"></div>
+                            </template>    
+                            <template v-slot:[`item.actions`]="{ item }">
+                                <v-icon small class="mr-2" @click="incomeDetails(item)">mdi-pencil</v-icon>
+                            </template> 
+                            <template v-slot:[`body.append`]="{headers}">
+                                <tr style="background-color: GhostWhite" ref="lr">
+                                    <td v-for="(header,i) in headers" :key="i" >
+                                        <div v-if="header.value == 'month'">
+                                            Total
+                                        </div>
+                                        <div v-if="header.value == 'expenses'" align="right">
+                                            <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'expenses'))"></div>
+                                        </div>
+                                        <div v-if="header.value == 'incomes'" align="right">
+                                            <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'incomes'))"></div>
+                                        </div>
+                                        <div v-if="header.value == 'gains'" align="right">
+                                            <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'gains'))"></div>
+                                        </div>
+                                        <div v-if="header.value == 'dividends'" align="right">
+                                            <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'dividends'))"></div>
+                                        </div>
+                                        <div v-if="header.value == 'total'" align="right">
+                                            <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'total'))"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                            </template>
+                        </v-data-table>
+                    </v-card>
+                </v-tab-item>
+                <v-tab-item key="2">     
+                    <v-card class="padding" outlined>
+                        <v-data-table dense :headers="total_annual_gainsbyproductstypes_headers" :items="total_annual_gainsbyproductstypes"  class="elevation-1" disable-pagination  hide-default-footer :loading="loading_annual_gainsbyproductstypes">      
+                            <template v-slot:[`item.dividends_gross`]="{ item }">
+                                <div v-html="localcurrency_html(item.dividends_gross)"></div>
+                            </template>      
+                            <template v-slot:[`item.dividends_net`]="{ item }">
+                                <div v-html="localcurrency_html(item.dividends_net)"></div>
+                            </template>   
+                            <template v-slot:[`item.gains_gross`]="{ item }">
+                                <div v-html="localcurrency_html(item.gains_gross)"></div>
+                            </template>   
+                            <template v-slot:[`item.gains_net`]="{ item }">
+                                <div v-html="localcurrency_html(item.gains_net)"></div>
+                            </template>    
+                            <template v-slot:[`body.append`]="{headers}">
+                                <tr style="background-color: GhostWhite" ref="lr">
+                                    <td v-for="(header,i) in headers" :key="i" >
+                                        <div v-if="header.value == 'name'">
+                                            Total
+                                        </div>
+                                        <div v-if="header.value == 'dividends_gross'" align="right">
+                                            <div v-html="localcurrency_html(listobjects_sum(total_annual_gainsbyproductstypes,'dividends_gross'))"></div>
+                                        </div>
+                                        <div v-if="header.value == 'dividends_net'" align="right">
+                                            <div v-html="localcurrency_html(listobjects_sum(total_annual_gainsbyproductstypes,'dividends_net'))"></div>
+                                        </div>
+                                        <div v-if="header.value == 'gains_gross'" align="right">
+                                            <div v-html="localcurrency_html(listobjects_sum(total_annual_gainsbyproductstypes,'gains_gross'))"></div>
+                                        </div>
+                                        <div v-if="header.value == 'gains_net'" align="right">
+                                            <div v-html="localcurrency_html(listobjects_sum(total_annual_gainsbyproductstypes,'gains_net'))"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                            </template>
+                        </v-data-table>   
+                        <div v-html="footer_gainsbyproductstypes()"></div>
+                    
+                    </v-card>
+                </v-tab-item>
+            </v-tabs-items>     
+        </div>
     </div>
 </template>
 <script>     

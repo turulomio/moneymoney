@@ -22,7 +22,7 @@
 </template>
 
 <script>
-    import {vuex_update_catalogs,vuex_update_investments} from '../functions.js'
+    import {vuex_update_catalogs,vuex_update_investments,vuex_update_concepts} from '../functions.js'
     import axios from 'axios'
     export default {
         name: 'btnLogIn',
@@ -53,6 +53,7 @@
                         this.$store.state.token=response.data;
                         this.$store.state.logged=true;
                         this.vuex_update_investments();
+                        this.vuex_update_concepts();
                         this.vuex_update_catalogs();
                         this.dialog=false;
                         this.$refs.form.reset()
@@ -63,6 +64,7 @@
                 })
             },
             vuex_update_catalogs,
+            vuex_update_concepts,
             vuex_update_investments,
         },
     }

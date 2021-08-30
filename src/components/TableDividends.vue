@@ -1,51 +1,62 @@
 <template>
-    <v-data-table dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" :ref="$vnode.tag">
-        <template v-slot:[`item.datetime`]="{ item, index}" >
-            <div :ref="index">{{ localtime(item.datetime)}}</div>
-        </template>      
-        <template v-slot:[`item.gross`]="{ item }">
-            <div v-html="currency(item.gross)"></div>
-        </template>   
-        <template v-slot:[`item.net`]="{ item }">
-            <div v-html="currency(item.net)"></div>
-        </template>   
-        <template v-slot:[`item.commission`]="{ item }">
-            <div v-html="currency(item.commission)"></div>
-        </template>   
-        <template v-slot:[`item.taxes`]="{ item }">
-            <div v-html="currency(item.taxes)"></div>
-        </template>   
-        <template v-slot:[`item.actions`]="{ item }">
-            <v-icon small class="mr-2" @click="editDividend(item)">mdi-pencil</v-icon>
-            <v-icon small class="mr-2" @click="deleteDividend(item)">mdi-delete</v-icon>
-        </template>
-        <template v-slot:[`body.append`]="{headers}">
-            <tr style="background-color: GhostWhite">
-                <td v-for="(header,i) in headers" :key="i" >
-                    <div v-if="header.value == 'datetime'">
-                        Total
-                    </div>
-                    <div v-if="header.value == 'gross'">
-                        <div class="text-right" v-html="currency(listobjects_sum(items,'gross'))"></div>
-                    </div>
-                    <div v-if="header.value == 'net'">
-                        <div class="text-right" v-html="currency(listobjects_sum(items,'net'))"></div>
-                    </div>
-                    <div v-if="header.value == 'commission'">
-                        <div class="text-right" v-html="currency(listobjects_sum(items,'commission'))"></div>
-                    </div>
-                    <div v-if="header.value == 'taxes'">
-                        <div class="text-right" v-html="currency(listobjects_sum(items,'taxes'))"></div>
-                    </div>
-                </td>
-            </tr>
-        </template>
-    </v-data-table>   
+    <div>
+        <v-data-table dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" :ref="$vnode.tag">
+            <template v-slot:[`item.datetime`]="{ item, index}" >
+                <div :ref="index">{{ localtime(item.datetime)}}</div>
+            </template>      
+            <template v-slot:[`item.gross`]="{ item }">
+                <div v-html="currency(item.gross)"></div>
+            </template>   
+            <template v-slot:[`item.net`]="{ item }">
+                <div v-html="currency(item.net)"></div>
+            </template>   
+            <template v-slot:[`item.commission`]="{ item }">
+                <div v-html="currency(item.commission)"></div>
+            </template>   
+            <template v-slot:[`item.taxes`]="{ item }">
+                <div v-html="currency(item.taxes)"></div>
+            </template>   
+            <template v-slot:[`item.actions`]="{ item }">
+                <v-icon small class="mr-2" @click="editDividend(item)">mdi-pencil</v-icon>
+                <v-icon small class="mr-2" @click="deleteDividend(item)">mdi-delete</v-icon>
+            </template>
+            <template v-slot:[`body.append`]="{headers}">
+                <tr style="background-color: GhostWhite">
+                    <td v-for="(header,i) in headers" :key="i" >
+                        <div v-if="header.value == 'datetime'">
+                            Total
+                        </div>
+                        <div v-if="header.value == 'gross'">
+                            <div class="text-right" v-html="currency(listobjects_sum(items,'gross'))"></div>
+                        </div>
+                        <div v-if="header.value == 'net'">
+                            <div class="text-right" v-html="currency(listobjects_sum(items,'net'))"></div>
+                        </div>
+                        <div v-if="header.value == 'commission'">
+                            <div class="text-right" v-html="currency(listobjects_sum(items,'commission'))"></div>
+                        </div>
+                        <div v-if="header.value == 'taxes'">
+                            <div class="text-right" v-html="currency(listobjects_sum(items,'taxes'))"></div>
+                        </div>
+                    </td>
+                </tr>
+            </template>
+        </v-data-table>   
+        <!-- DIVIDEND CU-->
+        <v-dialog v-model="dialog_dividend" width="35%">
+            <v-card class="pa-3">
+                <DividendsCU :dividend="dividend" :investment="investment" :key="key"  @cruded="on_DividendsCU_cruded()"></DividendsCU>
+            </v-card>
+        </v-dialog>
+    </div>
 </template>
 <script>    
+    import axios from 'axios'
+    import DividendsCU from './DividendsCU.vue'
     import {localtime} from '../functions.js'
     export default {
         components:{
+            DividendsCU,
         },
         props: {
             items: {
@@ -61,6 +72,10 @@
         },
         data: function(){
             return {
+                dialog_dividend:false,
+                dividend: null,
+                investment: null,
+                key: 0,
             }
         },
         methods: {
@@ -69,10 +84,22 @@
                 return this.currency_html(value, this.currency_account)
             },
             editDividend(item){
-                window.location.href=`${this.url_root}dividend/update/${item.id}`
+                this.dividend=item
+                this.investment={url:this.dividend.investments}
+                this.dialog_dividend=true
+                this.key=this.key+1
             },
             deleteDividend(item){
-                window.location.href=`${this.url_root}dividend/delete/${item.id}`
+               var r = confirm(this.$t("Do you want to delete this dividend?"))
+               if(r == false) {
+                  return
+               } 
+                axios.delete(item.url, this.myheaders())
+                .then(() => {
+                    this.$emit("cruded")
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
             },
             table_headers(){
                 var r= [
@@ -93,6 +120,9 @@
             gotoLastRow(){
                 this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs[this.$vnode.tag].$el.childNodes[0] }) 
             },
+            on_DividendsCU_cruded(){
+                this.$emit("cruded")
+            }
         },
         mounted(){
             this.gotoLastRow()

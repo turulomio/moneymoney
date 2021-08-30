@@ -5,8 +5,8 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <v-autocomplete :items="$store.state.catalogs.investments" v-model="newdividend.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <MyDateTimePicker v-model="newdividend.executed" :label="$t('Set investment execution date and time')"></MyDateTimePicker>
-                <v-autocomplete :items="$store.state.catalogs.concepts" v-model="newdividend.concepts" :label="$t('Select a concept')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <MyDateTimePicker v-model="newdividend.datetime" :label="$t('Set investment execution date and time')"></MyDateTimePicker>
+                <v-autocomplete :items="concepts_for_dividends()" v-model="newdividend.concepts" :label="$t('Select a concept')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field v-model="newdividend.gross" type="number" :label="$t('Set dividend gross balance')" :placeholder="$t('Set dividend gross balance')" :rules="RulesInteger(10,true)" counter="10"/>
                 <v-text-field v-model="newdividend.net" type="number" :label="$t('Set dividend net balance')" :placeholder="$t('Set dividend net balance1')" :rules="RulesInteger(10,true)" counter="10"/>
                 <v-text-field v-model="newdividend.taxes" type="number" :label="$t('Set dividend taxes')" :placeholder="$t('Set dividend taxes')" :rules="RulesInteger(10,true)" counter="10"/>
@@ -24,6 +24,7 @@
 <script>
     import axios from 'axios'
     import MyDateTimePicker from './MyDateTimePicker.vue'
+    import {concepts_for_dividends} from '../functions.js'
     export default {
         components: {
             MyDateTimePicker,
@@ -67,7 +68,6 @@
                             console.log(response.data)
                             this.$emit("cruded")
                             this.editing=false
-                            this.newdividend=this.empty_io()
                     }, (error) => {
                         this.parseResponseError(error)
                     })
@@ -76,13 +76,12 @@
                     .then((response) => {
                             console.log(response.data)
                             this.$emit("cruded")
-                            this.newdividend=this.empty_io()
                     }, (error) => {
                         this.parseResponseError(error)
                     })
                 }
             },
-
+            concepts_for_dividends,
         },
         created(){
             console.log(this.dividend)
