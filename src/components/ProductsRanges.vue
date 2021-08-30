@@ -11,7 +11,7 @@
                 <v-text-field  v-model="newpr.amount_to_invest" type="number" :label="$t('Set the amount to invest')" :placeholder="$t('Set the amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
                 </v-row>
                 <v-row class="pl-5 pr-5">
-                <v-text-field class="mr-5" v-model="newpr.recomendation_methods" type="number" :label="$t('Set recomendation method')" :placeholder="$t('Set recomendation method')" :rules="RulesInteger(10,true)" counter="10"/>  
+                <v-select class="mr-5" :items="recomendation_methods" v-model="newpr.recomendation_methods" :label="$t('Set recomendation method')"  item-text="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
                 <v-checkbox class="mr-5" v-model="newpr.only_first" :label="$t('Show only first operation?')" ></v-checkbox>
                 <v-autocomplete class="mr-5" :items="$store.state.catalogs.accounts" v-model="newpr.account" :label="$t('Select an account')" item-text="name" item-value="url" :rules="RulesSelection(false)"></v-autocomplete> 
                 <v-btn class="mt-4" color="primary" @click="accept()" :disabled="!form_valid">{{ $t("Show ranges") }}</v-btn>
@@ -89,7 +89,15 @@
                 tableData:[],
                 option: {},
                 loading:false,
-
+                recomendation_methods:[
+                    {id:0,name:this.$t("None")},
+                    {id:1,name:this.$t("All")},
+                    {id:2,name:this.$t("SMA 10/50/200")},
+                    {id:3,name:this.$t("SMA 100")},
+                    {id:4,name:this.$t("Strict SMA 10/50/200")},
+                    {id:5,name:this.$t("Strict SMA 100")},
+                    {id:6,name:this.$t("Strict SMA 10/100")},
+                ],
             }   
         },
         methods:{
