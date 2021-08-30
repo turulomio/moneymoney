@@ -6,7 +6,7 @@
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <v-autocomplete dense :items="$store.state.catalogs.products" v-model="newquote.products" :label="$t('Select a product')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker v-model="newquote.datetime" :label="$t('Set quote date and time')"></MyDateTimePicker>
-                <v-text-field dense v-model.number="newquote.quote" type="number" :label="$t('Set quote')" :placeholder="$t('Set quote')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field dense v-model.number="newquote.quote" type="number" :label="$t('Set quote')" :placeholder="$t('Set quote')" :rules="RulesInteger(10,true)" counter="10" autofocus/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>

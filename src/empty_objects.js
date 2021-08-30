@@ -57,6 +57,18 @@ export function empty_dividend(){
     }
 }
 
+export function empty_investment(){
+    return {
+        name: "",
+        active: true,
+        daily_adjustment: false,
+        selling_price: 0,
+        products: null,
+        selling_expiration: null,
+        balance_percentage: 100,
+        accounts: null,
+    }
+}
 
 export function empty_strategy(){
     return {

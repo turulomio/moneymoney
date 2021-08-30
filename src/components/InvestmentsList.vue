@@ -36,7 +36,8 @@
                     <div  :class="item.percentage_selling_point<0.05 ? 'vuegreen' : ''" v-html="percentage_html(item.percentage_selling_point)"></div>
                 </template>              
                 <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon small @click="editItem(item)">mdi-pencil</v-icon>
+                    <v-icon small class="ml-1" @click="addQuote(item)">mdi-plus</v-icon>
+                    <v-icon small class="ml-1" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small class="ml-1" @click="viewItem(item)">mdi-eye</v-icon>
                     <v-icon small class="ml-1" @click="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
                     <v-icon small class="ml-1" v-if="(new Date()>new Date(item.selling_expiration)) && item.selling_expiration!=null" @click="editInvestment(item)">mdi-alarm</v-icon>     
@@ -87,6 +88,12 @@
                 <InvestmentsView :investment="investment" :key="key" @cruded="on_InvestmentView_cruded"></InvestmentsView>
             </v-card>
         </v-dialog>
+        <!-- DIALOG  ADD QUOTE -->
+        <v-dialog v-model="dialog_quotescu">
+            <v-card class="pa-4">
+                <QuotesCU :quote="quote" :key="key" @cruded="on_QuotesCU_cruded"></QuotesCU>
+            </v-card>
+        </v-dialog>
 
     </div>
 </template>
@@ -94,13 +101,16 @@
     import axios from 'axios'
     import MyMenuInline from './MyMenuInline.vue'
     import InvestmentsView from './InvestmentsView.vue'
+    import QuotesCU from './QuotesCU.vue'
     import MyDatePicker from './MyDatePicker.vue'
     import {localtime} from '../functions.js'
+    import {empty_quote, empty_investment} from '../empty_objects.js'
     export default {
         components:{
             MyMenuInline,
             InvestmentsView,
             MyDatePicker,
+            QuotesCU,
         },
         data(){ 
             return{
@@ -144,79 +154,15 @@
                 dialog_view:false,
                 foot:"",
                 key:0,
+
+                // QuoteCU add
+                dialog_quotescu:false,
+                quote:null,
             }
         },
         methods: {
-            localtime,
-            on_InvestmentView_cruded(){
-                this.update_table()
-            },
-            dialog_title(){
-                if(this.editing==true){
-                    return this.$t("Updating investment")
-                } else {
-                    return this.$t("Creating a new investment")
-                }
-            },
-            empty_investment(){
-                return {
-                    name: "",
-                    active: true,
-                    daily_adjustment: false,
-                    selling_price: 0,
-                    products: null,
-                    selling_expiration: null,
-                    balance_percentage: 100,
-                    accounts: null,
-                }
-            },
             MyMenuInlineSelection(item){
                 item.code(this)
-            },
-            editItem (item) {
-                this.editing=true
-                this.investment=item
-                this.dialog=true
-            },
-            viewItem (item) {
-                this.key=this.key+1
-                this.investment=item
-                this.dialog_view=true
-            },
-            deleteItem (item) {
-               var r = confirm(this.$t("Do you want to delete this investment?"))
-               if(r == false) {
-                  return
-               } 
-                axios.delete(item.url, this.myheaders())
-                .then((response) => {
-                    console.log(response);
-                    this.update_table()
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
-            update_table(){
-                this.loading_investments=true
-                axios.get(`${this.$store.state.apiroot}/investments/withbalance?active=${this.showActive}`, this.myheaders())
-                .then((response) => {
-                    this.investments_items=response.data
-                    console.log(response);
-                    this.update_foot()
-                    this.loading_investments=false
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
-            on_chkActive(){
-                this.update_table()
-            },
-            setCheckboxLabel(){
-                if (this.showActive== true){
-                    return this.$t("Uncheck to see inactive investments")
-                } else {
-                    return this.$t("Check to see active investments")
-                }
             },
             acceptDialog(){
                 if (this.$refs.form.validate()==false) return
@@ -242,11 +188,80 @@
                     })
                 }
             },
+            addQuote(item){
+                this.quote=this.empty_quote()
+                this.quote.products=item.products
+                this.dialog_quotescu=true
+                this.key=this.key+1
+
+            },
+            deleteItem (item) {
+               var r = confirm(this.$t("Do you want to delete this investment?"))
+               if(r == false) {
+                  return
+               } 
+                axios.delete(item.url, this.myheaders())
+                .then((response) => {
+                    console.log(response);
+                    this.update_table()
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
+            },
+            dialog_title(){
+                if(this.editing==true){
+                    return this.$t("Updating investment")
+                } else {
+                    return this.$t("Creating a new investment")
+                }
+            },
+            editItem (item) {
+                this.editing=true
+                this.investment=item
+                this.dialog=true
+            },
+            empty_investment,
+            empty_quote,
+            localtime,
+            on_InvestmentView_cruded(){
+                this.update_table()
+            },
+            on_QuotesCU_cruded(){
+                this.dialog_quotescu=false
+                this.update_table()
+            },
+            on_chkActive(){
+                this.update_table()
+            },
+            setCheckboxLabel(){
+                if (this.showActive== true){
+                    return this.$t("Uncheck to see inactive investments")
+                } else {
+                    return this.$t("Check to see active investments")
+                }
+            },
             update_foot(){
                 var positives=this.listobjects_sum(this.investments_items.filter((o) => o.gains_user >=0), "gains_user")
                 var negatives=this.listobjects_sum(this.investments_items.filter((o) => o.gains_user <0), "gains_user")
                 this.foot= "<p>" + this.$t(`Positive gains - Negative gains = ${this.localcurrency_html(positives)} ${this.localcurrency_html(negatives)} = ${this.localcurrency_html(positives+negatives)}`) + "</p>"
-            }
+            },
+            update_table(){
+                this.loading_investments=true
+                axios.get(`${this.$store.state.apiroot}/investments/withbalance?active=${this.showActive}`, this.myheaders())
+                .then((response) => {
+                    this.investments_items=response.data
+                    console.log(response);
+                    this.update_foot()
+                    this.loading_investments=false
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
+            },
+            viewItem (item) {
+                this.key=this.key+1
+                this.investment=item
+                this.dialog_view=true
+            },
         },
         mounted(){
             this.update_table()
