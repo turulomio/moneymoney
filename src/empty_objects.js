@@ -31,7 +31,7 @@ export function empty_quote(){
 
 export function empty_products_ranges(){
     return {
-        product: 0,
+        product: null,
         only_first: true,
         percentage_between_ranges: 2500,
         percentage_gains: 2500,
@@ -57,3 +57,13 @@ export function empty_dividend(){
     }
 }
 
+
+export function empty_strategy(){
+    return {
+        name: "",
+        active: true,
+        number: "",
+        currency: "EUR",    
+        banks:null,
+    }
+}

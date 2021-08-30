@@ -4,18 +4,22 @@
         <v-card class="ma-4 pa-4">   
             
             <v-form ref="form" v-model="form_valid" lazy-validation>             
-                <v-autocomplete dense :items="$store.state.catalogs.products" v-model="pr.product" :label="$t('Select a product')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field dense v-model="pr.percentage_between_ranges" type="number" :label="$t('Set percentage_between_ranges x 1000')" :placeholder="$t('Set percentage_between_ranges x 1000')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field dense v-model="pr.percentage_gains" type="number" :label="$t('Set percentage gains x1000')" :placeholder="$t('Set percentage gains x1000')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field dense v-model="pr.amount_to_invest" type="number" :label="$t('Set the amount to invest')" :placeholder="$t('Set the amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field dense v-model="pr.recomendation_methods" type="number" :label="$t('Set recomendation method')" :placeholder="$t('Set recomendation method')" :rules="RulesInteger(10,true)" counter="10"/>  
-                <v-checkbox dense v-model="pr.only_first" :label="$t('Show only first operation?')" ></v-checkbox>
-                <v-autocomplete dense :items="$store.state.catalogs.accounts" v-model="pr.account" :label="$t('Select an account')" item-text="name" item-value="url" :rules="RulesSelection(false)"></v-autocomplete> 
+                <v-row class="pl-5 pr-5">
+                <v-autocomplete class="mr-5" :items="$store.state.catalogs.products" v-model="newpr.product" :label="$t('Select a product')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-text-field class="mr-5" v-model="newpr.percentage_between_ranges" type="number" :label="$t('Set percentage_between_ranges x 1000')" :placeholder="$t('Set percentage_between_ranges x 1000')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field class="mr-5" v-model="newpr.percentage_gains" type="number" :label="$t('Set percentage gains x1000')" :placeholder="$t('Set percentage gains x1000')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field  v-model="newpr.amount_to_invest" type="number" :label="$t('Set the amount to invest')" :placeholder="$t('Set the amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                </v-row>
+                <v-row class="pl-5 pr-5">
+                <v-text-field class="mr-5" v-model="newpr.recomendation_methods" type="number" :label="$t('Set recomendation method')" :placeholder="$t('Set recomendation method')" :rules="RulesInteger(10,true)" counter="10"/>  
+                <v-checkbox class="mr-5" v-model="newpr.only_first" :label="$t('Show only first operation?')" ></v-checkbox>
+                <v-autocomplete class="mr-5" :items="$store.state.catalogs.accounts" v-model="newpr.account" :label="$t('Select an account')" item-text="name" item-value="url" :rules="RulesSelection(false)"></v-autocomplete> 
+                <v-btn class="mt-4" color="primary" @click="accept()" :disabled="!form_valid">{{ $t("Show ranges") }}</v-btn>
+                </v-row>
             </v-form>
 
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="accept()" :disabled="!form_valid">{{ $t("Show ranges") }}</v-btn>
             </v-card-actions>
         </v-card>
 
@@ -28,7 +32,7 @@
             <v-tab-item key="0">
                 <v-card flat>
                     <v-container>{{ $t("Current price: ") }}</v-container>
-                    <v-data-table dense :headers="tableHeaders" :items="tableData" class="elevation-1" disable-pagination  hide-default-footer :sort-by="['value']" :sort-desc="[true]" fixed-header height="400">      
+                    <v-data-table dense :headers="tableHeaders" :items="tableData" class="elevation-1" disable-pagination  hide-default-footer :sort-by="['value']" :sort-desc="[true]" fixed-header height="360">      
                         <template v-slot:[`item.value`]="{ item }">
                             <div  @click="showLimits(item)" :class="item.current_in_range ? 'vuegreen' : ''">{{item.value }}</div>
                         </template>    
@@ -64,6 +68,11 @@
     export default {
         components: {
         },
+        props:{
+            pr:{
+                required:false,
+            }
+        },
         data(){ 
             return {
                 tab: null,
@@ -75,7 +84,7 @@
                     { text: 'Orders',  sortable: false, value: 'orders_inside'},
                     { text: 'Actions', value: 'actions', sortable: false },
                 ],   
-                pr:this.empty_products_ranges(),
+                newpr:this.empty_products_ranges(),
                 form_valid:false,
                 tableData:[],
                 option: {},
@@ -87,8 +96,15 @@
             empty_products_ranges,
             accept(){
                 if (this.$refs.form.validate()==false) return
+                this.refreshTable()
+
+            },
+            addOrder(item){
+                console.log(item)
+            },
+            refreshTable(){
                 this.loading=true
-                axios.get(`${this.$store.state.apiroot}/products/ranges/?product=${this.pr.product}&percentage_between_ranges=${this.pr.percentage_between_ranges}&percentage_gains=${this.pr.percentage_gains}&amount_to_invest=${this.pr.amount_to_invest}&recomendation_methods=${this.pr.recomendation_methods}&only_first=${this.pr.only_first}&account=${this.pr.account}`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/products/ranges/?product=${this.newpr.product}&percentage_between_ranges=${this.newpr.percentage_between_ranges}&percentage_gains=${this.newpr.percentage_gains}&amount_to_invest=${this.newpr.amount_to_invest}&recomendation_methods=${this.newpr.recomendation_methods}&only_first=${this.newpr.only_first}&account=${this.newpr.account}`, this.myheaders())
                 .then((response) => {
                     console.log(response.data);
                     this.tableData=response.data
@@ -97,13 +113,17 @@
                     this.parseResponseError(error)
                 });
             },
-            addOrder(item){
-                window.location.href = `{{ url_order_add }}?price=${item.value}`
-            },
             showLimits(item){
                 alert(item.limits)
             }
         
         },
+        mounted(){
+            console.log(this.pr)
+            if (this.pr!=null){
+                this.newpr=Object.assign({},this.pr)
+                this.refreshTable()
+            }
+        }
     }
 </script>
