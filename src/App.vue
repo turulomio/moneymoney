@@ -68,6 +68,9 @@
                         <v-list-item link router :to="{ name: 'products_ranges'}">
                             <v-list-item-title>{{ $t("Product ranges") }}</v-list-item-title>
                         </v-list-item>
+                        <v-list-item link router :to="{ name: 'reports_dividends'}">
+                            <v-list-item-title>{{ $t("Dividends") }}</v-list-item-title>
+                        </v-list-item>
                     </v-list-group>
             
 <!--                     STRATEGIES -->
