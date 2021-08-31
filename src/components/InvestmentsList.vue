@@ -6,8 +6,11 @@
 
         </h1>
         <v-card outlined class="ma-4 pa-4">
-            <v-checkbox v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" ></v-checkbox>
-            <v-data-table dense :headers="investments_headers" :items="investments_items" sort-by="percentage_selling_point" class="elevation-1" hide-default-footer disable-pagination :loading="loading_investments" :key="key">
+            <v-row>
+                <v-checkbox class="ml-6 mr-10" v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" ></v-checkbox>
+                <v-text-field class="ml-10 mr-6" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"></v-text-field>
+            </v-row>
+            <v-data-table dense :headers="investments_headers" :search="search" :items="investments_items" sort-by="percentage_selling_point" class="elevation-1" hide-default-footer disable-pagination :loading="loading_investments" :key="key">
                 <template v-slot:[`item.last_datetime`]="{ item }">
                     {{localtime(item.last_datetime)}}
                 </template>  
@@ -150,6 +153,7 @@
                 investment: this.empty_investment(),
                 editing:false,
                 loading_investments:false,
+                search:"",
 
                 dialog_view:false,
                 foot:"",

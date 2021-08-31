@@ -11,13 +11,20 @@
         <div class="pa-6">
             <v-data-table dense :headers="tableHeaders"  :items="items" class="elevation-1" disable-pagination  hide-default-footer :sort-by="['percentage']" :sort-desc="['percentage']">
                 <template v-slot:[`item.dps`]="{item}"  class="text-nowrap">
-                    <v-icon small @click="addEstimation(item)" v-if="showAlarm(item)">mdi-alarm</v-icon> {{ if_null_script(item.dps)}}
+                    <div v-html="currency_html(item.dps,item.currency )"></div>
+                </template>    
+                <template v-slot:[`item.estimated`]="{item}"  class="text-nowrap">
+                    <div v-html="currency_html(item.estimated,item.currency )"></div>
+                </template>    
+                <template v-slot:[`item.current_price`]="{item}"  class="text-nowrap">
+                    <div v-html="currency_html(item.current_price,item.currency )"></div>
                 </template>    
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small class="mr-2" @click="addEstimation(item)">mdi-pencil</v-icon>
+                    <v-icon small @click="addEstimation(item)" v-if="showAlarm(item)">mdi-alarm</v-icon>
                 </template> 
                 <template v-slot:[`item.percentage`]="{ item }">
-                    {{ `${my_round(item.percentage*100, 2)} %`}}
+                    <div v-html="percentage_html(item.percentage )"></div>
                 </template>
             </v-data-table>
             <p class="mt-4 ">{{ total() }}</p>
@@ -28,8 +35,8 @@
                 <v-card-title class="headline">{{ $t("Post an estimation") }}</v-card-title>
                 <v-form ref="form" v-model="form_valid" lazy-validation>
                     <v-col>
-                        <v-text-field v-model="year" type="text" :counter="4" :label="$t('Year')" :placeholder="$t('Enter a year')" :rules="RulesIntegerRequired4"></v-text-field>
-                        <v-text-field v-model="estimation" type="text" :label="$t('Estimation')" :counter="10" :placeholder="$t('Enter a estimation')" autofocus @focus="$event.target.select()" :rules="RulesNumberRequired10"></v-text-field>
+                        <v-text-field v-model="year" type="text" :counter="4" :label="$t('Year')" :placeholder="$t('Enter a year')" :rules="RulesInteger(4,true)"></v-text-field>
+                        <v-text-field v-model="estimation" type="text" :label="$t('Estimation')" :counter="10" :placeholder="$t('Enter a estimation')" autofocus @focus="$event.target.select()" :rules="RulesFloat(10, true)"></v-text-field>
                     </v-col>
                     <v-card-actions>
                         <v-spacer></v-spacer>
@@ -43,6 +50,7 @@
 </template>
 
 <script>
+    import axios from 'axios'
     import moment from 'moment'
     export default {
         data(){ 
@@ -65,6 +73,7 @@
                 
                 dialog:false,
                 form_valid:false,
+                loading_dividends:false
             }
         },
         methods:{
@@ -82,34 +91,42 @@
                 console.log(item)
             },
             submit(){
-                let data = new FormData(); // 2
-                console.log(data)
-                // data.append("products_id", this.products_id)  
-                // data.append("estimation", this.estimation)  
-                // data.append("year", this.year)
-                // data.append("csrfmiddlewaretoken", '{{csrf_token}}')
-    
-                // axios.post( action="{% url 'estimation_dps_new') , data)
-                // .then(function (response) {
-                //     if (response.data=="True"){
-                //         location.reload()
-                //     } else {
-                //         alert("Something is wrong")
-                //     }
-                // })
-                // .catch(function (error) {
-                //     alert("Something is wrong")
-                // });
+                if (this.$refs.form.validate()==false) return
+                var newestimation={
+                    year: this.year,
+                    estimation: this.estimation,
+                    date_estimation: new Date(),
+                    source:"Internet",
+                    manual: true,
+                    products: this.products_id,
+
+                }
+                axios.post(`${this.$store.state.apiroot}/api/estimations_dps/`, newestimation, this.myheaders())
+                .then((response) => {
+                    console.log(response.data)
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
+            },
+            refreshTable(){
+                this.loading_dividends=true
+                axios.get(`${this.$store.state.apiroot}/reports/dividends/`, this.myheaders())
+                .then((response) => {
+                    console.log(response.data)
+                    this.items=response.data
+                    this.loading_dividends=false
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
             },
             total(){
                 var total=this.items.reduce((accum,item) => accum + item.estimated, 0)
                 return this.$t(`If I kept the investments for a year I would get ${this.localcurrency_string(total)}`)
             }
             
+        },
+        mounted(){
+            this.refreshTable()
         }
     }
 </script>
-
-<style>
-
-</style>
