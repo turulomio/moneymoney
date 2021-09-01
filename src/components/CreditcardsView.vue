@@ -66,6 +66,7 @@
                                     this_.paying=false
                                     this_.editing=false
                                     this_.cco=this_.empty_cco()
+                                    this_.key=this_.key+1
                                     this_.dialog=true
                                 },
                             },
@@ -155,6 +156,7 @@
                     this.items_cco=response.data
                     console.log(response.data);
                     this.loading_cco=false
+                    this.key=this.key+1
                 }, (error) => {
                     this.parseResponseError(error)
                 });
