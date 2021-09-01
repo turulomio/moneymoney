@@ -14,7 +14,7 @@
     "axios": "^0.21.1",
     "babel-eslint": "^10.1.0",
     "core-js": "^3.16.4",
-    "echarts": "^5.1.2",
+    "echarts": "^5.2.0",
     "eslint-plugin-vue": "^7.17.0",
     "moment": "^2.29.1",
     "npm-check-updates": "^11.8.3",
