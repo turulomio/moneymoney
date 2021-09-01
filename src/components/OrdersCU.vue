@@ -6,10 +6,10 @@
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <MyDatePicker v-model="neworder.date" :label="$t('Set order date')"></MyDatePicker>
                 <MyDatePicker v-model="neworder.expiration" :label="$t('Set order expiration date')"></MyDatePicker>
-                <v-autocomplete :items="$store.state.catalogs.investments" v-model="neworder.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :items="$store.state.catalogs.investments" v-model="neworder.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker v-model="neworder.executed" v-if="editing==true" :label="$t('Set order execution date and time')"></MyDateTimePicker>
-                <v-text-field v-model="neworder.price" type="number" :label="$t('Set order price')" required :placeholder="$t('Set order price')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field v-model="neworder.shares" type="number" :label="$t('Set order shares')" required :placeholder="$t('Set order shares')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field v-model="neworder.price" type="number" :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field v-model="neworder.shares" type="number" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesInteger(10,true)" counter="10"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -36,21 +36,11 @@
         data(){ 
             return {
                 form_valid:false,
-                neworder:this.empty_order(),
+                neworder:null,
                 editing:false,
             }
         },
-        methods: {        
-            empty_order(){
-                return {
-                    date: new Date().toISOString().split("T")[0],
-                    executed: null,
-                    expiration: null,
-                    investments: null,
-                    price: 0,
-                    shares: 0,
-                }
-            },
+        methods: {  
             title(){
                 if (this.editing){
                     return this.$t("Updating order")
@@ -74,7 +64,6 @@
                             console.log(response.data)
                             this.$emit("cruded")
                             this.editing=false
-                            this.neworder=this.empty_order()
                     }, (error) => {
                         this.parseResponseError(error)
                     })
@@ -83,7 +72,6 @@
                     .then((response) => {
                             console.log(response.data)
                             this.$emit("cruded")
-                            this.neworder=this.empty_order()
                     }, (error) => {
                         this.parseResponseError(error)
                     })
@@ -91,21 +79,11 @@
             },
 
         },
-        mounted(){
-            console.log(this.order)
-            if (this.order!=null){
-                //this.neworder=Object.create(this.order)
-                this.neworder={}
-                this.neworder.url=this.order.url
-                this.neworder.date=this.order.date
-                this.neworder.expiration=this.order.expiration
-                this.neworder.executed=this.order.executed
-                this.neworder.investments=this.order.investments
-                this.neworder.shares=this.order.shares
-                this.neworder.price=this.order.price
-
+        created(){
+            if (this.order.url!=null){
                 this.editing=true
             }
+            this.neworder=Object.assign({},this.order)
             console.log(this.neworder)
         }
     }

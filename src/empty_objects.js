@@ -14,6 +14,19 @@ export function empty_io(){
     }
 }
 
+      
+export function empty_order(){
+    return {
+        date: new Date().toISOString().split("T")[0],
+        executed: null,
+        expiration: null,
+        investments: null,
+        price: 0,
+        shares: 0,
+        url: null,
+    }
+}
+
 export function empty_product(){
     return {
         url: null,

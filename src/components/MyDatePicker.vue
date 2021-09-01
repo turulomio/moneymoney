@@ -1,3 +1,11 @@
+<!--
+    Value:
+        Can be:
+            - A Date iso string  new Date().toISOString().split("T")[0]
+            - null. Se grabaría como null
+-->
+
+
 <template>
     <div>
         <v-menu v-model="menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
@@ -17,10 +25,6 @@
             value: {
                 required: true
             },
-            // locale:  {
-            //     required:true,
-            //     default: 'en',
-            // }
         },
         data: function(){
             return {
@@ -36,5 +40,12 @@
                 this.localValue = newValue
             }
         },
+        created(){
+            if (this.value == null){
+                this.localValue=""
+            } else {
+                this.localValue=this.value
+            }    
+        }
     }
 </script>

@@ -50,6 +50,7 @@
     import OrdersCU from './OrdersCU.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import {localtime} from '../functions.js'
+    import {empty_order} from '../empty_objects.js'
     export default {
         components:{
             MyMenuInline,
@@ -84,7 +85,7 @@
                                 name:"Add a new order",
                                 icon: "mdi-pencil",
                                 code: function(this_){
-                                    this_.order=null
+                                    this_.order=this_.empty_order()
                                     this_.dialog_cu=true
                                     this_.key=this_.key+1
                                 },
@@ -101,6 +102,7 @@
             }
         },
         methods: {
+            empty_order,
             localtime,
             on_OrdersCU_cruded(){
                 this.dialog_cu=false
@@ -130,12 +132,6 @@
                     return this.$t("Updating order")
                 } else {
                     return this.$t("Creating a new order")
-                }
-            },
-            empty_order(){
-                return {
-                    name: "",
-                    active: true,
                 }
             },
             MyMenuInlineSelection(item){

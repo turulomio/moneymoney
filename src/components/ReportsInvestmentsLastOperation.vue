@@ -10,7 +10,7 @@
         </v-layout>
         <p></p>
         <v-data-table dense :headers="tableHeaders" :items="tableData" class="elevation-1 ma-4" disable-pagination  hide-default-footer item-key="id" :key="refreshKey"  :sort-by="['percentage_last']" :sort-desc="[true]" >        
-            <template v-slot:[`item.datetime`]="{ item}">
+            <template v-slot:[`item.datetime`]="{ item}" :loading="loading">
                     {{ localtime(item.datetime)  }} 
             </template>  
             <template v-slot:[`item.balance`]="{ item }">
@@ -33,13 +33,25 @@
                 <v-icon small @click="orderAtPercentage(item)">mdi-cart</v-icon>   
             </template>
         </v-data-table>
+
+        <!-- Order CU dialog -->
+        <v-dialog v-model="dialog_cu" max-width="550">
+            <v-card class="pa-4">
+                <OrdersCU :order="order" :key="refreshKey" @cruded="on_OrdersCU_cruded()"></OrdersCU>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
 <script>
     import axios from 'axios'
-    import {localtime} from '../functions.js'
+    import {localtime, my_round} from '../functions.js'
+    import {empty_order} from '../empty_objects.js'
+    import OrdersCU from './OrdersCU.vue'
     export default {
+        components:{
+            OrdersCU,
+        },
         data(){ 
             return{
                 tableHeaders: [
@@ -63,6 +75,11 @@
                 limit: 40,
                 method: 0,
                 refreshKey: 0,
+
+
+                dialog_cu:false,
+                order: null,
+                loading:false,
             }
         },
         watch:{
@@ -71,20 +88,29 @@
             }
         },
         methods:{
+            empty_order,
             localtime,
+            my_round,
             viewItem(item){
                 window.location.href="{%url 'investment_view' pk=9999%}".replace("9999", item.id)
             },
+            on_OrdersCU_cruded(){
+                this.dialog_cu=false
+            },
             orderAtPercentage(item){
-                return (item)
-                // var price=my_round(item.last_price*(1+this.limit/100), item.decimals)
-                // window.location.href="{% url 'order_new' }}"+`?price=${price}&investment=${item.id}`
+                this.order=this.empty_order()
+                this.order.price=this.my_round(item.last_price*(1+this.limit/100), item.decimals)
+                this.order.investments=`${this.$store.state.apiroot}/api/investments/${item.id}/`
+                this.dialog_cu=true
+                this.refreshKey=this.refreshKey+1
             },
             refreshTable(){
+                this.loading=true
                 axios.get(`${this.$store.state.apiroot}/reports/investments/lastoperation/` , this.myheaders())
                 .then( (response)=> {
                     this.tableData=response.data;
                     this.refreshKey=this.refreshKey+1;
+                    this.loading=false
                 }) 
                 .catch((error) => {
                     this.parseResponseError(error)
