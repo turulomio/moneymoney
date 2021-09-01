@@ -5,12 +5,11 @@
             <MyMenuInline :items="menuinline_items" @selected="MyMenuInlineSelection"></MyMenuInline>
 
         </h1>
-        <v-card outlined class="ma-4 pa-4">
-            <v-row>
+            <v-row class="pa-4">
                 <v-checkbox class="ml-6 mr-10" v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" ></v-checkbox>
                 <v-text-field class="ml-10 mr-6" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"></v-text-field>
             </v-row>
-            <v-data-table dense :headers="investments_headers" :search="search" :items="investments_items" sort-by="percentage_selling_point" class="elevation-1" hide-default-footer disable-pagination :loading="loading_investments" :key="key">
+            <v-data-table dense :headers="investments_headers" :search="search" :items="investments_items" sort-by="percentage_selling_point" class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading_investments" :key="key">
                 <template v-slot:[`item.last_datetime`]="{ item }">
                     {{localtime(item.last_datetime)}}
                 </template>  
@@ -64,7 +63,6 @@
                 </template>
             </v-data-table>
             <div v-html="foot" class="pa-4"></div>
-        </v-card>
         <!-- DIALOG CU INVESTMERNT -->
         <v-dialog v-model="dialog" max-width="550">
             <v-card class="pa-4">
