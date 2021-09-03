@@ -53,7 +53,7 @@
                 </v-tab-item>
                 <v-tab-item key="1" >
                     <div style="height: 600px;">
-                        <v-chart autoresize :option="option"/>
+                        <ChartProductsRanges :prdata="prdata" autoresize />
                     </div>
                 </v-tab-item>
             </v-tabs-items>
@@ -65,8 +65,10 @@
 <script>    
     import {empty_products_ranges} from '../empty_objects.js'
     import axios from 'axios'
+    import ChartProductsRanges from './ChartProductsRanges.vue'
     export default {
         components: {
+            ChartProductsRanges,
         },
         props:{
             pr:{
@@ -85,6 +87,7 @@
                     { text: 'Actions', value: 'actions', sortable: false },
                 ],   
                 newpr:this.empty_products_ranges(),
+                prdata:null,
                 form_valid:false,
                 tableData:[],
                 option: {},
@@ -115,7 +118,9 @@
                 axios.get(`${this.$store.state.apiroot}/products/ranges/?product=${this.newpr.product}&percentage_between_ranges=${this.newpr.percentage_between_ranges}&percentage_gains=${this.newpr.percentage_gains}&amount_to_invest=${this.newpr.amount_to_invest}&recomendation_methods=${this.newpr.recomendation_methods}&only_first=${this.newpr.only_first}&account=${this.newpr.account}`, this.myheaders())
                 .then((response) => {
                     console.log(response.data);
-                    this.tableData=response.data
+                    this.prdata=response.data
+                    this.tableData=this.prdata.pr
+                    console.log(this.tableData)
                     this.loading=false
                 }, (error) => {
                     this.parseResponseError(error)
@@ -126,7 +131,7 @@
             }
         
         },
-        mounted(){
+        created(){
             console.log(this.pr)
             if (this.pr!=null){
                 this.newpr=Object.assign({},this.pr)

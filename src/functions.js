@@ -332,6 +332,11 @@ export function arrayobjects_to_stringofstrings(l, key){
     l.forEach(o => s=s+o[key].toString() + ", ")
     return s.slice(0,-2)
 }
+export function arrayobjects_to_array(l, key){
+    var s=[]
+    l.forEach(o => s.push(o[key]))
+    return s
+}
 
 export function percentage_generic_string(num, locale, decimals=2){
     if (isNaN(num)) return "- - - %"
