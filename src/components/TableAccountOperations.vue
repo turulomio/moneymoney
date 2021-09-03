@@ -4,10 +4,10 @@
         {{ localtime(item.datetime)}}
         </template>      
         <template v-slot:[`item.amount`]="{ item }">
-            <div v-html="currency(item.amount)"></div>
+            <div v-html="currency_html(item.amount,item.currency)"></div>
         </template>   
         <template v-slot:[`item.balance`]="{ item }">
-            <div v-html="currency(item.balance)"></div>
+            <div v-html="currency_html(item.balance, item.currency)"></div>
         </template>   
         <template v-slot:[`item.concepts`]="{ item }">
             <div v-html="get_concept(item.concepts).name"></div>
@@ -16,14 +16,14 @@
             <v-icon small class="mr-2" @click="editAO(item)">mdi-pencil</v-icon>
             <v-icon small class="mr-2" @click="deleteAO(item)">mdi-delete</v-icon>
         </template>
-        <template v-slot:[`body.append`]="{headers}">
+        <template v-slot:[`body.append`]="{headers}" v-if="total_currency!=null">
             <tr style="background-color: GhostWhite">
                 <td v-for="(header,i) in headers" :key="i" >
                     <div v-if="header.value == 'datetime'">
                         Total
                     </div>
                     <div v-if="header.value == 'amount'">
-                        <div class="text-right" v-html="currency(listobjects_sum(items,'amount'))"></div>
+                        <div class="text-right" v-html="currency_html(listobjects_sum(items,'amount'),total_currency)"></div>
                     </div>
                 </td>
             </tr>
@@ -32,26 +32,28 @@
 </template>
 
 <script>     
-    import {currency_generic_html, localtime, get_concept,listobjects_sum} from '../functions.js'
+    import {localtime, get_concept,listobjects_sum} from '../functions.js'
     export default {
     props: {
         items: {
             required: true
         },
-        currency_account: {
-            required: true
+        total_currency: { // Only in homogeneus. Each item must have it's currency. This is only for totals.
+                        // If null doesn't show total. Total can be showed in homogeneos or not. It depends on the query if has same currency
+            required: true,
+            default: null,
         },
-        homogeneous:{
+        homogeneous:{ //Only hides account if true
             required:true,
             default:true,
-        },
-        locale:{
-            required:true,
-            default: "es",
         },
         showselected:{
             required:false,
             default: false,
+        },
+        showactions:{
+            required:false,
+            default: true,
         }
     },
 
@@ -66,13 +68,9 @@
         }
     },
     methods: {
-        currency_generic_html,
         localtime,
         listobjects_sum,
         get_concept,
-        currency(value){
-            return this.currency_generic_html(value, this.currency_account, this.locale)
-        },
         editAO(item){
             this.$emit('editAO', item)
         },
@@ -80,18 +78,24 @@
             this.$emit('deleteAO', item)
         },
         table_headers(){
-            return [
+            var r= [
                 { text: this.$t('Date and time'), value: 'datetime', sortable: true, width:"10%" },
                 { text: this.$t('Concept'), value: 'concepts', sortable: true, width:"20%"},
                 { text: this.$t('Amount'), value: 'amount', sortable: false, align:"right", width:"8%"},
                 { text: this.$t('Balance'), value: 'balance', sortable: false, align:"right", width:"8%"},
-                { text: this.$t('Comment'), value: 'comment', sortable: true, width:"30%"},
-                { text: this.$t('Actions'), value: 'actions', sortable: false , width:"6%"},
+                { text: this.$t('Comment'), value: 'comment', sortable: true},
             ]
+            if (this.showactions==true){
+                r.push({ text: this.$t('Actions'), value: 'actions', sortable: false , width:"6%"})
+            }
+            return r
         },
         gotoLastRow(){
            this.$vuetify.goTo(100000, { container:  this.$refs[this.$vnode.tag].$el.childNodes[0] ,duration: 500}) 
         },
     },
+    mounted(){
+        console.log(this.items)
+    }
 }
 </script>

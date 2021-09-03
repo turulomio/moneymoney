@@ -146,14 +146,22 @@
                 </v-tab-item>
             </v-tabs-items>     
         </div>
+        <!-- REPORT ANNUAL INCOME DETAIL-->
+        <v-dialog v-model="dialog_income_details">
+            <v-card class="pa-3">
+                <ReportsAnnualIncomeDetail :year="year" :month="month" :key="key" ></ReportsAnnualIncomeDetail>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 <script>     
 
     import axios from 'axios'
     import {listobjects_sum, localtime} from '../functions.js'
+    import ReportsAnnualIncomeDetail from './ReportsAnnualIncomeDetail.vue'
     export default {
         components:{
+            ReportsAnnualIncomeDetail,
         },
         data(){
             return {
@@ -191,6 +199,11 @@
                 loading_annual:true,
                 loading_annual_incomes:true,
                 loading_annual_gainsbyproductstypes:true,
+
+                // REPORTS ANNUAL INCOME DETAILS
+                dialog_income_details:false,
+                month:null,
+                key:0,
             }
         },
         computed:{
@@ -211,9 +224,10 @@
                 return this.$t("<p class='mt-4'>Gross gains + Gross dividends = {0}.</p><p>Net gains + Net dividends = {1}.</p>").format(this.localcurrency_html(gross_gains), this.localcurrency_html(net_gains))
             },
             incomeDetails(item){
-            
-                var url='{% url "report_total_income_details" year=9999 month=8888 }}'.replace('9999', this.year).replace('8888', item.month_number)
-                window.open(url, '_blank')            
+                this.month=item.month_number
+                console.log(item)
+                this.dialog_income_details=true
+                this.key=this.key+1  
             },
             refreshTables(){
                 this.loading_annual=true
