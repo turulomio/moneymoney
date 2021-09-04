@@ -17,6 +17,7 @@
                 <v-tab key="3">{{ $t("Annual target") }}</v-tab>
                 <v-tab key="4">{{ $t("Invest or work") }}</v-tab>
                 <v-tab key="5">{{ $t("Make ends meet") }}</v-tab>
+                <v-tab key="evolution_chart">{{ $t("Evolution chart") }}</v-tab>
                 <v-tabs-slider color="yellow"></v-tabs-slider>
             </v-tabs>
             <v-tabs-items v-model="tab">
@@ -251,6 +252,10 @@
                         </v-data-table>   
                         <div v-html="message_make_ends_meet()" class="ma-4"></div>
 
+                    </v-card>
+                </v-tab-item>
+                <v-tab-item key="evolution_chart"><!-- EVOLUTION CHART -->
+                    <v-card  outlined width="100%">
                     </v-card>
                 </v-tab-item>
             </v-tabs-items>     
