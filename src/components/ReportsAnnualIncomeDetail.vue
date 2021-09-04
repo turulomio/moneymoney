@@ -4,7 +4,7 @@
 <template>
     <div>
         <h1>{{ $t(`Annual incomes detail (${this.year}-${this.month})`) }}</h1>
-        <v-tabs  v-model="tab" background-color="primary" dark next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
+        <v-tabs class="mt-4" v-model="tab" background-color="primary" dark next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
             <v-tab key="incomes">{{ $t('Incomes') }}</v-tab>
             <v-tab key="expenses">{{ $t('Expenses') }}</v-tab>
             <v-tab key="dividends">{{ $t('Dividends') }}</v-tab>
@@ -28,7 +28,7 @@
                 </v-tab-item>
                 <v-tab-item key="gains">       
                     <v-card class="pa-4">
-                        <TableInvestmentOperationsHistorical :items="gains" currency_account="EUR" currency_investment="EUR" :currency_user="$store.state.localcurrency" height="600" output="user" :key="key"></TableInvestmentOperationsHistorical>
+                        <TableInvestmentOperationsHistorical :items="gains" currency_account="EUR" currency_investment="EUR"  :homogeneus="false" :currency_user="$store.state.localcurrency" height="600" output="user" :key="key"></TableInvestmentOperationsHistorical>
 
                     </v-card>
                 </v-tab-item>
@@ -65,7 +65,7 @@
                 dividends:[],
                 gains:[],
                 key:0,
-                tab:2,
+                tab:3,
             }  
         },
         watch:{

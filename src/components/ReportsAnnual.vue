@@ -3,7 +3,8 @@
         <h1>{{ $t("Total report") }}</h1>
             <div class="d-flex justify-center mb-4">
                 <v-card width="20%" class="pa-5">
-                    <v-select dense label="Select the year from which to display the report" v-model="year" :items="years()" @change="change_year()"></v-select>
+                    <v-select dense label="Select the year from which to display the report" v-model="year" :items="years()" @change="change_year()"></v-select>              
+                    <v-text-field v-model.number="target" type="number" :label="$t('Set annual gains target')" :placeholder="$t('Set annual gains target')" :rules="RulesFloat(6,true)" counter="6" suffix=" %" autofocus/>
                 </v-card>
             </div>
         <div class="pa-6">
@@ -13,6 +14,9 @@
                 <v-tab key="0">{{ $t("Month evolution") }}</v-tab>
                 <v-tab key="1">{{ $t("Income report") }}</v-tab>
                 <v-tab key="2">{{ $t("Gains by product type") }}</v-tab>
+                <v-tab key="3">{{ $t("Annual target") }}</v-tab>
+                <v-tab key="4">{{ $t("Invest or work") }}</v-tab>
+                <v-tab key="5">{{ $t("Make ends meet") }}</v-tab>
                 <v-tabs-slider color="yellow"></v-tabs-slider>
             </v-tabs>
             <v-tabs-items v-model="tab">
@@ -143,6 +147,111 @@
                         <div v-html="footer_gainsbyproductstypes()"></div>
                     
                     </v-card>
+                </v-tab-item>                
+                <v-tab-item key="3"><!-- ANNUAL TARGET -->
+                    <v-card  outlined width="100%">
+    
+                        <v-data-table dense :headers="total_target_headers" :items="total_target"  class="elevation-1" disable-pagination  hide-default-footer :loading="loading_target">      
+                            <template v-slot:[`item.month_target`]="{ item }">
+                                <div v-html="localcurrency_string(item.month_target)"></div>
+                            </template>      
+                            <template v-slot:[`item.month_gains`]="{ item }">
+                                <div v-html="localcurrency_string(item.month_gains)" :class="item.color_month_gains"></div>
+                            </template>   
+                            <template v-slot:[`item.cumulative_target`]="{ item }">
+                                <div v-html="localcurrency_string(item.cumulative_target)"></div>
+                            </template>   
+                            <template v-slot:[`item.cumulative_gains`]="{ item }">
+                                <div v-html="localcurrency_string(item.cumulative_gains)" :class="item.color_month_cumulative_gains"></div>
+                            </template>
+                            <template v-slot:[`body.append`]="{headers}">
+                                <tr style="background-color: GhostWhite" ref="lr">
+                                    <td v-for="(header,i) in headers" :key="i" >
+                                        <div v-if="header.value == 'month'">
+                                            Total
+                                        </div>
+                                        <div v-if="header.value == 'month_target'" align="right">
+                                            <div v-html="localcurrency_string(listobjects_sum(total_target,'month_target'))" ></div>
+                                        </div>
+                                        <div v-if="header.value == 'month_gains'" align="right">
+                                            <div v-html="localcurrency_string(listobjects_sum(total_target,'month_gains'))" :class="(month_target*12<listobjects_sum(total_target,'month_gains')) ? 'boldgreen' : 'boldred'"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                            </template>
+                        </v-data-table>   
+                    </v-card>
+                </v-tab-item>
+                <v-tab-item key="4"><!-- INVEST OR WORK -->
+                    <v-card  outlined width="100%">
+                        <v-data-table dense :headers="total_invest_or_work_headers" :items="total_invest_or_work"  class="elevation-1" disable-pagination  hide-default-footer :loading="loading_invest_or_work">      
+                            <template v-slot:[`item.gains`]="{ item }">
+                                <div v-html="localcurrency_html(item.gains)"></div>
+                            </template>      
+                            <template v-slot:[`item.expenses`]="{ item }">
+                                <div v-html="localcurrency_html(item.expenses)"></div>
+                            </template>   
+                            <template v-slot:[`item.diff`]="{ item }">
+                                <div v-html="localcurrency_string(item.diff)" :class="item.color_diff"></div>
+                            </template>
+                            <template v-slot:[`body.append`]="{headers}">
+                                <tr style="background-color: GhostWhite" ref="lr">
+                                    <td v-for="(header,i) in headers" :key="i" >
+                                        <div v-if="header.value == 'month'">
+                                            Total
+                                        </div>
+                                        <div v-if="header.value == 'gains'" align="right">
+                                            <div v-html="localcurrency_html(listobjects_sum(total_invest_or_work,'gains'))" ></div>
+                                        </div>
+                                        <div v-if="header.value == 'expenses'" align="right">
+                                            <div v-html="localcurrency_html(listobjects_sum(total_invest_or_work,'expenses'))" ></div>
+                                        </div>
+                                        <div v-if="header.value == 'diff'" align="right">
+                                            <div v-html="localcurrency_string(listobjects_sum(total_invest_or_work,'diff'))" :class="(listobjects_sum(total_invest_or_work,'diff')>0) ? 'boldgreen' : 'boldred'"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </v-data-table>   
+                        <div v-html="message_invest_or_work()" class="ma-4"></div>
+
+                    </v-card>
+                </v-tab-item>
+                <v-tab-item key="5"><!-- MAKE ENDS MEET -->
+                    <v-card  outlined width="100%">
+                        <v-data-table dense :headers="total_make_ends_meet_headers" :items="total_make_ends_meet"  class="elevation-1" disable-pagination  hide-default-footer :loading="loading_make_ends_meet">      
+                            <template v-slot:[`item.incomes`]="{ item }">
+                                <div v-html="localcurrency_html(item.incomes)"></div>
+                            </template>      
+                            <template v-slot:[`item.expenses`]="{ item }">
+                                <div v-html="localcurrency_html(item.expenses)"></div>
+                            </template>   
+                            <template v-slot:[`item.diff`]="{ item }">
+                                <div v-html="localcurrency_string(item.diff)" :class="item.color_diff"></div>
+                            </template>
+                            <template v-slot:[`body.append`]="{headers}">
+                                <tr style="background-color: GhostWhite" ref="lr">
+                                    <td v-for="(header,i) in headers" :key="i" >
+                                        <div v-if="header.value == 'month'">
+                                            Total
+                                        </div>
+                                        <div v-if="header.value == 'incomes'" align="right">
+                                            <div v-html="localcurrency_html(listobjects_sum(total_make_ends_meet,'incomes'))" ></div>
+                                        </div>
+                                        <div v-if="header.value == 'expenses'" align="right">
+                                            <div v-html="localcurrency_html(listobjects_sum(total_make_ends_meet,'expenses'))" ></div>
+                                        </div>
+                                        <div v-if="header.value == 'diff'" align="right">
+                                            <div v-html="localcurrency_string(listobjects_sum(total_make_ends_meet,'diff'))" :class="(listobjects_sum(total_make_ends_meet,'diff')>0) ? 'boldgreen' : 'boldred'"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </v-data-table>   
+                        <div v-html="message_make_ends_meet()" class="ma-4"></div>
+
+                    </v-card>
                 </v-tab-item>
             </v-tabs-items>     
         </div>
@@ -157,6 +266,7 @@
 <script>     
 
     import axios from 'axios'
+    import moment from 'moment'
     import {listobjects_sum, localtime} from '../functions.js'
     import ReportsAnnualIncomeDetail from './ReportsAnnualIncomeDetail.vue'
     export default {
@@ -193,6 +303,28 @@
                     { text: this.$t('Net gains'), value: 'gains_net',sortable: true, align:'right'},
                     { text: this.$t('Net dividends'), value: 'dividends_net', sortable: true, align:'right'},
                 ],   
+                total_target:[],
+                total_target_headers: [
+                    { text: this.$t('Month'), value: 'month',sortable: true },
+                    { text: this.$t('Month target'), value: 'month_target',sortable: true,align:'right' },
+                    { text: this.$t('Month gains'), value: 'month_gains', sortable: true, align:'right'},
+                    { text: this.$t('Cumulative target'), value: 'cumulative_target', sortable: true, align:'right'},
+                    { text: this.$t('Cumulative gains'), value: 'cumulative_gains',sortable: true, align:'right'},
+                ],   
+                total_invest_or_work:[],
+                total_invest_or_work_headers: [
+                    { text: this.$t('Month'), value: 'month',sortable: true },
+                    { text: this.$t('Gains'), value: 'gains',sortable: true,align:'right' },
+                    { text: this.$t('Expenses'), value: 'expenses', sortable: true, align:'right'},
+                    { text: this.$t('Diff'), value: 'diff', sortable: true, align:'right'},
+                ],    
+                total_make_ends_meet:[],
+                total_make_ends_meet_headers: [
+                    { text: this.$t('Month'), value: 'month',sortable: true },
+                    { text: this.$t('Incomes'), value: 'incomes',sortable: true,align:'right' },
+                    { text: this.$t('Expenses'), value: 'expenses', sortable: true, align:'right'},
+                    { text: this.$t('Diff'), value: 'diff', sortable: true, align:'right'},
+                ],   
                 year: 2021,
                 last_year_balance:0,
                 last_year_balance_string: "",
@@ -204,9 +336,23 @@
                 dialog_income_details:false,
                 month:null,
                 key:0,
+
+                // TARGET
+                target: 4,
+                month_target: 0,
+                loading_target: false,
+                // INVEST OR WORK
+                loading_invest_or_work: false,
+                // INVEST OR WORK
+                loading_make_ends_meet: false,
             }
         },
         computed:{
+        },
+        watch:{
+            target: function(){
+                this.refreshTotalTarget()
+            }
         },
         methods:{
             localtime,
@@ -229,6 +375,88 @@
                 this.dialog_income_details=true
                 this.key=this.key+1  
             },
+            message_invest_or_work(){
+                if (listobjects_sum(this.total_invest_or_work,'diff')>=0){
+                    return this.$t("You can only invest")
+                } else {
+                    return this.$t("You still have to work")
+                }
+            },
+            message_make_ends_meet(){
+                if (listobjects_sum(this.total_make_ends_meet,'diff')>=0){
+                    return this.$t("I make ends meet")
+                } else {
+                    return this.$t("I don't make ends meet")
+                }
+            },
+            refreshInvestOrWork(){
+                this.loading_invest_or_work=true
+                this.total_invest_or_work=[]
+                
+                for (var i=0; i<12; i++){
+                    let month_gains= this.total_annual_incomes[i].gains
+                    let month_expenses=this.total_annual_incomes[i].expenses
+                    let diff=month_gains+month_expenses
+                    this.total_invest_or_work.push({
+                        month: this.$t(moment().month(i).format("MMMM")),
+                        gains: month_gains,
+                        expenses: month_expenses,
+                        diff: diff,
+                        color_diff:(diff>0)? "boldgreen": "boldred",
+                    })
+
+
+                }
+                this.loading_invest_or_work=false
+
+            },
+            refreshMakeEndsMeet(){
+                this.loading_make_ends_meet=true
+                this.total_make_ends_meet=[]
+                
+                for (var i=0; i<12; i++){
+                    let month_incomes= this.total_annual_incomes[i].incomes
+                    let month_expenses=this.total_annual_incomes[i].expenses
+                    let diff=month_incomes+month_expenses
+                    this.total_make_ends_meet.push({
+                        month: this.$t(moment().month(i).format("MMMM")),
+                        incomes: month_incomes,
+                        expenses: month_expenses,
+                        diff: diff,
+                        color_diff:(diff>0)? "boldgreen": "boldred",
+                    })
+
+
+                }
+                this.loading_make_ends_meet=false
+
+            },
+            refreshTotalTarget(){
+                this.loading_target=true
+                this.total_target=[]
+                this.month_target=this.last_year_balance*(this.target/100)/12
+                var cumulative_target=0
+                var cumulative_gains=0
+                
+                for (var i=0; i<12; i++){
+                    let month_gains= this.total_annual_incomes[i].gains
+                    cumulative_target=cumulative_target+this.month_target
+                    cumulative_gains=cumulative_gains+month_gains
+                    this.total_target.push({
+                        month: this.$t(moment().month(i).format("MMMM")),
+                        month_target:this.month_target,
+                        month_gains: month_gains,
+                        cumulative_target: cumulative_target,
+                        cumulative_gains: cumulative_gains,
+                        color_month_gains: (this.month_target<month_gains) ? "boldgreen" : "boldred",
+                        color_month_cumulative_gains: (cumulative_target<cumulative_gains) ? "boldgreen" : "boldred",
+                    })
+
+
+                }
+                this.loading_target=false
+
+            },
             refreshTables(){
                 this.loading_annual=true
                 this.loading_annual_incomes=true
@@ -236,11 +464,13 @@
                 this.last_year_balance_string=""
                 axios.get(`${this.$store.state.apiroot}/reports/annual/${this.year}/`, this.myheaders())
                 .then((response) => {
-                        console.log(response.data)
                         this.last_year_balance=response.data.last_year_balance
                         this.last_year_balance_string=this.$t(`Last year balance (${this.localtime(response.data.dtaware_last_year)}) is ${this.localcurrency_html(response.data.last_year_balance)}`) 
                         this.total_annual=response.data.data
                         this.loading_annual=false
+                        this.refreshTotalTarget()
+                        this.refreshInvestOrWork()
+                        this.refreshMakeEndsMeet()
                 }, (error) => {
                     this.parseResponseError(error)
                 })
@@ -254,7 +484,6 @@
                 })            
                 axios.get(`${this.$store.state.apiroot}/reports/annual/gainsbyproductstypes/${this.year}/`, this.myheaders())
                 .then((response) => {
-                        console.log(response.data)
                         this.total_annual_gainsbyproductstypes=response.data
                         this.loading_annual_gainsbyproductstypes=false
                 }, (error) => {

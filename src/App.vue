@@ -165,7 +165,13 @@ h1   {
 span.vuered{
     color:red;
 }
-.vuegreen{
+
+
+.boldred{
+    color: red;
+    font-weight: 900;
+}
+.boldgreen{
     color: Green;
     font-weight: 900;
 }

@@ -34,7 +34,7 @@
                     <v-container>{{ $t("Current price: ") }}</v-container>
                     <v-data-table dense :headers="tableHeaders" :items="tableData" class="elevation-1" disable-pagination  hide-default-footer :sort-by="['value']" :sort-desc="[true]" fixed-header height="360">      
                         <template v-slot:[`item.value`]="{ item }">
-                            <div  @click="showLimits(item)" :class="item.current_in_range ? 'vuegreen' : ''">{{item.value }}</div>
+                            <div  @click="showLimits(item)" :class="item.current_in_range ? 'boldgreen' : ''">{{item.value }}</div>
                         </template>    
                         <template v-slot:[`item.recomendation_invest`]="{ item }">
                             <v-icon small v-if="item.recomendation_invest" >mdi-check-outline</v-icon>

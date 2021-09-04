@@ -35,7 +35,7 @@
                     <div v-html="percentage_html(item.percentage_invested )"></div>
                 </template>  
                 <template v-slot:[`item.percentage_selling_point`]="{ item }">     
-                    <div  :class="item.percentage_selling_point<0.05 ? 'vuegreen' : ''" v-html="percentage_html(item.percentage_selling_point)"></div>
+                    <div  :class="item.percentage_selling_point<0.05 ? 'boldgreen' : ''" v-html="percentage_html(item.percentage_selling_point)"></div>
                 </template>              
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small class="ml-1" @click="addQuote(item)">mdi-plus</v-icon>
