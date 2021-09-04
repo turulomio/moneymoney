@@ -2,7 +2,11 @@
 <template>
     <div>
         <h1>{{ $t("Evolution assets chart")}}</h1>
-        <v-select dense label="Select the year from which to display the report" v-model="from" :items="years()" @change="change_year()"></v-select>       
+        <div class="d-flex justify-center mb-4 mt-4">
+            <v-card width="30%">
+             <v-select class="pa-4" width="10%" dense label="Select the year from which to display the report" v-model="from" :items="years()" @change="change_year()"></v-select>       
+             </v-card>
+        </div>
         <v-card outlined class="ma-4 pa-4" height="650" v-if="balance.length>0">
             <v-chart
                 ref="chart"
@@ -50,7 +54,6 @@
                             }
                         },
                         formatter: (params) => {
-                            console.log(params)
                             return params[0].axisValueLabel + "<br>" +
                                 params[0].marker + params[0].seriesName + ": " + this.localcurrency_string(params[0].data[1])  + "<br>"  + 
                                 params[1].marker + params[1].seriesName + ": " + this.localcurrency_string(params[1].data[1])  + "<br>"  + 
