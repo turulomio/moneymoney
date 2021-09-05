@@ -29,7 +29,7 @@
                 accounts:[],
                 investments:[],
                 invested:[],
-                from: new Date().getFullYear(),
+                from: new Date().getFullYear()-3,
 
             }
         },

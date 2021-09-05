@@ -17,10 +17,6 @@
                 <v-btn class="mt-4" color="primary" @click="accept()" :disabled="!form_valid">{{ $t("Show ranges") }}</v-btn>
                 </v-row>
             </v-form>
-
-            <v-card-actions>
-                <v-spacer></v-spacer>
-            </v-card-actions>
         </v-card>
 
         <v-card class="ma-6 pa-6">
@@ -58,17 +54,25 @@
                 </v-tab-item>
             </v-tabs-items>
         </v-card>
+        <!-- Order CU dialog -->
+        <v-dialog v-model="dialog_ordercu" max-width="550">
+            <v-card class="pa-4">
+                <OrdersCU :order="order" @cruded="on_OrdersCU_cruded()" :key="key"></OrdersCU>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
 
 <script>    
-    import {empty_products_ranges} from '../empty_objects.js'
+    import {empty_products_ranges, empty_order} from '../empty_objects.js'
     import axios from 'axios'
     import ChartProductsRanges from './ChartProductsRanges.vue'
+    import OrdersCU from './OrdersCU.vue'
     export default {
         components: {
             ChartProductsRanges,
+            OrdersCU,
         },
         props:{
             pr:{
@@ -101,10 +105,14 @@
                     {id:5,name:this.$t("Strict SMA 100")},
                     {id:6,name:this.$t("Strict SMA 10/100")},
                 ],
+
+                //Dialog OrderCU
+                dialog_ordercu:false,
+                order: null,
+                key:0,
             }   
         },
         methods:{
-            empty_products_ranges,
             accept(){
                 if (this.$refs.form.validate()==false) return
                 this.refreshTable()
@@ -112,7 +120,12 @@
             },
             addOrder(item){
                 console.log(item)
+                this.order=this.empty_order()
+                this.order.price=item.value
+                this.dialog_ordercu=true
             },
+            empty_order,
+            empty_products_ranges,
             refreshTable(){
                 this.loading=true
                 axios.get(`${this.$store.state.apiroot}/products/ranges/?product=${this.newpr.product}&percentage_between_ranges=${this.newpr.percentage_between_ranges}&percentage_gains=${this.newpr.percentage_gains}&amount_to_invest=${this.newpr.amount_to_invest}&recomendation_methods=${this.newpr.recomendation_methods}&only_first=${this.newpr.only_first}&account=${this.newpr.account}`, this.myheaders())

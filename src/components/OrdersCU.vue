@@ -1,7 +1,9 @@
 
 <template>
     <div>    
-        <h1>{{ title() }}</h1>           
+        <h1>{{ title() }}
+            <MyMenuInline :items="items" @selected="MyMenuInlineSelection"></MyMenuInline>    
+        </h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <MyDatePicker v-model="neworder.date" :label="$t('Set order date')"></MyDatePicker>
@@ -22,10 +24,13 @@
     import axios from 'axios'
     import MyDatePicker from './MyDatePicker.vue'
     import MyDateTimePicker from './MyDateTimePicker.vue'
+    import MyMenuInline from './MyMenuInline.vue'
+    import {parseNumber} from '../functions.js'
     export default {
         components: {
             MyDatePicker,
             MyDateTimePicker,
+            MyMenuInline,
         },
         props: {
             // An account object
@@ -38,9 +43,36 @@
                 form_valid:false,
                 neworder:null,
                 editing:false,
+
+                items: [
+                    {
+                        subheader:this.$t('Options to set shares'),
+                        children: [
+                            {
+                                name:this.$t('Integer shares from price'),
+                                code: function(this_){
+                                    var amount=parseNumber(prompt( this_.$t("Please the amount to invest in this order"), 10000 ));
+                                    this_.neworder.shares=parseInt(amount/this_.neworder.price)
+                                },
+                                icon: "mdi-book-plus",
+                            },
+                            {
+                                name:this.$t('Decimal shares from price'),
+                                code: function(this_){
+                                    var amount=parseNumber(prompt( this_.$t("Please the amount to invest in this order"), 10000 ));
+                                    this_.neworder.shares=amount/this_.neworder.price
+                                },
+                                icon: "mdi-book-plus",
+                            },
+                        ]
+                    },
+                ],
             }
         },
         methods: {  
+            MyMenuInlineSelection(item){
+                item.code(this)
+            },
             title(){
                 if (this.editing){
                     return this.$t("Updating order")

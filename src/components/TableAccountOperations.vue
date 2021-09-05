@@ -79,14 +79,14 @@
         },
         table_headers(){
             var r= [
-                { text: this.$t('Date and time'), value: 'datetime', sortable: true, width:"10%" },
+                { text: this.$t('Date and time'), value: 'datetime', sortable: true, width:"12%" },
                 { text: this.$t('Concept'), value: 'concepts', sortable: true, width:"20%"},
                 { text: this.$t('Amount'), value: 'amount', sortable: false, align:"right", width:"8%"},
                 { text: this.$t('Balance'), value: 'balance', sortable: false, align:"right", width:"8%"},
                 { text: this.$t('Comment'), value: 'comment', sortable: true},
             ]
             if (this.showactions==true){
-                r.push({ text: this.$t('Actions'), value: 'actions', sortable: false , width:"6%"})
+                r.push({ text: this.$t('Actions'), value: 'actions', sortable: false     , width:"6%"})
             }
             return r
         },
