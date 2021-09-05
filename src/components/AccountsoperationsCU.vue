@@ -2,11 +2,11 @@
     <div>
                 <h1>{{dialog_title_ao()}}</h1>
                 <v-form ref="form_ao" v-model="form_valid_ao" lazy-validation>
-                    <v-autocomplete :items="$store.state.catalogs.accounts.filter(v =>v.active==true)" v-model="newao.accounts" :label="$t('Select an account')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
-                    <MyDateTimePicker label="Select operation date and time" v-model="newao.datetime"> </MyDateTimePicker>
-                    <v-autocomplete :items="$store.state.catalogs.concepts" v-model="newao.concepts" :label="$t('Select a concept')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
-                    <v-text-field ref="ao_amount" v-model="newao.amount" type="number" :label="$t('Operation amount')" required :placeholder="$t('Account number')" :rules="RulesFloat(30,true)" counter="30"/>
-                    <v-text-field v-model="newao.comment" type="text" :label="$t('Operation comment')" required :placeholder="$t('Operation comment')" autofocus  counter="200"/>
+                    <v-autocomplete autoindex="3" :items="$store.state.catalogs.accounts.filter(v =>v.active==true)" v-model="newao.accounts" :label="$t('Select an account')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                    <MyDateTimePicker autoindex="4" label="Select operation date and time" v-model="newao.datetime"></MyDateTimePicker>
+                    <v-autocomplete autoindex="0" autofocus :items="$store.state.catalogs.concepts" v-model="newao.concepts" :label="$t('Select a concept')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                    <v-text-field autoindex="1" v-model="newao.amount" type="number" :label="$t('Operation amount')" :placeholder="$t('Account number')" :rules="RulesFloat(30,true)" counter="30"/>
+                    <v-text-field autoindex="2" v-model="newao.comment" type="text" :label="$t('Operation comment')" :placeholder="$t('Operation comment')" counter="200"/>
                 </v-form>
                 <v-card-actions>
                     <v-spacer></v-spacer>

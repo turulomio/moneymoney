@@ -55,7 +55,7 @@
         <!-- DIALOG CREDIT CARD VIEW -->
         <v-dialog v-model="dialog_ccview">
             <v-card class="pa-4">
-                <CreditcardsView :cc="cc" :account="account"></CreditcardsView>
+                <CreditcardsView :cc="cc" :account="account" @cruded="on_CreditcardsView_cruded()"></CreditcardsView>
             </v-card>
         </v-dialog>
 
@@ -240,6 +240,9 @@
             },
             on_CreditcardsCU_cruded(){
                 this.dialog_cc=false
+                this.refreshTableCC()
+            },
+            on_CreditcardsView_cruded(){
                 this.refreshTableCC()
             },
             on_chkActive_cc(){

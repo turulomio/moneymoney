@@ -210,6 +210,7 @@
                 axios.post(`${this.$store.state.apiroot}/creditcardsoperations/payment/${this.cc.id}/`, formData, this.myheaders_formdata())
                 .then((response) => {
                         console.log(response.data)
+                        this.$emit("cruded")
                         this.update_table()     
                         this.dialog=false
                         this.editing=false
