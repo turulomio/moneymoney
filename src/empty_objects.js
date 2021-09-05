@@ -1,3 +1,29 @@
+
+export function empty_account_operation(){
+    return {
+        datetime: new Date().toISOString(),
+        concepts: null,
+        operationstypes:null,
+        amount: 0,
+        comment: "",    
+        accounts: null,
+        url: null,
+    }
+}
+
+export function empty_credit_card(){
+    return {
+        name: "",
+        number: "",
+        deferred: false,
+        maximumbalance: 0,
+        active: true,   
+        accounts: null,
+        url: null,
+    }
+}
+
+
 export function empty_io(){
     return {
         datetime: new Date().toISOString(),

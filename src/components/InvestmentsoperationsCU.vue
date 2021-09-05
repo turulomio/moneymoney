@@ -2,7 +2,7 @@
 <template>
     <div>    
         <h1>{{ title() }}</h1>           
-        <v-card class="pa-8 mt-2">
+        <v-card class="ma-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <v-autocomplete dense :items="$store.state.catalogs.investments" v-model="newio.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker v-model="newio.datetime" :label="$t('Set investment operation date and time')"></MyDateTimePicker>

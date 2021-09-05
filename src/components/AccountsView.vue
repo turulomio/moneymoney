@@ -6,14 +6,14 @@
         <DisplayValues :items="displayvalues"></DisplayValues>
 
     
-        <v-tabs v-model="tab">
+        <v-tabs v-model="tab"  background-color="primary" dark>
             <v-tab key="ao">{{ $t("Account operations")}}</v-tab>
             <v-tab key="cc">{{ $t("Credit cards")}}</v-tab>
             <v-tab-item key="ao">     
                 <v-card class="pa-4 d-flex justify-center" outlined style="min-width: 100px; max-width: 100%;">
                     <v-date-picker dense no-title class="mymonthpicker " ref="monthpicker" v-model="monthpicker" type="month"></v-date-picker>
                     <v-divider class="mx-2" vertical ></v-divider>
-                    <TableAccountOperations homogeneous :items="items_ao" :total_currency="account.currency" height="400" ref="table_ao" class=" flex-grow-1 flex-shrink-0" @editAO="editAO" @deleteAO="deleteAO"></TableAccountOperations>
+                    <TableAccountOperations homogeneous :items="items_ao" :total_currency="account.currency" height="400" class=" flex-grow-1 flex-shrink-0" @editAO="editAO" @deleteAO="deleteAO"></TableAccountOperations>
                 </v-card>
             </v-tab-item>
             <v-tab-item key="cc">
@@ -41,43 +41,16 @@
         </v-tabs>  
         <!-- DIALOG ACCOUNTSOPERATIONS ADD/UPDATE -->
         <v-dialog v-model="dialog_ao" max-width="550">
-            <v-card class="pa-4">
-                <v-card-title class="headline">{{dialog_title_ao()}}</v-card-title>
-                <v-form ref="form_ao" v-model="form_valid_ao" lazy-validation>
-                    <v-autocomplete :items="$store.state.catalogs.accounts.filter(v =>v.active==true)" v-model="ao.accounts" :label="$t('Select an account')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
-                    <MyDateTimePicker label="Select operation date and time" v-model="ao.datetime"> </MyDateTimePicker>
-                    <v-autocomplete :items="$store.state.catalogs.concepts" v-model="ao.concepts" :label="$t('Select a concept')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
-                    <v-text-field ref="ao_amount" v-model="ao.amount" type="number" :label="$t('Operation amount')" required :placeholder="$t('Account number')" :rules="RulesFloat(30,true)" counter="30"/>
-                    <v-text-field v-model="ao.comment" type="text" :label="$t('Operation comment')" required :placeholder="$t('Operation comment')" autofocus  counter="200"/>
-                </v-form>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" @click="following_ao=false;acceptDialogAO()" :disabled="!form_valid_ao">{{ $t("Add") }}</v-btn>
-                    <v-btn color="primary" @click="following_ao=true;acceptDialogAO()" :disabled="!form_valid_ao" v-if="editing_ao==false">{{ $t("Add and follow") }}</v-btn>
-                    <v-btn color="error" @click="dialog_ao = false">{{ $t("Cancel") }}</v-btn>
-                </v-card-actions>
+            <v-card class="pa-8">
+                <AccountsoperationsCU :ao="ao" :key="key" @cruded="on_AccountsoperationsCU_cruded"></AccountsoperationsCU>
             </v-card>
         </v-dialog>
         <!-- DIALOG CREDIT CARD ADD/UPDATE -->
         <v-dialog v-model="dialog_cc" max-width="550">
             <v-card class="pa-4">
-                <v-card-title class="headline">{{dialog_title_cc()}}</v-card-title>
-                <v-form ref="form" v-model="form_valid_cc" lazy-validation>
-                    <v-autocomplete :items="$store.state.catalogs.accounts.filter(v =>v.active==true)" v-model="cc.accounts" :label="$t('Select an account')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
-                    <v-text-field v-model="cc.name" type="text" :label="$t('Credit card name')" required :placeholder="$t('Credit card name')" autofocus  counter="200" :rules="RulesString(200,true)"/>
-                    <v-text-field v-model="cc.number" type="text" :label="$t('Credit card number')" required :placeholder="$t('Credit card number')" counter="30" :rules="RulesString(30,false)"/>
-                    <v-text-field v-model="cc.maximumbalance" type="number" :label="$t('Credit card maximum balance')" required :placeholder="$t('Credit card maximum balance')" :rules="RulesInteger(10,true)" counter="10"/>
-                    <v-checkbox v-model="cc.active" :label="$t('Is active?')"></v-checkbox>
-                    <v-checkbox v-model="cc.deferred" :label="$t('Has deferred payments?')"></v-checkbox>
-                </v-form>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" @click="acceptDialogCC()" :disabled="!form_valid_cc">{{ $t("Add") }}</v-btn>
-                    <v-btn color="error" @click="dialog_cc = false">{{ $t("Cancel") }}</v-btn>
-                </v-card-actions>
+                <CreditcardsCU :cc="cc" :key="key" @cruded="on_CreditcardsCU_cruded()"></CreditcardsCU>
             </v-card>
         </v-dialog>
-
 
         <!-- DIALOG CREDIT CARD VIEW -->
         <v-dialog v-model="dialog_ccview">
@@ -96,20 +69,23 @@
 </template>  
 <script>     
     import axios from 'axios' 
+    import AccountsoperationsCU from './AccountsoperationsCU.vue'
     import AccountsTransfer from './AccountsTransfer.vue'
     import DisplayValues from './DisplayValues.vue'
     import MyMenuInline from './MyMenuInline.vue'
+    import CreditcardsCU from './CreditcardsCU.vue'
     import CreditcardsView from './CreditcardsView.vue'
-    import MyDateTimePicker from './MyDateTimePicker.vue'
     import TableAccountOperations from './TableAccountOperations.vue'
+    import {empty_account_operation,empty_credit_card} from '../empty_objects.js'
     export default {
         components:{
+            AccountsoperationsCU,
             AccountsTransfer,
             MyMenuInline,
             DisplayValues,
             TableAccountOperations,
+            CreditcardsCU,
             CreditcardsView,
-            MyDateTimePicker,
         },
         props:{
             account:{
@@ -126,6 +102,7 @@
                 ],
                 monthpicker: new Date().toISOString().substr(0, 7),
                 tab:0,
+                key:0,
                 items_ao: [],           
                 items: [
                     { subheader:this.$t('Account orders'), children: [
@@ -142,8 +119,9 @@
                             { 
                                 name:this.$t('Add an account operation'), 
                                 code: function(this_){
-                                    this_.editing_ao=false
                                     this_.ao=this_.empty_account_operation()
+                                    this_.ao.accounts=this_.account.url,
+                                    this_.key=this_.key+1
                                     this_.dialog_ao=true
                                 },
                                 icon: "mdi-plus" 
@@ -157,6 +135,9 @@
                                 code: function(this_){
                                     this_.editing_cc=false
                                     this_.cc=this_.empty_credit_card()
+                                    this_.cc.accounts=this_.account.url,
+                                    console.log(this_.cc)
+                                    this_.key=this_.key+1
                                     this_.dialog_cc=true
                                 },
                                 icon: "mdi-plus" 
@@ -175,17 +156,11 @@
                 ],
                 table_cc:[],
                 showActiveCC:true,
-                form_valid_cc:true,
                 dialog_cc:false,
-                editing_cc:false,
-                cc: this.empty_credit_card(),
-
+                cc: null,
                 // DIALOG ACCOUNT OPERATIONS
-                form_valid_ao:true,
                 dialog_ao:false,
-                editing_ao:false,
-                following_ao:false,
-                ao: this.empty_account_operation(),
+                ao: null,
 
                 // DIALOG CREDIT CARDS VIEW
                 dialog_ccview:false,
@@ -202,46 +177,14 @@
         methods: {
 
             CCONotDeferred(item){
-                this.editing_ao=false
                 this.ao=this.empty_account_operation()
+                this.ao.accounts=this.account.url,
                 this.ao.comment=item.name + ". "
                 this.dialog_ao=true
                 
             },
-            dialog_title_ao(){
-                if(this.editing_ao==true){
-                    return this.$t("Updating account operation")
-                } else {
-                    return this.$t("Creating a new account operation")
-                }
-            },
-            dialog_title_cc(){
-                if(this.editing_cc==true){
-                    return this.$t("Updating credit card")
-                } else {
-                    return this.$t("Creating a new credit card")
-                }
-            },
-            empty_account_operation(){
-                return {
-                    datetime: new Date().toISOString(),
-                    concepts: null,
-                    operationstypes:null,
-                    amount: 0,
-                    comment: "",    
-                    accounts: this.account.url,
-                }
-            },
-            empty_credit_card(){
-                return {
-                    name: "",
-                    number: "",
-                    deferred: false,
-                    maximumbalance: 0,
-                    active: true,   
-                    accounts: this.account.url,
-                }
-            },
+            empty_account_operation,
+            empty_credit_card,
             MyMenuInlineSelection(item){
                 item.code(this)
             },
@@ -250,12 +193,9 @@
                 axios.get(`${this.$store.state.apiroot}/accountsoperations/withbalance/?account=${this.account.id}&year=${this.monthpicker.slice(0,4)}&month=${this.monthpicker.slice(5,7)}`, this.myheaders())                
                 .then((response) => {
                     this.items_ao=response.data;
-                    console.log(this.items_ao)
-                    this.$refs.table_ao.gotoLastRow()
                 }) 
                 .catch((error) => {
-                    console.log(error)
-                    alert("Something is wrong")
+                    this.parseResponseError(error)
                 });
             },
             refreshTableCC(){
@@ -265,14 +205,12 @@
                     this.table_cc=response.data;
                 }) 
                 .catch((error) => {
-                    console.log(error)
-                    alert("Something is wrong")
+                    this.parseResponseError(error)
                 });
             },
           
             editCC(item){
                 this.cc=item
-                this.editing_cc=true
                 this.dialog_cc=true
             },
             viewCC(item){
@@ -296,6 +234,14 @@
                     this.parseResponseError(error)
                 });
             },
+            on_AccountsoperationsCU_cruded(following){
+                this.dialog_ao=following
+                this.refreshTable()
+            },
+            on_CreditcardsCU_cruded(){
+                this.dialog_cc=false
+                this.refreshTableCC()
+            },
             on_chkActive_cc(){
                 this.refreshTableCC()
             },
@@ -311,79 +257,9 @@
                     return this.$t("Check to see active credit cards")
                 }
             },
-            acceptDialogAO(){
-                //Validation
-                if( this.$refs.form_ao.validate()==false) return
-                var operationtype=this.get_operationstypes_from_concept(this.ao.concepts)
-                this.ao.operationstypes=operationtype.url
-                if (operationtype.id==1 && this.ao.amount>0){
-                     alert(this.$t("Amount must be negative"))
-                     return
-                }
-                if (operationtype.id==2 && this.ao.amount<0) {
-                    alert(this.$t("Amount must be positive"))
-                    return
-                }
-
-                //Accept
-                if (this.editing_ao==true){               
-                    axios.put(this.ao.url, this.ao, this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
-                            this.refreshTable()     
-                            this.$emit('changed', this.ao)
-                            this.dialog_ao=false
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    })
-                } else{
-                    axios.post(`${this.$store.state.apiroot}/api/accountsoperations/`, this.ao,  this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
-                            this.refreshTable()                             
-                            if (this.following_ao==true){
-                                this.dialog_ao=true
-                                var dt=this.zulu2date(this.ao.datetime)
-                                var olddtseconds=this.zulu2date(this.ao.datetime).getSeconds()
-                                dt.setSeconds(olddtseconds+60)
-                                this.ao.datetime=this.date2zulu(dt)
-                            } else {  
-                                this.dialog_ao=false
-                            }
-                            this.$emit('changed', this.ao)
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    })
-                }
-            },
-            acceptDialogCC(){
-                console.log(this.cc)
-                if (this.editing_cc==true){               
-                    axios.put(this.cc.url, this.cc, this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
-                            this.refreshTableCC()     
-                            this.dialog_cc=false
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    })
-                } else{
-                    axios.post(`${this.$store.state.apiroot}/api/creditcards/`, this.cc,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
-                        this.refreshTableCC()
-                        this.dialog_cc=false
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    })
-                }
-            },
-
             editAO (item) {
                 console.log(item)
                 this.ao=item
-                this.ao.datetime=new Date(this.ao.datetime)
-                this.editing_ao=true
                 this.dialog_ao=true
             },
             deleteAO (item) {
@@ -401,7 +277,7 @@
                 });
             },
         },
-        mounted(){
+        created(){
             this.refreshTable()
             this.refreshTableCC()
         }
