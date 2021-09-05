@@ -180,6 +180,7 @@
                 this.ao=this.empty_account_operation()
                 this.ao.accounts=this.account.url,
                 this.ao.comment=item.name + ". "
+                this.key=this.key+1
                 this.dialog_ao=true
                 
             },
