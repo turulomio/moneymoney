@@ -89,9 +89,8 @@ export function moment_day_start(isostring){
 }   
 
 
-export function AddressTypeName(value){
-    var retypes=this.$store.state.catalogs.addresstype.find(t => t.value==value);
-    return retypes.display_name;
+export function investment_name(url){
+    return this.$store.state.catalogs.investments.find(t => t.url==url).name
 }
 
 

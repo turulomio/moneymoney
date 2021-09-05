@@ -66,21 +66,7 @@
         <!-- DIALOG CU INVESTMERNT -->
         <v-dialog v-model="dialog" max-width="550">
             <v-card class="pa-4">
-                <v-card-title class="headline">{{dialog_title()}}</v-card-title>
-                <v-form ref="form" v-model="form_valid" lazy-validation>
-                    <v-autocomplete :items="$store.state.catalogs.accounts.filter(v =>v.active==true)" v-model="investment.accounts" :label="$t('Select an account')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
-                    <v-text-field v-model="investment.name" type="text" :label="$t('Investment name')" required :placeholder="$t('Investment name')" autofocus/>
-                    <v-autocomplete :items="$store.state.catalogs.products" v-model="investment.products" :label="$t('Select a product')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
-                    <v-text-field v-model="investment.selling_price" type="number" :label="$t('Set an investment selling price')" required :placeholder="$t('Investment selling price')" :rules="RulesInteger(10,true)" counter="10"/>
-                    <MyDatePicker v-model="investment.selling_expiration" :label="$t('Set a selling expiration date')"></MyDatePicker>
-                    <v-checkbox v-model="investment.active" :label="$t('Is active?')" ></v-checkbox>
-                    <v-checkbox v-model="investment.daily_adjustment" :label="$t('Has daily adjustment?')" ></v-checkbox>
-                </v-form>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" @click="acceptDialog()" :disabled="!form_valid">{{ $t("Log in") }}</v-btn>
-                    <v-btn color="error" @click="dialog = false">{{ $t("Cancel") }}</v-btn>
-                </v-card-actions>
+                <InvestmentsCU :investment="investment" :key="key" @cruded="on_InvestmentsCU_cruded"></InvestmentsCU>
             </v-card>
         </v-dialog>
         <!-- DIALOG  VIEW INVESTMERNT -->
@@ -101,23 +87,23 @@
 <script>
     import axios from 'axios'
     import MyMenuInline from './MyMenuInline.vue'
+    import InvestmentsCU from './InvestmentsCU.vue'
     import InvestmentsView from './InvestmentsView.vue'
     import QuotesCU from './QuotesCU.vue'
-    import MyDatePicker from './MyDatePicker.vue'
     import {localtime} from '../functions.js'
     import {empty_quote, empty_investment} from '../empty_objects.js'
     export default {
         components:{
             MyMenuInline,
+            InvestmentsCU,
             InvestmentsView,
-            MyDatePicker,
             QuotesCU,
         },
         data(){ 
             return{
                 showActive:true,
                 investments_headers: [
-                    { text: this.$t('Name'), sortable: true, value: 'name'},
+                    { text: this.$t('Name'), sortable: true, value: 'fullname'},
                     { text: this.$t('Last datetime'), value: 'last_datetime',  width: "9%"},
                     { text: this.$t('Last'), value: 'last',  width: "7%", align:'right'},
                     { text: this.$t('Daily difference'), value: 'daily_difference',  width: "7%", align:'right'},
@@ -138,8 +124,8 @@
                                 name:"Add a new investment",
                                 icon: "mdi-pencil",
                                 code: function(this_){
-                                    this_.editing=false
                                     this_.investment=this_.empty_investment()
+                                    this_.key=this_.key+1
                                     this_.dialog=true
                                 },
                             },
@@ -147,9 +133,7 @@
                     },
                 ],
                 dialog:false,
-                form_valid: false,
-                investment: this.empty_investment(),
-                editing:false,
+                investment: null,
                 loading_investments:false,
                 search:"",
 
@@ -165,30 +149,6 @@
         methods: {
             MyMenuInlineSelection(item){
                 item.code(this)
-            },
-            acceptDialog(){
-                if (this.$refs.form.validate()==false) return
-                if (this.editing==true){               
-                    axios.put(this.investment.url, this.investment, this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
-                            this.update_table()     
-                            this.dialog=false
-                            this.editing=false
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    })
-                } else{
-                    axios.post(`${this.$store.state.apiroot}/api/investments/`, this.investment,  this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
-                            this.update_table()     
-                            this.dialog=false
-                            this.editing=false
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    })
-                }
             },
             addQuote(item){
                 this.quote=this.empty_quote()
@@ -210,16 +170,9 @@
                     this.parseResponseError(error)
                 });
             },
-            dialog_title(){
-                if(this.editing==true){
-                    return this.$t("Updating investment")
-                } else {
-                    return this.$t("Creating a new investment")
-                }
-            },
             editItem (item) {
-                this.editing=true
                 this.investment=item
+                this.key=this.key+1
                 this.dialog=true
             },
             empty_investment,
@@ -230,6 +183,10 @@
             },
             on_QuotesCU_cruded(){
                 this.dialog_quotescu=false
+                this.update_table()
+            },
+            on_InvestmentsCU_cruded(){
+                this.dialog=false
                 this.update_table()
             },
             on_chkActive(){

@@ -106,6 +106,7 @@ export function empty_investment(){
         selling_expiration: null,
         balance_percentage: 100,
         accounts: null,
+        url: null,
     }
 }
 
