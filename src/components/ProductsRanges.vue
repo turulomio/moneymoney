@@ -27,10 +27,10 @@
             <v-tabs-items v-model="tab">
             <v-tab-item key="0">
                 <v-card flat>
-                    <v-container>{{ $t("Current price: ") }}</v-container>
+                    <v-container >{{ currentpricelabel }}</v-container>
                     <v-data-table dense :headers="tableHeaders" :items="tableData" class="elevation-1" disable-pagination  hide-default-footer :sort-by="['value']" :sort-desc="[true]" fixed-header height="360">      
                         <template v-slot:[`item.value`]="{ item }">
-                            <div  @click="showLimits(item)" :class="item.current_in_range ? 'boldgreen' : ''">{{item.value }}</div>
+                            <div  @click="showLimits(item)" :class="item.current_in_range ? 'boldgreen' : ''">{{currency_string(item.value, prdata.product.currency) }}</div>
                         </template>    
                         <template v-slot:[`item.recomendation_invest`]="{ item }">
                             <v-icon small v-if="item.recomendation_invest" >mdi-check-outline</v-icon>
@@ -84,13 +84,14 @@
                 tab: null,
                 chart: '',                
                 tableHeaders: [
-                    { text: 'Value', value: 'value',sortable: true },
-                    { text: 'Must Invest', value: 'recomendation_invest',sortable: false},
+                    { text: 'Value', value: 'value',sortable: true, width:"7%"},
+                    { text: 'Must Invest', value: 'recomendation_invest',sortable: false, width:"5%"},
                     { text: 'Investments',  sortable: false, value: 'investments_inside'},
                     { text: 'Orders',  sortable: false, value: 'orders_inside'},
-                    { text: 'Actions', value: 'actions', sortable: false },
+                    { text: 'Actions', value: 'actions', sortable: false , width:"7%"},
                 ],   
                 newpr:this.empty_products_ranges(),
+                currentpricelabel:"",
                 prdata:null,
                 form_valid:false,
                 tableData:[],
@@ -133,7 +134,7 @@
                     console.log(response.data);
                     this.prdata=response.data
                     this.tableData=this.prdata.pr
-                    console.log(this.tableData)
+                    this.currentpricelabel= this.$t(`Current price: ${this.currency_string(this.prdata.product.last, this.prdata.product.currency)}`) 
                     this.loading=false
                 }, (error) => {
                     this.parseResponseError(error)
