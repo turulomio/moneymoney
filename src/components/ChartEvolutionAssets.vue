@@ -7,7 +7,7 @@
              <v-select class="pa-4" width="10%" dense label="Select the year from which to display the report" v-model="from" :items="years()" @change="change_year()"></v-select>       
              </v-card>
         </div>
-        <v-card outlined class="ma-4 pa-4" height="650" v-if="balance.length>0">
+        <v-card outlined class="ma-4 pa-4" height="650">
             <v-chart
                 ref="chart"
                 :option="chart_option()"
@@ -24,7 +24,7 @@
     export default {
         data(){ 
             return{
-                loading:true,
+                loading:false,
                 balance:[],
                 accounts:[],
                 investments:[],
@@ -145,7 +145,7 @@
                 this.refreshChart()
             },
             refreshChart(){
-                this.loading=false
+                this.loading=true
                 axios.get(`${this.$store.state.apiroot}/reports/evolutionassets/chart/?from=${this.from}`, this.myheaders())
                 .then((response) => {
                     console.log(response.data)
@@ -160,7 +160,6 @@
                         this.invested.push([o.datetime, o.invested_user])
 
                     })
-                    console.log(this.balance)
                     this.loading=false
                 }, (error) => {
                     this.parseResponseError(error)
