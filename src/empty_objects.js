@@ -59,6 +59,14 @@ export function empty_product(){
         name: null,
     }
 }
+export function empty_products_comparation(){
+    return {
+        url: null,
+        name: null,
+        a:null,
+        b:null,
+    }
+}
 
 export function empty_quote(){
     return {

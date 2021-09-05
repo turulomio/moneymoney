@@ -1,16 +1,6 @@
 <template>
     <div>
         <h1>{{ $t("Products comparation") }}</h1>
-        <v-card class="pa-6">
-            <v-card-title>{{ $t("Select two products") }}</v-card-title>
-            <v-card-subtitle>{{ $t("Put in first place the one with better behaviour") }}</v-card-subtitle>
-            <v-autocomplete :items="$store.state.catalogs.products" v-model="product_a" :label="$t('Select a product')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
-            <v-autocomplete :items="$store.state.catalogs.products" v-model="product_b" :label="$t('Select a product')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
-            <v-card-actions>
-                <v-btn color="primary" @click="change" :disabled="(product_a==null || product_b==null)">{{ $t('Switch') }}</v-btn>
-                <v-btn color="primary" @click="pairReport" :disabled="(product_a==null || product_b==null)">{{ $t('Pair report') }}</v-btn>
-            </v-card-actions>
-        </v-card>
 
         <v-tabs v-model="tab"  background-color="primary" dark>
             <v-tab key="price_ratio">{{ $t("Price ratio")}}</v-tab>
@@ -36,6 +26,12 @@
         components:{
             ChartPriceRatio,
         },
+        props: {
+            // An account object
+            pc: {
+                required: true // Null to create, pc object to update
+            }
+        },
         data(){ 
             return {
                 tab:1,
@@ -60,7 +56,7 @@
         methods:{
             pairReport(){               
                 this.loading=true
-                axios.get(`${this.$store.state.apiroot}/products/pairs/?a=${this.product_a}&b=${this.product_b}`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/products/pairs/?a=${this.pc.a}&b=${this.pc.b}`, this.myheaders())
                 .then((response) => {
                     this.data_price_ratio=response.data
                     this.data_price_ratio_chart=[]
@@ -80,8 +76,8 @@
                 this.$refs.b.forceValue(this.product_b)
             }
         },
-        computed:{
-        
-        },
+        mounted(){
+            this.pairReport()
+        }
     }
 </script>
