@@ -111,7 +111,7 @@
 
 
 
-                for (var i = 0; i < this.prdata.pr.filter(o => o.recomendation_invest==true).length; i++) {
+                for (var i = 0; i < this.prdata.pr.length; i++) {
                     // Create line with same values
                     var dat=[]
                     var value=this.prdata.pr[i].value
@@ -123,9 +123,7 @@
                             show:false,
                         },
                         showSymbol:false, 
-                        itemStyle: {
-                            color: 'rgba(255, 173, 177, 0.4)'
-                        }, 
+                        itemStyle: (this.prdata.pr[i].recomendation_invest==true) ? {color: 'rgba(255, 213, 213, 0.4)'} :  {color: 'rgba(217, 217, 217, 0.4)'},
                     })
                 }
                 return r
