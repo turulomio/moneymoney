@@ -88,6 +88,7 @@ const router = new VueRouter({
 
 // MIXIN GLOBAL
 import {
+    localtime,
     myheaders,
     parseResponse,
     parseResponseError,
@@ -99,7 +100,6 @@ import {
     percentage_generic_html,
     percentage_generic_string, 
     get_from_catalog,
-    get_operationstypes_from_concept,
     zulu2py,
     date2py,
     zulu2date,
@@ -113,13 +113,13 @@ Vue.mixin({
         }
     },
     methods: {
+        localtime,
         myheaders,
         myheaders_formdata,
         parseResponse,
         parseResponseError,
         getLocalStorage,
         get_from_catalog,
-        get_operationstypes_from_concept,
         zulu2py,
         date2py,
         py2date,

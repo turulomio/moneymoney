@@ -194,23 +194,21 @@ export function vuex_update_catalogs(){
     });
 }
 
-export function get_operationstypes_from_concept(url){
-    var concept=this.$store.state.catalogs.concepts.find(o => o.url==url)
-    return this.$store.state.catalogs.operationstypes.find(o => o.url==concept.operationstypes)
-
-}
-
-
-export function get_from_catalog(url, catalog, property, default_=''){
+// If property is null returns object
+// If property is a string returns object.string
+// If property is a string that contains a point return object.string.string
+export function get_from_catalog(url, catalog, property='', default_=''){
     var arr=property.split(".")
     let object=this.$store.state.catalogs[catalog].find(o => o.url==url)
-    if (arr.length==1){
+    if (property==''){
+        return object
+    } else if (arr.length==1){
         if (object==null) return default_
         return object[property]
-    } else {
-        var newcatalog=arr[0]
-        var newproperty=arr[1]
-        var newobject= this.$store.state.catalogs[newcatalog].find(o => o.url==object[url])
+    } else { //(item.url, "concepts", "operationstypes.name")
+        var newcatalog=arr[0] //operationstypes
+        var newproperty=arr[1] //name
+        var newobject= this.$store.state.catalogs[newcatalog].find(o => o.url==object[newcatalog])
         if (newobject==null) return default_
         return newobject[newproperty]
     }

@@ -164,7 +164,8 @@
             acceptDialog(){
                 //Validation
                 if( this.$refs.form_cco.validate()==false) return
-                var operationtype=this.get_operationstypes_from_concept(this.cco.concepts)
+                var concept=this.get_from_catalog(this.cco.concepts,"concepts")
+                var operationtype=this.get_from_catalog(concept.operationstypes,"operationstypes")
                 this.cco.operationstypes=operationtype.url
                 if (operationtype.id==1 && this.cco.amount>0){
                      alert(this.$t("Amount must be negative"))

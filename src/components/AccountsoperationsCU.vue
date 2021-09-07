@@ -10,7 +10,7 @@
                 </v-form>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary" @click="following_ao=false;acceptDialogAO()" :disabled="!form_valid_ao">{{ $t("Add") }}</v-btn>
+                    <v-btn color="primary" @click="following_ao=false;acceptDialogAO()" :disabled="!form_valid_ao">{{ button() }}</v-btn>
                     <v-btn color="primary" @click="following_ao=true;acceptDialogAO()" :disabled="!form_valid_ao" v-if="editing_ao==false">{{ $t("Add and follow") }}</v-btn>
                 </v-card-actions>
     </div>
@@ -41,10 +41,9 @@
             acceptDialogAO(){
                 //Validation
                 if( this.$refs.form_ao.validate()==false) return
-                var operationtype=this.get_operationstypes_from_concept(this.newao.concepts)
+                var concept=this.get_from_catalog(this.newao.concepts,"concepts")
+                var operationtype=this.get_from_catalog(concept.operationstypes,"operationstypes")
                 this.newao.operationstypes=operationtype.url
-                print(this.get_from_catalog(this.newao.concepts,"concepts","operationstypes.name"))
-                console.log(this.newao.operationstypes)
                 if (operationtype.id==1 && this.newao.amount>0){
                      alert(this.$t("Amount must be negative"))
                      return
@@ -77,6 +76,13 @@
                     })
                 }
             },
+            button(){
+                if(this.editing_ao==true){
+                    return this.$t("Update")
+                } else {
+                    return this.$t("Create")
+                }
+            },
             dialog_title_ao(){
                 if(this.editing_ao==true){
                     return this.$t("Updating account operation")
@@ -88,9 +94,9 @@
         created(){
 
             if ( this.ao.url!=null){ // EDITING TIENE IO URL
-                this.editing=true
+                this.editing_ao=true
             } else { // NEW IO BUT SETTING VALUES WITH URL=null
-                this.editing=false
+                this.editing_ao=false
             }
             this.newao=Object.assign({},this.ao)
         }
