@@ -210,9 +210,9 @@ export function get_from_catalog(url, catalog, property, default_=''){
     } else {
         var newcatalog=arr[0]
         var newproperty=arr[1]
-        var newobject= this.$store.state.catalogs[newcatalog].find(o => o.url==object[url)
+        var newobject= this.$store.state.catalogs[newcatalog].find(o => o.url==object[url])
         if (newobject==null) return default_
-        return newobject.newproperty
+        return newobject[newproperty]
     }
 }
 

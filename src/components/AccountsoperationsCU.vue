@@ -43,7 +43,7 @@
                 if( this.$refs.form_ao.validate()==false) return
                 var operationtype=this.get_operationstypes_from_concept(this.newao.concepts)
                 this.newao.operationstypes=operationtype.url
-                print(get_from_catalog(this.newao.concepts,"concepts","operationstypes.name"))
+                print(this.get_from_catalog(this.newao.concepts,"concepts","operationstypes.name"))
                 console.log(this.newao.operationstypes)
                 if (operationtype.id==1 && this.newao.amount>0){
                      alert(this.$t("Amount must be negative"))
