@@ -89,10 +89,6 @@ export function moment_day_start(isostring){
 }   
 
 
-export function investment_name(url){
-    return this.$store.state.catalogs.investments.find(t => t.url==url).name
-}
-
 
 export function myheaders(){
     return {
@@ -192,19 +188,34 @@ export function vuex_update_catalogs(){
     .then((response) => {
         this.$store.state.catalogs.products= sortObjectsArray(response.data, "name")
         console.log("Updated products")
+        console.log(response.data)
     }, (error) => {
         this.parseResponseError(error)
     });
 }
 
-export function get_concept(url){
-    return this.$store.state.catalogs.concepts.find(o => o.url==url)
-}
 export function get_operationstypes_from_concept(url){
     var concept=this.$store.state.catalogs.concepts.find(o => o.url==url)
     return this.$store.state.catalogs.operationstypes.find(o => o.url==concept.operationstypes)
 
 }
+
+
+export function get_from_catalog(url, catalog, property, default_=''){
+    var arr=property.split(".")
+    let object=this.$store.state.catalogs[catalog].find(o => o.url==url)
+    if (arr.length==1){
+        if (object==null) return default_
+        return object[property]
+    } else {
+        var newcatalog=arr[0]
+        var newproperty=arr[1]
+        var newobject= this.$store.state.catalogs[newcatalog].find(o => o.url==object[url)
+        if (newobject==null) return default_
+        return newobject.newproperty
+    }
+}
+
 
 export function object2formdata(item){
     var form_data = new FormData();

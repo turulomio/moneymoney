@@ -10,7 +10,7 @@
             <div v-html="currency_html(item.balance, item.currency)"></div>
         </template>   
         <template v-slot:[`item.concepts`]="{ item }">
-            <div v-html="get_concept(item.concepts).name"></div>
+            <div v-html="get_from_catalog(item.concepts, 'concepts', 'name')"></div>
         </template>
         <template v-slot:[`item.actions`]="{ item }">
             <v-icon small class="mr-2" @click="editAO(item)">mdi-pencil</v-icon>
@@ -32,7 +32,7 @@
 </template>
 
 <script>     
-    import {localtime, get_concept,listobjects_sum} from '../functions.js'
+    import {localtime, listobjects_sum} from '../functions.js'
     export default {
     props: {
         items: {
@@ -70,7 +70,6 @@
     methods: {
         localtime,
         listobjects_sum,
-        get_concept,
         editAO(item){
             this.$emit('editAO', item)
         },
