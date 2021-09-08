@@ -18,15 +18,16 @@
             <template v-slot:activator="{ on }">
                 <v-row justify="center" align="center">
                     <v-text-field v-model="representation" v-bind="$attrs" prepend-icon="mdi-calendar" readonly v-on="on"  @click="on_text_click"></v-text-field>
-                    <v-icon class="ml-1" x-small @click="localValue=''">mdi-backspace</v-icon>
+                    <v-icon class="ml-1" x-small @click="localValue=null">mdi-backspace</v-icon>
                 </v-row>
             </template>
             <v-card >
-                <v-date-picker class="pa-5" no-title v-model="date" @change="on_date_change()" locale="locale" first-day-of-week="1"></v-date-picker>
-                <v-time-picker class="pa-5" ref="time" no-title scrollable  format="24hr" v-model="time" use-seconds @click:hour="on_time_click()" @click:minute="on_time_click()" @click:second="on_time_click()" locale="locale"></v-time-picker>
-                <v-text-field class="pa-5" v-model="milliseconds" type="number" :label="$t('Milliseconds')" required :placeholder="$t('Milliseconds')" :rules="RulesString(3,true)" counter="3" @change="on_milliseconds_change()"></v-text-field>        
+                <v-date-picker v-if="localValue" class="pa-5" no-title v-model="date" @change="on_date_change()" locale="locale" first-day-of-week="1"></v-date-picker>
+                <v-time-picker v-if="localValue" class="pa-5" ref="time" no-title scrollable  format="24hr" v-model="time" use-seconds @click:hour="on_time_click()" @click:minute="on_time_click()" @click:second="on_time_click()" locale="locale"></v-time-picker>
+                <v-text-field v-if="localValue" class="pa-5" v-model="milliseconds" type="number" :label="$t('Milliseconds')" required :placeholder="$t('Milliseconds')" :rules="RulesString(3,true)" counter="3" @change="on_milliseconds_change()"></v-text-field>        
                 <v-card-actions>
-                    <v-btn class="ml-4" color="error" @click="on_close()" >{{$t("Set")+ " '" + this.representation + "'"}}</v-btn>
+                    <v-btn class="ml-4" color="primary" @click="on_set_now()" >{{$t("Set now")}}</v-btn>
+                    <v-btn class="ml-4" v-if="localValue" color="error" @click="on_close()" >{{$t("Set")+ " '" + this.representation + "'"}}</v-btn>
                 </v-card-actions>            
             </v-card>
         </v-menu>
@@ -39,10 +40,6 @@
             value: {
                 required: true
             },
-            // locale:  {
-            //     required:true,
-            //     default: 'en',
-            // }
         },
         data: function(){
             return {
@@ -72,7 +69,7 @@
                     this.milliseconds=arr[2]
                 }
                 this.setRepresentation()
-                console.log(this.date,this.time,this.milliseconds, this.representation, this.value)
+            //    console.log(this.date,this.time,this.milliseconds, this.representation, this.value)
             }
         },
         methods: {
@@ -81,6 +78,10 @@
                 if (this.$refs.time) this.$refs.time.selecting=1
             },
             on_close(){
+                this.menu=false
+            },
+            on_set_now(){
+                this.localValue=this.date2zulu(new Date())
                 this.menu=false
             },
             on_date_change(){
@@ -108,7 +109,11 @@
                 return new Date( d +" " + t +"."+milli).toISOString()
             },
             setRepresentation(){
-                this.representation=this.date +" " + this.time +"."+this.milliseconds
+                if (this.localValue==null){
+                    this.representation=""
+                } else {
+                    this.representation=this.date +" " + this.time +"."+this.milliseconds
+                }
             }
         },
         mounted(){

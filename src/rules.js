@@ -1,7 +1,7 @@
 
 export function RulesInteger(maxdigits=10,required=true){
     var r= [
-        v => !!v || this.$t('Number is required'),
+        v => (v==0 || !!v) || this.$t('Number is required'),
         v => (v && v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
         v => (v && !isNaN(parseInt(v))) || this.$t('Must be a integer number')
     ]
@@ -13,9 +13,9 @@ export function RulesInteger(maxdigits=10,required=true){
 
 export function RulesFloat(maxdigits,required){
     var r= [
-        v => !!v || this.$t('Number is required'),
-        v => (v && v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
-        v => (v && !isNaN(parseFloat(v))) || this.$t('Must be a number')
+        v => (v==0 || !!v) || this.$t('Number is required'),
+        v => (v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
+        v => (!isNaN(parseFloat(v))) || this.$t('Must be a number')
     ]
     if (required==false){
         r.shift()
@@ -25,10 +25,10 @@ export function RulesFloat(maxdigits,required){
 
 export function RulesFloatPositive(maxdigits,required){
     var r= [
-        v => !!v || this.$t('Number is required'),
-        v => (v && v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
-        v => (v && !isNaN(parseFloat(v))) || this.$t('Must be a number'),
-        v => (v && v>=0) || this.$t('Must be a positive number')
+        v => (v==0 || !!v) || this.$t('Number is required'),
+        v => (v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
+        v => (!isNaN(parseFloat(v))) || this.$t('Must be a number'),
+        v => (v>=0) || this.$t('Must be a positive number')
     ]
     if (required==false){
         r.shift()
@@ -37,10 +37,10 @@ export function RulesFloatPositive(maxdigits,required){
 }
 export function RulesFloatNegative(maxdigits,required){
     var r= [
-        v => !!v || this.$t('Number is required'),
-        v => (v && v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
-        v => (v && !isNaN(parseFloat(v))) || this.$t('Must be a number'),
-        v => (v && v<=0) || this.$t('Must be a negative number')
+        v => (v==0 || !!v) || this.$t('Number is required'),
+        v => (v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
+        v => (!isNaN(parseFloat(v))) || this.$t('Must be a number'),
+        v => (v<=0) || this.$t('Must be a negative number')
     ]
     if (required==false){
         r.shift()
@@ -49,6 +49,24 @@ export function RulesFloatNegative(maxdigits,required){
 }
 
 
+export function RulesDatetime(required){
+    var r= [
+        v => !!v || this.$t('You must select date and time'),
+    ]
+    if (required==false){
+        r.shift()
+    }
+    return r
+}
+export function RulesDate(required){
+    var r= [
+        v => !!v || this.$t('You must select a date'),
+    ]
+    if (required==false){
+        r.shift()
+    }
+    return r
+}
 
 export function RulesString(maxdigits,required){
     var r= [

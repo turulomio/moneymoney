@@ -106,7 +106,7 @@ import {
     date2zulu,
     py2date,
 } from './functions.js'
-import {RulesFloat,RulesInteger,RulesString,RulesSelection, RulesFloatPositive, RulesFloatNegative, } from './rules.js'
+import {RulesFloat,RulesDatetime,RulesInteger,RulesString,RulesSelection, RulesFloatPositive, RulesFloatNegative, } from './rules.js'
 Vue.mixin({
     data: function () {
         return {
@@ -127,6 +127,7 @@ Vue.mixin({
         date2zulu,
 
         listobjects_sum,
+        RulesDatetime,
         RulesFloat,
         RulesInteger,
         RulesString,
