@@ -13,12 +13,12 @@
             <v-tabs-items v-model="tab">
                 <v-tab-item key="incomes">        
                     <v-card class="pa-4">
-                    <TableAccountOperations :homogeneous="false" :items="incomes" :total_currency="$store.state.localcurrency" :showactions="false" height="600" class=" flex-grow-1 flex-shrink-0" ></TableAccountOperations>
+                    <TableAccountOperations :homogeneous="false" :items="incomes" :total_currency="$store.state.local_currency" :showactions="false" height="600" class=" flex-grow-1 flex-shrink-0" ></TableAccountOperations>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="expenses">       
                     <v-card class="pa-4">
-                    <TableAccountOperations :homogeneous="false" :items="expenses" :total_currency="$store.state.localcurrency" :showactions="false" height="600" class=" flex-grow-1 flex-shrink-0" ></TableAccountOperations>
+                    <TableAccountOperations :homogeneous="false" :items="expenses" :total_currency="$store.state.local_currency" :showactions="false" height="600" class=" flex-grow-1 flex-shrink-0" ></TableAccountOperations>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="dividends">     
@@ -28,7 +28,7 @@
                 </v-tab-item>
                 <v-tab-item key="gains">       
                     <v-card class="pa-4">
-                        <TableInvestmentOperationsHistorical :items="gains" currency_account="EUR" currency_investment="EUR"  :homogeneus="false" :currency_user="$store.state.localcurrency" height="600" output="user" :key="key"></TableInvestmentOperationsHistorical>
+                        <TableInvestmentOperationsHistorical :items="gains" currency_account="EUR" currency_investment="EUR"  :homogeneus="false" :currency_user="$store.state.local_currency" height="600" output="user" :key="key"></TableInvestmentOperationsHistorical>
 
                     </v-card>
                 </v-tab-item>

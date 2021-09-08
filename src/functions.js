@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import axios from 'axios'
 
 // Function to use "{0} {1}".format(a, b) style
@@ -31,7 +31,14 @@ export function my_round(num, decimals = 2) {
 
 // Value es un utc iso string with T and Z
 export function localtime(value){
-    return zulu2py(value)
+    if (value){
+        var dateFormat = 'YYYY-MM-DD HH:mm:ss';
+        var testDateUtc = moment.utc(value);
+        var localDate = testDateUtc.tz(this.$store.state.local_zone)
+        return (localDate.format(dateFormat)); // 2015-30-01 02:00:00
+    }
+    console.log("REALLY");
+    return null;
 }   
 
 // Uses .local()
@@ -39,7 +46,7 @@ export function zulu2py(value){
     if (value){
         var dateFormat = 'YYYY-MM-DD HH:mm:ss';
         var testDateUtc = moment.utc(value);
-        var localDate = testDateUtc.local();
+        var localDate = testDateUtc.tz(this.$store.state.local_zone)
         return (localDate.format(dateFormat)); // 2015-30-01 02:00:00
     }
     console.log("REALLY");
@@ -127,6 +134,17 @@ export function vuex_update_concepts(){
     .then((response) => {
         this.$store.state.catalogs.concepts= sortObjectsArray(response.data, "name")
         console.log("Updated concepts")
+    }, (error) => {
+        this.parseResponseError(error)
+    });
+}
+export function vuex_update_settings(){
+    axios.get(`${this.$store.state.apiroot}/settings/`, this.myheaders())
+    .then((response) => {
+        this.$store.state.local_currency=response.data.local_currency
+        this.$store.state.local_zone=response.data.local_zone
+        console.log(response.data)
+        console.log("Updated settings")
     }, (error) => {
         this.parseResponseError(error)
     });

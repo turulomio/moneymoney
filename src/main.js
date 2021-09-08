@@ -30,8 +30,8 @@ export const store = new Vuex.Store({
             mimetype:[],
         },
         lastsearch: "",
-        localcurrency:"EUR",
-        localzone:"Europe/Madrid",
+        local_currency:"EUR",
+        local_zone:"Europe/Madrid",
     },
 })
 import About from './components/about';
@@ -148,10 +148,10 @@ Vue.mixin({
             return percentage_generic_html(num,this.$i18n.locale,decimals )
         },
         localcurrency_string(num, decimals=2){
-            return currency_generic_string(num, this.$store.state.localcurrency, this.$i18n.locale,decimals )
+            return currency_generic_string(num, this.$store.state.local_currency, this.$i18n.locale,decimals )
         },
         localcurrency_html(num, decimals=2){
-            return currency_generic_html(num, this.$store.state.localcurrency, this.$i18n.locale,decimals )
+            return currency_generic_html(num, this.$store.state.local_currency, this.$i18n.locale,decimals )
         },
 
 

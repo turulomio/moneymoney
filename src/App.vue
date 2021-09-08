@@ -129,6 +129,7 @@
         <v-app-bar color="primary" dark  fixed fill-height app >
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
             <v-btn color="primary" :to="{ name: 'home'}"><v-icon dark>mdi-home</v-icon></v-btn>
+            <v-btn color="primary" :to="{ name: 'settings'}" v-if="$store.state.logged"><v-icon dark>mdi-wrench</v-icon></v-btn>
             <v-spacer />
             <h1 class="font-weight-black text-no-wrap text-truncate" >{{ $t("Money Money. Another way to manage your finances") }}</h1>
             <v-spacer />

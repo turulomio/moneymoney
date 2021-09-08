@@ -23,7 +23,6 @@ export function RulesFloat(maxdigits,required){
     return r
 }
 
-
 export function RulesFloatPositive(maxdigits,required){
     var r= [
         v => !!v || this.$t('Number is required'),
