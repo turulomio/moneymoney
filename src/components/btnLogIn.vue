@@ -8,8 +8,8 @@
         <v-card  class="login">
             <v-card-title class="headline">{{ $t("Login in Money Money") }}</v-card-title>
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-text-field v-model="user" type="text" :counter="75" :label="$t('User')" required :placeholder="$t('Enter user')" autofocus :rules="RulesTextRequired75"/>
-                <v-text-field v-model="password" type="password" :label="$t('Password')" :counter="75" :placeholder="$t('Enter password')" :rules="RulesTextRequired75"/>
+                <v-text-field v-model="user" type="text" :counter="75" :label="$t('User')" :placeholder="$t('Enter user')" autofocus :rules="RulesString(75,true)"/>
+                <v-text-field v-model="password" type="password" :label="$t('Password')" :counter="75" :placeholder="$t('Enter password')" :rules="RulesString(75,true)"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -27,15 +27,11 @@
         name: 'btnLogIn',
         data () {
             return {
-                user: null,
-                password: null,
+                user: "",
+                password: "",
                 dialog: false,                
                 
                 form_valid:false,
-                RulesTextRequired75: [
-                    v => !!v || this.$t('Text is required'),
-                    v => (v && v.length <75) || this.$t('Text must be less than 75 characters'),
-                ],
             }
         },
         methods: {

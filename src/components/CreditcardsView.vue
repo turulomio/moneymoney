@@ -6,7 +6,7 @@
 
         </h1>
         <v-card outlined class="ma-4 pa-4">
-            <TableAccountOperations :showselected="paying" homogeneous :items="items_cco" :currency_account="account.currency" height="400" ref="table_cc" class=" flex-grow-1 flex-shrink-0" :locale='this.$i18n.locale' @editAO="editCCO" @deleteAO="deleteCCO" @changeSelected="changeSelected" :key="key"></TableAccountOperations>
+            <TableAccountOperations :showselected="paying" homogeneous :items="items_cco" :total_currency="account.currency" height="400" ref="table_cc" class=" flex-grow-1 flex-shrink-0" :locale='this.$i18n.locale' @editAO="editCCO" @deleteAO="deleteCCO" @changeSelected="changeSelected" :key="key"></TableAccountOperations>
         </v-card>
         <v-dialog v-model="dialog" max-width="550">
             <v-card class="pa-4">
@@ -164,7 +164,7 @@
             acceptDialog(){
                 //Validation
                 if( this.$refs.form_cco.validate()==false) return
-                var concept=this.$store.getObjectByUrl("concepts",this.cco.concepts)
+                var concept=this.$store.getters.getObjectByUrl("concepts",this.cco.concepts)
                 var operationtype=this.getObjectByUrl("operationstypes", concept.operationstypes)
                 this.cco.operationstypes=operationtype.url
                 if (operationtype.id==1 && this.cco.amount>0){

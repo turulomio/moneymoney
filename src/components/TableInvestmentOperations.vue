@@ -10,7 +10,10 @@
         <v-data-table dense v-model="selected" :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" ref="table_o" :key="$attrs.key">
             <template v-slot:[`item.datetime`]="{ item,index }">
             <div :ref="index">{{ localtime(item.datetime)}}</div>
-            </template>
+            </template>           
+           <template v-slot:[`item.operationstypes`]="{ item }">
+               <div v-html="$store.getters.getObjectPropertyByUrl('operationstypes',item.operationstypes,'name')"></div>
+           </template>
             <template v-slot:[`item.price`]="{ item }">
             {{ currency_string(item.price, currency_investment)}}
             </template>

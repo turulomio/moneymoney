@@ -3,6 +3,9 @@
         <template v-slot:[`item.datetime`]="{ item, index }" >
             <div :ref="index">{{ localtime(item.datetime)}}</div>
         </template>                  
+        <template v-slot:[`item.operationstypes`]="{ item }">
+            <div v-html="$store.getters.getObjectPropertyByUrl('operationstypes',item.operationstypes,'name')"></div>
+        </template>
         <template v-slot:[`item.price_account`]="{ item }">
             <div v-html="currency(item.price_account)"></div>
         </template>        
@@ -161,7 +164,7 @@
                 if (this.output=="account"){
                     r= [
                         { text: this.$t('Date and time'), value: 'datetime',sortable: true },
-                       { text: this.$t('Operation'), value: 'operationstypes_id',sortable: true },
+                        { text: this.$t('Operation'), value: 'operationstypes',sortable: true },
                         { text: this.$t('Shares'), value: 'shares',sortable: false, align:"right"},
                         { text: this.$t('Price'), value: 'price_account',sortable: false, align:"right"},
                         { text: this.$t('Invested'), value: 'invested_account',sortable: false, align:"right"},

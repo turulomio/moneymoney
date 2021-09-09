@@ -70,9 +70,9 @@ export function RulesDate(required){
 
 export function RulesString(maxdigits,required){
     var r= [
-        v => !!v || this.$t('String is required'),
+        v => (!!v) || this.$t('String is required'),
         v =>  v && !!v.trim() || this.$t(`String can't be empty`),
-        v =>  v.length <= maxdigits || this.$t(`String must be at most ${maxdigits} characters`)
+        v =>  (v && v.length <= maxdigits) || this.$t(`String must be at most ${maxdigits} characters`)
     ]
     if (required==false){
         r.shift()

@@ -30,15 +30,15 @@ export const store = new Vuex.Store({
             return state.concepts.filter( o => [39, 50,59,62,63,65,66,68,70,72,75,76].includes(o.id))
         },
         getObjectByUrl:(state) => (catalog,url,default_=null) => {
-            var r=state[catalog].find(o => o.url=url)
+            var r=state[catalog].find(o => o.url==url)
             if (r==null){
                 return default_
             } else {
                 return r
             }
         },
-        getObjectPropertyByUrl:(state) => (catalog,url,property,default_=null) => {
-            var r=state.getObjectByUrl(catalog,url)
+        getObjectPropertyByUrl:(state,getters) => (catalog,url,property,default_=null) => {
+            var r=getters.getObjectByUrl(catalog,url)
             if (r==null){
                 return default_
             } else {

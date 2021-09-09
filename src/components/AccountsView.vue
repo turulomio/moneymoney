@@ -42,7 +42,7 @@
         <!-- DIALOG ACCOUNTSOPERATIONS ADD/UPDATE -->
         <v-dialog v-model="dialog_ao" max-width="550">
             <v-card class="pa-8">
-                <AccountsoperationsCU :ao="ao" :key="key" @cruded="on_AccountsoperationsCU_cruded"></AccountsoperationsCU>
+                <AccountsoperationsCU :ao="ao" :total_currency="account.currency" :key="key" @cruded="on_AccountsoperationsCU_cruded"></AccountsoperationsCU>
             </v-card>
         </v-dialog>
         <!-- DIALOG CREDIT CARD ADD/UPDATE -->

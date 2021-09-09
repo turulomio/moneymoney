@@ -1,7 +1,10 @@
 <template>
             <v-data-table dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="dt_end" fixed-header :height="$attrs.height"  :key="$attrs.key" ref="table">
             <template v-slot:[`item.dt_end`]="{ item }">
-            {{ localtime(item.dt_end)}}
+                {{ localtime(item.dt_end)}}
+            </template>           
+            <template v-slot:[`item.operationstypes`]="{ item }">
+                <div v-html="$store.getters.getObjectPropertyByUrl('operationstypes',item.operationstypes,'name')"></div>
             </template>
             <template v-slot:[`item.gross_start_user`]="{ item }">
                 <div v-html="currency(item.gross_start_user)"></div>

@@ -7,10 +7,10 @@
         <v-data-table dense :headers="headers" :items="items" sort-by="name" class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading" :key="key">
         
             <template v-slot:[`item.a`]="{ item }">
-                <div v-html="$store.getObjectPropertyByUrl('products', item.a, 'name' )"></div>
+                <div v-html="$store.getters.getObjectPropertyByUrl('products', item.a, 'name' )"></div>
             </template> 
             <template v-slot:[`item.b`]="{ item }">
-                <div v-html="$store.getObjectPropertyByUrl('products', item.b, 'name' )"></div>
+                <div v-html="$store.getters.getObjectPropertyByUrl('products', item.b, 'name' )"></div>
             </template>     
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="pairReportItem(item)">mdi-eye</v-icon>
