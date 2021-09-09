@@ -22,7 +22,6 @@
 </template>
 
 <script>
-    import {vuex_update_catalogs,vuex_update_concepts,vuex_update_settings} from '../functions.js'
     import axios from 'axios'
     export default {
         name: 'btnLogIn',
@@ -45,17 +44,13 @@
                 const formData = new FormData();
                 formData.append('username', this.user);
                 formData.append('password', this.password);
-                console.log(this.$store.state)
                 axios.post(`${this.$store.state.apiroot}/login/`, formData)
                 .then((response) => {
                     if (this.parseResponse(response)==true){
                         console.log("Authenticated");
                         this.$store.state.token=response.data;
                         this.$store.state.logged=true;
-                        this.$store.dispatch("getInvestments")
-                        this.vuex_update_settings()
-                        this.vuex_update_concepts();
-                        this.vuex_update_catalogs();
+                        this.$store.dispatch("getAll")
                         this.dialog=false;
                         this.$refs.form.reset()
                         this.$router.push({name:'home'})
@@ -64,9 +59,6 @@
                     this.parseResponseError(error)
                 })
             },
-            vuex_update_catalogs,
-            vuex_update_concepts,
-            vuex_update_settings,
         },
     }
 </script>
