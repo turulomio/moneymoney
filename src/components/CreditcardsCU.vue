@@ -52,6 +52,7 @@
                 if (this.editing_cc==true){               
                     axios.put(this.newcc.url, this.newcc, this.myheaders())
                     .then(() => {
+                            this.$store.dispatch("getCreditcards")
                             this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -59,6 +60,7 @@
                 } else{
                     axios.post(`${this.$store.state.apiroot}/api/creditcards/`, this.newcc,  this.myheaders())
                     .then(() => {
+                        this.$store.dispatch("getCreditcards")
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)

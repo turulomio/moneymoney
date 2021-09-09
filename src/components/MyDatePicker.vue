@@ -15,7 +15,7 @@
                     <v-icon x-small @click="localValue=null">mdi-backspace</v-icon>
                 </v-row>
             </template>
-            <v-date-picker v-model="localValue" @input="menu = false"></v-date-picker>
+            <v-date-picker v-model="localValue" :first-day-of-week="first_day_of_week()" :locale="$i18n.locale" @input="menu = false"></v-date-picker>
         </v-menu>
     </div>
 </template>
@@ -47,6 +47,14 @@
                     this.representation=""
                 } else {
                     this.representation=this.localValue
+                }
+            },
+            first_day_of_week(){
+                console.log(this.$i18n.locale)
+                if (this.$i18n.locale=="es"){
+                    return 1
+                } else {
+                    return 0
                 }
             }
         },

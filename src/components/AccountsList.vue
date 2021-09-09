@@ -159,6 +159,7 @@
                 axios.delete(item.url, this.myheaders())
                 .then((response) => {
                     console.log(response);
+                    this.$store.dispatch("getAccounts")
                     this.update_table()
                 }, (error) => {
                     this.parseResponseError(error)
@@ -192,6 +193,7 @@
                     axios.put(this.account.url, this.account, this.myheaders())
                     .then((response) => {
                             console.log(response.data)
+                            this.$store.dispatch("getAccounts")
                             this.update_table()     
                             this.dialog=false
                             this.editing=false
@@ -202,6 +204,7 @@
                     axios.post(`${this.$store.state.apiroot}/api/accounts/`, this.account,  this.myheaders())
                     .then((response) => {
                             console.log(response.data)
+                            this.$store.dispatch("getAccounts")
                             this.update_table()     
                             this.dialog=false
                             this.editing=false

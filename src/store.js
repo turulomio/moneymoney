@@ -104,6 +104,7 @@ export const store = new Vuex.Store({
             store.dispatch("getBanks")
             store.dispatch("getConcepts")
             store.dispatch("getCreditcards")
+            store.dispatch("getCurrencies")
             store.dispatch("getInvestments")
             store.dispatch("getOperationstypes")
             store.dispatch("getProducts")

@@ -91,7 +91,7 @@ export function RulesSelection(required){
 export function RulesEmail(required){
 
     var r=  [
-        v => !!v || this.$t('Number is required'),
+        v => !!v || this.$t('Email is required'),
         v => /.+@.+/.test(v) || this.$t('Invalid Email address') 
     ]
     if (required==false){
