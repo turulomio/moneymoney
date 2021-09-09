@@ -4,9 +4,9 @@
         <h1>{{ title() }}</h1>           
         <v-card class="ma-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-autocomplete dense :items="$store.state.catalogs.investments" v-model="newio.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete dense :items="$store.state.investments" v-model="newio.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker v-model="newio.datetime" :label="$t('Set investment operation date and time')"></MyDateTimePicker>
-                <v-autocomplete dense :items="$store.state.catalogs.operationstypes" v-model="newio.operationstypes" :label="$t('Select an operation type')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete dense :items="$store.state.operationstypes" v-model="newio.operationstypes" :label="$t('Select an operation type')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field dense v-model.number="newio.shares" type="number" :label="$t('Set investment operation shares')" :placeholder="$t('Set investment operation shares')" :rules="RulesInteger(10,true)" counter="10"/>
                 <v-text-field dense v-model.number="newio.price" type="number" :label="$t('Set investment operation price')" :placeholder="$t('Set investment operation price')" :rules="RulesInteger(10,true)" counter="10"/>
                 <v-text-field dense v-model.number="newio.taxes" type="number" :label="$t('Set investment operation taxes')" :placeholder="$t('Set investment operation taxes')" :rules="RulesInteger(10,true)" counter="10"/>

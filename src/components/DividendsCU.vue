@@ -4,7 +4,7 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-autocomplete :items="$store.state.catalogs.investments" v-model="newdividend.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :items="$store.state.investments" v-model="newdividend.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker v-model="newdividend.datetime" :label="$t('Set investment execution date and time')"></MyDateTimePicker>
                 <v-autocomplete :items="concepts_for_dividends()" v-model="newdividend.concepts" :label="$t('Select a concept')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field v-model="newdividend.gross" type="number" :label="$t('Set dividend gross balance')" :placeholder="$t('Set dividend gross balance')" :rules="RulesInteger(10,true)" counter="10"/>

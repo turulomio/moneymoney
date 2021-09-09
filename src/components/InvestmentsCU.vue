@@ -2,11 +2,11 @@
   <div>
         <h1>{{dialog_title()}}</h1>
         <v-form ref="form" v-model="form_valid" lazy-validation>
-            <v-autocomplete :items="$store.state.catalogs.accounts.filter(v =>v.active==true)" v-model="newinvestment.accounts" :label="$t('Select an account')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
-            <v-text-field v-model="newinvestment.name" type="text" :label="$t('Investment name')" required :placeholder="$t('Investment name')" autofocus/>
-            <v-autocomplete :items="$store.state.catalogs.products" v-model="newinvestment.products" :label="$t('Select a product')" item-text="name" item-value="url" required :rules="RulesSelection(true)"></v-autocomplete>
-            <v-text-field v-model="newinvestment.selling_price" type="number" :label="$t('Set an investment selling price')" required :placeholder="$t('Investment selling price')" :rules="RulesInteger(10,true)" counter="10"/>
-            <MyDatePicker v-model="newinvestment.selling_expiration" :label="$t('Set a selling expiration date')"></MyDatePicker>
+            <v-autocomplete :items="$store.state.accounts.filter(v =>v.active==true)" v-model="newinvestment.accounts" :label="$t('Select an account')" item-text="name" item-value="url"  :rules="RulesSelection(true)"></v-autocomplete>
+            <v-text-field v-model="newinvestment.name" type="text" :label="$t('Investment name')"  :placeholder="$t('Investment name')" autofocus :rules="RulesString(200,true)"/>
+            <v-autocomplete :items="$store.state.products" v-model="newinvestment.products" :label="$t('Select a product')" item-text="name" item-value="url"  :rules="RulesSelection(true)"></v-autocomplete>
+            <v-text-field v-model="newinvestment.selling_price" type="number" :label="$t('Set an investment selling price')"  :placeholder="$t('Investment selling price')" :rules="RulesInteger(10,false)" counter="10"/>
+            <MyDatePicker v-model="newinvestment.selling_expiration" :label="$t('Set a selling expiration date')" :rules="RulesDate(false)"></MyDatePicker>
             <v-checkbox v-model="newinvestment.active" :label="$t('Is active?')" ></v-checkbox>
             <v-checkbox v-model="newinvestment.daily_adjustment" :label="$t('Has daily adjustment?')" ></v-checkbox>
         </v-form>
@@ -58,6 +58,7 @@
                     axios.put(this.newinvestment.url, this.newinvestment, this.myheaders())
                     .then(() => {
                         this.$emit("cruded")
+                        this.$store.dispatch("getInvestments")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
@@ -67,6 +68,7 @@
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
+                        this.$store.dispatch("getInvestments")
                     })
                 }
             },

@@ -102,7 +102,7 @@
                 if (this.search==null){
                     this.tableData=[]
                 } else {
-                    this.tableData=this.$store.state.catalogs.products.filter(o => 
+                    this.tableData=this.$store.state.products.filter(o => 
                         o.name.toUpperCase().includes(this.search.toUpperCase()) || 
                         o.tickers.toString().toUpperCase().includes(this.search.toUpperCase()) ||
                         this.ifnullempty(o.isin).toUpperCase().includes(this.search.toUpperCase())

@@ -2,8 +2,8 @@
 export function RulesInteger(maxdigits=10,required=true){
     var r= [
         v => (v==0 || !!v) || this.$t('Number is required'),
-        v => (v && v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
-        v => (v && !isNaN(parseInt(v))) || this.$t('Must be a integer number')
+        v => (v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
+        v => (!isNaN(parseInt(v))) || this.$t('Must be a integer number')
     ]
     if (required==false){
         r.shift()

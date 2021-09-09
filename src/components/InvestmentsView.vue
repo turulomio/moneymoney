@@ -208,7 +208,7 @@
                             {
                                 name:this.$t('View product'),
                                 code: function(this_){
-                                    this_.product=this_.$store.state.catalogs.products.find( (o) => o.url=this_.investment.url)
+                                    this_.product=this_.$store.state.products.find( (o) => o.url=this_.investment.url)
                                     this_.dialog_productview=true
                                 },
                                 icon: "mdi-magnify",

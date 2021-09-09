@@ -179,6 +179,7 @@
             empty_quote,
             localtime,
             on_InvestmentView_cruded(){
+                this.key=this.key+1
                 this.update_table()
             },
             on_QuotesCU_cruded(){

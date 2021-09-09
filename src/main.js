@@ -1,39 +1,17 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
 import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import i18n from './i18n'
 import VueRouter from 'vue-router';
+import {store} from './store.js'
 
 import "echarts";
 import ECharts from 'vue-echarts'
 Vue.component('v-chart', ECharts)
 
 Vue.use(VueRouter);
-Vue.use(Vuex);
 
-export const store = new Vuex.Store({
-    state: {
-        token:null,
-        logged:false,
-        version: "0.1.0",
-        versiondate: new Date(2021, 6, 25, 9, 22),
-        apiroot: process.env.VUE_APP_DJANGO_MONEYMONEY_URL,
-        publicPath: process.env.VUE_APP_PUBLIC_PATH,
-        catalogs: {
-            addresstype: [],
-            countries: [],
-            persongender: [],
-            mailtype: [],
-            phonetype: [],
-            logtype: [],
-            mimetype:[],
-        },
-        lastsearch: "",
-        local_currency:"EUR",
-        local_zone:"Europe/Madrid",
-    },
-})
+
 import About from './components/about';
 import Home from './components/Home';
 import AccountsList from './components/AccountsList';
@@ -106,7 +84,7 @@ import {
     date2zulu,
     py2date,
 } from './functions.js'
-import {RulesFloat,RulesDatetime,RulesInteger,RulesString,RulesSelection, RulesFloatPositive, RulesFloatNegative, } from './rules.js'
+import {RulesFloat,RulesDate,RulesDatetime,RulesInteger,RulesString,RulesSelection, RulesFloatPositive, RulesFloatNegative, } from './rules.js'
 Vue.mixin({
     data: function () {
         return {
@@ -127,6 +105,7 @@ Vue.mixin({
         date2zulu,
 
         listobjects_sum,
+        RulesDate,
         RulesDatetime,
         RulesFloat,
         RulesInteger,
@@ -159,13 +138,15 @@ Vue.mixin({
     }
 })
 
-new Vue({
+const app=new Vue({
     i18n,
     store:store,
     router,
     vuetify,
     render: h => h(App)
-}).$mount('#app')
+})
+store.$app = app
+.$mount('#app')
 
 
 

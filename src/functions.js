@@ -117,22 +117,12 @@ export function myheaders_formdata(){
 }
 
 
-export function vuex_update_investments(){
-    axios.get(`${this.$store.state.apiroot}/api/investments/`, this.myheaders())
-    .then((response) => {
-        this.$store.state.catalogs.investments= sortObjectsArray(response.data, "fullname")
-        console.log("Updated investments")
-        console.log(response.data)
-    }, (error) => {
-        this.parseResponseError(error)
-    });
-}
 
 
 export function vuex_update_concepts(){
     axios.get(`${this.$store.state.apiroot}/api/concepts/`, this.myheaders())
     .then((response) => {
-        this.$store.state.catalogs.concepts= sortObjectsArray(response.data, "name")
+        this.$store.state.concepts= sortObjectsArray(response.data, "name")
         console.log("Updated concepts")
     }, (error) => {
         this.parseResponseError(error)
@@ -151,11 +141,11 @@ export function vuex_update_settings(){
 }
 
 export function concepts_for_dividends(){
-    return this.$store.state.catalogs.concepts.filter( o => [39, 50,59,62,63,65,66,68,70,72,75,76].includes(o.id))
+    return this.$store.state.concepts.filter( o => [39, 50,59,62,63,65,66,68,70,72,75,76].includes(o.id))
 }
 
 export function vuex_update_catalogs(){   
-    this.$store.state.catalogs.currencies=[
+    this.$store.state.currencies=[
         {
             id: "EUR",
             name: this.$t("Euro"),
@@ -172,7 +162,7 @@ export function vuex_update_catalogs(){
 
     axios.get(`${this.$store.state.apiroot}/api/banks/`, this.myheaders())
     .then((response) => {
-        this.$store.state.catalogs.banks= sortObjectsArray(response.data, "name")
+        this.$store.state.banks= sortObjectsArray(response.data, "name")
         console.log("Updated banks")
         console.log(response.data)
         console.log(response.data.filter((v)=>v.active==true ))
@@ -181,30 +171,30 @@ export function vuex_update_catalogs(){
     });
     axios.get(`${this.$store.state.apiroot}/api/accounts/`, this.myheaders())
     .then((response) => {
-        this.$store.state.catalogs.accounts= sortObjectsArray(response.data, "name")
+        this.$store.state.accounts= sortObjectsArray(response.data, "name")
         console.log("Updated accounts")
-        console.log(this.$store.state.catalogs.accounts)
+        console.log(this.$store.state.accounts)
     }, (error) => {
         this.parseResponseError(error)
     });
     axios.get(`${this.$store.state.apiroot}/api/creditcards/`, this.myheaders())
     .then((response) => {
-        this.$store.state.catalogs.creditcards= sortObjectsArray(response.data, "name")
+        this.$store.state.creditcards= sortObjectsArray(response.data, "name")
         console.log("Updated creditcards")
     }, (error) => {
         this.parseResponseError(error)
     });
     axios.get(`${this.$store.state.apiroot}/api/operationstypes/`, this.myheaders())
     .then((response) => {
-        this.$store.state.catalogs.operationstypes= sortObjectsArray(response.data, "name")
-        console.log(this.$store.state.catalogs.operationstypes)
+        this.$store.state.operationstypes= sortObjectsArray(response.data, "name")
+        console.log(this.$store.state.operationstypes)
         console.log("Updated operationstypes")
     }, (error) => {
         this.parseResponseError(error)
     });
     axios.get(`${this.$store.state.apiroot}/api/products/`, this.myheaders())
     .then((response) => {
-        this.$store.state.catalogs.products= sortObjectsArray(response.data, "name")
+        this.$store.state.products= sortObjectsArray(response.data, "name")
         console.log("Updated products")
         console.log(response.data)
     }, (error) => {

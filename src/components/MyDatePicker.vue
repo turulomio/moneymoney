@@ -11,7 +11,7 @@
         <v-menu v-model="menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
             <template v-slot:activator="{ on, attrs }">
                 <v-row justify="center" align="center">
-                    <v-text-field v-model="localValue" :name="$attrs.name" :label="$attrs.label" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
+                    <v-text-field v-model="representation" :name="$attrs.name" :label="$attrs.label" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
                     <v-icon x-small @click="localValue=null">mdi-backspace</v-icon>
                 </v-row>
             </template>
@@ -30,22 +30,32 @@
             return {
                 menu: false,
                 localValue: null,
+                representation:"",
             }
         },
         watch: {
             localValue (newValue) {
                 this.$emit('input', newValue)
-            },
+                this.setRepresentation()            },
             value (newValue) {
                 this.localValue = newValue
             }
         },
+        methods: {
+            setRepresentation(){
+                if (this.localValue==null){
+                    this.representation=""
+                } else {
+                    this.representation=this.localValue
+                }
+            }
+        },
         created(){
             if (this.value == null){
-                this.localValue=""
+                this.localValue=null
             } else {
                 this.localValue=this.value
             }    
-        }
+        },
     }
 </script>

@@ -5,7 +5,7 @@
             
             <v-form ref="form" v-model="form_valid" lazy-validation>             
                 <v-row class="pl-5 pr-5">
-                <v-autocomplete class="mr-5" :items="$store.state.catalogs.products" v-model="newpr.product" :label="$t('Select a product')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete class="mr-5" :items="$store.state.products" v-model="newpr.product" :label="$t('Select a product')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field class="mr-5" v-model="newpr.percentage_between_ranges" type="number" :label="$t('Set percentage_between_ranges x 1000')" :placeholder="$t('Set percentage_between_ranges x 1000')" :rules="RulesInteger(10,true)" counter="10"/>
                 <v-text-field class="mr-5" v-model="newpr.percentage_gains" type="number" :label="$t('Set percentage gains x1000')" :placeholder="$t('Set percentage gains x1000')" :rules="RulesInteger(10,true)" counter="10"/>
                 <v-text-field  v-model="newpr.amount_to_invest" type="number" :label="$t('Set the amount to invest')" :placeholder="$t('Set the amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
@@ -13,7 +13,7 @@
                 <v-row class="pl-5 pr-5">
                 <v-select class="mr-5" :items="recomendation_methods" v-model="newpr.recomendation_methods" :label="$t('Set recomendation method')"  item-text="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
                 <v-checkbox class="mr-5" v-model="newpr.only_first" :label="$t('Show only first operation?')" ></v-checkbox>
-                <v-autocomplete class="mr-5" :items="$store.state.catalogs.accounts" v-model="newpr.account" :label="$t('Select an account')" item-text="name" item-value="url" :rules="RulesSelection(false)"></v-autocomplete> 
+                <v-autocomplete class="mr-5" :items="$store.state.accounts" v-model="newpr.account" :label="$t('Select an account')" item-text="name" item-value="url" :rules="RulesSelection(false)"></v-autocomplete> 
                 <v-btn class="mt-4" color="primary" @click="accept()" :disabled="!form_valid">{{ $t("Show ranges") }}</v-btn>
                 </v-row>
             </v-form>
