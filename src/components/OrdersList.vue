@@ -31,7 +31,7 @@
             </v-data-table>
         </v-card>
         <!-- Order CU dialog -->
-        <v-dialog v-model="dialog_cu" max-width="550">
+        <v-dialog v-model="dialog_cu" max-width="550" persistent>
             <v-card class="pa-4">
                 <OrdersCU :order="order" @cruded="on_OrdersCU_cruded()" :key="key"></OrdersCU>
             </v-card>

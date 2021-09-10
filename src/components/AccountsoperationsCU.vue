@@ -42,7 +42,7 @@
                 //Validation
                 if( this.$refs.form_ao.validate()==false) return
                 var concept=this.$store.getters.getObjectByUrl("concepts",this.newao.concepts)
-                var operationtype=this.getObjectByUrl("operationstypes", concept.operationstypes)
+                var operationtype=this.$store.getters.getObjectByUrl("operationstypes", concept.operationstypes)
                 this.newao.operationstypes=operationtype.url
                 if (operationtype.id==1 && this.newao.amount>0){
                      alert(this.$t("Amount must be negative"))
