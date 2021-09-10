@@ -23,12 +23,12 @@
                 </v-tab-item>
                 <v-tab-item key="dividends">     
                     <v-card class="pa-4">
-                        <TableDividends :items="dividends" currency_account="EUR"  height="600" output="user" :key="key" :homogeneus="false"></TableDividends>
+                        <TableDividends :items="dividends" currency_account="EUR"  height="600" output="user" :key="key" :homogeneous="false"></TableDividends>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="gains">       
                     <v-card class="pa-4">
-                        <TableInvestmentOperationsHistorical :items="gains" :homogeneus="false" height="600" output="user" :key="key"></TableInvestmentOperationsHistorical>
+                        <TableInvestmentOperationsHistorical :items="gains" :homogeneous="false" height="600" output="user" :key="key"></TableInvestmentOperationsHistorical>
 
                     </v-card>
                 </v-tab-item>

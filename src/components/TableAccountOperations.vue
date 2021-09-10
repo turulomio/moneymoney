@@ -38,7 +38,7 @@
         items: {
             required: true
         },
-        total_currency: { // Only in homogeneus. Each item must have it's currency. This is only for totals.
+        total_currency: { // Only in homogeneous. Each item must have it's currency. This is only for totals.
                         // If null doesn't show total. Total can be showed in homogeneos or not. It depends on the query if has same currency
             required: true,
             default: null,

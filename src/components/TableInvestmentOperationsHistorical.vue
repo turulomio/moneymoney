@@ -3,9 +3,9 @@
             <template v-slot:[`item.dt_end`]="{ item }">
                 {{ localtime(item.dt_end)}}
             </template>           
-            <!-- <template v-slot:[`item.operationstypes`]="{ item }">
+            <template v-slot:[`item.operationstypes`]="{ item }">
                 <div v-html="$store.getters.getObjectPropertyByUrl('operationstypes',item.operationstypes,'name')"></div>
-            </template> -->
+            </template>
             <template v-slot:[`item.gross_start_user`]="{ item }">
                 <div v-html="currency_html(item.gross_start_user, item.currency_user)"></div>
             </template>
@@ -66,7 +66,7 @@
             </template>           
             <template v-slot:[`body.append`]="{headers}">
                 <tr style="background-color: GhostWhite" ref="lastrow" v-if="items.length>0">
-                    <td v-for="(header,i) in headers" :key="i+10000" >
+                    <td v-for="(header,i) in headers" :key="i" >
                         <div v-if="header.value == 'dt_end'">
                             Total
                         </div>
@@ -121,7 +121,7 @@
                 required: true
             },
 
-            homogeneus:{
+            homogeneous:{
                 type: Boolean,
                 required:false,
                 default:false
@@ -178,8 +178,8 @@
                         { text: this.$t('Gains'), value: 'gains_net_user',sortable: false, align:"right"},
                     ] 
                 }
-                if (this.homogeneus==false){
-                    r.splice(1, 0, { text: this.$t('Name'), value: 'name',sortable: true });
+                if (this.homogeneous==false){
+                    r.splice(2, 0, { text: this.$t('Name'), value: 'name',sortable: true });
                 }
                 return r
             },
