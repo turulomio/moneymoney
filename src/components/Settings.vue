@@ -5,7 +5,7 @@
             
             <v-form ref="form" v-model="form_valid" lazy-validation >
                 <v-card class="mx-auto pa-6" max-width="40%">
-                    <v-autocomplete :items="$store.state.currencies" v-model="$store.state.local_currency" :label="$t('Select your local currency')" item-text="fullname" item-value="id" :rules="RulesSelection(true   )"></v-autocomplete>
+                    <v-autocomplete :items="$store.state.currencies" v-model="$store.state.local_currency" :label="$t('Select your local currency')" item-text="fullname" item-value="code" :rules="RulesSelection(true   )"></v-autocomplete>
                     <v-autocomplete :items="timezones" v-model="$store.state.local_zone" :label="$t('Select your localtime zone')" :rules="RulesSelection(true)"></v-autocomplete>
                     <v-card-actions>
                         <v-spacer></v-spacer>

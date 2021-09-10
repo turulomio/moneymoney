@@ -1,7 +1,7 @@
 <template>
     <v-app>    
-        <v-navigation-drawer v-model="drawer" absolute temporary app class="blue-grey lighten-5 " style="position:fixed; top:0; left:0; overflow-y:scroll;">
-            <v-card class="mx-auto" width="300">
+        <v-navigation-drawer v-model="drawer" absolute temporary app class="blue-grey lighten-5 " style="position:fixed; top:0; left:0" width="350">
+            <v-card class="mx-auto" >
                 <v-list>
                 
                     <v-list-item>
@@ -67,6 +67,9 @@
                         </v-list-item>
                         <v-list-item link router :to="{ name: 'reports_evolution_chart'}">
                             <v-list-item-title>{{ $t("Evolution chart") }}</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item link router :to="{ name: 'reports_concepts'}">
+                            <v-list-item-title>{{ $t("Concepts") }}</v-list-item-title>
                         </v-list-item>
                         <v-list-item link router :to="{ name: 'reports_ranking'}">
                             <v-list-item-title>{{ $t("Ranking") }}</v-list-item-title>
@@ -188,5 +191,15 @@ span.vuered{
 .v-application .inform {
     margin-bottom: 1px;
     background-color: white !important;
+}
+
+
+/*SLIM MONTHPICKER*/
+.v-date-picker-table--month td {
+    height: unset;
+}
+
+.v-date-picker-table {
+    height: unset;
 }
 </style>

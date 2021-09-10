@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import {sortObjectsArray} from './functions.js'
+import {sortObjectsArray,capitalizeFirstLetter} from './functions.js'
+import CurrencyList from 'currency-list'
 
 Vue.use(Vuex);
 
@@ -99,16 +100,15 @@ export const store = new Vuex.Store({
     actions: {// Can be asynchronous. Fetch data
 
         getAll(context){
-            console.log(context)
-            store.dispatch("getAccounts")
-            store.dispatch("getBanks")
-            store.dispatch("getConcepts")
-            store.dispatch("getCreditcards")
-            store.dispatch("getCurrencies")
-            store.dispatch("getInvestments")
-            store.dispatch("getOperationstypes")
-            store.dispatch("getProducts")
-            store.dispatch("getSettings")
+            context.dispatch("getAccounts")
+            context.dispatch("getBanks")
+            context.dispatch("getConcepts")
+            context.dispatch("getCreditcards")
+            context.dispatch("getCurrencies")
+            context.dispatch("getInvestments")
+            context.dispatch("getOperationstypes")
+            context.dispatch("getProducts")
+            context.dispatch("getSettings")
         },
         getAccounts(context){
             axios.get(`${store.state.apiroot}/api/accounts/`, store.$app.myheaders())
@@ -135,21 +135,16 @@ export const store = new Vuex.Store({
             });
         },
         getCurrencies(context){
-            var r=[
-                {
-                    id: "EUR",
-                    name: store.$app.$t("Euro"),
-                    fullname: store.$app.$t("Euro")+ " (€)",
-                    symbol: "€",
-                },
-                {
-                    id: "USD",
-                    name: store.$app.$t("American dolar"),
-                    fullname: store.$app.$t("American dolar")+ " ($)",
-                    symbol: "$",
-                },
-            ]
-            context.commit("updateCurrencies", r)
+            var locale="en_US"
+            if (store.$app.$i18n.locale=='es'){
+                locale="es_ES"
+            }
+            var currencies_object=CurrencyList.getAll(locale)
+            console.log(currencies_object)
+            var currencies_list=[]
+            Object.entries(currencies_object).forEach(o => currencies_list.push(o[1]))
+            currencies_list.forEach(o=> o["fullname"]=`${capitalizeFirstLetter(o.name)} (${o.code} - ${o.symbol})`)
+            context.commit("updateCurrencies", currencies_list)
         },
         getInvestments(context){
             axios.get(`${store.state.apiroot}/api/investments/`, store.$app.myheaders())
@@ -193,25 +188,3 @@ export const store = new Vuex.Store({
         }
     }
 })
-
-
-
-// // If property is null returns object
-// // If property is a string returns object.string
-// // If property is a string that contains a point return object.string.string
-// export function get_from_catalog(url, catalog, property='', default_=''){
-//     var arr=property.split(".")
-//     let object=this.$store.state.catalogs[catalog].find(o => o.url==url)
-//     if (property==''){
-//         return object
-//     } else if (arr.length==1){
-//         if (object==null) return default_
-//         return object[property]
-//     } else { //(item.url, "concepts", "operationstypes.name")
-//         var newcatalog=arr[0] //operationstypes
-//         var newproperty=arr[1] //name
-//         var newobject= this.$store.state.catalogs[newcatalog].find(o => o.url==object[newcatalog])
-//         if (newobject==null) return default_
-//         return newobject[newproperty]
-//     }
-// }

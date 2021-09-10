@@ -14,6 +14,7 @@
     "axios": "^0.21.4",
     "babel-eslint": "^10.1.0",
     "core-js": "^3.17.2",
+    "currency-list": "^1.0.6",
     "echarts": "^5.2.0",
     "eslint-plugin-vue": "^7.17.0",
     "moment": "^2.29.1",

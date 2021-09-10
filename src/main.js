@@ -23,6 +23,7 @@ import ProductsRanges from './components/ProductsRanges';
 import ProductsSearch from './components/ProductsSearch';
 import ProductsUpdate from './components/ProductsUpdate';
 import ReportsAnnual from './components/ReportsAnnual';
+import ReportsConcepts from './components/ReportsConcepts';
 import ReportsDividends from './components/ReportsDividends';
 import ReportsEvolution from './components/ReportsEvolution';
 import ReportsInvestmentsClasses from './components/ReportsInvestmentsClasses';
@@ -52,6 +53,7 @@ const router = new VueRouter({
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/products/search/`, name: 'products_search', component: ProductsSearch },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/products/update/`, name: 'products_update', component: ProductsUpdate },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/annual/`, name: 'reports_annual', component: ReportsAnnual },
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/concepts/`, name: 'reports_concepts', component: ReportsConcepts },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/dividens/`, name: 'reports_dividends', component: ReportsDividends },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/investmentsclasses/`, name: 'reports_investments_classes', component: ReportsInvestmentsClasses },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/investments/lastoperation/`, name: 'reports_lastoperation', component: ReportsInvestmentsLastOperation },
@@ -144,7 +146,7 @@ const app=new Vue({
     render: h => h(App)
 })
 store.$app = app
-.$mount('#app')
+app.$mount('#app')
 
 
 

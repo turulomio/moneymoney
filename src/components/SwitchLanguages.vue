@@ -33,9 +33,11 @@
                 this.$i18n.locale=item.value;
                 this.current=item;
                 localStorage.locale=item.value;
-                //this.$vuetify.lang.current = item.value;
+                this.$vuetify.lang.current = item.value;
+                console.log("APUNTO")
+                console.log(this.$store.state.logged)
                 if (this.$store.state.logged == true){
-                        this.$store.dispatch("getAll")
+                        //this.$store.dispatch("getAll")
                 }
             },
             getStoredCurrent() {

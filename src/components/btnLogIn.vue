@@ -46,6 +46,7 @@
                         console.log("Authenticated");
                         this.$store.state.token=response.data;
                         this.$store.state.logged=true;
+                        console.log(this.$i18n.locale)
                         this.$store.dispatch("getAll")
                         this.dialog=false;
                         this.$refs.form.reset()
