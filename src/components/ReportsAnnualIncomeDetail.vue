@@ -28,7 +28,7 @@
                 </v-tab-item>
                 <v-tab-item key="gains">       
                     <v-card class="pa-4">
-                        <TableInvestmentOperationsHistorical :items="gains" currency_account="EUR" currency_investment="EUR"  :homogeneus="false" :currency_user="$store.state.local_currency" height="600" output="user" :key="key"></TableInvestmentOperationsHistorical>
+                        <TableInvestmentOperationsHistorical :items="gains" :homogeneus="false" height="600" output="user" :key="key"></TableInvestmentOperationsHistorical>
 
                     </v-card>
                 </v-tab-item>

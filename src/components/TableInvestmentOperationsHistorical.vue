@@ -1,110 +1,110 @@
 <template>
-            <v-data-table dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="dt_end" fixed-header :height="$attrs.height"  :key="$attrs.key" ref="table">
+            <v-data-table dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="dt_end" fixed-header :height="$attrs.height" ref="table">
             <template v-slot:[`item.dt_end`]="{ item }">
                 {{ localtime(item.dt_end)}}
             </template>           
-            <template v-slot:[`item.operationstypes`]="{ item }">
+            <!-- <template v-slot:[`item.operationstypes`]="{ item }">
                 <div v-html="$store.getters.getObjectPropertyByUrl('operationstypes',item.operationstypes,'name')"></div>
-            </template>
+            </template> -->
             <template v-slot:[`item.gross_start_user`]="{ item }">
-                <div v-html="currency(item.gross_start_user)"></div>
+                <div v-html="currency_html(item.gross_start_user, item.currency_user)"></div>
             </template>
             <template v-slot:[`item.gross_end_user`]="{ item }">
-                <div v-html="currency(item.gross_end_user)"></div>
+                <div v-html="currency_html(item.gross_end_user, item.currency_user)"></div>
             </template>
             <template v-slot:[`item.gains_gross_user`]="{ item }">
-                <div v-html="currency(item.gains_gross_user)"></div>
+                <div v-html="currency_html(item.gains_gross_user, item.currency_user)"></div>
             </template>
             <template v-slot:[`item.commissions_user`]="{ item }">
-                <div v-html="currency(item.commissions_user)"></div>
+                <div v-html="currency_html(item.commissions_user, item.currency_user)"></div>
             </template>
             <template v-slot:[`item.taxes_user`]="{ item }">
-                <div v-html="currency(item.taxes_user)"></div>
+                <div v-html="currency_html(item.taxes_user, item.currency_user)"></div>
             </template>
             <template v-slot:[`item.gains_net_user`]="{ item }">
-                <div v-html="currency(item.gains_net_user)"></div>
+                <div v-html="currency_html(item.gains_net_user, item.currency_user)"></div>
             </template>
             
             
             <template v-slot:[`item.gross_start_account`]="{ item }">
-                <div v-html="currency(item.gross_start_account)"></div>
+                <div v-html="currency_html(item.gross_start_account, item.currency_account)"></div>
             </template>
             <template v-slot:[`item.gross_end_account`]="{ item }">
-                <div v-html="currency(item.gross_end_account)"></div>
+                <div v-html="currency_html(item.gross_end_account, item.currency_account)"></div>
             </template>
             <template v-slot:[`item.gains_gross_account`]="{ item }">
-                <div v-html="currency(item.gains_gross_account)"></div>
+                <div v-html="currency_html(item.gains_gross_account, item.currency_account)"></div>
             </template>
             <template v-slot:[`item.commissions_account`]="{ item }">
-                <div v-html="currency(item.commissions_account)"></div>
+                <div v-html="currency_html(item.commissions_account, item.currency_account)"></div>
             </template>
             <template v-slot:[`item.taxes_account`]="{ item }">
-                <div v-html="currency(item.taxes_account)"></div>
+                <div v-html="currency_html(item.taxes_account, item.currency_account)"></div>
             </template>
             <template v-slot:[`item.gains_net_account`]="{ item }">
-                <div v-html="currency(item.gains_net_account)"></div>
+                <div v-html="currency_html(item.gains_net_account, item.currency_account)"></div>
             </template>
             
             
             <template v-slot:[`item.gross_start_investment`]="{ item }">
-                <div v-html="currency(item.gross_start_investment)"></div>
+                <div v-html="currency_html(item.gross_start_investment, item.currency_investment)"></div>
             </template>
             <template v-slot:[`item.gross_end_investment`]="{ item }">
-                <div v-html="currency(item.gross_end_investment)"></div>
+                <div v-html="currency_html(item.gross_end_investment, item.currency_investment)"></div>
             </template>
             <template v-slot:[`item.gains_gross_investment`]="{ item }" >
-                <div v-html="currency(item.gains_gross_investment)"></div>
+                <div v-html="currency_html(item.gains_gross_investment, item.currency_investment)"></div>
             </template>
             <template v-slot:[`item.commissions_investment`]="{ item }">
-                <div v-html="currency(item.commissions_investment)"></div>
+                <div v-html="currency_html(item.commissions_investment, item.currency_investment)"></div>
             </template>
             <template v-slot:[`item.taxes_investment`]="{ item }">
-                <div v-html="currency(item.taxes_investment)"></div>
+                <div v-html="currency_html(item.taxes_investment, item.currency_investment)"></div>
             </template>
             <template v-slot:[`item.gains_net_investment`]="{ item }">
-                <div v-html="currency(item.gains_net_investment)"></div>
+                <div v-html="currency_html(item.gains_net_investment, item.currency_investment)"></div>
             </template>           
             <template v-slot:[`body.append`]="{headers}">
-                <tr style="background-color: GhostWhite" ref="lastrow">
-                    <td v-for="(header,i) in headers" :key="i" >
+                <tr style="background-color: GhostWhite" ref="lastrow" v-if="items.length>0">
+                    <td v-for="(header,i) in headers" :key="i+10000" >
                         <div v-if="header.value == 'dt_end'">
                             Total
                         </div>
                         
                         <div v-if="header.value == 'gains_gross_investment'" align="right">
-                            <div v-html="currency(listobjects_sum(items,'gains_gross_investment'))"></div>
+                            <div v-html="currency_html(listobjects_sum(items,'gains_gross_investment'), items[0].currency_investment)"></div>
                         </div>
                         <div v-if="header.value == 'gains_gross_account'" align="right">
-                            <div v-html="currency(listobjects_sum(items,'gains_gross_account'))"></div>
+                            <div v-html="currency_html(listobjects_sum(items,'gains_gross_account'), items[0].currency_account)"></div>
                         </div>
                         <div v-if="header.value == 'gains_gross_user'" align="right">
-                            <div v-html="currency(listobjects_sum(items,'gains_gross_user'))"></div>
+                            <div v-html="currency_html(listobjects_sum(items,'gains_gross_user'), items[0].currency_user)"></div>
                         </div>
                         
                         <div v-if="header.value == 'gains_net_investment'" align="right">
-                            <div v-html="currency(listobjects_sum(items,'gains_net_investment'))"></div>
+                            <div v-html="currency_html(listobjects_sum(items,'gains_net_investment'), items[0].currency_investment)"></div>
                         </div>
                         <div v-if="header.value == 'gains_net_account'" align="right">
-                            <div v-html="currency(listobjects_sum(items,'gains_net_account'))"></div>
+                            <div v-html="currency_html(listobjects_sum(items,'gains_net_account'), items[0].currency_account)"></div>
                         </div>
                         <div v-if="header.value == 'gains_net_user'" align="right">
-                            <div v-html="currency(listobjects_sum(items,'gains_net_user'))"></div>
+                            <div v-html="currency_html(listobjects_sum(items,'gains_net_user'), items[0].currency_user)"></div>
                         </div>
                         
                         
                         <div v-if="header.value == 'commissions_investment'" align="right">
-                            <div v-html="currency(listobjects_sum(items,'commissions_investment'))"></div>
+                            <div v-html="currency_html(listobjects_sum(items,'commissions_investment'), items[0].currency_investment)"></div>
                         </div>
                         <div v-if="header.value == 'commissions_account'" align="right">
-                            <div v-html="currency(listobjects_sum(items,'commissions_account'))"></div>
+                            <div v-html="currency_html(listobjects_sum(items,'commissions_account'), items[0].currency_account)"></div>
                         </div>
                         
                         
                         <div v-if="header.value == 'taxes_investment'" align="right">
-                            <div v-html="currency(listobjects_sum(items,'taxes_investment'))"></div>
+                            <div v-html="currency_html(listobjects_sum(items,'taxes_investment'), items[0].currency_investment)"></div>
                         </div>
                         <div v-if="header.value == 'taxes_account'" align="right">
-                            <div v-html="currency(listobjects_sum(items,'taxes_account'))"></div>
+                            <div v-html="currency_html(listobjects_sum(items,'taxes_account'), items[0].currency_account)"></div>
                         </div>
                     </td>
                 </tr>
@@ -112,7 +112,6 @@
         </v-data-table>  
 </template>
 <script>    
-    import {localtime} from '../functions.js'
     export default {
         components:{
         },
@@ -121,19 +120,8 @@
             items: {
                 required: true
             },
-            currency_account: {
-                required: true,
-                default:"EUR"
-            },
-            currency_investment: {
-                required: true,
-                default:"EUR"
-            },
-            currency_user:{
-                required: true,
-                default:"EUR"
-            },
-            heterogeneus:{
+
+            homogeneus:{
                 type: Boolean,
                 required:false,
                 default:false
@@ -148,16 +136,6 @@
             }
         },
         methods: {
-            localtime,
-            currency(value){
-                if (this.output=="account"){
-                    return this.currency_html(value, this.currency_account)
-                } else if (this.output=="investment"){
-                    return this.currency_html(value, this.currency_investment)
-                } else if (this.output=="user"){
-                    return this.currency_html(value, this.currency_user)
-                }
-            },
             table_headers(){
                 var r
                 if (this.output=="account"){
@@ -200,13 +178,13 @@
                         { text: this.$t('Gains'), value: 'gains_net_user',sortable: false, align:"right"},
                     ] 
                 }
-                if (this.heterogeneus==true){
+                if (this.homogeneus==false){
                     r.splice(1, 0, { text: this.$t('Name'), value: 'name',sortable: true });
                 }
                 return r
             },
             gotoLastRow(){
-            this.$vuetify.goTo(this.$refs.lastrow, { container:  this.$refs.table.$el.childNodes[0] }) 
+                this.$vuetify.goTo(this.$refs.lastrow, { container:  this.$refs.table.$el.childNodes[0] }) 
             },
         },
         mounted(){

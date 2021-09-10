@@ -165,7 +165,7 @@
                 //Validation
                 if( this.$refs.form_cco.validate()==false) return
                 var concept=this.$store.getters.getObjectByUrl("concepts",this.cco.concepts)
-                var operationtype=this.getObjectByUrl("operationstypes", concept.operationstypes)
+                var operationtype=this.$store.getters.getObjectByUrl("operationstypes", concept.operationstypes)
                 this.cco.operationstypes=operationtype.url
                 if (operationtype.id==1 && this.cco.amount>0){
                      alert(this.$t("Amount must be negative"))
