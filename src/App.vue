@@ -1,6 +1,6 @@
 <template>
     <v-app>    
-        <v-navigation-drawer v-model="drawer" absolute temporary>
+        <v-navigation-drawer v-model="drawer" absolute temporary app class="blue-grey lighten-5 " style="position:fixed; top:0; left:0; overflow-y:scroll;">
             <v-card class="mx-auto" width="300">
                 <v-list>
                 

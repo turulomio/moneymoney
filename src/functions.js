@@ -37,7 +37,6 @@ export function localtime(value){
         var localDate = testDateUtc.tz(this.$store.state.local_zone)
         return (localDate.format(dateFormat)); // 2015-30-01 02:00:00
     }
-    console.log("REALLY");
     return null;
 }   
 
@@ -49,7 +48,6 @@ export function zulu2py(value){
         var localDate = testDateUtc.tz(this.$store.state.local_zone)
         return (localDate.format(dateFormat)); // 2015-30-01 02:00:00
     }
-    console.log("REALLY");
     return null;
 }   
 // Uses .local()
@@ -70,7 +68,6 @@ export function date2py(value){
         var localDate = testDateUtc.local();
         return (localDate.format(dateFormat)); // 2015-30-01 02:00:00
     }
-    console.log("REALLY");
     return null;
 }   
 
@@ -80,7 +77,6 @@ export function py2date(value){
     if (value){
         return new Date(value);
     }
-    console.log("REALLY");
     return null;
 }   
 
@@ -91,7 +87,6 @@ export function moment_day_start(isostring){
         var localDate = testDateUtc.local();
         return localDate
     }
-    console.log("REALLY");
     return null;
 }   
 

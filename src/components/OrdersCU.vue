@@ -93,7 +93,6 @@
                 }
             },
             accept(){
-                console.log("Accepting")
                 if (this.editing==true){
                     axios.put(this.neworder.url, this.neworder,  this.myheaders())
                     .then(() => {
@@ -147,7 +146,6 @@
                 this.editing=true
             }
             this.neworder=Object.assign({},this.order)
-            console.log(this.neworder)
         }
     }
 </script>

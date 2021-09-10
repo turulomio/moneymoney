@@ -50,7 +50,6 @@
                 }
             },
             first_day_of_week(){
-                console.log(this.$i18n.locale)
                 if (this.$i18n.locale=="es"){
                     return 1
                 } else {
