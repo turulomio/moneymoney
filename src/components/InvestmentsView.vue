@@ -108,12 +108,19 @@
                 <ProductsView :product="product" ></ProductsView>
             </v-card>
         </v-dialog>
+        <!-- INVESTMENT CHART-->
+        <v-dialog v-model="dialog_investment_chart" v-if="ios">
+            <v-card class="pa-3">
+                <ChartInvestments :ios="ios" :ohcl="ohcl" :key="key"></ChartInvestments>
+            </v-card>
+        </v-dialog>
     </div>  
 </template>
 <script>
     import axios from 'axios'
     import {empty_io,empty_dividend} from '../empty_objects.js'
     import {listobjects_sum, parseNumber,listobjects_average_ponderated} from '../functions.js'
+    import ChartInvestments from './ChartInvestments.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import DividendsCU from './DividendsCU.vue'
     import InvestmentsoperationsEvolutionChart from './InvestmentsoperationsEvolutionChart.vue'
@@ -127,6 +134,7 @@
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
     export default {
         components:{
+            ChartInvestments,
             DisplayValues,
             DividendsCU,
             MyMenuInline,
@@ -166,6 +174,21 @@
                     {
                         subheader:this.$t('Investment orders'),
                         children: [
+                            {
+                                name:this.$t('Investment chart'),
+                                icon: "mdi-chart-areaspline",
+                                code: function(this_){              
+                                    axios.get(`${this_.$store.state.apiroot}/products/quotes/ohcl?product=${this_.ios.product.url}`, this_.myheaders())
+                                    .then((response) => {
+                                        console.log(response.data);
+                                        this_.ohcl=response.data 
+                                        this_.key=this_.key+1
+                                        this_.dialog_investment_chart=true
+                                    }, (error) => {
+                                        this_.parseResponseError(error)
+                                    });
+                                }
+                            },
                             {
                                 name:this.$t('Change active status'),
                                 code: function(this_){
@@ -286,6 +309,11 @@
                 // Dividend Produts view
                 dialog_productview:false,
                 product: null,
+
+                // Investment chart
+                dialog_investment_chart:false,
+                ios:null,
+                ohcl:[],
             }  
         },
         watch:{
@@ -355,6 +383,8 @@
             update_investmentsoperations(){
                 axios.get(`${this.$store.state.apiroot}/investmentsoperations/full?investments=${this.investment.id}`, this.myheaders())
                 .then((response) => {
+                    this.ios=response.data[0]
+                    console.log(this.ios)
                     this.investment_io=response.data[0].investment
                     this.list_io=response.data[0].io
                     this.list_io_current=response.data[0].io_current
