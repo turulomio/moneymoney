@@ -43,11 +43,11 @@
             <v-card class="pa-4">
                 <v-card-title class="headline">{{dialog_title()}}</v-card-title>
                 <v-form ref="form" v-model="form_valid" >
-                    <v-text-field v-model="account.name" type="text" :label="$t('Account name')" required :placeholder="$t('Account name')" autofocus :rules="RulesString(200,false)" counter="200"/>
+                    <v-text-field v-model="account.name" type="text" :label="$t('Account name')" :placeholder="$t('Account name')" autofocus :rules="RulesString(200,false)" counter="200"/>
                     <v-checkbox v-model="account.active" :label="$t('Is active?')" ></v-checkbox>
-                    <v-text-field v-model="account.number" type="text" :label="$t('Account number')" required :placeholder="$t('Account number')" :rules="RulesString(30,true)" counter="30"/>
-                    <v-autocomplete :items="$store.state.currencies" v-model="account.currency" :label="$t('Select a currency')" item-text="fullname" item-value="id" required :rules="RulesSelection(false)"></v-autocomplete>
-                    <v-autocomplete ref="autocompleteBanks" :items="$store.state.banks.filter(v =>v.active==true)" v-model="account.banks" :label="$t('Select a bank')" item-text="name" item-value="url" required :rules="RulesSelection(false)"></v-autocomplete>
+                    <v-text-field v-model="account.number" type="text" :label="$t('Account number')" :placeholder="$t('Account number')" :rules="RulesString(30,true)" counter="30"/>
+                    <v-autocomplete :items="$store.state.currencies" v-model="account.currency" :label="$t('Select a currency')" item-text="fullname" item-value="id" :rules="RulesSelection(false)"></v-autocomplete>
+                    <v-autocomplete ref="autocompleteBanks" :items="$store.state.banks.filter(v =>v.active==true)" v-model="account.banks" :label="$t('Select a bank')" item-text="name" item-value="url" :rules="RulesSelection(false)"></v-autocomplete>
                 </v-form>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -58,7 +58,13 @@
         </v-dialog>
         <v-dialog v-model="dialog_view">
             <v-card class="pa-4">
-                <AccountsView :account="account" :key="key" @changed="AccountsView_changed()"></AccountsView>
+                <AccountsView :account="account" :key="key" @cruded="on_AccountsView_cruded()"></AccountsView>
+            </v-card>
+        </v-dialog>
+        <!-- ACCOUNTS OPERATIONS SEARCH -->
+        <v-dialog v-model="dialog_search">
+            <v-card class="pa-4">
+                <AccountsoperationsSearch :key="key"  @cruded="on_AccountsoperationsSearch_cruded()"></AccountsoperationsSearch>
             </v-card>
         </v-dialog>
 
@@ -67,12 +73,13 @@
 <script>
     import axios from 'axios'
     import MyMenuInline from './MyMenuInline.vue'
+    import AccountsoperationsSearch from './AccountsoperationsSearch.vue'
     import AccountsView from './AccountsView.vue'
-    import {localtime} from '../functions.js'
     export default {
         components:{
             MyMenuInline,
             AccountsView,
+            AccountsoperationsSearch,
         },
         data(){ 
             return{
@@ -102,6 +109,19 @@
                             },
                         ]
                     },
+                    {
+                        subheader: this.$t("Account operations options"),
+                        children: [
+                            {
+                                name:"Search by string",
+                                icon: "mdi-magnify",
+                                code: function(this_){
+                                    this_.key=this_.key+1
+                                    this_.dialog_search=true
+                                },
+                            },
+                        ]
+                    },
                 ],
                 dialog:false,
                 form_valid: false,
@@ -111,13 +131,12 @@
 
                 dialog_view:false,
                 key:0,
+
+                // Accountsoperations search
+                dialog_search:false
             }
         },
         methods: {
-            localtime,
-            AccountsView_changed(){
-                this.update_table()
-            },
             dialog_title(){
                 if(this.editing==true){
                     return this.$t("Updating account")
@@ -171,6 +190,7 @@
                 .then((response) => {
                     this.accounts_items=response.data
                     console.log(response.data);
+                    this.key=this.key+1
                     this.loading_accounts=false
                 }, (error) => {
                     this.parseResponseError(error)
@@ -212,6 +232,12 @@
                         this.parseResponseError(error)
                     })
                 }
+            },
+            on_AccountsoperationsSearch_cruded(){
+                this.update_table()
+            },
+            on_AccountsView_cruded(){
+                this.update_table()
             },
         },
         mounted(){

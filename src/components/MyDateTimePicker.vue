@@ -24,7 +24,7 @@
             <v-card >
                 <v-date-picker v-if="localValue" class="pa-5" no-title v-model="date" @change="on_date_change()" locale="locale" first-day-of-week="1"></v-date-picker>
                 <v-time-picker v-if="localValue" class="pa-5" ref="time" no-title scrollable  format="24hr" v-model="time" use-seconds @click:hour="on_time_click()" @click:minute="on_time_click()" @click:second="on_time_click()" locale="locale"></v-time-picker>
-                <v-text-field v-if="localValue" class="pa-5" v-model="milliseconds" type="number" :label="$t('Milliseconds')" required :placeholder="$t('Milliseconds')" :rules="RulesString(3,true)" counter="3" @change="on_milliseconds_change()"></v-text-field>        
+                <v-text-field v-if="localValue" class="pa-5" v-model="milliseconds" type="number" :label="$t('Milliseconds')" :placeholder="$t('Milliseconds')" :rules="RulesString(3,true)" counter="3" @change="on_milliseconds_change()"></v-text-field>        
                 <v-card-actions>
                     <v-btn class="ml-4" color="primary" @click="on_set_now()" >{{$t("Set now")}}</v-btn>
                     <v-btn class="ml-4" v-if="localValue" color="error" @click="on_close()" >{{$t("Set")+ " '" + this.representation + "'"}}</v-btn>

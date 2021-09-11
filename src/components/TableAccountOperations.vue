@@ -1,5 +1,5 @@
 <template>
-    <v-data-table :show-select="showselected" v-model="selected" dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header v-bind="$attrs"  :ref="$vnode.tag" :single-select="false" item-key="datetime">
+    <v-data-table :show-select="showselected" v-model="selected" dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header v-bind="$attrs"  :ref="$vnode.tag" :single-select="false" item-key="url">
         <template v-slot:[`item.datetime`]="{ item }" >
         {{ localtime(item.datetime)}}
         </template>      
@@ -40,7 +40,7 @@
         },
         total_currency: { // Only in homogeneous. Each item must have it's currency. This is only for totals.
                         // If null doesn't show total. Total can be showed in homogeneos or not. It depends on the query if has same currency
-            required: true,
+            required: false,
             default: null,
         },
         homogeneous:{ //Only hides account if true
@@ -86,6 +86,10 @@
             ]
             if (this.showactions==true){
                 r.push({ text: this.$t('Actions'), value: 'actions', sortable: false     , width:"6%"})
+            }
+            if (this.homogeneous==false){
+
+                r.splice(3, 1);
             }
             return r
         },

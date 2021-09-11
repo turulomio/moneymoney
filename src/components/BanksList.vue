@@ -46,7 +46,7 @@
             <v-card class="pa-4">
                 <v-card-title class="headline">{{dialog_title()}}</v-card-title>
                 <v-form ref="form" v-model="form_valid" lazy-validation>
-                    <v-text-field v-model="bank.name" type="text" :label="$t('Bank name')" required :placeholder="$t('Bank name')" autofocus/>
+                    <v-text-field v-model="bank.name" type="text" :label="$t('Bank name')" :placeholder="$t('Bank name')" autofocus/>
                     <v-checkbox v-model="bank.active" :label="$t('Is active?')" ></v-checkbox>
                 </v-form>
                 <v-card-actions>

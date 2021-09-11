@@ -13,7 +13,7 @@
                 <v-card class="pa-4 d-flex justify-center" outlined style="min-width: 100px; max-width: 100%;">
                     <v-date-picker dense no-title class="mymonthpicker " ref="monthpicker" v-model="monthpicker" type="month"></v-date-picker>
                     <v-divider class="mx-2" vertical ></v-divider>
-                    <TableAccountOperations homogeneous :items="items_ao" :total_currency="account.currency" height="400" class=" flex-grow-1 flex-shrink-0" @editAO="editAO" @deleteAO="deleteAO"></TableAccountOperations>
+                    <TableAccountOperations :homogeneous="true" :items="items_ao" :total_currency="account.currency" height="400" class=" flex-grow-1 flex-shrink-0" @editAO="editAO" @deleteAO="deleteAO"></TableAccountOperations>
                 </v-card>
             </v-tab-item>
             <v-tab-item key="cc">
@@ -238,6 +238,7 @@
             on_AccountsoperationsCU_cruded(following){
                 this.dialog_ao=following
                 this.refreshTable()
+                this.$emit('cruded')
             },
             on_CreditcardsCU_cruded(){
                 this.dialog_cc=false
@@ -252,7 +253,7 @@
             on_AccountTransfer_accepted(){
                 this.dialog_transfer=false 
                 this.refreshTable()    
-                this.$emit('changed')
+                this.$emit('cruded')
             },
             setCheckboxLabelCC(){
                 if (this.showActiveCC == true){
@@ -274,7 +275,7 @@
                 axios.delete(item.url, this.myheaders())
                 .then((response) => {
                     console.log(response);
-                    this.$emit('changed', this.ao)
+                    this.$emit('cruded', this.ao)
                     this.refreshTable()
                 }, (error) => {
                     this.parseResponseError(error)

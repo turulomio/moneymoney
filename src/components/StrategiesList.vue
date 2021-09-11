@@ -56,11 +56,11 @@
             <v-card class="pa-4">
                 <v-card-title class="headline">{{dialog_title()}}</v-card-title>
                 <v-form ref="form" v-model="form_valid" >
-                    <v-text-field v-model="strategy.name" type="text" :label="$t('Strategy name')" required :placeholder="$t('Strategy name')" autofocus :rules="RulesString(200,false)" counter="200"/>
+                    <v-text-field v-model="strategy.name" type="text" :label="$t('Strategy name')" :placeholder="$t('Strategy name')" autofocus :rules="RulesString(200,false)" counter="200"/>
                     <v-checkbox v-model="strategy.active" :label="$t('Is active?')" ></v-checkbox>
-                    <v-text-field v-model="strategy.number" type="text" :label="$t('Strategy number')" required :placeholder="$t('Strategy number')" :rules="RulesString(30,true)" counter="30"/>
-                    <v-autocomplete :items="$store.state.currencies" v-model="strategy.currency" :label="$t('Select a currency')" item-text="fullname" item-value="id" required :rules="RulesSelection(false)"></v-autocomplete>
-                    <v-autocomplete ref="autocompleteBanks" :items="$store.state.banks.filter(v =>v.active==true)" v-model="strategy.banks" :label="$t('Select a bank')" item-text="name" item-value="url" required :rules="RulesSelection(false)"></v-autocomplete>
+                    <v-text-field v-model="strategy.number" type="text" :label="$t('Strategy number')" :placeholder="$t('Strategy number')" :rules="RulesString(30,true)" counter="30"/>
+                    <v-autocomplete :items="$store.state.currencies" v-model="strategy.currency" :label="$t('Select a currency')" item-text="fullname" item-value="id" :rules="RulesSelection(false)"></v-autocomplete>
+                    <v-autocomplete ref="autocompleteBanks" :items="$store.state.banks.filter(v =>v.active==true)" v-model="strategy.banks" :label="$t('Select a bank')" item-text="name" item-value="url" :rules="RulesSelection(false)"></v-autocomplete>
                 </v-form>
                 <v-card-actions>
                     <v-spacer></v-spacer>
