@@ -88,6 +88,18 @@ export function empty_products_ranges(){
     }
 }
 
+
+export function empty_investments_operations_simulation(){
+    return {
+        investments: [], //urls
+        dt:new Date().toISOString(),
+        local_currency: null,
+        operations:[],//Empty io
+        temporaltable: null, //Null if new simulation
+    }
+}
+
+
 export function empty_dividend(){
     return {
         datetime: new Date().toISOString(),

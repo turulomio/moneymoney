@@ -30,6 +30,7 @@
                 buys:[],
                 sells:[],
                 sellingprice:[],
+                averageprice:[],
             }
         },
         methods: {
@@ -37,7 +38,7 @@
             chart_option(){
                 return {
                     legend: {
-                        data: [this.ios.product.name, this.$t("Buys"), this.$t("Sells"), this.$t("Selling price")],
+                        data: [this.ios.product.name, this.$t("Buys"), this.$t("Sells"), this.$t("Selling price"), this.$t("Average price")],
                         inactiveColor: '#777',
                     },
                     tooltip: {
@@ -124,6 +125,15 @@
                     showSymbol:false,
                         color: "pink",
                 })
+                //AVERAGE PRICE
+
+                r.push({
+                    type: 'line',
+                    name: this.$t("Average price"),
+                    data: this.averageprice,
+                    showSymbol:false,
+                        color: "orange",
+                })
                 return r
             },
         },
@@ -132,6 +142,7 @@
              this.ohcl.forEach(o=> {
                 this.closes.push([new Date(o.date), o.close])
                 this.sellingprice.push([new Date(o.date), this.ios.investment.selling_price])
+                this.averageprice.push([new Date(o.date), this.ios.investment.average_price_investment])
              })
              console.log("AQUIN")
              this.ios.io.forEach(o=> {
