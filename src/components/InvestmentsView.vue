@@ -177,7 +177,7 @@
                             {
                                 name:this.$t('Investment chart'),
                                 icon: "mdi-chart-areaspline",
-                                code: function(this_){              
+                                code: function(this_){
                                     axios.get(`${this_.$store.state.apiroot}/products/quotes/ohcl?product=${this_.ios.product.url}`, this_.myheaders())
                                     .then((response) => {
                                         console.log(response.data);

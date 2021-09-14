@@ -189,8 +189,7 @@
                 axios.get(`${this.$store.state.apiroot}/accounts/withbalance?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
                     this.accounts_items=response.data
-                    console.log(response.data);
-                    this.key=this.key+1
+                    // this.key=this.key+1 Lo tuve que quitar por el following_ao del AccountsoperationsCu. Ver si funciona bien
                     this.loading_accounts=false
                 }, (error) => {
                     this.parseResponseError(error)
@@ -207,12 +206,9 @@
                 }
             },
             acceptDialog(){
-                console.log(this.account)
-                console.log(this.$refs)
                 if (this.editing==true){               
                     axios.put(this.account.url, this.account, this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
+                    .then(() => {
                             this.$store.dispatch("getAccounts")
                             this.update_table()     
                             this.dialog=false
@@ -222,8 +218,7 @@
                     })
                 } else{
                     axios.post(`${this.$store.state.apiroot}/api/accounts/`, this.account,  this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
+                    .then(() => {
                             this.$store.dispatch("getAccounts")
                             this.update_table()     
                             this.dialog=false

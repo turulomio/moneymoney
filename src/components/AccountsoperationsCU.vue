@@ -64,13 +64,13 @@
                 } else{
                     axios.post(`${this.$store.state.apiroot}/api/accountsoperations/`, this.newao,  this.myheaders())
                     .then(() => {             
-                            if (this.following_ao==true){
-                                var dt=this.zulu2date(this.newao.datetime)
-                                var olddtseconds=this.zulu2date(this.newao.datetime).getSeconds()
-                                dt.setSeconds(olddtseconds+60)
-                                this.newao.datetime=this.date2zulu(dt)
-                            }
-                            this.$emit('cruded', this.following_ao)
+                        if (this.following_ao==true){
+                            var dt=this.zulu2date(this.newao.datetime)
+                            var olddtseconds=this.zulu2date(this.newao.datetime).getSeconds()
+                            dt.setSeconds(olddtseconds+60)
+                            this.newao.datetime=this.date2zulu(dt)
+                        }
+                        this.$emit('cruded', this.following_ao)
                     }, (error) => {
                         this.parseResponseError(error)
                     })
