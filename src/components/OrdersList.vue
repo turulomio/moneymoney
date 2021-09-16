@@ -1,4 +1,3 @@
-
 <template>
     <div>    
         <h1>{{ $t('Orders list') }}
@@ -24,7 +23,7 @@
                     <div v-html="localtime(item.executed )"></div>
                 </template>  
                 <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon small class="mr-2" @click="viewItem(item)">mdi-eye</v-icon>
+                    <v-icon small class="mr-2" @click="executeOrder(item)">mdi-play</v-icon>
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small class="mr-2" @click="viewSimulationChart(item)">mdi-chart-areaspline</v-icon>
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
@@ -44,7 +43,6 @@
             </v-card>
         </v-dialog>
 
-
         <!-- INVESTMENT OPERTATIONS SIMULATION CHART-->
         <v-dialog v-model="dialog_simulation_chart" v-if="ios">
             <v-card class="pa-3">
@@ -52,15 +50,23 @@
             </v-card>
         </v-dialog>
 
+        <!-- Investments operation CU dialog -->
+        <v-dialog v-model="dialog_io_cu" max-width="550" v-if="io" >
+            <v-card class="pa-4">
+                <InvestmentsoperationsCU :io="io" :investment="io_investment" @cruded="on_InvestmentsoperationsCU_cruded()" :key="key"></InvestmentsoperationsCU>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 <script>
     import axios from 'axios'
     import OrdersCU from './OrdersCU.vue'
+    import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import {empty_order,empty_investments_operations_simulation, empty_io} from '../empty_objects.js'
     export default {
         components:{
+            InvestmentsoperationsCU,
             MyMenuInline,
             OrdersCU,
         },
@@ -112,6 +118,11 @@
                 dialog_simulation_chart:false,
                 ios:null,
                 ohcl:null,
+
+                //Dialog InvestmentsOperationsCU
+                dialog_io_cu:false,
+                io:null,
+                io_investment: null,
             }
         },
         methods: {
@@ -156,10 +167,23 @@
                 this.key=this.key+1
                 this.dialog_cu=true
             },
-            viewItem (item) {
-                this.key=this.key+1
-                this.order=item
-                this.dialog_view=true
+            executeOrder (item) {
+
+                // Updates order
+                item.executed=new Date().toISOString()
+                axios.put(item.url, item,  this.myheaders())
+                .then(() => {
+                    this.update_table()
+                    this.io_investment={url:item.investments,currency:item.currency}
+                    this.io=this.empty_io()
+                    this.io.shares=item.shares
+                    this.io.price=item.price
+                    this.io.investments=item.investments
+                    this.key=this.key+1
+                    this.dialog_io_cu=true
+                }, (error) => {
+                    this.parseResponseError(error)
+                })
             },
             viewSimulationChart (item) {    
                 axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl?product=${item.products}`, this.myheaders())
@@ -229,6 +253,12 @@
             },
             on_chkActive(){
                 this.update_table()
+            },
+            on_InvestmentsoperationsCU_cruded(){
+
+                this.dialog_io_cu=false
+                this.io=null
+                this.io_investment=null
             },
             setCheckboxLabel(){
                 if (this.showActive== true){

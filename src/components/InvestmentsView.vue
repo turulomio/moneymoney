@@ -334,7 +334,11 @@
             },
             on_InvestmentsoperationsCU_cruded(){
                 this.dialog_io=false
+                var this_=this
+                this_.investment.active=true // Not too good but needed to not to change a lot of code. It's an ugly way to change props
                 this.update_investmentsoperations()
+                this.displayvalues()
+                this.key=this.key+1
                 this.$emit("cruded") //Translated to InvestmentsList
             },
             on_TableInvestmentsOperations_cruded(){//Emited deleting IO

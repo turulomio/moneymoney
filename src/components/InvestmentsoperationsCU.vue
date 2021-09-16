@@ -37,7 +37,7 @@
                 required: true // Null to create, io object to update
             },
             investment: {
-                required: false // Solo necesaria cuando viene de añadir io y queremos especificar la inversion
+                required: true // Solo necesita y currency
             }
         },
         data(){ 
@@ -69,8 +69,7 @@
                     axios.put(this.newio.url, this.newio,  this.myheaders())
                     .then((response) => {
                             console.log(response.data)
-                            this.$emit("cruded")
-                            this.editing=false
+                            this.change_investment_to_active()
                     }, (error) => {
                         this.parseResponseError(error)
                     })
@@ -78,11 +77,21 @@
                     axios.post(`${this.$store.state.apiroot}/api/investmentsoperations/`, this.newio,  this.myheaders())
                     .then((response) => {
                             console.log(response.data)
-                            this.$emit("cruded")
+                            this.change_investment_to_active()
                     }, (error) => {
                         this.parseResponseError(error)
                     })
                 }
+            },
+            change_investment_to_active(){
+                    console.log("PATCHING")
+                    axios.patch(this.newio.investments, {url:this.newio.investments, active:true},  this.myheaders())
+                    .then((response) => {
+                            console.log(response.data)
+                            this.$emit("cruded")
+                    }, (error) => {
+                        this.parseResponseError(error)
+                    })
             },
             foot(){
                 var gross=this.newio.shares*this.newio.price
