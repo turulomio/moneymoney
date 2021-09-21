@@ -20,7 +20,7 @@
                 <div v-html="localcurrency_html(item.gains)"></div>
             </template>
             <template v-slot:[`item.percentage_last`]="{ item }">
-                <div  :class="item.percentage_last<limit/100 ? 'spanchildred' : ''" v-html="percentage_html(item.percentage_last)"></div>
+                <div  :class="item.percentage_last<limit/100 ? 'boldred' : ''" v-html="percentage_html(item.percentage_last)"></div>
             </template>
             <template v-slot:[`item.percentage_invested`]="{ item }">
                 <div v-html="percentage_html(item.percentage_invested)"></div>
@@ -29,7 +29,6 @@
                 <div v-html="percentage_html(item.percentage_sellingpoint)"></div>
             </template>
             <template v-slot:[`item.actions`]="{ item }">
-                <v-icon small @click="viewItem(item)">mdi-pencil</v-icon>   
                 <v-icon small @click="orderAtPercentage(item)">mdi-cart</v-icon>   
             </template>
         </v-data-table>
@@ -45,7 +44,7 @@
 
 <script>
     import axios from 'axios'
-    import {localtime, my_round} from '../functions.js'
+    import {my_round} from '../functions.js'
     import {empty_order} from '../empty_objects.js'
     import OrdersCU from './OrdersCU.vue'
     export default {
@@ -72,7 +71,7 @@
                     { id:1, name:this.$t('Show merging current investment operations')},
                     { id:2, name:this.$t('Show mergin all investment operations')},     
                 ],
-                limit: 40,
+                limit: -40,
                 method: 0,
                 refreshKey: 0,
 
@@ -89,18 +88,14 @@
         },
         methods:{
             empty_order,
-            localtime,
             my_round,
-            viewItem(item){
-                window.location.href="{%url 'investment_view' pk=9999%}".replace("9999", item.id)
-            },
             on_OrdersCU_cruded(){
                 this.dialog_cu=false
             },
             orderAtPercentage(item){
                 this.order=this.empty_order()
                 this.order.price=this.my_round(item.last_price*(1+this.limit/100), item.decimals)
-                this.order.investments=`${this.$store.state.apiroot}/api/investments/${item.id}/`
+                this.order.investments=item.url
                 this.dialog_cu=true
                 this.refreshKey=this.refreshKey+1
             },
