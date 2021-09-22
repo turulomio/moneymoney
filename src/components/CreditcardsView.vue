@@ -145,6 +145,7 @@
                 .then((response) => {
                     console.log(response);
                     this.update_table()
+                    this.$emit("cruded")
                 }, (error) => {
                     this.parseResponseError(error)
                 });
@@ -155,7 +156,7 @@
                 .then((response) => {
                     this.items_cco=response.data
                     console.log(response.data);
-                    this.loading_cco=false
+                    this.loading_cco=false 
                     this.key=this.key+1
                 }, (error) => {
                     this.parseResponseError(error)
@@ -182,6 +183,7 @@
                     .then((response) => {
                             console.log(response.data)
                             this.update_table()     
+                            this.$emit("cruded")
                             this.dialog=false
                             this.editing=false
                     }, (error) => {
@@ -192,6 +194,7 @@
                     .then((response) => {
                             console.log(response.data)
                             this.update_table()     
+                            this.$emit("cruded")
                             this.dialog=false
                             this.editing=false
                     }, (error) => {
