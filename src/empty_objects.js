@@ -68,6 +68,19 @@ export function empty_products_comparation(){
     }
 }
 
+export function empty_cco(){
+    return {
+        datetime: new Date(),
+        concepts: null,
+        operationstypes:null,
+        amount: 0,
+        comment: "",    
+        creditcards: null,
+        paid:false,
+        paid_datetime:null,
+    }
+}
+
 export function empty_quote(){
     return {
         url: null,
