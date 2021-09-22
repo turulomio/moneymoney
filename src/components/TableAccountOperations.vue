@@ -1,8 +1,8 @@
 <template>
-    <v-data-table :show-select="showselected" v-model="selected" dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header v-bind="$attrs"  :ref="$vnode.tag" :single-select="false" item-key="url">
-        <template v-slot:[`item.datetime`]="{ item }" >
-        {{ localtime(item.datetime)}}
-        </template>      
+    <v-data-table  ref="table_ao" :show-select="showselected" v-model="selected" dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header v-bind="$attrs" :single-select="false">
+        <template v-slot:[`item.datetime`]="{ item,index }">
+            <div :ref="index">{{ localtime(item.datetime)}}</div>
+        </template>          
         <template v-slot:[`item.amount`]="{ item }">
             <div v-html="currency_html(item.amount,item.currency)"></div>
         </template>   
@@ -32,7 +32,7 @@
 </template>
 
 <script>     
-    import {localtime, listobjects_sum} from '../functions.js'
+    import {listobjects_sum} from '../functions.js'
     export default {
     props: {
         items: {
@@ -68,7 +68,6 @@
         }
     },
     methods: {
-        localtime,
         listobjects_sum,
         editAO(item){
             this.$emit('editAO', item)
@@ -93,12 +92,16 @@
             }
             return r
         },
-        gotoLastRow(){
-           this.$vuetify.goTo(100000, { container:  this.$refs[this.$vnode.tag].$el.childNodes[0] ,duration: 500}) 
+        gotoLastRow(){          
+           //this.$vuetify.goTo(100000, { container:  this.$refs[this.$vnode.tag].$el.children[0].children[0].children[2].children ,duration: 500}) 
+        console.log(this.$refs.table_ao.$el.childNodes[0])
+            this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs.table_ao.$el.childNodes[0]}) 
+
         },
     },
     mounted(){
         console.log(this.items)
+        this.gotoLastRow()
     }
 }
 </script>
