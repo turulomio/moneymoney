@@ -1,4 +1,3 @@
-
 <template>
     <div>    
         <h1>{{ $t('Investments list') }}
@@ -76,7 +75,7 @@
             </v-card>
         </v-dialog>
         <!-- DIALOG  ADD QUOTE -->
-        <v-dialog v-model="dialog_quotescu">
+        <v-dialog v-model="dialog_quotescu" width="450">
             <v-card class="pa-4">
                 <QuotesCU :quote="quote" :key="key" @cruded="on_QuotesCU_cruded"></QuotesCU>
             </v-card>
