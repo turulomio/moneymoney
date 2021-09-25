@@ -9,6 +9,9 @@
                 <v-text-field class="ml-10 mr-6" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"></v-text-field>
             </v-row>
             <v-data-table dense :headers="investments_headers" :search="search" :items="investments_items" sort-by="percentage_selling_point" class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading_investments" :key="key">
+                <template v-slot:[`item.fullname`]="{ item }">
+                    {{item.fullname}}
+                </template>                  
                 <template v-slot:[`item.last_datetime`]="{ item }">
                     {{localtime(item.last_datetime)}}
                 </template>  
@@ -19,7 +22,11 @@
                     <div v-html="localcurrency_html(item.balance_user )"></div>
                 </template>     
                 <template v-slot:[`item.invested_user`]="{ item }">
-                    <div v-html="localcurrency_html(item.invested_user )"></div>
+                    <v-row class="text-nowrap" justify="end">
+                        <div v-html="localcurrency_html(item.invested_user )"></div>
+                        <v-icon small class="ml-1" @click="on_icon_short_long_clicked(item)" v-if="item.shares>=0" color="blue">mdi-arrow-up-circle-outline</v-icon>
+                        <v-icon small class="ml-1" @click="on_icon_short_long_clicked(item)" v-if="item.shares<0" color="orange">mdi-arrow-down-circle-outline</v-icon>
+                    </v-row>
                 </template>    
                 <template v-slot:[`item.gains_user`]="{ item }">
                     <div v-html="localcurrency_html(item.gains_user )"></div>
@@ -41,7 +48,7 @@
                     <v-icon small class="ml-1" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small class="ml-1" @click="viewItem(item)">mdi-eye</v-icon>
                     <v-icon small class="ml-1" @click="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
-                    <v-icon small class="ml-1" v-if="(new Date()>new Date(item.selling_expiration)) && item.selling_expiration!=null" @click="editInvestment(item)">mdi-alarm</v-icon>     
+                    <v-icon small class="ml-1" v-if="(new Date()>new Date(item.selling_expiration)) && item.selling_expiration!=null" @click="editInvestment(item)" color="#9933ff" style="font-weight:bold">mdi-alarm</v-icon>     
                 </template>                
                 <template v-slot:[`body.append`]="{headers}">
                     <tr style="background-color: WhiteSmoke">
@@ -188,6 +195,14 @@
             on_InvestmentsCU_cruded(){
                 this.dialog=false
                 this.update_table()
+            },
+            on_icon_short_long_clicked(item){
+                if (item.shares>=0){
+                    alert(this.$t('Long position'))
+                } else {
+                    alert(this.$t('Short position'))
+
+                }
             },
             on_chkActive(){
                 this.update_table()
