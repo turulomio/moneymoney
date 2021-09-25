@@ -2,7 +2,10 @@
     <div>    
         <h1>{{ $t('Ranking investments report') }}</h1>
         <v-card outlined class="ma-4 pa-4">
-            <v-data-table dense :headers="headers" :items="data" class="elevation-1" hide-default-footer disable-pagination :loading="loading_table">
+            <v-row class="pa-4">
+                <v-text-field class="ml-10 mr-6" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"></v-text-field>
+            </v-row>
+            <v-data-table dense :headers="headers" :search="search" :items="data" class="elevation-1" hide-default-footer disable-pagination :loading="loading_table">
                 <template v-slot:[`item.current_net_gains`]="{ item }">
                     <div v-html="localcurrency_html(item.current_net_gains )"></div>
                 </template>  
@@ -19,7 +22,7 @@
                     <v-icon small class="mr-2" @click="viewItem(item)">mdi-eye</v-icon>
                 </template>    
                 <template v-slot:[`body.append`]="{headers}">
-                    <tr style="background-color: GhostWhite" ref="lr">
+                    <tr style="background-color: GhostWhite" ref="lr" v-if="search==''">
                         <td v-for="(header,i) in headers" :key="i" >
                             <div v-if="header.value == 'name'">
                                 Total
@@ -37,7 +40,6 @@
                             <div v-if="header.value == 'total'" align="right">
                                 <div v-html="localcurrency_html(listobjects_sum(data,'total'))"></div>
                             </div>
-
                         </td>
                     </tr>
                 </template>                        
@@ -63,6 +65,7 @@
                 ],
                 data:[],
                 loading_table:false,
+                search:"",
             }
         },
         methods: {
