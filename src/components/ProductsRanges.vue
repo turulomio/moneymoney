@@ -36,13 +36,13 @@
                             <v-icon small v-if="item.recomendation_invest" >mdi-check-outline</v-icon>
                         </template>                        
                          <template v-slot:[`item.investments_inside`]="{ item }">
-                            <div v-for="o in item.investments_inside" :key="o.name">{{ o.name }}. Invested: {{ o.invested }}<br></div>
+                            <div v-for="o in item.investments_inside" :key="o.name" @click="on_investments_inside_click(o)">{{ o.name }}. Invested: {{ o.invested }}<br></div>
                         </template>                      
                         <template v-slot:[`item.orders_inside`]="{ item }">
-                            <div  v-for="o in item.orders_inside" :key="o.name">{{ o.name }}. Amount: {{ o.amount}}<br></div>
+                            <div  v-for="o in item.orders_inside" :key="o.name" @click="on_orders_inside_click(o)">{{ o.name }}. Amount: {{ o.amount}}<br></div>
                         </template>
                         <template v-slot:[`item.actions`]="{ item }">
-                            <v-icon small class="mr-2" @click="addOrder(item)" v-if="item.recomendation_invest">mdi-pencil</v-icon>
+                            <v-icon small class="mr-2" @click="addOrder(item)" :color="(item.recomendation_invest) ? '' : 'red'">mdi-cart</v-icon>
                         </template>
                     </v-data-table>   
                     </v-card>
@@ -60,6 +60,18 @@
                 <OrdersCU :order="order" @cruded="on_OrdersCU_cruded()" :key="key"></OrdersCU>
             </v-card>
         </v-dialog>
+        <!-- Orders LIST -->
+        <v-dialog v-model="dialog_orders_list" @click:outside="on_dialog_orders_list_click_outside()">
+            <v-card class="pa-4">
+                <OrdersList :key="key"></OrdersList>
+            </v-card>
+        </v-dialog>
+        <!-- Investment view  -->
+        <v-dialog v-model="dialog_investment_view" @click:outside="on_dialog_investment_view_click_outside()">
+            <v-card class="pa-4">
+                <InvestmentsView :key="key" :investment="investment"></InvestmentsView>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -67,12 +79,17 @@
 <script>    
     import {empty_products_ranges, empty_order} from '../empty_objects.js'
     import axios from 'axios'
+    
     import ChartProductsRanges from './ChartProductsRanges.vue'
+    import InvestmentsView from './InvestmentsView.vue'
+    import OrdersList from './OrdersList.vue'
     import OrdersCU from './OrdersCU.vue'
     export default {
         components: {
             ChartProductsRanges,
             OrdersCU,
+            OrdersList,
+            InvestmentsView,
         },
         props:{
             pr:{
@@ -111,6 +128,13 @@
                 dialog_ordercu:false,
                 order: null,
                 key:0,
+
+                //Dialog orders list
+                dialog_orders_list:false,
+
+                //Dialog investment view
+                dialog_investment_view:false,
+                investment:null,
             }   
         },
         methods:{
@@ -120,7 +144,6 @@
 
             },
             addOrder(item){
-                console.log(item)
                 this.order=this.empty_order()
                 this.order.price=item.value
                 this.dialog_ordercu=true
@@ -131,7 +154,6 @@
                 this.loading=true
                 axios.get(`${this.$store.state.apiroot}/products/ranges/?product=${this.newpr.product}&percentage_between_ranges=${this.newpr.percentage_between_ranges}&percentage_gains=${this.newpr.percentage_gains}&amount_to_invest=${this.newpr.amount_to_invest}&recomendation_methods=${this.newpr.recomendation_methods}&only_first=${this.newpr.only_first}&account=${this.newpr.account}`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data);
                     this.prdata=response.data
                     this.tableData=this.prdata.pr
                     this.currentpricelabel= this.$t(`Current price: ${this.currency_string(this.prdata.product.last, this.prdata.product.currency)}`) 
@@ -142,11 +164,33 @@
             },
             showLimits(item){
                 alert(item.limits)
-            }
+            },
+            on_OrdersCU_cruded(){
+                this.dialog_ordercu=false
+                this.refreshTable()
+            },
+            on_orders_inside_click(o){
+                console.log(o)
+                this.dialog_orders_list=true
+            },
+            on_dialog_orders_list_click_outside(){
+                console.log("FUERA")
+                this.dialog_orders_list=false
+                this.refreshTable()
+            },
+            on_investments_inside_click(inv){
+                console.log(inv)
+                this.investment=inv
+                this.dialog_investment_view=true
+            },
+            on_dialog_investment_view_click_outside(){
+                console.log("FUERAinv")
+                this.dialog_orders_list=false
+                this.refreshTable()
+            },
         
         },
         created(){
-            console.log(this.pr)
             if (this.pr!=null){
                 this.newpr=Object.assign({},this.pr)
                 this.refreshTable()
