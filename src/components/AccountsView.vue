@@ -48,21 +48,21 @@
         <!-- DIALOG CREDIT CARD ADD/UPDATE -->
         <v-dialog v-model="dialog_cc" max-width="550">
             <v-card class="pa-4">
-                <CreditcardsCU :cc="cc" :key="key" @cruded="on_CreditcardsCU_cruded()"></CreditcardsCU>
+                <CreditcardsCU :cc="cc" @cruded="on_CreditcardsCU_cruded()" :key="key"></CreditcardsCU>
             </v-card>
         </v-dialog>
 
         <!-- DIALOG CREDIT CARD VIEW -->
         <v-dialog v-model="dialog_ccview">
             <v-card class="pa-4">
-                <CreditcardsView :cc="cc" :account="account" @cruded="on_CreditcardsView_cruded()"></CreditcardsView>
+                <CreditcardsView :cc="cc" :account="account" @cruded="on_CreditcardsView_cruded()" :key="key"></CreditcardsView>
             </v-card>
         </v-dialog>
 
         <!-- DIALOG ACCOUNT TRANSFER -->
         <v-dialog v-model="dialog_transfer" width="25%">
             <v-card class="pa-6">
-                <AccountsTransfer :origin="account" @accepted="on_AccountTransfer_accepted()"></AccountsTransfer>
+                <AccountsTransfer :origin="account" @accepted="on_AccountTransfer_accepted()" :key="key"></AccountsTransfer>
             </v-card>
         </v-dialog>
     </div>
@@ -213,6 +213,7 @@
             editCC(item){
                 this.cc=item
                 this.dialog_cc=true
+                this.key=this.key+1
             },
             viewCC(item){
                 this.cc=item
@@ -266,6 +267,7 @@
                 console.log(item)
                 this.ao=item
                 this.dialog_ao=true
+                this.key=this.key+1
             },
             deleteAO (item) {
                 var r = confirm(this.$t("Do you want to delete this account operation?"))

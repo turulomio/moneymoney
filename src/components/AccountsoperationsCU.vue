@@ -11,7 +11,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="primary" @click="following_ao=false;acceptDialogAO()" :disabled="!form_valid_ao">{{ button() }}</v-btn>
-                    <v-btn color="primary" @click="following_ao=true;acceptDialogAO()" :disabled="!form_valid_ao" v-if="editing_ao==false">{{ $t("Add and follow") }}</v-btn>
+                    <v-btn color="primary" @click="following_ao=true;acceptDialogAO()" :disabled="!form_valid_ao" v-if="editing==false">{{ $t("Add and follow") }}</v-btn>
                 </v-card-actions>
     </div>
 </template>
@@ -33,7 +33,7 @@
                 newao:null,
                 form_valid_ao:true,
                 following_ao:false,
-                editing_ao:false,
+                editing:false,
             }
         },
         methods:{
@@ -54,7 +54,7 @@
                 }
 
                 //Accept
-                if (this.editing_ao==true){               
+                if (this.editing==true){               
                     axios.put(this.newao.url, this.newao, this.myheaders())
                     .then(() => {
                             this.$emit('cruded', this.following_ao)
@@ -77,14 +77,14 @@
                 }
             },
             button(){
-                if(this.editing_ao==true){
+                if(this.editing==true){
                     return this.$t("Update")
                 } else {
                     return this.$t("Create")
                 }
             },
             dialog_title_ao(){
-                if(this.editing_ao==true){
+                if(this.editing==true){
                     return this.$t("Updating account operation")
                 } else {
                     return this.$t("Creating a new account operation")
@@ -94,9 +94,9 @@
         created(){
 
             if ( this.ao.url!=null){ // EDITING TIENE IO URL
-                this.editing_ao=true
+                this.editing=true
             } else { // NEW IO BUT SETTING VALUES WITH URL=null
-                this.editing_ao=false
+                this.editing=false
             }
             this.newao=Object.assign({},this.ao)
         }
