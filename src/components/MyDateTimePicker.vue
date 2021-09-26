@@ -16,7 +16,7 @@
     <div>
         <v-menu v-model="menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
             <template v-slot:activator="{ on }">
-                <v-row justify="center" align="center">
+                <v-row justify="center" align="center" class="ml-0 mr-1 mb-1">
                     <v-text-field v-model="representation" v-bind="$attrs" prepend-icon="mdi-calendar" readonly v-on="on"  @click="on_text_click"></v-text-field>
                     <v-icon class="ml-1" x-small @click="localValue=null">mdi-backspace</v-icon>
                 </v-row>

@@ -1,8 +1,8 @@
 
 <template>
     <div>    
-        <h1>{{ title() }}</h1>           
-        <v-card class="ma-2">
+        <h1 class="mb-4">{{ title() }}</h1>           
+        <v-card class="pa-6">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <v-autocomplete dense :items="$store.state.investments" v-model="newio.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker v-model="newio.datetime" :label="$t('Set investment operation date and time')"></MyDateTimePicker>
@@ -11,8 +11,8 @@
                 <v-text-field dense v-model.number="newio.price" type="number" :label="$t('Set investment operation price')" :placeholder="$t('Set investment operation price')" :rules="RulesInteger(10,true)" counter="10"/>
                 <v-text-field dense v-model.number="newio.taxes" type="number" :label="$t('Set investment operation taxes')" :placeholder="$t('Set investment operation taxes')" :rules="RulesInteger(10,true)" counter="10"/>
                 <v-text-field dense v-model.number="newio.commission" type="number" :label="$t('Set investment operation commission')" :placeholder="$t('Set investment operation commission')" :rules="RulesInteger(10,true)" counter="10"/>            
-                <v-text-field dense v-model="newio.comment" type="text" :label="$t('Set investment operation comment')" :placeholder="$t('Set investment operation comment')" :rules="RulesString(255,false)" counter="255"/>      
-                <v-text-field dense v-model.number="newio.currency_conversion" type="number" :label="$t('Set investment operation currency conversion')" :placeholder="$t('Set investment operation currency conversion')" :rules="RulesInteger(10,true)" counter="10"/>      
+                <v-text-field dense v-model="newio.comment" type="text" :label="$t('Set investment operation comment')" :placeholder="$t('Set investment operation comment')" :rules="RulesString(255,false)" counter="255"/>
+                <CurrencyFactor :label="$t('Set currency conversion factor')" v-model="newio.currency_conversion" :currency_from="investment.currency" :currency_to="investment.currency_account"></CurrencyFactor>
                 <v-checkbox dense v-model="newio.show_in_ranges" :label="$t('Show in ranges?')" ></v-checkbox>
             </v-form>
             <div v-html="foot()"></div>
@@ -27,9 +27,11 @@
     import axios from 'axios'
     import {empty_io} from '../empty_objects.js'
     import MyDateTimePicker from './MyDateTimePicker.vue'
+    import CurrencyFactor from './CurrencyFactor.vue'
     export default {
         components: {
             MyDateTimePicker,
+            CurrencyFactor,
         },
         props: {
             // An account object
@@ -75,8 +77,7 @@
                     })
                 } else{
                     axios.post(`${this.$store.state.apiroot}/api/investmentsoperations/`, this.newio,  this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
+                    .then(() => {
                             this.change_investment_to_active()
                     }, (error) => {
                         this.parseResponseError(error)
@@ -109,6 +110,7 @@
 
         },
         created(){
+            console.log(this.investment)
             if ( this.io.url!=null){ // EDITING TIENE IO URL
                 this.editing=true
             } else { // NEW IO BUT SETTING VALUES WITH URL=null

@@ -22,7 +22,7 @@
                         <v-tab key="investment">{{ $t('Investment currency') }}</v-tab>
                         <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
-                            <v-card class="padding" v-if="!loading_ios">
+                            <v-card v-if="!loading_ios">
                                 <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="investment" height="400" :key="key"></TableInvestmentOperationsCurrent>
                             </v-card>
                         </v-tab-item>
@@ -89,7 +89,7 @@
         </v-dialog>
 
         <!-- IO CU-->
-        <v-dialog v-model="dialog_io" width="35%">
+        <v-dialog v-model="dialog_io" width="550">
             <v-card class="pa-3">
                 <InvestmentsoperationsCU :io="io" :investment="investment" :key="key"  @cruded="on_InvestmentsoperationsCU_cruded()"></InvestmentsoperationsCU>
             </v-card>
