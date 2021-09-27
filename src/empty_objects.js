@@ -145,10 +145,21 @@ export function empty_investment(){
 
 export function empty_strategy(){
     return {
+        dt_from: new Date().toISOString(),
+        dt_to: null,
+        investments: "",
         name: "",
-        active: true,
-        number: "",
-        currency: "EUR",    
-        banks:null,
+        type: 3,
+        comment: "",
+        additional1: null,
+        additional2: null,
+        additional3: null,
+        additional4: null,
+        additional5: null,
+        additional6: null,
+        additional7: null,
+        additional8: null,
+        additional9: null,
+        additional10: null,
     }
 }

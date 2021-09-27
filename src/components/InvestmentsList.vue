@@ -48,7 +48,7 @@
                     <v-icon small class="ml-1" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small class="ml-1" @click="viewItem(item)">mdi-eye</v-icon>
                     <v-icon small class="ml-1" @click="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
-                    <v-icon small class="ml-1" v-if="(new Date()>new Date(item.selling_expiration)) && item.selling_expiration!=null" @click="editInvestment(item)" color="#9933ff" style="font-weight:bold">mdi-alarm</v-icon>     
+                    <v-icon small class="ml-1" v-if="(new Date()>new Date(item.selling_expiration)) && item.selling_expiration!=null" @click="editItem(item)" color="#9933ff" style="font-weight:bold">mdi-alarm</v-icon>     
                 </template>                
                 <template v-slot:[`body.append`]="{headers}">
                     <tr style="background-color: WhiteSmoke">
@@ -71,7 +71,7 @@
             <div v-html="foot" class="pa-4"></div>
         <!-- DIALOG CU INVESTMERNT -->
         <v-dialog v-model="dialog" max-width="550">
-            <v-card class="pa-4">
+            <v-card class="pa-6">
                 <InvestmentsCU :investment="investment" :key="key" @cruded="on_InvestmentsCU_cruded"></InvestmentsCU>
             </v-card>
         </v-dialog>

@@ -25,6 +25,7 @@ export const store = new Vuex.Store({
         investments: [],
         operationstypes: [],
         products: [],
+        strategiestypes:[],
     },    
     getters:{
         getConceptsForDividends: (state) => () => { 
@@ -95,6 +96,11 @@ export const store = new Vuex.Store({
             console.log(state.local_currency)
             console.log(state.local_zone)
         },
+        updateStrategiesTypes: (state, payload) =>{
+            state.strategiestypes=payload
+            console.log("Updated strategies types")
+            console.log(state.strategiestypes)
+        },
 
     },
     actions: {// Can be asynchronous. Fetch data
@@ -109,6 +115,7 @@ export const store = new Vuex.Store({
             context.dispatch("getOperationstypes")
             context.dispatch("getProducts")
             context.dispatch("getSettings")
+            context.dispatch("getStrategiesTypes")
         },
         getAccounts(context){
             axios.get(`${store.state.apiroot}/api/accounts/`, store.$app.myheaders())
@@ -185,6 +192,14 @@ export const store = new Vuex.Store({
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
+        },
+        getStrategiesTypes(context){
+            var r=[
+                {id:1, name: store.$app.$t("Pairs in same account")},
+                {id:2, name: store.$app.$t("Product ranges")},
+                {id:3, name: store.$app.$t("Generic")},
+            ]
+            context.commit("updateStrategiesTypes",r)
         }
     }
 })

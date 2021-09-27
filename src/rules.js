@@ -1,15 +1,21 @@
 
 export function RulesInteger(maxdigits=10,required=true){
-    var r= [
-        v => (v==0 || !!v) || this.$t('Number is required'),
-        v => (v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
-        v => (!isNaN(parseInt(v))) || this.$t('Must be a integer number')
-    ]
+    var r
     if (required==false){
-        r.shift()
+        r= [
+            v => (v!= null && v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
+            v => (v!=null && !isNaN(parseInt(v))) || this.$t('Must be a integer number')
+        ]
+    } else { // required==true
+        r= [
+            v => (v==0 || !!v) || this.$t('Number is required'),
+            v => (v!= null && v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
+            v => (!isNaN(parseInt(v))) || this.$t('Must be a integer number')
+        ]
     }
     return r
 }
+
 
 export function RulesFloat(maxdigits,required){
     var r= [

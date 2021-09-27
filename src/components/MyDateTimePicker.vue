@@ -14,14 +14,14 @@
 
 <template>
     <div>
-        <v-menu v-model="menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto">
+        <v-menu v-model="menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto" :disabled="readonly">
             <template v-slot:activator="{ on }">
                 <v-row justify="center" align="center" class="ml-0 mr-1 mb-1">
                     <v-text-field v-model="representation" v-bind="$attrs" prepend-icon="mdi-calendar" readonly v-on="on"  @click="on_text_click"></v-text-field>
                     <v-icon class="ml-1" x-small @click="localValue=null">mdi-backspace</v-icon>
                 </v-row>
             </template>
-            <v-card >
+            <v-card>
                 <v-date-picker v-if="localValue" class="pa-5" no-title v-model="date" @change="on_date_change()" locale="locale" first-day-of-week="1"></v-date-picker>
                 <v-time-picker v-if="localValue" class="pa-5" ref="time" no-title scrollable  format="24hr" v-model="time" use-seconds @click:hour="on_time_click()" @click:minute="on_time_click()" @click:second="on_time_click()" locale="locale"></v-time-picker>
                 <v-text-field v-if="localValue" class="pa-5" v-model="milliseconds" type="number" :label="$t('Milliseconds')" :placeholder="$t('Milliseconds')" :rules="RulesString(3,true)" counter="3" @change="on_milliseconds_change()"></v-text-field>        
@@ -40,6 +40,10 @@
             value: {
                 required: true
             },
+            readonly: {
+                required: false,
+                default: false
+            }
         },
         data: function(){
             return {
