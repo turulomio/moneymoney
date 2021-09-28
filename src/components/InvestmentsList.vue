@@ -96,7 +96,6 @@
     import InvestmentsCU from './InvestmentsCU.vue'
     import InvestmentsView from './InvestmentsView.vue'
     import QuotesCU from './QuotesCU.vue'
-    import {localtime} from '../functions.js'
     import {empty_quote, empty_investment} from '../empty_objects.js'
     export default {
         components:{
@@ -183,7 +182,6 @@
             },
             empty_investment,
             empty_quote,
-            localtime,
             on_InvestmentView_cruded(){
                 this.key=this.key+1
                 this.update_table()

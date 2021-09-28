@@ -36,10 +36,10 @@
                             <v-icon small v-if="item.recomendation_invest" >mdi-check-outline</v-icon>
                         </template>                        
                          <template v-slot:[`item.investments_inside`]="{ item }">
-                            <div v-for="o in item.investments_inside" :key="o.name" @click="on_investments_inside_click(o)">{{ o.name }}. Invested: {{ o.invested }}<br></div>
+                            <div v-for="o in item.investments_inside" :key="o.name" @click="on_investments_inside_click(o)">{{ $t(`${o.name}. Invested: ${currency_string(o.invested, prdata.product.currency)}`) }}<br></div>
                         </template>                      
                         <template v-slot:[`item.orders_inside`]="{ item }">
-                            <div  v-for="o in item.orders_inside" :key="o.name" @click="on_orders_inside_click(o)">{{ o.name }}. Amount: {{ o.amount}}<br></div>
+                            <div  v-for="o in item.orders_inside" :key="o.name" @click="on_orders_inside_click(o)">{{ $t(`${o.name}. Amount: ${currency_string(o.amount, prdata.product.currency)}`) }}<br></div>
                         </template>
                         <template v-slot:[`item.actions`]="{ item }">
                             <v-icon small class="mr-2" @click="addOrder(item)" :color="(item.recomendation_invest) ? '' : 'red'">mdi-cart</v-icon>
@@ -146,6 +146,8 @@
             addOrder(item){
                 this.order=this.empty_order()
                 this.order.price=item.value
+                this.order.current_price=this.prdata.product.last
+                this.key=this.key+1
                 this.dialog_ordercu=true
             },
             empty_order,
@@ -184,7 +186,6 @@
                 this.dialog_investment_view=true
             },
             on_dialog_investment_view_click_outside(){
-                console.log("FUERAinv")
                 this.dialog_orders_list=false
                 this.refreshTable()
             },
