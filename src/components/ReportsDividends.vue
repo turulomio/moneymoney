@@ -33,10 +33,10 @@
         <v-dialog v-model="dialog" max-width="450">
             <v-card>
                 <v-card-title class="headline">{{ $t("Post an estimation") }}</v-card-title>
-                <v-form ref="form" v-model="form_valid" lazy-validation>
+                <v-form ref="form" v-model="form_valid" lazy-validation v-if='estimation!=null'>
                     <v-col>
-                        <v-text-field v-model="year" type="text" :counter="4" :label="$t('Year')" :placeholder="$t('Enter a year')" :rules="RulesInteger(4,true)"></v-text-field>
-                        <v-text-field v-model="estimation" type="text" :label="$t('Estimation')" :counter="10" :placeholder="$t('Enter a estimation')" autofocus @focus="$event.target.select()" :rules="RulesFloat(10, true)"></v-text-field>
+                        <v-text-field v-model="estimation.year" type="text" :counter="4" :label="$t('Year')" :placeholder="$t('Enter a year')" :rules="RulesInteger(4,true)"></v-text-field>
+                        <v-text-field v-model="estimation.estimation" type="text" :label="$t('Estimation')" :counter="10" :placeholder="$t('Enter a estimation')" autofocus @focus="$event.target.select()" :rules="RulesFloat(10, true)"></v-text-field>
                     </v-col>
                     <v-card-actions>
                         <v-spacer></v-spacer>
@@ -52,6 +52,7 @@
 <script>
     import axios from 'axios'
     import moment from 'moment'
+    import {empty_estimation_dps} from '../empty_objects.js'
     export default {
         data(){ 
             return{
@@ -67,9 +68,7 @@
                 ],
                 items:[],
                 
-                products_id: null,
-                year:new Date().getFullYear(),
-                estimation: 0,
+                estimation: null,
                 
                 dialog:false,
                 form_valid:false,
@@ -87,23 +86,18 @@
             },
             addEstimation(item){
                 this.dialog=true
-                this.products_id=item.products_id
-                console.log(item)
+                this.estimation=this.empty_estimation_dps()
+                this.estimation.product=item.product
             },
+            empty_estimation_dps,
             submit(){
+                console.log(this.estimation)
                 if (this.$refs.form.validate()==false) return
-                var newestimation={
-                    year: this.year,
-                    estimation: this.estimation,
-                    date_estimation: new Date(),
-                    source:"Internet",
-                    manual: true,
-                    products: this.products_id,
-
-                }
-                axios.post(`${this.$store.state.apiroot}/api/estimations_dps/`, newestimation, this.myheaders())
+                axios.post(`${this.$store.state.apiroot}/estimations/dps/add/`, this.estimation, this.myheaders())
                 .then((response) => {
                     console.log(response.data)
+                    this.dialog=false
+                    this.refreshTable()
                 }, (error) => {
                     this.parseResponseError(error)
                 });

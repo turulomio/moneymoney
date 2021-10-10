@@ -23,6 +23,14 @@ export function empty_credit_card(){
     }
 }
 
+export function empty_estimation_dps(){
+    return {
+        year: new Date().getFullYear(),
+        estimation: 0,
+        product: null,
+    }
+}
+
 
 export function empty_io(){
     return {
