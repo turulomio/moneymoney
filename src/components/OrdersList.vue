@@ -1,7 +1,7 @@
 <template>
     <div>    
         <h1>{{ $t('Orders list') }}
-            <MyMenuInline :items="menuinline_items" @selected="MyMenuInlineSelection"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
         </h1>
         <div class="d-flex justify-center mb-4">
             <v-card width="20%" class="pa-5">
@@ -158,9 +158,6 @@
                 } else {
                     return this.$t("Creating a new order")
                 }
-            },
-            MyMenuInlineSelection(item){
-                item.code(this)
             },
             editItem (item) {
                 this.order=item

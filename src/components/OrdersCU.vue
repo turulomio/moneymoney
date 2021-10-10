@@ -2,7 +2,7 @@
 <template>
     <div>    
         <h1 v-if="snackbar_message==''">{{ title() }}
-            <MyMenuInline :items="items" @selected="MyMenuInlineSelection"></MyMenuInline>    
+            <MyMenuInline :items="items" :context="this"></MyMenuInline>    
         </h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation v-if="snackbar_message==''">
@@ -74,10 +74,7 @@
                 key:0,
             }
         },
-        methods: {  
-            MyMenuInlineSelection(item){
-                item.code(this)
-            },
+        methods: {
             title(){
                 if (this.editing){
                     return this.$t("Updating order")

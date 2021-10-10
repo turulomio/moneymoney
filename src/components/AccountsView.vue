@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ $t(`Account details of '${account.name }'`)}}
-        <MyMenuInline :items="items" @selected="MyMenuInlineSelection"></MyMenuInline>  </h1>
+        <MyMenuInline :items="items"  :context="this"></MyMenuInline>  </h1>
 
         <DisplayValues :items="displayvalues"></DisplayValues>
 
@@ -186,9 +186,6 @@
             },
             empty_account_operation,
             empty_credit_card,
-            MyMenuInlineSelection(item){
-                item.code(this)
-            },
             refreshTable(){
                 //var this_=this //Needs this inside axios seems with browser vue method
                 axios.get(`${this.$store.state.apiroot}/accountsoperations/withbalance/?account=${this.account.id}&year=${this.monthpicker.slice(0,4)}&month=${this.monthpicker.slice(5,7)}`, this.myheaders())                

@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ $t(`Strategy details of '${strategy.name }'`)}}
-        <MyMenuInline :items="items" @selected="MyMenuInlineSelection"></MyMenuInline>  </h1>
+        <MyMenuInline :items="items" :context="this"></MyMenuInline>  </h1>
 
     </div>
 </template>  

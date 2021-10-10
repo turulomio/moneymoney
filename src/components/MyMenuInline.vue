@@ -3,7 +3,7 @@ Yo need to put items and @selected method
 
 type puede ser redirection or command
 
-            <MyMenuInline :items="menuinline_items" @selected="MyMenuInlineSelection"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items"  :context="this"></MyMenuInline>
 
 
                 menuinline_items: [
@@ -37,7 +37,7 @@ type puede ser redirection or command
         <v-list dense subheader >
             <div v-for="(subheader,indexsubheader) in items" :key="indexsubheader" inset>
                 <v-subheader inset>{{ subheader.subheader }}</v-subheader>
-                <v-list-item v-for="(item, index) in subheader.children" :key="index" @click="parseCommand(item)">
+                <v-list-item v-for="(item, index) in subheader.children" :key="index" @click="on_item_click(item)">
                 <v-list-item-icon>
                     <v-icon v-text="item.icon"></v-icon>
                 </v-list-item-icon>
@@ -58,10 +58,13 @@ type puede ser redirection or command
             items: {
                 required: true
             },
+            context: {
+                required: true
+            },
         },
         methods: {
-            parseCommand(item){
-                this.$emit("selected", item)
+            on_item_click(item){
+                item.code(this.context)
             },
         },
     }

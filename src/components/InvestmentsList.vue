@@ -1,7 +1,7 @@
 <template>
     <div>    
         <h1>{{ $t('Investments list') }}
-            <MyMenuInline :items="menuinline_items" @selected="MyMenuInlineSelection"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items"></MyMenuInline>
 
         </h1>
             <v-row class="pa-4">
@@ -151,10 +151,7 @@
                 quote:null,
             }
         },
-        methods: {
-            MyMenuInlineSelection(item){
-                item.code(this)
-            },
+        methods: { 
             addQuote(item){
                 this.quote=this.empty_quote()
                 this.quote.products=item.products

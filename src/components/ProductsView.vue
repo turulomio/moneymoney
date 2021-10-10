@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ $t(`Products view`)}}
-            <MyMenuInline :items="items" @selected="MyMenuInlineSelection"></MyMenuInline>
+            <MyMenuInline :items="items" :context="this"></MyMenuInline>
         </h1>
         <v-dialog v-model="dialog_quotescu" width="35%">
             <v-card class="pa-4">
@@ -48,9 +48,6 @@
             }
         },
         methods: {
-            MyMenuInlineSelection(item){
-                item.code(this)
-            },
             empty_quote,
         }
         

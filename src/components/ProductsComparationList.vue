@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ $t("Products comparation") }}
-            <MyMenuInline :items="menuinline_items" @selected="MyMenuInlineSelection"></MyMenuInline>    
+            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>    
         </h1>
 
         <v-data-table dense :headers="headers" :items="items" sort-by="name" class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading" :key="key">
@@ -91,9 +91,6 @@
             }
         },
         methods:{
-            MyMenuInlineSelection(item){
-                item.code(this)
-            },
             deletePair(item){
                var r = confirm(this.$t("Do you want to delete this products comparation?"))
                if(r == false) {

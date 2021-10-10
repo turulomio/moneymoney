@@ -2,7 +2,7 @@
 <template>
     <div>    
         <h1>{{ $t('Banks list') }}
-            <MyMenuInline :items="menuinline_items" @selected="MyMenuInlineSelection"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
 
         </h1>
         <v-card outlined class="ma-4 pa-4">
@@ -124,9 +124,6 @@
                     name: "",
                     active: true,
                 }
-            },
-            MyMenuInlineSelection(item){
-                item.code(this)
             },
             editItem (item) {
                 this.editing=true

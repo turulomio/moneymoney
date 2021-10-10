@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ $t(`Products search`)}}
-            <MyMenuInline :items="items" @selected="MyMenuInlineSelection"></MyMenuInline>
+            <MyMenuInline :items="items" :context="this"></MyMenuInline>
         </h1>
 
         <v-card width="45%" class="pa-8 ma-3 mx-lg-auto">
@@ -77,9 +77,6 @@
             }
         },
         methods: {
-            MyMenuInlineSelection(item){
-                item.code(this)
-            },
             editProduct(item){
                 console.log(item)
             },

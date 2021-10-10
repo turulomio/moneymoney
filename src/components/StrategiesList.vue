@@ -1,7 +1,7 @@
 <template>
     <div>    
         <h1>{{ $t('Strategies list') }}
-            <MyMenuInline :items="menuinline_items" @selected="MyMenuInlineSelection"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
         </h1>
         <v-card outlined class="ma-4 pa-4">
             <v-checkbox v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" ></v-checkbox>
@@ -135,9 +135,6 @@
             }
         },
         methods: {
-            MyMenuInlineSelection(item){
-                item.code(this)
-            },
             editItem (item) {
                 this.strategy=item
                 this.key=this.key+1

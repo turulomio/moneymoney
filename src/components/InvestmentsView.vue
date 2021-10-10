@@ -4,7 +4,7 @@
 <template>
     <div>
         <h1>{{ investment.name }}
-            <MyMenuInline :items="items" @selected="MyMenuInlineSelection"></MyMenuInline>
+            <MyMenuInline :items="items"  :context="this"></MyMenuInline>
         </h1>
         <DisplayValues :items="displayvalues()" :key="key"></DisplayValues>
 
@@ -364,9 +364,6 @@
                     {title:this.$t('Daily adjustment'), value: this.investment.daily_adjustment},
                     {title:this.$t('Id'), value: this.investment.id},
                 ]
-            },
-            MyMenuInlineSelection(item){
-                item.code(this)
             },
             setChkDividendsLabel(){
                 if (this.showAllDividends== true){

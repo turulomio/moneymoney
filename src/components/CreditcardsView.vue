@@ -2,7 +2,7 @@
 <template>
     <div>    
         <h1>{{ $t(`Credit card details of '${cc.name}'`) }}
-            <MyMenuInline :items="menuinline_items" @selected="MyMenuInlineSelection"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
 
         </h1>
         <v-card outlined class="ma-4 pa-4">
@@ -93,9 +93,6 @@
             changeSelected(selected_items){
                 this.selected_items=selected_items
                 this.paying_string=this.$t(`Make a payment of ${selected_items.length} operations valued in ${listobjects_sum(selected_items,"amount")}`) 
-            },
-            MyMenuInlineSelection(item){
-                item.code(this)
             },
             editCCO (item) {
                 this.cco=item
