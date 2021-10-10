@@ -36,17 +36,18 @@
             </v-tab-item>
             <v-tab-item key="operations">          
                 <div>
+                    <v-checkbox v-model="chkShowAllIO" :label="set_chkShowAllIO_label()" @click="on_chkShowAllIO_click()"></v-checkbox>
                     <v-tabs vertical  v-model="tabcurrent">
                         <v-tab key="investment">{{ $t('Investment currency') }}</v-tab>
                             <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card class="padding" v-if="!loading_ios">
-                                <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment" @cruded="on_TableInvestmentsOperations_cruded()" @onedit="on_TableInvestmentsOperations_edit"></TableInvestmentOperations>
+                                <TableInvestmentOperations :items="io_filtered" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment" @cruded="on_TableInvestmentsOperations_cruded()" @onedit="on_TableInvestmentsOperations_edit"></TableInvestmentOperations>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
                                 <v-card class="padding" v-if="!loading_ios">
-                                    <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="account" :showactions="false"></TableInvestmentOperations>
+                                    <TableInvestmentOperations :items="io_filtered" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="account" :showactions="false"></TableInvestmentOperations>
                                 </v-card>
                             </v-tab-item>
                     </v-tabs>
@@ -166,9 +167,11 @@
                 loading_ios:true,
                 dividends: [],
                 dividends_filtered: [],
+                io_filtered:[],
                 selling_expiration_message:"",
                 selling_point_message:"",
                 showAllDividends:false,
+                chkShowAllIO:false,
                 leverage_message:"",
                 items: [
                     {
@@ -372,6 +375,24 @@
                     return this.$t("Check to see all dividends")
                 }
             },
+            set_chkShowAllIO_label(){
+                if (this.chkShowAllIO== true){
+                    return this.$t("Uncheck to see investments operations of current ones")
+                } else {
+                    return this.$t("Check to see all investments operations")
+                }
+            },
+            on_chkShowAllIO_click(){
+                if (this.chkShowAllIO==true){
+                    this.io_filtered=this.list_io
+                } else {
+                    if (this.list_io_current.length==0){
+                        this.io_filtered=[]
+                    } else {
+                        this.io_filtered=this.list_io.filter((d)=> new Date(d.datetime)>=new Date(this.list_io_current[0].datetime))
+                    }
+                }
+            },
             on_chkDividends(){
                 if (this.showAllDividends==true){
                     this.dividends_filtered=this.dividends
@@ -400,7 +421,7 @@
                     if (this.investment_io.gains_at_sellingpoint){
                         this.selling_point_message=this.selling_point_message+ this.$t(`, to gain ${this.currency_string(this.investment_io.gains_at_sellingpoint, this.investment.currency)}`)
                     }
-
+                    this.on_chkShowAllIO_click()
                     this.update_dividends()
                 }, (error) => {
                     this.parseResponseError(error)
@@ -421,16 +442,11 @@
         },
         mounted(){
             this.loading_ios=true
-
             this.selling_expiration_message= `${this.investment.selling_expiration}`
             if (new Date(this.investment.selling_expiration)<new Date()){
                 this.selling_expiration_message=this.selling_expiration_message+ '.<span class="vuered"> '+ this.$t('You must set a new selling order.') + '</span>'
             }
-
-
             this.update_investmentsoperations()
-
         }
     }
 </script>
-
