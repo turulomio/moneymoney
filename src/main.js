@@ -15,6 +15,7 @@ Vue.use(VueRouter);
 import About from './components/about';
 import Home from './components/Home';
 import AccountsList from './components/AccountsList';
+import AssetsReport from './components/AssetsReport';
 import BanksList from './components/BanksList';
 import InvestmentsList from './components/InvestmentsList';
 import OrdersList from './components/OrdersList';
@@ -36,7 +37,6 @@ import StrategiesList from './components/StrategiesList';
 
 
 
-
 const router = new VueRouter({
   mode: 'history',
   base: __dirname,
@@ -45,6 +45,7 @@ const router = new VueRouter({
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/about/`, name: 'about', component: About },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/home/`, name: 'home', component: Home },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/accounts/list/`, name: 'accounts_list', component: AccountsList },
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/assets/report/`, name: 'assetsreport', component: AssetsReport },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/banks/list/`, name: 'banks_list', component: BanksList },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/investments/list/`, name: 'investments_list', component: InvestmentsList },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/orders/list/`, name: 'orders_list', component: OrdersList },
