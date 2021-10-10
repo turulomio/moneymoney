@@ -21,7 +21,7 @@
                 </template>    
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small class="mr-2" @click="addEstimation(item)">mdi-pencil</v-icon>
-                    <v-icon small @click="addEstimation(item)" v-if="showAlarm(item)">mdi-alarm</v-icon>
+                    <v-icon small @click="addEstimation(item)" v-if="showAlarm(item)" color="#9933ff">mdi-alarm</v-icon>
                 </template> 
                 <template v-slot:[`item.percentage`]="{ item }">
                     <div v-html="percentage_html(item.percentage )"></div>
