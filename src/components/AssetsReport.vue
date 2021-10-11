@@ -1,7 +1,32 @@
 <template>
     <div>
         <h1>{{ $t(`Assets Report`) }}</h1>
-        <p>{{ loading }}</p>
+        <div class="text-center mt-4" v-if="loading">
+            <v-progress-circular
+            indeterminate
+            color="primary"
+            ></v-progress-circular>
+
+            <v-progress-circular
+            indeterminate
+            color="red"
+            ></v-progress-circular>
+
+            <v-progress-circular
+            indeterminate
+            color="purple"
+            ></v-progress-circular>
+
+            <v-progress-circular
+            indeterminate
+            color="green"
+            ></v-progress-circular>
+
+            <v-progress-circular
+            indeterminate
+            color="amber"
+            ></v-progress-circular>
+        </div>
     </div>
 </template>
 
@@ -13,11 +38,20 @@
                 loading:false,
             }
         },
+        methods:{
+        },
         mounted(){
-            this.loading=false
+            this.loading=true
             axios.get(`${this.$store.state.apiroot}/assets/report/`, this.myheaders())
-            .then(() => {
-                this.loading=true
+            .then((response) => {
+                this.loading=false                
+                var blob = new Blob([response.data], { type: 'application/pdf' });
+                var link = window.document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = `file.pdf`
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             }, (error) => {
                 this.parseResponseError(error)
             });
