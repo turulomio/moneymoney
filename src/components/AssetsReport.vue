@@ -44,10 +44,9 @@
             this.loading=true
             axios.get(`${this.$store.state.apiroot}/assets/report/`, this.myheaders())
             .then((response) => {
-                this.loading=false                
-                var blob = new Blob([response.data], { type: 'application/pdf' });
+                this.loading=false      
                 var link = window.document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
+                link.href = `data:application/pdf;base64,${response.data}`
                 link.download = `file.pdf`
                 document.body.appendChild(link);
                 link.click();
