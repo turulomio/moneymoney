@@ -47,7 +47,7 @@
                 this.loading=false      
                 var link = window.document.createElement('a');
                 link.href = `data:application/pdf;base64,${response.data}`
-                link.download = `file.pdf`
+                link.download = `AssetsReport.pdf`
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
