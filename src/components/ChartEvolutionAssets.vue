@@ -2,7 +2,7 @@
 <template>
     <div>
         <h1>{{ $t("Evolution assets chart")}}</h1>
-        <div class="d-flex justify-center mb-4 mt-4">
+        <div class="d-flex justify-center mb-4 mt-4" v-if="!save_prefix">
             <v-card width="30%">
              <v-select class="pa-4" width="10%" dense label="Select the year from which to display the report" v-model="from" :items="years()" @change="change_year()"></v-select>       
              </v-card>
@@ -26,6 +26,7 @@
         props: {
             save_prefix:{
                 required:false,
+                default:null,
             },
         },
         data(){ 
@@ -177,6 +178,7 @@
                     axios.post(`${this.$store.state.apiroot}/echarts/to/file/`, {filename:filename,data:this.$refs.chart.getDataURL(),}, this.myheaders())
                     .then((response) => {
                         console.log(response.data)
+                        this.$emit("finished")
                     }, (error) => {
                         this.parseResponseError(error)
                     });

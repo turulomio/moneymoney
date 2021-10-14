@@ -33,6 +33,7 @@
             ></v-progress-circular>
         </div>
         <div v-if="data">
+            <ChartEvolutionAssets save_prefix="evolution_assets.png" @finished="finished_evolution_assets=true;" ></ChartEvolutionAssets>
             <ChartPie name="Investments by product" :items="echart_products_items" save_prefix="by_product.png" :heigth="height" :show_data="false" @finished="finished_by_product=true;" ></ChartPie>
             <ChartPie name="Investments by pci" :items="echart_pci_items" save_prefix="by_pci.png" :heigth="height" :show_data="false" @finished="finished_by_pci=true;"></ChartPie>
             <ChartPie name="Investments by variable percentage" :items="echart_percentage_items" save_prefix="by_percentage.png" :heigth="height" :show_data="false" @finished="finished_by_percentage=true;"></ChartPie>
@@ -45,10 +46,12 @@
 <script>
     import axios from 'axios'
     import {my_round} from '../functions.js'
+    import ChartEvolutionAssets from './ChartEvolutionAssets.vue'
     import ChartPie from './ChartPie.vue'
     export default {
         components:{
             ChartPie,
+            ChartEvolutionAssets,
         },
         data(){
             return {
@@ -62,6 +65,7 @@
                 finished_by_percentage:false,
                 finished_by_producttype:false,
                 finished_by_leverage:false,
+                finished_evolution_assets:false,
 
                 
             }
@@ -131,7 +135,8 @@
                 this.finished_by_pci && 
                 this.finished_by_percentage && 
                 this.finished_by_producttype && 
-                this.finished_by_leverage) return true
+                this.finished_by_leverage &&
+                this.finished_evolution_assets) return true
                 return false
             },
             launch_report(){
