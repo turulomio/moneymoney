@@ -14,19 +14,19 @@
                 </v-tabs>
                 <v-tabs-items v-model="tab" v-if="data!=null">
                     <v-tab-item key="product">
-                        <ChartPie name="Investments by product" :items="echart_products_items" height="600px" :key="key+1"></ChartPie>
+                        <ChartPie name="Investments by product" :items="echart_products_items" save_prefix="prueba.png" :key="key"></ChartPie>
                     </v-tab-item>
                     <v-tab-item key="pci">
-                        <ChartPie name="Investments by pci" :items="echart_pci_items" height="600px" :key="key"></ChartPie>
+                        <ChartPie name="Investments by pci" :items="echart_pci_items" :key="key"></ChartPie>
                     </v-tab-item>
                     <v-tab-item key="percentage">
-                        <ChartPie name="Investments by variable percentage" :items="echart_percentage_items" height="600px" :key="key"></ChartPie>
+                        <ChartPie name="Investments by variable percentage" :items="echart_percentage_items" :key="key"></ChartPie>
                     </v-tab-item>
                     <v-tab-item key="type">
-                        <ChartPie name="Investments by product type" :items="echart_producttype_items" height="600px" :key="key"></ChartPie>
+                        <ChartPie name="Investments by product type" :items="echart_producttype_items" :key="key"></ChartPie>
                     </v-tab-item>
                     <v-tab-item key="leverage">
-                        <ChartPie name="Investments by leverage" :items="echart_leverage_items" height="600px" :key="key"></ChartPie>
+                        <ChartPie name="Investments by leverage" :items="echart_leverage_items" :key="key"></ChartPie>
                     </v-tab-item>
                 </v-tabs-items>
         </v-card>
@@ -59,6 +59,7 @@
                 } else {//Invested
                     adapted= products.map(el => ({name: el.name, value: my_round(el.invested,2)}))
                 }
+                adapted=adapted.filter(o => o.value!=0)
                 return adapted
             },
             echart_pci_items: function(){
@@ -69,6 +70,7 @@
                 } else {//Invested
                     adapted= products.map(el => ({name: el.name, value: my_round(el.invested,2)}))
                 }
+                adapted=adapted.filter(o => o.value!=0)
                 return adapted
             },
             echart_percentage_items: function(){
@@ -80,6 +82,7 @@
                 } else {//Invested
                     adapted= products.map(el => ({name: el.name, value: my_round(el.invested,2)}))
                 }
+                adapted=adapted.filter(o => o.value!=0)
                 return adapted
             },
             echart_producttype_items: function(){
@@ -90,6 +93,7 @@
                 } else {//Invested
                     adapted= products.map(el => ({name: el.name, value: my_round(el.invested,2)}))
                 }
+                adapted=adapted.filter(o => o.value!=0)
                 return adapted
             },
             echart_leverage_items: function(){
@@ -100,6 +104,7 @@
                 } else {//Invested
                     adapted= products.map(el => ({name: el.name, value: my_round(el.invested,2)}))
                 }
+                adapted=adapted.filter(o => o.value!=0)
                 return adapted
             }
         },

@@ -13,6 +13,7 @@
                 :option="chart_option()"
                 autoresize
                 :loading="loading"
+                @finished="on_finished"
             />
          </v-card>
     </div>
@@ -22,6 +23,11 @@
     import axios from 'axios'
     import {arrayobjects_to_array} from '../functions.js'
     export default {
+        props: {
+            save_prefix:{
+                required:false,
+            },
+        },
         data(){ 
             return{
                 loading:false,
@@ -164,6 +170,18 @@
                 }, (error) => {
                     this.parseResponseError(error)
                 });
+            },
+            on_finished(){
+                if (this.save_prefix!=null){
+                    var filename=this.save_prefix
+                    axios.post(`${this.$store.state.apiroot}/echarts/to/file/`, {filename:filename,data:this.$refs.chart.getDataURL(),}, this.myheaders())
+                    .then((response) => {
+                        console.log(response.data)
+                    }, (error) => {
+                        this.parseResponseError(error)
+                    });
+                }
+                
             }
         },
         mounted(){
