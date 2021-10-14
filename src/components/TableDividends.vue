@@ -3,7 +3,10 @@
         <v-data-table dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" :ref="$vnode.tag">
             <template v-slot:[`item.datetime`]="{ item, index}" >
                 <div :ref="index">{{ localtime(item.datetime)}}</div>
-            </template>      
+            </template>         
+           <template v-slot:[`item.concepts`]="{ item }">
+               <div v-html="$store.getters.getObjectPropertyByUrl('concepts',item.concepts,'name')"></div>
+           </template> 
             <template v-slot:[`item.gross`]="{ item }">
                 <div v-html="currency(item.gross)"></div>
             </template>   

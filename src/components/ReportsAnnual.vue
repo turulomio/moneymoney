@@ -439,7 +439,7 @@
                 var cumulative_gains=0
                 
                 for (var i=0; i<12; i++){
-                    let month_gains= this.total_annual_incomes[i].gains
+                    let month_gains= this.total_annual_incomes[i].gains + this.total_annual_incomes[i].dividends
                     cumulative_target=cumulative_target+this.month_target
                     cumulative_gains=cumulative_gains+month_gains
                     this.total_target.push({
