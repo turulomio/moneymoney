@@ -46,6 +46,7 @@
         <template v-slot:[`item.balance_user`]="{ item }">
             <div v-html="currency(item.balance_user)"></div>
         </template> 
+
         <template v-slot:[`item.percentage_annual_investment`]="{ item }">
             <div v-html="percentage_html(item.percentage_annual_investment)"></div>
         </template>
@@ -55,6 +56,17 @@
         <template v-slot:[`item.percentage_total_investment`]="{ item }">
             <div v-html="percentage_html(item.percentage_total_investment)"></div>
         </template>   
+        
+        <template v-slot:[`item.percentage_annual_user`]="{ item }">
+            <div v-html="percentage_html(item.percentage_annual_user)"></div>
+        </template>
+        <template v-slot:[`item.percentage_apr_user`]="{ item }">
+            <div v-html="percentage_html(item.percentage_apr_user)"></div>
+        </template>
+        <template v-slot:[`item.percentage_total_user`]="{ item }">
+            <div v-html="percentage_html(item.percentage_total_user)"></div>
+        </template>   
+
         <template v-slot:[`body.append`]="{headers}">
             <tr style="background-color: GhostWhite" ref="lr">
                 <td v-for="(header,i) in headers" :key="i" >
@@ -62,7 +74,7 @@
                         Total
                     </div>
                  
-                    <div v-if="header.value == 'shares'" align="right">
+                    <div v-if="header.value == 'shares' && heterogeneus==false" align="right">
                         <div v-html="items.reduce((accum,item) => accum + item.shares, 0)"></div>
                     </div>
                     
@@ -72,7 +84,7 @@
                     <div v-if="header.value == 'price_investment'" align="right">
                         <div v-html="currency(listobjects_average_ponderated(items,'price_investment', 'shares'))"></div>
                     </div>
-                    <div v-if="header.value == 'price_user'" align="right">
+                    <div v-if="header.value == 'price_user' && heterogeneus==false" align="right">
                         <div v-html="currency(listobjects_average_ponderated(items,'price_user', 'shares'))"></div>
                     </div>
                     

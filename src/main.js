@@ -29,6 +29,7 @@ import ReportsDividends from './components/ReportsDividends';
 import ReportsEvolution from './components/ReportsEvolution';
 import ReportsInvestmentsClasses from './components/ReportsInvestmentsClasses';
 import ChartEvolutionAssets from './components/ChartEvolutionAssets';
+import ReportscurrentInvestmentsOperations from './components/ReportsCurrentInvestmentsOperations';
 import ReportsInvestmentsLastOperation from './components/ReportsInvestmentsLastOperation';
 import ReportsRanking from './components/ReportsRanking';
 import Settings from './components/Settings';
@@ -58,6 +59,7 @@ const router = new VueRouter({
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/dividens/`, name: 'reports_dividends', component: ReportsDividends },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/investmentsclasses/`, name: 'reports_investments_classes', component: ReportsInvestmentsClasses },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/investments/lastoperation/`, name: 'reports_lastoperation', component: ReportsInvestmentsLastOperation },
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/investmentsoperations/current/`, name: 'reports_investmentsoperations_current', component: ReportscurrentInvestmentsOperations },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/ranking/`, name: 'reports_ranking', component: ReportsRanking },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/evolution/`, name: 'reports_evolution', component: ReportsEvolution },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/evolution/chart/`, name: 'reports_evolution_chart', component: ChartEvolutionAssets },
