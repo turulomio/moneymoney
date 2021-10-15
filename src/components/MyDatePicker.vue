@@ -10,8 +10,9 @@
     <div>
         <v-menu v-model="menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto" :disabled="readonly">
             <template v-slot:activator="{ on, attrs }">
-                <v-row justify="center" align="center" class="ml-0 mr-0">
-                    <v-text-field v-model="representation" :name="$attrs.name" :label="$attrs.label" prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
+                <v-row justify="center" align="center" class="ml-0 mr-0">                   
+                    <v-icon  @click="localValue=new Date().toISOString().slice(0,10)">mdi-calendar</v-icon>
+                    <v-text-field class="ml-3 mr-3" v-model="representation" :name="$attrs.name" :label="$attrs.label" readonly v-bind="attrs" v-on="on"></v-text-field>
                     <v-icon x-small @click="localValue=null">mdi-backspace</v-icon>
                 </v-row>
             </template>
