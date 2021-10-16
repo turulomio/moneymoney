@@ -35,10 +35,8 @@
         },
         watch:{
             'newquote.products': function (newVal){
-                console.log("CHANGED")
                 var product=this.$store.getters.getObjectByUrl("products", newVal)
                 this.stockmarket=this.$store.getters.getObjectByUrl("stockmarkets",product.stockmarkets)
-                console.log(this.stockmarket)
             },
         },
         data(){ 
@@ -52,17 +50,31 @@
                         subheader: this.$t("Date and time options"),
                         children: [
                             {
-                                name: this.$t("Set the time at the close of the stock market"),
+                                name: this.$t("Set the time at the start of the futures stock market"),
                                 icon: "mdi-calendar",
                                 code: function(this_){
-                                   this_.newquote.datetime=moment(`${this_.newquote.datetime.slice(0,10)}T${this_.stockmarket.closes}`)
+                                   this_.newquote.datetime=moment(`${this_.newquote.datetime.slice(0,10)}T${this_.stockmarket.starts_futures}`).toISOString()
+                                },
+                            },
+                            {
+                                name: this.$t("Set the time at the start of the stock market"),
+                                icon: "mdi-calendar ",
+                                code: function(this_){
+                                   this_.newquote.datetime=moment(`${this_.newquote.datetime.slice(0,10)}T${this_.stockmarket.starts}`).toISOString()
+                                },
+                            },
+                            {
+                                name: this.$t("Set the time at the close of the stock market"),
+                                icon: "mdi-calendar ",
+                                code: function(this_){
+                                   this_.newquote.datetime=moment(`${this_.newquote.datetime.slice(0,10)}T${this_.stockmarket.closes}`).toISOString()
                                 },
                             },
                             {
                                 name: this.$t("Set the time at the close of the futures stock market"),
                                 icon: "mdi-calendar ",
                                 code: function(this_){
-                                   this_.newquote.datetime=moment(`${this_.newquote.datetime.slice(0,10)}T${this_.stockmarket.closes_futures}`)
+                                   this_.newquote.datetime=moment(`${this_.newquote.datetime.slice(0,10)}T${this_.stockmarket.closes_futures}`).toISOString()
                                 },
                             },
                         ]
@@ -115,8 +127,6 @@
                 this.editing=false
             }
             this.newquote=Object.assign({},this.quote)
-            console.log(this.newquote)
-            console.log("AHORA")
         }
     }
 </script>
