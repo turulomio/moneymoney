@@ -25,6 +25,7 @@ export const store = new Vuex.Store({
         investments: [],
         operationstypes: [],
         products: [],
+        stockmarkets:[],
         strategiestypes:[],
     },    
     getters:{
@@ -96,6 +97,11 @@ export const store = new Vuex.Store({
             console.log(state.local_currency)
             console.log(state.local_zone)
         },
+        updateStockmarkets: (state, payload) =>{
+            state.stockmarkets=payload
+            console.log("Updated stock markets")
+            console.log(state.stockmarkets)
+        },
         updateStrategiesTypes: (state, payload) =>{
             state.strategiestypes=payload
             console.log("Updated strategies types")
@@ -115,6 +121,7 @@ export const store = new Vuex.Store({
             context.dispatch("getOperationstypes")
             context.dispatch("getProducts")
             context.dispatch("getSettings")
+            context.dispatch("getStockmarkets")
             context.dispatch("getStrategiesTypes")
         },
         getAccounts(context){
@@ -193,6 +200,14 @@ export const store = new Vuex.Store({
                 store.$app.parseResponseError(error)
             });
         },
+        getStockmarkets(context){
+            axios.get(`${store.state.apiroot}/api/stockmarkets/`, store.$app.myheaders())
+            .then((response) => {
+                context.commit("updateStockmarkets", response.data)
+            }, (error) => {
+                store.$app.parseResponseError(error)
+            });
+        },
         getStrategiesTypes(context){
             var r=[
                 {id:1, name: store.$app.$t("Pairs in same account")},
@@ -200,6 +215,6 @@ export const store = new Vuex.Store({
                 {id:3, name: store.$app.$t("Generic")},
             ]
             context.commit("updateStrategiesTypes",r)
-        }
+        },
     }
 })

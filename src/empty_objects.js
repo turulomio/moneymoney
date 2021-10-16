@@ -94,6 +94,7 @@ export function empty_quote(){
         url: null,
         datetime: new Date().toISOString(),
         quote: 0,
+        products: null
     }
 }
 
