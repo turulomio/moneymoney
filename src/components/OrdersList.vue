@@ -203,7 +203,7 @@
                         console.log(response.data);
                         this.ios=response.data 
                         this.key=this.key+1
-                        this.dialog_investment_chart=true
+                        this.dialog_simulation_chart=true
                     }, (error) => {
                         this.parseResponseError(error)
                     });

@@ -182,9 +182,9 @@
                         { text: this.$t('Invested'), value: 'invested_account',sortable: false, align:"right"},
                         { text: this.$t('Balance'), value: 'balance_account',sortable: false, align:"right"},
                         { text: this.$t('Gross gains'), value: 'gains_gross_account',sortable: false, align:"right"},
-                       { text: this.$t('% annual'), value: 'percentage_annual_investment',sortable: false, align:"right"},
-                       { text: this.$t('% APR'), value: 'percentage_apr_investment',sortable: false, align:"right"},
-                       { text: this.$t('% Total'), value: 'percentage_total_investment',sortable: false, align:"right"},
+                       { text: this.$t('% annual'), value: 'percentage_annual_account',sortable: false, align:"right"},
+                       { text: this.$t('% APR'), value: 'percentage_apr_account',sortable: false, align:"right"},
+                       { text: this.$t('% Total'), value: 'percentage_total_account',sortable: false, align:"right"},
                     ]
                 } else if (this.output=="investment"){
                     r= [

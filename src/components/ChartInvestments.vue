@@ -118,13 +118,15 @@
 
                 //SELLING PRICE
 
-                r.push({
-                    type: 'line',
-                    name: this.$t("Selling price"),
-                    data: this.sellingprice,
-                    showSymbol:false,
-                        color: "pink",
-                })
+                if (this.sellingprice!=null && this.sellingprice>0){
+                    r.push({
+                        type: 'line',
+                        name: this.$t("Selling price"),
+                        data: this.sellingprice,
+                        showSymbol:false,
+                            color: "pink",
+                    })
+                }
                 //AVERAGE PRICE
 
                 r.push({
