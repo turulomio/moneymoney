@@ -3,9 +3,9 @@
         <h1>{{ $t(`Orders view`)}}
             <MyMenuInline :items="items" :context="this"></MyMenuInline>
         </h1>
-        <v-row>
-            <v-select class="mr-5" :items="viewoptions" v-model="viewoption" :label="$t('Set a view option')"  item-text="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables()"></v-select>  
-            <v-text-field autoindex="1" v-model="gains_percentage" type="number" :label="$t('Gains percentage')" :placeholder="$t('Gains percentage')" :rules="RulesFloat(5,true)" counter="5"/>
+        <v-row class="px-4 ma-2">
+            <v-select class="mr-5" :disable="loading" :items="viewoptions" v-model="viewoption" :label="$t('Set a view option')"  item-text="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables()"></v-select>  
+            <v-text-field autoindex="1" :disable="loading" v-model="gains_percentage" type="number" :label="$t('Gains percentage')" :placeholder="$t('Gains percentage')" :rules="RulesFloat(5,true)" counter="5"/>
         </v-row>
         <v-tabs  background-color="primary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
             <v-tab key="current">{{ $t('Current investment operations') }}</v-tab>
@@ -17,29 +17,29 @@
         <v-tabs-items v-model="tab">
             <v-tab-item key="current">      
                 <div>
-                    <v-card v-if="!loading_ios_after && !loading_ios_before && !loading_ohcls">
-                        <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="investment" height="400" :key="key"></TableInvestmentOperationsCurrent>
+                    <v-card v-if="!loading">
+                        <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="investment" height="400" :key="key" :loading="loading"></TableInvestmentOperationsCurrent>
                     </v-card>
                 </div>
             </v-tab-item>
             <v-tab-item key="operations">          
                 <div>
-                    <v-card v-if="!loading_ios_after && !loading_ios_before && !loading_ohcls">
-                        <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment"></TableInvestmentOperations>
+                    <v-card v-if="!loading">
+                        <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment" :loading="loading"></TableInvestmentOperations>
                     </v-card>
                 </div>
             </v-tab-item>
             <v-tab-item key="historical">     
                 <div>            
-                    <v-card v-if="!loading_ios_after && !loading_ios_before && !loading_ohcls">
-                        <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="investment" :homogeneous="true" :key="key"></TableInvestmentOperationsHistorical>
+                    <v-card v-if="!loading">
+                        <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="investment" :homogeneous="true" :key="key" :loading="loading"></TableInvestmentOperationsHistorical>
                     </v-card>
                 </div>
             </v-tab-item>
             <v-tab-item key="chart">     
                 <div> 
-                    <v-card v-if="!loading_ios_after && !loading_ios_before && !loading_ohcls">
-                        <ChartInvestments :data="chart_data" height="400" :key="key"></ChartInvestments>
+                    <v-card v-if="!loading">
+                        <ChartInvestments :data="chart_data" height="400" :key="key" :loading="loading"></ChartInvestments>
                     </v-card>
                 </div>
             </v-tab-item>
@@ -107,12 +107,7 @@
                 ohcls:null,
                 ios_before:null,
                 ios_after:null,
-                loading_ios_before:false,
-                loading_ios_after:false,
-                loading_ohcls:false,
-                ios_before_loaded:false,
-                ios_after_loaded:false,
-                ohcls_loaded:false,
+                loading:false,
             }
         },
         computed:{
@@ -125,36 +120,15 @@
             empty_investments_chart,
             empty_investments_chart_limit_line,
             refreshProductQuotes(){
-                this.loading_ohcls=true
-                axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl?product=${this.neworder.products}`, this.myheaders())
-                .then((response) => {
-                    console.log(response.data);
-                    this.ohcls=response.data 
-                    this.loading_ohcls=false
-                    this.refreshTables()
-                    this.key=this.key+1
-                }, (error) => {
-                    this.parseResponseError(error)
-                })
+                return axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl?product=${this.neworder.products}`, this.myheaders())
             },
             simulateOrderBefore(){
-                    this.loading_ios_before=true
                     var simulation=this.empty_investments_operations_simulation()
                     simulation.investments.push(this.neworder.investments)
                     simulation.local_currency=this.neworder.currency
-                    axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
-                    .then((response) => {
-                        this.ios_before=response.data 
-                        this.refreshTables()
-                        this.loading_ios_before=false
-                        this.key=this.key+1
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    });
-
+                    return axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
             },
             simulateOrderAfter(){
-                    this.loading_ios_after=true
                     var simulation=this.empty_investments_operations_simulation()
                     simulation.investments.push(this.neworder.investments)
                     simulation.local_currency=this.neworder.currency
@@ -165,18 +139,20 @@
                     operation.comment="Simulation 1"
                     operation.investments=this.neworder.investments
                     simulation.operations.push(operation)
-                    axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
-                    .then((response) => {
-                        this.ios_after=response.data 
-                        this.loading_ios_after=false
-                        this.refreshTables()
-                        this.key=this.key+1
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    });
-
+                    return axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
             },
-
+            make_all_axios(){
+                this.loading=true
+                axios.all([this.refreshProductQuotes(), this.simulateOrderBefore(), this.simulateOrderAfter()])
+                .then(([resQuotes, resBefore, resAfter]) => {
+                    this.ohcls=resQuotes.data 
+                    this.ios_before=resBefore.data
+                    this.ios_after=resAfter.data
+                    this.key=this.key+1
+                    this.loading=false
+                    this.refreshTables()
+                });
+            },
             refreshTables(){
                 var ll
                 this.chart_data=this.empty_investments_chart()
@@ -212,9 +188,7 @@
         },
         created(){
             this.neworder=Object.assign({},this.order)
-            this.refreshProductQuotes()
-            this.simulateOrderBefore()
-            this.simulateOrderAfter()
+            this.make_all_axios()
         }
         
     }
