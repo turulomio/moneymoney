@@ -112,14 +112,14 @@
         <!-- INVESTMENT CHART-->
         <v-dialog v-model="dialog_investment_chart" v-if="ios">
             <v-card class="pa-3">
-                <ChartInvestments :ios="ios" :ohcl="ohcl" :key="key"></ChartInvestments>
+                <ChartInvestments :data="chart_data" :key="key"></ChartInvestments>
             </v-card>
         </v-dialog>
     </div>  
 </template>
 <script>
     import axios from 'axios'
-    import {empty_io,empty_dividend} from '../empty_objects.js'
+    import {empty_io,empty_dividend,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
     import {listobjects_sum, parseNumber,listobjects_average_ponderated} from '../functions.js'
     import ChartInvestments from './ChartInvestments.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
@@ -173,6 +173,7 @@
                 showAllDividends:false,
                 chkShowAllIO:false,
                 leverage_message:"",
+                chart_data: null,
                 items: [
                     {
                         subheader:this.$t('Investment orders'),
@@ -183,7 +184,17 @@
                                 code: function(this_){
                                     axios.get(`${this_.$store.state.apiroot}/products/quotes/ohcl?product=${this_.ios.product.url}`, this_.myheaders())
                                     .then((response) => {
-                                        console.log(response.data);
+                                        this_.chart_data=this_.empty_investments_chart()
+                                        this_.chart_data.ohcls=response.data
+                                        this_.chart_data.io_object=this_.ios
+                                        var ll
+                                        if (this_.list_io_current.length>0){
+                                            ll=this_.empty_investments_chart_limit_line()
+                                            ll.buy=this_.ios.investment.average_price_investment
+                                            ll.average=this_.ios.investment.average_price_investment
+                                            ll.sell=this_.investment.selling_price
+                                            this_.chart_data.limitlines.push(ll)
+                                        }
                                         this_.ohcl=response.data 
                                         this_.key=this_.key+1
                                         this_.dialog_investment_chart=true
@@ -305,6 +316,8 @@
                 dialog_evolution_chart:false,
                 dialog_evolution_chart_timeseries:false,
 
+                ios:null,
+
                 // Dividend CU
                 dialog_dividend:false,
                 dividend: null,
@@ -315,8 +328,6 @@
 
                 // Investment chart
                 dialog_investment_chart:false,
-                ios:null,
-                ohcl:[],
             }  
         },
         watch:{
@@ -325,6 +336,8 @@
             }
         },
         methods: {
+            empty_investments_chart,
+            empty_investments_chart_limit_line,
             empty_dividend,
             empty_io,
             listobjects_average_ponderated,

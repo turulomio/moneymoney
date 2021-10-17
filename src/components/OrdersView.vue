@@ -141,12 +141,10 @@
                     simulation.local_currency=this.neworder.currency
                     axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
                     .then((response) => {
-                        console.log(response.data);
                         this.ios_before=response.data 
                         this.key=this.key+1
                         this.refreshTables()
                         this.loading_ios_before=false
-                        //this.dialog_simulation_chart=true
                     }, (error) => {
                         this.parseResponseError(error)
                     });
@@ -166,11 +164,9 @@
                     simulation.operations.push(operation)
                     axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
                     .then((response) => {
-                        console.log(response.data);
                         this.ios_after=response.data 
                         this.key=this.key+1
                         this.loading_ios_before=false
-                        //this.dialog_simulation_chart=true
                     }, (error) => {
                         this.parseResponseError(error)
                     });
@@ -183,8 +179,8 @@
                 this.chart_data.ohcls=this.ohcls
                 if (this.ios_before.io_current.length>0){
                     ll=this.empty_investments_chart_limit_line()
-                    ll.buy=null
-                    ll.average=this.ios_before.investment.average_price_investment
+                    ll.buy=this.ios.investment.average_price_investment
+                    ll.average=this.ios.investment.average_price_investment
                     ll.sell=ll.average*(1+this.gains_percentage/100)
                     this.chart_data.limitlines.push(ll)
 
@@ -205,10 +201,9 @@
                     ll2.buy=this.neworder.price
                     ll2.average=this.ios_after.investment.average_price_investment
                     ll2.sell=ll2.average*(1+this.gains_percentage/100)
-                    console.log("LL2")
-                    console.log(ll2)
                     this.chart_data.limitlines.push(ll2)
                 }
+                this.key=this.key+1
             },
         },
         created(){

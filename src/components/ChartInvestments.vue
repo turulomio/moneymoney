@@ -42,7 +42,6 @@
                     legends.push(this.limitlines_series_name(i*3+1))
                     legends.push(this.limitlines_series_name(i*3+2))
                 }
-                console.log(legends)
                 return {
                     legend: {
                         data: legends,
@@ -203,8 +202,6 @@
                     this.sells.push([o.datetime, o.price])
                 }
              })
-             console.log('CLOSEXS')
-             console.log(this.closes)
 
         }
     }
