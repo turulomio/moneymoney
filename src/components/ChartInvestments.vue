@@ -16,12 +16,9 @@
     import {arrayobjects_to_array} from '../functions.js'
     export default {
         props:{
-            ios:{
+            data:{ //empty_investments_chart
                 required:true,
             },
-            ohcl:{
-                required:true
-            }
         },
         data(){ 
             return{
@@ -29,16 +26,26 @@
                 closes:[],
                 buys:[],
                 sells:[],
-                sellingprice:[],
-                averageprice:[],
+                limitlines:[], //Array of lines n%3==0 buy, n%3==1 average n%3==2  sell
             }
         },
         methods: {
             arrayobjects_to_array,
             chart_option(){
+                var legends= [
+                            this.data.io_object.product.name, 
+                            this.$t("Buys"), 
+                            this.$t("Sells"), 
+                    ]
+                for (var i = 0; i < this.data.limitlines.length; i++) {
+                    legends.push(this.limitlines_series_name(i*3+0))
+                    legends.push(this.limitlines_series_name(i*3+1))
+                    legends.push(this.limitlines_series_name(i*3+2))
+                }
+                console.log(legends)
                 return {
                     legend: {
-                        data: [this.ios.product.name, this.$t("Buys"), this.$t("Sells"), this.$t("Selling price"), this.$t("Average price")],
+                        data: legends,
                         inactiveColor: '#777',
                     },
                     tooltip: {
@@ -91,7 +98,7 @@
                 var r=[]
                 r.push({
                     type: 'line',
-                    name: this.ios.product.name, 
+                    name: this.data.io_object.product.name, 
                     data: this.closes,
                     showSymbol:false,
                 })
@@ -116,44 +123,88 @@
                         color: "#FF0000",
                 })
 
-                //SELLING PRICE
-
-                if (this.sellingprice!=null && this.sellingprice>0){
+                //LIMIT LINES
+                for (var pos = 0; pos < this.data.limitlines.length; pos++) {
                     r.push({
                         type: 'line',
-                        name: this.$t("Selling price"),
-                        data: this.sellingprice,
+                        name: this.limitlines_series_name(pos*3+0),
+                        data: this.limitlines[pos*3+0],
                         showSymbol:false,
-                            color: "pink",
+                        color: this.limitlines_series_color(pos*3+0),
+                        lineStyle: {
+                            width: 4,
+                            type: 'dashed'
+                        },
+                    })
+                    r.push({
+                        type: 'line',
+                        name: this.limitlines_series_name(pos*3+1),
+                        data: this.limitlines[pos*3+1],
+                        showSymbol:false,
+                        color: this.limitlines_series_color(pos*3+1),
+                        lineStyle: {
+                            width: 4,
+                        },
+                    })
+                    r.push({
+                        type: 'line',
+                        name: this.limitlines_series_name(pos*3+2),
+                        data: this.limitlines[pos*3+2],
+                        showSymbol:false,
+                            color: this.limitlines_series_color(pos*3+2),
+                        lineStyle: {
+                            width: 4,
+                            type: 'dotted'
+                        },
                     })
                 }
-                //AVERAGE PRICE
 
-                r.push({
-                    type: 'line',
-                    name: this.$t("Average price"),
-                    data: this.averageprice,
-                    showSymbol:false,
-                        color: "orange",
-                })
                 return r
+            },
+            limitlines_series_name(position){
+                var num = ~~(position / 3); //Division integer
+                if(position % 3==0){
+                    return `${'Buy price'} ${num}`
+                } else if (position % 3==1){
+                    return `${'Average price'} ${num}`
+                } else if (position % 3==2){
+                    return `${'Sell price'} ${num}`
+                }
+            },
+            limitlines_series_color(position){
+                var colors=['pink','gray','yellow','orange']
+                var num = ~~(position / 3); //Division integer
+                return colors[num]
             },
         },
         mounted(){
              this.loading=false
-             this.ohcl.forEach(o=> {
+             this.data.ohcls.forEach(o=> {
                 this.closes.push([new Date(o.date), o.close])
-                this.sellingprice.push([new Date(o.date), this.ios.investment.selling_price])
-                this.averageprice.push([new Date(o.date), this.ios.investment.average_price_investment])
              })
-             console.log("AQUIN")
-             this.ios.io.forEach(o=> {
+            this.data.limitlines.forEach(ll=>{ //0 buy,1 average,2 sell
+                var buy=[]
+                var avg=[]
+                var sell=[]
+                this.data.ohcls.forEach(ohcl=> {
+                    buy.push([new Date(ohcl.date),ll.buy])
+                    avg.push([new Date(ohcl.date),ll.average])
+                    sell.push([new Date(ohcl.date),ll.sell])
+                })
+                this.limitlines.push(buy)
+                this.limitlines.push(avg)
+                this.limitlines.push(sell)
+            })
+             console.log(this.limitlines)
+             this.data.io_object.io.forEach(o=> {
                 if (o.shares>=0){
                     this.buys.push([o.datetime,o.price])
                 } else {
                     this.sells.push([o.datetime, o.price])
                 }
              })
+             console.log('CLOSEXS')
+             console.log(this.closes)
 
         }
     }

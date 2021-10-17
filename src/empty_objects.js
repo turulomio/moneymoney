@@ -121,6 +121,21 @@ export function empty_investments_operations_simulation(){
     }
 }
 
+export function empty_investments_chart(){
+    return {
+        ohcls:[],
+        io_object: [], //investmentsoperations object also simulations
+        limitlines:[],//empty_investments_chart_limit_line
+    }
+}
+export function empty_investments_chart_limit_line(){
+    return {
+        buy:null,
+        average: null, 
+        sell:null,
+    }
+}
+
 
 export function empty_dividend(){
     return {

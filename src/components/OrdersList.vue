@@ -25,7 +25,7 @@
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small class="mr-2" @click="executeOrder(item)">mdi-play</v-icon>
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon small class="mr-2" @click="viewSimulationChart(item)">mdi-chart-areaspline</v-icon>
+                    <v-icon small class="mr-2" @click="orderView(item)">mdi-eye</v-icon>
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
                 </template>                            
             </v-data-table>
@@ -40,13 +40,7 @@
         <!-- Order View dialog -->
         <v-dialog v-model="dialog_view">
             <v-card class="pa-4">
-            </v-card>
-        </v-dialog>
-
-        <!-- INVESTMENT OPERTATIONS SIMULATION CHART-->
-        <v-dialog v-model="dialog_simulation_chart" v-if="ios">
-            <v-card class="pa-3">
-                <ChartInvestments :ios="ios" :ohcl="ohcl" :key="key"></ChartInvestments>
+                <OrdersView :order="order" :key="key"></OrdersView>
             </v-card>
         </v-dialog>
 
@@ -61,6 +55,7 @@
 <script>
     import axios from 'axios'
     import OrdersCU from './OrdersCU.vue'
+    import OrdersView from './OrdersView.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import {empty_order,empty_investments_operations_simulation, empty_io} from '../empty_objects.js'
@@ -69,6 +64,7 @@
             InvestmentsoperationsCU,
             MyMenuInline,
             OrdersCU,
+            OrdersView,
         },
         data(){ 
             return{
@@ -113,11 +109,6 @@
 
                 dialog_view:false,
                 key:0,
-
-                //Dialog simulation chart
-                dialog_simulation_chart:false,
-                ios:null,
-                ohcl:null,
 
                 //Dialog InvestmentsOperationsCU
                 dialog_io_cu:false,
@@ -182,34 +173,7 @@
                     this.parseResponseError(error)
                 })
             },
-            viewSimulationChart (item) {    
-                axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl?product=${item.products}`, this.myheaders())
-                .then((response) => {
-                    console.log(response.data);
-                    this.ohcl=response.data 
-                    var simulation=this.empty_investments_operations_simulation()
-                    simulation.investments.push(item.investments)
-                    simulation.local_currency=item.currency
-                    var operation=this.empty_io()
-                    operation.datetime=simulation.dt
-                    operation.shares=item.shares
-                    operation.price=item.price
-                    operation.comment="Simulation 1"
-                    operation.investments=item.investments
-                    simulation.operations.push(operation)
-                    console.log(simulation)
-                    axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
-                    .then((response) => {
-                        console.log(response.data);
-                        this.ios=response.data 
-                        this.key=this.key+1
-                        this.dialog_simulation_chart=true
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    });
-                }, (error) => {
-                    this.parseResponseError(error)
-                })
+            orderView(item) {    
                 this.key=this.key+1
                 this.order=item
                 this.dialog_view=true

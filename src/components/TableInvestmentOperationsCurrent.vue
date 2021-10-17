@@ -223,7 +223,7 @@
             },
         },
         mounted(){
-            this.gotoLastRow()
+            //this.gotoLastRow()
         }
     }
 </script>
