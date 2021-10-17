@@ -17,28 +17,28 @@
         <v-tabs-items v-model="tab">
             <v-tab-item key="current">      
                 <div>
-                    <v-card v-if="true">
+                    <v-card v-if="!loading_ios_after && !loading_ios_before && !loading_ohcls">
                         <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="investment" height="400" :key="key"></TableInvestmentOperationsCurrent>
                     </v-card>
                 </div>
             </v-tab-item>
             <v-tab-item key="operations">          
                 <div>
-                    <v-card v-if="true">
+                    <v-card v-if="!loading_ios_after && !loading_ios_before && !loading_ohcls">
                         <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment"></TableInvestmentOperations>
                     </v-card>
                 </div>
             </v-tab-item>
             <v-tab-item key="historical">     
                 <div>            
-                    <v-card v-if="true">
+                    <v-card v-if="!loading_ios_after && !loading_ios_before && !loading_ohcls">
                         <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="investment" :homogeneous="true" :key="key"></TableInvestmentOperationsHistorical>
                     </v-card>
                 </div>
             </v-tab-item>
             <v-tab-item key="chart">     
-                <div>            
-                    <v-card v-if="true">
+                <div> 
+                    <v-card v-if="!loading_ios_after && !loading_ios_before && !loading_ohcls">
                         <ChartInvestments :data="chart_data" height="400" :key="key"></ChartInvestments>
                     </v-card>
                 </div>
@@ -70,7 +70,6 @@
         },
         data () {
             return {
-                gains_percentage:10,
                 items: [
                     {
                         subheader:this.$t('Quote options'),
@@ -98,25 +97,27 @@
                 list_io_historical:[],
                 tab:0,
                 key:0,
+                gains_percentage:10,
 
 
                 //Chart
                 chart_data:null,
 
                 //simulation
-                ohcls:[],
+                ohcls:null,
                 ios_before:null,
                 ios_after:null,
                 loading_ios_before:false,
                 loading_ios_after:false,
-                loading_ohcl:false,
+                loading_ohcls:false,
+                ios_before_loaded:false,
+                ios_after_loaded:false,
+                ohcls_loaded:false,
             }
         },
         computed:{
-//            loaded_data: function(){
-//                if (this.loading_ios_before==false&& this.loading_ios_after==false && this.loading_ohcl==false) return true
-//                return  false
-//            },
+        },
+        watch:{
         },
         methods: {
             empty_investments_operations_simulation,
@@ -124,12 +125,14 @@
             empty_investments_chart,
             empty_investments_chart_limit_line,
             refreshProductQuotes(){
-                this.loading_ohcl=true
+                this.loading_ohcls=true
                 axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl?product=${this.neworder.products}`, this.myheaders())
                 .then((response) => {
                     console.log(response.data);
                     this.ohcls=response.data 
-                    this.loading_ohcl=false
+                    this.loading_ohcls=false
+                    this.refreshTables()
+                    this.key=this.key+1
                 }, (error) => {
                     this.parseResponseError(error)
                 })
@@ -142,9 +145,9 @@
                     axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
                     .then((response) => {
                         this.ios_before=response.data 
-                        this.key=this.key+1
                         this.refreshTables()
                         this.loading_ios_before=false
+                        this.key=this.key+1
                     }, (error) => {
                         this.parseResponseError(error)
                     });
@@ -165,8 +168,9 @@
                     axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
                     .then((response) => {
                         this.ios_after=response.data 
+                        this.loading_ios_after=false
+                        this.refreshTables()
                         this.key=this.key+1
-                        this.loading_ios_before=false
                     }, (error) => {
                         this.parseResponseError(error)
                     });
@@ -179,8 +183,8 @@
                 this.chart_data.ohcls=this.ohcls
                 if (this.ios_before.io_current.length>0){
                     ll=this.empty_investments_chart_limit_line()
-                    ll.buy=this.ios.investment.average_price_investment
-                    ll.average=this.ios.investment.average_price_investment
+                    ll.buy=this.ios_before.investment.average_price_investment
+                    ll.average=this.ios_before.investment.average_price_investment
                     ll.sell=ll.average*(1+this.gains_percentage/100)
                     this.chart_data.limitlines.push(ll)
 
