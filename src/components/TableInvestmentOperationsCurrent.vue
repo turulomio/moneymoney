@@ -1,5 +1,5 @@
 <template>
-    <v-data-table ref="table_oc" dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" :key="$attrs.key">
+    <v-data-table ref="table_oc" dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" :key="$attrs.key" :loading="$attrs.loading">
         <template v-slot:[`item.datetime`]="{ item, index }" >
             <div :ref="index">{{ localtime(item.datetime)}}</div>
         </template>                  
@@ -68,7 +68,7 @@
         </template>   
 
         <template v-slot:[`body.append`]="{headers}">
-            <tr style="background-color: GhostWhite" ref="lr">
+            <tr style="background-color: GhostWhite" ref="lr" v-if="!$attrs.loading">
                 <td v-for="(header,i) in headers" :key="i" >
                     <div v-if="header.value == 'datetime'">
                         Total

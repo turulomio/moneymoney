@@ -119,14 +119,6 @@
                         <v-list-item href="https://github.com/turulomio/django_moneymoney/" target="_blank">
                             <v-list-item-title>{{ $t('Django Money Money Github') }}</v-list-item-title>
                         </v-list-item>
-
-                        <v-list-item href="https://github.com/turulomio/xulpymoney/" target="_blank">
-                            <v-list-item-title>{{ $t('Xulpymoney Github') }}</v-list-item-title>
-                        </v-list-item>
-                        
-                        <v-list-item href="https://github.com/turulomio/django-money/" target="_blank">
-                            <v-list-item-title>{{ $t('Django Money Github') }}</v-list-item-title>
-                        </v-list-item>
                     </v-list-group>
                 </v-list>
             </v-card>

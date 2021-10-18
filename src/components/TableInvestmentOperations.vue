@@ -7,7 +7,7 @@
 
 <template>
     <div>
-        <v-data-table dense v-model="selected" :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" ref="table_o" :key="$attrs.key">
+        <v-data-table dense v-model="selected" :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" ref="table_o" :key="$attrs.key" :loading="$attrs.loading">
             <template v-slot:[`item.datetime`]="{ item,index }">
             <div :ref="index">{{ localtime(item.datetime)}}</div>
             </template>           
