@@ -49,6 +49,10 @@
                 required: false,
                 default:600
             },
+            width: {
+                required: false,
+                default:1200
+            },
             save_prefix:{
                 required:false,
             },
@@ -94,7 +98,7 @@
                 }
             },
             styleheight: function(){
-                return `height: ${this.height}px;`
+                return `height: ${this.height}px; width: ${this.width}px;`
             },
             buttontext: function(){
                 if (this.showtable){
