@@ -38,9 +38,9 @@
         </v-dialog>
 
         <!-- Order View dialog -->
-        <v-dialog v-model="dialog_view">
+        <v-dialog v-model="dialog_reinvest">
             <v-card class="pa-4">
-                <OrdersView :order="order" :key="key"></OrdersView>
+                <InvestmentsoperationsReinvest :order="order" :key="key"></InvestmentsoperationsReinvest>
             </v-card>
         </v-dialog>
 
@@ -55,7 +55,7 @@
 <script>
     import axios from 'axios'
     import OrdersCU from './OrdersCU.vue'
-    import OrdersView from './OrdersView.vue'
+    import InvestmentsoperationsReinvest from './InvestmentsoperationsReinvest.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import {empty_order,empty_investments_operations_simulation, empty_io} from '../empty_objects.js'
@@ -64,7 +64,7 @@
             InvestmentsoperationsCU,
             MyMenuInline,
             OrdersCU,
-            OrdersView,
+            InvestmentsoperationsReinvest,
         },
         data(){ 
             return{
@@ -107,7 +107,7 @@
                 order: null,
                 loading_table:false,
 
-                dialog_view:false,
+                dialog_reinvest:false,
                 key:0,
 
                 //Dialog InvestmentsOperationsCU
@@ -176,7 +176,7 @@
             orderView(item) {    
                 this.key=this.key+1
                 this.order=item
-                this.dialog_view=true
+                this.dialog_reinvest=true
             },
             deleteItem (item) {
                var r = confirm(this.$t("This order will be deleted. Do you want to continue?"))

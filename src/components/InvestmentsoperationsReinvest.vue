@@ -3,10 +3,23 @@
         <h1>{{ $t(`Orders view`)}}
             <MyMenuInline :items="items" :context="this"></MyMenuInline>
         </h1>
-        <v-row class="px-4 ma-2"  >
+        <v-card class="pa-4 mb-3 mt-3"  >
+            <v-form ref="form" v-model="form_valid" lazy-validation class="pa-4">
+                <v-row>
+                <v-text-field class="mr-5" v-model="neworder.price" type="number" :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field v-model="neworder.shares" type="number" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesInteger(10,true)" counter="10"/>
+                </v-row>
+
+            <v-row>
             <v-select class="mr-5" :disabled="loading" :items="viewoptions" v-model="viewoption" :label="$t('Set a view option')"  item-text="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables()"></v-select>  
-            <v-text-field autoindex="1" :disabled="loading" v-model="gains_percentage" type="number" :label="$t('Gains percentage')" :placeholder="$t('Gains percentage')" :rules="RulesFloat(5,true)" counter="5"/>
-        </v-row>
+            <v-text-field class="mr-5" autoindex="1" :disabled="loading" v-model="gains_percentage" type="number" :label="$t('Gains percentage')" :placeholder="$t('Gains percentage')" :rules="RulesFloat(5,true)" counter="5"/>
+
+            <v-btn class="mr-5" color="primary" @click="make_all_axios()" :disabled="!form_valid">{{ $t("Simulate") }}</v-btn>
+            <v-btn color="error" @click="add_or_update_order()" :disabled="!form_valid">{{ button() }}</v-btn>                 
+            </v-row>
+            </v-form>  
+
+        </v-card>
         <v-tabs  background-color="primary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
             <v-tab key="current">{{ $t('Current investment operations') }}</v-tab>
             <v-tab key="operations">{{ $t('Investment operations') }}</v-tab>
@@ -95,10 +108,11 @@
                 list_io_current:[],
                 list_io:[],
                 list_io_historical:[],
-                tab:0,
+                tab:3,
                 key:0,
                 gains_percentage:10,
 
+                neworder: null,
 
                 //Chart
                 chart_data:null,
@@ -108,6 +122,7 @@
                 ios_before:null,
                 ios_after:null,
                 loading:false,
+                form_valid:false,
             }
         },
         computed:{
@@ -119,6 +134,16 @@
             empty_io,
             empty_investments_chart,
             empty_investments_chart_limit_line,
+            add_or_update_order(){
+
+            },
+            button(){
+                if (this.editing){
+                    return this.$t("Update order")
+                } else {
+                    return this.$t("Add order")
+                }
+            },
             refreshProductQuotes(){
                 return axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl?product=${this.neworder.products}`, this.myheaders())
             },
@@ -186,8 +211,14 @@
             },
         },
         created(){
-            this.neworder=Object.assign({},this.order)
-            this.make_all_axios()
+            if ( this.order.url!=null){ // EDITING TIENE IO URL
+                this.editing=true
+                this.neworder=Object.assign({},this.order)
+                this.make_all_axios()
+            } else { // NEW IO BUT SETTING VALUES WITH URL=null
+                this.editing=false
+                this.neworder=Object.assign({},this.order)
+            }
         }
         
     }
