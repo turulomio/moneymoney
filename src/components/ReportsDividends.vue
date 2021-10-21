@@ -30,20 +30,11 @@
             <p class="mt-4 ">{{ total() }}</p>
         </div>
         
-        <v-dialog v-model="dialog" max-width="450">
-            <v-card>
-                <v-card-title class="headline">{{ $t("Post an estimation") }}</v-card-title>
-                <v-form ref="form" v-model="form_valid" lazy-validation v-if='estimation!=null'>
-                    <v-col>
-                        <v-text-field v-model="estimation.year" type="text" :counter="4" :label="$t('Year')" :placeholder="$t('Enter a year')" :rules="RulesInteger(4,true)"></v-text-field>
-                        <v-text-field v-model="estimation.estimation" type="text" :label="$t('Estimation')" :counter="10" :placeholder="$t('Enter a estimation')" autofocus @focus="$event.target.select()" :rules="RulesFloat(10, true)"></v-text-field>
-                    </v-col>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="primary" @click="submit()" :disabled="!form_valid">{{ $t("Post an estimation") }}</v-btn>
-                        <v-btn color="error" @click="dialog = false">{{ $t("Cancel") }}</v-btn>
-                    </v-card-actions>
-                </v-form>
+
+        <!-- ESTIMATIONS_DPS CU -->
+        <v-dialog v-model="dialog" width="35%">
+            <v-card class="pa-4">
+                <EstimationsDpsCU :estimation="estimation" @cruded="on_EstimationsDpsCU_cruded()" :key="key"></EstimationsDpsCU>
             </v-card>
         </v-dialog>
     </div>
@@ -52,8 +43,12 @@
 <script>
     import axios from 'axios'
     import moment from 'moment'
+    import EstimationsDpsCU from './EstimationsDpsCU.vue'
     import {empty_estimation_dps} from '../empty_objects.js'
     export default {
+        components:{
+            EstimationsDpsCU,
+        },
         data(){ 
             return{
                 alertdays:90,
@@ -68,11 +63,13 @@
                 ],
                 items:[],
                 
-                estimation: null,
                 
+                loading_dividends:false,
+
+                //Estimations DPS CU
                 dialog:false,
-                form_valid:false,
-                loading_dividends:false
+                estimation: null,
+                key: 0,
             }
         },
         methods:{
@@ -85,6 +82,7 @@
                 return false
             },
             addEstimation(item){
+                this.key=this.key+1
                 this.dialog=true
                 this.estimation=this.empty_estimation_dps()
                 this.estimation.product=item.product
@@ -101,6 +99,10 @@
                 }, (error) => {
                     this.parseResponseError(error)
                 });
+            },
+            on_EstimationsDpsCU_cruded(){
+                this.dialog=false
+                this.refreshTable()
             },
             refreshTable(){
                 this.loading_dividends=true
