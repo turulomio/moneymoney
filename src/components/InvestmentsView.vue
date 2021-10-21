@@ -115,6 +115,16 @@
                 <ChartInvestments :data="chart_data" :key="key"></ChartInvestments>
             </v-card>
         </v-dialog>
+        <!-- INVESTMENT operations same product selling price-->
+        <v-dialog v-model="dialog_io_sameproduct" v-if="ios">
+            <v-card class="pa-3">
+                <InvestmentsoperationsSameProductSellingPrice :product="investment.products" :key="key" @cruded="on_InvestmentsoperationsSameProductSellingPrice_cruded()"></InvestmentsoperationsSameProductSellingPrice>
+            </v-card>
+        </v-dialog>
+
+
+
+        
     </div>  
 </template>
 <script>
@@ -126,6 +136,7 @@
     import DividendsCU from './DividendsCU.vue'
     import InvestmentsoperationsEvolutionChart from './InvestmentsoperationsEvolutionChart.vue'
     import InvestmentsoperationsEvolutionChartTimeseries from './InvestmentsoperationsEvolutionChartTimeseries.vue'
+    import InvestmentsoperationsSameProductSellingPrice from './InvestmentsoperationsSameProductSellingPrice.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import DisplayValues from './DisplayValues.vue'
     import ProductsView from './ProductsView.vue'
@@ -147,6 +158,7 @@
             InvestmentsoperationsCU,
             InvestmentsoperationsEvolutionChart,
             InvestmentsoperationsEvolutionChartTimeseries,
+            InvestmentsoperationsSameProductSellingPrice,
         },
         props: {
             investment: {
@@ -233,9 +245,10 @@
                             },
                             {
                                 name:this.$t('Change selling price of investments with the same product'),
-                                type: "redirection",
-                                command:"{% url 'investments_same_product_change_selling_price' products_id=investment.products.id %}",
                                 icon: "mdi-pencil",
+                                code: function(this_){
+                                    this_.dialog_io_sameproduct=true
+                                }
                             },
                         ]
                     },
@@ -328,6 +341,9 @@
 
                 // Investment chart
                 dialog_investment_chart:false,
+
+                // IO set selling price same product
+                dialog_io_sameproduct:false,
             }  
         },
         watch:{
@@ -356,6 +372,9 @@
                 this.displayvalues()
                 this.key=this.key+1
                 this.$emit("cruded") //Translated to InvestmentsList
+            },
+            on_InvestmentsoperationsSameProductSellingPrice_cruded(){
+                this.on_InvestmentsoperationsCU_cruded()
             },
             on_TableInvestmentsOperations_cruded(){//Emited deleting IO
                 this.on_InvestmentsoperationsCU_cruded()
