@@ -2,8 +2,15 @@
     <div class="pa-6">
         <h1>{{ $t(`Products update`)}}</h1>
         <v-card class="pa-5">
-            <v-form ref="formFile" method="post">
-                    <v-file-input name="csv_file1" accept="text/csv" show-size truncate-length="100" v-model="file" :label="$t('Select a file')"></v-file-input>
+            <v-form  method="post">
+                    <v-file-input 
+                        name="csv_file1" 
+                        accept="text/csv" 
+                        show-size 
+                        truncate-length="100"
+                        v-model="filename" 
+                        :label="$t('Select a file')"
+                    ></v-file-input>
                     <v-card-actions class="justify-center">
                         <v-btn color="primary" @click="submmit()" :disabled="isButtonDisabled()">{{ $t("Send file")}}</v-btn>
                     </v-card-actions>
@@ -23,7 +30,7 @@
         },
         data () {
             return {
-                file:"",
+                filename:[], //Must be an array 
                 loading:false,
                 items: [],
                 headers: [
@@ -37,12 +44,12 @@
             submmit(){
                 this.loading=true
                 let data=new FormData()
-                data.append('csv_file1', this.file)
+                data.append('csv_file1', this.filename)
                 axios.post(`${this.$store.state.apiroot}/products/update/`, data, this.myheaders_formdata())
                 .then((response) => {
                         console.log(response.data)
                         this.items=response.data
-                        this.file=""
+                        this.filename=[]
                         this.loading=false
                 }, (error) => {
                     this.parseResponseError(error)
@@ -50,7 +57,7 @@
             },
             isButtonDisabled(){
                 if (this.loading==true) return true
-                if (this.file=="") return true
+                if (this.filename=="") return true
                 return false
             }
 
