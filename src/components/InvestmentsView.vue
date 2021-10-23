@@ -118,7 +118,7 @@
         <!-- INVESTMENT operations same product selling price-->
         <v-dialog v-model="dialog_io_sameproduct" v-if="ios">
             <v-card class="pa-3">
-                <InvestmentsoperationsSameProductSellingPrice :product="investment.products" :key="key" @cruded="on_InvestmentsoperationsSameProductSellingPrice_cruded()"></InvestmentsoperationsSameProductSellingPrice>
+                <InvestmentsoperationsSameProductSellingPrice :product="ios.product" :key="key" @cruded="on_InvestmentsoperationsSameProductSellingPrice_cruded()"></InvestmentsoperationsSameProductSellingPrice>
             </v-card>
         </v-dialog>
 
@@ -444,7 +444,7 @@
                     this.list_io_current=response.data[0].io_current
                     this.list_io_historical=response.data[0].io_historical
 
-                    this.leverage_message= this.$t(`${this.investment_io.leverage_multiplier } (Real: ${this.investment_io.leverage_real_multiplier })`)
+                    this.leverage_message= this.$t(`${this.ios.product.leverage_multiplier } (Real: ${this.ios.product.leverage_real_multiplier })`)
 
                     this.selling_point_message=this.currency_string(this.investment.selling_price, this.investment.currency)
                     if (this.investment_io.gains_at_sellingpoint){
