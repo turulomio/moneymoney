@@ -57,18 +57,18 @@
                 if (this.editing==true){               
                     axios.put(this.newinvestment.url, this.newinvestment, this.myheaders())
                     .then(() => {
-                        this.$emit("cruded")
                         this.$store.dispatch("getInvestments")
+                        this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
                 } else{
                     axios.post(`${this.$store.state.apiroot}/api/investments/`, this.newinvestment,  this.myheaders())
                     .then(() => {
+                        this.$store.dispatch("getInvestments")
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
-                        this.$store.dispatch("getInvestments")
                     })
                 }
             },
