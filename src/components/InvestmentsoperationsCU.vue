@@ -71,28 +71,19 @@
                     axios.put(this.newio.url, this.newio,  this.myheaders())
                     .then((response) => {
                             console.log(response.data)
-                            this.change_investment_to_active()
+                            this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
                 } else{
                     axios.post(`${this.$store.state.apiroot}/api/investmentsoperations/`, this.newio,  this.myheaders())
-                    .then(() => {
-                            this.change_investment_to_active()
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    })
-                }
-            },
-            change_investment_to_active(){
-                    console.log("PATCHING")
-                    axios.patch(this.newio.investments, {url:this.newio.investments, active:true},  this.myheaders())
                     .then((response) => {
-                            console.log(response.data)
+                            console.log(response)
                             this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
+                }
             },
             foot(){
                 var gross=this.newio.shares*this.newio.price

@@ -264,12 +264,16 @@ export function arrayobjects_to_array(l, key){
 }
 
 export function percentage_generic_string(num, locale, decimals=2){
-    if (isNaN(num)) return "- - - %"
+    if (num==null) return "- - - %"
     return "{0} %".format(my_round(num*100,decimals).toLocaleString(locale,{ minimumFractionDigits: decimals,  }));
 }
 
 export function percentage_generic_html(num, locale, decimals=2){
-    if (num>=0 || isNaN(num)){
+    if (num==null){
+        return percentage_generic_string(num,locale,decimals)
+    }
+
+    if (num>=0){
         return "<span>{0}</span>".format(percentage_generic_string(num, locale, decimals))
     } else {
         return "<span class='vuered'>{0}</span>".format(percentage_generic_string(num, locale, decimals));

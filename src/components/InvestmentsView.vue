@@ -6,7 +6,7 @@
         <h1>{{ investment.name }}
             <MyMenuInline :items="items"  :context="this"></MyMenuInline>
         </h1>
-        <DisplayValues :items="displayvalues()" :key="key"></DisplayValues>
+        <DisplayValues v-if="ios" :items="displayvalues()" :key="key"></DisplayValues>
 
         <v-tabs  background-color="primary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
             <v-tab key="current">{{ $t('Current investment operations') }}</v-tab>
@@ -22,12 +22,12 @@
                         <v-tab key="investment">{{ $t('Investment currency') }}</v-tab>
                         <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
-                            <v-card v-if="!loading_ios">
+                            <v-card v-if="!loading">
                                 <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="investment" height="400" :key="key"></TableInvestmentOperationsCurrent>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
-                                    <v-card class="padding" v-if="!loading_ios">
+                                    <v-card class="padding" v-if="!loading">
                                             <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="account" height="400" :key="key"></TableInvestmentOperationsCurrent>
                                     </v-card>
                             </v-tab-item>
@@ -41,12 +41,12 @@
                         <v-tab key="investment">{{ $t('Investment currency') }}</v-tab>
                             <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
-                            <v-card class="padding" v-if="!loading_ios">
+                            <v-card class="padding" v-if="!loading">
                                 <TableInvestmentOperations :items="io_filtered" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment" @cruded="on_TableInvestmentsOperations_cruded()" @onedit="on_TableInvestmentsOperations_edit"></TableInvestmentOperations>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
-                                <v-card class="padding" v-if="!loading_ios">
+                                <v-card class="padding" v-if="!loading">
                                     <TableInvestmentOperations :items="io_filtered" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="account" :showactions="false"></TableInvestmentOperations>
                                 </v-card>
                             </v-tab-item>
@@ -59,12 +59,12 @@
                         <v-tab key="investmenth">{{ $t('Investment currency') }}</v-tab>
                             <v-tab key="accounth">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investmenth">     
-                            <v-card class="padding"  v-if="!loading_ios">
+                            <v-card class="padding"  v-if="!loading">
                                 <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="investment" :homogeneous="true" :key="key"></TableInvestmentOperationsHistorical>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="accounth">
-                                <v-card class="padding" v-if="!loading_ios">
+                                <v-card class="padding" v-if="!loading">
                                     <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="account" :homogeneous="true" :key="key"></TableInvestmentOperationsHistorical>
                                 </v-card>
                             </v-tab-item>
@@ -72,7 +72,7 @@
                 </div>
             </v-tab-item>
             <v-tab-item key="dividends">     
-                <v-card class="padding" v-if="!loading_ios">
+                <v-card class="padding" v-if="!loading">
                     <v-checkbox v-model="showAllDividends" :label="setChkDividendsLabel()" @click="on_chkDividends()"></v-checkbox>
                     <TableDividends :items="dividends_filtered" currency_account="EUR"  height="300" output="user" :key="key" heterogeneus @cruded="on_TableDividends_cruded()"></TableDividends>
                 </v-card>
@@ -170,13 +170,12 @@
                 tab:0,
                 tabcurrent:0,
                 key:0,
-                investment_io: null,
                 list_io: [],
                 list_io_current: [],
                 list_io_historical: [],
                 dialog_io:false,
                 io:null,
-                loading_ios:true,
+                loading:true,
                 dividends: [],
                 dividends_filtered: [],
                 io_filtered:[],
@@ -297,7 +296,7 @@
                                     var gains_account_currency=parseNumber(prompt( this_.$t("Please add the final gains in account currency"), 0 ));
                                     var shares=listobjects_sum(this_.list_io_current,"shares")
                                     var average_price_current_account=listobjects_average_ponderated(this_.list_io_current,'price_account', 'shares')
-                                    var leverage=this_.investment_io.leverage_real_multiplier
+                                    var leverage=this_.ios.investment.leverage_real_multiplier
                                     var currency_conversion=(gains_account_currency+shares*average_price_current_account*leverage)/(shares*selling_price_product_currency*leverage)
 
                                     this_.io=this_.empty_investment_operation()
@@ -389,11 +388,7 @@
             },
             on_InvestmentsoperationsCU_cruded(){
                 this.dialog_io=false
-                var this_=this
-                this_.investment.active=true // Not too good but needed to not to change a lot of code. It's an ugly way to change props
-                this.update_investmentsoperations()
-                this.displayvalues()
-                this.key=this.key+1
+                this.update_all()
                 this.$emit("cruded") //Translated to InvestmentsList
             },
             on_InvestmentsoperationsSameProductSellingPrice_cruded(){
@@ -403,7 +398,6 @@
                 this.on_InvestmentsoperationsCU_cruded()
             },
             on_TableInvestmentsOperations_edit(io){
-                console.log(io.datetime)
                 this.dialog_io=true
                 this.io=io
                 this.key=this.key+1
@@ -412,12 +406,12 @@
                 return [
                     {title:this.$t('Selling point'), value: this.selling_point_message},
                     {title:this.$t('Selling expiration'), value: this.selling_expiration_message},
-                    {title:this.$t('Active'), value: this.investment.active},
-                    {title:this.$t('Currency'), value: this.investment.currency},
-                    {title:this.$t('Product'), value: this.investment.products},
+                    {title:this.$t('Active'), value: this.ios.investment.active},
+                    {title:this.$t('Currency'), value: this.ios.product.currency},
+                    {title:this.$t('Product'), value: this.ios.product.name},
                     {title:this.$t('Leverage'), value: this.leverage_message},
-                    {title:this.$t('Daily adjustment'), value: this.investment.daily_adjustment},
-                    {title:this.$t('Id'), value: this.investment.id},
+                    {title:this.$t('Daily adjustment'), value: this.ios.investment.daily_adjustment},
+                    {title:this.$t('Id'), value: this.ios.investment.id},
                 ]
             },
             setChkDividendsLabel(){
@@ -458,47 +452,43 @@
             },
 
             update_investmentsoperations(){
-                axios.get(`${this.$store.state.apiroot}/investmentsoperations/full?investments=${this.investment.id}`, this.myheaders())
-                .then((response) => {
-                    this.ios=response.data[0]
-                    console.log(this.ios)
-                    this.investment_io=response.data[0].investment
-                    this.list_io=response.data[0].io
-                    this.list_io_current=response.data[0].io_current
-                    this.list_io_historical=response.data[0].io_historical
+                return axios.get(`${this.$store.state.apiroot}/investmentsoperations/full?investments=${this.investment.id}`, this.myheaders())
+            },
+            update_dividends(){
+                return axios.get(`${this.$store.state.apiroot}/api/dividends?investments=${this.investment.id}`, this.myheaders())
+            },
+            update_all(){
+                this.loading=true
+                axios.all([this.update_investmentsoperations(), this.update_dividends()])
+                .then(([resIO, resDividends]) => {
+                    this.ios=resIO.data[0]
+                    console.log(this.ios)   
+                    this.list_io=resIO.data[0].io
+                    this.list_io_current=resIO.data[0].io_current
+                    this.list_io_historical=resIO.data[0].io_historical
 
                     this.leverage_message= this.$t(`${this.ios.product.leverage_multiplier } (Real: ${this.ios.product.leverage_real_multiplier })`)
 
-                    this.selling_point_message=this.currency_string(this.investment.selling_price, this.investment.currency)
-                    if (this.investment_io.gains_at_sellingpoint){
-                        this.selling_point_message=this.selling_point_message+ this.$t(`, to gain ${this.currency_string(this.investment_io.gains_at_sellingpoint, this.investment.currency)}`)
+                    this.selling_point_message=this.currency_string(this.ios.investment.selling_price, this.ios.product.currency)
+                    if (this.ios.investment.gains_at_sellingpoint){
+                        this.selling_point_message=this.selling_point_message+ this.$t(`, to gain ${this.currency_string(this.ios.investment.gains_at_sellingpoint, this.ios.product.currency)}`)
+                    }
+                    this.selling_expiration_message=`${this.ios.investment.selling_expiration}`
+                    if (new Date(this.ios.investment.selling_expiration).setHours(0,0,0,0)<new Date().setHours(0,0,0,0)){
+                        this.selling_expiration_message=this.selling_expiration_message+ '.<span class="vuered"> '+ this.$t('You must set a new selling order.') + '</span>'
                     }
                     this.on_chkShowAllIO_click()
-                    this.update_dividends()
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
-            update_dividends(){
-                axios.get(`${this.$store.state.apiroot}/api/dividends?investments=${this.investment.id}`, this.myheaders())
-                .then((response) => {
-                    console.log(response.data)
-                    this.dividends=response.data
+
+                    this.dividends=resDividends.data
                     this.on_chkDividends()
-                    this.loading_ios=false
+                    this.displayvalues()
+                    this.loading=false
                     this.key=this.key+1
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
-            },
-        },
-        mounted(){
-            this.loading_ios=true
-            this.selling_expiration_message= `${this.investment.selling_expiration}`
-            if (new Date(this.investment.selling_expiration)<new Date()){
-                this.selling_expiration_message=this.selling_expiration_message+ '.<span class="vuered"> '+ this.$t('You must set a new selling order.') + '</span>'
             }
-            this.update_investmentsoperations()
+        },
+        created(){
+            this.update_all()
         }
     }
 </script>
