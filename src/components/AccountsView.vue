@@ -19,7 +19,7 @@
             <v-tab-item key="cc">
                 <v-card class="padding" outlined>
                     <v-checkbox v-model="showActiveCC" :label="setCheckboxLabelCC()" @click="on_chkActive_cc()" ></v-checkbox>
-                    <v-data-table dense :headers="table_cc_headers" :items="table_cc"  class="elevation-1" disable-pagination  hide-default-footer sort-by="name" fixed-header max-height="400">         
+                    <v-data-table dense :headers="table_cc_headers" :items="table_cc"  class="elevation-1" disable-pagination  hide-default-footer sort-by="name" fixed-header max-height="400" :key="key">
                         <template v-slot:[`item.deferred`]="{ item }">
                             <v-simple-checkbox v-model="item.deferred" disabled></v-simple-checkbox>
                         </template>  
@@ -197,7 +197,6 @@
                 });
             },
             refreshTableCC(){
-                //var this_=this //Needs this inside axios seems with browser vue method
                 axios.get(`${this.$store.state.apiroot}/creditcards/withbalance/?account=${this.account.id}&active=${this.showActiveCC}`, this.myheaders())                
                 .then((response) => {
                     this.table_cc=response.data;
@@ -214,6 +213,7 @@
             },
             viewCC(item){
                 this.cc=item
+                this.key=this.key+1
                 this.dialog_ccview=true
             },
             deleteCC(item){
