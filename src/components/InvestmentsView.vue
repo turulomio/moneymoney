@@ -381,10 +381,10 @@
             listobjects_average_ponderated,
             on_DividendsCU_cruded(){
                 this.dialog_dividend=false
-                this.update_dividends()
+                this.update_all()
             },
             on_TableDividends_cruded(){
-                this.update_dividends()
+                this.update_all()
             },
             on_InvestmentsoperationsCU_cruded(){
                 this.dialog_io=false

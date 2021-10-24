@@ -59,8 +59,28 @@
                     return this.$t("Add dividend")
                 }
             },
-            accept(){
-                console.log("Accepting")
+            accept(){           
+                if( this.$refs.form.validate()==false) return
+                var concept=this.$store.getters.getObjectByUrl("concepts",this.newdividend.concepts)
+                var operationtype=this.$store.getters.getObjectByUrl("operationstypes", concept.operationstypes)
+                if (operationtype.id==1 && (this.newdividend.gross>0 || this.newdividend.net >0)){
+                     alert(this.$t("Gross and net must be negative"))
+                     return
+                }
+                if (operationtype.id==2 && (this.newdividend.gross<=0|| this.newdividend.net <=0)) {
+                    alert(this.$t("Amount must be positive"))
+                    return
+                }
+
+                if (this.newdividend.gross==0 && this.newdividend.net!=0) {
+                    alert(this.$t("Gross shouldn't be 0 when net is not"))
+                    return 
+                }
+                if (this.newdividend.net==0 && this.newdividend.gross!=0) {
+                    alert(this.$t("Net shouldn't be 0 when gross is not"))
+                    return
+                }
+
                 if (this.editing==true){
                     axios.put(this.newdividend.url, this.newdividend,  this.myheaders())
                     .then(() => {

@@ -128,9 +128,9 @@
             }
         },
         mounted(){
-            this.gotoLastRow()
-            this.key=this.key+1
-            console.log("DIVIDENDS TABLE")
+            // this.gotoLastRow()
+            // this.key=this.key+1
+            // console.log("DIVIDENDS TABLE")
         }
     }
 </script>
