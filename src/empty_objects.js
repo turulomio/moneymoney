@@ -32,7 +32,7 @@ export function empty_estimation_dps(){
 }
 
 
-export function empty_io(){
+export function empty_investment_operation(){
     return {
         datetime: new Date().toISOString(),
         operationstypes: `${this.$store.state.apiroot}/api/operationstypes/4/`,

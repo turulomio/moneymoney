@@ -40,6 +40,14 @@ export const store = new Vuex.Store({
                 return r
             }
         },
+        getObjectById:(state) => (catalog,id,default_=null) => {
+            var r=state[catalog].find(o => o.id==id)
+            if (r==null){
+                return default_
+            } else {
+                return r
+            }
+        },
         getObjectPropertyByUrl:(state,getters) => (catalog,url,property,default_=null) => {
             var r=getters.getObjectByUrl(catalog,url)
             if (r==null){

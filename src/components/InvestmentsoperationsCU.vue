@@ -25,7 +25,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import {empty_io} from '../empty_objects.js'
+    import {empty_investment_operation} from '../empty_objects.js'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import CurrencyFactor from './CurrencyFactor.vue'
     export default {
@@ -50,7 +50,7 @@
             }
         },
         methods: {
-            empty_io,
+            empty_investment_operation,
             title(){
                 if (this.editing){
                     return this.$t("Updating investment operation")

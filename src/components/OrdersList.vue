@@ -58,7 +58,7 @@
     import InvestmentsoperationsReinvest from './InvestmentsoperationsReinvest.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import MyMenuInline from './MyMenuInline.vue'
-    import {empty_order,empty_investments_operations_simulation, empty_io} from '../empty_objects.js'
+    import {empty_order,empty_investments_operations_simulation, empty_investment_operation} from '../empty_objects.js'
     export default {
         components:{
             InvestmentsoperationsCU,
@@ -119,7 +119,7 @@
         methods: {
             empty_order,
             empty_investments_operations_simulation,
-            empty_io,
+            empty_investment_operation,
             on_OrdersCU_cruded(){
                 this.dialog_cu=false
                 this.update_table()
@@ -163,7 +163,7 @@
                 .then(() => {
                     this.update_table()
                     this.io_investment={url:item.investments,currency:item.currency}
-                    this.io=this.empty_io()
+                    this.io=this.empty_investment_operation()
                     this.io.shares=item.shares
                     this.io.price=item.price
                     this.io.investments=item.investments

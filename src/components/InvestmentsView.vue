@@ -129,7 +129,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import {empty_io,empty_dividend,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
+    import {empty_investment_operation,empty_dividend,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
     import {listobjects_sum, parseNumber,listobjects_average_ponderated} from '../functions.js'
     import ChartInvestments from './ChartInvestments.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
@@ -283,7 +283,7 @@
                             {
                                 name:this.$t('Add an investment operation'),
                                 code: function(this_){
-                                    this_.io=this_.empty_io()
+                                    this_.io=this_.empty_investment_operation()
                                     this_.io.investments=this_.investment.url
                                     this_.key=this_.key+1
                                     this_.dialog_io=true
@@ -300,10 +300,33 @@
                                     var leverage=this_.investment_io.leverage_real_multiplier
                                     var currency_conversion=(gains_account_currency+shares*average_price_current_account*leverage)/(shares*selling_price_product_currency*leverage)
 
-                                    this_.io=this_.empty_io()
+                                    this_.io=this_.empty_investment_operation()
                                     this_.io.shares=-shares
                                     this_.io.currency_conversion=currency_conversion
                                     this_.io.price=selling_price_product_currency
+                                     
+                                    this_.dialog_io=true
+                                },
+                                icon: "mdi-book-plus",
+                            },
+                            {
+                                name:this.$t('Sell/Buy all shares to selling price'),
+                                code: function(this_){
+                                    if (this_.investment.currency!=this_.ios.product.currency){
+                                        alert(this_.$t("You can't use this option if investment and product currencies are not the same"))
+                                        return
+                                    }
+                                    var shares=listobjects_sum(this_.list_io_current,"shares")
+
+                                    this_.io=this_.empty_investment_operation()
+                                    this_.io.investments=this_.investment.url
+                                    this_.io.shares=-shares
+                                    this_.io.price=this_.investment.selling_price
+                                    if (shares>=0){
+                                        this_.io.operationstypes=this_.$store.getters.getObjectById("operationstypes",5)//Sales
+                                    } else {
+                                        this_.io.operationstypes=this_.$store.getters.getObjectById("operationstypes",4)//Buy
+                                    }
                                      
                                     this_.dialog_io=true
                                 },
@@ -355,7 +378,7 @@
             empty_investments_chart,
             empty_investments_chart_limit_line,
             empty_dividend,
-            empty_io,
+            empty_investment_operation,
             listobjects_average_ponderated,
             on_DividendsCU_cruded(){
                 this.dialog_dividend=false

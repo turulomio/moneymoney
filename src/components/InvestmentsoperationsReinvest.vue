@@ -62,7 +62,7 @@
 <script>     
     import axios from 'axios'
     import MyMenuInline from './MyMenuInline.vue'
-    import {empty_investments_operations_simulation,empty_io,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
+    import {empty_investments_operations_simulation,empty_investment_operation,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
     import ChartInvestments from './ChartInvestments.vue'
     import TableInvestmentOperations from './TableInvestmentOperations.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
@@ -131,7 +131,7 @@
         },
         methods: {
             empty_investments_operations_simulation,
-            empty_io,
+            empty_investment_operation,
             empty_investments_chart,
             empty_investments_chart_limit_line,
             add_or_update_order(){
@@ -157,7 +157,7 @@
                 var simulation=this.empty_investments_operations_simulation()
                 simulation.investments.push(this.neworder.investments)
                 simulation.local_currency=this.neworder.currency
-                var operation=this.empty_io()
+                var operation=this.empty_investment_operation()
                 operation.datetime=simulation.dt
                 operation.shares=this.neworder.shares
                 operation.price=this.neworder.price
