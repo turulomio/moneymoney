@@ -322,9 +322,9 @@
                                     this_.io.shares=-shares
                                     this_.io.price=this_.investment.selling_price
                                     if (shares>=0){
-                                        this_.io.operationstypes=this_.$store.getters.getObjectById("operationstypes",5)//Sales
+                                        this_.io.operationstypes=this_.$store.getters.getObjectById("operationstypes",5).url//Sales
                                     } else {
-                                        this_.io.operationstypes=this_.$store.getters.getObjectById("operationstypes",4)//Buy
+                                        this_.io.operationstypes=this_.$store.getters.getObjectById("operationstypes",4).url//Buy
                                     }
                                      
                                     this_.dialog_io=true
