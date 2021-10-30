@@ -2,16 +2,17 @@
     <div>
         <h1>{{dialog_title_ao()}}</h1>
         <v-form ref="form_ao" v-model="form_valid_ao" lazy-validation>
-            <v-autocomplete autoindex="3" :items="$store.state.accounts.filter(v =>v.active==true)" v-model="newao.accounts" :label="$t('Select an account')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-            <MyDateTimePicker autoindex="4" label="Select operation date and time" v-model="newao.datetime" :rules="RulesDatetime(true)"></MyDateTimePicker>
-            <v-autocomplete autoindex="0" autofocus :items="$store.state.concepts" v-model="newao.concepts" :label="$t('Select a concept')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-            <v-text-field autoindex="1" v-model="newao.amount" type="number" :label="$t('Operation amount')" :placeholder="$t('Account number')" :rules="RulesFloat(30,true)" counter="30"/>
-            <v-text-field autoindex="2" v-model="newao.comment" type="text" :label="$t('Operation comment')" :placeholder="$t('Operation comment')" counter="200"/>
+            <v-autocomplete :readonly="deleting" autoindex="3" :items="$store.state.accounts.filter(v =>v.active==true)" v-model="newao.accounts" :label="$t('Select an account')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+            <MyDateTimePicker :readonly="deleting" autoindex="4" label="Select operation date and time" v-model="newao.datetime" :rules="RulesDatetime(true)"></MyDateTimePicker>
+            <v-autocomplete :readonly="deleting" autoindex="0" autofocus :items="$store.state.concepts" v-model="newao.concepts" :label="$t('Select a concept')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+            <v-text-field :readonly="deleting" autoindex="1" v-model="newao.amount" type="number" :label="$t('Operation amount')" :placeholder="$t('Account number')" :rules="RulesFloat(30,true)" counter="30"/>
+            <v-text-field :readonly="deleting" autoindex="2" v-model="newao.comment" type="text" :label="$t('Operation comment')" :placeholder="$t('Operation comment')" counter="200"/>
         </v-form>
         <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" @click="following_ao=false;acceptDialogAO()" :disabled="!form_valid_ao">{{ button() }}</v-btn>
-            <v-btn color="primary" @click="following_ao=true;acceptDialogAO()" :disabled="!form_valid_ao" v-if="editing==false">{{ $t("Add and follow") }}</v-btn>
+            <v-spacer></v-spacer> 
+            <v-btn v-if="deleting" color="error" @click="deleteAO()" :disabled="!form_valid_ao">{{ $t("Delete") }}</v-btn>
+            <v-btn v-if="!deleting" color="primary" @click="following_ao=false;acceptDialogAO()" :disabled="!form_valid_ao">{{ button() }}</v-btn>
+            <v-btn v-if="editing &&!deleting" color="primary" @click="following_ao=true;acceptDialogAO()" :disabled="!form_valid_ao" >{{ $t("Add and follow") }}</v-btn>
         </v-card-actions>
     </div>
 </template>
@@ -26,7 +27,12 @@
         props:{
             ao:{
                 required:true,
+            },
+            deleting:{
+                required:false,
+                default:false
             }
+            
         },
         data () {
             return {
@@ -84,12 +90,28 @@
                 }
             },
             dialog_title_ao(){
-                if(this.editing==true){
+                if (this.deleting==true){
+                    return this.$t("Deleting account operation")
+                } else if (this.editing==true){
                     return this.$t("Updating account operation")
                 } else {
                     return this.$t("Creating a new account operation")
                 }
             },
+            deleteAO(){
+                var r
+                r = confirm(this.$t("Do you want to delete this account operation?"))
+                if(r == false) {
+                    return
+                }  
+                this.following_ao=false
+                axios.delete(this.newao.url, this.myheaders())
+                .then(() => {
+                    this.$emit('cruded', this.following_ao)
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
+            }
         },
         created(){
 

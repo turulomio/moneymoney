@@ -13,7 +13,7 @@
                 <v-card class="pa-4 d-flex justify-center" outlined style="min-width: 100px; max-width: 100%;">
                     <v-date-picker dense no-title class="mymonthpicker " ref="monthpicker" v-model="monthpicker" type="month"></v-date-picker>
                     <v-divider class="mx-2" vertical ></v-divider>
-                    <TableAccountOperations :homogeneous="true" :items="items_ao" :total_currency="account.currency" height="400" class=" flex-grow-1 flex-shrink-0" @editAO="editAO" @deleteAO="deleteAO"></TableAccountOperations>
+                    <TableAccountOperations :homogeneous="true" :items="items_ao" :total_currency="account.currency" height="400" class=" flex-grow-1 flex-shrink-0" @cruded="on_TableAccountOperations_cruded()"></TableAccountOperations>
                 </v-card>
             </v-tab-item>
             <v-tab-item key="cc">
@@ -123,6 +123,7 @@
                                     this_.ao=this_.empty_account_operation()
                                     this_.ao.accounts=this_.account.url,
                                     this_.key=this_.key+1
+                                    this_.ao_deleting=false
                                     this_.dialog_ao=true
                                 },
                                 icon: "mdi-plus" 
@@ -159,15 +160,16 @@
                 showActiveCC:true,
                 dialog_cc:false,
                 cc: null,
-                // DIALOG ACCOUNT OPERATIONS
-                dialog_ao:false,
-                ao: null,
 
                 // DIALOG CREDIT CARDS VIEW
                 dialog_ccview:false,
 
                 // DIALOG CREDIT CARDS VIEW
                 dialog_transfer:false,
+
+                // DIALOG ACCOUNT OPERATIONS
+                dialog_ao:false,
+                ao: null,
             }  
         },
         watch:{
@@ -254,32 +256,16 @@
                 this.refreshTable()    
                 this.$emit('cruded')
             },
+            on_TableAccountOperations_cruded(){
+                this.refreshTable()
+                this.$emit('cruded')
+            },
             setCheckboxLabelCC(){
                 if (this.showActiveCC == true){
                     return this.$t("Uncheck to see inactive credit cards")
                 } else {
                     return this.$t("Check to see active credit cards")
                 }
-            },
-            editAO (item) {
-                console.log(item)
-                this.ao=item
-                this.dialog_ao=true
-                this.key=this.key+1
-            },
-            deleteAO (item) {
-                var r = confirm(this.$t("Do you want to delete this account operation?"))
-                if(r == false) {
-                    return
-                }  
-                axios.delete(item.url, this.myheaders())
-                .then((response) => {
-                    console.log(response);
-                    this.$emit('cruded', this.ao)
-                    this.refreshTable()
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
             },
         },
         created(){

@@ -66,7 +66,9 @@
 
         },
         mounted(){
-            this.transfer.origin=this.origin.url
+            if (this.origin.url!=null){
+                this.transfer.origin=this.origin.url
+            }
         }
     }
 </script>
