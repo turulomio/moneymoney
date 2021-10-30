@@ -6,7 +6,7 @@
 
         </h1>
         <v-card outlined class="ma-4 pa-4">
-            <TableAccountOperations :showselected="paying" homogeneous :items="items_cco" :total_currency="account.currency" height="400" ref="table_cc" class=" flex-grow-1 flex-shrink-0" :locale='this.$i18n.locale' @editAO="editCCO" @deleteAO="on_TableAccountOperations_deleteAO" @changeSelected="changeSelected" :key="key"></TableAccountOperations>
+            <TableCreditcardsOperations :showselected="paying" homogeneous :items="items_cco" :total_currency="account.currency" height="400" ref="table_cc" class=" flex-grow-1 flex-shrink-0" :locale='this.$i18n.locale' @editCCO="editCCO" @deleteCCO="on_TableAccountOperations_deleteCCO" @changeSelected="changeSelected" :key="key"></TableCreditcardsOperations>
         </v-card>
         <v-card outlined class="ma-4 pa-4" v-if="paying">
             <MyDateTimePicker label="Select payment date and time" v-model="dt_payment" ></MyDateTimePicker>
@@ -26,14 +26,14 @@
     import axios from 'axios'
     import MyMenuInline from './MyMenuInline.vue'
     import MyDateTimePicker from './MyDateTimePicker.vue'
-    import TableAccountOperations from './TableAccountOperations.vue'
+    import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
     import CreditcardsoperationsCU from './CreditcardsoperationsCU.vue'
     import {listobjects_sum} from '../functions.js'
     import {empty_cco} from '../empty_objects.js'
     export default {
         components:{
             MyMenuInline,
-            TableAccountOperations,
+            TableCreditcardsOperations,
             MyDateTimePicker,
             CreditcardsoperationsCU,            
         },

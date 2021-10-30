@@ -109,6 +109,7 @@
                             { 
                                 name:this.$t('Add an account transfer'), 
                                 code: function(this_){
+                                    this_.key=this_.key+1
                                     this_.dialog_transfer=true
                                 },
                                 icon: "mdi-plus" 

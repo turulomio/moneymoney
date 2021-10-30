@@ -66,6 +66,12 @@
             </v-card>
         </v-dialog>
 
+        <!-- DIALOG ACCOUNT TRANSFER -->
+        <v-dialog v-model="dialog_transfer" width="25%">
+            <v-card class="pa-6">
+                <AccountsTransfer @accepted="on_AccountTransfer_accepted()" :key="key"></AccountsTransfer>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 <script>
@@ -73,10 +79,12 @@
     import MyMenuInline from './MyMenuInline.vue'
     import AccountsoperationsSearch from './AccountsoperationsSearch.vue'
     import AccountsView from './AccountsView.vue'
+    import AccountsTransfer from './AccountsTransfer.vue'
     export default {
         components:{
             MyMenuInline,
             AccountsView,
+            AccountsTransfer,
             AccountsoperationsSearch,
         },
         data(){ 
@@ -105,6 +113,14 @@
                                     this_.dialog=true
                                 },
                             },
+                            { 
+                                name:this.$t('Add an account transfer'), 
+                                code: function(this_){
+                                    this_.key=this_.key+1
+                                    this_.dialog_transfer=true
+                                },
+                                icon: "mdi-plus" 
+                            },
                         ]
                     },
                     {
@@ -131,7 +147,10 @@
                 key:0,
 
                 // Accountsoperations search
-                dialog_search:false
+                dialog_search:false,
+
+                //AccountsTransfer
+                dialog_transfer:false,
             }
         },
         methods: {
@@ -227,6 +246,10 @@
                 this.update_table()
             },
             on_AccountsView_cruded(){
+                this.update_table()
+            },
+            on_AccountTransfer_accepted(){
+                this.dialog_transfer=false
                 this.update_table()
             },
         },
