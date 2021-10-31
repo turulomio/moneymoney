@@ -17,6 +17,7 @@ import Home from './components/Home';
 import AccountsList from './components/AccountsList';
 import AssetsReport from './components/AssetsReport';
 import BanksList from './components/BanksList';
+import ConceptsCatalog from './components/ConceptsCatalog';
 import InvestmentsList from './components/InvestmentsList';
 import OrdersList from './components/OrdersList';
 import ProductsComparationList from './components/ProductsComparationList';
@@ -48,6 +49,7 @@ const router = new VueRouter({
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/accounts/list/`, name: 'accounts_list', component: AccountsList },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/assets/report/`, name: 'assetsreport', component: AssetsReport },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/banks/list/`, name: 'banks_list', component: BanksList },
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/concepts/catalog/`, name: 'concepts_catalog', component: ConceptsCatalog },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/investments/list/`, name: 'investments_list', component: InvestmentsList },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/orders/list/`, name: 'orders_list', component: OrdersList },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/products/ranges/`, name: 'products_ranges', component: ProductsRanges },

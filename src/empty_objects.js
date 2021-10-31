@@ -11,6 +11,13 @@ export function empty_account_operation(){
     }
 }
 
+export function empty_concept(){
+    return {
+        name: "",
+        editable: true,
+        operationstypes: null,
+    }
+}
 export function empty_credit_card(){
     return {
         name: "",

@@ -97,6 +97,15 @@
                         <v-list-item-title>{{ $t("Strategies") }}</v-list-item-title>
                     </v-list-item>
 
+<!--                     ADMINISTRATION -->
+                    <v-list-group :value="false" prepend-icon="mdi-file-chart-outline"  v-if="$store.state.logged">
+                        <template v-slot:activator>
+                            <v-list-item-title>{{ $t("Administration") }}</v-list-item-title>
+                        </template>
+                        <v-list-item link router :to="{ name: 'concepts_catalog'}">
+                            <v-list-item-title>{{ $t("Concepts catalog") }}</v-list-item-title>
+                        </v-list-item>
+                    </v-list-group>    
 
 <!--                     HELP -->
                     <v-list-group :value="false" prepend-icon="mdi-lifebuoy">
