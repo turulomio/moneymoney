@@ -6,8 +6,8 @@
         </h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation v-if="snackbar_message==''">
-                <MyDatePicker v-model="neworder.date" :label="$t('Set order date')"></MyDatePicker>
-                <MyDatePicker v-model="neworder.expiration" :label="$t('Set order expiration date')"></MyDatePicker>
+                <MyDatePicker v-model="neworder.date" :label="$t('Set order date')" :rules="RulesDate(true)"></MyDatePicker>
+                <MyDatePicker v-model="neworder.expiration" :label="$t('Set order expiration date')" :rules="RulesDate(true)" ></MyDatePicker>
                 <v-autocomplete :items="$store.state.investments" v-model="neworder.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker v-model="neworder.executed" v-if="editing==true" :label="$t('Set order execution date and time')"></MyDateTimePicker>
                 <v-text-field v-model="neworder.price" type="number" :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesInteger(10,true)" counter="10"/>
@@ -125,7 +125,7 @@
                 r=r + stw
                 r=r +"<ul>"
                 r=r+"<li>" + this.$t("Expiration") + `: ${this.neworder.expiration}</li>`
-                r=r+"<li>" + this.$t("Investment") + `: ${this.neworder.investments}</li>`
+                r=r+"<li>" + this.$t("Investment") + `: ${this.$store.getters.getObjectPropertyByUrl("investments", this.neworder.investments,"name")}</li>`
                 r=r+"<li>" + this.$t("Shares") + `: ${this.neworder.shares}</li>`
                 r=r+"<li>" + this.$t("Price") + `: ${this.neworder.price}</li>`
 
