@@ -12,7 +12,7 @@
             <v-spacer></v-spacer> 
             <v-btn v-if="deleting" color="error" @click="deleteAO()" :disabled="!form_valid_ao">{{ $t("Delete") }}</v-btn>
             <v-btn v-if="!deleting" color="primary" @click="following_ao=false;acceptDialogAO()" :disabled="!form_valid_ao">{{ button() }}</v-btn>
-            <v-btn v-if="editing &&!deleting" color="primary" @click="following_ao=true;acceptDialogAO()" :disabled="!form_valid_ao" >{{ $t("Add and follow") }}</v-btn>
+            <v-btn v-if="!deleting && !editing" color="primary" @click="following_ao=true;acceptDialogAO()" :disabled="!form_valid_ao" >{{ $t("Add and follow") }}</v-btn>
         </v-card-actions>
     </div>
 </template>
@@ -43,7 +43,12 @@
             }
         },
         methods:{
+            // showFollowing(){
+            //     if (deleting==true) return False
+            //     if (editing==true) return False
+            //     return True
 
+            // }
             acceptDialogAO(){
                 //Validation
                 if( this.$refs.form_ao.validate()==false) return
