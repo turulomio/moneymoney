@@ -4,6 +4,7 @@
         <v-card outlined class="ma-4 pa-4">
             <v-row class="pa-4">
                 <v-text-field class="ml-10 mr-6" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"></v-text-field>
+                <v-checkbox dense v-model="only_current_investments" :label="$t('Show only current investments?')" ></v-checkbox>
             </v-row>
             <v-data-table dense :headers="headers" :search="search" :items="data" class="elevation-1" hide-default-footer disable-pagination :loading="loading_table">
                 <template v-slot:[`item.current_net_gains`]="{ item }">
@@ -57,15 +58,29 @@
                 headers: [
                     { text: this.$t('Ranking'), sortable: true, value: 'ranking',  width: "3%"},
                     { text: this.$t('Name'), value: 'name'},
-                    { text: this.$t('Current net gains'), value: 'current_net_gains', align:'right',  width: "10%"},
+                    { text: this.$t('Current net gains'), value: 'current_net_gains', align:'right',  width: "10%", 
+                        filter: value => {
+                            if (this.only_current_investments){
+                                if ( value!=0){
+                                    return true
+                                } else {
+                                    return false
+                                }
+                            } else {
+                                return true
+                            }
+                        }
+                    },
                     { text: this.$t('Historical net gains'), value: 'historical_net_gains', align:'right',  width: "10%"},
                     { text: this.$t('Net dividends'), value: 'dividends', align:'right',  width: "10%"},
                     { text: this.$t('Total'), value: 'total', align:'right',  width: "10%"},
                     { text: this.$t('Actions'), value: 'actions', sortable: false , width: "7%"},
                 ],
-                data:[],
+                data:[
+                ],
                 loading_table:false,
                 search:"",
+                only_current_investments:false,
             }
         },
         methods: {
