@@ -18,7 +18,7 @@
             <template v-slot:activator="{ on }">
                 <v-row justify="center" align="center" class="ml-0 mr-1 mb-1">                
                     <v-icon class="mr-3" @click="localValue=new Date().toISOString()">mdi-calendar</v-icon>
-                    <v-text-field v-model="representation" v-bind="$attrs" readonly v-on="on"  @click="on_text_click"></v-text-field>
+                    <v-text-field v-model="representation" v-bind="$attrs" readonly v-on="on"  @click="on_text_click" :rules="rules"></v-text-field>
                     <v-icon class="ml-3" x-small @click="localValue=null">mdi-backspace</v-icon>
                 </v-row>
             </template>
@@ -44,6 +44,10 @@
             readonly: {
                 required: false,
                 default: false
+            },
+            rules: {
+                type: Array,
+                required: false
             }
         },
         data: function(){

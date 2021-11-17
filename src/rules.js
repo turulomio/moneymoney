@@ -57,7 +57,7 @@ export function RulesFloatNegative(maxdigits,required){
 
 export function RulesDatetime(required){
     var r= [
-        v => !!v || this.$t('You must select date and time'),
+        v => (!!v) || this.$t('You must select date and time'),
     ]
     if (required==false){
         r.shift()
@@ -66,8 +66,8 @@ export function RulesDatetime(required){
 }
 export function RulesDate(required){
     var r= [
-        v => !!v || this.$t('You must select a date'),
-    ]
+            v => (!!v) || this.$t("You must select a date"),
+        ]
     if (required==false){
         r.shift()
     }
