@@ -90,6 +90,7 @@
                 }
             },
             accept(){
+                if (this.$refs.form.validate()==false) return
                 if (this.editing==true){
                     axios.put(this.neworder.url, this.neworder,  this.myheaders())
                     .then(() => {
