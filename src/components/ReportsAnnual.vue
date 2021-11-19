@@ -181,6 +181,7 @@
                                 
                             </template>
                         </v-data-table>   
+                        <div v-html="current_assets_gains_percentage_message" class="ma-4"></div>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="4"><!-- INVEST OR WORK -->
@@ -341,6 +342,8 @@
                 target: 4,
                 month_target: 0,
                 loading_target: false,
+                current_assets_gains_percentage_message:0,
+
                 // INVEST OR WORK
                 loading_invest_or_work: false,
                 // INVEST OR WORK
@@ -455,6 +458,9 @@
 
                 }
                 this.loading_target=false
+                
+                var current_percentage=(cumulative_gains)*(this.target/100)/(this.last_year_balance*(this.target/100))
+                this.current_assets_gains_percentage_message=this.$t(`Currently, gains annual percentage is ${this.percentage_html(current_percentage)}`)
 
             },
             refreshTables(){
