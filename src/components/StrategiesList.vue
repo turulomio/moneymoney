@@ -163,9 +163,8 @@
                     this.pr.amount_to_invest=item.additional4
                     this.pr.recomendation_methods=item.additional5
                     this.pr.only_first=item.additional6
-                    if (item.additional7!=null) {
-                        this.pr.account=`${this.$store.state.apiroot}/api/accounts/${item.additional7}/`
-                    }
+                    console.log(item.investments)
+                    this.pr.investments=item.investments
                     this.dialog_detailedview=true
                     this.key=this.key+1
                 } else {

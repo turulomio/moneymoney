@@ -113,7 +113,7 @@ export function empty_products_ranges(){
         percentage_gains: 2500,
         amount_to_invest: 10000,
         recomendation_methods: 1,
-        account: null,
+        investments: [],
     }
 }
 

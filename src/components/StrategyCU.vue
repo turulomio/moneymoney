@@ -140,7 +140,7 @@
                         this.$t("Amount"),
                         this.$t("Recomendation method"),
                         this.$t("Only first"),
-                        this.$t("Account"),
+                        "",
                         "",
                         "",
                         "",
@@ -170,7 +170,7 @@
         },
         created(){
             if ( this.strategy.url!=null){ // EDITING TIENE IO URL
-                this.temporal_investments=this.stringofintegers_to_arrayofintegers(this.strategy.investments)
+                this.temporal_investments=this.strategy.investments
                 this.editing=true
             } else { // NEW IO BUT SETTING VALUES WITH URL=null
                 this.editing=false

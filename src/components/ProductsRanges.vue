@@ -13,7 +13,7 @@
                 <v-row class="pl-5 pr-5">
                 <v-select class="mr-5" :items="recomendation_methods" v-model="newpr.recomendation_methods" :label="$t('Set recomendation method')"  item-text="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
                 <v-checkbox class="mr-5" v-model="newpr.only_first" :label="$t('Show only first operation?')" ></v-checkbox>
-                <v-autocomplete class="mr-5" :items="$store.state.accounts" v-model="newpr.account" :label="$t('Select an account')" item-text="name" item-value="url" :rules="RulesSelection(false)"></v-autocomplete> 
+                <v-autocomplete :items="$store.state.investments" v-model="newpr.investments" :label="$t('Select investments to include')" item-text="fullname" item-value="id" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
                 <v-btn class="mt-4" color="primary" @click="accept()" :disabled="!form_valid">{{ $t("Show ranges") }}</v-btn>
                 </v-row>
             </v-form>
@@ -154,10 +154,12 @@
             empty_products_ranges,
             refreshTable(){
                 this.loading=true
-                var account=(account==null) ? "" : `&account=${this.newpr.account}`
-                axios.get(`${this.$store.state.apiroot}/products/ranges/?product=${this.newpr.product}&percentage_between_ranges=${this.newpr.percentage_between_ranges}&percentage_gains=${this.newpr.percentage_gains}&amount_to_invest=${this.newpr.amount_to_invest}&recomendation_methods=${this.newpr.recomendation_methods}&only_first=${this.newpr.only_first}${account}`, this.myheaders())
+                var headers={...this.myheaders(),params:this.newpr}
+                console.log(headers)
+                axios.get(`${this.$store.state.apiroot}/products/ranges/`, headers)
                 .then((response) => {
                     this.prdata=response.data
+                    console.log(this.prdata)
                     this.tableData=this.prdata.pr
                     this.currentpricelabel= this.$t(`Current price: ${this.currency_string(this.prdata.product.last, this.prdata.product.currency)}`) 
                     this.loading=false
