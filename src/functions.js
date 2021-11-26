@@ -9,21 +9,9 @@ String.prototype.format = function() {
         formatted = formatted.replace(regexp, arguments[i]);
     }
     return formatted;
-};
-export function currency_symbol(currency){
-    if (currency=='EUR'){
-        return '€';
-    } 
-    else if (currency=='USD'){
-        return'$';
-    }
-    else if (currency=='u'){
-        return'u';
-    }
-    else {
-            return "???";
-    }
 }
+
+
 export function my_round(num, decimals = 2) {
     return Math.round(num*Math.pow(10, decimals))/Math.pow(10, decimals)
 }
@@ -279,17 +267,7 @@ export function percentage_generic_html(num, locale, decimals=2){
         return "<span class='vuered'>{0}</span>".format(percentage_generic_string(num, locale, decimals));
     }
 }
-export function currency_generic_string(num, currency, locale, decimals=2){
-    return "{0} {1}".format(my_round(num,decimals).toLocaleString(locale, { minimumFractionDigits: decimals,  }), currency_symbol(currency));
-}
 
-export function currency_generic_html(num, currency, locale, decimals=2){
-    if (num>=0){
-        return currency_generic_string(num, currency, locale, decimals)
-    } else {
-        return "<span class='vuered'>{0}</span>".format(currency_generic_string(num, currency, locale, decimals));
-    }
-}
 
 
 export function listobjects_sum(lo,key){

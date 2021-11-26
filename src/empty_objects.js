@@ -1,4 +1,13 @@
 
+export function empty_account(){
+    return {
+        name: "",
+        active: true,
+        number: "",
+        currency: "EUR",    
+        banks:null,
+    }
+}
 export function empty_account_operation(){
     return {
         datetime: new Date().toISOString(),

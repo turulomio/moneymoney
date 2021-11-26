@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import {sortObjectsArray,capitalizeFirstLetter} from './functions.js'
+import {sortObjectsArray,capitalizeFirstLetter,my_round} from './functions.js'
 import CurrencyList from 'currency-list'
 
 Vue.use(Vuex);
@@ -32,6 +32,9 @@ export const store = new Vuex.Store({
         getConceptsForDividends: (state) => () => { 
             return state.concepts.filter( o => [39, 50,59,62,63,65,66,68,70,72,75,76,77].includes(o.id))
         },
+        getInvestmentsByProduct:(state) => (product) => {
+            return state.investments.filter(o => o.products==product)
+        },
         getOperationstypesForNewConcepts: (state) => () => { 
             return state.operationstypes.filter( o => [1,2].includes(o.id))
         },
@@ -59,6 +62,33 @@ export const store = new Vuex.Store({
                 return r[property]
             }
         },
+        getCurrencyByCode:(state) => (code,default_=null) => {
+            var r=state['currencies'].find(o => o.code==code)
+            if (r==null){
+                return default_
+            } else {
+                return r
+            }
+        },
+        getCurrencyPropertyByCode:(state,getters) => (code,property,default_="???") => {
+            var r=getters.getCurrencyByCode(code)
+            if (r==null){
+                return default_
+            } else {
+                return r[property]
+            }
+        },
+        currency_generic_string:(state,getters) => (num, currency, locale, decimals=2)=>{
+            return `${my_round(num,decimals).toLocaleString(locale, { minimumFractionDigits: decimals,  })} ${getters.getCurrencyPropertyByCode(currency,"symbol_native")}`
+        },
+        
+        currency_generic_html:(state,getters) =>(num, currency, locale, decimals=2)=>{
+            if (num>=0){
+                return getters.currency_generic_string(num, currency, locale, decimals)
+            } else {
+                return `<span class='vuered'>${getters.currency_generic_string(num, currency, locale, decimals)}</span>`.format();
+            }
+        }
     },
     mutations: { // Only sincronous changes data
         updateAccounts: (state, payload) =>{

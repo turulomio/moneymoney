@@ -80,8 +80,6 @@ import {
     getLocalStorage, 
     listobjects_sum,
     myheaders_formdata,
-    currency_generic_html,
-    currency_generic_string,
     percentage_generic_html,
     percentage_generic_string, 
     zulu2py,
@@ -121,10 +119,10 @@ Vue.mixin({
 
 
         currency_string(num, currency, decimals=2){
-            return currency_generic_string(num, currency, this.$i18n.locale,decimals )
+            return this.$store.getters.currency_generic_string(num, currency, this.$i18n.locale,decimals )
         },
         currency_html(num, currency, decimals=2){
-            return currency_generic_html(num, currency, this.$i18n.locale,decimals )
+            return this.$store.getters.currency_generic_html(num, currency, this.$i18n.locale,decimals )
         },
         percentage_string(num, decimals=2){
             return percentage_generic_string(num,this.$i18n.locale,decimals )
@@ -133,10 +131,10 @@ Vue.mixin({
             return percentage_generic_html(num,this.$i18n.locale,decimals )
         },
         localcurrency_string(num, decimals=2){
-            return currency_generic_string(num, this.$store.state.local_currency, this.$i18n.locale,decimals )
+            return this.$store.getters.currency_generic_string(num, this.$store.state.local_currency, this.$i18n.locale,decimals )
         },
         localcurrency_html(num, decimals=2){
-            return currency_generic_html(num, this.$store.state.local_currency, this.$i18n.locale,decimals )
+            return this.$store.getters.currency_generic_html(num, this.$store.state.local_currency, this.$i18n.locale,decimals )
         },
 
 
