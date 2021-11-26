@@ -1,16 +1,6 @@
 import moment from 'moment-timezone';
 import axios from 'axios'
 
-// Function to use "{0} {1}".format(a, b) style
-String.prototype.format = function() {
-    var formatted = this;
-    for (var i = 0; i < arguments.length; i++) {
-        var regexp = new RegExp('\\{'+i+'\\}', 'gi');
-        formatted = formatted.replace(regexp, arguments[i]);
-    }
-    return formatted;
-}
-
 
 export function my_round(num, decimals = 2) {
     return Math.round(num*Math.pow(10, decimals))/Math.pow(10, decimals)
@@ -253,7 +243,7 @@ export function arrayobjects_to_array(l, key){
 
 export function percentage_generic_string(num, locale, decimals=2){
     if (num==null) return "- - - %"
-    return "{0} %".format(my_round(num*100,decimals).toLocaleString(locale,{ minimumFractionDigits: decimals,  }));
+    return `${my_round(num*100,decimals).toLocaleString(locale,{ minimumFractionDigits: decimals,  })} %`
 }
 
 export function percentage_generic_html(num, locale, decimals=2){
@@ -262,13 +252,11 @@ export function percentage_generic_html(num, locale, decimals=2){
     }
 
     if (num>=0){
-        return "<span>{0}</span>".format(percentage_generic_string(num, locale, decimals))
+        return `<span>${percentage_generic_string(num, locale, decimals)}</span>`
     } else {
-        return "<span class='vuered'>{0}</span>".format(percentage_generic_string(num, locale, decimals));
+        return `<span class='vuered'>${percentage_generic_string(num, locale, decimals)}</span>`
     }
 }
-
-
 
 export function listobjects_sum(lo,key){
     return lo.reduce((accum,item) => accum + item[key], 0)
