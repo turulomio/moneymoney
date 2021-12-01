@@ -86,7 +86,7 @@ export const store = new Vuex.Store({
             if (num>=0){
                 return getters.currency_generic_string(num, currency, locale, decimals)
             } else {
-                return `<span class='vuered'>${getters.currency_generic_string(num, currency, locale, decimals)}</span>`.format();
+                return `<span class='vuered'>${getters.currency_generic_string(num, currency, locale, decimals)}</span>`
             }
         }
     },

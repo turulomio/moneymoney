@@ -370,7 +370,7 @@
             footer_gainsbyproductstypes(){
                 var gross_gains=listobjects_sum(this.total_annual_gainsbyproductstypes,'gains_gross')+listobjects_sum(this.total_annual_gainsbyproductstypes,'dividends_gross')
                 var net_gains=listobjects_sum(this.total_annual_gainsbyproductstypes,'gains_net')+listobjects_sum(this.total_annual_gainsbyproductstypes,'dividends_net')
-                return this.$t("<p class='mt-4'>Gross gains + Gross dividends = {0}.</p><p>Net gains + Net dividends = {1}.</p>").format(this.localcurrency_html(gross_gains), this.localcurrency_html(net_gains))
+                return this.$t(`<p class='mt-4'>Gross gains + Gross dividends = ${this.localcurrency_html(gross_gains)}.</p><p>Net gains + Net dividends = ${this.localcurrency_html(net_gains)}.</p>`)
             },
             incomeDetails(item){
                 this.month=item.month_number
