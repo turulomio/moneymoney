@@ -78,8 +78,13 @@
         },
         props: {
             order: {
-                required: true
+                required: false,
+                default:null,
             },
+            investments: {
+                type: Array,
+                required: true,
+            }
         },
         data () {
             return {
@@ -211,7 +216,7 @@
             },
         },
         created(){
-            if ( this.order.url!=null){ // EDITING TIENE IO URL
+            if ( this.order!=null){ // EDITING TIENE IO URL
                 this.editing=true
                 this.neworder=Object.assign({},this.order)
                 this.make_all_axios()
@@ -219,6 +224,8 @@
                 this.editing=false
                 this.neworder=Object.assign({},this.order)
             }
+
+
         }
         
     }

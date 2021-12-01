@@ -6,8 +6,10 @@ export function empty_account(){
         number: "",
         currency: "EUR",    
         banks:null,
+        url:null,
     }
 }
+
 export function empty_account_operation(){
     return {
         datetime: new Date().toISOString(),

@@ -30,6 +30,7 @@
             </template>
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small @click="orderAtPercentage(item)">mdi-cart</v-icon>   
+                <div @click="reinvestAtPercentage(item)"> <v-img color="#AAAAAA;" src="@/assets/reinvest.png"  :height="16" :width="16"  ></v-img></div>
             </template>
         </v-data-table>
 
@@ -39,17 +40,26 @@
                 <OrdersCU :order="order" :key="refreshKey" @cruded="on_OrdersCU_cruded()"></OrdersCU>
             </v-card>
         </v-dialog>
+
+
+        <!-- Reinvest dialog -->
+        <v-dialog v-model="dialog_reinvest">
+            <v-card class="pa-4">
+                <InvestmentsoperationsReinvest :order="order" :key="refreshKey"></InvestmentsoperationsReinvest>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
 <script>
     import axios from 'axios'
-    import {my_round} from '../functions.js'
     import {empty_order} from '../empty_objects.js'
     import OrdersCU from './OrdersCU.vue'
+    import InvestmentsoperationsReinvest from './InvestmentsoperationsReinvest.vue'
     export default {
         components:{
             OrdersCU,
+            InvestmentsoperationsReinvest,
         },
         data(){ 
             return{
@@ -79,6 +89,9 @@
                 dialog_cu:false,
                 order: null,
                 loading:false,
+
+                //Reinvest
+                dialog_reinvest:false,
             }
         },
         watch:{
@@ -88,7 +101,6 @@
         },
         methods:{
             empty_order,
-            my_round,
             on_OrdersCU_cruded(){
                 this.dialog_cu=false
             },
@@ -96,13 +108,21 @@
                 this.order=this.empty_order()
                 this.order.price=this.my_round(item.last_price*(1+this.limit/100), item.decimals)
                 this.order.investments=item.url
-                this.dialog_cu=true
                 this.refreshKey=this.refreshKey+1
+                this.dialog_cu=true
+            },
+            reinvestAtPercentage(item){
+                this.order=this.empty_order()
+                this.order.price=this.my_round(item.last_price*(1+this.limit/100), item.decimals)
+                this.order.investments=item.url
+                this.refreshKey=this.refreshKey+1
+                this.dialog_reinvest=true
             },
             refreshTable(){
                 this.loading=true
                 axios.get(`${this.$store.state.apiroot}/reports/investments/lastoperation/?method=${this.method}` , this.myheaders())
                 .then( (response)=> {
+                    console.log(response.data)
                     this.tableData=response.data;
                     this.refreshKey=this.refreshKey+1;
                     this.loading=false

@@ -87,6 +87,7 @@ import {
     zulu2date,
     date2zulu,
     py2date,
+    my_round
 } from './functions.js'
 import {RulesFloat,RulesDate,RulesDatetime,RulesInteger,RulesString,RulesSelection, RulesFloatPositive, RulesFloatNegative, } from './rules.js'
 Vue.mixin({
@@ -97,6 +98,7 @@ Vue.mixin({
     methods: {
         localtime,
         myheaders,
+        my_round,
         myheaders_formdata,
         parseResponse,
         parseResponseError,
