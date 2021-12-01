@@ -1,33 +1,36 @@
 <template>
     <div>
-        <h1>{{ $t(`Orders view`)}}
+        <h1>{{ $t(`Reinvest dialog`)}}
             <MyMenuInline :items="items" :context="this"></MyMenuInline>
         </h1>
         <v-card class="pa-4 mb-3 mt-3"  >
             <v-form ref="form" v-model="form_valid" lazy-validation class="pa-4">
                 <v-row>
-                <v-text-field class="mr-5" v-model="neworder.price" type="number" :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field v-model="neworder.shares" type="number" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesInteger(10,true)" counter="10"/>
+                    <v-autocomplete class="mr-5" :items="$store.state.products" v-model="product" :label="$t('Select a product')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                    <v-autocomplete :items="$store.getters.getInvestmentsByProduct(product)" v-model="newinvestments" :label="$t('Select investments to include')" item-text="fullname" item-value="url" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
+
+                    <v-text-field class="mr-5" v-model="neworder.price" type="number" :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesInteger(10,true)" counter="10"/>
+                    <v-text-field v-model="neworder.shares" type="number" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesInteger(10,true)" counter="10"/>
                 </v-row>
 
             <v-row>
-            <v-select class="mr-5" :disabled="loading" :items="viewoptions" v-model="viewoption" :label="$t('Set a view option')"  item-text="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables()"></v-select>  
-            <v-text-field class="mr-5" autoindex="1" :disabled="loading" v-model="gains_percentage" type="number" :label="$t('Gains percentage')" :placeholder="$t('Gains percentage')" :rules="RulesFloat(5,true)" counter="5"/>
+                <v-select class="mr-5" :disabled="loading" :items="viewoptions" v-model="viewoption" :label="$t('Set a view option')"  item-text="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables()"></v-select>  
+                <v-text-field class="mr-5" autoindex="1" :disabled="loading" v-model="gains_percentage" type="number" :label="$t('Gains percentage')" :placeholder="$t('Gains percentage')" :rules="RulesFloat(5,true)" counter="5"/>
 
-            <v-btn class="mr-5" color="primary" @click="make_all_axios()" :disabled="!form_valid">{{ $t("Simulate") }}</v-btn>
-            <v-btn color="error" @click="add_or_update_order()" :disabled="!form_valid">{{ button() }}</v-btn>                 
+                <v-btn class="mr-5" color="primary" @click="make_all_axios()" :disabled="!form_valid">{{ $t("Simulate") }}</v-btn>
+                <v-btn color="error" @click="add_or_update_order()" :disabled="!form_valid">{{ button() }}</v-btn>                 
             </v-row>
             </v-form>  
 
         </v-card>
-        <v-tabs  background-color="primary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
+        <v-tabs v-if="ios_before" background-color="primary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
             <v-tab key="current">{{ $t('Current investment operations') }}</v-tab>
             <v-tab key="operations">{{ $t('Investment operations') }}</v-tab>
             <v-tab key="historical">{{ $t('Historical investment operations') }}</v-tab>
             <v-tab key="chart">{{ $t('Investment chart') }}</v-tab>
             <v-tabs-slider color="yellow"></v-tabs-slider>
         </v-tabs>
-        <v-tabs-items v-model="tab">
+        <v-tabs-items v-if="ios_before" v-model="tab">
             <v-tab-item key="current">      
                 <div>
                     <v-card>
@@ -117,7 +120,12 @@
                 key:0,
                 gains_percentage:10,
 
+                //Form
                 neworder: null,
+                product: null,
+                newinvestments: [],
+                
+
 
                 //Chart
                 chart_data:null,
@@ -150,24 +158,24 @@
                 }
             },
             refreshProductQuotes(){
-                return axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl?product=${this.neworder.products}`, this.myheaders())
+                return axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl?product=${this.product}`, this.myheaders())
             },
             simulateOrderBefore(){
                 var simulation=this.empty_investments_operations_simulation()
-                simulation.investments.push(this.neworder.investments)
-                simulation.local_currency=this.neworder.currency
+                simulation.investments=this.newinvestments
+                simulation.local_currency=this.$store.state.local_currency
                 return axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
             },
             simulateOrderAfter(){
                 var simulation=this.empty_investments_operations_simulation()
-                simulation.investments.push(this.neworder.investments)
-                simulation.local_currency=this.neworder.currency
+                simulation.investments=this.newinvestments
+                simulation.local_currency=this.$store.state.local_currency
                 var operation=this.empty_investment_operation()
                 operation.datetime=simulation.dt
                 operation.shares=this.neworder.shares
                 operation.price=this.neworder.price
                 operation.comment="Simulation 1"
-                operation.investments=this.neworder.investments
+                operation.investments=this.investments[0]
                 simulation.operations.push(operation)
                 return axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
             },
@@ -219,13 +227,12 @@
             if ( this.order!=null){ // EDITING TIENE IO URL
                 this.editing=true
                 this.neworder=Object.assign({},this.order)
-                this.make_all_axios()
             } else { // NEW IO BUT SETTING VALUES WITH URL=null
                 this.editing=false
                 this.neworder=Object.assign({},this.order)
             }
-
-
+            this.investments.forEach(element => { this.newinvestments.push(element)});
+            if (this.newinvestments.length>0) this.product=this.$store.getters.getObjectPropertyByUrl("investments", this.newinvestments[0],"products")
         }
         
     }

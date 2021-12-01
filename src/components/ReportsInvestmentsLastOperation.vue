@@ -45,7 +45,7 @@
         <!-- Reinvest dialog -->
         <v-dialog v-model="dialog_reinvest">
             <v-card class="pa-4">
-                <InvestmentsoperationsReinvest :order="order" :key="refreshKey"></InvestmentsoperationsReinvest>
+                <InvestmentsoperationsReinvest :order="order" :investments="reinvest_investments" :key="refreshKey"></InvestmentsoperationsReinvest>
             </v-card>
         </v-dialog>
     </div>
@@ -92,6 +92,7 @@
 
                 //Reinvest
                 dialog_reinvest:false,
+                reinvest_investments:[],
             }
         },
         watch:{
@@ -115,6 +116,7 @@
                 this.order=this.empty_order()
                 this.order.price=this.my_round(item.last_price*(1+this.limit/100), item.decimals)
                 this.order.investments=item.url
+                this.reinvest_investments=item.investments_urls
                 this.refreshKey=this.refreshKey+1
                 this.dialog_reinvest=true
             },
