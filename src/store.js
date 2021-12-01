@@ -38,6 +38,9 @@ export const store = new Vuex.Store({
         getOperationstypesForNewConcepts: (state) => () => { 
             return state.operationstypes.filter( o => [1,2].includes(o.id))
         },
+        getOperationstypesForInvestmentsOperations: (state) => () => { 
+            return state.operationstypes.filter( o => [4,5,6,8,9,10].includes(o.id))
+        },
         getObjectByUrl:(state) => (catalog,url,default_=null) => {
             var r=state[catalog].find(o => o.url==url)
             if (r==null){
