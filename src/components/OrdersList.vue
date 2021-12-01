@@ -40,7 +40,7 @@
         <!-- Order View dialog -->
         <v-dialog v-model="dialog_reinvest">
             <v-card class="pa-4">
-                <InvestmentsoperationsReinvest :order="order" :key="key"></InvestmentsoperationsReinvest>
+                <InvestmentsoperationsReinvest v-if="order!=null" :price="order.price" :shares="order.shares" :investments="new Array(this.order.investments)" :key="key"></InvestmentsoperationsReinvest>
             </v-card>
         </v-dialog>
 
@@ -174,8 +174,8 @@
                 })
             },
             orderView(item) {    
+                this.order=item               
                 this.key=this.key+1
-                this.order=item
                 this.dialog_reinvest=true
             },
             deleteItem (item) {

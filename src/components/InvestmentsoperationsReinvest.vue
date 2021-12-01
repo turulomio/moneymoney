@@ -9,8 +9,8 @@
                     <v-autocomplete class="mr-5" :items="$store.state.products" v-model="product" :label="$t('Select a product')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                     <v-autocomplete :items="$store.getters.getInvestmentsByProduct(product)" v-model="newinvestments" :label="$t('Select investments to include')" item-text="fullname" item-value="url" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
 
-                    <v-text-field class="mr-5" v-model="neworder.price" type="number" :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesInteger(10,true)" counter="10"/>
-                    <v-text-field v-model="neworder.shares" type="number" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesInteger(10,true)" counter="10"/>
+                    <v-text-field class="mr-5" v-model="newprice" type="number" :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesInteger(10,true)" counter="10"/>
+                    <v-text-field v-model="newshares" type="number" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesInteger(10,true)" counter="10"/>
                 </v-row>
 
             <v-row>
@@ -18,7 +18,7 @@
                 <v-text-field class="mr-5" autoindex="1" :disabled="loading" v-model="gains_percentage" type="number" :label="$t('Gains percentage')" :placeholder="$t('Gains percentage')" :rules="RulesFloat(5,true)" counter="5"/>
 
                 <v-btn class="mr-5" color="primary" @click="make_all_axios()" :disabled="!form_valid">{{ $t("Simulate") }}</v-btn>
-                <v-btn color="error" @click="add_or_update_order()" :disabled="!form_valid">{{ button() }}</v-btn>                 
+                <v-btn v-if="this.newinvestments.length==1" color="error" @click="add_order()" :disabled="!form_valid">{{ $t("Add order") }}</v-btn>                 
             </v-row>
             </v-form>  
 
@@ -60,13 +60,22 @@
                 </div>
             </v-tab-item>
         </v-tabs-items> 
+
+        <!-- Order CU dialog -->
+        <v-dialog v-model="dialog_order_cu" max-width="550">
+            <v-card class="pa-4">
+                <OrdersCU :order="order" :key="key"></OrdersCU>
+            </v-card>
+        </v-dialog>
     </div>
 </template>  
 <script>     
     import axios from 'axios'
     import MyMenuInline from './MyMenuInline.vue'
-    import {empty_investments_operations_simulation,empty_investment_operation,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
+    import {parseNumber} from '../functions.js'
+    import {empty_order, empty_investments_operations_simulation,empty_investment_operation,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
     import ChartInvestments from './ChartInvestments.vue'
+    import OrdersCU from './OrdersCU.vue'
     import TableInvestmentOperations from './TableInvestmentOperations.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
@@ -75,34 +84,46 @@
         components:{
             ChartInvestments,
             MyMenuInline,
+            OrdersCU,
             TableInvestmentOperations,
             TableInvestmentOperationsHistorical,
             TableInvestmentOperationsCurrent,
         },
         props: {
-            order: {
-                required: false,
-                default:null,
-            },
             investments: {
                 type: Array,
                 required: true,
+            },
+            shares: {
+                required: false,
+                default: 0,
+            },
+            price: {
+                required: false,
+                default: 0,
             }
         },
         data () {
             return {
                 items: [
                     {
-                        subheader:this.$t('Quote options'),
+                        subheader:this.$t('Options to set shares'),
                         children: [
                             {
-                                name:this.$t('Add a quote'),
+                                name:this.$t('Integer shares from price'),
                                 code: function(this_){
-                                    this_.quote=this_.empty_quote()
-                                    this_.quote.products=this_.product.url
-                                    this_.dialog_quotescu=true
+                                    var amount=parseNumber(prompt( this_.$t("Please the amount to invest in this order"), 10000 ));
+                                    this_.newshares=parseInt(amount/this_.newprice)
                                 },
-                                icon: "mdi-plus",
+                                icon: "mdi-book-plus",
+                            },
+                            {
+                                name:this.$t('Decimal shares from price'),
+                                code: function(this_){
+                                    var amount=parseNumber(prompt( this_.$t("Please the amount to invest in this order"), 10000 ));
+                                    this_.newshares=amount/this_.newprice
+                                },
+                                icon: "mdi-book-plus",
                             },
                         ]
                     },
@@ -120,11 +141,15 @@
                 key:0,
                 gains_percentage:10,
 
+                //Order CU
+                dialog_order_cu:false,
+                order: null,
+
                 //Form
-                neworder: null,
                 product: null,
                 newinvestments: [],
-                
+                newshares:0,                
+                newprice:0,
 
 
                 //Chart
@@ -143,19 +168,18 @@
         watch:{
         },
         methods: {
+            empty_order,
             empty_investments_operations_simulation,
             empty_investment_operation,
             empty_investments_chart,
             empty_investments_chart_limit_line,
-            add_or_update_order(){
+            add_order(){
+                this.order=this.empty_order()
+                this.order.price=this.newprice
+                this.order.shares=this.newshares
+                this.key=this.key+1
+                this.dialog_order_cu=true
 
-            },
-            button(){
-                if (this.editing){
-                    return this.$t("Update order")
-                } else {
-                    return this.$t("Add order")
-                }
             },
             refreshProductQuotes(){
                 return axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl?product=${this.product}`, this.myheaders())
@@ -172,8 +196,8 @@
                 simulation.local_currency=this.$store.state.local_currency
                 var operation=this.empty_investment_operation()
                 operation.datetime=simulation.dt
-                operation.shares=this.neworder.shares
-                operation.price=this.neworder.price
+                operation.shares=this.newshares
+                operation.price=this.newprice
                 operation.comment="Simulation 1"
                 operation.investments=this.investments[0]
                 simulation.operations.push(operation)
@@ -215,7 +239,7 @@
                     this.list_io_historical=this.ios_after.io_historical
                     this.chart_data.io_object=this.ios_after
                     var ll2=this.empty_investments_chart_limit_line()
-                    ll2.buy=this.neworder.price
+                    ll2.buy=this.newprice
                     ll2.average=this.ios_after.investment.average_price_investment
                     ll2.sell=ll2.average*(1+this.gains_percentage/100)
                     this.chart_data.limitlines.push(ll2)
@@ -224,15 +248,12 @@
             },
         },
         created(){
-            if ( this.order!=null){ // EDITING TIENE IO URL
-                this.editing=true
-                this.neworder=Object.assign({},this.order)
-            } else { // NEW IO BUT SETTING VALUES WITH URL=null
-                this.editing=false
-                this.neworder=Object.assign({},this.order)
-            }
+            this.newshares=this.shares
+            this.newprice=this.price
             this.investments.forEach(element => { this.newinvestments.push(element)});
-            if (this.newinvestments.length>0) this.product=this.$store.getters.getObjectPropertyByUrl("investments", this.newinvestments[0],"products")
+            if (this.newinvestments.length>0) {
+                this.product=this.$store.getters.getObjectPropertyByUrl("investments", this.newinvestments[0],"products")
+            }
         }
         
     }

@@ -28,9 +28,12 @@
             <template v-slot:[`item.percentage_sellingpoint`]="{ item }">
                 <div v-html="percentage_html(item.percentage_sellingpoint)"></div>
             </template>
-            <template v-slot:[`item.actions`]="{ item }">
-                <v-icon small @click="orderAtPercentage(item)">mdi-cart</v-icon>   
-                <div @click="reinvestAtPercentage(item)"> <v-img color="#AAAAAA;" src="@/assets/reinvest.png"  :height="16" :width="16"  ></v-img></div>
+            <template v-slot:[`item.actions`]="{ item }">                    
+                <v-row class="text-nowrap" justify="center">
+                    <v-icon small @click="orderAtPercentage(item)">mdi-cart</v-icon>   
+                    <div @click="reinvestAtPercentage(item)"> <v-img color="#757575;" src="@/assets/reinvest.png"  :height="16" :width="16"  ></v-img></div>
+                </v-row>
+
             </template>
         </v-data-table>
 
@@ -45,7 +48,7 @@
         <!-- Reinvest dialog -->
         <v-dialog v-model="dialog_reinvest">
             <v-card class="pa-4">
-                <InvestmentsoperationsReinvest :order="order" :investments="reinvest_investments" :key="refreshKey"></InvestmentsoperationsReinvest>
+                <InvestmentsoperationsReinvest :shares="reinvest_shares" :price="reinvest_price" :investments="reinvest_investments" :key="refreshKey"></InvestmentsoperationsReinvest>
             </v-card>
         </v-dialog>
     </div>
@@ -73,13 +76,12 @@
                     { text: this.$t('% last'), value: 'percentage_last', sortable: true, align:"right", width:"7%" },
                     { text: this.$t('% invested'), value: 'percentage_invested', sortable: true, align:"right", width:"7%" },
                     { text: this.$t('% selling point'), value: 'percentage_sellingpoint', sortable: true, align:"right", width:"7%" },
-                    { text: this.$t('Actions'), value: 'actions', sortable: true, cellClass: "text-nowrap" , width:"7%" },
+                    { text: this.$t('Actions'), value: 'actions', sortable: true, cellClass: "text-nowrap" , width:"6%" },
                 ],   
                 tableData: [],
                 method_results: [
                     { id:0, name:this.$t('Show separated investments')},
                     { id:1, name:this.$t('Show merging current investment operations')},
-                    { id:2, name:this.$t('Show mergin all investment operations')},     
                 ],
                 limit: -40,
                 method: 0,
@@ -93,6 +95,8 @@
                 //Reinvest
                 dialog_reinvest:false,
                 reinvest_investments:[],
+                reinvest_shares:0,
+                reinvest_price:0,
             }
         },
         watch:{
@@ -113,9 +117,8 @@
                 this.dialog_cu=true
             },
             reinvestAtPercentage(item){
-                this.order=this.empty_order()
-                this.order.price=this.my_round(item.last_price*(1+this.limit/100), item.decimals)
-                this.order.investments=item.url
+                this.reinvest_price=this.my_round(item.last_price*(1+this.limit/100), item.decimals)
+                this.reinvest_shares=0
                 this.reinvest_investments=item.investments_urls
                 this.refreshKey=this.refreshKey+1
                 this.dialog_reinvest=true
