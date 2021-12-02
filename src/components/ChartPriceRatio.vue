@@ -1,7 +1,7 @@
 
 <template>
     <div>
-        <h1>{{ $t("Price ratio chart")}}</h1>
+        <h1 v-if="!notitle">{{ $t("Price ratio chart")}}</h1>
         <v-card outlined class="ma-4 pa-4" height="650" v-if="data.length>0">
             <v-chart
                 ref="chart"
@@ -25,6 +25,11 @@
             },
             data:{
                 required:true,
+            },
+            notitle:{
+                type: Boolean,
+                required: false,
+                default: false
             }
         },
         data(){ 

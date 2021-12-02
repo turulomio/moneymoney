@@ -29,7 +29,7 @@
             </v-card-actions>
         </v-card>
         <!-- DIALOG PRODUCT COMPARATION VIEW -->
-        <v-dialog v-model="dialog" >
+        <v-dialog v-model="dialog" width="100%" height="100%">
             <v-card class="pa-4">
                 <ProductsComparation :pc="pc"  :key="key"></ProductsComparation>
             </v-card>

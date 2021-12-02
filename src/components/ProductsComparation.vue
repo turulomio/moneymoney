@@ -28,7 +28,7 @@
             </v-tab-item>
             <v-tab-item key="price_ratio_chart">
                 <v-card class="padding" outlined>
-                    <ChartPriceRatio :product_a="product_a" :product_b="product_b" :data="data_price_ratio_chart"></ChartPriceRatio>
+                    <ChartPriceRatio notitle :product_a="product_a" :product_b="product_b" :data="data_price_ratio_chart"></ChartPriceRatio>
                 </v-card>
             </v-tab-item>
         </v-tabs>  
