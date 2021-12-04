@@ -11,12 +11,12 @@
   "dependencies": {
     "@intlify/vue-i18n-loader": "^1.1.0",
     "@mdi/js": "^6.5.95",
-    "axios": "^0.24.0",
+    "axios": "^0.22.0",
     "babel-eslint": "^10.1.0",
     "core-js": "^3.19.2",
     "currency-list": "^1.0.6",
     "echarts": "^5.2.2",
-    "eslint-plugin-vue": "^8.1.1",
+    "eslint-plugin-vue": "^7.20.0",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.34",
     "vue": "^2.6.14",
@@ -34,7 +34,7 @@
     "@vue/cli-service": "~4.5.15",
     "@vue/composition-api": "*",
     "sass": "^1.44.0",
-    "sass-loader": "^12.3.0",
+    "sass-loader": "^10.2.0",
     "vue-cli-plugin-i18n": "~2.3.1",
     "vue-template-compiler": "^2.6.14",
     "npm-check-updates": "^12.0.2"
