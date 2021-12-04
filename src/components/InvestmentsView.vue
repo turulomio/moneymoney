@@ -104,9 +104,9 @@
         </v-dialog>
 
         <!-- DIVIDEND PRODUCTSVIEW-->
-        <v-dialog v-model="dialog_productview" width="35%">
+        <v-dialog v-model="dialog_productview" width="100%" heigth="100%">
             <v-card class="pa-3">
-                <ProductsView :product="product" ></ProductsView>
+                <ProductsView :product="product" :key="key" ></ProductsView>
             </v-card>
         </v-dialog>
         <!-- INVESTMENT CHART-->
@@ -257,7 +257,8 @@
                             {
                                 name:this.$t('View product'),
                                 code: function(this_){
-                                    this_.product=this_.$store.state.products.find( (o) => o.url=this_.investment.url)
+                                    this_.product=this_.$store.getters.getObjectByUrl("products",this_.investment.products)
+                                    this_.key=this_.key+1
                                     this_.dialog_productview=true
                                 },
                                 icon: "mdi-magnify",

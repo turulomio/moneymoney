@@ -35,8 +35,7 @@
             submit(){
                 if (this.$refs.form.validate()==false) return
                 axios.post(`${this.$store.state.apiroot}/estimations/dps/add/`, this.newestimation, this.myheaders())
-                .then((response) => {
-                    console.log(response.data)
+                .then(() => {
                     this.$emit("cruded")
                 }, (error) => {
                     this.parseResponseError(error)

@@ -90,7 +90,6 @@
                 axios.get(`${this.$store.state.apiroot}/estimations/dps/list?product=${this.product.url}`, this.myheaders())
                 .then((response) => {
                     this.items=response.data
-                    console.log(response);
                     this.loading=false
                 }, (error) => {
                     this.parseResponseError(error)
