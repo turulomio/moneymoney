@@ -7,12 +7,12 @@
         <v-card width="45%" class="pa-8 ma-3 mx-lg-auto">
                 <v-row>
                     <v-text-field dense name="search" v-model="search" :label="$t('Search products')"  :placeholder="$t('Enter a string')" autofocus></v-text-field>
-                    <v-btn dense class="ml-4" color="error" @click="submit()">{{ $t("Search") }}</v-btn>
+                    <v-btn :disabled="loading" dense class="ml-4" color="error" @click="submit()">{{ $t("Search") }}</v-btn>
                 </v-row>
         </v-card>
 
         <v-card >
-            <v-data-table dense :headers="tableHeaders" :items="tableData"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['value']" :sort-desc="[true]" fixed-header height="600">      
+            <v-data-table dense :headers="tableHeaders" :items="tableData"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['value']" :sort-desc="[true]" fixed-header height="650" :loading="loading">      
                 <template v-slot:[`item.last`]="{ item }">
                     {{ currency_string(item.last, item.currency)}}
                 </template>  
@@ -71,6 +71,7 @@
                         ]
                     },
                 ],
+                loading: false,
                 //DIALOG PRODUCTS VIEW
                 dialog_productsview:false,
                 product:null,
@@ -96,6 +97,7 @@
                 this.refreshTables()
             },
             refreshTables(){
+                this.loading=true
                 if (this.search==null){
                     this.tableData=[]
                 } else {
@@ -105,6 +107,7 @@
                         this.ifnullempty(o.isin).toUpperCase().includes(this.search.toUpperCase())
                     )
                 }
+                this.loading=false
             }
         }
         
