@@ -45,11 +45,6 @@
             
         },
         created(){
-            if (this.estimation.url==null){
-                this.editing=false
-            } else {
-                this.editing=true
-            }
             this.newestimation=Object.assign({},this.estimation)
         }
     }

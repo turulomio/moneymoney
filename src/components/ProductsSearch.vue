@@ -30,7 +30,7 @@
         </v-card>
         <v-dialog v-model="dialog_productsview">
             <v-card class="pa-4">
-                <ProductsView :product="product"></ProductsView>
+                <ProductsView :product="product" :key="key"></ProductsView>
             </v-card>
         </v-dialog>
     </div>
@@ -72,6 +72,7 @@
                     },
                 ],
                 loading: false,
+                key:0,
                 //DIALOG PRODUCTS VIEW
                 dialog_productsview:false,
                 product:null,
@@ -85,6 +86,7 @@
             ifnullempty,
             viewProduct(item){
                 this.product=item
+                this.key=this.key+1
                 this.dialog_productsview=true
             },
             class_name(item){

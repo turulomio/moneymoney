@@ -11,8 +11,8 @@
             <v-tab key="dps_estimations">{{ $t("DPS estimations")}}</v-tab>
             <v-tab key="quotes">{{ $t("Quotes")}}</v-tab>
             <v-tab-item key="dps_estimations">     
-                <v-card class="pa-4 d-flex justify-center" outlined style="min-width: 100px; max-width: 100%;">
-                
+                <v-card class="pa-4 d-flex justify-center" outlined >
+                    <TableEstimationsDPS :product="product" :key="key"></TableEstimationsDPS>
                 </v-card>
             </v-tab-item>
             <v-tab-item key="quotes">
@@ -20,6 +20,7 @@
                 </v-card>
             </v-tab-item>
         </v-tabs>  
+
         <!-- QUOTES CU -->
         <v-dialog v-model="dialog_quotescu" width="35%">
             <v-card class="pa-4">
@@ -40,6 +41,7 @@
     import QuotesCU from './QuotesCU.vue'
     import DisplayValues from './DisplayValues.vue'
     import EstimationsDpsCU from './EstimationsDpsCU.vue'
+    import TableEstimationsDPS from './TableEstimationsDPS.vue'
     import {empty_quote,empty_estimation_dps} from '../empty_objects.js'
     export default {
         components:{
@@ -47,6 +49,7 @@
             EstimationsDpsCU,
             MyMenuInline,
             QuotesCU,
+            TableEstimationsDPS,
         },
 
         props: {
@@ -60,7 +63,7 @@
                     {title:this.$t('Leverage'), value: this.product.leverage},
                     {title:this.$t('Currency'), value: this.product.currency},
                     {title:this.$t('Obsolete'), value: this.product.obsolete},
-                    {title:this.$t('Id'), value: this.account.id},
+                    {title:this.$t('Id'), value: this.product.id},
                 ],
                 items: [
                     {
@@ -112,6 +115,7 @@
             empty_estimation_dps,
             on_EstimationsDpsCU_cruded(){
                 this.dialog_estimationdps=false
+                this.key=this.key+1
             },
         }
         
