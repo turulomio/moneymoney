@@ -9,7 +9,9 @@
     
         <v-tabs v-model="tab"  background-color="primary" dark>
             <v-tab key="dps_estimations">{{ $t("DPS estimations")}}</v-tab>
-            <v-tab key="quotes">{{ $t("Quotes")}}</v-tab>
+            <v-tab key="quotes">{{ $t("Daily OHCL")}}</v-tab>
+            <v-tab key="quotes_by_month">{{ $t("Quotes")}}</v-tab>
+            <v-tab key="chart">{{ $t("Chart")}}</v-tab>
             <v-tab-item key="dps_estimations">     
                 <v-card class="pa-4 d-flex justify-center" outlined >
                     <TableEstimationsDPS :product="product" :key="key"></TableEstimationsDPS>
@@ -17,6 +19,17 @@
             </v-tab-item>
             <v-tab-item key="quotes">
                 <v-card class="padding" outlined>
+                    <TableOHCLS :currency="product.currency" :items="ohcls" :key="key"></TableOHCLS>
+                </v-card>
+            </v-tab-item>
+            <v-tab-item key="quotes_by_month">
+                <v-card class="padding" outlined>
+                    <TableQuotes :currency="product.currency" :items="quotes_all" :key="key"></TableQuotes>
+                </v-card>
+            </v-tab-item>
+            <v-tab-item key="chart">     
+                <v-card class="pa-4" outlined >
+                    <ChartProduct :ohcls="ohcls" :product="product" :key="key"></ChartProduct>
                 </v-card>
             </v-tab-item>
         </v-tabs>  
@@ -37,19 +50,26 @@
     </div>
 </template>  
 <script>     
+    import axios from 'axios'
     import MyMenuInline from './MyMenuInline.vue'
     import QuotesCU from './QuotesCU.vue'
+    import ChartProduct from './ChartProduct.vue'
     import DisplayValues from './DisplayValues.vue'
     import EstimationsDpsCU from './EstimationsDpsCU.vue'
     import TableEstimationsDPS from './TableEstimationsDPS.vue'
+    import TableOHCLS from './TableOHCLS.vue'
+    import TableQuotes from './TableQuotes.vue'
     import {empty_quote,empty_estimation_dps} from '../empty_objects.js'
     export default {
         components:{
+            ChartProduct,
             DisplayValues,
             EstimationsDpsCU,
             MyMenuInline,
             QuotesCU,
             TableEstimationsDPS,
+            TableQuotes,
+            TableOHCLS,
         },
 
         props: {
@@ -100,6 +120,10 @@
                 tab:0,
                 key:0,
 
+                //Product chart
+                ohcls:[],
+                quotes_all:[],
+
 
                 // Quotes CU
                 dialog_quotescu: false,
@@ -117,6 +141,27 @@
                 this.dialog_estimationdps=false
                 this.key=this.key+1
             },
+            refreshProductOHCLDaily(){
+                return axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl/?product=${this.product.url}`, this.myheaders())
+            },
+            // refreshProductAllQuotes(){
+            //     return axios.get(`${this.$store.state.apiroot}/api/quotes/?product=${this.product.url}`, this.myheaders())
+            // },
+            make_all_axios(){
+                this.loading=true
+                axios.all([this.refreshProductOHCLDaily()])
+                .then(([resOHCLS]) => {
+                    this.ohcls=resOHCLS.data 
+                    console.log(this.ohcls)
+
+
+                    this.loading=false
+                });
+            },
+        },
+
+        created(){
+            this.make_all_axios()
         }
         
     }
