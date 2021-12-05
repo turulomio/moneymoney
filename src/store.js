@@ -32,6 +32,9 @@ export const store = new Vuex.Store({
         getConceptsForDividends: (state) => () => { 
             return state.concepts.filter( o => [39, 50,59,62,63,65,66,68,70,72,75,76,77].includes(o.id))
         },
+        getInvestmentsActive:(state) => () => {
+            return state.investments.filter(o => o.active==true)
+        },
         getInvestmentsByProduct:(state) => (product) => {
             return state.investments.filter(o => o.products==product)
         },

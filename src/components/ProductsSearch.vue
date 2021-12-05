@@ -70,6 +70,32 @@
                             },
                         ]
                     },
+                    {
+                        subheader:this.$t('Especial products'),
+                        children: [
+                            {
+                                name:this.$t('Active investments products'),
+                                code: function(this_){
+                                    this_.refreshActiveInvestmentsProducts()
+                                },
+                                icon: "mdi-plus",
+                            },
+                            {
+                                name:this.$t('All investments products'),
+                                code: function(this_){
+                                    this_.refreshInvestmentsProducts()
+                                },
+                                icon: "mdi-plus",
+                            },
+                            {
+                                name:this.$t('Personal products'),
+                                code: function(this_){
+                                    this_.refreshPersonalProducts()
+                                },
+                                icon: "mdi-plus",
+                            },
+                        ]
+                    },
                 ],
                 loading: false,
                 key:0,
@@ -96,9 +122,9 @@
                 return "text-decoration-line-through"
             },
             submit(){
-                this.refreshTables()
+                this.refreshSearch()
             },
-            refreshTables(){
+            refreshSearch(){
                 this.loading=true
                 if (this.search==null){
                     this.tableData=[]
@@ -110,7 +136,34 @@
                     )
                 }
                 this.loading=false
-            }
+            },
+            refreshActiveInvestmentsProducts(){
+                this.tableData=[]
+                this.loading=true
+                this.$store.getters.getInvestmentsActive().forEach(element => {
+                    let product = this.$store.getters.getObjectByUrl("products",element.products)
+                    if (!this.tableData.find(o => o.url === product.url)) {
+                         this.tableData.push(product)
+                    }
+                });
+                this.loading=false
+            },
+            refreshInvestmentsProducts(){
+                this.tableData=[]
+                this.loading=true
+                this.$store.state.investments.forEach(element => {
+                    let product = this.$store.getters.getObjectByUrl("products",element.products)
+                    if (!this.tableData.find(o => o.url === product.url)) {
+                         this.tableData.push(product)
+                    }
+                });
+                this.loading=false
+            },
+            refreshPersonalProducts(){
+                this.loading=true
+                this.tableData=this.$store.state.products.filter( element => element.id<0)
+                this.loading=false
+            },
         }
         
     }
