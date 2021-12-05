@@ -5,7 +5,7 @@
                 <div :ref="index">{{ localtime(item.datetime)}}</div>
             </template>        
             <template v-slot:[`item.quote`]="{ item }">
-                <div v-html="this.currency_html(item.quote,this.currency)"></div>
+                <div v-html="this.currency_html(item.quote,product.currency,product.decimals)"></div>
             </template>   
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="editQuote(item)">mdi-pencil</v-icon>
@@ -32,7 +32,7 @@
             items: {
                 required: true
             },
-            currency: {
+            product: {
                 required: true
             },
         },

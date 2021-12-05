@@ -19,12 +19,12 @@
             </v-tab-item>
             <v-tab-item key="quotes">
                 <v-card class="padding" outlined>
-                    <TableOHCLS :currency="product.currency" :items="ohcls" :key="key"></TableOHCLS>
+                    <TableOHCLS :product="product" :items="ohcls" :key="key"></TableOHCLS>
                 </v-card>
             </v-tab-item>
             <v-tab-item key="quotes_by_month">
                 <v-card class="padding" outlined>
-                    <TableQuotes :currency="product.currency" :items="quotes_all" :key="key"></TableQuotes>
+                    <TableQuotes :product="product" :items="quotes_all" :key="key"></TableQuotes>
                 </v-card>
             </v-tab-item>
             <v-tab-item key="chart">     

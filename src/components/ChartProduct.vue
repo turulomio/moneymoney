@@ -19,7 +19,7 @@
             ohcls:{
                 required:true,
             },
-            product:{
+            product:{   // Must be an object
                 required:true
             }
         },

@@ -4,8 +4,17 @@
             <template v-slot:[`item.datetime`]="{ item, index}" >
                 <div :ref="index">{{ localtime(item.datetime)}}</div>
             </template>        
-            <template v-slot:[`item.quote`]="{ item }">
-                <div v-html="this.currency_html(item.quote,this.currency)"></div>
+            <template v-slot:[`item.open`]="{ item }">
+                <div v-html="currency_html(item.open,product.currency, product.decimals)"></div>
+            </template>     
+            <template v-slot:[`item.close`]="{ item }">
+                <div v-html="currency_html(item.close,product.currency, product.decimals)"></div>
+            </template>     
+            <template v-slot:[`item.high`]="{ item }">
+                <div v-html="currency_html(item.high,product.currency, product.decimals)"></div>
+            </template>     
+            <template v-slot:[`item.low`]="{ item }">
+                <div v-html="currency_html(item.low,product.currency, product.decimals)"></div>
             </template>   
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="deleteOHCL(item)">mdi-delete</v-icon>
@@ -31,7 +40,7 @@
             items: {
                 required: true
             },
-            currency: {
+            product: {   // Must be a product object
                 required: true
             },
         },
