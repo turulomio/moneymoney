@@ -78,7 +78,7 @@
                         if (this.following_ao==true){
                             var dt=this.zulu2date(this.newao.datetime)
                             var olddtseconds=this.zulu2date(this.newao.datetime).getSeconds()
-                            dt.setSeconds(olddtseconds+60)
+                            dt.setSeconds(olddtseconds+2)
                             this.newao.datetime=this.date2zulu(dt)
                         }
                         this.$emit('cruded', this.following_ao)
