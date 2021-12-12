@@ -11,7 +11,7 @@
                 <div v-html="currency_html(item.balance, item.currency)"></div>
             </template>   
             <template v-slot:[`item.concepts`]="{ item }">
-                <div v-html="$store.getters.getObjectPropertyByUrl('concepts', item.concepts, 'name')"></div>
+                <div v-html="$store.getters.getObjectPropertyByUrl('concepts', item.concepts, 'localname')"></div>
             </template>
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="editAO(item)">mdi-pencil</v-icon>
