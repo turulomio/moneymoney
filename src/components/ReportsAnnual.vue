@@ -459,7 +459,7 @@
                 }
                 this.loading_target=false
                 
-                var current_percentage=(cumulative_gains)*(this.target/100)/(this.last_year_balance*(this.target/100))
+                var current_percentage=cumulative_gains/this.last_year_balance
                 this.current_assets_gains_percentage_message=this.$t(`Currently, gains annual percentage is ${this.percentage_html(current_percentage)}`)
 
             },
