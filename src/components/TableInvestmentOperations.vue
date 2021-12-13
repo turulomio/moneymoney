@@ -12,7 +12,7 @@
             <div :ref="index">{{ localtime(item.datetime)}}</div>
             </template>           
            <template v-slot:[`item.operationstypes`]="{ item }">
-               <div v-html="$store.getters.getObjectPropertyByUrl('operationstypes',item.operationstypes,'name')"></div>
+               <div v-html="$store.getters.getObjectPropertyByUrl('operationstypes',item.operationstypes,'localname')"></div>
            </template>
             <template v-slot:[`item.price`]="{ item }">
             {{ currency_string(item.price, currency_investment)}}

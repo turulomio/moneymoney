@@ -77,7 +77,7 @@
             return{
                 showActive:true,
                 headers: [
-                    { text: this.$t('Name'), sortable: true, value: 'name'},
+                    { text: this.$t('Name'), sortable: true, value: 'localname'},
                     { text: this.$t('Active'), value: 'active',  width: "12%"},
                     { text: this.$t('Accounts balance'), value: 'balance_accounts', align:'right',  width: "12%"},
                     { text: this.$t('Investments balance'), value: 'balance_investments', align:'right',  width: "12%"},

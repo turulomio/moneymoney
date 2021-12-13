@@ -10,7 +10,7 @@
                     {{localtime(item.last_datetime)}}
                 </template>             
                 <template v-slot:[`item.banks`]="{ item }">
-                    <div v-html="$store.getters.getObjectPropertyByUrl('banks',item.banks,'name')"></div>
+                    <div v-html="$store.getters.getObjectPropertyByUrl('banks',item.banks,'localname')"></div>
                 </template>     
                 <template v-slot:[`item.balance_user`]="{ item }">
                     <div v-html="localcurrency_html(item.balance_user)"></div>
@@ -30,7 +30,7 @@
                 <template v-slot:[`body.append`]="{headers}">
                     <tr style="background-color: WhiteSmoke">
                         <td v-for="(header,i) in headers" :key="i">
-                            <div v-if="header.value == 'name'">
+                            <div v-if="header.value == 'localname'">
                                 Total
                             </div>
                             <div v-if="header.value == 'balance_user'" align="right" v-html="localcurrency_html(listobjects_sum(accounts_items,'balance_user'))">
@@ -85,7 +85,7 @@
             return{
                 showActive:true,
                 accounts_headers: [
-                    { text: this.$t('Name'), sortable: true, value: 'name'},
+                    { text: this.$t('Name'), sortable: true, value: 'localname'},
                     { text: this.$t('Bank'), sortable: true, value: 'banks'},
                     { text: this.$t('Active'), value: 'active',  width: "4%"},
                     { text: this.$t('Currency'), value: 'currency',  width: "4%"},
