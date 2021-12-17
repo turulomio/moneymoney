@@ -53,16 +53,20 @@
                 <template v-slot:[`body.append`]="{headers}">
                     <tr style="background-color: WhiteSmoke">
                         <td v-for="(header,i) in headers" :key="i">
-                            <div v-if="header.value == 'name'">
-                                Total
+                            <div v-if="header.value == 'fullname'">
+                                {{ $t(`Total (${investments_items.length} investments):`)}}
                             </div>
                             <div v-if="header.value == 'daily_difference'" align="right" v-html="localcurrency_html(listobjects_sum(investments_items,'daily_difference'))">
+                            </div>
+                            <div v-if="header.value == 'daily_percentage'" align="right" v-html="percentage_html(listobjects_sum(investments_items,'daily_difference')/listobjects_sum(investments_items,'balance_user'))">
                             </div>
                             <div v-if="header.value == 'balance_user'" align="right" v-html="localcurrency_html(listobjects_sum(investments_items,'balance_user'))">
                             </div>
                             <div v-if="header.value == 'invested_user'" align="right" v-html="localcurrency_html(listobjects_sum(investments_items,'invested_user'))">
                             </div>
                             <div v-if="header.value == 'gains_user'" align="right" v-html="localcurrency_html(listobjects_sum(investments_items,'gains_user'))">
+                            </div>
+                            <div v-if="header.value == 'percentage_invested'" align="right" v-html="percentage_html(listobjects_sum(investments_items,'gains_user')/listobjects_sum(investments_items,'invested_user'))">
                             </div>
                         </td>
                     </tr>
