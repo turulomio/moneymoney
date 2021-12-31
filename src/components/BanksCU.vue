@@ -3,8 +3,8 @@
         <h1>{{ title() }}</h1>    
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-text-field v-model="newbank.name" type="text" :label="$t('Bank name')" :placeholder="$t('Bank name')" autofocus :rules="RulesString(100, true)"/>
-                <v-checkbox v-model="newbank.active" :label="$t('Is active?')" ></v-checkbox>
+                <v-text-field :readonly="deleting"  v-model="newbank.name" type="text" :label="$t('Bank name')" :placeholder="$t('Bank name')" autofocus :rules="RulesString(100, true)"/>
+                <v-checkbox :readonly="deleting"  v-model="newbank.active" :label="$t('Is active?')" ></v-checkbox>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>

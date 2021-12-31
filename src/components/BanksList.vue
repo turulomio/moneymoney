@@ -87,6 +87,7 @@
                                 icon: "mdi-pencil",
                                 code: function(this_){
                                     this_.editing=false
+                                    this_.bank_deleting=false
                                     this_.bank=this_.empty_bank()
                                     this_.key=this_.key+1
                                     this_.dialog=true
@@ -105,15 +106,22 @@
             }
         },
         methods: {
+            deleteItem (item) {
+                this.bank=item
+                this.bank_deleting=true
+                this.key=this.key+1
+                this.dialog=true
+            },
             empty_bank,
             editItem (item) {
                 this.bank=item
+                this.bank_deleting=false
                 this.key=this.key+1
                 this.dialog=true
             },
             viewItem (item) {
-                this.key=this.key+1
                 this.bank=item
+                this.key=this.key+1
                 this.dialog_view=true
             },
 

@@ -99,66 +99,55 @@ export const store = new Vuex.Store({
     mutations: { // Only sincronous changes data
         updateAccounts: (state, payload) =>{
             state.accounts=payload
-            console.log("Updated accounts")
-            console.log(state.accounts)
+            console.log(`Updated ${payload.length} accounts`)
         },
         updateBanks: (state, payload) =>{
             state.banks=payload
-            console.log("Updated banks")
-            console.log(state.banks)
+            console.log(`Updated ${payload.length} banks`)
         },
         updateConcepts: (state, payload) =>{
             state.concepts=payload
-            console.log("Updated concepts")
-            console.log(state.concepts)
+            console.log(`Updated ${payload.length} concepts`)
         },
         updateCreditcards: (state, payload) =>{
             state.creditcards=payload
-            console.log("Updated credit cards")
-            console.log(state.creditcards)
+            console.log(`Updated ${payload.length} credit cards`)
         },
         updateCurrencies: (state, payload) =>{
             state.currencies=payload
-            console.log("Updated currencies")
-            console.log(state.currencies)
+            console.log(`Updated ${payload.length} currencies`)
         },
         updateInvestments: (state, payload) =>{
             state.investments=payload
-            console.log("Updated investments")
-            console.log(state.investments)
+            console.log(`Updated ${payload.length} investments`)
         },
         updateOperationstypes: (state, payload) =>{
             state.operationstypes=payload
-            console.log("Updated operations types")
-            console.log(state.operationstypes)
+            console.log(`Updated ${payload.length} operation types`)
         },
         updateProducts: (state, payload) =>{
             state.products=payload
-            console.log("Updated products")
-            console.log(state.products)
+            console.log(`Updated ${payload.length} products`)
         },
         updateSettings: (state, payload) =>{
             state.local_zone=payload.local_zone
             state.local_currency=payload.local_currency
             console.log("Updated settings")
-            console.log(state.local_currency)
-            console.log(state.local_zone)
         },
         updateStockmarkets: (state, payload) =>{
             state.stockmarkets=payload
-            console.log("Updated stock markets")
-            console.log(state.stockmarkets)
+            console.log(`Updated ${payload.length} stock markets`)
         },
         updateStrategiesTypes: (state, payload) =>{
             state.strategiestypes=payload
-            console.log("Updated strategies types")
-            console.log(state.strategiestypes)
+            console.log(`Updated ${payload.length} strategy types`)
         },
 
     },
     actions: {// Can be asynchronous. Fetch data
 
         getAll(context){
+            context.dispatch("getProducts")
             context.dispatch("getAccounts")
             context.dispatch("getBanks")
             context.dispatch("getConcepts")
@@ -166,7 +155,6 @@ export const store = new Vuex.Store({
             context.dispatch("getCurrencies")
             context.dispatch("getInvestments")
             context.dispatch("getOperationstypes")
-            context.dispatch("getProducts")
             context.dispatch("getSettings")
             context.dispatch("getStockmarkets")
             context.dispatch("getStrategiesTypes")
@@ -201,7 +189,6 @@ export const store = new Vuex.Store({
                 locale="es_ES"
             }
             var currencies_object=CurrencyList.getAll(locale)
-            console.log(currencies_object)
             var currencies_list=[]
             Object.entries(currencies_object).forEach(o => currencies_list.push(o[1]))
             currencies_list.forEach(o=> o["fullname"]=`${capitalizeFirstLetter(o.name)} (${o.code} - ${o.symbol})`)
