@@ -3,15 +3,12 @@
         <h1>{{ title() }}</h1>    
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-autocomplete :readonly="deleting" :items="$store.state.banks.filter(v =>v.active==true)" v-model="newaccount.banks" :label="$t('Select a bank')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field v-model="newaccount.name" :readonly="deleting" type="text" :label="$t('Account name')" :placeholder="$t('Account name')" autofocus :rules="RulesString(200,true)" counter="200"/>
-                <v-checkbox v-model="newaccount.active" :readonly="deleting" :label="$t('Is active?')" ></v-checkbox>
-                <v-text-field v-model="newaccount.number" :readonly="deleting" type="text" :label="$t('Account number')" :placeholder="$t('Account number')" :rules="RulesString(30,false)" counter="30"/>
-                <v-autocomplete :items="$store.state.currencies" :readonly="deleting" v-model="newaccount.currency" :label="$t('Select a currency')" item-text="fullname" item-value="code" :rules="RulesSelection(true)"></v-autocomplete>
-           </v-form>   
+                <v-text-field v-model="newbank.name" type="text" :label="$t('Bank name')" :placeholder="$t('Bank name')" autofocus :rules="RulesString(100, true)"/>
+                <v-checkbox v-model="newbank.active" :label="$t('Is active?')" ></v-checkbox>
+            </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn v-if="deleting" color="error" @click="deleteAccount()">{{ $t("Delete") }}</v-btn>
+                <v-btn v-if="deleting" color="error" @click="deleteBank()">{{ $t("Delete") }}</v-btn>
                 <v-btn v-if="!deleting" color="primary" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn>
             </v-card-actions>
         </v-card>
@@ -21,8 +18,8 @@
     import axios from 'axios'
     export default {
         props: {
-            // An account object
-            account: {
+            // An bank object
+            bank: {
                 required: true // Null to create, io object to update
             },
             deleting:{
@@ -33,18 +30,18 @@
         data(){ 
             return {
                 form_valid:false,
-                newaccount: null,
+                newbank: null,
                 editing:false,
             }
         },
         methods: {
             title(){
                 if (this.deleting==true){
-                    return this.$t("Deleting an account")
+                    return this.$t("Deleting bank")
                 } else if (this.editing==true){
-                    return this.$t("Updating an account")
+                    return this.$t("Updating bank")
                 } else {
-                    return this.$t("Creating a new account")
+                    return this.$t("Creating a new bank")
                 }
             },
             button(){
@@ -57,31 +54,31 @@
             acceptDialog(){
                 if (this.$refs.form.validate()==false) return
                 if (this.editing==true){               
-                    axios.put(this.newaccount.url, this.newaccount, this.myheaders())
+                    axios.put(this.newbank.url, this.newbank, this.myheaders())
                     .then(() => {
-                        this.$store.dispatch("getAccounts")
+                        this.$store.dispatch("getBanks")
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
                 } else{
-                    axios.post(`${this.$store.state.apiroot}/api/accounts/`, this.newaccount,  this.myheaders())
+                    axios.post(`${this.$store.state.apiroot}/api/banks/`, this.newbank,  this.myheaders())
                     .then(() => {
-                        this.$store.dispatch("getAccounts")
+                        this.$store.dispatch("getBanks")
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
                 }
             },
-            deleteAccount () {
-               var r = confirm(this.$t("This account will be deleted. Do you want to continue?"))
+            deleteBank () {
+               var r = confirm(this.$t("This bank will be deleted. Do you want to continue?"))
                if(r == false) {
                   return
                } 
-                axios.delete(this.newaccount.url, this.myheaders())
+                axios.delete(this.newbank.url, this.myheaders())
                 .then(() => {
-                    this.$store.dispatch("getAccounts")
+                    this.$store.dispatch("getBanks")
                     this.$emit("cruded")
                 }, (error) => {
                     this.parseResponseError(error)
@@ -89,12 +86,12 @@
             },
         },
         created(){
-            if ( this.account.url!=null){ // EDITING TIENE IO URL
+            if ( this.bank.url!=null){ // EDITING TIENE IO URL
                 this.editing=true
             } else { // NEW IO BUT SETTING VALUES WITH URL=null
                 this.editing=false
             }
-            this.newaccount=Object.assign({},this.account)
+            this.newbank=Object.assign({},this.bank)
         }
     }
 </script>

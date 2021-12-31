@@ -22,6 +22,13 @@ export function empty_account_operation(){
     }
 }
 
+export function empty_bank(){
+    return {
+        name: "",
+        active: true,
+    }
+}
+
 export function empty_concept(){
     return {
         name: "",

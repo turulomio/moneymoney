@@ -3,7 +3,6 @@
     <div>    
         <h1>{{ $t('Banks list') }}
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
-
         </h1>
         <v-card outlined class="ma-4 pa-4">
             <v-checkbox v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" ></v-checkbox>
@@ -42,18 +41,9 @@
                 </template>
             </v-data-table>
         </v-card>
-        <v-dialog v-model="dialog" max-width="550">
+        <v-dialog v-model="dialog" width="35%">
             <v-card class="pa-4">
-                <v-card-title class="headline">{{dialog_title()}}</v-card-title>
-                <v-form ref="form" v-model="form_valid" lazy-validation>
-                    <v-text-field v-model="bank.name" type="text" :label="$t('Bank name')" :placeholder="$t('Bank name')" autofocus/>
-                    <v-checkbox v-model="bank.active" :label="$t('Is active?')" ></v-checkbox>
-                </v-form>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" @click="acceptDialog()" :disabled="!form_valid">{{ $t("Log in") }}</v-btn>
-                    <v-btn color="error" @click="dialog = false">{{ $t("Cancel") }}</v-btn>
-                </v-card-actions>
+                <BanksCU :bank="bank" :deleting="bank_deleting" :key="key" @cruded="on_BanksCU_cruded()"></BanksCU>
             </v-card>
         </v-dialog>
         <v-dialog v-model="dialog_view">
@@ -67,10 +57,13 @@
 <script>
     import axios from 'axios'
     import MyMenuInline from './MyMenuInline.vue'
+    import BanksCU from './BanksCU.vue'
     import BanksView from './BanksView.vue'
+    import {empty_bank} from '../empty_objects.js'
     export default {
         components:{
             MyMenuInline,
+            BanksCU,
             BanksView,
         },
         data(){ 
@@ -95,6 +88,7 @@
                                 code: function(this_){
                                     this_.editing=false
                                     this_.bank=this_.empty_bank()
+                                    this_.key=this_.key+1
                                     this_.dialog=true
                                 },
                             },
@@ -102,9 +96,8 @@
                     },
                 ],
                 dialog:false,
-                form_valid: false,
-                bank: this.empty_bank(),
-                editing:false,
+                bank: null,
+                bank_deleting: false,
                 loading_table:false,
 
                 dialog_view:false,
@@ -112,22 +105,10 @@
             }
         },
         methods: {
-            dialog_title(){
-                if(this.editing==true){
-                    return this.$t("Updating bank")
-                } else {
-                    return this.$t("Creating a new bank")
-                }
-            },
-            empty_bank(){
-                return {
-                    name: "",
-                    active: true,
-                }
-            },
+            empty_bank,
             editItem (item) {
-                this.editing=true
                 this.bank=item
+                this.key=this.key+1
                 this.dialog=true
             },
             viewItem (item) {
@@ -135,34 +116,20 @@
                 this.bank=item
                 this.dialog_view=true
             },
-            deleteItem (item) {
-               var r = confirm(this.$t("Do you want to delete this item?"))
-               if(r == false) {
-                  return
-               } 
-               r = confirm(this.$t("This bank will be deleted. Do you want to continue?"))
-               if(r == false) {
-                  return
-               } 
-                axios.delete(item.url, this.myheaders())
-                .then((response) => {
-                    console.log(response);
-                    this.$store.dispatch("getBanks")
-                    this.update_table()
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
+
             update_table(){
                 this.loading_table=true
                 axios.get(`${this.$store.state.apiroot}/banks/withbalance/?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
                     this.data=response.data
-                    console.log(response);
                     this.loading_table=false
                 }, (error) => {
                     this.parseResponseError(error)
                 });
+            },
+            on_BanksCU_cruded(){
+                this.dialog=false
+                this.update_table()
             },
             on_chkActive(){
                 this.update_table()
@@ -174,31 +141,7 @@
                     return this.$t("Check to see active banks")
                 }
             },
-            acceptDialog(){
-                if (this.editing==true){               
-                    axios.put(this.bank.url, this.bank, this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
-                            this.$store.dispatch("getBanks")
-                            this.update_table()     
-                            this.dialog=false
-                            this.editing=false
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    })
-                } else{
-                    axios.post(`${this.$store.state.apiroot}/api/banks/`, this.bank,  this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
-                            this.$store.dispatch("getBanks")
-                            this.update_table()     
-                            this.dialog=false
-                            this.editing=false
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    })
-                }
-            },
+
         },
         mounted(){
             this.update_table()
