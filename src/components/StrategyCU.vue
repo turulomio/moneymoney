@@ -145,7 +145,7 @@
                         "",
                         "",
                     ]
-                    this.additional_visibility=[true,true,true,true,true,true,true,false,false,false,]
+                    this.additional_visibility=[true,true,true,true,true,true,false,false,false,false,]
 
                 } else if (this.newstrategy.type==1){//Product pairs
                     this.additional_labels=[

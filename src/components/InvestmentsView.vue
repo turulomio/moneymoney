@@ -118,13 +118,9 @@
         <!-- INVESTMENT operations same product selling price-->
         <v-dialog v-model="dialog_io_sameproduct" v-if="ios">
             <v-card class="pa-3">
-                <InvestmentsoperationsSameProductSellingPrice :product="ios.product" :key="key" @cruded="on_InvestmentsoperationsSameProductSellingPrice_cruded()"></InvestmentsoperationsSameProductSellingPrice>
+                <InvestmentsChangeSellingPrice :product="ios.product" :investment="investment" :key="key" @cruded="on_InvestmentsoperationsSameProductSellingPrice_cruded()"></InvestmentsChangeSellingPrice>
             </v-card>
         </v-dialog>
-
-
-
-        
     </div>  
 </template>
 <script>
@@ -136,7 +132,7 @@
     import DividendsCU from './DividendsCU.vue'
     import InvestmentsoperationsEvolutionChart from './InvestmentsoperationsEvolutionChart.vue'
     import InvestmentsoperationsEvolutionChartTimeseries from './InvestmentsoperationsEvolutionChartTimeseries.vue'
-    import InvestmentsoperationsSameProductSellingPrice from './InvestmentsoperationsSameProductSellingPrice.vue'
+    import InvestmentsChangeSellingPrice from './InvestmentsChangeSellingPrice.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import DisplayValues from './DisplayValues.vue'
     import ProductsView from './ProductsView.vue'
@@ -158,7 +154,7 @@
             InvestmentsoperationsCU,
             InvestmentsoperationsEvolutionChart,
             InvestmentsoperationsEvolutionChartTimeseries,
-            InvestmentsoperationsSameProductSellingPrice,
+            InvestmentsChangeSellingPrice,
         },
         props: {
             investment: {
@@ -243,9 +239,10 @@
                                 }
                             },
                             {
-                                name:this.$t('Change selling price of investments with the same product'),
+                                name:this.$t('Change selling price'),
                                 icon: "mdi-pencil",
                                 code: function(this_){
+                                    this_.key=this_.key+1
                                     this_.dialog_io_sameproduct=true
                                 }
                             },

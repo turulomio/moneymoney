@@ -175,6 +175,7 @@
                 this.loading_strategies=true
                 axios.get(`${this.$store.state.apiroot}/strategies/withbalance?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
+                    console.log(response.data)
                     this.strategies_items=response.data
                     this.loading_strategies=false
                 }, (error) => {
