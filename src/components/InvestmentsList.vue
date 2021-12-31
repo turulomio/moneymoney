@@ -48,7 +48,7 @@
                     <v-icon small class="ml-1" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small class="ml-1" @click="viewItem(item)">mdi-eye</v-icon>
                     <v-icon small class="ml-1" @click="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
-                    <v-icon small class="ml-1" v-if="(new Date().setHours(0,0,0,0)>new Date(item.selling_expiration).setHours(0,0,0,0)) && item.selling_expiration!=null" @click="editItem(item)" color="#9933ff" style="font-weight:bold">mdi-alarm</v-icon>     
+                    <v-icon small class="ml-1" v-if="(new Date().setHours(0,0,0,0)>new Date(item.selling_expiration).setHours(0,0,0,0)) && item.selling_expiration!=null" @click="changeSellingPrice(item)" color="#9933ff" style="font-weight:bold">mdi-alarm</v-icon>     
                 </template>                
                 <template v-slot:[`body.append`]="{headers}">
                     <tr style="background-color: WhiteSmoke">
@@ -92,12 +92,20 @@
             </v-card>
         </v-dialog>
 
+        <!-- INVESTMENT change selling price-->
+        <v-dialog v-model="dialog_change_selling_price">
+            <v-card class="pa-3">
+                <InvestmentsChangeSellingPrice :investment="investment" :key="key" @cruded="on_InvestmentsChangeSellingPrice_cruded()"></InvestmentsChangeSellingPrice>
+            </v-card>
+        </v-dialog>
+
     </div>
 </template>
 <script>
     import axios from 'axios'
     import MyMenuInline from './MyMenuInline.vue'
     import InvestmentsCU from './InvestmentsCU.vue'
+    import InvestmentsChangeSellingPrice from './InvestmentsChangeSellingPrice.vue'
     import InvestmentsView from './InvestmentsView.vue'
     import QuotesCU from './QuotesCU.vue'
     import {empty_quote, empty_investment} from '../empty_objects.js'
@@ -107,6 +115,7 @@
             InvestmentsCU,
             InvestmentsView,
             QuotesCU,
+            InvestmentsChangeSellingPrice,
         },
         data(){ 
             return{
@@ -153,6 +162,10 @@
                 // QuoteCU add
                 dialog_quotescu:false,
                 quote:null,
+
+                // CHange selling price
+                dialog_change_selling_price:false,
+                selling_product:null
             }
         },
         methods: { 
@@ -181,6 +194,11 @@
                 this.key=this.key+1
                 this.dialog=true
             },
+            changeSellingPrice(item){
+                this.investment=item
+                this.key=this.key+1
+                this.dialog_change_selling_price=true
+            },
             empty_investment,
             empty_quote,
             on_InvestmentView_cruded(){
@@ -193,6 +211,10 @@
             },
             on_InvestmentsCU_cruded(){
                 this.dialog=false
+                this.update_table()
+            },
+            on_InvestmentsChangeSellingPrice_cruded(){
+                this.dialog_change_selling_price=false
                 this.update_table()
             },
             on_icon_short_long_clicked(item){

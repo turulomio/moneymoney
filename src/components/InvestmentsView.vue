@@ -115,10 +115,10 @@
                 <ChartInvestments :data="chart_data" :key="key"></ChartInvestments>
             </v-card>
         </v-dialog>
-        <!-- INVESTMENT operations same product selling price-->
+        <!-- INVESTMENT change selling price-->
         <v-dialog v-model="dialog_io_sameproduct" v-if="ios">
             <v-card class="pa-3">
-                <InvestmentsChangeSellingPrice :product="ios.product" :investment="investment" :key="key" @cruded="on_InvestmentsoperationsSameProductSellingPrice_cruded()"></InvestmentsChangeSellingPrice>
+                <InvestmentsChangeSellingPrice :product="ios.product" :investment="investment" :key="key" @cruded="on_InvestmentsChangeSellingPrice_cruded()"></InvestmentsChangeSellingPrice>
             </v-card>
         </v-dialog>
     </div>  
@@ -389,8 +389,10 @@
                 this.update_all()
                 this.$emit("cruded") //Translated to InvestmentsList
             },
-            on_InvestmentsoperationsSameProductSellingPrice_cruded(){
-                this.on_InvestmentsoperationsCU_cruded()
+            on_InvestmentsChangeSellingPrice_cruded(){
+                this.dialog_io_sameproduct=false
+                this.update_all()
+                this.$emit("cruded")
             },
             on_TableInvestmentsOperations_cruded(){//Emited deleting IO
                 this.on_InvestmentsoperationsCU_cruded()

@@ -24,7 +24,7 @@
             <v-tab key="percentage">{{ $t("Set a gains percentage") }}</v-tab>
             <v-tab key="gain">{{ $t("Set a gain") }}</v-tab>
             <v-tab key="price">{{ $t("Set a price") }}</v-tab>
-            <v-tab key="range">{{ $t("Set a strategy range") }}</v-tab>
+            <v-tab key="range" v-if="this.selected.length==1 && this.investment.id==this.selected[0].id">{{ $t("Set a range for current investment strategy") }}</v-tab>
             <v-tabs-slider color="yellow"></v-tabs-slider>
         </v-tabs>
         <v-tabs-items v-model="tab">
@@ -56,7 +56,8 @@
                 <MyDatePicker v-model="selling_expiration" :label="$t('Selling expiration')"></MyDatePicker>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="error" @click="submit()" :disabled="form_valid==false">{{ button_text }}</v-btn>
+                    <v-btn color="primary" @click="submit()" :disabled="form_valid==false">{{ button_text }}</v-btn>
+                    <v-btn color="error" @click="submit_null()">{{ $t("Set null values") }}</v-btn>
 
                     <v-spacer></v-spacer>
                 </v-card-actions>
@@ -70,15 +71,19 @@
     import DisplayValues from './DisplayValues.vue'
     import MyDatePicker from './MyDatePicker.vue'
     import {empty_products_ranges} from '../empty_objects.js'
-    import {stringofintegers_to_arrayofintegers} from '../functions.js'
+    import {arrayobjects_to_array} from '../functions.js'
 
     
     export default {
         props:{
-            product:{
-                required:true,
-            },
-            investment:{ //Current investment to be selected by default
+            //Current investment to be selected by default.
+            //Investment object
+            // Needs:
+            // - url
+            // - product url
+            // - selling_price
+            // - selling_expiration
+            investment:{
                 required:true,
             }
         },
@@ -88,7 +93,7 @@
         },
         data(){ 
             return{
-                tab:0,
+                tab:2,
                 form_valid:false,
                 data: [],
                 selected:[],
@@ -114,6 +119,8 @@
                 percentage: 10,
                 key:0,
                 loading_ios:false,
+
+                product:null, // Object loaded at created
 
                 //Strategies for product ranges
                 strategies:[],
@@ -155,7 +162,7 @@
                 pr.amount_to_invest=item.additional4
                 pr.recomendation_methods=item.additional5
                 pr.only_first=item.additional6
-                pr.investments=this.stringofintegers_to_arrayofintegers(item.investments) // Is a string due tu uses api/strategies an in db is a string
+                pr.investments=[this.investment.id] // Is a string due tu uses api/strategies an in db is a string
                 var headers={...this.myheaders(),params:pr}
                 axios.get(`${this.$store.state.apiroot}/products/ranges/`, headers)
                 .then((response) => {
@@ -187,18 +194,18 @@
                     {title:this.$t('Selected invested amount'), value: this.currency_string(this.selected_invested,this.product.currency)},
                     {title:this.$t('Number of shares selected'), value: this.selected_shares},
                     {title:this.$t('Average price of selected shares'), value: this.currency_string(this.selected_average_price,this.product.currency)},
-                    {title:this.$t('Product leverage'), value: this.product.leverage_multiplier},
-                    {title:this.$t('Product current price'), value: this.product.leverage_real_multiplier},
+                    {title:this.$t('Product leverage'), value: this.$store.getters.getObjectPropertyByUrl("leverages", this.product.leverages, "multiplier") },
+                    {title:this.$t('Product real leverage'), value: this.product.real_leveraged_multiplier},
                 ]
             },
             empty_products_ranges,
             selling_price_to_gain_money(money){
                 var PF=0
                 if (this.selected_shares>0){
-                    PF=(money+this.selected_average_price*this.selected_shares*this.product.leverage_real_multiplier)/(this.selected_shares*this.product.leverage_real_multiplier)        
+                    PF=(money+this.selected_average_price*this.selected_shares*this.product.real_leveraged_multiplier)/(this.selected_shares*this.product.real_leveraged_multiplier)        
                 } 
                 else if (this.selected_shares<0){
-                    PF=(-money+this.selected_average_price*this.selected_shares*this.product.leverage_real_multiplier)/(this.selected_shares*this.product.leverage_real_multiplier)        
+                    PF=(-money+this.selected_average_price*this.selected_shares*this.product.real_leveraged_multiplier)/(this.selected_shares*this.product.real_leveraged_multiplier)        
                 }
                 return PF
             },    
@@ -206,9 +213,11 @@
                 var gains=this.selected_invested*percentage/100
                 return this.selling_price_to_gain_money(gains)
             },
-            stringofintegers_to_arrayofintegers,
+            arrayobjects_to_array,
             submit(){                               
                 if (this.$refs.form.validate()==false) return
+                if (this.selling_expiration != null && new Date(this.selling_expiration).setHours(0,0,0,0)<new Date().setHours(0,0,0,0)) alert(this.$t("Selling expiration date is in the past"))
+
                 var s= new Array()
                 this.selected.forEach(v=> s.push(v.url))
                 var p={
@@ -216,11 +225,31 @@
                     investments: s,
                     selling_price: this.my_round(this.selected_selling_price,  this.product.decimals),
                 }
-                axios.post(`${this.$store.state.apiroot}/investments/sameproduct/changesellingprice/`, p, this.myheaders())
+                axios.post(`${this.$store.state.apiroot}/investments/changesellingprice/`, p, this.myheaders())
                 .then(() => {
                     this.loading_ios=false
-                    this.refreshInvestmentsOperations( false )
+                    this.refreshInvestments( false )
                     this.key=this.key+1
+                    alert(this.$t("Remember to set your order in the bank"))
+                    this.$emit("cruded")
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
+            },
+            submit_null(){   
+                var s= new Array()
+                this.selected.forEach(v=> s.push(v.url))
+                var p={
+                    selling_expiration:null,
+                    investments: s,
+                    selling_price: 0,
+                }
+                axios.post(`${this.$store.state.apiroot}/investments/changesellingprice/`, p, this.myheaders())
+                .then(() => {
+                    this.refreshInvestments( false )
+                    this.key=this.key+1
+                    alert(this.$t("Remember to set your order in the bank"))
+                    this.$emit("cruded")
                 }, (error) => {
                     this.parseResponseError(error)
                 });
@@ -236,15 +265,17 @@
                     this.selected_selling_price=this.strategy_range
                 }
                     
-                var gai=(this.selected_selling_price-this.selected_average_price)*this.selected_shares*this.product.leverage_real_multiplier
+                var gai=(this.selected_selling_price-this.selected_average_price)*this.selected_shares*this.product.real_leveraged_multiplier
                 this.button_text=this.$t(`Set selected investments selling price to ${this.currency_string(this.selected_selling_price, this.product.currency, this.product.decimals)} to gain ${this.currency_string(gai,this.product.currency, 2)}`)
 
             },
-            refreshInvestmentsOperations(select_current){
+            refreshInvestments(select_current){
                 this.loading_ios=true
                 axios.get(`${this.$store.state.apiroot}/investmentsoperationstotalmanager/investments/sameproduct/?product=${this.product.url}`, this.myheaders())
                 .then((response) => {
                     this.dividends=response.data
+                    console.log("AHORA")
+                    console.log(response.data)
                     this.data=[]
                     var o;
                     response.data.forEach( iot => {
@@ -275,7 +306,7 @@
                 });
             },
             refreshStrategies(){
-                axios.get(`${this.$store.state.apiroot}/api/strategies/?investment=${this.investment.url}`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/api/strategies/?investment=${this.investment.url}&active=true&type=2`, this.myheaders())
                 .then((response) => {
                     this.strategies=response.data
                 }, (error) => {
@@ -284,9 +315,13 @@
             },
         },
         created(){
+            this.product=this.$store.getters.getObjectByUrl("products",this.investment.product)
+            console.log("PRODUCTO")
+            console.log(this.product)
             this.refreshStrategies()
-            this.refreshInvestmentsOperations(true)
+            this.refreshInvestments(true)
             this.selling_expiration=this.investment.selling_expiration
+            this.price=this.investment.selling_price
         }
     }
 </script>

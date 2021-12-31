@@ -5,8 +5,6 @@
             <v-autocomplete :items="$store.state.accounts.filter(v =>v.active==true)" v-model="newinvestment.accounts" :label="$t('Select an account')" item-text="name" item-value="url"  :rules="RulesSelection(true)"></v-autocomplete>
             <v-text-field v-model="newinvestment.name" type="text" :label="$t('Investment name')"  :placeholder="$t('Investment name')" autofocus :rules="RulesString(200,true)"/>
             <v-autocomplete :items="$store.state.products" v-model="newinvestment.products" :label="$t('Select a product')" item-text="name" item-value="url"  :rules="RulesSelection(true)"></v-autocomplete>
-            <v-text-field v-model="newinvestment.selling_price" type="number" :label="$t('Set an investment selling price')"  :placeholder="$t('Investment selling price')" :rules="RulesInteger(10,false)" counter="10"/>
-            <MyDatePicker v-model="newinvestment.selling_expiration" :label="$t('Set a selling expiration date')" :rules="RulesDate(false)"></MyDatePicker>
             <v-checkbox v-model="newinvestment.active" :label="$t('Is active?')" ></v-checkbox>
             <v-checkbox v-model="newinvestment.daily_adjustment" :label="$t('Has daily adjustment?')" ></v-checkbox>
         </v-form>
@@ -19,11 +17,7 @@
 
 <script>
     import axios from 'axios'
-    import MyDatePicker from './MyDatePicker.vue'
     export default {
-        components:{
-            MyDatePicker,
-        },
         props:{
             investment:{
                 required:true,

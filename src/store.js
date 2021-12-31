@@ -23,6 +23,7 @@ export const store = new Vuex.Store({
         concepts:[],
         currencies: [],
         investments: [],
+        leverages: [],
         operationstypes: [],
         products: [],
         stockmarkets:[],
@@ -121,6 +122,10 @@ export const store = new Vuex.Store({
             state.investments=payload
             console.log(`Updated ${payload.length} investments`)
         },
+        updateLeverages: (state, payload) =>{
+            state.leverages=payload
+            console.log(`Updated ${payload.length} leverages`)
+        },
         updateOperationstypes: (state, payload) =>{
             state.operationstypes=payload
             console.log(`Updated ${payload.length} operation types`)
@@ -154,6 +159,7 @@ export const store = new Vuex.Store({
             context.dispatch("getCreditcards")
             context.dispatch("getCurrencies")
             context.dispatch("getInvestments")
+            context.dispatch("getLeverages")
             context.dispatch("getOperationstypes")
             context.dispatch("getSettings")
             context.dispatch("getStockmarkets")
@@ -198,6 +204,14 @@ export const store = new Vuex.Store({
             axios.get(`${store.state.apiroot}/api/investments/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateInvestments', sortObjectsArray(response.data, "name"))
+            }, (error) => {
+                store.$app.parseResponseError(error)
+            });
+        },
+        getLeverages(context){
+            axios.get(`${store.state.apiroot}/api/leverages/`, store.$app.myheaders())
+            .then((response) => {
+                context.commit('updateLeverages', sortObjectsArray(response.data, "name"))
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
