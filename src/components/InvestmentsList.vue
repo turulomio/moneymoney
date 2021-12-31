@@ -13,7 +13,7 @@
                     {{item.fullname}}
                 </template>                  
                 <template v-slot:[`item.last_datetime`]="{ item }">
-                    {{localtime(item.last_datetime)}}
+                    <div v-html="(item.last_datetime) ? localtime(item.last_datetime) : $t('Update product quotes')" :class="(item.last_datetime) ? '' : 'boldred'"></div>
                 </template>  
                 <template v-slot:[`item.last`]="{ item }">
                     <div v-html="currency_html(item.last,item.currency )"></div>
