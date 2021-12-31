@@ -68,7 +68,7 @@
         </template>   
 
         <template v-slot:[`body.append`]="{headers}">
-            <tr style="background-color: GhostWhite" ref="lr" v-if="!$attrs.loading">
+            <tr style="background-color: GhostWhite" ref="lr" v-if="items.length>0">
                 <td v-for="(header,i) in headers" :key="i" >
                     <div v-if="header.value == 'datetime'">
                         Total
