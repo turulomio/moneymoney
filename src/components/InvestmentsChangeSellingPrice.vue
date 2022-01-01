@@ -3,6 +3,9 @@
         <h1 class="mb-2">{{ $t("Change selling price") }}</h1>
         <div v-html="$t('Table with all investments with the same product as current investment:')"></div>
         <v-data-table ref="table" v-model="selected" :headers="tableHeaders" :items="data" :single-select="false" item-key="id" show-select class="elevation-1 mt-2" :disable-pagination="true" dense >
+            <template v-slot:[`item.fullname`]="{ item }">
+                {{ $store.getters.getObjectPropertyByUrl("investments",item.url,"fullname") }}
+            </template>            
             <template v-slot:[`item.selling_price`]="{ item }">
                 {{ currency_string(item.selling_price, item.currency)}}
             </template>
@@ -99,7 +102,7 @@
                 selected:[],
                 tableHeaders: [
                     { text: this.$t('Id'), value: 'id', sortable: true },
-                    { text: this.$t('Name'), value: 'name', sortable: true},
+                    { text: this.$t('Name'), value: 'fullname', sortable: true},
                     { text: this.$t('Shares'), value: 'shares', sortable: true, align: 'right'},
                     { text: this.$t('Selling price'), value: 'selling_price', sortable: true, align: 'right'},
                     { text: this.$t('Selling expiration'), value: 'selling_expiration', sortable: true, align: 'right'},

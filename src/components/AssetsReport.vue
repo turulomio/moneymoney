@@ -1,11 +1,18 @@
 <template>
     <div>
         <h1>{{ $t(`Assets Report`) }}</h1>
-        <v-row>
-            <v-col align="center">
-                <v-btn color="primary" :disabled="!can_launch()" @click="launch_report()">{{ $t("Generate report") }}</v-btn>
-            </v-col>
-        </v-row>
+            <div class="d-flex justify-center mb-4">
+        <v-card width="20%" class="pa-4">          
+             <v-select class="pa-4" dense label="Select a format" v-model="format" :items="['pdf','odt','docx']"></v-select>       
+
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn class="pa-4" color="primary" :disabled="!can_launch()" @click="launch_report()">{{ $t("Generate report") }}</v-btn>
+                <v-spacer></v-spacer>
+            </v-card-actions>
+
+        </v-card>
+        </div>
         <div class="text-center mt-4" v-if="loading">
             <v-progress-circular
             indeterminate
@@ -45,7 +52,6 @@
 
 <script>
     import axios from 'axios'
-    import {my_round} from '../functions.js'
     import ChartEvolutionAssets from './ChartEvolutionAssets.vue'
     import ChartPie from './ChartPie.vue'
     export default {
@@ -67,7 +73,7 @@
                 finished_by_leverage:false,
                 finished_evolution_assets:false,
 
-                
+                format:"pdf",
             }
         },        
         computed:{
@@ -76,9 +82,9 @@
                 var products= this.data.by_product
                 var adapted
                 if (this.method=="Current"){
-                    adapted= products.map(el => ({name: el.name, value: my_round(el.balance, 2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
                 } else {//Invested
-                    adapted= products.map(el => ({name: el.name, value: my_round(el.invested,2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.invested,2)}))
                 }
                 adapted=adapted.filter(o => o.value!=0)
                 return adapted
@@ -87,9 +93,9 @@
                 var products= this.data.by_pci
                 var adapted
                 if (this.method=="Current"){
-                    adapted= products.map(el => ({name: el.name, value: my_round(el.balance, 2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
                 } else {//Invested
-                    adapted= products.map(el => ({name: el.name, value: my_round(el.invested,2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.invested,2)}))
                 }
                 adapted=adapted.filter(o => o.value!=0)
                 return adapted
@@ -99,9 +105,9 @@
                 var adapted
 
                 if (this.method=="Current"){
-                    adapted= products.map(el => ({name: el.name, value: my_round(el.balance, 2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
                 } else {//Invested
-                    adapted= products.map(el => ({name: el.name, value: my_round(el.invested,2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.invested,2)}))
                 }
                 adapted=adapted.filter(o => o.value!=0)
                 return adapted
@@ -110,9 +116,9 @@
                 var products= this.data.by_producttype
                 var adapted
                 if (this.method=="Current"){
-                    adapted= products.map(el => ({name: el.name, value: my_round(el.balance, 2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
                 } else {//Invested
-                    adapted= products.map(el => ({name: el.name, value: my_round(el.invested,2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.invested,2)}))
                 }
                 adapted=adapted.filter(o => o.value!=0)
                 return adapted
@@ -121,9 +127,9 @@
                 var products= this.data.by_leverage
                 var adapted
                 if (this.method=="Current"){
-                    adapted= products.map(el => ({name: el.name, value: my_round(el.balance, 2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
                 } else {//Invested
-                    adapted= products.map(el => ({name: el.name, value: my_round(el.invested,2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.invested,2)}))
                 }
                 adapted=adapted.filter(o => o.value!=0)
                 return adapted
@@ -141,12 +147,13 @@
             },
             launch_report(){
                 this.loading=true
-                axios.get(`${this.$store.state.apiroot}/assets/report/`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/assets/report/?outputformat=${this.format}`, this.myheaders())
                 .then((response) => {
                     this.loading=false      
                     var link = window.document.createElement('a');
-                    link.href = `data:application/pdf;base64,${response.data}`
-                    link.download = `AssetsReport.pdf`
+
+                    link.href = `data:${response.data.mime};base64,${response.data.data}`
+                    link.download = response.data.filename
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);

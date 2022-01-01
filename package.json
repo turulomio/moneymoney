@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve --port 8005 --config webpack.dev.js",
     "build": "vue-cli-service build --config webpack.prod.js",
     "lint": "vue-cli-service lint",
-    "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\""
+    "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\" --output npm_i18n_report.json"
   },
   "dependencies": {
     "@intlify/vue-i18n-loader": "^1.1.0",
@@ -33,11 +33,11 @@
     "@vue/cli-plugin-eslint": "~4.5.15",
     "@vue/cli-service": "~4.5.15",
     "@vue/composition-api": "*",
+    "npm-check-updates": "^12.0.5",
     "sass": "^1.45.2",
     "sass-loader": "^10.2.0",
     "vue-cli-plugin-i18n": "~2.3.1",
-    "vue-template-compiler": "^2.6.14",
-    "npm-check-updates": "^12.0.5"
+    "vue-template-compiler": "^2.6.14"
   },
   "eslintConfig": {
     "root": true,
