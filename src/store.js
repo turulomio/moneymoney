@@ -234,9 +234,11 @@ export const store = new Vuex.Store({
             });
         },
         getProducts(context){
+            var start=new Date()
             axios.get(`${store.state.apiroot}/api/products/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateProducts', sortObjectsArray(response.data, "name"))
+                console.log(new Date()-start)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
