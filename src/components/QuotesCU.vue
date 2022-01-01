@@ -99,20 +99,16 @@
                 }
             },
             accept(){
-                console.log("Accepting")
                 if (this.editing==true){
                     axios.put(this.newquote.url, this.newquote,  this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
+                    .then(() => {
                             this.$emit("cruded")
-                            this.editing=false
                     }, (error) => {
                         this.parseResponseError(error)
                     })
                 } else{
                     axios.post(`${this.$store.state.apiroot}/api/quotes/`, this.newquote,  this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
+                    .then(() => {
                             this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)

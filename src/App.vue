@@ -105,6 +105,9 @@
                         <v-list-item link router :to="{ name: 'concepts_catalog'}">
                             <v-list-item-title>{{ $t("Concepts catalog") }}</v-list-item-title>
                         </v-list-item>
+                        <v-list-item link router :to="{ name: 'maintenance_quotes'}">
+                            <v-list-item-title>{{ $t("Quotes maintenance") }}</v-list-item-title>
+                        </v-list-item>
                     </v-list-group>    
 
 <!--                     HELP -->

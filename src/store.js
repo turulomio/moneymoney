@@ -80,6 +80,7 @@ export const store = new Vuex.Store({
         getCurrencyPropertyByCode:(state,getters) => (code,property,default_="???") => {
             var r=getters.getCurrencyByCode(code)
             if (r==null){
+                if (code=='u') return "u"
                 return default_
             } else {
                 return r[property]

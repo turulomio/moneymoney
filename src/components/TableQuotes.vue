@@ -1,11 +1,11 @@
 <template>
     <div>
-        <v-data-table dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" :ref="$vnode.tag">
-            <template v-slot:[`item.datetime`]="{ item, index}" >
-                <div :ref="index">{{ localtime(item.datetime)}}</div>
+        <v-data-table dense :headers="table_headers()" :items="quotes" class="elevation-1" disable-pagination  hide-default-footer :sort-by="$attrs.sort_by" fixed-header :height="$attrs.height" :loading="$attrs.loading">
+            <template v-slot:[`item.datetime`]="{ item }" >
+                <div>{{ localtime(item.datetime)}}</div>
             </template>        
             <template v-slot:[`item.quote`]="{ item }">
-                <div v-html="this.currency_html(item.quote,product.currency,product.decimals)"></div>
+                <div v-html="currency_html(item.quote,item.currency,item.decimals)"></div>
             </template>   
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="editQuote(item)">mdi-pencil</v-icon>
@@ -15,7 +15,7 @@
         <!-- QUOTES CU-->
         <v-dialog v-model="dialog_quotes_cu" width="35%">
             <v-card class="pa-3">
-                <QuotesCU :quote="quote" :investment="investment" :key="key"  @cruded="on_QuotesCU_cruded()"></QuotesCU>
+                <QuotesCU :quote="quote" :key="key"  @cruded="on_QuotesCU_cruded()"></QuotesCU>
             </v-card>
         </v-dialog>
     </div>
@@ -29,18 +29,25 @@
             QuotesCU,
         },
         props: {
-            items: {
+            quotes: { //List of object with  datetime, quote, id, product (url), decimal, currency, name attributes
                 required: true
             },
-            product: {
-                required: true
+            show_name:{ // Show product name
+                type: Boolean,
+                required: false,
+                default: false,
             },
+            no_delete_confirmation:{
+                type: Boolean,
+                required: false,
+                default: false,
+            },
+            
         },
         data: function(){
             return {
                 dialog_quotes_cu:false,
                 quote: null,
-                investment: null,
                 key: 0,
             }
         },
@@ -48,15 +55,16 @@
             localtime,
             editQuote(item){
                 this.quote=item
-                this.investment={url:this.dividend.investments}
-                this.dialog_dividend=true
                 this.key=this.key+1
+                this.dialog_quotes_cu=true
             },
             deleteQuote(item){
-               var r = confirm(this.$t("Do you want to delete this dividend?"))
-               if(r == false) {
-                  return
-               } 
+                if (this.no_delete_confirmation==false){
+                    var r = confirm(this.$t("Do you want to delete this dividend?"))
+                    if(r == false) {
+                        return
+                    } 
+                }
                 axios.delete(item.url, this.myheaders())
                 .then(() => {
                     this.$emit("cruded")
@@ -67,22 +75,16 @@
             table_headers(){
                 var r= [
                     { text: this.$t('Date and time'), value: 'datetime', sortable: true },
-                    { text: this.$t('Quote'), value: 'quote', sortable: true },
+                    { text: this.$t('Product'), value: 'name', sortable: true },
+                    { text: this.$t('Quote'), value: 'quote', sortable: true ,align:"right"},
                     { text: this.$t('Actions'), value: 'actions', sortable: false },
                 ]
                 return r
             },
-            gotoLastRow(){
-                this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs[this.$vnode.tag].$el.childNodes[0] }) 
-            },
             on_QuotesCU_cruded(){
+                this.dialog_quotes_cu=false
                 this.$emit("cruded")
             }
         },
-        mounted(){
-            // this.gotoLastRow()
-            // this.key=this.key+1
-            // console.log("DIVIDENDS TABLE")
-        }
     }
 </script>

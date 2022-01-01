@@ -12,30 +12,31 @@ Vue.component('v-chart', ECharts)
 Vue.use(VueRouter);
 
 
-import About from './components/about';
-import Home from './components/Home';
-import AccountsList from './components/AccountsList';
-import AssetsReport from './components/AssetsReport';
-import BanksList from './components/BanksList';
-import ConceptsCatalog from './components/ConceptsCatalog';
-import InvestmentsList from './components/InvestmentsList';
-import OrdersList from './components/OrdersList';
-import ProductsComparationList from './components/ProductsComparationList';
-import ProductsRanges from './components/ProductsRanges';
-import ProductsSearch from './components/ProductsSearch';
-import ProductsUpdate from './components/ProductsUpdate';
-import ReportsAnnual from './components/ReportsAnnual';
-import ReportsConcepts from './components/ReportsConcepts';
-import ReportsDividends from './components/ReportsDividends';
-import ReportsEvolution from './components/ReportsEvolution';
-import ReportsInvestmentsClasses from './components/ReportsInvestmentsClasses';
-import ChartEvolutionAssets from './components/ChartEvolutionAssets';
-import ReportscurrentInvestmentsOperations from './components/ReportsCurrentInvestmentsOperations';
-import ReportsInvestmentsLastOperation from './components/ReportsInvestmentsLastOperation';
-import ReportsRanking from './components/ReportsRanking';
-import Settings from './components/Settings';
-import Statistics from './components/Statistics';
-import StrategiesList from './components/StrategiesList';
+import About from './components/about'
+import Home from './components/Home'
+import AccountsList from './components/AccountsList'
+import AssetsReport from './components/AssetsReport'
+import BanksList from './components/BanksList'
+import ConceptsCatalog from './components/ConceptsCatalog'
+import ChartEvolutionAssets from './components/ChartEvolutionAssets'
+import InvestmentsList from './components/InvestmentsList'
+import MaintenanceQuotes from './components/MaintenanceQuotes'
+import OrdersList from './components/OrdersList'
+import ProductsComparationList from './components/ProductsComparationList'
+import ProductsRanges from './components/ProductsRanges'
+import ProductsSearch from './components/ProductsSearch'
+import ProductsUpdate from './components/ProductsUpdate'
+import ReportsAnnual from './components/ReportsAnnual'
+import ReportsConcepts from './components/ReportsConcepts'
+import ReportsDividends from './components/ReportsDividends'
+import ReportsEvolution from './components/ReportsEvolution'
+import ReportsInvestmentsClasses from './components/ReportsInvestmentsClasses'
+import ReportscurrentInvestmentsOperations from './components/ReportsCurrentInvestmentsOperations'
+import ReportsInvestmentsLastOperation from './components/ReportsInvestmentsLastOperation'
+import ReportsRanking from './components/ReportsRanking'
+import Settings from './components/Settings'
+import Statistics from './components/Statistics'
+import StrategiesList from './components/StrategiesList'
 
 
 
@@ -52,6 +53,7 @@ const router = new VueRouter({
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/concepts/catalog/`, name: 'concepts_catalog', component: ConceptsCatalog },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/investments/list/`, name: 'investments_list', component: InvestmentsList },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/orders/list/`, name: 'orders_list', component: OrdersList },
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/maintenance/quotes/`, name: 'maintenance_quotes', component: MaintenanceQuotes },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/products/ranges/`, name: 'products_ranges', component: ProductsRanges },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/products/comparation/list/`, name: 'products_comparation_list', component: ProductsComparationList },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/products/search/`, name: 'products_search', component: ProductsSearch },
