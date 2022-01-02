@@ -17,9 +17,9 @@
         <v-menu v-model="menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="auto" :disabled="readonly">
             <template v-slot:activator="{ on }">
                 <v-row justify="center" align="center" class="ml-0 mr-1 mb-1">                
-                    <v-icon class="mr-3" @click="localValue=new Date().toISOString()">mdi-calendar</v-icon>
+                    <v-icon class="mr-3" @click="on_icon_click()">mdi-calendar</v-icon>
                     <v-text-field v-model="representation" v-bind="$attrs" readonly v-on="on"  @click="on_text_click" :rules="rules"></v-text-field>
-                    <v-icon class="ml-3" x-small @click="localValue=null">mdi-backspace</v-icon>
+                    <v-icon class="ml-3" x-small @click="on_backspace_click()">mdi-backspace</v-icon>
                 </v-row>
             </template>
             <v-card class="pa-4">
@@ -187,6 +187,16 @@
             }
         },
         methods: {
+            on_icon_click(){
+                if (this.readonly==false){
+                    this.localValue=new Date().toISOString()
+                }
+            },
+            on_backspace_click(){
+                if (this.readonly==false){
+                    this.localValue=null
+                }
+            },
             on_text_click(){
                 // Changes to hour selection mode
                 if (this.$refs.time) this.$refs.time.selecting=1
