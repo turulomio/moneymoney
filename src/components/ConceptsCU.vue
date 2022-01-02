@@ -4,7 +4,7 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <v-text-field :readonly="deleting" dense v-model="newconcept.name" :label="$t('Set concept')" :placeholder="$t('Set concept')" :rules="RulesString(200,true)" counter="200" autofocus/>
-                <v-autocomplete :readonly="deleting || editing" dense :items="$store.getters.getOperationstypesForNewConcepts()" v-model="newconcept.operationstypes" :label="$t('Select a operation type')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="deleting || editing" dense :items="$store.getters.getOperationstypesForNewConcepts()" v-model="newconcept.operationstypes" :label="$t('Select a operation type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>

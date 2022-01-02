@@ -8,7 +8,7 @@
                 <v-icon small v-if="item.editable" >mdi-check-outline</v-icon>
             </template>             
            <template v-slot:[`item.operationstypes`]="{ item }">
-               <div v-html="$store.getters.getObjectPropertyByUrl('operationstypes',item.operationstypes,'name')"></div>
+               <div v-html="$store.getters.getObjectPropertyByUrl('operationstypes',item.operationstypes,'localname')"></div>
            </template>           
            <template v-slot:[`item.name`]="{ item }">
                <div v-html="item.name" :class="(item.editable==true && item.id<1000) ? 'boldred' : ''"></div>
@@ -19,7 +19,7 @@
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon v-if="item.editable" small class="ml-1" @click="editItem(item)">mdi-pencil</v-icon>
                 <v-icon v-if="item.editable && item.used==0" small class="ml-1" @click="deleteItem(item)">mdi-delete</v-icon>
-                <v-icon v-if="is_migrable(item)" small class="ml-1" @click="migrateConcept(item)" color="#9933ff" style="font-weight:bold">mdi-folder-move-outline</v-icon>     
+                <v-icon v-if="item.migrable" small class="ml-1" @click="migrateConcept(item)" color="#9933ff" style="font-weight:bold">mdi-folder-move-outline</v-icon>     
             </template>                
         </v-data-table>
         <!-- DIALOG CONCEPTS ADD/UPDATE -->
@@ -105,20 +105,7 @@
                 this.key=this.key+1
                 this.concept_deleting=false
                 this.dialog_concepts_cu=true
-            },
-            is_migrable(item){
-                //Exclude some concepts
-                console.log(item)
-                if ([1,38,39,59,62,63,65,66].includes(item.id)) {
-                    return false
-                }
-                var ot=this.$store.getters.getObjectByUrl("operationstypes",item.operationstypes)
-                // With data and includes expenses and incomes
-                if (item.used>0 && [1,2].includes(ot.id) ) {
-                    return true
-                }
-                return false
-            },
+             },
             migrateConcept(item){
                 this.concept=item
                 this.key=this.key+1
@@ -136,7 +123,7 @@
             },
             update_table(){
                 this.loading=true
-                axios.get(`${this.$store.state.apiroot}/api/concepts`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/concepts/used/`, this.myheaders())
                 .then((response) => {
                     this.concepts=response.data
                     this.loading=false

@@ -326,7 +326,7 @@
                     { text: this.$t('Expenses'), value: 'expenses', sortable: true, align:'right'},
                     { text: this.$t('Diff'), value: 'diff', sortable: true, align:'right'},
                 ],   
-                year: 2021,
+                year: new Date().getFullYear(),
                 last_year_balance:0,
                 last_year_balance_string: "",
                 loading_annual:true,
