@@ -2,6 +2,18 @@ import moment from 'moment-timezone';
 import axios from 'axios'
 
 
+
+// Function to use "{0} {1}".format(a, b) style
+String.prototype.format = function() {
+    var formatted = this;
+    for (var i = 0; i < arguments.length; i++) {
+        var regexp = new RegExp('\\{'+i+'\\}', 'gi');
+        formatted = formatted.replace(regexp, arguments[i]);
+    }
+    return formatted;
+};
+
+
 export function my_round(num, decimals = 2) {
     return Math.round(num*Math.pow(10, decimals))/Math.pow(10, decimals)
 }

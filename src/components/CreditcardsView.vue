@@ -1,25 +1,35 @@
 
 <template>
     <div>    
-        <h1>{{ $t(`Credit card details of '${cc.name}'`) }}
+        <h1 class="mb-4">{{ $t(`Credit card details of '${cc.name}'`) }}
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
 
         </h1>
-        <v-card outlined class="ma-4 pa-4">
-            <TableCreditcardsOperations :showselected="paying" homogeneous :items="items_cco" :total_currency="account.currency" height="400" ref="table_cc" class=" flex-grow-1 flex-shrink-0" :locale='this.$i18n.locale' @editCCO="editCCO" @deleteCCO="on_TableAccountOperations_deleteCCO" @changeSelected="changeSelected" :key="key"></TableCreditcardsOperations>
-        </v-card>
-        <v-card outlined class="ma-4 pa-4" v-if="paying">
-            <MyDateTimePicker label="Select payment date and time" v-model="dt_payment" ></MyDateTimePicker>
-            <v-btn color="primary" @click="acceptPayment()" :disabled="this.selected_items.length==0">{{ paying_string }}</v-btn>
-            <v-btn class="ml-2" color="error" @click="paying=false" >{{ $t("Close payment mode") }}</v-btn>
-        </v-card>
 
-        <!-- CCCO CU -->
-        <v-dialog v-model="dialog" max-width="650" class="pa-4" >
-            <v-card class="pa-4">
-              <CreditcardsoperationsCU  ref="cco_cu" :cco="cco" :key="key" @cruded="on_CreditcardsoperationsCU_cruded()"></CreditcardsoperationsCU>
-            </v-card>
-        </v-dialog>
+        <v-tabs  background-color="primary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
+            <v-tab key="cco">{{ $t('Current credit card operations') }}</v-tab>
+            <v-tab key="oldpayments">{{ $t('Old payments') }}</v-tab>
+        </v-tabs>
+        <v-tabs-items v-model="tab">
+            <v-tab-item key="cco">      
+                <div>
+                    <v-card outlined class="ma-4 pa-4">
+                        <TableCreditcardsOperations :showselected="paying" homogeneous :items="items_cco" :total_currency="account.currency" height="400" ref="table_cc" class=" flex-grow-1 flex-shrink-0" :locale='this.$i18n.locale' @changeSelected="changeSelected" @cruded="on_TableCreditcardsOperations_cruded()" :key="key"></TableCreditcardsOperations>
+                    </v-card>
+                    <v-card outlined class="ma-4 pa-4" v-if="paying">
+                        <MyDateTimePicker label="Select payment date and time" v-model="dt_payment" ></MyDateTimePicker>
+                        <v-btn color="primary" @click="acceptPayment()" :disabled="this.selected_items.length==0">{{ paying_string }}</v-btn>
+                        <v-btn class="ml-2" color="error" @click="paying=false" >{{ $t("Close payment mode") }}</v-btn>
+                    </v-card>
+                </div>
+            </v-tab-item>
+            <v-tab-item key="oldpayments">      
+                <div>
+                    <CreditcardsPaymentsRefund :cc="cc" @cruded="on_CreditcardsPaymentsRefund_cruded()" :key="key"></CreditcardsPaymentsRefund>
+                </div>
+            </v-tab-item>
+        </v-tabs-items> 
+
     </div>
 </template>
 <script>
@@ -27,7 +37,7 @@
     import MyMenuInline from './MyMenuInline.vue'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
-    import CreditcardsoperationsCU from './CreditcardsoperationsCU.vue'
+    import CreditcardsPaymentsRefund from './CreditcardsPaymentsRefund.vue'
     import {listobjects_sum} from '../functions.js'
     import {empty_cco} from '../empty_objects.js'
     export default {
@@ -35,7 +45,7 @@
             MyMenuInline,
             TableCreditcardsOperations,
             MyDateTimePicker,
-            CreditcardsoperationsCU,            
+            CreditcardsPaymentsRefund,         
         },
         props:{
             cc:{
@@ -72,12 +82,10 @@
                             },
                         ]
                     },
-                ],
+                ],  
+                tab:0,
+
                 items_cco:[],
-                //CCOCU
-                dialog:false,
-                cco: null,
-                loading_cco:false,
                 key:0,
 
                 //Payment
@@ -93,11 +101,6 @@
             changeSelected(selected_items){
                 this.selected_items=selected_items
                 this.paying_string=this.$t(`Make a payment of ${selected_items.length} operations valued in ${listobjects_sum(selected_items,"amount")}`) 
-            },
-            editCCO (item) {
-                this.cco=item
-                this.key=this.key+1
-                this.dialog=true
             },
             update_table(){
                 this.loading_cco=true
@@ -131,15 +134,15 @@
                 })
 
             },
-            on_CreditcardsoperationsCU_cruded(){
-                this.$emit("cruded ")
-                this.dialog=false
+            on_TableCreditcardsOperations_cruded(){
+                this.$emit("cruded")
                 this.update_table()
             },
-            on_TableAccountOperations_deleteAO(item){
-                this.$refs.cco_cu.deleteCCO(item)
-
-            }
+            on_CreditcardsPaymentsRefund_cruded(){
+                this.$emit("cruded")
+                this.key=this.key+1
+                this.update_table()
+            },
         },
         mounted(){
             this.update_table()

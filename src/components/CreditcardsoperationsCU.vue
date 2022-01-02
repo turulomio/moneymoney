@@ -1,18 +1,18 @@
-
 <template>
     <div>    
         <h1 class="mb-6">{{ dialog_title() }}</h1>
         <v-card class="pa-6">
             <v-form ref="form_cco" v-model="form_valid_cco" lazy-validation>
-                <v-autocomplete :items="$store.state.creditcards.filter(v =>v.active==true)" v-model="newcco.creditcards" :label="$t('Select a credit card')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <MyDateTimePicker label="Select operation date and time" v-model="newcco.datetime" :rules="RulesDatetime(true)" ></MyDateTimePicker>
-                <v-autocomplete autoindex="0" :items="$store.state.concepts" v-model="newcco.concepts" :label="$t('Select a concept')" item-text="name" item-value="url" :rules="RulesSelection(true)" autofocus></v-autocomplete>
-                <v-text-field autoindex="1" v-model="newcco.amount" type="number" :label="$t('Operation amount')" :placeholder="$t('Operation amount')" :rules="RulesFloat(30,true)" counter="30"/>
-                <v-text-field autoindex="2" v-model="newcco.comment" type="text" :label="$t('Operation comment')" :placeholder="$t('Operation comment')" :rules="RulesString(200, false)" counter="200"/>
+                <v-autocomplete :readonly="deleting" :items="$store.state.creditcards.filter(v =>v.active==true)" v-model="newcco.creditcards" :label="$t('Select a credit card')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <MyDateTimePicker :readonly="deleting" label="Select operation date and time" v-model="newcco.datetime" :rules="RulesDatetime(true)" ></MyDateTimePicker>
+                <v-autocomplete :readonly="deleting" autoindex="0" :items="$store.state.concepts" v-model="newcco.concepts" :label="$t('Select a concept')" item-text="name" item-value="url" :rules="RulesSelection(true)" autofocus></v-autocomplete>
+                <v-text-field :readonly="deleting" autoindex="1" v-model="newcco.amount" type="number" :label="$t('Operation amount')" :placeholder="$t('Operation amount')" :rules="RulesFloat(30,true)" counter="30"/>
+                <v-text-field :readonly="deleting" autoindex="2" v-model="newcco.comment" type="text" :label="$t('Operation comment')" :placeholder="$t('Operation comment')" :rules="RulesString(200, false)" counter="200"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="acceptDialog()" :disabled="!form_valid_cco">{{ button() }}</v-btn>
+                <v-btn v-if="deleting" color="error" @click="deleteCCO()">{{ $t("Delete") }}</v-btn>
+                <v-btn v-if="!deleting" color="primary" @click="acceptDialog()" :disabled="!form_valid_cco">{{ button() }}</v-btn>
             </v-card-actions>
         </v-card>
     </div>
@@ -28,6 +28,11 @@
             cco:{
                 required:true,
             },
+            deleting:{
+                type: Boolean,
+                required:false,
+                default:false
+            }
         },
         data(){ 
             return{
@@ -46,20 +51,21 @@
                 }
             },     
             dialog_title(){
-                if(this.editing==true){
+                if (this.deleting==true){
+                    return this.$t("Deleting a credit card operation")
+                } else if(this.editing==true){
                     return this.$t("Updating credit card operation")
                 } else {
                     return this.$t("Creating a new credit card operation")
                 }
             },
-            deleteCCO (item) {
+            deleteCCO () {
                var r = confirm(this.$t("Do you want to delete this credit card operation?"))
                if(r == false) {
                   return
                }
-                axios.delete(item.url, this.myheaders())
-                .then((response) => {
-                    console.log(response);
+                axios.delete(this.newcco.url, this.myheaders())
+                .then(() => {
                     this.$emit("cruded")
                 }, (error) => {
                     this.parseResponseError(error)
@@ -83,16 +89,14 @@
                 //Accept
                 if (this.editing==true){               
                     axios.put(this.newcco.url, this.newcco, this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
+                    .then(() => {
                             this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
                 } else{
                     axios.post(`${this.$store.state.apiroot}/api/creditcardsoperations/`, this.newcco,  this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
+                    .then(() => {
                             this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)

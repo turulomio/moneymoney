@@ -1,0 +1,100 @@
+<template>
+    <v-card>   
+        <v-select :items="payments" v-model="payment" :label="$t('Select a old payment')"  item-text="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
+
+        <TableCreditcardsOperations homogeneous :items="items_cco" :total_currency="account.currency" height="400" class=" flex-grow-1 flex-shrink-0" :locale='this.$i18n.locale' :key="key"></TableCreditcardsOperations>
+
+        <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="error" @click="refundPayment()">{{ $t("Refund") }}</v-btn>
+        </v-card-actions>
+    </v-card>
+</template>
+<script>
+    import axios from 'axios'
+    import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
+    export default {
+        components:{
+            TableCreditcardsOperations,
+        },
+        props: {
+            cc: {
+                required: true
+            },
+        },
+        data(){ 
+            return{
+                account:null,
+                loading:false,
+
+                key:0,
+
+                items_cco:[],
+
+                payments:[],
+                payment: null,
+
+            }
+        },
+        watch: {
+            payment: function(){
+                axios.get(`${this.$store.state.apiroot}/api/creditcardsoperations/?accountsoperations_id=${this.payment}`, this.myheaders())
+                .then((response) => {
+                    this.items_cco=response.data
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
+            },
+        },
+        methods: {
+            refundPayment() {
+                axios.post(`${this.$store.state.apiroot}/creditcardsoperations/payment/refund/`, {accountsoperations_id: this.payment}, this.myheaders())
+                .then((response) => {
+                    console.log(response.data)
+                    this.items_cco=[]
+                    this.updatePayments()
+                    this.$emit("cruded")
+                    this.key=this.key+1
+                    alert(this.$t("Payment was refund"))
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
+            },
+            updatePayments(){
+                axios.get(`${this.$store.state.apiroot}/creditcards/payments/?creditcard=${this.cc.url}`, this.myheaders())
+                .then((response) => {
+                    this.payments=[]
+                    response.data.forEach(o=> {
+                        console.log(o)
+                        this.payments.push({
+                            id: o.accountsoperations_id,
+                            name:this.$t("{0} were paid {1} ({2} operations)").format(this.localtime(o.datetime), this.currency_string(o.amount, this.account.currency), o.count),
+                        })
+                    });
+                    console.log(this.payments)
+                    this.loading=false
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
+
+            },
+            update_table(){
+                this.loading=true
+                axios.get(`${this.$store.state.apiroot}/concepts/used/`, this.myheaders())
+                .then((response) => {
+                    this.concepts=response.data
+                    this.loading=false
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
+            },
+        },
+        created(){
+            console.log(this.cc)
+            this.account=this.$store.getters.getObjectByUrl("accounts",this.cc.accounts)
+            console.log(this.account)
+            this.updatePayments()
+        }
+    }
+</script>
+
