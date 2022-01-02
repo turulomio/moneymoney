@@ -4,7 +4,7 @@
         <v-form ref="form" v-model="form_valid" lazy-validation>
             <v-autocomplete :items="$store.state.accounts.filter(v =>v.active==true)" v-model="newinvestment.accounts" :label="$t('Select an account')" item-text="name" item-value="url"  :rules="RulesSelection(true)"></v-autocomplete>
             <v-text-field v-model="newinvestment.name" type="text" :label="$t('Investment name')"  :placeholder="$t('Investment name')" autofocus :rules="RulesString(200,true)"/>
-            <v-autocomplete :items="$store.state.products" v-model="newinvestment.products" :label="$t('Select a product')" item-text="name" item-value="url"  :rules="RulesSelection(true)"></v-autocomplete>
+            <v-autocomplete :items="$store.state.products" v-model="newinvestment.products" :label="$t('Select a product')" item-text="fullname" item-value="url"  :rules="RulesSelection(true)"></v-autocomplete>
             <v-checkbox v-model="newinvestment.active" :label="$t('Is active?')" ></v-checkbox>
             <v-checkbox v-model="newinvestment.daily_adjustment" :label="$t('Has daily adjustment?')" ></v-checkbox>
         </v-form>
