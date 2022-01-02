@@ -2,10 +2,8 @@
     <div>
         <h1>{{ $t(`Account details of '${account.name }'`)}}
         <MyMenuInline :items="items"  :context="this"></MyMenuInline>  </h1>
-
         <DisplayValues :items="displayvalues"></DisplayValues>
-
-    
+   
         <v-tabs v-model="tab"  background-color="primary" dark>
             <v-tab key="ao">{{ $t("Account operations")}}</v-tab>
             <v-tab key="cc">{{ $t("Credit cards")}}</v-tab>
@@ -246,7 +244,9 @@
                 this.refreshTableCC()
             },
             on_CreditcardsView_cruded(){
+                this.refreshTable()//Due to payments, must refresh account operations
                 this.refreshTableCC()
+                this.$emit('cruded')
             },
             on_chkActive_cc(){
                 this.refreshTableCC()
