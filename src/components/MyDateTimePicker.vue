@@ -22,21 +22,39 @@
                     <v-icon class="ml-3" x-small @click="localValue=null">mdi-backspace</v-icon>
                 </v-row>
             </template>
-            <v-card>
-                <v-date-picker v-if="localValue" class="pa-5" no-title v-model="date" @change="on_date_change()" locale="locale" first-day-of-week="1"></v-date-picker>
-                <v-time-picker v-if="localValue" class="pa-5" ref="time" no-title scrollable  format="24hr" v-model="time" use-seconds @click:hour="on_time_click()" @click:minute="on_time_click()" @click:second="on_time_click()" locale="locale"></v-time-picker>
-                <v-text-field v-if="localValue" class="pa-5" v-model="milliseconds" type="number" :label="$t('Milliseconds')" :placeholder="$t('Milliseconds')" :rules="RulesString(3,true)" counter="3" @change="on_milliseconds_change()"></v-text-field>        
+            <v-card class="pa-4">
+                <h1 class="mb-3">{{ this.$t("Select a date and time")}}
+                    <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+                </h1>            
+                <v-row class="d-flex .flex-nowrap"  no-gutters>
+                    <v-date-picker dense v-if="localValue" no-title v-model="date" @change="on_date_change()" locale="locale" first-day-of-week="1"></v-date-picker>
+                    <v-time-picker dense v-if="localValue" ref="time" no-title scrollable  format="24hr" v-model="time" use-seconds @click:hour="on_time_click()" @click:minute="on_time_click()" @click:second="on_time_click()" locale="locale"></v-time-picker>
+
+                    <v-col>
+                        <v-row class="mt-12 pt-12 ml-4">             
+                            <v-text-field class="shrink" reverse v-if="localValue" v-model="milliseconds" type="number" :label="$t('Milliseconds')" :placeholder="$t('Milliseconds')" :rules="RulesString(3,true)" counter="3" @change="on_milliseconds_change()"></v-text-field>        
+                            <v-icon class="mr-8 ml-4" x-small @click="on_milliseconds_backspace">mdi-backspace</v-icon>
+                        </v-row>
+                    </v-col>    
+                </v-row>
                 <v-card-actions>
-                    <v-btn class="ml-4" color="primary" @click="on_set_now()" >{{$t("Set now")}}</v-btn>
-                    <v-btn class="ml-4" v-if="localValue" color="error" @click="on_close()" >{{$t("Set")+ " '" + this.representation + "'"}}</v-btn>
-                </v-card-actions>            
+                    <v-spacer></v-spacer>
+                        <v-btn class="mt-4 mx-4" v-if="localValue" color="error" @click="on_close()" >{{$t("Set")+ " '" + this.representation + "'"}}</v-btn>
+
+                    <v-spacer></v-spacer>
+                </v-card-actions>
+
             </v-card>
         </v-menu>
     </div>
 </template>
 <script>
     import moment from 'moment'
+    import MyMenuInline from './MyMenuInline.vue'
     export default {    
+        components: {
+            MyMenuInline,
+        },
         props: {
             value: {
                 required: true
@@ -52,6 +70,93 @@
         },
         data: function(){
             return {
+                    menuinline_items: [
+                    {
+                        subheader: this.$t("Predefined"),
+                        children: [
+                            {
+                                name: this.$t("Current date and time"),
+                                icon: "mdi-calendar",
+                                code: function(this_){
+                                    this_.on_set_now()
+                                },
+                            },
+                            {
+                                name: this.$t("Start of the day"),
+                                icon: "mdi-calendar",
+                                code: function(this_){
+                                    this_.time="00:00:00"
+                                    this_.milliseconds="0"
+                                    this_.localValue=this_.tuple2zulu(this_.date,this_.time,this_.milliseconds)
+                                    this_.menu=false
+                                },
+                            },
+                            {
+                                name: this.$t("Start of the month"),
+                                icon: "mdi-calendar ",
+                                code: function(this_){
+                                    var n=new Date(this_.date)
+                                    n.setDate(1)
+                                    this_.date=n.toISOString().slice(0,10)
+                                    this_.time="00:00:00"
+                                    this_.milliseconds="0"
+                                    this_.localValue=this_.tuple2zulu(this_.date,this_.time,this_.milliseconds)
+                                    this_.menu=false                                },
+                            },
+                            {
+                                name: this.$t("Start of the year"),
+                                icon: "mdi-calendar ",
+                                code: function(this_){
+                                    var n=new Date(this_.date)
+                                    n.setDate(1)
+                                    n.setMonth(0)
+                                    this_.date=n.toISOString().slice(0,10)
+                                    this_.time="00:00:00"
+                                    this_.milliseconds="0"
+                                    this_.localValue=this_.tuple2zulu(this_.date,this_.time,this_.milliseconds)
+                                    this_.menu=false                                },
+                            },
+                            {
+                                name: this.$t("End of the day"),
+                                icon: "mdi-calendar",
+                                code: function(this_){
+                                    this_.time="23:59:59"
+                                    this_.milliseconds="999"
+                                    this_.localValue=this_.tuple2zulu(this_.date,this_.time,this_.milliseconds)
+                                    this_.menu=false
+                                },
+                            },
+                            {
+                                name: this.$t("End of the month"),
+                                icon: "mdi-calendar ",
+                                code: function(this_){
+                                    var n=new Date(this_.date)
+                                    n.setDate(1)
+                                    n.setMonth(n.getMonth()+1)
+                                    n.setDate(0)
+                                    this_.date=n.toISOString().slice(0,10)
+                                    this_.time="23:59:59"
+                                    this_.milliseconds="999"
+                                    this_.localValue=this_.tuple2zulu(this_.date,this_.time,this_.milliseconds)
+                                    this_.menu=false                                },
+                            },
+                            {
+                                name: this.$t("End of the year"),
+                                icon: "mdi-calendar ",
+                                code: function(this_){
+                                    var n=new Date(this_.date)
+                                    n.setDate(31)
+                                    n.setMonth(11)
+                                    this_.date=n.toISOString().slice(0,10)
+                                    this_.time="23:59:59"
+                                    this_.milliseconds="999"
+                                    this_.localValue=this_.tuple2zulu(this_.date,this_.time,this_.milliseconds)
+                                    this_.menu=false                                },
+                            },
+                        ]
+                    },
+                ],
+
                 menu: false,
                 date: "",
                 time: "",
@@ -95,8 +200,10 @@
             },
             on_date_change(){
                 this.localValue=this.tuple2zulu(this.date,this.time,this.milliseconds)
+                this.menu=false
             },
             on_time_click(){
+                console.log(this.time)
                 if (this.$refs.time.selecting == 3) {
                     this.on_close()
                 }
@@ -104,6 +211,11 @@
             },
             on_milliseconds_change(){
                 this.localValue=this.tuple2zulu(this.date,this.time,this.milliseconds)
+            },
+            on_milliseconds_backspace(){
+                this.milliseconds='0';
+                this.localValue=this.tuple2zulu(this.date,this.time,this.milliseconds)
+                this.menu=false
             },
             // py django format without timezone, tuple string (date, time )
             zulu2tuple(s){
