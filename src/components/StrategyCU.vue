@@ -9,16 +9,21 @@
                 <MyDateTimePicker :readonly="deleting" v-model="newstrategy.dt_to" :label="$t('Date and time strategy end')"></MyDateTimePicker>
                 <v-select :readonly="deleting" dense :items="$store.state.strategiestypes" v-model="newstrategy.type" :label="$t('Select strategy type')" item-text="name" item-value="id" :rules="RulesSelection(true)" @change="on_strategy_type_change()"></v-select>
                 <v-textarea :readonly="deleting" dense v-model="newstrategy.comment" :label="$t('Set strategy comment')" :placeholder="$t('Set strategy comment')" :rules="RulesString(200,false)" counter="200"></v-textarea>
-                <v-text-field :readonly="deleting" dense ref="additional1" v-model.number="newstrategy.additional1" v-if="additional_visibility[0]" :label="additional_labels[0]" :placeholder="additional_labels[0]" :rules="RulesInteger(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" dense ref="additional2" v-model.number="newstrategy.additional2" v-if="additional_visibility[1]" :label="additional_labels[1]" :placeholder="additional_labels[1]" :rules="RulesInteger(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" dense ref="additional3" v-model.number="newstrategy.additional3" v-if="additional_visibility[2]" :label="additional_labels[2]" :placeholder="additional_labels[2]" :rules="RulesInteger(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" dense ref="additional4" v-model.number="newstrategy.additional4" v-if="additional_visibility[3]" :label="additional_labels[3]" :placeholder="additional_labels[3]" :rules="RulesInteger(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" dense ref="additional5" v-model.number="newstrategy.additional5" v-if="additional_visibility[4]" :label="additional_labels[4]" :placeholder="additional_labels[4]" :rules="RulesInteger(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" dense ref="additional6" v-model.number="newstrategy.additional6" v-if="additional_visibility[5]" :label="additional_labels[5]" :placeholder="additional_labels[5]" :rules="RulesInteger(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" dense ref="additional7" v-model.number="newstrategy.additional7" v-if="additional_visibility[6]" :label="additional_labels[6]" :placeholder="additional_labels[6]" :rules="RulesInteger(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" dense ref="additional8" v-model.number="newstrategy.additional8" v-if="additional_visibility[7]" :label="additional_labels[7]" :placeholder="additional_labels[7]" :rules="RulesInteger(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" dense ref="additional9" v-model.number="newstrategy.additional9" v-if="additional_visibility[8]" :label="additional_labels[8]" :placeholder="additional_labels[8]" :rules="RulesInteger(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" dense ref="additional10" v-model.number="newstrategy.additional10" v-if="additional_visibility[9]" :label="additional_labels[9]" :placeholder="additional_labels[9]" :rules="RulesInteger(10,false)" counter="10"/>
+                <v-text-field :readonly="deleting" dense v-model.number="newstrategy.additional1" v-if="additional_visibility[0]" :label="additional_labels[0]" :placeholder="additional_labels[0]" :rules="RulesInteger(10,false)" counter="10"/>
+                <v-autocomplete class="mr-5" :items="$store.state.products" v-model="product"  item-text="name" item-value="id" :rules="RulesSelection(true)" v-if="product_visibility" :label="this.$t('Select a product')"></v-autocomplete>  
+                <v-text-field :readonly="deleting" dense v-model.number="newstrategy.additional2" v-if="additional_visibility[1]" :label="additional_labels[1]" :placeholder="additional_labels[1]" :rules="RulesInteger(10,false)" counter="10"/>
+                <v-text-field :readonly="deleting" dense v-model.number="newstrategy.additional3" v-if="additional_visibility[2]" :label="additional_labels[2]" :placeholder="additional_labels[2]" :rules="RulesInteger(10,false)" counter="10"/>
+                <v-text-field :readonly="deleting" dense v-model.number="newstrategy.additional4" v-if="additional_visibility[3]" :label="additional_labels[3]" :placeholder="additional_labels[3]" :rules="RulesInteger(10,false)" counter="10"/>
+                <v-text-field :readonly="deleting" dense v-model.number="newstrategy.additional5" v-if="additional_visibility[4]" :label="additional_labels[4]" :placeholder="additional_labels[4]" :rules="RulesInteger(10,false)" counter="10"/>
+                <v-select class="mr-5" :items="$store.state.recomendation_methods" v-model="recomendation_method"  item-text="name" item-value="id" :rules="RulesSelection(true)" v-if="recomendation_method_visibility" :label="this.$t('Select a recomendation method')"></v-select>  
+                <v-text-field :readonly="deleting" dense v-model.number="newstrategy.additional6" v-if="additional_visibility[5]" :label="additional_labels[5]" :placeholder="additional_labels[5]" :rules="RulesInteger(10,false)" counter="10"/>
+                <v-text-field :readonly="deleting" dense v-model.number="newstrategy.additional7" v-if="additional_visibility[6]" :label="additional_labels[6]" :placeholder="additional_labels[6]" :rules="RulesInteger(10,false)" counter="10"/>
+                <v-text-field :readonly="deleting" dense v-model.number="newstrategy.additional8" v-if="additional_visibility[7]" :label="additional_labels[7]" :placeholder="additional_labels[7]" :rules="RulesInteger(10,false)" counter="10"/>
+                <v-text-field :readonly="deleting" dense v-model.number="newstrategy.additional9" v-if="additional_visibility[8]" :label="additional_labels[8]" :placeholder="additional_labels[8]" :rules="RulesInteger(10,false)" counter="10"/>
+                <v-text-field :readonly="deleting" dense v-model.number="newstrategy.additional10" v-if="additional_visibility[9]" :label="additional_labels[9]" :placeholder="additional_labels[9]" :rules="RulesInteger(10,false)" counter="10"/>
+
+
+                
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -53,14 +58,20 @@
                 editing:false,
                 temporal_investments:[],
                 additional_labels:["1","2","3","4","5","6","7","8","9","10"],
-                additional_visibility:[true,true,true,true,true,true,true,true,true,true,]
+                additional_visibility:[true,true,true,true,true,true,true,true,true,true,],
+
+                //Additional  components
+                recomendation_method:null,
+                recomendation_method_visibility:false,
+
+                product:null,
+                product_visibility:false,
             }
         },
         methods: {
             arrayofintegers_to_stringofintegers,
             stringofintegers_to_arrayofintegers,
             title(){
-                console.log(this.deleting)
                 if (this.deleting) {
                     return this.$t("Deleting strategy")
                 } else if (this.editing){
@@ -82,20 +93,26 @@
                     return
                 }
                 this.newstrategy.investments=this.arrayofintegers_to_stringofintegers(this.temporal_investments)
-                console.log(this.newstrategy.investments)
 
+                //Update additional components
+                if (this.newstrategy.type==3){//Generic
+                } else if (this.newstrategy.type==2){//Product ranges
+                    this.newstrategy.additional5=this.recomendation_method
+                    this.newstrategy.additional1=this.product
+                } else if (this.newstrategy.type==1){//Product pairs
+                }
+
+                console.log(this.newstrategy)
                 if (this.editing==true){
                     axios.put(this.newstrategy.url, this.newstrategy,  this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
+                    .then(() => {
                             this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
                 } else{
                     axios.post(`${this.$store.state.apiroot}/api/strategies/`, this.newstrategy,  this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
+                    .then(() => {
                            this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -108,16 +125,13 @@
                   return
                } 
                 axios.delete(this.strategy.url, this.myheaders())
-                .then((response) => {
-                    console.log(response);
+                .then(() => {
                     this.$emit("cruded")
                 }, (error) => {
                     this.parseResponseError(error)
                 });
             },
             updateUi(){
-                console.log("UPDATEUI")
-                console.log(this.$refs.additional1)
                 if (this.newstrategy.type==3){//Generic
                     this.additional_labels=[
                         "",
@@ -132,6 +146,8 @@
                         "",
                     ]
                     this.additional_visibility=[false,false,false,false,false,false,false,false,false,false,]
+                    this.recomendation_method_visibility=false
+                    this.product_visibility=false
                 } else if (this.newstrategy.type==2){//Product ranges
                     this.additional_labels=[
                         this.$t("Product"),
@@ -145,7 +161,11 @@
                         "",
                         "",
                     ]
-                    this.additional_visibility=[true,true,true,true,true,true,false,false,false,false,]
+                    this.additional_visibility=[false,true,true,true,false,true,false,false,false,false,]
+                    this.recomendation_method_visibility=true
+                    this.recomendation_method=this.newstrategy.additional5
+                    this.product_visibility=true
+                    this.product=this.newstrategy.additional1
 
                 } else if (this.newstrategy.type==1){//Product pairs
                     this.additional_labels=[
@@ -161,6 +181,8 @@
                         "",
                     ]
                     this.additional_visibility=[true,true,true,false,false,false,false,false,false,false,]
+                    this.recomendation_method_visibility=false
+                    this.product_visibility=false
 
                 }
             },

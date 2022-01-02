@@ -144,14 +144,14 @@
             empty_strategy,
             deleteItem(item){
                 this.strategy=item
-                this.key=this.key+1
                 this.strategy_deleting=true
+                this.key=this.key+1
                 this.dialog_strategy_cu=true
                 //this.$refs.strategy_cu.deleteStrategy(item)
             },
             viewItem (item) {
-                this.key=this.key+1
                 this.strategy=item
+                this.key=this.key+1
                 this.dialog_view=true
             },
             detailedviewItem (item) {
@@ -163,10 +163,9 @@
                     this.pr.amount_to_invest=item.additional4
                     this.pr.recomendation_methods=item.additional5
                     this.pr.only_first=item.additional6
-                    console.log(item.investments)
                     this.pr.investments=item.investments
-                    this.dialog_detailedview=true
                     this.key=this.key+1
+                    this.dialog_detailedview=true
                 } else {
                     alert(this.$t("Detailed view for this strategy type is not developed yet"))
                 }
@@ -175,7 +174,6 @@
                 this.loading_strategies=true
                 axios.get(`${this.$store.state.apiroot}/strategies/withbalance?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     this.strategies_items=response.data
                     this.loading_strategies=false
                 }, (error) => {

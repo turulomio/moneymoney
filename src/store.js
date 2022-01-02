@@ -28,6 +28,9 @@ export const store = new Vuex.Store({
         products: [],
         stockmarkets:[],
         strategiestypes:[],
+
+
+        recomendation_methods:[],
     },    
     getters:{
         getConceptsForDividends: (state) => () => { 
@@ -131,6 +134,10 @@ export const store = new Vuex.Store({
             state.operationstypes=payload
             console.log(`Updated ${payload.length} operation types`)
         },
+        updateRecomendationMethods: (state, payload) =>{
+            state.recomendation_methods=payload
+            console.log(`Updated ${payload.length} recomendation methods`)
+        },
         updateProducts: (state, payload) =>{
             state.products=payload
             console.log(`Updated ${payload.length} products`)
@@ -162,6 +169,7 @@ export const store = new Vuex.Store({
             context.dispatch("getInvestments")
             context.dispatch("getLeverages")
             context.dispatch("getOperationstypes")
+            context.dispatch("getRecomendationMethods")
             context.dispatch("getSettings")
             context.dispatch("getStockmarkets")
             context.dispatch("getStrategiesTypes")
@@ -239,6 +247,14 @@ export const store = new Vuex.Store({
             .then((response) => {
                 context.commit('updateProducts', sortObjectsArray(response.data, "name"))
                 console.log(new Date()-start)
+            }, (error) => {
+                store.$app.parseResponseError(error)
+            });
+        },
+        getRecomendationMethods(context){
+            axios.get(`${store.state.apiroot}/recomendationmethods/`, store.$app.myheaders())
+            .then((response) => {
+                context.commit('updateRecomendationMethods', sortObjectsArray(response.data, "name"))
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
