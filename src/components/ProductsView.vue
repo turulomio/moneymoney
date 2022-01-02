@@ -8,30 +8,71 @@
         <DisplayValues :items="displayvalues"></DisplayValues>
     
         <v-tabs v-model="tab"  background-color="primary" dark>
+            <v-tab key="percentage_evolution">{{ $t("Percentage evolution")}}</v-tab>
+            <v-tab key="quotes_evolution">{{ $t("Quotes evolution")}}</v-tab>
             <v-tab key="dps_estimations">{{ $t("DPS estimations")}}</v-tab>
             <v-tab key="quotes">{{ $t("Daily OHCL")}}</v-tab>
             <v-tab key="quotes_by_month">{{ $t("Quotes")}}</v-tab>
             <v-tab key="chart">{{ $t("Chart")}}</v-tab>
-            <v-tab-item key="dps_estimations">     
-                <v-card class="pa-4 d-flex justify-center" outlined >
-                    <TableEstimationsDPS :product="product" :key="key"></TableEstimationsDPS>
-                </v-card>
-            </v-tab-item>
-            <v-tab-item key="quotes">
-                <v-card class="padding" outlined>
-                    <TableOHCLS :product="product" :items="ohcls" :key="key"></TableOHCLS>
-                </v-card>
-            </v-tab-item>
-            <v-tab-item key="quotes_by_month">
-                <v-card class="padding" outlined>
-                    <TableQuotes :product="product" :items="quotes_all" :key="key"></TableQuotes>
-                </v-card>
-            </v-tab-item>
-            <v-tab-item key="chart">     
-                <v-card class="pa-4" outlined >
-                    <ChartProduct :ohcls="ohcls" :product="product" :key="key"></ChartProduct>
-                </v-card>
-            </v-tab-item>
+            <v-tabs-items v-model="tab">
+                <v-tab-item key="percentage_evolution">     
+                    <v-card class="pa-4 d-flex justify-center" outlined >
+                        <v-data-table dense :headers="percentage_headers" :items="this.information.percentages" class="elevation-1" disable-pagination  hide-default-footer  fixed-header :loading="loading">
+                            <template v-slot:[`item.m1`]="{ item }"><div v-html="percentage_html(item.m1 )"></div></template>  
+                            <template v-slot:[`item.m2`]="{ item }"><div v-html="percentage_html(item.m2 )"></div></template>  
+                            <template v-slot:[`item.m3`]="{ item }"><div v-html="percentage_html(item.m3 )"></div></template>  
+                            <template v-slot:[`item.m4`]="{ item }"><div v-html="percentage_html(item.m4 )"></div></template>  
+                            <template v-slot:[`item.m5`]="{ item }"><div v-html="percentage_html(item.m5 )"></div></template>  
+                            <template v-slot:[`item.m6`]="{ item }"><div v-html="percentage_html(item.m6 )"></div></template>  
+                            <template v-slot:[`item.m7`]="{ item }"><div v-html="percentage_html(item.m7 )"></div></template>  
+                            <template v-slot:[`item.m8`]="{ item }"><div v-html="percentage_html(item.m8 )"></div></template>  
+                            <template v-slot:[`item.m9`]="{ item }"><div v-html="percentage_html(item.m9 )"></div></template>  
+                            <template v-slot:[`item.m10`]="{ item }"><div v-html="percentage_html(item.m10 )"></div></template>  
+                            <template v-slot:[`item.m11`]="{ item }"><div v-html="percentage_html(item.m11 )"></div></template>  
+                            <template v-slot:[`item.m12`]="{ item }"><div v-html="percentage_html(item.m12 )"></div></template>  
+                            <template v-slot:[`item.m13`]="{ item }"><div v-html="percentage_html(item.m13 )"></div></template>  
+                        </v-data-table>   
+                    </v-card>
+                </v-tab-item>
+                <v-tab-item key="quotes_evolution">     
+                    <v-card class="pa-4 d-flex justify-center" outlined >
+                        <v-data-table dense :headers="quotes_headers" :items="this.information.quotes" class="elevation-1" disable-pagination  hide-default-footer  fixed-header :loading="loading">
+                            <template v-slot:[`item.m1`]="{ item }"><div v-html="currency_html(item.m1 , product.currency)"></div></template>  
+                            <template v-slot:[`item.m2`]="{ item }"><div v-html="currency_html(item.m2 , product.currency)"></div></template>  
+                            <template v-slot:[`item.m3`]="{ item }"><div v-html="currency_html(item.m3 , product.currency)"></div></template>  
+                            <template v-slot:[`item.m4`]="{ item }"><div v-html="currency_html(item.m4 , product.currency)"></div></template>  
+                            <template v-slot:[`item.m5`]="{ item }"><div v-html="currency_html(item.m5 , product.currency)"></div></template>  
+                            <template v-slot:[`item.m6`]="{ item }"><div v-html="currency_html(item.m6 , product.currency)"></div></template>  
+                            <template v-slot:[`item.m7`]="{ item }"><div v-html="currency_html(item.m7 , product.currency)"></div></template>  
+                            <template v-slot:[`item.m8`]="{ item }"><div v-html="currency_html(item.m8 , product.currency)"></div></template>  
+                            <template v-slot:[`item.m9`]="{ item }"><div v-html="currency_html(item.m9 , product.currency)"></div></template>  
+                            <template v-slot:[`item.m10`]="{ item }"><div v-html="currency_html(item.m10 , product.currency)"></div></template>  
+                            <template v-slot:[`item.m11`]="{ item }"><div v-html="currency_html(item.m11 , product.currency)"></div></template>  
+                            <template v-slot:[`item.m12`]="{ item }"><div v-html="currency_html(item.m12 , product.currency)"></div></template>  
+                        </v-data-table>   
+                    </v-card>
+                </v-tab-item>
+                <v-tab-item key="dps_estimations">     
+                    <v-card class="pa-4 d-flex justify-center" outlined >
+                        <TableEstimationsDPS :product="product" :key="key"></TableEstimationsDPS>
+                    </v-card>
+                </v-tab-item>
+                <v-tab-item key="quotes">
+                    <v-card class="padding" outlined>
+                        <TableOHCLS :product="product" :items="ohcls" :key="key"></TableOHCLS>
+                    </v-card>
+                </v-tab-item>
+                <v-tab-item key="quotes_by_month">
+                    <v-card class="padding" outlined>
+                        <TableQuotes :product="product" :items="quotes_all" :key="key"></TableQuotes>
+                    </v-card>
+                </v-tab-item>
+                <v-tab-item key="chart">     
+                    <v-card class="pa-4" outlined >
+                        <ChartProduct :ohcls="ohcls" :product="product" :key="key"></ChartProduct>
+                    </v-card>
+                </v-tab-item>
+            </v-tabs-items>
         </v-tabs>  
 
         <!-- QUOTES CU -->
@@ -120,6 +161,40 @@
                 tab:0,
                 key:0,
 
+                // Information
+                information: [],
+
+                percentage_headers: [
+                    { text: this.$t('Year'), value: 'year', sortable: true },
+                    { text: this.$t('January'), value: 'm1', sortable: true,align:"right" },
+                    { text: this.$t('February'), value: 'm2', sortable: true, align:"right" },
+                    { text: this.$t('March'), value: 'm3', sortable: true, align:"right" },
+                    { text: this.$t('April'), value: 'm4', sortable: true, align:"right" },
+                    { text: this.$t('May'), value: 'm5', sortable: true, align:"right" },
+                    { text: this.$t('June'), value: 'm6', sortable: true, align:"right" },
+                    { text: this.$t('July'), value: 'm7', sortable: true, align:"right" },
+                    { text: this.$t('August'), value: 'm8', sortable: true, align:"right" },
+                    { text: this.$t('September'), value: 'm9', sortable: true, align:"right" },
+                    { text: this.$t('October'), value: 'm10', sortable: true, align:"right" },
+                    { text: this.$t('November'), value: 'm11', sortable: true, align:"right" },
+                    { text: this.$t('December'), value: 'm12', sortable: true, align:"right" },
+                    { text: this.$t('Total'), value: 'm13', sortable: true,align:"right" },
+                ],
+                quotes_headers: [
+                    { text: this.$t('Year'), value: 'year', sortable: true },
+                    { text: this.$t('January'), value: 'm1', sortable: true,align:"right" },
+                    { text: this.$t('February'), value: 'm2', sortable: true, align:"right" },
+                    { text: this.$t('March'), value: 'm3', sortable: true, align:"right" },
+                    { text: this.$t('April'), value: 'm4', sortable: true, align:"right" },
+                    { text: this.$t('May'), value: 'm5', sortable: true, align:"right" },
+                    { text: this.$t('June'), value: 'm6', sortable: true, align:"right" },
+                    { text: this.$t('July'), value: 'm7', sortable: true, align:"right" },
+                    { text: this.$t('August'), value: 'm8', sortable: true, align:"right" },
+                    { text: this.$t('September'), value: 'm9', sortable: true, align:"right" },
+                    { text: this.$t('October'), value: 'm10', sortable: true, align:"right" },
+                    { text: this.$t('November'), value: 'm11', sortable: true, align:"right" },
+                    { text: this.$t('December'), value: 'm12', sortable: true, align:"right" },
+                ],
                 //Product chart
                 ohcls:[],
                 quotes_all:[],
@@ -144,17 +219,15 @@
             refreshProductOHCLDaily(){
                 return axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl/?product=${this.product.url}`, this.myheaders())
             },
-            // refreshProductAllQuotes(){
-            //     return axios.get(`${this.$store.state.apiroot}/api/quotes/?product=${this.product.url}`, this.myheaders())
-            // },
+            refreshInformation(){
+                return axios.get(`${this.$store.state.apiroot}/products/information/?product=${this.product.url}`, this.myheaders())
+            },
             make_all_axios(){
                 this.loading=true
-                axios.all([this.refreshProductOHCLDaily()])
-                .then(([resOHCLS]) => {
+                axios.all([this.refreshProductOHCLDaily(),this.refreshInformation()])
+                .then(([resOHCLS,resInformation]) => {
                     this.ohcls=resOHCLS.data 
-                    console.log(this.ohcls)
-
-
+                    this.information=resInformation.data
                     this.loading=false
                 });
             },
