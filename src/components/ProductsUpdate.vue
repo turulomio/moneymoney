@@ -13,6 +13,8 @@
                     ></v-file-input>
                     <v-card-actions class="justify-center">
                         <v-btn color="primary" @click="submmit()" :disabled="isButtonDisabled()">{{ $t("Send file")}}</v-btn>
+
+                        <v-btn color="primary" @click="submmit_auto()">{{ $t("Auto update")}}</v-btn>
                     </v-card-actions>
             </v-form>
         </v-card>   
@@ -50,6 +52,17 @@
                         console.log(response.data)
                         this.items=response.data
                         this.filename=[]
+                        this.loading=false
+                }, (error) => {
+                    this.parseResponseError(error)
+                })
+            },
+            submmit_auto(){
+                this.loading=true
+                axios.post(`${this.$store.state.apiroot}/products/update/`, {auto:true,}, this.myheaders())
+                .then((response) => {
+                        console.log(response.data)
+                        this.items=response.data
                         this.loading=false
                 }, (error) => {
                     this.parseResponseError(error)
