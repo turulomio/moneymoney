@@ -67,7 +67,7 @@
             },
             showactions:{
                 required:false,
-                default: true,
+                default: false,
             }
         },
 
@@ -132,6 +132,7 @@
         },
         mounted(){
             console.log(this.items)
+            console.log(this.showactions)
             this.gotoLastRow()
         }
     }

@@ -14,7 +14,7 @@
             <v-tab-item key="cco">      
                 <div>
                     <v-card outlined class="ma-4 pa-4">
-                        <TableCreditcardsOperations :showselected="paying" homogeneous :items="items_cco" :total_currency="account.currency" height="400" ref="table_cc" class=" flex-grow-1 flex-shrink-0" :locale='this.$i18n.locale' @changeSelected="changeSelected" @cruded="on_TableCreditcardsOperations_cruded()" :key="key"></TableCreditcardsOperations>
+                        <TableCreditcardsOperations :showselected="paying" :showactions="true" homogeneous :items="items_cco" :total_currency="account.currency" height="400" ref="table_cc" class=" flex-grow-1 flex-shrink-0" :locale='this.$i18n.locale' @changeSelected="changeSelected" @cruded="on_TableCreditcardsOperations_cruded()" :key="key"></TableCreditcardsOperations>
                     </v-card>
                     <v-card outlined class="ma-4 pa-4" v-if="paying">
                         <MyDateTimePicker label="Select payment date and time" v-model="dt_payment" ></MyDateTimePicker>
@@ -120,10 +120,11 @@
                 var ids=[]
                 this.selected_items.forEach(item => ids.push(item.id))
 
-                const formData= new FormData()
-                formData.append('cco', ids)
-                formData.append('dt_payment',this.dt_payment)
-                axios.post(`${this.$store.state.apiroot}/creditcardsoperations/payment/${this.cc.id}/`, formData, this.myheaders_formdata())
+                const data= {
+                    cco:ids,
+                    dt_payment: this.dt_payment,
+                }
+                axios.post(`${this.$store.state.apiroot}/creditcardsoperations/payment/${this.cc.id}/`, data, this.myheaders())
                 .then((response) => {
                         console.log(response.data)
                         this.$emit("cruded")

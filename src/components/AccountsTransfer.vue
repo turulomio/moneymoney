@@ -20,7 +20,6 @@
 <script>
     import axios from 'axios'
     import MyDateTimePicker from './MyDateTimePicker.vue'
-    import {object2formdata} from '../functions.js'
     export default {
         components: {
             MyDateTimePicker,
@@ -38,8 +37,7 @@
 
             }
         },
-        methods: {        
-            object2formdata,
+        methods: {
             empty_transfer(){
                 return {
                     datetime: new Date().toISOString(),
@@ -55,7 +53,7 @@
                     return
                 }
                 if( this.$refs.form.validate()==false) return       
-                axios.post(`${this.$store.state.apiroot}/accounts/transfer/`, this.object2formdata(this.transfer),  this.myheaders_formdata())
+                axios.post(`${this.$store.state.apiroot}/accounts/transfer/`, this.transfer,  this.myheaders())
                 .then((response) => {
                     console.log(response.data)
                     this.$emit("accepted")

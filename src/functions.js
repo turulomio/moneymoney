@@ -30,16 +30,7 @@ export function localtime(value){
     return null;
 }   
 
-// Uses .local()
-export function zulu2py(value){
-    if (value){
-        var dateFormat = 'YYYY-MM-DD HH:mm:ss';
-        var testDateUtc = moment.utc(value);
-        var localDate = testDateUtc.tz(this.$store.state.local_zone)
-        return (localDate.format(dateFormat)); // 2015-30-01 02:00:00
-    }
-    return null;
-}   
+
 // Uses .local()
 export function zulu2date(value){
     return new Date(value)
@@ -48,39 +39,6 @@ export function zulu2date(value){
 export function date2zulu(value){
     return value.toISOString()
 }   
-
-
-// Without time zone but using .local()
-export function date2py(value){
-    if (value){
-        var dateFormat = 'YYYY-MM-DD HH:mm:ss.SSS';
-        var testDateUtc = moment(value);
-        var localDate = testDateUtc.local();
-        return (localDate.format(dateFormat)); // 2015-30-01 02:00:00
-    }
-    return null;
-}   
-
-
-// Without time zone but using .local()
-export function py2date(value){
-    if (value){
-        return new Date(value);
-    }
-    return null;
-}   
-
-
-export function moment_day_start(isostring){
-    if (isostring){
-        var testDateUtc = moment.utc(isostring);
-        var localDate = testDateUtc.local();
-        return localDate
-    }
-    return null;
-}   
-
-
 
 export function myheaders(){
     return {
@@ -106,14 +64,7 @@ export function capitalizeFirstLetter(string) {
   }
 
 
-export function object2formdata(item){
-    var form_data = new FormData();
 
-    for ( var key in item ) {
-        form_data.append(key, item[key]);
-    }
-    return form_data
-}
 
 export function logout(){
     const formData = new FormData();
@@ -182,15 +133,6 @@ export function parseResponse(response){
         alert (`${response.status}: ${response.data}`)
         return false
     }
-}
-
-export function getLocalStorage(key, default_){
-    if (localStorage.getItem(key)){
-        return localStorage.getItem(key)
-    } else {
-        return default_
-    }
-    
 }
 
 export function parseResponseError(error){

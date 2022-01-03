@@ -79,16 +79,12 @@ import {
     myheaders,
     parseResponse,
     parseResponseError,
-    getLocalStorage, 
     listobjects_sum,
     myheaders_formdata,
     percentage_generic_html,
     percentage_generic_string, 
-    zulu2py,
-    date2py,
     zulu2date,
     date2zulu,
-    py2date,
     my_round
 } from './functions.js'
 import {RulesFloat,RulesDate,RulesDatetime,RulesInteger,RulesString,RulesSelection, RulesFloatPositive, RulesFloatNegative, } from './rules.js'
@@ -104,10 +100,6 @@ Vue.mixin({
         myheaders_formdata,
         parseResponse,
         parseResponseError,
-        getLocalStorage,
-        zulu2py,
-        date2py,
-        py2date,
         zulu2date,
         date2zulu,
 
