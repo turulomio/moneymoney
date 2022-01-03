@@ -75,7 +75,6 @@
                 this.editing=false
             }
             this.newinvestment=Object.assign({},this.investment)
-            console.log(this.newinvestment)
         }
     }
 </script>

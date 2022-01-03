@@ -104,56 +104,43 @@ export const store = new Vuex.Store({
     mutations: { // Only sincronous changes data
         updateAccounts: (state, payload) =>{
             state.accounts=payload
-            console.log(`Updated ${payload.length} accounts`)
         },
         updateBanks: (state, payload) =>{
             state.banks=payload
-            console.log(`Updated ${payload.length} banks`)
         },
         updateConcepts: (state, payload) =>{
             state.concepts=payload
-            console.log(`Updated ${payload.length} concepts`)
         },
         updateCreditcards: (state, payload) =>{
             state.creditcards=payload
-            console.log(`Updated ${payload.length} credit cards`)
         },
         updateCurrencies: (state, payload) =>{
             state.currencies=payload
-            console.log(`Updated ${payload.length} currencies`)
         },
         updateInvestments: (state, payload) =>{
             state.investments=payload
-            console.log(`Updated ${payload.length} investments`)
         },
         updateLeverages: (state, payload) =>{
             state.leverages=payload
-            console.log(`Updated ${payload.length} leverages`)
         },
         updateOperationstypes: (state, payload) =>{
             state.operationstypes=payload
-            console.log(`Updated ${payload.length} operation types`)
         },
         updateRecomendationMethods: (state, payload) =>{
             state.recomendation_methods=payload
-            console.log(`Updated ${payload.length} recomendation methods`)
         },
         updateProducts: (state, payload) =>{
             state.products=payload
-            console.log(`Updated ${payload.length} products`)
         },
         updateSettings: (state, payload) =>{
             state.local_zone=payload.local_zone
             state.local_currency=payload.local_currency
-            console.log("Updated settings")
         },
         updateStockmarkets: (state, payload) =>{
             state.stockmarkets=payload
-            console.log(`Updated ${payload.length} stock markets`)
         },
         updateStrategiesTypes: (state, payload) =>{
             state.strategiestypes=payload
-            console.log(`Updated ${payload.length} strategy types`)
         },
 
     },
@@ -175,30 +162,37 @@ export const store = new Vuex.Store({
             context.dispatch("getStrategiesTypes")
         },
         getAccounts(context){
+            var start=new Date()
             axios.get(`${store.state.apiroot}/api/accounts/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateAccounts', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} accounts in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
         },
         getBanks(context){
+            var start=new Date()
             axios.get(`${store.state.apiroot}/api/banks/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateBanks', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} banks in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
         },
         getCreditcards(context){
+            var start=new Date()
             axios.get(`${store.state.apiroot}/api/creditcards/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateCreditcards', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} credit cards in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
         },
         getCurrencies(context){
+            var start=new Date()
             var locale="en_US"
             if (store.$app.$i18n.locale=='es'){
                 locale="es_ES"
@@ -208,35 +202,44 @@ export const store = new Vuex.Store({
             Object.entries(currencies_object).forEach(o => currencies_list.push(o[1]))
             currencies_list.forEach(o=> o["fullname"]=`${capitalizeFirstLetter(o.name)} (${o.code} - ${o.symbol})`)
             context.commit("updateCurrencies", currencies_list)
+            console.log(`Updated ${currencies_list.length} currencies in ${new Date()-start} ms`)
         },
         getInvestments(context){
+            var start=new Date()
             axios.get(`${store.state.apiroot}/api/investments/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateInvestments', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} investments in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
         },
         getLeverages(context){
+            var start=new Date()
             axios.get(`${store.state.apiroot}/api/leverages/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateLeverages', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} leverages in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
         },
         getConcepts(context){
+            var start=new Date()
             axios.get(`${store.state.apiroot}/api/concepts/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateConcepts', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} concepts in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
         },
         getOperationstypes(context){
+            var start=new Date()
             axios.get(`${store.state.apiroot}/api/operationstypes/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateOperationstypes', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} operations types in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
@@ -246,42 +249,50 @@ export const store = new Vuex.Store({
             axios.get(`${store.state.apiroot}/api/products/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateProducts', sortObjectsArray(response.data, "name"))
-                console.log(new Date()-start)
+                console.log(`Updated ${response.data.length} products in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
         },
         getRecomendationMethods(context){
+            var start=new Date()
             axios.get(`${store.state.apiroot}/recomendationmethods/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateRecomendationMethods', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} recomendation methods in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
         },
         getSettings(context){
+            var start=new Date()
             axios.get(`${store.state.apiroot}/settings/`, store.$app.myheaders())
             .then((response) => {
                 context.commit("updateSettings", response.data)
+                console.log(`Updated ${response.data.length} settings in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
         },
         getStockmarkets(context){
+            var start=new Date()
             axios.get(`${store.state.apiroot}/api/stockmarkets/`, store.$app.myheaders())
             .then((response) => {
                 context.commit("updateStockmarkets", response.data)
+                console.log(`Updated ${response.data.length} stock markets in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
         },
         getStrategiesTypes(context){
+            var start=new Date()
             var r=[
                 {id:1, name: store.$app.$t("Pairs in same account")},
                 {id:2, name: store.$app.$t("Product ranges")},
                 {id:3, name: store.$app.$t("Generic")},
             ]
             context.commit("updateStrategiesTypes",r)
+            console.log(`Updated ${r.length} strategy types in ${new Date()-start} ms`)
         },
     }
 })

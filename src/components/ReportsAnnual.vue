@@ -374,7 +374,6 @@
             },
             incomeDetails(item){
                 this.month=item.month_number
-                console.log(item)
                 this.dialog_income_details=true
                 this.key=this.key+1  
             },
@@ -482,7 +481,6 @@
                 })
                 axios.get(`${this.$store.state.apiroot}/reports/annual/income/${this.year}/`, this.myheaders())
                 .then((response) => {
-                        console.log(response.data)
                         this.total_annual_incomes=response.data
                         this.loading_annual_incomes=false
                 }, (error) => {

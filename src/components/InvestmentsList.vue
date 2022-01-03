@@ -245,7 +245,6 @@
                 axios.get(`${this.$store.state.apiroot}/investments/withbalance?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
                     this.investments_items=response.data
-                    console.log(response);
                     this.update_foot()
                     this.loading_investments=false
                 }, (error) => {

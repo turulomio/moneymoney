@@ -215,8 +215,7 @@
                                 code: function(this_){
                                     this_.investment.active=!this_.investment.active
                                     axios.put(this_.investment.url, this_.investment,  this_.myheaders())
-                                    .then((response) => {
-                                        console.log(response.data)
+                                    .then(() => {
                                         this_.$emit("cruded")
                                     }, (error) => {
                                         this_.parseResponseError(error)

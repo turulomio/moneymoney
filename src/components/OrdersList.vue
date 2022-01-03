@@ -206,7 +206,6 @@
                 axios.get(url, this.myheaders())
                 .then((response) => {
                     this.data=response.data
-                    console.log(response);
                     this.loading_table=false
                 }, (error) => {
                     this.parseResponseError(error)
