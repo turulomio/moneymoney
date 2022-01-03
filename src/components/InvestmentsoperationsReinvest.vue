@@ -64,7 +64,7 @@
         <!-- Order CU dialog -->
         <v-dialog v-model="dialog_order_cu" max-width="550">
             <v-card class="pa-4">
-                <OrdersCU :order="order" :key="key"></OrdersCU>
+                <OrdersCU :order="order" :key="key" @cruded="on_OrdersCU_cruded()"></OrdersCU>
             </v-card>
         </v-dialog>
     </div>
@@ -180,6 +180,9 @@
                 this.key=this.key+1
                 this.dialog_order_cu=true
 
+            },
+            on_OrdersCU_cruded(){
+                this.dialog_order_cu=false
             },
             refreshProductQuotes(){
                 return axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl?product=${this.product}`, this.myheaders())
