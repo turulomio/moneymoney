@@ -175,9 +175,9 @@
             on_finished(){
                 if (this.save_prefix!=null){
                     var filename=this.save_prefix
-                    axios.post(`${this.$store.state.apiroot}/echarts/to/file/`, {filename:filename,data:this.$refs.chart.getDataURL(),}, this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    var data=this.$refs.chart.getDataURL().replace('data:image/png;base64,','')
+                    axios.post(`${this.$store.state.apiroot}/binary/to/global/`, {global:filename,data:data,}, this.myheaders())
+                    .then(() => {
                         this.$emit("finished")
                     }, (error) => {
                         this.parseResponseError(error)

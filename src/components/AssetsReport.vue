@@ -40,12 +40,12 @@
             ></v-progress-circular>
         </div>
         <div v-if="data">
-            <ChartEvolutionAssets save_prefix="evolution_assets.png" @finished="finished_evolution_assets=true;" ></ChartEvolutionAssets>
-            <ChartPie name="Investments by product" :items="echart_products_items" save_prefix="by_product.png" :heigth="height" :show_data="false" @finished="finished_by_product=true;" ></ChartPie>
-            <ChartPie name="Investments by pci" :items="echart_pci_items" save_prefix="by_pci.png" :heigth="height" :show_data="false" @finished="finished_by_pci=true;"></ChartPie>
-            <ChartPie name="Investments by variable percentage" :items="echart_percentage_items" save_prefix="by_percentage.png" :heigth="height" :show_data="false" @finished="finished_by_percentage=true;"></ChartPie>
-            <ChartPie name="Investments by product type" :items="echart_producttype_items" save_prefix="by_producttype.png" :heigth="height" :show_data="false" @finished="finished_by_producttype=true;"></ChartPie>
-            <ChartPie name="Investments by leverage" :items="echart_leverage_items" save_prefix="by_leverage.png" :heigth="height" :show_data="false" @finished="finished_by_leverage=true;"></ChartPie>
+            <ChartEvolutionAssets save_prefix="base64_assetsreport_evolution.png" @finished="finished_evolution_assets=true;" ></ChartEvolutionAssets>
+            <ChartPie name="Investments by product" :items="echart_products_items" save_prefix="base64_assetsreport_classes_by_product.png" :heigth="height" :show_data="false" @finished="finished_by_product=true;" ></ChartPie>
+            <ChartPie name="Investments by pci" :items="echart_pci_items" save_prefix="base64_assetsreport_classes_by_pci.png" :heigth="height" :show_data="false" @finished="finished_by_pci=true;"></ChartPie>
+            <ChartPie name="Investments by variable percentage" :items="echart_percentage_items" save_prefix="base64_assetsreport_classes_by_percentage.png" :heigth="height" :show_data="false" @finished="finished_by_percentage=true;"></ChartPie>
+            <ChartPie name="Investments by product type" :items="echart_producttype_items" save_prefix="base64_assetsreport_classes_by_producttype.png" :heigth="height" :show_data="false" @finished="finished_by_producttype=true;"></ChartPie>
+            <ChartPie name="Investments by leverage" :items="echart_leverage_items" save_prefix="base64_assetsreport_classes_by_leverage.png" :heigth="height" :show_data="false" @finished="finished_by_leverage=true;"></ChartPie>
         </div>
     </div>
 </template>
