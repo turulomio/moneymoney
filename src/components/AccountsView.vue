@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>{{ $t(`Account details of '${account.name }'`)}}
+        <h1>{{ $t(`Account details of '${account.localname }'`)}}
         <MyMenuInline :items="items"  :context="this"></MyMenuInline>  </h1>
         <DisplayValues :items="displayvalues"></DisplayValues>
    
