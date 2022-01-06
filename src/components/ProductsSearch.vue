@@ -6,7 +6,7 @@
 
         <v-card width="45%" class="pa-8 ma-3 mx-lg-auto">
                 <v-row>
-                    <v-text-field dense name="search" v-model="search" :label="$t('Search products')"  :placeholder="$t('Enter a string')" autofocus></v-text-field>
+                    <v-text-field dense name="search" v-model="search" :label="$t('Search products')"  :placeholder="$t('Enter a string')" autofocus v-on:keyup.enter="refreshSearch()"></v-text-field>
                     <v-btn :disabled="loading" dense class="ml-4" color="error" @click="submit()">{{ $t("Search") }}</v-btn>
                 </v-row>
         </v-card>
@@ -23,8 +23,9 @@
                     <div :class="class_name(item)">{{item.name}}</div>
                 </template>  
                 <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon small @click="viewProduct(item)">mdi-eye-outline</v-icon>
-                    <v-icon small @click="editProduct(item)" v-if="item.id<0">mdi-pencil</v-icon>
+                    <v-icon small @click="favoriteProduct(item)" :color="(favorites.includes(item.id))? 'orange': '' ">mdi-star-outline</v-icon>
+                    <v-icon class="mr-2" small @click="viewProduct(item)">mdi-eye-outline</v-icon>
+                    <v-icon class="mr-2" small @click="editProduct(item)" v-if="item.id<0">mdi-pencil</v-icon>
                 </template>
             </v-data-table>   
         </v-card>
@@ -36,6 +37,7 @@
     </div>
 </template>  
 <script>     
+    import axios from 'axios'
     import {ifnullempty} from '../functions.js'
     import {empty_product} from '../empty_objects.js'
     import MyMenuInline from './MyMenuInline.vue'
@@ -74,6 +76,13 @@
                         subheader:this.$t('Especial products'),
                         children: [
                             {
+                                name:this.$t('Favorite products'),
+                                code: function(this_){
+                                    this_.refreshFavoriteProducts()
+                                },
+                                icon: "mdi-star-outline",
+                            },
+                            {
                                 name:this.$t('Active investments products'),
                                 code: function(this_){
                                     this_.refreshActiveInvestmentsProducts()
@@ -99,6 +108,9 @@
                 ],
                 loading: false,
                 key:0,
+                favorites: [],
+
+
                 //DIALOG PRODUCTS VIEW
                 dialog_productsview:false,
                 product:null,
@@ -148,6 +160,16 @@
                 });
                 this.loading=false
             },
+            refreshFavoriteProducts(){
+                this.tableData=[]
+                this.loading=true
+                this.$store.state.products.forEach(element => {
+                    if (this.favorites.includes(element.id)) {
+                         this.tableData.push(element)
+                    }
+                });
+                this.loading=false
+            },
             refreshInvestmentsProducts(){
                 this.tableData=[]
                 this.loading=true
@@ -164,6 +186,30 @@
                 this.tableData=this.$store.state.products.filter( element => element.id<0)
                 this.loading=false
             },
+            favoriteProduct(item){
+                this.loading=true
+                this.product=item
+                var url
+                if (item==null){ //Load favorites
+                    url=null
+                } else{
+                    url=this.product.url //Add or remove
+                }
+
+                axios.post(`${this.$store.state.apiroot}/products/favorites/`, {product: url}, this.myheaders())
+                .then((response) => {
+                        console.log(response.data)
+                        this.favorites=response.data
+                        this.refreshSearch()
+                        this.loading=false
+                }, (error) => {
+                    this.parseResponseError(error)
+                })
+            }
+        },
+        created(){
+            this.favoriteProduct(null)
+
         }
         
     }
