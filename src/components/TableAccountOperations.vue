@@ -11,7 +11,7 @@
                 <div v-html="currency_html(item.balance, item.currency)"></div>
             </template>   
             <template v-slot:[`item.account`]="{ item }">
-                <div v-html="$store.getters.getObjectPropertyByUrl('accounts', item.account, 'name')"></div>
+                <div v-html="$store.getters.getObjectPropertyByUrl('accounts', item.account, 'localname')"></div>
             </template> 
             <template v-slot:[`item.concepts`]="{ item }">
                 <div v-html="$store.getters.getObjectPropertyByUrl('concepts', item.concepts, 'localname')"></div>
