@@ -30,6 +30,12 @@
             </v-tab-item>
         </v-tabs-items> 
 
+        <!-- CCCO CU -->
+        <v-dialog v-model="dialog" max-width="650" class="pa-4" >
+            <v-card class="pa-4">
+                <CreditcardsoperationsCU :deleting="cco_deleting" :cco="cco" :key="key" @cruded="on_CreditcardsoperationsCU_cruded()"></CreditcardsoperationsCU>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 <script>
@@ -37,12 +43,14 @@
     import MyMenuInline from './MyMenuInline.vue'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
+    import CreditcardsoperationsCU from './CreditcardsoperationsCU.vue'
     import CreditcardsPaymentsRefund from './CreditcardsPaymentsRefund.vue'
     import {listobjects_sum} from '../functions.js'
     import {empty_cco} from '../empty_objects.js'
     export default {
         components:{
             MyMenuInline,
+            CreditcardsoperationsCU,
             TableCreditcardsOperations,
             MyDateTimePicker,
             CreditcardsPaymentsRefund,         
@@ -67,6 +75,7 @@
                                 code: function(this_){
                                     this_.paying=false
                                     this_.cco=this_.empty_cco()
+                                    this_.cco_deleting=false
                                     this_.cco.creditcards=this_.cc.url
                                     this_.key=this_.key+1
                                     this_.dialog=true
@@ -93,6 +102,12 @@
                 dt_payment:new Date().toISOString(),
                 paying_string:this.$t("You cant't pay, please select operations"),
                 selected_items:[],
+
+                //CreditCardsOperationsCU
+                dialog:false,
+                cco:null,
+                cco_deleting:false,
+            
 
             }
         },
@@ -140,6 +155,11 @@
                 this.update_table()
             },
             on_CreditcardsPaymentsRefund_cruded(){
+                this.$emit("cruded")
+                this.key=this.key+1
+                this.update_table()
+            },
+            on_CreditcardsoperationsCU_cruded(){
                 this.$emit("cruded")
                 this.key=this.key+1
                 this.update_table()
