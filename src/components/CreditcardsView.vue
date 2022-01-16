@@ -1,7 +1,7 @@
 
 <template>
     <div>    
-        <h1 class="mb-4">{{ $t(`Credit card details of '${cc.name}'`) }}
+        <h1 class="mb-4">{{ $t("Credit card details of '{0}'").format(cc.name) }}
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
 
         </h1>
