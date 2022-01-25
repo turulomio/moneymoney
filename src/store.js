@@ -90,14 +90,18 @@ export const store = new Vuex.Store({
             }
         },
         currency_generic_string:(state,getters) => (num, currency, locale, decimals=2)=>{
-            return `${my_round(num,decimals).toLocaleString(locale, { minimumFractionDigits: decimals,  })} ${getters.getCurrencyPropertyByCode(currency,"symbol_native")}`
+            if (num ==null){
+                return `- - - ${getters.getCurrencyPropertyByCode(currency,"symbol_native")}`
+            } else {
+                return `${my_round(num,decimals).toLocaleString(locale, { minimumFractionDigits: decimals,  })} ${getters.getCurrencyPropertyByCode(currency,"symbol_native")}`
+            }
         },
         
         currency_generic_html:(state,getters) =>(num, currency, locale, decimals=2)=>{
-            if (num>=0){
-                return getters.currency_generic_string(num, currency, locale, decimals)
-            } else {
+            if (num<0){
                 return `<span class='vuered'>${getters.currency_generic_string(num, currency, locale, decimals)}</span>`
+            } else {
+                return getters.currency_generic_string(num, currency, locale, decimals)
             }
         }
     },
