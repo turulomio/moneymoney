@@ -12,7 +12,9 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn v-if="deleting" color="error" @click="deleteCCO()">{{ $t("Delete") }}</v-btn>
-                <v-btn v-if="!deleting" color="primary" @click="acceptDialog()" :disabled="!form_valid_cco">{{ button() }}</v-btn>
+                <v-btn v-if="!deleting" color="primary" @click="following_cco=false;acceptDialog()" :disabled="!form_valid_cco">{{ button() }}</v-btn>
+                <v-btn v-if="!deleting && !editing" color="primary" @click="following_cco=true;acceptDialog()" :disabled="!form_valid_cco" >{{ $t("Add and follow") }}</v-btn>
+        
             </v-card-actions>
         </v-card>
     </div>
@@ -37,6 +39,7 @@
         data(){ 
             return{
                 form_valid_cco: false,
+                following_cco: false,
                 editing:false,
                 key:0,
                 newcco:null,
@@ -66,7 +69,8 @@
                }
                 axios.delete(this.newcco.url, this.myheaders())
                 .then(() => {
-                    this.$emit("cruded")
+                    this.following_cco=false
+                    this.$emit("cruded", this.following_cco)
                 }, (error) => {
                     this.parseResponseError(error)
                 });
@@ -90,14 +94,21 @@
                 if (this.editing==true){               
                     axios.put(this.newcco.url, this.newcco, this.myheaders())
                     .then(() => {
-                            this.$emit("cruded")
+                            this.following_cco=false
+                            this.$emit("cruded", this.following_cco)
                     }, (error) => {
                         this.parseResponseError(error)
                     })
                 } else{
                     axios.post(`${this.$store.state.apiroot}/api/creditcardsoperations/`, this.newcco,  this.myheaders())
-                    .then(() => {
-                            this.$emit("cruded")
+                    .then(() => {    
+                        if (this.following_cco==true){
+                            var dt=this.zulu2date(this.newcco.datetime)
+                            var olddtseconds=this.zulu2date(this.newcco.datetime).getSeconds()
+                            dt.setSeconds(olddtseconds+2)
+                            this.newcco.datetime=this.date2zulu(dt)
+                        }
+                        this.$emit("cruded", this.following_cco)
                     }, (error) => {
                         this.parseResponseError(error)
                     })

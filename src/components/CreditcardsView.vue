@@ -33,7 +33,7 @@
         <!-- CCCO CU -->
         <v-dialog v-model="dialog" max-width="650" class="pa-4" >
             <v-card class="pa-4">
-                <CreditcardsoperationsCU :deleting="cco_deleting" :cco="cco" :key="key" @cruded="on_CreditcardsoperationsCU_cruded()"></CreditcardsoperationsCU>
+                <CreditcardsoperationsCU :deleting="cco_deleting" :cco="cco" :key="key" @cruded="on_CreditcardsoperationsCU_cruded"></CreditcardsoperationsCU>
             </v-card>
         </v-dialog>
     </div>
@@ -117,14 +117,13 @@
                 this.selected_items=selected_items
                 this.paying_string=this.$t(`Make a payment of ${selected_items.length} operations valued in ${listobjects_sum(selected_items,"amount")}`) 
             },
-            update_table(){
+            update_table(refresh_key=true){
                 this.loading_cco=true
                 axios.get(`${this.$store.state.apiroot}/creditcardsoperations/withbalance?paid=false&creditcard=${this.cc.id}`, this.myheaders())
                 .then((response) => {
                     this.items_cco=response.data
-                    console.log(response.data);
                     this.loading_cco=false 
-                    this.key=this.key+1
+                    if(refresh_key==true) this.key=this.key+1
                 }, (error) => {
                     this.parseResponseError(error)
                 });
@@ -140,8 +139,7 @@
                     dt_payment: this.dt_payment,
                 }
                 axios.post(`${this.$store.state.apiroot}/creditcardsoperations/payment/${this.cc.id}/`, data, this.myheaders())
-                .then((response) => {
-                        console.log(response.data)
+                .then(() => {
                         this.$emit("cruded")
                         this.update_table()     
                         this.dialog=false
@@ -159,10 +157,13 @@
                 this.key=this.key+1
                 this.update_table()
             },
-            on_CreditcardsoperationsCU_cruded(){
+            on_CreditcardsoperationsCU_cruded(following){
+                this.dialog=following
                 this.$emit("cruded")
-                this.key=this.key+1
-                this.update_table()
+                if (following==false){ // To retain values in CCO_CU
+                    this.key=this.key+1
+                }
+                this.update_table(!following) // To retain values in CCO_CU
             },
         },
         mounted(){

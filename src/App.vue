@@ -120,7 +120,7 @@
                             <v-list-item-title>{{ $t("About")}}</v-list-item-title>
                         </v-list-item>
 
-                        <v-list-item link router :to="{ name: 'statistics'}">
+                        <v-list-item link router :to="{ name: 'statistics'}" v-if="$store.state.logged">
                             <v-list-item-title>{{ $t("Statistics")}}</v-list-item-title>
                         </v-list-item>
 
