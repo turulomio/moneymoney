@@ -1,7 +1,7 @@
 
 <template>
     <div>    
-        <h1>{{ $t(`Account tranfer`) }}</h1>           
+        <h1>{{ $t(`Account transfer`) }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <MyDateTimePicker v-model="transfer.datetime" :label="$t('Set transfer date and time')"></MyDateTimePicker>

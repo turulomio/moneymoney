@@ -5,7 +5,7 @@
             <v-form ref="form_cco" v-model="form_valid_cco" lazy-validation>
                 <v-autocomplete :readonly="deleting" :items="$store.state.creditcards.filter(v =>v.active==true)" v-model="newcco.creditcards" :label="$t('Select a credit card')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker :readonly="deleting" label="Select operation date and time" v-model="newcco.datetime" :rules="RulesDatetime(true)" ></MyDateTimePicker>
-                <v-autocomplete :readonly="deleting" autoindex="0" :items="$store.state.concepts" v-model="newcco.concepts" :label="$t('Select a concept')" item-text="name" item-value="url" :rules="RulesSelection(true)" autofocus></v-autocomplete>
+                <v-autocomplete :readonly="deleting" autoindex="0" :items="$store.state.concepts" v-model="newcco.concepts" :label="$t('Select a concept')" item-text="localname" item-value="url" :rules="RulesSelection(true)" autofocus></v-autocomplete>
                 <v-text-field :readonly="deleting" autoindex="1" v-model="newcco.amount" type="number" :label="$t('Operation amount')" :placeholder="$t('Operation amount')" :rules="RulesFloat(30,true)" counter="30"/>
                 <v-text-field :readonly="deleting" autoindex="2" v-model="newcco.comment" type="text" :label="$t('Operation comment')" :placeholder="$t('Operation comment')" :rules="RulesString(200, false)" counter="200"/>
             </v-form>

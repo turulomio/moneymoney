@@ -422,9 +422,9 @@
             },
             set_chkShowAllIO_label(){
                 if (this.chkShowAllIO== true){
-                    return this.$t("Uncheck to see investments operations of current ones")
+                    return this.$t("Uncheck to see current investment operations")
                 } else {
-                    return this.$t("Check to see all investments operations")
+                    return this.$t("Check to see all investment operations")
                 }
             },
             on_chkShowAllIO_click(){

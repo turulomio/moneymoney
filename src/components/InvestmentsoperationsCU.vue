@@ -1,7 +1,9 @@
 
 <template>
     <div>    
-        <h1 class="mb-4">{{ title() }}</h1>           
+        <h1 class="mb-4">{{ title() }}
+            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+        </h1>           
         <v-card class="pa-6">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <v-autocomplete dense :items="$store.state.investments" v-model="newio.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
@@ -26,11 +28,14 @@
 <script>
     import axios from 'axios'
     import {empty_investment_operation} from '../empty_objects.js'
+    import {parseNumber} from '../functions.js'
     import MyDateTimePicker from './MyDateTimePicker.vue'
+    import MyMenuInline from './MyMenuInline.vue'
     import CurrencyFactor from './CurrencyFactor.vue'
     export default {
         components: {
             MyDateTimePicker,
+            MyMenuInline,
             CurrencyFactor,
         },
         props: {
@@ -44,6 +49,21 @@
         },
         data(){ 
             return {
+                menuinline_items: [
+                    {
+                        subheader: this.$t("Investment operation options"),
+                        children: [
+                            {
+                                name:"Fill commissions from total balance",
+                                icon: "mdi-plus",
+                                code: function(this_){
+                                    var amount=this_.parseNumber(prompt( this_.$t("Set total balance of this investment operation") ));
+                                    this_.newio.commission=Math.abs(Math.abs(amount)-Math.abs(this_.newio.shares*this_.newio.price))
+                                },
+                            },
+                        ]
+                    },
+                ],  
                 form_valid:false,
                 newio: null,
                 editing:false,
@@ -51,6 +71,7 @@
         },
         methods: {
             empty_investment_operation,
+            parseNumber,
             title(){
                 if (this.editing){
                     return this.$t("Updating investment operation")

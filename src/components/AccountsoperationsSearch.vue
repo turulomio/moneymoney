@@ -45,7 +45,7 @@
                 this.dialog_ao=true
             },
             deleteAO (item) {
-               var r = confirm(this.$t("Do you want to delete this acount operation?"))
+               var r = confirm(this.$t("Do you want to delete this account operation?"))
                if(r == false) {
                   return
                }
