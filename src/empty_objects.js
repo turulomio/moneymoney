@@ -146,6 +146,16 @@ export function empty_investments_operations_simulation(){
     }
 }
 
+export function empty_strategy_simulation(){
+    return {
+        investments: [], //integers
+        dt:new Date().toISOString(),
+        local_currency: null,
+        operations:[],//Empty io
+        temporaltable: null, //Null if new simulation
+    }
+}
+
 export function empty_investments_chart(){
     return {
         ohcls:[],

@@ -61,7 +61,7 @@
         <!-- View strategy -->
         <v-dialog v-model="dialog_view">
             <v-card class="pa-4">
-                <StrategiesView strategy="strategy" :key="key"></StrategiesView>
+                <StrategiesView :strategy="strategy" :key="key"></StrategiesView>
             </v-card>
         </v-dialog>
 

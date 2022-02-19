@@ -454,7 +454,8 @@
                 return axios.get(`${this.$store.state.apiroot}/investmentsoperations/full?investments=${this.investment.id}`, this.myheaders())
             },
             update_dividends(){
-                return axios.get(`${this.$store.state.apiroot}/api/dividends?investments=${this.investment.id}`, this.myheaders())
+                var headers={...this.myheaders(),params:{investments:[this.investment.id,]}}
+                return axios.get(`${this.$store.state.apiroot}/api/dividends/`, headers)
             },
             update_all(){
                 this.loading=true

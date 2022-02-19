@@ -3,7 +3,7 @@
 -->
 <template>
     <div>
-        <h1>{{ investment.name }}
+        <h1>{{ strategy.name }}
             <MyMenuInline :items="items"  :context="this"></MyMenuInline>
         </h1>
         <DisplayValues v-if="ios" :items="displayvalues()" :key="key"></DisplayValues>
@@ -78,6 +78,7 @@
                 </v-card>
             </v-tab-item>
         </v-tabs-items> 
+
         <v-dialog v-model="dialog_evolution_chart">
             <v-card class="pa-4">
                 <InvestmentsoperationsEvolutionChart :investment="investment" :key="key" ></InvestmentsoperationsEvolutionChart>
@@ -88,55 +89,24 @@
                 <InvestmentsoperationsEvolutionChartTimeseries :investment="investment" :key="key" ></InvestmentsoperationsEvolutionChartTimeseries>
             </v-card>
         </v-dialog>
-
-        <!-- IO CU-->
-        <v-dialog v-model="dialog_io" width="550">
-            <v-card class="pa-3">
-                <InvestmentsoperationsCU :io="io" :investment="investment" :key="key"  @cruded="on_InvestmentsoperationsCU_cruded()"></InvestmentsoperationsCU>
-            </v-card>
-        </v-dialog>
-
-        <!-- DIVIDEND CU-->
-        <v-dialog v-model="dialog_dividend" width="35%">
-            <v-card class="pa-3">
-                <DividendsCU :dividend="dividend" :investment="investment" :key="key"  @cruded="on_DividendsCU_cruded()"></DividendsCU>
-            </v-card>
-        </v-dialog>
-
-        <!-- DIVIDEND PRODUCTSVIEW-->
-        <v-dialog v-model="dialog_productview" width="100%" heigth="100%">
-            <v-card class="pa-3">
-                <ProductsView :product="product" :key="key" ></ProductsView>
-            </v-card>
-        </v-dialog>
         <!-- INVESTMENT CHART-->
         <v-dialog v-model="dialog_investment_chart" v-if="ios">
             <v-card class="pa-3">
                 <ChartInvestments :data="chart_data" :key="key"></ChartInvestments>
             </v-card>
         </v-dialog>
-        <!-- INVESTMENT change selling price-->
-        <v-dialog v-model="dialog_io_sameproduct" v-if="ios">
-            <v-card class="pa-3">
-                <InvestmentsChangeSellingPrice :product="ios.product" :investment="investment" :key="key" @cruded="on_InvestmentsChangeSellingPrice_cruded()"></InvestmentsChangeSellingPrice>
-            </v-card>
-        </v-dialog>
     </div>  
 </template>
 <script>
     import axios from 'axios'
-    import {empty_investment_operation, empty_investments_operations_simulation, empty_dividend,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
-    import {listobjects_sum, parseNumber,listobjects_average_ponderated} from '../functions.js'
+    import {empty_investment_operation, empty_strategy_simulation, empty_dividend,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
+    import {listobjects_average_ponderated} from '../functions.js'
     import ChartInvestments from './ChartInvestments.vue'
-    import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
-    import DividendsCU from './DividendsCU.vue'
-    import InvestmentsoperationsEvolutionChart from './InvestmentsoperationsEvolutionChart.vue'
-    import InvestmentsoperationsEvolutionChartTimeseries from './InvestmentsoperationsEvolutionChartTimeseries.vue'
-    import InvestmentsChangeSellingPrice from './InvestmentsChangeSellingPrice.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import DisplayValues from './DisplayValues.vue'
-    import ProductsView from './ProductsView.vue'
     import TableDividends from './TableDividends.vue'
+    import InvestmentsoperationsEvolutionChart from './InvestmentsoperationsEvolutionChart.vue'
+    import InvestmentsoperationsEvolutionChartTimeseries from './InvestmentsoperationsEvolutionChartTimeseries.vue'
     import TableInvestmentOperations from './TableInvestmentOperations.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
@@ -144,17 +114,13 @@
         components:{
             ChartInvestments,
             DisplayValues,
-            DividendsCU,
             MyMenuInline,
-            ProductsView,
             TableInvestmentOperations,
             TableInvestmentOperationsCurrent,
             TableInvestmentOperationsHistorical,
             TableDividends,
-            InvestmentsoperationsCU,
             InvestmentsoperationsEvolutionChart,
             InvestmentsoperationsEvolutionChartTimeseries,
-            InvestmentsChangeSellingPrice,
         },
         props: {
             strategy: {
@@ -211,19 +177,6 @@
                                 }
                             },
                             {
-                                name:this.$t('Change active status'),
-                                code: function(this_){
-                                    this_.investment.active=!this_.investment.active
-                                    axios.put(this_.investment.url, this_.investment,  this_.myheaders())
-                                    .then(() => {
-                                        this_.$emit("cruded")
-                                    }, (error) => {
-                                        this_.parseResponseError(error)
-                                    })
-                                },
-                                icon: "mdi-pencil",
-                            },
-                            {
                                 name:this.$t('Show evolution chart'),
                                 icon: "mdi-chart-areaspline",
                                 code: function(this_){
@@ -237,132 +190,18 @@
                                     this_.dialog_evolution_chart_timeseries=true
                                 }
                             },
-                            {
-                                name:this.$t('Change selling price'),
-                                icon: "mdi-pencil",
-                                code: function(this_){
-                                    this_.key=this_.key+1
-                                    this_.dialog_io_sameproduct=true
-                                }
-                            },
-                        ]
-                    },
-                    {
-                        subheader:this.$t('Product orders'),
-                        children: [
-                            {
-                                name:this.$t('View product'),
-                                code: function(this_){
-                                    this_.product=this_.$store.getters.getObjectByUrl("products",this_.investment.products)
-                                    this_.key=this_.key+1
-                                    this_.dialog_productview=true
-                                },
-                                icon: "mdi-magnify",
-                            },
-                            {
-                                name:this.$t('Add a quote to product'),
-                                type: "redirection",
-                                command:"{% url 'quote_new' products_id=investment.products.id %}",
-                                icon: "mdi-book-plus",
-                            },
-                            {
-                                name:this.$t('Delete last quote'),
-                                type: "redirection",
-                                command:"{% url 'quote_delete_last' products_id=investment.products.id %}?next={% url 'investment_list_active')",
-                                icon: "mdi-delete",
-                            },
-                        ]
-                    },
-                    {
-                        subheader:this.$t('Investment operation orders'),
-                        children: [
-                            {
-                                name:this.$t('Add an investment operation'),
-                                code: function(this_){
-                                    this_.io=this_.empty_investment_operation()
-                                    this_.io.investments=this_.investment.url
-                                    this_.key=this_.key+1
-                                    this_.dialog_io=true
-                                },
-                                icon: "mdi-book-plus",
-                            },
-                            {
-                                name:this.$t('Add an investment operation adjusting currency conversion factor'),
-                                code: function(this_){
-                                    var selling_price_product_currency=parseNumber(prompt( this_.$t("Please add the operation close price in product currency"), 0 ));
-                                    var gains_account_currency=parseNumber(prompt( this_.$t("Please add the final gains in account currency"), 0 ));
-                                    var shares=listobjects_sum(this_.list_io_current,"shares")
-                                    var average_price_current_account=listobjects_average_ponderated(this_.list_io_current,'price_account', 'shares')
-                                    var leverage=this_.ios.investment.leverage_real_multiplier
-                                    var currency_conversion=(gains_account_currency+shares*average_price_current_account*leverage)/(shares*selling_price_product_currency*leverage)
-
-                                    this_.io=this_.empty_investment_operation()
-                                    this_.io.shares=-shares
-                                    this_.io.currency_conversion=currency_conversion
-                                    this_.io.price=selling_price_product_currency
-                                     
-                                    this_.dialog_io=true
-                                },
-                                icon: "mdi-book-plus",
-                            },
-                            {
-                                name:this.$t('Sell/Buy all shares to selling price'),
-                                code: function(this_){
-                                    if (this_.investment.currency!=this_.ios.product.currency){
-                                        alert(this_.$t("You can't use this option if investment and product currencies are not the same"))
-                                        return
-                                    }
-                                    var shares=listobjects_sum(this_.list_io_current,"shares")
-
-                                    this_.io=this_.empty_investment_operation()
-                                    this_.io.investments=this_.investment.url
-                                    this_.io.shares=-shares
-                                    this_.io.price=this_.investment.selling_price
-                                    if (shares>=0){
-                                        this_.io.operationstypes=this_.$store.getters.getObjectById("operationstypes",5).url//Sales
-                                    } else {
-                                        this_.io.operationstypes=this_.$store.getters.getObjectById("operationstypes",4).url//Buy
-                                    }
-                                     
-                                    this_.dialog_io=true
-                                },
-                                icon: "mdi-book-plus",
-                            },
-                        ]
-                    },
-                    {
-                        subheader:this.$t('Dividend orders'),
-                        children: [
-                            {
-                                name:this.$t('Add a dividend'),
-                                code: function(this_){
-                                    this_.dividend=this_.empty_dividend()
-                                    this_.dividend.investments=this_.investment.url                                     
-                                    this_.dialog_dividend=true
-                                },
-                                icon: "mdi-book-plus",
-                            },
                         ]
                     },
                 ],
-                dialog_evolution_chart:false,
-                dialog_evolution_chart_timeseries:false,
 
                 ios:null,
 
-                // Dividend CU
-                dialog_dividend:false,
-                dividend: null,
-
-                // Dividend Produts view
-                dialog_productview:false,
-                product: null,
+                dialog_evolution_chart:false,
+                dialog_evolution_chart_timeseries:false,
 
                 // Investment chart
                 dialog_investment_chart:false,
 
-                // IO set selling price same product
-                dialog_io_sameproduct:false,
             }  
         },
         watch:{
@@ -375,32 +214,10 @@
             empty_investments_chart_limit_line,
             empty_dividend,
             empty_investment_operation,
-            empty_investments_operations_simulation,
+            empty_strategy_simulation,
             listobjects_average_ponderated,
-            on_DividendsCU_cruded(){
-                this.dialog_dividend=false
-                this.update_all()
-            },
             on_TableDividends_cruded(){
                 this.update_all()
-            },
-            on_InvestmentsoperationsCU_cruded(){
-                this.dialog_io=false
-                this.update_all()
-                this.$emit("cruded") //Translated to InvestmentsList
-            },
-            on_InvestmentsChangeSellingPrice_cruded(){
-                this.dialog_io_sameproduct=false
-                this.update_all()
-                this.$emit("cruded")
-            },
-            on_TableInvestmentsOperations_cruded(){//Emited deleting IO
-                this.on_InvestmentsoperationsCU_cruded()
-            },
-            on_TableInvestmentsOperations_edit(io){
-                this.dialog_io=true
-                this.io=io
-                this.key=this.key+1
             },
             displayvalues(){
                 return [
@@ -452,32 +269,25 @@
             },
 
             update_investmentsoperations(){
-
-                var simulation=this.empty_investments_operations_simulation()
-                console.log(this.strategy.investments)
-    //             simulation.investments=
-    // return {
-    //     investments: [], //urls
-    //     dt:new Date().toISOString(),
-    //     local_currency: null,
-    //     operations:[],//Empty io
-    //     temporaltable: null, //Null if new simulation
-    // }}
-
-                return axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
+                var simulation=this.empty_strategy_simulation()
+                simulation.investments=this.strategy.investments
+                simulation.local_currency=this.$store.state.local_currency
+                var headers={...this.myheaders(),params:simulation}
+                return axios.get(`${this.$store.state.apiroot}/strategies/simulation/`, headers)
             },
             update_dividends(){
-                return axios.get(`${this.$store.state.apiroot}/api/dividends?investments=${this.investment.id}`, this.myheaders())
+                var headers={...this.myheaders(),params:{investments:this.strategy.investments}}
+                return axios.get(`${this.$store.state.apiroot}/api/dividends/`, headers)
             },
             update_all(){
                 this.loading=true
                 axios.all([this.update_investmentsoperations(), this.update_dividends()])
                 .then(([resIO, resDividends]) => {
-                    this.ios=resIO.data[0]
+                    this.ios=resIO.data
                     console.log(this.ios)   
-                    this.list_io=resIO.data[0].io
-                    this.list_io_current=resIO.data[0].io_current
-                    this.list_io_historical=resIO.data[0].io_historical
+                    this.list_io=resIO.data.io
+                    this.list_io_current=resIO.data.io_current
+                    this.list_io_historical=resIO.data.io_historical
 
                     this.leverage_message= this.$t(`${this.ios.product.leverage_multiplier } (Real: ${this.ios.product.leverage_real_multiplier })`)
 
