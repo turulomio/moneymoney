@@ -1,8 +1,11 @@
 <template>
-            <v-data-table dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="dt_end" fixed-header :height="$attrs.height" ref="table" :loading="$attrs.loading">
+        <v-data-table dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="dt_end" fixed-header :height="$attrs.height" ref="table" :loading="$attrs.loading">
             <template v-slot:[`item.dt_end`]="{ item }">
                 {{ localtime(item.dt_end)}}
-            </template>           
+            </template>                  
+            <template v-slot:[`item.name`]="{ item }">
+                <div v-html="$store.getters.getObjectPropertyByUrl('investments', item.investments,'fullname')"></div>
+            </template>  
             <template v-slot:[`item.operationstypes`]="{ item }">
                 <div v-html="$store.getters.getObjectPropertyByUrl('operationstypes',item.operationstypes,'localname')"></div>
             </template>
@@ -121,7 +124,7 @@
                 required: true
             },
 
-            homogeneous:{
+            heterogeneus:{
                 type: Boolean,
                 required:false,
                 default:false
@@ -178,7 +181,7 @@
                         { text: this.$t('Gains'), value: 'gains_net_user',sortable: false, align:"right"},
                     ] 
                 }
-                if (this.homogeneous==false){
+                if (this.heterogeneus==true){
                     r.splice(2, 0, { text: this.$t('Name'), value: 'name',sortable: true });
                 }
                 return r

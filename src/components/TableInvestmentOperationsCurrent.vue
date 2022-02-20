@@ -3,6 +3,9 @@
         <template v-slot:[`item.datetime`]="{ item, index }" >
             <div :ref="index">{{ localtime(item.datetime)}}</div>
         </template>                  
+        <template v-slot:[`item.name`]="{ item }">
+            <div v-html="$store.getters.getObjectPropertyByUrl('investments', item.investments,'fullname')"></div>
+        </template>              
         <template v-slot:[`item.operationstypes`]="{ item }">
             <div v-html="$store.getters.getObjectPropertyByUrl('operationstypes',item.operationstypes,'localname')"></div>
         </template>

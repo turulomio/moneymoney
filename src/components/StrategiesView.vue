@@ -23,12 +23,12 @@
                         <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card v-if="!loading">
-                                <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="investment" height="400" :key="key"></TableInvestmentOperationsCurrent>
+                                <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="investment" height="400" :key="key" :heterogeneus="true"></TableInvestmentOperationsCurrent>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
                                     <v-card class="padding" v-if="!loading">
-                                            <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="account" height="400" :key="key"></TableInvestmentOperationsCurrent>
+                                            <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="account" height="400" :key="key" :heterogeneus="true"></TableInvestmentOperationsCurrent>
                                     </v-card>
                             </v-tab-item>
                     </v-tabs>
@@ -39,15 +39,15 @@
                     <v-checkbox v-model="chkShowAllIO" :label="set_chkShowAllIO_label()" @click="on_chkShowAllIO_click()"></v-checkbox>
                     <v-tabs vertical  v-model="tabcurrent">
                         <v-tab key="investment">{{ $t('Investment currency') }}</v-tab>
-                            <v-tab key="account">{{ $t('Account currency') }}</v-tab>
+                        <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card class="padding" v-if="!loading">
-                                <TableInvestmentOperations :items="io_filtered" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment" @cruded="on_TableInvestmentsOperations_cruded()" @onedit="on_TableInvestmentsOperations_edit"></TableInvestmentOperations>
+                                <TableInvestmentOperations :items="io_filtered" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment" :showactions="false" :heterogeneus="true"></TableInvestmentOperations>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
                                 <v-card class="padding" v-if="!loading">
-                                    <TableInvestmentOperations :items="io_filtered" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="account" :showactions="false"></TableInvestmentOperations>
+                                    <TableInvestmentOperations :items="io_filtered" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="account" :showactions="false" :heterogeneus="true"></TableInvestmentOperations>
                                 </v-card>
                             </v-tab-item>
                     </v-tabs>
@@ -60,12 +60,12 @@
                             <v-tab key="accounth">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investmenth">     
                             <v-card class="padding"  v-if="!loading">
-                                <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="investment" :homogeneous="true" :key="key"></TableInvestmentOperationsHistorical>
+                                <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="investment" :heterogeneus="true" :key="key"></TableInvestmentOperationsHistorical>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="accounth">
                                 <v-card class="padding" v-if="!loading">
-                                    <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="account" :homogeneous="true" :key="key"></TableInvestmentOperationsHistorical>
+                                    <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="account" :heterogeneus="true" :key="key"></TableInvestmentOperationsHistorical>
                                 </v-card>
                             </v-tab-item>
                     </v-tabs>
@@ -79,48 +79,26 @@
             </v-tab-item>
         </v-tabs-items> 
 
-        <v-dialog v-model="dialog_evolution_chart">
-            <v-card class="pa-4">
-                <InvestmentsoperationsEvolutionChart :investment="investment" :key="key" ></InvestmentsoperationsEvolutionChart>
-            </v-card>
-        </v-dialog>
-        <v-dialog v-model="dialog_evolution_chart_timeseries">
-            <v-card class="pa-4">
-                <InvestmentsoperationsEvolutionChartTimeseries :investment="investment" :key="key" ></InvestmentsoperationsEvolutionChartTimeseries>
-            </v-card>
-        </v-dialog>
-        <!-- INVESTMENT CHART-->
-        <v-dialog v-model="dialog_investment_chart" v-if="ios">
-            <v-card class="pa-3">
-                <ChartInvestments :data="chart_data" :key="key"></ChartInvestments>
-            </v-card>
-        </v-dialog>
     </div>  
 </template>
 <script>
     import axios from 'axios'
     import {empty_investment_operation, empty_strategy_simulation, empty_dividend,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
     import {listobjects_average_ponderated} from '../functions.js'
-    import ChartInvestments from './ChartInvestments.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import DisplayValues from './DisplayValues.vue'
     import TableDividends from './TableDividends.vue'
-    import InvestmentsoperationsEvolutionChart from './InvestmentsoperationsEvolutionChart.vue'
-    import InvestmentsoperationsEvolutionChartTimeseries from './InvestmentsoperationsEvolutionChartTimeseries.vue'
     import TableInvestmentOperations from './TableInvestmentOperations.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
     export default {
         components:{
-            ChartInvestments,
             DisplayValues,
             MyMenuInline,
             TableInvestmentOperations,
             TableInvestmentOperationsCurrent,
             TableInvestmentOperationsHistorical,
             TableDividends,
-            InvestmentsoperationsEvolutionChart,
-            InvestmentsoperationsEvolutionChartTimeseries,
         },
         props: {
             strategy: {
@@ -195,13 +173,6 @@
                 ],
 
                 ios:null,
-
-                dialog_evolution_chart:false,
-                dialog_evolution_chart_timeseries:false,
-
-                // Investment chart
-                dialog_investment_chart:false,
-
             }  
         },
         watch:{
@@ -221,14 +192,9 @@
             },
             displayvalues(){
                 return [
-                    {title:this.$t('Selling point'), value: this.selling_point_message},
-                    {title:this.$t('Selling expiration'), value: this.selling_expiration_message},
-                    {title:this.$t('Active'), value: this.ios.investment.active},
                     {title:this.$t('Currency'), value: this.ios.product.currency},
                     {title:this.$t('Product'), value: this.ios.product.name},
                     {title:this.$t('Leverage'), value: this.leverage_message},
-                    {title:this.$t('Daily adjustment'), value: this.ios.investment.daily_adjustment},
-                    {title:this.$t('Id'), value: this.ios.investment.id},
                 ]
             },
             setChkDividendsLabel(){
@@ -270,8 +236,7 @@
 
             update_investmentsoperations(){
                 var simulation=this.empty_strategy_simulation()
-                simulation.investments=this.strategy.investments
-                simulation.local_currency=this.$store.state.local_currency
+                simulation.strategy=this.strategy.url
                 var headers={...this.myheaders(),params:simulation}
                 return axios.get(`${this.$store.state.apiroot}/strategies/simulation/`, headers)
             },
@@ -291,14 +256,6 @@
 
                     this.leverage_message= this.$t(`${this.ios.product.leverage_multiplier } (Real: ${this.ios.product.leverage_real_multiplier })`)
 
-                    this.selling_point_message=this.currency_string(this.ios.investment.selling_price, this.ios.product.currency)
-                    if (this.ios.investment.gains_at_sellingpoint){
-                        this.selling_point_message=this.selling_point_message+ this.$t(`, to gain ${this.currency_string(this.ios.investment.gains_at_sellingpoint, this.ios.product.currency)}`)
-                    }
-                    this.selling_expiration_message=`${this.ios.investment.selling_expiration}`
-                    if (new Date(this.ios.investment.selling_expiration).setHours(0,0,0,0)<new Date().setHours(0,0,0,0)){
-                        this.selling_expiration_message=this.selling_expiration_message+ '.<span class="vuered"> '+ this.$t('You must set a new selling order.') + '</span>'
-                    }
                     this.on_chkShowAllIO_click()
 
                     this.dividends=resDividends.data

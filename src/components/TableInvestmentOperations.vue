@@ -17,7 +17,10 @@
             <template v-slot:[`item.price`]="{ item }">
             {{ currency_string(item.price, currency_investment)}}
             </template>
-            
+                         
+            <template v-slot:[`item.name`]="{ item }">
+                <div v-html="$store.getters.getObjectPropertyByUrl('investments', item.investments,'fullname')"></div>
+            </template>  
             <template v-slot:[`item.gross_account`]="{ item }">
             {{ currency_string(item.gross_account, currency_account)}}
             </template>

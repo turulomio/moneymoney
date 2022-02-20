@@ -148,10 +148,9 @@ export function empty_investments_operations_simulation(){
 
 export function empty_strategy_simulation(){
     return {
-        investments: [], //integers
+        strategy: null, //strategy url
         dt:new Date().toISOString(),
-        local_currency: null,
-        operations:[],//Empty io
+        operations:[],//Empty io must specifi investments_id
         temporaltable: null, //Null if new simulation
     }
 }
