@@ -10,8 +10,8 @@ export const store = new Vuex.Store({
     state: {
         token:null,
         logged:false,
-        version: "0.1.0",
-        versiondate: new Date(2021, 6, 25, 9, 22),
+        version: "0.2.0",
+        versiondate: new Date(2022, 1, 20, 20, 46),
         apiroot: process.env.VUE_APP_DJANGO_MONEYMONEY_URL,
         publicPath: process.env.VUE_APP_PUBLIC_PATH,
         lastsearch: "",

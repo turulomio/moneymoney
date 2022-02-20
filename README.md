@@ -22,3 +22,9 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+## Changelog
+
+### 0.2.0 (2022-02-20)
+- First version with almost all features migrated from xulpymoney project
