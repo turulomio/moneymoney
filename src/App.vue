@@ -7,7 +7,7 @@
                     <v-list-item>
                         <v-list-item-content>
                             <v-list-item-title class="title">Money Money</v-list-item-title>
-                            <v-list-item-subtitle>{{ $store.state.version }}</v-list-item-subtitle>
+                            <v-list-item-subtitle>{{ $store.state.version }} ({{ $store.state.versiondate.toISOString().slice(0,10)}})</v-list-item-subtitle>
                         </v-list-item-content>
                     </v-list-item>
 
