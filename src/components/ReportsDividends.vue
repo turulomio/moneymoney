@@ -10,13 +10,13 @@
         </v-container>
         <div class="pa-6">
             <v-data-table dense :headers="tableHeaders"  :items="items" class="elevation-1" disable-pagination  hide-default-footer :sort-by="['percentage']" :sort-desc="['percentage']">
-                <template v-slot:[`item.dps`]="{item}"  class="text-nowrap">
+                <template v-slot:[`item.dps`]="{item}" >
                     <div v-html="currency_html(item.dps,item.currency )"></div>
                 </template>    
-                <template v-slot:[`item.estimated`]="{item}"  class="text-nowrap">
+                <template v-slot:[`item.estimated`]="{item}" >
                     <div v-html="currency_html(item.estimated,item.currency )"></div>
                 </template>    
-                <template v-slot:[`item.current_price`]="{item}"  class="text-nowrap">
+                <template v-slot:[`item.current_price`]="{item}" >
                     <div v-html="currency_html(item.current_price,item.currency )"></div>
                 </template>    
                 <template v-slot:[`item.actions`]="{ item }">

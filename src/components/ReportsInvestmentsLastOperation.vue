@@ -10,7 +10,7 @@
         </v-layout>
         <p></p>
         <v-data-table dense :headers="tableHeaders" :items="tableData" class="elevation-1 ma-4" disable-pagination  hide-default-footer item-key="id" :key="refreshKey"  :sort-by="['percentage_last']" :sort-desc="[true]" >        
-            <template v-slot:[`item.datetime`]="{ item}" :loading="loading">
+            <template v-slot:[`item.datetime`]="{ item}">
                     {{ localtime(item.datetime)  }} 
             </template>  
             <template v-slot:[`item.balance`]="{ item }">
