@@ -72,6 +72,14 @@ export const store = new Vuex.Store({
                 return r[property]
             }
         },
+        getObjectPropertyById:(state,getters) => (catalog,id,property,default_=null) => {
+            var r=getters.getObjectById(catalog,id)
+            if (r==null){
+                return default_
+            } else {
+                return r[property]
+            }
+        },
         getCurrencyByCode:(state) => (code,default_=null) => {
             var r=state['currencies'].find(o => o.code==code)
             if (r==null){

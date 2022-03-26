@@ -6,7 +6,7 @@
         <h1>{{ strategy.name }}
             <MyMenuInline :items="items"  :context="this"></MyMenuInline>
         </h1>
-        <DisplayValues v-if="ios" :items="displayvalues()" :key="key"></DisplayValues>
+        <DisplayValues v-if="ios" :items="displayvalues()" :key="key" :minimized_items="10"></DisplayValues>
 
         <v-tabs  background-color="primary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
             <v-tab key="current">{{ $t('Current investment operations') }}</v-tab>
@@ -191,11 +191,19 @@
                 this.update_all()
             },
             displayvalues(){
-                return [
-                    {title:this.$t('Currency'), value: this.ios.product.currency},
-                    {title:this.$t('Product'), value: this.ios.product.name},
-                    {title:this.$t('Leverage'), value: this.leverage_message},
-                ]
+                var r= []
+
+                r.push({title:this.$t('From'), value: this.localtime(this.strategy.dt_from)})
+                r.push({title:this.$t('To'), value: this.localtime(this.strategy.dt_to)})
+                r.push({title:this.$t('Type'), value: this.$store.getters.getObjectPropertyById("strategiestypes", this.strategy.type, "name")})
+                r.push({title:this.$t('Investments'), value: this.strategy.investments.length})                
+                if (this.ios.strategy.additional1){//That means it has a product property
+                    this.leverage_message= this.$t(`${this.ios.product.leverage_multiplier } (Real: ${this.ios.product.leverage_real_multiplier })`)
+                    r.push({title:this.$t('Currency'), value: this.ios.product.currency})
+                    r.push({title:this.$t('Product'), value: this.ios.product.name})
+                    r.push({title:this.$t('Leverage'), value: this.leverage_message})
+                }
+                return r
             },
             setChkDividendsLabel(){
                 if (this.showAllDividends== true){
@@ -254,7 +262,6 @@
                     this.list_io_current=resIO.data.io_current
                     this.list_io_historical=resIO.data.io_historical
 
-                    this.leverage_message= this.$t(`${this.ios.product.leverage_multiplier } (Real: ${this.ios.product.leverage_real_multiplier })`)
 
                     this.on_chkShowAllIO_click()
 
