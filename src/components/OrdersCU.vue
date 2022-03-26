@@ -118,7 +118,7 @@
             },
             show_snackbar_message(){
                 this.snackbar=true
-                var stw
+                var stw =""
                 if (this.needs_stop_loss_warning()==true){
                     stw='<p><span class="red">' + this.$t("Remember that is a stop loss order")+'</span></p>'
                 }
@@ -127,7 +127,7 @@
                 r=r + stw
                 r=r +"<ul>"
                 r=r+"<li>" + this.$t("Expiration") + `: ${this.neworder.expiration}</li>`
-                r=r+"<li>" + this.$t("Investment") + `: ${this.$store.getters.getObjectPropertyByUrl("investments", this.neworder.investments,"name")}</li>`
+                r=r+"<li>" + this.$t("Investment") + `: ${this.$store.getters.getObjectPropertyByUrl("investments", this.neworder.investments,"fullname")}</li>`
                 r=r+"<li>" + this.$t("Shares") + `: ${this.neworder.shares}</li>`
                 r=r+"<li>" + this.$t("Price") + `: ${this.neworder.price}</li>`
 
