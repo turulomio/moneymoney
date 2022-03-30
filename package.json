@@ -13,7 +13,7 @@
     "@mdi/js": "^6.6.96",
     "axios": "^0.26.1",
     "core-js": "^3.21.1",
-    "currency-list": "^1.0.7",
+    "currency-list": "^1.0.8",
     "echarts": "^5.3.1",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.34",
