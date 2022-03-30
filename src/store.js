@@ -1,10 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import {sortObjectsArray,capitalizeFirstLetter,my_round} from './functions.js'
-import { CurrencyList } from 'currency-list'
-
-console.dir(CurrencyList)
+import {sortObjectsArray, my_round} from './functions.js'
+// import { CurrencyList } from 'currency-list'
 
 Vue.use(Vuex);
 
@@ -205,16 +203,24 @@ export const store = new Vuex.Store({
                 store.$app.parseResponseError(error)
             });
         },
+        // getCurrencies(context){
+        //     var start=new Date()
+        //     var locale="en_US"
+        //     if (store.$app.$i18n.locale=='es'){
+        //         locale="es_ES"
+        //     }
+        //     var currencies_object=CurrencyList.getAll(locale)
+        //     var currencies_list=[]
+        //     Object.entries(currencies_object).forEach(o => currencies_list.push(o[1]))
+        //     currencies_list.forEach(o=> o["fullname"]=`${capitalizeFirstLetter(o.name)} (${o.code} - ${o.symbol})`)
+        //     context.commit("updateCurrencies", currencies_list)
+        //     console.log(`Updated ${currencies_list.length} currencies in ${new Date()-start} ms`)
+        // },
         getCurrencies(context){
             var start=new Date()
-            var locale="en_US"
-            if (store.$app.$i18n.locale=='es'){
-                locale="es_ES"
-            }
-            var currencies_object=CurrencyList.getAll(locale)
             var currencies_list=[]
-            Object.entries(currencies_object).forEach(o => currencies_list.push(o[1]))
-            currencies_list.forEach(o=> o["fullname"]=`${capitalizeFirstLetter(o.name)} (${o.code} - ${o.symbol})`)
+            currencies_list.push({name:"Euro",symbol_native: "€", code: "EUR", symbol:"€", fullname:"Euro ( EUR - €)"})
+            currencies_list.push({name:"US Dolar",symbol_native: "$", code: "USD", symbol:"$", fullname:"US Dolar ( USD - $)"})
             context.commit("updateCurrencies", currencies_list)
             console.log(`Updated ${currencies_list.length} currencies in ${new Date()-start} ms`)
         },
