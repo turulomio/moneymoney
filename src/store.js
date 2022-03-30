@@ -2,7 +2,9 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import {sortObjectsArray,capitalizeFirstLetter,my_round} from './functions.js'
-import CurrencyList from 'currency-list'
+import { CurrencyList } from 'currency-list'
+
+console.dir(CurrencyList)
 
 Vue.use(Vuex);
 
