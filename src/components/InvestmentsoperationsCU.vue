@@ -39,12 +39,11 @@
             CurrencyFactor,
         },
         props: {
-            // An account object
-            io: {
-                required: true // Null to create, io object to update
+            io: { //Null to create, io object with all parameters to update
+                required: true 
             },
-            investment: {
-                required: true // Solo necesita y currency
+            investment: { // Only needs currrency paramenter
+                required: true 
             }
         },
         data(){ 
@@ -122,7 +121,6 @@
 
         },
         created(){
-            console.log(this.investment)
             if ( this.io.url!=null){ // EDITING TIENE IO URL
                 this.editing=true
             } else { // NEW IO BUT SETTING VALUES WITH URL=null

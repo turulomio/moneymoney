@@ -39,6 +39,12 @@
                 <AccountsoperationsCU :ao="ao" :deleting="ao_deleting" :key="key" @cruded="on_AccountsoperationsCU_cruded"></AccountsoperationsCU>
             </v-card>
         </v-dialog>
+        <!-- IO CU-->
+        <v-dialog v-model="dialog_io" width="550" v-if="io">
+            <v-card class="pa-3">
+                <InvestmentsoperationsCU :io="io" :investment="io_investment" :key="key"  @cruded="on_InvestmentsoperationsCU_cruded()"></InvestmentsoperationsCU>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -46,9 +52,11 @@
     import axios from 'axios'
     import {listobjects_sum} from '../functions.js'
     import AccountsoperationsCU from './AccountsoperationsCU.vue'
+    import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     export default {
         components:{
             AccountsoperationsCU,
+            InvestmentsoperationsCU,
         },
     props: {
         items: {
@@ -76,11 +84,17 @@
     data: function(){
         return {
             selected: [],
+            key:0,
+
             // DIALOG ACCOUNT OPERATIONS
             dialog_ao:false,
             ao: null,
             ao_deleting:false,
-            key:0,
+
+            // DIALOG INVESTMENT OPERATIONS CU
+            dialog_io:false,
+            io: null,
+            io_investment:null,
         }
     },
     watch: {
@@ -92,15 +106,32 @@
         listobjects_sum,
 
         editAO (item) {
-            //Rest of no editables
-            if (item.is_editable==false){
-                alert(this.$t("You can't edit this account operation"))
-                return
+            console.log(item)
+            
+            if (item.is_editable==false){// Account operation is not editable
+                if (item.comment.startsWith("10000,")){ //It's an investment operation 
+                    var io_string= item.comment.split(",")[1]
+                    //Gets
+                    axios.get(`${this.$store.state.apiroot}/api/investmentsoperations/${io_string}/`, this.myheaders())
+                    .then((response) => {
+                        this.io=response.data
+                        this.io_investment={ url: response.data.investments, currency: response.data.currency }
+                        this.key=this.key+1
+                        this.dialog_io=true
+                    }, (error) => {
+                        this.parseResponseError(error)
+                    });
+
+                } else { //It's not a especial comment
+                    alert(this.$t("You can't edit this account operation"))
+                    return
+                }
+            } else { // Account operation is editable
+                this.ao=item
+                this.ao_deleting=false
+                this.dialog_ao=true
+                this.key=this.key+1
             }
-            this.ao=item
-            this.ao_deleting=false
-            this.dialog_ao=true
-            this.key=this.key+1
         },
         deleteAO (item) {
             console.log(item)
@@ -155,6 +186,10 @@
         },
         on_AccountsoperationsCU_cruded(){
             this.dialog_ao=false
+            this.$emit("cruded")
+        },
+        on_InvestmentsoperationsCU_cruded(){
+            this.dialog_io=false
             this.$emit("cruded")
         }
     },
