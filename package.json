@@ -14,8 +14,8 @@
     "axios": "^0.26.1",
     "core-js": "^3.21.1",
     "currency-list": "^1.0.8",
-    "echarts": "^5.3.1",
-    "moment": "^2.29.1",
+    "echarts": "^5.3.2",
+    "moment": "^2.29.2",
     "moment-timezone": "^0.5.34",
     "vue": "^2.6.14",
     "vue-cli-plugin-vuetify": "^2.4.8",
@@ -32,25 +32,11 @@
     "@vue/composition-api": "^1.4.9",
     "eslint": "^8.12.0",
     "eslint-plugin-vue": "^8.5.0",
-    "npm-check-updates": "^12.5.4",
-    "sass": "^1.49.9",
+    "npm-check-updates": "^12.5.7",
+    "sass": "^1.49.11",
     "sass-loader": "^10.2.0",
     "vue-cli-plugin-i18n": "~2.3.1",
     "vue-template-compiler": "^2.6.14"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "rules": {}
   },
   "browserslist": [
     "> 1%",
