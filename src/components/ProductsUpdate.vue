@@ -19,7 +19,7 @@
             </v-form>
         </v-card>   
 
-        <v-data-table dense :headers="headers" :items="items" sort-by="name" class="elevation-1 pt-6" hide-default-footer  disable-pagination :loading="loading"></v-data-table>
+        <v-data-table dense :headers="headers" :items="items" sort-by="product" class="elevation-1 pt-6" hide-default-footer  disable-pagination :loading="loading"></v-data-table>
     </div>
 </template>  
 <script>     
@@ -38,7 +38,7 @@
                 headers: [
                     { text: this.$t('Code'), sortable: true, value: 'code'},
                     { text: this.$t('Product'), sortable: true, value: 'product'},
-                    { text: this.$t('Log'), value: 'log'},
+                    { text: this.$t('Log'), sortable: true, value: 'log'},
                 ],
             }
         },
@@ -61,7 +61,6 @@
                 this.loading=true
                 axios.post(`${this.$store.state.apiroot}/products/update/`, {auto:true,}, this.myheaders())
                 .then((response) => {
-                        console.log(response.data)
                         this.items=response.data
                         this.loading=false
                 }, (error) => {
