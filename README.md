@@ -1,5 +1,6 @@
 # moneymoney
 
+
 ## Project setup
 ```
 npm install
@@ -23,6 +24,9 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
+## Products database
+
+- Products database can be updated using https://www.dolthub.com/repositories/turulomio/dolthub_money. You can send me pull request like in Github. Then you can update your system products from moneymoney maintenance menu
 
 ## Changelog
 
