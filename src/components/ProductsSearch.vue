@@ -15,10 +15,7 @@
             <v-data-table dense :headers="tableHeaders" :items="tableData"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['value']" :sort-desc="[true]" fixed-header height="650" :loading="loading">      
                 <template v-slot:[`item.last`]="{ item }">
                     {{ currency_string(item.last, item.currency)}}
-                </template>  
-                <template v-slot:[`item.tickers`]="{ item }">
-                    {{ item.tickers.toString()}}
-                </template>  
+                </template>
                 <template v-slot:[`item.name`]="{ item }">
                     <div :class="class_name(item)">{{item.name}}</div>
                 </template>  
@@ -54,7 +51,11 @@
                     { text: 'Id', value: 'id',sortable: true },
                     { text: 'Name', value: 'name',sortable: true},
                     { text: 'ISIN',  sortable: true, value: 'isin'},
-                    { text: 'tickers',  sortable: true, value: 'tickers'},
+                    { text: 'ticker_yahoo',  sortable: true, value: 'Yahoo'},
+                    { text: 'ticker_morningstar',  sortable: true, value: 'Morningstar'},
+                    { text: 'ticker_google',  sortable: true, value: 'Google'},
+                    { text: 'ticker_quefondos',  sortable: true, value: 'QueFondos'},
+                    { text: 'ticker_investingcom',  sortable: true, value: 'InvestingCom'},
                     { text: 'Actions', value: 'actions', sortable: false },
                 ],   
                 tableData: [],
@@ -143,7 +144,11 @@
                 } else {
                     this.tableData=this.$store.state.products.filter(o => 
                         o.name.toUpperCase().includes(this.search.toUpperCase()) || 
-                        o.tickers.toString().toUpperCase().includes(this.search.toUpperCase()) ||
+                        (o.ticker_yahoo!=null && o.ticker_yahoo.toString().toUpperCase().includes(this.search.toUpperCase())) ||
+                        (o.ticker_morningstar!=null && o.ticker_morningstar.toString().toUpperCase().includes(this.search.toUpperCase())) ||
+                        (o.ticker_google!=null && o.ticker_google.toString().toUpperCase().includes(this.search.toUpperCase())) ||
+                        (o.ticker_quefondos!=null && o.ticker_quefondos.toString().toUpperCase().includes(this.search.toUpperCase())) ||
+                        (o.ticker_investingcom!=null && o.ticker_investingcom.toString().toUpperCase().includes(this.search.toUpperCase())) ||
                         this.ifnullempty(o.isin).toUpperCase().includes(this.search.toUpperCase())
                     )
                 }
