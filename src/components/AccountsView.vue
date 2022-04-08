@@ -58,9 +58,9 @@
         </v-dialog>
 
         <!-- DIALOG ACCOUNT TRANSFER -->
-        <v-dialog v-model="dialog_transfer" width="25%">
+        <v-dialog v-model="dialog_transfer" width="550">
             <v-card class="pa-6">
-                <AccountsTransfer :origin="account" @accepted="on_AccountTransfer_accepted()" :key="key"></AccountsTransfer>
+                <AccountsTransfer :at="at" @cruded="on_AccountTransfer_cruded()" :key="key"></AccountsTransfer>
             </v-card>
         </v-dialog>
     </div>
@@ -74,7 +74,7 @@
     import CreditcardsCU from './CreditcardsCU.vue'
     import CreditcardsView from './CreditcardsView.vue'
     import TableAccountOperations from './TableAccountOperations.vue'
-    import {empty_account_operation,empty_credit_card} from '../empty_objects.js'
+    import {empty_account_operation,empty_credit_card,empty_account_transfer} from '../empty_objects.js'
     export default {
         components:{
             AccountsoperationsCU,
@@ -108,6 +108,8 @@
                                 name:this.$t('Add an account transfer'), 
                                 code: function(this_){
                                     this_.key=this_.key+1
+                                    this_.at=this_.empty_account_transfer()
+                                    this_.at.account_origin=this_.account.url
                                     this_.dialog_transfer=true
                                 },
                                 icon: "mdi-plus" 
@@ -159,6 +161,9 @@
                 dialog_cc:false,
                 cc: null,
 
+                // DIALOG ACCOUNT TRANSFER
+                at: null,
+
                 // DIALOG CREDIT CARDS VIEW
                 dialog_ccview:false,
 
@@ -184,6 +189,7 @@
                 this.dialog_ao=true
             },
             empty_account_operation,
+            empty_account_transfer,
             empty_credit_card,
             refreshTable(){
                 //var this_=this //Needs this inside axios seems with browser vue method
@@ -249,7 +255,7 @@
             on_chkActive_cc(){
                 this.refreshTableCC()
             },
-            on_AccountTransfer_accepted(){
+            on_AccountTransfer_cruded(){
                 this.dialog_transfer=false 
                 this.refreshTable()    
                 this.$emit('cruded')

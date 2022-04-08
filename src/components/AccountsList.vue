@@ -60,7 +60,7 @@
         <!-- DIALOG ACCOUNT TRANSFER -->
         <v-dialog v-model="dialog_transfer" width="35%">
             <v-card class="pa-6">
-                <AccountsTransfer @accepted="on_AccountTransfer_accepted()" :key="key"></AccountsTransfer>
+                <AccountsTransfer :at="at" @cruded="on_AccountTransfer_cruded()" :key="key"></AccountsTransfer>
             </v-card>
         </v-dialog>
     </div>
@@ -72,7 +72,7 @@
     import AccountsCU from './AccountsCU.vue'
     import AccountsView from './AccountsView.vue'
     import AccountsTransfer from './AccountsTransfer.vue'
-    import {empty_account} from '../empty_objects.js'
+    import {empty_account,empty_account_transfer} from '../empty_objects.js'
     export default {
         components:{
             MyMenuInline,
@@ -111,6 +111,7 @@
                             { 
                                 name:this.$t('Add an account transfer'), 
                                 code: function(this_){
+                                    this_.at=this_.empty_account_transfer()
                                     this_.key=this_.key+1
                                     this_.dialog_transfer=true
                                 },
@@ -145,11 +146,13 @@
                 dialog_search:false,
 
                 //AccountsTransfer
+                at:null,
                 dialog_transfer:false,
             }
         },
         methods: {
             empty_account,
+            empty_account_transfer,
             editItem (item) {
                 this.account=item
                 this.account_deleting=false
@@ -198,7 +201,7 @@
             on_AccountsView_cruded(){
                 this.update_table()
             },
-            on_AccountTransfer_accepted(){
+            on_AccountTransfer_cruded(){
                 this.dialog_transfer=false
                 this.update_table()
             },

@@ -43,12 +43,6 @@
             }
         },
         methods:{
-            // showFollowing(){
-            //     if (deleting==true) return False
-            //     if (editing==true) return False
-            //     return True
-
-            // }
             acceptDialogAO(){
                 //Validation
                 if( this.$refs.form_ao.validate()==false) return
