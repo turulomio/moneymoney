@@ -1,4 +1,4 @@
-# moneymoney
+# MoneyMoney [![Github - Downloads](https://shields.io/github/downloads/turulomio/moneymoney/total?label=Github%20downloads )](https://github.com/turulomio/moneymoney/)
 
 
 ## Project setup
