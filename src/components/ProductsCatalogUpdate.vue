@@ -47,7 +47,7 @@
             submmit(){
                 this.loading=true
                 let data=new FormData()
-                data.append('csv_file1', this.filename)
+                data.append('json_file1', this.filename)
                 axios.post(`${this.$store.state.apiroot}/products/catalog/update/`, data, this.myheaders_formdata())
                 .then((response) => {
                         console.log(response.data)
