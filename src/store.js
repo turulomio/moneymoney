@@ -25,6 +25,7 @@ export const store = new Vuex.Store({
         leverages: [],
         operationstypes: [],
         products: [],
+        productstypes: [],
         stockmarkets:[],
         strategiestypes:[],
 
@@ -143,6 +144,9 @@ export const store = new Vuex.Store({
         updateProducts: (state, payload) =>{
             state.products=payload
         },
+        updateProductstypes: (state, payload) =>{
+            state.productstypes=payload
+        },
         updateSettings: (state, payload) =>{
             state.local_zone=payload.local_zone
             state.local_currency=payload.local_currency
@@ -167,6 +171,7 @@ export const store = new Vuex.Store({
             context.dispatch("getInvestments")
             context.dispatch("getLeverages")
             context.dispatch("getOperationstypes")
+            context.dispatch("getProductstypes")
             context.dispatch("getRecomendationMethods")
             context.dispatch("getSettings")
             context.dispatch("getStockmarkets")
@@ -270,6 +275,16 @@ export const store = new Vuex.Store({
             .then((response) => {
                 context.commit('updateProducts', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} products in ${new Date()-start} ms`)
+            }, (error) => {
+                store.$app.parseResponseError(error)
+            });
+        },
+        getProductstypes(context){
+            var start=new Date()
+            axios.get(`${store.state.apiroot}/api/productstypes/`, store.$app.myheaders())
+            .then((response) => {
+                context.commit('updateProductstypes', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} products types in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });

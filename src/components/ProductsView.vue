@@ -121,10 +121,15 @@
         data () {
             return {
                 displayvalues:[
-                    {title:this.$t('Leverage'), value: this.product.leverage},
+                    {title:this.$t('Leverage'), value: this.$store.getters.getObjectPropertyByUrl("leverages",this.product.leverages,"localname")},
                     {title:this.$t('Currency'), value: this.product.currency},
                     {title:this.$t('Obsolete'), value: this.product.obsolete},
                     {title:this.$t('Id'), value: this.product.id},
+                    {title:this.$t('Ticker Yahoo'), value: this.product.ticker_yahoo},
+                    {title:this.$t('Ticker Morningstar'), value: this.product.ticker_morningstar},
+                    {title:this.$t('Ticker Google'), value: this.product.ticker_google},
+                    {title:this.$t('Ticker QueFondos'), value: this.product.ticker_quefondos},
+                    {title:this.$t('Ticker Investing.com'), value: this.product.ticker_investingcom},
                 ],
                 items: [
                     {

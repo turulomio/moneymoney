@@ -13,11 +13,11 @@
 
         <v-card >
             <v-data-table dense :headers="tableHeaders" :items="tableData"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['value']" :sort-desc="[true]" fixed-header height="650" :loading="loading">      
-                <template v-slot:[`item.last`]="{ item }">
-                    {{ currency_string(item.last, item.currency)}}
-                </template>
                 <template v-slot:[`item.name`]="{ item }">
                     <div :class="class_name(item)">{{item.name}}</div>
+                </template>                  
+                <template v-slot:[`item.productstypes`]="{ item }">
+                    <div>{{ $store.getters.getObjectPropertyByUrl("productstypes",item.productstypes,"localname")}}</div>
                 </template>  
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small @click="favoriteProduct(item)" :color="(favorites.includes(item.id))? 'orange': '' ">mdi-star-outline</v-icon>
@@ -51,12 +51,14 @@
                     { text: 'Id', value: 'id',sortable: true },
                     { text: 'Name', value: 'name',sortable: true},
                     { text: 'ISIN',  sortable: true, value: 'isin'},
-                    { text: 'ticker_yahoo',  sortable: true, value: 'Yahoo'},
-                    { text: 'ticker_morningstar',  sortable: true, value: 'Morningstar'},
-                    { text: 'ticker_google',  sortable: true, value: 'Google'},
-                    { text: 'ticker_quefondos',  sortable: true, value: 'QueFondos'},
-                    { text: 'ticker_investingcom',  sortable: true, value: 'InvestingCom'},
-                    { text: 'Actions', value: 'actions', sortable: false },
+                    { text: this.$t('Type'),  sortable: true, value: 'productstypes'},
+                    { text: this.$t('Currency'),  sortable: true, value: 'currency'},
+                    { text: 'Yahoo',  sortable: true, value: 'ticker_yahoo'},
+                    { text: 'Morningstar',  sortable: true, value: 'ticker_morningstar'},
+                    { text: 'Google',  sortable: true, value: 'ticker_google'},
+                    { text: 'QueFondos',  sortable: true, value: 'ticker_quefondos'},
+                    { text: 'Investing.com',  sortable: true, value: 'ticker_investingcom'},
+                    { text: this.$t('Actions'), value: 'actions', sortable: false },
                 ],   
                 tableData: [],
                 items: [
@@ -163,6 +165,7 @@
                          this.tableData.push(product)
                     }
                 });
+                console.log(this.tableData)
                 this.loading=false
             },
             refreshFavoriteProducts(){
@@ -203,7 +206,6 @@
 
                 axios.post(`${this.$store.state.apiroot}/products/favorites/`, {product: url}, this.myheaders())
                 .then((response) => {
-                        console.log(response.data)
                         this.favorites=response.data
                         this.refreshSearch()
                         this.loading=false
