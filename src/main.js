@@ -26,6 +26,7 @@ import ProductsComparationList from './components/ProductsComparationList'
 import ProductsRanges from './components/ProductsRanges'
 import ProductsSearch from './components/ProductsSearch'
 import ProductsUpdate from './components/ProductsUpdate'
+import ProductsCatalogUpdate from './components/ProductsCatalogUpdate'
 import ReportsAnnual from './components/ReportsAnnual'
 import ReportsConcepts from './components/ReportsConcepts'
 import ReportsDividends from './components/ReportsDividends'
@@ -57,6 +58,7 @@ const router = new VueRouter({
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/products/ranges/`, name: 'products_ranges', component: ProductsRanges },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/products/comparation/list/`, name: 'products_comparation_list', component: ProductsComparationList },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/products/search/`, name: 'products_search', component: ProductsSearch },
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/products/catalog/update/`, name: 'products_catalog_update', component: ProductsCatalogUpdate },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/products/update/`, name: 'products_update', component: ProductsUpdate },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/annual/`, name: 'reports_annual', component: ReportsAnnual },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/concepts/`, name: 'reports_concepts', component: ReportsConcepts },

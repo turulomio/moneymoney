@@ -102,6 +102,9 @@
                         <template v-slot:activator>
                             <v-list-item-title>{{ $t("Administration") }}</v-list-item-title>
                         </template>
+                        <v-list-item link router :to="{ name: 'products_catalog_update'}">
+                            <v-list-item-title>{{ $t("Products catalog update") }}</v-list-item-title>
+                        </v-list-item>
                         <v-list-item link router :to="{ name: 'concepts_catalog'}">
                             <v-list-item-title>{{ $t("Concepts catalog") }}</v-list-item-title>
                         </v-list-item>
