@@ -16,10 +16,11 @@
                         <v-btn color="primary" @click="submmit()" :disabled="isButtonDisabled()">{{ $t("Send file")}}</v-btn>
 
                         <v-btn color="primary" @click="submmit_auto()">{{ $t("Update from MoneyMoney GitHub repository")}}</v-btn>
+
                     </v-card-actions>
+                    <v-card-subtitle>{{message}}</v-card-subtitle>
             </v-form>
         </v-card>   
-        <p>{{message}}</p>
         <v-data-table dense :headers="headers" :items="items" sort-by="product" class="elevation-1 pt-6" hide-default-footer  disable-pagination :loading="loading"></v-data-table>
     </div>
 </template>  
@@ -50,9 +51,8 @@
                 data.append('json_file1', this.filename)
                 axios.post(`${this.$store.state.apiroot}/products/catalog/update/`, data, this.myheaders_formdata())
                 .then((response) => {
-                        console.log(response.data)
                         this.items=response.data.logs
-                        this.message=this.$t("{0} system products have been updated").format(response.data.total)
+                        this.message=this.$t("{0} system products have been readed from file").format(response.data.total)
                         this.filename=[]
                         this.$store.dispatch("getProducts")
                         this.loading=false
@@ -68,9 +68,8 @@
                 this.loading=true
                 axios.post(`${this.$store.state.apiroot}/products/catalog/update/`, {auto:true,}, this.myheaders())
                 .then((response) => {
-                        console.log(response.data)
                         this.items=response.data.logs
-                        this.message=this.$t("{0} system products have been updated").format(response.data.total)
+                        this.message=this.$t("{0} system products have been readed from MoneMoney Github repository").format(response.data.total)
                         this.$store.dispatch("getProducts")
                         this.loading=false
                 }, (error) => {
