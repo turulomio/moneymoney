@@ -1,5 +1,4 @@
-# moneymoney
-
+# MoneyMoney 
 
 ## Project setup
 ```
