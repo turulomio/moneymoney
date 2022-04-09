@@ -130,7 +130,7 @@
                     ]).then(([resAoOrigin, resAoDestiny]) => {
                         this.newat.account_origin=resAoOrigin.data.accounts
                         this.newat.account_destiny=resAoDestiny.data.accounts
-                        this.newat.amount=resAoDestiny.data.amount
+                        this.newat.amount=resAoDestiny.data.amount  
                         console.log(this.newat)
                         this.loading=false
                         this.key=this.key+1
