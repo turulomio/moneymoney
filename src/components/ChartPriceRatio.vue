@@ -2,7 +2,7 @@
 <template>
     <div>
         <h1 v-if="!notitle">{{ $t("Price ratio chart")}}</h1>
-        <v-card outlined class="ma-4 pa-4" height="650" v-if="data.length>0">
+        <v-card outlined class="ma-4 pa-4" height="500" v-if="data.length>0">
             <v-chart
                 ref="chart"
                 :option="chart_option()"

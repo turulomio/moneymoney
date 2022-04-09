@@ -14,6 +14,7 @@
     "core-js": "^3.21.1",
     "currency-list": "^1.0.8",
     "echarts": "^5.3.2",
+    "echarts-stat": "^1.2.0",
     "moment": "^2.29.2",
     "moment-timezone": "^0.5.34",
     "vue": "^2.6.14",

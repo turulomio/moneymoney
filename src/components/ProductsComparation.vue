@@ -9,7 +9,7 @@
             <v-tab key="pairs_price_scatter">{{ $t("Price scatter chart")}}</v-tab>
             <v-tab-item key="price_ratio">     
                 <v-card class="pa-4 d-flex justify-center" outlined >
-                    <v-data-table dense :headers="data_price_ratio_headers" :items="dbdata" sort-by="datetime" class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading" :key="key" height="600"> 
+                    <v-data-table dense :headers="data_price_ratio_headers" :items="dbdata" sort-by="datetime" class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading" :key="key" height="500"> 
                         <template v-slot:[`item.datetime`]="{ item }">
                             {{localtime(item.datetime)}}
                         </template>  

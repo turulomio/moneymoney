@@ -5,10 +5,12 @@ import i18n from './i18n'
 import VueRouter from 'vue-router';
 import {store} from './store.js'
 
-import "echarts";
+import * as echarts from 'echarts';
 import ECharts from 'vue-echarts'
 Vue.component('v-chart', ECharts)
 
+import {transform} from 'echarts-stat'
+echarts.registerTransform(transform.regression);
 Vue.use(VueRouter);
 
 
