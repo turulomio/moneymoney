@@ -234,3 +234,12 @@ export function empty_strategy(){
         additional10: null,
     }
 }
+
+
+export function empty_chart_scatter_pair_prices(){
+    return{
+        product_a: null, //Object with url, name, currency
+        product_b: null, //Object with url, name, currency
+        prices: [], //Array of price_a, price_b values
+    }
+}

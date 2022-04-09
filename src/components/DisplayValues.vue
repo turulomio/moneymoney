@@ -8,7 +8,7 @@
 -->
 <template>  
         <v-layout style="justify-content: center;" class="ma-4">
-            <v-card class="pa-4" style="width:50%;">
+            <v-card class="pa-4" :style="width_method()">
                 <p v-for="(item, index) in items" class="inform" :key="index">
                     <span v-if="must_be_showed(item,index)">
                         <strong>{{ item.title }}: </strong><span v-html="item.value"></span>
@@ -30,6 +30,10 @@ export default {
         minimized_items:{
             required:false,
             default: 3,
+        },
+        width:{
+            required:false,
+            default: "50%"
         }
     },
     data(){ 
@@ -39,6 +43,9 @@ export default {
         }
     },
     methods:{
+        width_method(){
+            return `width:${this.width};`
+        },
         on_button_click(){
             this.minimized=!this.minimized
             if (this.minimized==true){
