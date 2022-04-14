@@ -157,7 +157,10 @@
                 });
             },
             showLimits(item){
-                alert(item.limits)
+                let s=this.$t(`Range center: ${this.currency_string(item.value, this.prdata.product.currency)}`)
+                
+                
+                alert(`${s}\n${item.limits}`)
             },
             on_OrdersCU_cruded(){
                 this.dialog_ordercu=false
