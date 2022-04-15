@@ -11,8 +11,8 @@
             <v-tab key="percentage_evolution">{{ $t("Percentage evolution")}}</v-tab>
             <v-tab key="quotes_evolution">{{ $t("Quotes evolution")}}</v-tab>
             <v-tab key="dps_estimations">{{ $t("DPS estimations")}}</v-tab>
-            <v-tab key="quotes">{{ $t("Daily OHCL")}}</v-tab>
-            <v-tab key="quotes_by_month">{{ $t("Quotes")}}</v-tab>
+            <v-tab key="ohcls">{{ $t("Daily OHCL")}}</v-tab>
+            <v-tab key="quotes">{{ $t("Quotes")}}</v-tab>
             <v-tab key="chart">{{ $t("Chart")}}</v-tab>
             <v-tabs-items v-model="tab">
                 <v-tab-item key="percentage_evolution">     
@@ -57,14 +57,18 @@
                         <TableEstimationsDPS :product="product" :key="key"></TableEstimationsDPS>
                     </v-card>
                 </v-tab-item>
-                <v-tab-item key="quotes">
-                    <v-card class="padding" outlined>
-                        <TableOHCLS :product="product" :items="ohcls" :key="key"></TableOHCLS>
+                <v-tab-item key="ohcls">
+                    <v-card class="pa-4 d-flex justify-center" outlined style="min-width: 100px; max-width: 100%;">
+                        <v-date-picker dense no-title class="mymonthpicker" v-model="monthpicker_ohcls" type="month" @change="on_monthpicker_ohcls_change()"></v-date-picker>
+                        <v-divider class="mx-2" vertical ></v-divider>
+                        <TableOHCLS :product="product" :items="ohcls_month" :key="key" :height="400" @cruded="on_TableQuotes_cruded()"></TableOHCLS>
                     </v-card>
                 </v-tab-item>
-                <v-tab-item key="quotes_by_month">
-                    <v-card class="padding" outlined>
-                        <TableQuotes :product="product" :items="quotes_all" :key="key"></TableQuotes>
+                <v-tab-item key="quotes">
+                    <v-card class="pa-4 d-flex justify-center" outlined style="min-width: 100px; max-width: 100%;">
+                        <v-date-picker dense no-title class="mymonthpicker" v-model="monthpicker_quotes" type="month" @change="on_monthpicker_quotes_change()"></v-date-picker>
+                        <v-divider class="mx-2" vertical ></v-divider>
+                        <TableQuotes :product="product" :items="quotes_month" :key="key" :height="400" @cruded="on_TableQuotes_cruded()"></TableQuotes>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="chart">     
@@ -101,6 +105,7 @@
     import TableOHCLS from './TableOHCLS.vue'
     import TableQuotes from './TableQuotes.vue'
     import {empty_quote,empty_estimation_dps} from '../empty_objects.js'
+    import {get_current_monthpicker_string} from '../functions.js'
     export default {
         components:{
             ChartProduct,
@@ -200,9 +205,14 @@
                     { text: this.$t('November'), value: 'm11', sortable: true, align:"right" },
                     { text: this.$t('December'), value: 'm12', sortable: true, align:"right" },
                 ],
+                monthpicker_quotes: this.get_current_monthpicker_string(),
+                monthpicker_ohcls: this.get_current_monthpicker_string(),
+
+
                 //Product chart
                 ohcls:[],
-                quotes_all:[],
+                ohcls_month: [],
+                quotes_month:[],
 
 
                 // Quotes CU
@@ -217,9 +227,34 @@
         methods: {
             empty_quote,
             empty_estimation_dps,
+            get_current_monthpicker_string,
             on_EstimationsDpsCU_cruded(){
                 this.dialog_estimationdps=false
                 this.key=this.key+1
+            },
+            on_monthpicker_quotes_change(){
+                let year=this.monthpicker_quotes.slice(0,4)
+                let month=this.monthpicker_quotes.slice(5,7)
+
+                axios.get(`${this.$store.state.apiroot}/api/quotes/?product=${this.product.url}&year=${year}&month=${month}`, this.myheaders())                
+                .then((response) => {
+                    this.quotes_month=response.data
+                }) 
+                .catch((error) => {
+                    this.parseResponseError(error)
+                });
+            },
+            on_monthpicker_ohcls_change(){
+                let year=this.monthpicker_ohcls.slice(0,4)
+                let month=this.monthpicker_ohcls.slice(5,7)
+        
+                axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl/?product=${this.product.url}&year=${year}&month=${month}`, this.myheaders())                
+                .then((response) => {
+                    this.ohcls_month=response.data
+                }) 
+                .catch((error) => {
+                    this.parseResponseError(error)
+                });
             },
             refreshProductOHCLDaily(){
                 return axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl/?product=${this.product.url}`, this.myheaders())
@@ -236,10 +271,17 @@
                     this.loading=false
                 });
             },
+            on_TableQuotes_cruded(){
+                this.make_all_axios()
+                this.on_monthpicker_quotes_change()
+                this.on_monthpicker_ohcls_change()
+            }
         },
 
         created(){
             this.make_all_axios()
+            this.on_monthpicker_ohcls_change()
+            this.on_monthpicker_quotes_change()
         }
         
     }

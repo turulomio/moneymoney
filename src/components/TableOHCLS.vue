@@ -61,11 +61,13 @@
                 this.key=this.key+1
             },
             deleteOHCL(item){
-               var r = confirm(this.$t("Do you want to delete this dividend?"))
+               var r = confirm(this.$t("Do you want to delete this OHCL quotes?"))
                if(r == false) {
                   return
                } 
-                axios.delete(item.url, this.myheaders())
+               console.log(item)
+                var headers={...this.myheaders(),data:{product:this.product.url,date:item.date}}
+                axios.delete(`${this.$store.state.apiroot}/products/quotes/ohcl/`, headers)
                 .then(() => {
                     this.$emit("cruded")
                 }, (error) => {

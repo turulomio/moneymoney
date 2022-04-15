@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table dense :headers="table_headers()" :items="quotes" class="elevation-1" disable-pagination  hide-default-footer :sort-by="$attrs.sort_by" fixed-header :height="$attrs.height" :loading="$attrs.loading">
+        <v-data-table dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer :sort-by="$attrs.sort_by" fixed-header :height="$attrs.height" :loading="$attrs.loading">
             <template v-slot:[`item.datetime`]="{ item }" >
                 <div>{{ localtime(item.datetime)}}</div>
             </template>        
@@ -29,7 +29,7 @@
             QuotesCU,
         },
         props: {
-            quotes: { //List of object with  datetime, quote, id, product (url), decimal, currency, name attributes
+            items: { //List of object with  datetime, quote, id, product (url), decimal, currency, name attributes
                 required: true
             },
             show_name:{ // Show product name
@@ -60,7 +60,7 @@
             },
             deleteQuote(item){
                 if (this.no_delete_confirmation==false){
-                    var r = confirm(this.$t("Do you want to delete this dividend?"))
+                    var r = confirm(this.$t("Do you want to delete this quote?"))
                     if(r == false) {
                         return
                     } 
