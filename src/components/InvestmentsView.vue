@@ -23,7 +23,7 @@
                         <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card v-if="!loading">
-                                <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="investment" height="400" :key="key"></TableInvestmentOperationsCurrent>
+                                <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="investment" height="500" :key="key"></TableInvestmentOperationsCurrent>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
@@ -42,12 +42,12 @@
                             <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card class="padding" v-if="!loading">
-                                <TableInvestmentOperations :items="io_filtered" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment" @cruded="on_TableInvestmentsOperations_cruded()" @onedit="on_TableInvestmentsOperations_edit"></TableInvestmentOperations>
+                                <TableInvestmentOperations :items="io_filtered" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="500" :key="key" output="investment" @cruded="on_TableInvestmentsOperations_cruded()" @onedit="on_TableInvestmentsOperations_edit"></TableInvestmentOperations>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
                                 <v-card class="padding" v-if="!loading">
-                                    <TableInvestmentOperations :items="io_filtered" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="account" :showactions="false"></TableInvestmentOperations>
+                                    <TableInvestmentOperations :items="io_filtered" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="500" :key="key" output="account" :showactions="false"></TableInvestmentOperations>
                                 </v-card>
                             </v-tab-item>
                     </v-tabs>
@@ -60,12 +60,12 @@
                             <v-tab key="accounth">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investmenth">     
                             <v-card class="padding"  v-if="!loading">
-                                <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="investment" :homogeneous="true" :key="key"></TableInvestmentOperationsHistorical>
+                                <TableInvestmentOperationsHistorical :items="list_io_historical" height="500" output="investment" :homogeneous="true" :key="key"></TableInvestmentOperationsHistorical>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="accounth">
                                 <v-card class="padding" v-if="!loading">
-                                    <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="account" :homogeneous="true" :key="key"></TableInvestmentOperationsHistorical>
+                                    <TableInvestmentOperationsHistorical :items="list_io_historical" height="500" output="account" :homogeneous="true" :key="key"></TableInvestmentOperationsHistorical>
                                 </v-card>
                             </v-tab-item>
                     </v-tabs>
@@ -74,7 +74,7 @@
             <v-tab-item key="dividends">     
                 <v-card class="padding" v-if="!loading">
                     <v-checkbox v-model="showAllDividends" :label="setChkDividendsLabel()" @click="on_chkDividends()"></v-checkbox>
-                    <TableDividends :items="dividends_filtered" currency_account="EUR"  height="300" output="user" :key="key" heterogeneus @cruded="on_TableDividends_cruded()"></TableDividends>
+                    <TableDividends :items="dividends_filtered" currency_account="EUR"  height="500" output="user" :key="key" heterogeneus @cruded="on_TableDividends_cruded()"></TableDividends>
                 </v-card>
             </v-tab-item>
         </v-tabs-items> 

@@ -1,8 +1,8 @@
 <template>
     <div>
         <v-data-table dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" :ref="$vnode.tag">
-            <template v-slot:[`item.datetime`]="{ item, index}" >
-                <div :ref="index">{{ localtime(item.datetime)}}</div>
+            <template v-slot:[`item.datetime`]="{ item }" >
+                <div>{{ localtime(item.datetime)}}</div>
             </template>         
            <template v-slot:[`item.concepts`]="{ item }">
                <div v-html="$store.getters.getObjectPropertyByUrl('concepts',item.concepts,'name')"></div>
@@ -121,16 +121,14 @@
                 return r
             },
             gotoLastRow(){
-                this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs[this.$vnode.tag].$el.childNodes[0] }) 
+                if (this.$refs[this.$vnode.tag]) this.$vuetify.goTo(1000000, { container:  this.$refs[this.$vnode.tag].$el.childNodes[0] }) 
             },
             on_DividendsCU_cruded(){
                 this.$emit("cruded")
             }
         },
         mounted(){
-            // this.gotoLastRow()
-            // this.key=this.key+1
-            // console.log("DIVIDENDS TABLE")
+             this.gotoLastRow()
         }
     }
 </script>
