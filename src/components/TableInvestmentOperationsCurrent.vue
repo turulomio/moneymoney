@@ -1,7 +1,7 @@
 <template>
     <v-data-table ref="table_oc" dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" :key="$attrs.key" :loading="$attrs.loading">
-        <template v-slot:[`item.datetime`]="{ item, index }" >
-            <div :ref="index">{{ localtime(item.datetime)}}</div>
+        <template v-slot:[`item.datetime`]="{ item }" >
+            <div>{{ localtime(item.datetime)}}</div>
         </template>                  
         <template v-slot:[`item.name`]="{ item }">
             <div v-html="$store.getters.getObjectPropertyByUrl('investments', item.investments,'fullname')"></div>
@@ -71,7 +71,7 @@
         </template>   
 
         <template v-slot:[`body.append`]="{headers}">
-            <tr style="background-color: GhostWhite" ref="lr" v-if="items.length>0">
+            <tr style="background-color: GhostWhite" v-if="items.length>0">
                 <td v-for="(header,i) in headers" :key="i" >
                     <div v-if="header.value == 'datetime'">
                         Total
@@ -222,11 +222,11 @@
                 return r
             },
             gotoLastRow(){
-                this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs.table_oc.$el.childNodes[0] }) 
+                if (this.$refs.table_oc) this.$vuetify.goTo(1000000, { container:  this.$refs.table_oc.$el.childNodes[0] }) 
             },
         },
         mounted(){
-            //this.gotoLastRow()
+            this.gotoLastRow()
         }
     }
 </script>

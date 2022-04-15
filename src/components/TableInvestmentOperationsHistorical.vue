@@ -1,5 +1,5 @@
 <template>
-        <v-data-table dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="dt_end" fixed-header :height="$attrs.height" ref="table" :loading="$attrs.loading">
+        <v-data-table dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="dt_end" fixed-header :height="$attrs.height" ref="table">
             <template v-slot:[`item.dt_end`]="{ item }">
                 {{ localtime(item.dt_end)}}
             </template>                  
@@ -68,7 +68,7 @@
                 <div v-html="currency_html(item.gains_net_investment, item.currency_investment)"></div>
             </template>           
             <template v-slot:[`body.append`]="{headers}">
-                <tr style="background-color: GhostWhite" ref="lastrow" v-if="items.length>0">
+                <tr style="background-color: GhostWhite" v-if="items.length>0">
                     <td v-for="(header,i) in headers" :key="i" >
                         <div v-if="header.value == 'dt_end'">
                             Total
@@ -187,7 +187,7 @@
                 return r
             },
             gotoLastRow(){
-                this.$vuetify.goTo(this.$refs.lastrow, { container:  this.$refs.table.$el.childNodes[0] }) 
+                if (this.$refs.table) this.$vuetify.goTo(1000000, { container:  this.$refs.table.$el.childNodes[0] }) 
             },
         },
         mounted(){
