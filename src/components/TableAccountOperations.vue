@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table  ref="table_ao" :show-select="showselected" v-model="selected" dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header v-bind="$attrs" :single-select="false">
+        <v-data-table  ref="table_ao" :show-select="showselected" v-model="selected" dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :single-select="false" :height="$attrs.height">
             <template v-slot:[`item.datetime`]="{ item,index }">
                 <div :ref="index">{{ localtime(item.datetime)}}</div>
             </template>          
@@ -202,9 +202,8 @@
             return r
         },
         gotoLastRow(){          
-           //this.$vuetify.goTo(100000, { container:  this.$refs[this.$vnode.tag].$el.children[0].children[0].children[2].children ,duration: 500}) 
-            //console.log(this.$refs.table_ao.$el.childNodes[0])
-            //this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs.table_ao.$el.childNodes[0]}) 
+            
+            if(this.$refs.table_ao) this.$vuetify.goTo(100000, { container:  this.$refs.table_ao.$el.childNodes[0]}) 
 
         },
         on_AccountTransfer_cruded(){
@@ -221,7 +220,6 @@
         }
     },
     mounted(){
-        console.log(this.items)
         this.gotoLastRow()
     }
 }
