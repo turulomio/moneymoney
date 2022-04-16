@@ -17,16 +17,24 @@ export function RulesInteger(maxdigits=10,required=true){
 }
 
 
+// If required==true must be 0 or a number
+// If required==false can be null,
 export function RulesFloat(maxdigits,required){
-    var r= [
-        v => (v==0 || !!v) || this.$t('Number is required'),
-        v => (v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
-        v => (!isNaN(parseFloat(v))) || this.$t('Must be a number')
-    ]
+    var r
     if (required==false){
-        r.shift()
+        r= [
+            v => (v==null || (v!= null && v.toString().length <=maxdigits)) || this.$t(`Number must be at most ${maxdigits} characters`),
+            v => (v==null || (v!=null && !isNaN(parseFloat(v)))) || this.$t('Must be a decimal number')
+        ]
+    } else { // required==true
+        r= [
+            v => (v==0 || !!v) || this.$t('Number is required'),
+            v => (v!= null && v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
+            v => (!isNaN(parseFloat(v))) || this.$t('Must be a decimal number')
+        ]
     }
     return r
+
 }
 
 export function RulesFloatPositive(maxdigits,required){
@@ -75,14 +83,16 @@ export function RulesDate(required){
 }
 
 export function RulesString(maxdigits,required){
-    var r= [
-        v => (!!v) || this.$t('String is required'),
-        v =>  (v!=null && v.length>0) || this.$t(`String can't be empty`),
-        v =>  (v!=null && v.length <= maxdigits) || this.$t(`String must be at most ${maxdigits} characters`)
-    ]
+    var r
     if (required==false){
-        r.shift()
-        r.shift()
+        r= [
+            v => (v==null || (v!=null && v.length<= maxdigits)) || this.$t('Must be a decimal number')
+        ]
+    } else { // required==true
+        r= [
+            v => (v!=null || v!="") || this.$t('String is required'),
+            v => (v!=null && v.length<= maxdigits) || this.$t(`String must be at most ${maxdigits} characters`)
+        ]
     }
     return r
 }
