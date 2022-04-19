@@ -16,6 +16,7 @@ export const store = new Vuex.Store({
         lastsearch: "",
         local_currency:"EUR",
         local_zone:"Europe/Madrid",
+        catalog_manager: false,
         accounts: [],
         banks: [],
         creditcards:[],
@@ -120,11 +121,11 @@ export const store = new Vuex.Store({
         updateBanks: (state, payload) =>{
             state.banks=payload
         },
+        updateCatalogManager: (state, payload) =>{
+            state.catalog_manager=payload
+        },
         updateConcepts: (state, payload) =>{
             state.concepts=payload
-        },
-        updateCreditcards: (state, payload) =>{
-            state.creditcards=payload
         },
         updateCurrencies: (state, payload) =>{
             state.currencies=payload
@@ -165,6 +166,7 @@ export const store = new Vuex.Store({
             context.dispatch("getProducts")
             context.dispatch("getAccounts")
             context.dispatch("getBanks")
+            context.dispatch("getCatalogManager")
             context.dispatch("getConcepts")
             context.dispatch("getCreditcards")
             context.dispatch("getCurrencies")
@@ -193,6 +195,16 @@ export const store = new Vuex.Store({
             .then((response) => {
                 context.commit('updateBanks', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} banks in ${new Date()-start} ms`)
+            }, (error) => {
+                store.$app.parseResponseError(error)
+            });
+        },
+        getCatalogManager(context){
+            var start=new Date()
+            axios.get(`${store.state.apiroot}/catalog_manager/`, store.$app.myheaders())
+            .then((response) => {
+                context.commit('updateCatalogManager', response.data)
+                console.log(`Updated catalog manager in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
