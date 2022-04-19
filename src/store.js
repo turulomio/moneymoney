@@ -127,6 +127,9 @@ export const store = new Vuex.Store({
         updateConcepts: (state, payload) =>{
             state.concepts=payload
         },
+        updateCreditcards: (state, payload) =>{
+            state.creditcards=payload
+        },
         updateCurrencies: (state, payload) =>{
             state.currencies=payload
         },

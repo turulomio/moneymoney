@@ -20,15 +20,25 @@
                     <div>{{ $store.getters.getObjectPropertyByUrl("productstypes",item.productstypes,"localname")}}</div>
                 </template>  
                 <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon small @click="favoriteProduct(item)" :color="(favorites.includes(item.id))? 'orange': '' ">mdi-star-outline</v-icon>
-                    <v-icon class="mr-2" small @click="viewProduct(item)">mdi-eye-outline</v-icon>
-                    <v-icon class="mr-2" small @click="editProduct(item)" v-if="item.id<0">mdi-pencil</v-icon>
+                    <v-icon small @click="favoriteProduct(item)" :color="(favorites.includes(item.id))? 'orange': '' " class="mr-1">mdi-star-outline</v-icon>
+                    <v-icon class="mr-1" small @click="viewProduct(item)">mdi-eye-outline</v-icon>
+                    <v-icon class="mr-1" small @click="editPersonalProduct(item)" v-if="item.id<0">mdi-pencil</v-icon>
+                    <v-icon class="mr-1" small @click="editSystemProduct(item)"  color="#AA0000" v-if="item.id>=0 && $store.state.catalog_manager">mdi-pencil</v-icon>
+                    <v-icon class="mr-1" small @click="deletePersonalProduct(item)" v-if="item.id<0">mdi-delete</v-icon>
+                    <v-icon class="mr-1" small @click="deleteSystemProduct(item)" color="#AA0000" v-if="item.id>=0 && $store.state.catalog_manager">mdi-delete</v-icon>
                 </template>
             </v-data-table>   
         </v-card>
+        <!--  DIALOG PRODUCT VIEW -->
         <v-dialog v-model="dialog_productsview">
             <v-card class="pa-4">
                 <ProductsView :product="product" :key="key"></ProductsView>
+            </v-card>
+        </v-dialog>
+        <!--  DIALOG PRODUCT CU -->
+        <v-dialog v-model="dialog_products_cu" width="30%">
+            <v-card class="pa-4">
+                <ProductsCU :product="product" :mode="product_cu_mode" :system="product_cu_system" :key="key"></ProductsCU>
             </v-card>
         </v-dialog>
     </div>
@@ -39,10 +49,12 @@
     import {empty_product} from '../empty_objects.js'
     import MyMenuInline from './MyMenuInline.vue'
     import ProductsView from './ProductsView.vue'
+    import ProductsCU from './ProductsCU.vue'
     export default {
         components:{
             MyMenuInline,
             ProductsView,
+            ProductsCU,
         },
         data () {
             return {
@@ -66,10 +78,24 @@
                         subheader:this.$t('Product orders'),
                         children: [
                             {
-                                name:this.$t('Add personal product'),
+                                name:this.$t('Add a personal product'),
                                 code: function(this_){
                                     this_.product=this_.empty_product()
-                                    this_.dialog_productsview=true
+                                    this_.product_cu_mode="C"
+                                    this_.product_cu_system=false
+                                    this_.key=this_.key+1
+                                    this_.dialog_products_cu=true
+                                },
+                                icon: "mdi-plus",
+                            },
+                            {
+                                name:this.$t('Add a system product'),
+                                code: function(this_){
+                                    this_.product=this_.empty_product()
+                                    this_.product_cu_mode="C"
+                                    this_.product_cu_system=true
+                                    this_.key=this_.key+1
+                                    this_.dialog_products_cu=true
                                 },
                                 icon: "mdi-plus",
                             },
@@ -117,11 +143,28 @@
                 //DIALOG PRODUCTS VIEW
                 dialog_productsview:false,
                 product:null,
+
+                //DIALOG PRODUCTS CU
+                dialog_products_cu:false,
+                product_cu_mode:null,
+                product_cu_system:null,
             }
         },
         methods: {
-            editProduct(item){
+            editPersonalProduct(item){
                 console.log(item)
+                this.product=item
+                this.product_cu_mode="U"
+                this.product_cu_system=false
+                this.key=this.key+1
+                this.dialog_products_cu=true
+            },
+            editSystemProduct(item){
+                this.product=item
+                this.product_cu_mode="U"
+                this.product_cu_system=true
+                this.key=this.key+1
+                this.dialog_products_cu=true
             },
             empty_product,
             ifnullempty,
