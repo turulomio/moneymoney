@@ -29,13 +29,11 @@ export const store = new Vuex.Store({
         productstypes: [],
         stockmarkets:[],
         strategiestypes:[],
-
-
         recomendation_methods:[],
     },    
     getters:{
         getConceptsForDividends: (state) => () => { 
-            return state.concepts.filter( o => [39, 50,59,62,63,65,66,68,70,72,75,76,77].includes(o.id))
+            return state.concepts.filter( o => [39,50,59,62,63,65,66,68,70,72,75,76,77].includes(o.id))
         },
         getInvestmentsActive:(state) => () => {
             return state.investments.filter(o => o.active==true)
@@ -166,7 +164,6 @@ export const store = new Vuex.Store({
     actions: {// Can be asynchronous. Fetch data
 
         getAll(context){
-            context.dispatch("getProducts")
             context.dispatch("getAccounts")
             context.dispatch("getBanks")
             context.dispatch("getCatalogManager")
@@ -181,6 +178,8 @@ export const store = new Vuex.Store({
             context.dispatch("getSettings")
             context.dispatch("getStockmarkets")
             context.dispatch("getStrategiesTypes")
+
+            return context.dispatch("getProducts")
         },
         getAccounts(context){
             var start=new Date()
@@ -286,7 +285,7 @@ export const store = new Vuex.Store({
         },
         getProducts(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/products/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/products/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateProducts', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} products in ${new Date()-start} ms`)

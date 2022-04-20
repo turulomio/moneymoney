@@ -103,8 +103,29 @@ export function empty_product(){
     return {
         url: null,
         name: null,
+        isin: null,
+        currency:null,
+        productstypes:null,
+        agrupations:null,
+        web:null,
+        address:null,
+        phone:null,
+        mail:null,
+        pci:'c',
+        leverages:`${this.$store.state.apiroot}/api/leverages/1/`,
+        percentage:100,
+        stockmarkets: null,
+        comment: null,
+        decimals: 2,
+        obsolete: false,
+        ticker_yahoo: null,
+        ticker_morningstar: null,
+        ticker_google: null,
+        ticker_quefondos: null,
+        ticker_investingcom: null,
     }
 }
+
 export function empty_products_comparation(){
     return {
         url: null,

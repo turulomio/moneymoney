@@ -38,7 +38,7 @@
         <!--  DIALOG PRODUCT CU -->
         <v-dialog v-model="dialog_products_cu" width="30%">
             <v-card class="pa-4">
-                <ProductsCU :product="product" :mode="product_cu_mode" :system="product_cu_system" :key="key"></ProductsCU>
+                <ProductsCU :product="product" :mode="product_cu_mode" :system="product_cu_system" :key="key" @cruded="on_ProductsCU_cruded()"></ProductsCU>
             </v-card>
         </v-dialog>
     </div>
@@ -166,6 +166,16 @@
                 this.key=this.key+1
                 this.dialog_products_cu=true
             },
+            deletePersonalProduct(item){
+                this.product=item
+                this.product_cu_mode="D"
+                this.product_cu_system=false
+                this.key=this.key+1
+                this.dialog_products_cu=true
+            },
+            deleteSystemProduct(){
+                alert(this.$t("System products never should be deleted. You can set obsolete or rename to Reusable when needed."))
+            },
             empty_product,
             ifnullempty,
             viewProduct(item){
@@ -181,6 +191,14 @@
             },
             submit(){
                 this.refreshSearch()
+            },
+            on_ProductsCU_cruded(){
+                this.loading=true
+                this.dialog_products_cu=false,
+                this.$store.dispatch("getProducts").then(() => {
+                    this.refreshSearch()
+                    console.log("AHORA")
+                })
             },
             refreshSearch(){
                 this.loading=true
