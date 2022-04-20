@@ -24,7 +24,7 @@
                     <v-icon class="mr-1" small @click="viewProduct(item)">mdi-eye-outline</v-icon>
                     <v-icon class="mr-1" small @click="editPersonalProduct(item)" v-if="item.id<0">mdi-pencil</v-icon>
                     <v-icon class="mr-1" small @click="editSystemProduct(item)"  color="#AA0000" v-if="item.id>=0 && $store.state.catalog_manager">mdi-pencil</v-icon>
-                    <v-icon class="mr-1" small @click="deletePersonalProduct(item)" v-if="item.id<0">mdi-delete</v-icon>
+                    <v-icon class="mr-1" small @click="deletePersonalProduct(item)" v-if="item.id<0 && item.uses==0">mdi-delete</v-icon>
                     <v-icon class="mr-1" small @click="deleteSystemProduct(item)" color="#AA0000" v-if="item.id>=0 && $store.state.catalog_manager">mdi-delete</v-icon>
                 </template>
             </v-data-table>   
