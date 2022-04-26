@@ -37,10 +37,7 @@
         methods: {
             login(){            
                 if (this.$refs.form.validate()==false) return
-                const formData = new FormData();
-                formData.append('username', this.user);
-                formData.append('password', this.password);
-                axios.post(`${this.$store.state.apiroot}/login/`, formData)
+                axios.post(`${this.$store.state.apiroot}/login/`, {username: this.user, password:this.password}, this.myheaders_noauth())
                 .then((response) => {
                     if (this.parseResponse(response)==true){
                         console.log("Authenticated");

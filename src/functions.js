@@ -49,6 +49,17 @@ export function myheaders(){
         }
     }
 }
+
+
+export function myheaders_noauth(){
+    return {
+        headers:{
+            'Accept-Language': `${this.$i18n.locale}-${this.$i18n.locale}`,
+            'Content-Type':'application/json'
+        }
+    }
+}
+
 export function myheaders_formdata(){
     return {
         headers:{
