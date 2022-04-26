@@ -10,8 +10,8 @@
             <template v-slot:[`item.balance`]="{ item }">
                 <div v-html="currency_html(item.balance, item.currency)"></div>
             </template>   
-            <template v-slot:[`item.account`]="{ item }">
-                <div v-html="$store.getters.getObjectPropertyByUrl('accounts', item.account, 'localname')"></div>
+            <template v-slot:[`item.accounts`]="{ item }">
+                <div v-html="$store.getters.getObjectPropertyByUrl('accounts', item.accounts, 'localname')"></div>
             </template> 
             <template v-slot:[`item.concepts`]="{ item }">
                 <div v-html="$store.getters.getObjectPropertyByUrl('concepts', item.concepts, 'localname')"></div>
@@ -184,14 +184,14 @@
         table_headers(){
             var r= [
                 { text: this.$t('Date and time'), value: 'datetime', sortable: true, width:"12%" },
-                { text: this.$t('Account'), value: 'account', sortable: true, width:"20%" },
+                { text: this.$t('Account'), value: 'accounts', sortable: true, width:"20%" },
                 { text: this.$t('Concept'), value: 'concepts', sortable: true, width:"20%"},
-                { text: this.$t('Amount'), value: 'amount', sortable: false, align:"right", width:"8%"},
+                { text: this.$t('Amount'), value: 'amount', sortable: true, align:"right", width:"8%"},
                 { text: this.$t('Balance'), value: 'balance', sortable: false, align:"right", width:"8%"},
                 { text: this.$t('Comment'), value: 'comment_decoded', sortable: true},
             ]
             if (this.showactions==true){
-                r.push({ text: this.$t('Actions'), value: 'actions', sortable: false     , width:"6%"})
+                r.push({ text: this.$t('Actions'), value: 'actions', sortable: false , width:"6%"})
             }
             if (this.homogeneous==false){
                 r.splice(4, 1);
@@ -220,6 +220,7 @@
         }
     },
     mounted(){
+        console.log(this.items)
         this.gotoLastRow()
     }
 }
