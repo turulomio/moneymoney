@@ -13,7 +13,7 @@
                 <v-row justify="center" align="center" class="ml-0 mr-0">                   
                     <v-icon  @click="localValue=new Date().toISOString().slice(0,10)">mdi-calendar</v-icon>
                     <v-text-field class="ml-3 mr-3" v-model="representation" :name="$attrs.name" :label="$attrs.label" readonly v-bind="attrs" v-on="on" :rules="rules"></v-text-field>
-                    <v-icon x-small @click="localValue=null">mdi-backspace</v-icon>
+                    <v-icon x-small @click="localValue=null" v-if="!hidenullicon">mdi-backspace</v-icon>
                 </v-row>
             </template>
             <v-date-picker v-model="localValue" :first-day-of-week="first_day_of_week()" :locale="$i18n.locale" @input="menu = false"></v-date-picker>
@@ -33,6 +33,11 @@
             rules: {
                 type: Array,
                 required: false
+            },
+            hidenullicon: { //Hides null icon
+                type: Boolean,
+                required: false,
+                default: false,
             }
         },
         data: function(){
