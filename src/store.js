@@ -164,26 +164,27 @@ export const store = new Vuex.Store({
     actions: {// Can be asynchronous. Fetch data
 
         getAll(context){
-            context.dispatch("getAccounts")
-            context.dispatch("getBanks")
-            context.dispatch("getCatalogManager")
-            context.dispatch("getConcepts")
-            context.dispatch("getCreditcards")
-            context.dispatch("getCurrencies")
-            context.dispatch("getInvestments")
-            context.dispatch("getLeverages")
-            context.dispatch("getOperationstypes")
-            context.dispatch("getProductstypes")
-            context.dispatch("getRecomendationMethods")
-            context.dispatch("getSettings")
-            context.dispatch("getStockmarkets")
-            context.dispatch("getStrategiesTypes")
-
-            return context.dispatch("getProducts")
+            return Promise.all([
+                context.dispatch("getAccounts"),
+                context.dispatch("getBanks"),
+                context.dispatch("getCatalogManager"),
+                context.dispatch("getConcepts"),
+                context.dispatch("getCreditcards"),
+                context.dispatch("getCurrencies"),
+                context.dispatch("getInvestments"),
+                context.dispatch("getLeverages"),
+                context.dispatch("getOperationstypes"),
+                context.dispatch("getProductstypes"),
+                context.dispatch("getRecomendationMethods"),
+                context.dispatch("getSettings"),
+                context.dispatch("getStockmarkets"),
+                context.dispatch("getStrategiesTypes"),
+                context.dispatch("getProducts")
+            ])
         },
         getAccounts(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/accounts/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/accounts/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateAccounts', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} accounts in ${new Date()-start} ms`)
@@ -193,7 +194,7 @@ export const store = new Vuex.Store({
         },
         getBanks(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/banks/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/banks/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateBanks', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} banks in ${new Date()-start} ms`)
@@ -203,7 +204,7 @@ export const store = new Vuex.Store({
         },
         getCatalogManager(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/catalog_manager/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/catalog_manager/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateCatalogManager', response.data)
                 console.log(`Updated catalog manager in ${new Date()-start} ms`)
@@ -213,7 +214,7 @@ export const store = new Vuex.Store({
         },
         getCreditcards(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/creditcards/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/creditcards/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateCreditcards', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} credit cards in ${new Date()-start} ms`)
@@ -235,17 +236,9 @@ export const store = new Vuex.Store({
             context.commit("updateCurrencies", currencies_list)
             console.log(`Updated ${currencies_list.length} currencies in ${new Date()-start} ms`)
         },
-        // getCurrencies(context){
-        //     var start=new Date()
-        //     var currencies_list=[]
-        //     currencies_list.push({name:"Euro",symbol_native: "€", code: "EUR", symbol:"€", fullname:"Euro ( EUR - €)"})
-        //     currencies_list.push({name:"US Dolar",symbol_native: "$", code: "USD", symbol:"$", fullname:"US Dolar ( USD - $)"})
-        //     context.commit("updateCurrencies", currencies_list)
-        //     console.log(`Updated ${currencies_list.length} currencies in ${new Date()-start} ms`)
-        // },
         getInvestments(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/investments/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/investments/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateInvestments', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} investments in ${new Date()-start} ms`)
@@ -255,7 +248,7 @@ export const store = new Vuex.Store({
         },
         getLeverages(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/leverages/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/leverages/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateLeverages', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} leverages in ${new Date()-start} ms`)
@@ -265,7 +258,7 @@ export const store = new Vuex.Store({
         },
         getConcepts(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/concepts/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/concepts/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateConcepts', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} concepts in ${new Date()-start} ms`)
@@ -275,7 +268,7 @@ export const store = new Vuex.Store({
         },
         getOperationstypes(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/operationstypes/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/operationstypes/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateOperationstypes', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} operations types in ${new Date()-start} ms`)
@@ -295,7 +288,7 @@ export const store = new Vuex.Store({
         },
         getProductstypes(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/productstypes/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/productstypes/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateProductstypes', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} products types in ${new Date()-start} ms`)
@@ -305,7 +298,7 @@ export const store = new Vuex.Store({
         },
         getRecomendationMethods(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/recomendationmethods/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/recomendationmethods/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateRecomendationMethods', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} recomendation methods in ${new Date()-start} ms`)
@@ -315,7 +308,7 @@ export const store = new Vuex.Store({
         },
         getSettings(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/settings/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/settings/`, store.$app.myheaders())
             .then((response) => {
                 context.commit("updateSettings", response.data)
                 console.log(`Updated ${response.data.length} settings in ${new Date()-start} ms`)
@@ -325,7 +318,7 @@ export const store = new Vuex.Store({
         },
         getStockmarkets(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/stockmarkets/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/stockmarkets/`, store.$app.myheaders())
             .then((response) => {
                 context.commit("updateStockmarkets", response.data)
                 console.log(`Updated ${response.data.length} stock markets in ${new Date()-start} ms`)

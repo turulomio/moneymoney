@@ -8,8 +8,8 @@
         <v-card  class="login">
             <h1 class="mb-2">{{ $t("Enter your credentials") }}</h1>
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-text-field v-model="user" type="text" :counter="75" :label="$t('User')" :placeholder="$t('Enter user')" autofocus :rules="RulesString(75,true)"/>
-                <v-text-field v-model="password" type="password" :label="$t('Password')" :counter="75" :placeholder="$t('Enter password')" :rules="RulesString(75,true)"/>
+                <v-text-field v-model="user" :readonly="loading" type="text" :counter="75" :label="$t('User')" :placeholder="$t('Enter user')" autofocus :rules="RulesString(75,true)"/>
+                <v-text-field v-model="password" :readonly="loading" type="password" :label="$t('Password')" :counter="75" :placeholder="$t('Enter password')" :rules="RulesString(75,true)"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -38,6 +38,7 @@
             login(){            
                 var start=new Date()
                 if (this.$refs.form.validate()==false) return
+                if (this.loading==true) return
                 this.loading=true
                 axios.post(`${this.$store.state.apiroot}/login/`, {username: this.user, password:this.password}, this.myheaders_noauth())
                 .then((response) => {
