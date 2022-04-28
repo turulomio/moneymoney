@@ -4,17 +4,17 @@
         <v-icon>mdi-account</v-icon>
         <span class="mr-2 text-no-wrap text-truncate">{{ $t("Log in") }}</span>
     </v-btn>    
-    <v-dialog v-model="dialog" max-width="450">
+    <v-dialog v-model="dialog" max-width="450" persistent>
         <v-card  class="login">
-            <v-card-title class="headline">{{ $t("Enter your credentials") }}</v-card-title>
+            <h1 class="mb-2">{{ $t("Enter your credentials") }}</h1>
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <v-text-field v-model="user" type="text" :counter="75" :label="$t('User')" :placeholder="$t('Enter user')" autofocus :rules="RulesString(75,true)"/>
                 <v-text-field v-model="password" type="password" :label="$t('Password')" :counter="75" :placeholder="$t('Enter password')" :rules="RulesString(75,true)"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="login()" :disabled="!form_valid">{{ $t("Log in") }}</v-btn>
-                <v-btn color="error" @click="dialog = false">{{ $t("Cancel") }}</v-btn>
+                <v-btn color="primary" :loading="loading" @click="login()" :disabled="!form_valid">{{ $t("Log in") }}</v-btn>
+                <v-btn color="error" :disabled="loading" @click="dialog = false">{{ $t("Cancel") }}</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -24,19 +24,21 @@
 <script>
     import axios from 'axios'
     export default {
-        name: 'btnLogIn',
         data () {
             return {
                 user: "",
                 password: "",
-                dialog: false,                
+                dialog: false,         
+                loading:false,       
                 
                 form_valid:false,
             }
         },
         methods: {
             login(){            
+                var start=new Date()
                 if (this.$refs.form.validate()==false) return
+                this.loading=true
                 axios.post(`${this.$store.state.apiroot}/login/`, {username: this.user, password:this.password}, this.myheaders_noauth())
                 .then((response) => {
                     if (this.parseResponse(response)==true){
@@ -45,9 +47,13 @@
                         this.$store.state.logged=true;
                         console.log(this.$i18n.locale)
                         this.$store.dispatch("getAll")
-                        this.dialog=false;
-                        this.$refs.form.reset()
-                        this.$router.push({name:'home'})
+                        .then(()=>{
+                            this.$refs.form.reset()
+                            this.$router.push({name:'home'})
+                            this.loading=false
+                            this.dialog=false;
+                            console.log(`Login and catalogs load took ${new Date()-start} ms`)
+                        })
                     }
                 }, (error) => {
                     this.parseResponseError(error)
