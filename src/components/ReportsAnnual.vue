@@ -268,7 +268,6 @@
 
     import axios from 'axios'
     import moment from 'moment'
-    import {listobjects_sum, localtime} from '../functions.js'
     import ReportsAnnualIncomeDetail from './ReportsAnnualIncomeDetail.vue'
     export default {
         components:{
@@ -358,7 +357,6 @@
             }
         },
         methods:{
-            localtime,
             years(){
                 var start=1990
                 var end=new Date().getFullYear()
@@ -368,8 +366,8 @@
                 this.refreshTables()
             },
             footer_gainsbyproductstypes(){
-                var gross_gains=listobjects_sum(this.total_annual_gainsbyproductstypes,'gains_gross')+listobjects_sum(this.total_annual_gainsbyproductstypes,'dividends_gross')
-                var net_gains=listobjects_sum(this.total_annual_gainsbyproductstypes,'gains_net')+listobjects_sum(this.total_annual_gainsbyproductstypes,'dividends_net')
+                var gross_gains=this.listobjects_sum(this.total_annual_gainsbyproductstypes,'gains_gross')+this.listobjects_sum(this.total_annual_gainsbyproductstypes,'dividends_gross')
+                var net_gains=this.listobjects_sum(this.total_annual_gainsbyproductstypes,'gains_net')+this.listobjects_sum(this.total_annual_gainsbyproductstypes,'dividends_net')
                 return this.$t(`<p class='mt-4'>Gross gains + Gross dividends = ${this.localcurrency_html(gross_gains)}.</p><p>Net gains + Net dividends = ${this.localcurrency_html(net_gains)}.</p>`)
             },
             incomeDetails(item){
@@ -378,14 +376,14 @@
                 this.key=this.key+1  
             },
             message_invest_or_work(){
-                if (listobjects_sum(this.total_invest_or_work,'diff')>=0){
+                if (this.listobjects_sum(this.total_invest_or_work,'diff')>=0){
                     return this.$t("You can only invest")
                 } else {
                     return this.$t("You still have to work")
                 }
             },
             message_make_ends_meet(){
-                if (listobjects_sum(this.total_make_ends_meet,'diff')>=0){
+                if (this.listobjects_sum(this.total_make_ends_meet,'diff')>=0){
                     return this.$t("I make ends meet")
                 } else {
                     return this.$t("I don't make ends meet")

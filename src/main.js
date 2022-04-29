@@ -85,12 +85,15 @@ import {
     parseResponse,
     parseResponseError,
     listobjects_sum,
+    listobjects_average_ponderated,
     myheaders_formdata,
     percentage_generic_html,
     percentage_generic_string, 
-    zulu2date,
-    date2zulu,
     my_round
+} from './my_commons.js'
+import {
+    zulu2date,
+    date2zulu
 } from './functions.js'
 import {RulesFloat,RulesDate,RulesDatetime,RulesInteger,RulesString,RulesSelection, RulesFloatPositive, RulesFloatNegative, } from './rules.js'
 Vue.mixin({
@@ -108,7 +111,7 @@ Vue.mixin({
         parseResponseError,
         zulu2date,
         date2zulu,
-
+        listobjects_average_ponderated,
         listobjects_sum,
         RulesDate,
         RulesDatetime,

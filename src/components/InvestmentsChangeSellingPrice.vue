@@ -74,7 +74,6 @@
     import DisplayValues from './DisplayValues.vue'
     import MyDatePicker from './MyDatePicker.vue'
     import {empty_products_ranges} from '../empty_objects.js'
-    import {arrayobjects_to_array} from '../functions.js'
 
     
     export default {
@@ -216,7 +215,6 @@
                 var gains=this.selected_invested*percentage/100
                 return this.selling_price_to_gain_money(gains)
             },
-            arrayobjects_to_array,
             submit(){                               
                 if (this.$refs.form.validate()==false) return
                 if (this.selling_expiration != null && new Date(this.selling_expiration).setHours(0,0,0,0)<new Date().setHours(0,0,0,0)) alert(this.$t("Selling expiration date is in the past"))

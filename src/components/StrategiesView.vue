@@ -84,7 +84,6 @@
 <script>
     import axios from 'axios'
     import {empty_investment_operation, empty_strategy_simulation, empty_dividend,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
-    import {listobjects_average_ponderated} from '../functions.js'
     import MyMenuInline from './MyMenuInline.vue'
     import DisplayValues from './DisplayValues.vue'
     import TableDividends from './TableDividends.vue'
@@ -186,7 +185,6 @@
             empty_dividend,
             empty_investment_operation,
             empty_strategy_simulation,
-            listobjects_average_ponderated,
             on_TableDividends_cruded(){
                 this.update_all()
             },

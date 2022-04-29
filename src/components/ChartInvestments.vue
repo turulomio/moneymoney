@@ -13,7 +13,6 @@
 
 </template>
 <script>
-    import {arrayobjects_to_array} from '../functions.js'
     export default {
         props:{
             data:{ //empty_investments_chart
@@ -30,7 +29,6 @@
             }
         },
         methods: {
-            arrayobjects_to_array,
             chart_option(){
                 var legends= [
                             this.data.io_object.product.name, 

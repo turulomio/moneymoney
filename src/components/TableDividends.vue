@@ -56,7 +56,6 @@
 <script>    
     import axios from 'axios'
     import DividendsCU from './DividendsCU.vue'
-    import {localtime} from '../functions.js'
     export default {
         components:{
             DividendsCU,
@@ -82,7 +81,6 @@
             }
         },
         methods: {
-            localtime,
             currency(value){
                 return this.currency_html(value, this.currency_account)
             },

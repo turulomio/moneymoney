@@ -8,11 +8,19 @@
 </template>
 
 <script>
-    import {logout} from '../functions.js'
+    import axios from 'axios'
     export default {
-        name: 'btnLogOut',
         methods: {
-            logout,
+            logout(){
+                axios.post(`${this.$store.state.apiroot}/logout/`, {'key': this.$store.state.token},this.myheaders())
+                .then((response) => {
+                    console.log(response.data);
+                    this.$store.state.token=null;
+                    this.$store.state.logged=false;
+                }, (error) => {
+                    this.parseResponseError(error)
+                    });
+            }
         },
     }
 </script>

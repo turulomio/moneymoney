@@ -127,7 +127,6 @@
     </v-data-table>   
 </template>
 <script>    
-    import {listobjects_average_ponderated,localtime} from '../functions.js'
     export default {
         components:{
         },
@@ -162,8 +161,6 @@
             }
         },
         methods: {
-            localtime,
-            listobjects_average_ponderated,
             currency(value){
                 if (this.output=="account"){
                     return this.currency_html(value, this.currency_account)

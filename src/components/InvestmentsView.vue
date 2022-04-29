@@ -126,7 +126,6 @@
 <script>
     import axios from 'axios'
     import {empty_investment_operation,empty_dividend,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
-    import {listobjects_sum, parseNumber,listobjects_average_ponderated} from '../functions.js'
     import ChartInvestments from './ChartInvestments.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import DividendsCU from './DividendsCU.vue'
@@ -289,10 +288,10 @@
                             {
                                 name:this.$t('Add an investment operation adjusting currency conversion factor'),
                                 code: function(this_){
-                                    var selling_price_product_currency=parseNumber(prompt( this_.$t("Please add the operation close price in product currency"), 0 ));
-                                    var gains_account_currency=parseNumber(prompt( this_.$t("Please add the final gains in account currency"), 0 ));
-                                    var shares=listobjects_sum(this_.list_io_current,"shares")
-                                    var average_price_current_account=listobjects_average_ponderated(this_.list_io_current,'price_account', 'shares')
+                                    var selling_price_product_currency=this_.parseNumber(prompt( this_.$t("Please add the operation close price in product currency"), 0 ));
+                                    var gains_account_currency=this_.parseNumber(prompt( this_.$t("Please add the final gains in account currency"), 0 ));
+                                    var shares=this_.listobjects_sum(this_.list_io_current,"shares")
+                                    var average_price_current_account=this_.listobjects_average_ponderated(this_.list_io_current,'price_account', 'shares')
                                     var leverage=this_.ios.investment.leverage_real_multiplier
                                     var currency_conversion=(gains_account_currency+shares*average_price_current_account*leverage)/(shares*selling_price_product_currency*leverage)
 
@@ -312,7 +311,7 @@
                                         alert(this_.$t("You can't use this option if investment and product currencies are not the same"))
                                         return
                                     }
-                                    var shares=listobjects_sum(this_.list_io_current,"shares")
+                                    var shares=this_.listobjects_sum(this_.list_io_current,"shares")
 
                                     this_.io=this_.empty_investment_operation()
                                     this_.io.investments=this_.investment.url
@@ -375,7 +374,6 @@
             empty_investments_chart_limit_line,
             empty_dividend,
             empty_investment_operation,
-            listobjects_average_ponderated,
             on_DividendsCU_cruded(){
                 this.dialog_dividend=false
                 this.update_all()

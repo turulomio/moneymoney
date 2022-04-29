@@ -38,7 +38,6 @@
 </template>
 <script>
     import axios from 'axios'
-    // import {listobjects_sum, parseNumber,listobjects_average_ponderated} from '../functions.js'
     import TableAccountOperations from './TableAccountOperations.vue'
     import TableDividends from './TableDividends.vue'
     

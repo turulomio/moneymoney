@@ -58,7 +58,6 @@
 
 <script>    
     import axios from 'axios'
-    import {localtime} from '../functions.js'
     export default {
         props: {
             items: {
@@ -99,7 +98,6 @@
         computed:{
         },
         methods: {
-            localtime,
             table_headers(){
                 var r
                 if (this.output=="account"){

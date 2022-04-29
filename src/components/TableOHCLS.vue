@@ -31,7 +31,6 @@
 <script>    
     import axios from 'axios'
     import QuotesCU from './QuotesCU.vue'
-    import {localtime} from '../functions.js'
     export default {
         components:{
             QuotesCU,
@@ -53,7 +52,6 @@
             }
         },
         methods: {
-            localtime,
             editQuote(item){
                 this.quote=item
                 this.investment={url:this.dividend.investments}

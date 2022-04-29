@@ -13,7 +13,6 @@
 
 </template>
 <script>
-    import {arrayobjects_to_array} from '../functions.js'
     export default {
         props:{
             ohcls:{
@@ -31,7 +30,6 @@
             }
         },
         methods: {
-            arrayobjects_to_array,
             chart_option(){
                 return {
                     legend: {

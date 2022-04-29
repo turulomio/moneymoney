@@ -14,7 +14,6 @@
 
 </template>
 <script>
-    import {arrayobjects_to_array} from '../functions.js'
     export default {
         props:{
             product_a:{
@@ -38,7 +37,6 @@
             }
         },
         methods: {
-            arrayobjects_to_array,
             chart_option(){
                 // var this_=this
                 return {
