@@ -41,8 +41,6 @@
 </template>
 
 <script>     
-    import {listobjects_sum} from '../functions.js'
-
     import CreditcardsoperationsCU from './CreditcardsoperationsCU.vue'
     export default {
         components:{
@@ -89,7 +87,6 @@
             }
         },
         methods: {
-            listobjects_sum,
             editCCO(item){
                 this.cco=item
                 this.cco_deleting=false

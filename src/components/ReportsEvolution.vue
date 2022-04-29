@@ -126,7 +126,6 @@
 </template>
 <script>     
     import axios from 'axios'
-    import {listobjects_sum} from '../functions.js'
     export default {
         components:{
         },
@@ -175,9 +174,9 @@
             report(){
                 var last=this.investedData[this.investedData.length-1]
                 var diff=last.balance-last.invested
-                var sum_gd=listobjects_sum(this.investedData,'net_gains_plus_dividends')
-                var sum_cc=listobjects_sum(this.investedData,'custody_commissions')
-                var sum_t=listobjects_sum(this.investedData,'taxes')
+                var sum_gd=this.listobjects_sum(this.investedData,'net_gains_plus_dividends')
+                var sum_cc=this.listobjects_sum(this.investedData,'custody_commissions')
+                var sum_t=this.listobjects_sum(this.investedData,'taxes')
                 var s=""
                 s=s+"<br>"+this.$t("Difference between invested amount and current invesment balance is {0}.").replace('{0}', this.localcurrency_html(diff) )
                 s=s+"<br>"

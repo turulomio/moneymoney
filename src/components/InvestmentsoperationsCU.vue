@@ -28,7 +28,6 @@
 <script>
     import axios from 'axios'
     import {empty_investment_operation} from '../empty_objects.js'
-    import {parseNumber} from '../functions.js'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import CurrencyFactor from './CurrencyFactor.vue'
@@ -70,7 +69,6 @@
         },
         methods: {
             empty_investment_operation,
-            parseNumber,
             title(){
                 if (this.editing){
                     return this.$t("Updating investment operation")

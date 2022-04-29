@@ -25,7 +25,6 @@
     </div>
 </template>
 <script>
-    import {my_round} from '../functions.js'
     export default {    
         props: {
             value: {
@@ -61,7 +60,6 @@
             },
         },
         methods: {
-            my_round,
             update_value(){
                 this.newvalue=this.my_round(this.currency_to_value/this.currency_from_value, this.decimals)
                 this.$emit('input', this.newvalue)

@@ -45,7 +45,6 @@
     import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
     import CreditcardsoperationsCU from './CreditcardsoperationsCU.vue'
     import CreditcardsPaymentsRefund from './CreditcardsPaymentsRefund.vue'
-    import {listobjects_sum} from '../functions.js'
     import {empty_cco} from '../empty_objects.js'
     export default {
         components:{
@@ -115,7 +114,7 @@
             empty_cco,
             changeSelected(selected_items){
                 this.selected_items=selected_items
-                this.paying_string=this.$t(`Make a payment of ${selected_items.length} operations valued in ${this.currency_string(listobjects_sum(selected_items,"amount"), this.account.currency) }`) 
+                this.paying_string=this.$t(`Make a payment of ${selected_items.length} operations valued in ${this.currency_string(this.listobjects_sum(selected_items,"amount"), this.account.currency) }`) 
             },
             update_table(refresh_key=true){
                 this.loading_cco=true

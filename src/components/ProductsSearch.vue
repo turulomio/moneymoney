@@ -45,7 +45,6 @@
 </template>  
 <script>     
     import axios from 'axios'
-    import {ifnullempty} from '../functions.js'
     import {empty_product} from '../empty_objects.js'
     import MyMenuInline from './MyMenuInline.vue'
     import ProductsView from './ProductsView.vue'
@@ -177,7 +176,6 @@
                 alert(this.$t("System products never should be deleted. You can set obsolete or rename to Reusable when needed."))
             },
             empty_product,
-            ifnullempty,
             viewProduct(item){
                 this.product=item
                 this.key=this.key+1

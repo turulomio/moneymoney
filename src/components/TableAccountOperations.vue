@@ -56,7 +56,6 @@
 
 <script>     
     import axios from 'axios'
-    import {listobjects_sum} from '../functions.js'
     import {empty_account_transfer} from '../empty_objects.js'
     import AccountsoperationsCU from './AccountsoperationsCU.vue'
     import AccountsTransfer from './AccountsTransfer.vue'
@@ -117,7 +116,6 @@
         }
     },
     methods: {
-        listobjects_sum,
         empty_account_transfer,
         editAO (item) {
             console.log(item)

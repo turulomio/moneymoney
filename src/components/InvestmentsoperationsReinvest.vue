@@ -72,7 +72,6 @@
 <script>     
     import axios from 'axios'
     import MyMenuInline from './MyMenuInline.vue'
-    import {parseNumber} from '../functions.js'
     import {empty_order, empty_investments_operations_simulation,empty_investment_operation,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
     import ChartInvestments from './ChartInvestments.vue'
     import OrdersCU from './OrdersCU.vue'
@@ -112,7 +111,7 @@
                             {
                                 name:this.$t('Integer shares from price'),
                                 code: function(this_){
-                                    var amount=parseNumber(prompt( this_.$t("Please the amount to invest in this order"), 10000 ));
+                                    var amount=this_.parseNumber(prompt( this_.$t("Please the amount to invest in this order"), 10000 ));
                                     this_.newshares=parseInt(amount/this_.newprice)
                                 },
                                 icon: "mdi-book-plus",
@@ -120,7 +119,7 @@
                             {
                                 name:this.$t('Decimal shares from price'),
                                 code: function(this_){
-                                    var amount=parseNumber(prompt( this_.$t("Please the amount to invest in this order"), 10000 ));
+                                    var amount=this_.parseNumber(prompt( this_.$t("Please the amount to invest in this order"), 10000 ));
                                     this_.newshares=amount/this_.newprice
                                 },
                                 icon: "mdi-book-plus",

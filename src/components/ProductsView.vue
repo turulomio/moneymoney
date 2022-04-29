@@ -105,7 +105,6 @@
     import TableOHCLS from './TableOHCLS.vue'
     import TableQuotes from './TableQuotes.vue'
     import {empty_quote,empty_estimation_dps} from '../empty_objects.js'
-    import {get_current_monthpicker_string} from '../functions.js'
     export default {
         components:{
             ChartProduct,
@@ -227,7 +226,6 @@
         methods: {
             empty_quote,
             empty_estimation_dps,
-            get_current_monthpicker_string,
             on_EstimationsDpsCU_cruded(){
                 this.dialog_estimationdps=false
                 this.key=this.key+1

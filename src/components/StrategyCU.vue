@@ -36,7 +36,6 @@
 <script>
     import axios from 'axios'
     import MyDateTimePicker from './MyDateTimePicker.vue'
-    import {arrayofintegers_to_stringofintegers,stringofintegers_to_arrayofintegers} from '../functions.js'
     export default {
         components: {
             MyDateTimePicker,
@@ -69,8 +68,6 @@
             }
         },
         methods: {
-            arrayofintegers_to_stringofintegers,
-            stringofintegers_to_arrayofintegers,
             title(){
                 if (this.deleting) {
                     return this.$t("Deleting strategy")
