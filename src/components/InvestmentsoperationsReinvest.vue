@@ -162,10 +162,6 @@
                 form_valid:false,
             }
         },
-        computed:{
-        },
-        watch:{
-        },
         methods: {
             empty_order,
             empty_investments_operations_simulation,
