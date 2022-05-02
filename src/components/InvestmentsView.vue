@@ -97,9 +97,9 @@
         </v-dialog>
 
         <!-- DIVIDEND CU-->
-        <v-dialog v-model="dialog_dividend" width="35%">
+        <v-dialog v-model="dividends_cu_dialog" width="35%">
             <v-card class="pa-3">
-                <DividendsCU :dividend="dividend" :investment="investment" :key="key"  @cruded="on_DividendsCU_cruded()"></DividendsCU>
+                <DividendsCU :dividend="dividend" :mode="dividends_cu_mode" :key="key"  @cruded="on_DividendsCU_cruded()"></DividendsCU>
             </v-card>
         </v-dialog>
 
@@ -336,8 +336,10 @@
                                 name:this.$t('Add a dividend'),
                                 code: function(this_){
                                     this_.dividend=this_.empty_dividend()
-                                    this_.dividend.investments=this_.investment.url                                     
-                                    this_.dialog_dividend=true
+                                    this_.dividend.investments=this_.investment.url    
+                                    this_.dividends_cu_mode="C"         
+                                    this_.key=this_.key+1                        
+                                    this_.dividends_cu_dialog=true
                                 },
                                 icon: "mdi-book-plus",
                             },
@@ -350,7 +352,8 @@
                 ios:null,
 
                 // Dividend CU
-                dialog_dividend:false,
+                dividends_cu_dialog:false,
+                dividends_cu_mode: null,
                 dividend: null,
 
                 // Dividend Produts view
@@ -375,7 +378,7 @@
             empty_dividend,
             empty_investment_operation,
             on_DividendsCU_cruded(){
-                this.dialog_dividend=false
+                this.dividends_cu_dialog=false
                 this.update_all()
             },
             on_TableDividends_cruded(){

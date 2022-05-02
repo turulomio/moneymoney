@@ -46,15 +46,14 @@
             </template>
         </v-data-table>   
         <!-- DIVIDEND CU-->
-        <v-dialog v-model="dialog_dividend" width="35%">
+        <v-dialog v-model="dividends_cu_dialog" width="35%">
             <v-card class="pa-3">
-                <DividendsCU :dividend="dividend" :investment="investment" :key="key"  @cruded="on_DividendsCU_cruded()"></DividendsCU>
+                <DividendsCU :dividend="dividend" :mode="dividends_cu_mode" :key="key"  @cruded="on_DividendsCU_cruded()"></DividendsCU>
             </v-card>
         </v-dialog>
     </div>
 </template>
-<script>    
-    import axios from 'axios'
+<script>
     import DividendsCU from './DividendsCU.vue'
     export default {
         components:{
@@ -74,9 +73,9 @@
         },
         data: function(){
             return {
-                dialog_dividend:false,
+                dividends_cu_dialog:false,
                 dividend: null,
-                investment: null,
+                dividends_cu_mode: null,
                 key: 0,
             }
         },
@@ -86,21 +85,15 @@
             },
             editDividend(item){
                 this.dividend=item
-                this.investment={url:this.dividend.investments}
-                this.dialog_dividend=true
+                this.dividends_cu_mode="U"
                 this.key=this.key+1
+                this.dividends_cu_dialog=true
             },
             deleteDividend(item){
-               var r = confirm(this.$t("Do you want to delete this dividend?"))
-               if(r == false) {
-                  return
-               } 
-                axios.delete(item.url, this.myheaders())
-                .then(() => {
-                    this.$emit("cruded")
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
+                this.dividend=item
+                this.dividends_cu_mode="D"
+                this.key=this.key+1
+                this.dividends_cu_dialog=true
             },
             table_headers(){
                 var r= [

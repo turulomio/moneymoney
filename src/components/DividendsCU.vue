@@ -4,15 +4,15 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-autocomplete :items="$store.state.investments" v-model="newdividend.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <MyDateTimePicker v-model="newdividend.datetime" :label="$t('Set investment execution date and time')"></MyDateTimePicker>
-                <v-autocomplete :items="$store.getters.getConceptsForDividends()" v-model="newdividend.concepts" :label="$t('Select a concept')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field v-model="newdividend.gross" type="number" :label="$t('Set dividend gross balance')" :placeholder="$t('Set dividend gross balance')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field v-model="newdividend.net" type="number" :label="$t('Set dividend net balance')" :placeholder="$t('Set dividend net balance')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field v-model="newdividend.taxes" type="number" :label="$t('Set dividend taxes')" :placeholder="$t('Set dividend taxes')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field v-model="newdividend.commission" type="number" :label="$t('Set dividend commission')" :placeholder="$t('Set dividend commission')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field v-model="newdividend.dps" type="number" :label="$t('Set dividend per share')" :placeholder="$t('Set dividend per share')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field v-model="newdividend.currency_conversion" type="number" :label="$t('Set dividend currency conversion')" :placeholder="$t('Set dividend currency conversion')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-autocomplete :readonly="mode=='D'" :items="$store.state.investments" v-model="newdividend.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <MyDateTimePicker :readonly="mode=='D'" v-model="newdividend.datetime" :label="$t('Set investment execution date and time')"></MyDateTimePicker>
+                <v-autocomplete :readonly="mode=='D'" :items="$store.getters.getConceptsForDividends()" v-model="newdividend.concepts" :label="$t('Select a concept')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-text-field :readonly="mode=='D'" v-model="newdividend.gross" type="number" :label="$t('Set dividend gross balance')" :placeholder="$t('Set dividend gross balance')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newdividend.net" type="number" :label="$t('Set dividend net balance')" :placeholder="$t('Set dividend net balance')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newdividend.taxes" type="number" :label="$t('Set dividend taxes')" :placeholder="$t('Set dividend taxes')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newdividend.commission" type="number" :label="$t('Set dividend commission')" :placeholder="$t('Set dividend commission')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newdividend.dps" type="number" :label="$t('Set dividend per share')" :placeholder="$t('Set dividend per share')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newdividend.currency_conversion" type="number" :label="$t('Set dividend currency conversion')" :placeholder="$t('Set dividend currency conversion')" :rules="RulesInteger(10,true)" counter="10"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -29,11 +29,10 @@
             MyDateTimePicker,
         },
         props: {
-            // An account object
             dividend: {
-                required: true // Null to create, io object to update
+                required: true
             },
-            investment:{
+            mode: {
                 required: true
             }
         },
@@ -41,23 +40,18 @@
             return {
                 form_valid: false,
                 newdividend: null,
-                editing: false,
             }
         },
         methods: {
             title(){
-                if (this.editing){
-                    return this.$t("Updating dividend")
-                } else {
-                    return this.$t("Creating a new dividend")
-                }
+                if (this.mode=="C") return this.$t("Add a dividend")
+                if (this.mode=="U") return this.$t("Update dividend")
+                if (this.mode=="D") return this.$t("Delete dividend")
             },
             button(){
-                if (this.editing){
-                    return this.$t("Update dividend")
-                } else {
-                    return this.$t("Add dividend")
-                }
+                if (this.mode=="C") return this.$t("Add")
+                if (this.mode=="U") return this.$t("Update")
+                if (this.mode=="D") return this.$t("Delete")
             },
             accept(){           
                 if( this.$refs.form.validate()==false) return
@@ -81,7 +75,7 @@
                     return
                 }
 
-                if (this.editing==true){
+                if (this.mode=="U"){
                     axios.put(this.newdividend.url, this.newdividend,  this.myheaders())
                     .then(() => {
                             this.$emit("cruded")
@@ -89,22 +83,29 @@
                     }, (error) => {
                         this.parseResponseError(error)
                     })
-                } else{
+                } else if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/dividends/`, this.newdividend,  this.myheaders())
                     .then(() => {
                             this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
+                } else if (this.mode=="D"){
+
+                    var r = confirm(this.$t("Do you want to delete this dividend?"))
+                    if(r == false) {
+                        return
+                    } 
+                        axios.delete(this.newdividend.url, this.myheaders())
+                        .then(() => {
+                            this.$emit("cruded")
+                        }, (error) => {
+                            this.parseResponseError(error)
+                        });
                 }
             },
         },
         created(){
-            if (this.dividend.url==null){
-                this.editing=false
-            } else {
-                this.editing=true
-            }
             this.newdividend=Object.assign({},this.dividend)
         }
     }
