@@ -1,4 +1,3 @@
-
 export function empty_account(){
     return {
         name: "",
@@ -57,6 +56,16 @@ export function empty_credit_card(){
         maximumbalance: 0,
         active: true,   
         accounts: null,
+        url: null,
+    }
+}
+
+export function empty_dps(){
+    return {
+        date: new Date().toISOString().slice(0,10),
+        paydate: new Date().toISOString().slice(0,10),
+        gross: 0,
+        products: null,
         url: null,
     }
 }

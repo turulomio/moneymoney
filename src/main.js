@@ -80,6 +80,7 @@ const router = new VueRouter({
 // MIXIN GLOBAL
 import {
     localtime,
+    get_current_monthpicker_string,
     myheaders,
     myheaders_noauth,
     parseResponse,
@@ -113,6 +114,7 @@ Vue.mixin({
         parseResponseError,
         zulu2date,
         date2zulu,
+        get_current_monthpicker_string,
         listobjects_average_ponderated,
         listobjects_sum,
         RulesDate,

@@ -11,6 +11,7 @@
             <v-tab key="percentage_evolution">{{ $t("Percentage evolution")}}</v-tab>
             <v-tab key="quotes_evolution">{{ $t("Quotes evolution")}}</v-tab>
             <v-tab key="dps_estimations">{{ $t("DPS estimations")}}</v-tab>
+            <v-tab key="dps">{{ $t("DPS")}}</v-tab>
             <v-tab key="ohcls">{{ $t("Daily OHCL")}}</v-tab>
             <v-tab key="quotes">{{ $t("Quotes")}}</v-tab>
             <v-tab key="chart">{{ $t("Chart")}}</v-tab>
@@ -57,6 +58,11 @@
                         <TableEstimationsDPS :product="product" :key="key"></TableEstimationsDPS>
                     </v-card>
                 </v-tab-item>
+                <v-tab-item key="dps">     
+                    <v-card class="pa-4 d-flex justify-center" outlined >
+                        <TableDPS :product="product" :key="key" :height="400"></TableDPS>
+                    </v-card>
+                </v-tab-item>
                 <v-tab-item key="ohcls">
                     <v-card class="pa-4 d-flex justify-center" outlined style="min-width: 100px; max-width: 100%;">
                         <v-date-picker dense no-title class="mymonthpicker" v-model="monthpicker_ohcls" type="month" @change="on_monthpicker_ohcls_change()"></v-date-picker>
@@ -92,6 +98,13 @@
                 <EstimationsDpsCU :estimation="estimation" @cruded="on_EstimationsDpsCU_cruded()" :key="key"></EstimationsDpsCU>
             </v-card>
         </v-dialog>
+
+        <!-- DPS CU -->
+        <v-dialog v-model="dps_crud_dialog" width="35%">
+            <v-card class="pa-4">
+                <DpsCRUD :dps="dps" :mode="dps_crud_mode" @cruded="on_DpsCRUD_cruded()" :key="key"></DpsCRUD>
+            </v-card>
+        </v-dialog>
     </div>
 </template>  
 <script>     
@@ -101,10 +114,12 @@
     import ChartProduct from './ChartProduct.vue'
     import DisplayValues from './DisplayValues.vue'
     import EstimationsDpsCU from './EstimationsDpsCU.vue'
+    import TableDPS from './TableDPS.vue'
     import TableEstimationsDPS from './TableEstimationsDPS.vue'
     import TableOHCLS from './TableOHCLS.vue'
     import TableQuotes from './TableQuotes.vue'
-    import {empty_quote,empty_estimation_dps} from '../empty_objects.js'
+    import {empty_quote,empty_estimation_dps,empty_dps} from '../empty_objects.js'
+    import DpsCRUD from './DpsCRUD.vue'
     export default {
         components:{
             ChartProduct,
@@ -112,9 +127,11 @@
             EstimationsDpsCU,
             MyMenuInline,
             QuotesCU,
+            TableDPS,
             TableEstimationsDPS,
             TableQuotes,
             TableOHCLS,
+            DpsCRUD,
         },
 
         props: {
@@ -160,6 +177,18 @@
                                     this_.estimation=this_.empty_estimation_dps()
                                     this_.estimation.product=this_.product.url
                                     this_.dialog_estimationdps=true
+                                },
+                                icon: "mdi-plus",
+                            },
+                            {
+                                name:this.$t('Add a DPS'),
+                                code: function(this_){
+                                    this_.key=this_.key+1
+                                    this_.dps=this_.empty_dps()
+                                    this_.dps.products=this_.product.url
+                                    this_.dps_crud_mode="C"
+                                    this_.dps_crud_dialog=true
+
                                 },
                                 icon: "mdi-plus",
                             },
@@ -221,9 +250,15 @@
                 //Estimations DPS CU
                 dialog_estimationdps: false,
                 estimation: null,
+
+                //DPS CRUD DIALOG
+                dps_crud_dialog: false,
+                dps_crud_mode: null,
+                dps: null,
             }
         },
         methods: {
+            empty_dps,
             empty_quote,
             empty_estimation_dps,
             on_EstimationsDpsCU_cruded(){
@@ -273,6 +308,10 @@
                 this.make_all_axios()
                 this.on_monthpicker_quotes_change()
                 this.on_monthpicker_ohcls_change()
+            },
+            on_DpsCRUD_cruded(){
+                this.dps_crud_dialog=false
+                this.key=this.key+1
             }
         },
 
