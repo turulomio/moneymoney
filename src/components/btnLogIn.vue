@@ -5,7 +5,7 @@
         <span class="mr-2 text-no-wrap text-truncate">{{ $t("Log in") }}</span>
     </v-btn>    
     <v-dialog v-model="dialog" max-width="450" persistent>
-        <v-card  class="login">
+        <v-card  class="pa-6">
             <h1 class="mb-2">{{ $t("Enter your credentials") }}</h1>
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <v-text-field v-model="user" :readonly="loading" type="text" :counter="75" :label="$t('User')" :placeholder="$t('Enter user')" autofocus :rules="RulesString(75,true)"/>
@@ -50,11 +50,17 @@
                         this.$store.dispatch("getAll")
                         .then(()=>{
                             this.$refs.form.reset()
-                            this.$router.push({name:'home'})
                             this.loading=false
                             this.dialog=false;
+                            if (this.$router.history.current.name !== 'home' ) this.$router.push({name:'home'})
                             console.log(`Login and catalogs load took ${new Date()-start} ms`)
                         })
+                    } else { //Response=false 
+                        setTimeout(() => { //Delay of 1 second
+                            this.$refs.form.reset()
+                            this.dialog=false
+                            this.loading=false
+                        }, 2000);
                     }
                 }, (error) => {
                     this.parseResponseError(error)
@@ -64,8 +70,3 @@
     }
 </script>
 <style>
-.login{
-    padding:30px;
-    
-}
-</style>

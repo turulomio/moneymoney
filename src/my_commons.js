@@ -102,18 +102,16 @@ export function sortObjectsArray(objectsArray, sortKey)
 // return false if there is something wrong
 export function parseResponse(response){
     if (response.status==200){ //Good connection
-        if (response.data == "Invalid user" || response.data == "Wrong password"){
-            this.$store.state.token=null;
-            this.$store.state.logged=false;
-            if (this.$router.currentRoute.name != "home") this.$router.push("home")
-            alert(response.data)
+        if (response.data == "Wrong credentials"){
+            this.$store.state.token=null
+            this.$store.state.logged=false
+            alert(this.$t("Wrong credentials"))
             return false
         }
         return true
     } else if (response.status==201){// Created
         
     } else if (response.status==204){// Deleted
-        this.ao
     } else {
         alert (`${response.status}: ${response.data}`)
         return false
