@@ -80,6 +80,7 @@ const router = new VueRouter({
 // MIXIN GLOBAL
 import {
     arrayofintegers_to_stringofintegers,
+    arrayobjects_to_array,
     localtime,
     get_current_monthpicker_string,
     myheaders,
@@ -106,6 +107,7 @@ Vue.mixin({
     },
     methods: {
         arrayofintegers_to_stringofintegers,
+        arrayobjects_to_array,
         localtime,
         myheaders,
         myheaders_noauth,
