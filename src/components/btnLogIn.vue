@@ -14,7 +14,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" :loading="loading" @click="login()" :disabled="!form_valid">{{ $t("Log in") }}</v-btn>
-                <v-btn color="error" :disabled="loading" @click="dialog = false">{{ $t("Cancel") }}</v-btn>
+                <v-btn color="error" :disabled="loading" @click="cancel()">{{ $t("Cancel") }}</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -66,6 +66,10 @@
                     this.parseResponseError(error)
                 })
             },
+            cancel(){
+                this.$refs.form.reset()
+                this.dialog = false
+            }
         },
     }
 </script>
