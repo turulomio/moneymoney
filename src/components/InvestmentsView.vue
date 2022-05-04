@@ -121,6 +121,13 @@
                 <InvestmentsChangeSellingPrice :product="ios.product" :investment="investment" :key="key" @cruded="on_InvestmentsChangeSellingPrice_cruded()"></InvestmentsChangeSellingPrice>
             </v-card>
         </v-dialog>
+
+        <!-- Reinvest dialog -->
+        <v-dialog v-model="dialog_reinvest">
+            <v-card class="pa-4">
+                <InvestmentsoperationsReinvest :shares="reinvest_shares" :price="reinvest_price" :investments="reinvest_investments" :key="key"></InvestmentsoperationsReinvest>
+            </v-card>
+        </v-dialog>
     </div>  
 </template>
 <script>
@@ -131,6 +138,7 @@
     import DividendsCU from './DividendsCU.vue'
     import InvestmentsoperationsEvolutionChart from './InvestmentsoperationsEvolutionChart.vue'
     import InvestmentsoperationsEvolutionChartTimeseries from './InvestmentsoperationsEvolutionChartTimeseries.vue'
+    import InvestmentsoperationsReinvest from "./InvestmentsoperationsReinvest.vue"
     import InvestmentsChangeSellingPrice from './InvestmentsChangeSellingPrice.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import DisplayValues from './DisplayValues.vue'
@@ -144,6 +152,7 @@
             ChartInvestments,
             DisplayValues,
             DividendsCU,
+            InvestmentsoperationsReinvest,
             MyMenuInline,
             ProductsView,
             TableInvestmentOperations,
@@ -327,6 +336,18 @@
                                 },
                                 icon: "mdi-book-plus",
                             },
+                            {
+                                name:this.$t('Reinvest operation'),
+                                code: function(this_){
+                                    this_.reinvest_investments=[]
+                                    this_.reinvest_investments.push(this_.investment.url)
+                                    this_.reinvest_shares=0
+                                    this_.reinvest_price=this_.investment.last
+                                    this_.key=this_.key+1                        
+                                    this_.dialog_reinvest=true
+                                },
+                                icon: "mdi-book-plus",
+                            },
                         ]
                     },
                     {
@@ -365,6 +386,12 @@
 
                 // IO set selling price same product
                 dialog_io_sameproduct:false,
+
+                //dialog_reinvest
+                dialog_reinvest: false,
+                reinvest_investments:[],
+                reinvest_shares:0,
+                reinvest_price:0,
             }  
         },
         watch:{
@@ -463,7 +490,6 @@
                 axios.all([this.update_investmentsoperations(), this.update_dividends()])
                 .then(([resIO, resDividends]) => {
                     this.ios=resIO.data[0]
-                    console.log(this.ios)   
                     this.list_io=resIO.data[0].io
                     this.list_io_current=resIO.data[0].io_current
                     this.list_io_historical=resIO.data[0].io_historical
