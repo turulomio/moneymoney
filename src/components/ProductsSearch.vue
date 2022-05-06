@@ -204,12 +204,12 @@
                     this.tableData=[]
                 } else {
                     this.tableData=this.$store.state.products.filter(o => 
-                        o.name.toUpperCase().includes(this.search.toUpperCase()) || 
-                        (o.ticker_yahoo!=null && o.ticker_yahoo.toString().toUpperCase().includes(this.search.toUpperCase())) ||
-                        (o.ticker_morningstar!=null && o.ticker_morningstar.toString().toUpperCase().includes(this.search.toUpperCase())) ||
-                        (o.ticker_google!=null && o.ticker_google.toString().toUpperCase().includes(this.search.toUpperCase())) ||
-                        (o.ticker_quefondos!=null && o.ticker_quefondos.toString().toUpperCase().includes(this.search.toUpperCase())) ||
-                        (o.ticker_investingcom!=null && o.ticker_investingcom.toString().toUpperCase().includes(this.search.toUpperCase())) ||
+                        o.name.toUpperCase().includes(this.search.toUpperCase()) ||
+                        this.ifnullempty(o.ticker_yahoo).toUpperCase().includes(this.search.toUpperCase()) ||
+                        this.ifnullempty(o.ticker_morningstar).toUpperCase().includes(this.search.toUpperCase()) ||
+                        this.ifnullempty(o.ticker_google).toUpperCase().includes(this.search.toUpperCase()) ||
+                        this.ifnullempty(o.ticker_quefondos).toUpperCase().includes(this.search.toUpperCase()) ||
+                        this.ifnullempty(o.ticker_investingcom).toUpperCase().includes(this.search.toUpperCase()) ||
                         this.ifnullempty(o.isin).toUpperCase().includes(this.search.toUpperCase())
                     )
                 }

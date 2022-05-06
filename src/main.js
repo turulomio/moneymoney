@@ -83,6 +83,7 @@ import {
     arrayobjects_to_array,
     localtime,
     get_current_monthpicker_string,
+    ifnullempty,
     myheaders,
     myheaders_noauth,
     parseResponse,
@@ -108,6 +109,7 @@ Vue.mixin({
     methods: {
         arrayofintegers_to_stringofintegers,
         arrayobjects_to_array,
+        ifnullempty,
         localtime,
         myheaders,
         myheaders_noauth,
