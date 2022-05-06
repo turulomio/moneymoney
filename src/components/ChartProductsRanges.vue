@@ -133,16 +133,6 @@
         },
         mounted(){
              this.loading=false
-            // axios.get(`${this.$store.state.apiroot}/productranges/chart/?product=${this.pr.products}`, this.myheaders())
-            // .then((response) => {
-            //     console.log(response.data)
-            //     this.product=[]  
-            //     for (var i = 0; i < response.data.datetimes.length; i++) {
-            //         this.product.push([response.data.datetimes[i],response.data.invested[i]])
-            //     this.loading=false
-            // }, (error) => {
-            //     this.parseResponseError(error)
-            // });
         }
     }
 
