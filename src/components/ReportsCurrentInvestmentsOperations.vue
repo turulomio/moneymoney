@@ -8,7 +8,6 @@
 
 <script>
     import axios from 'axios'
-    import {empty_order} from '../empty_objects.js'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
     export default {
         components:{
@@ -24,7 +23,6 @@
         watch:{
         },
         methods:{
-            empty_order,
             refreshTable(){
                 this.loading=true
                 axios.get(`${this.$store.state.apiroot}/reports/investmentsoperations/current/` , this.myheaders())

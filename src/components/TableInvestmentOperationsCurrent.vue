@@ -1,11 +1,8 @@
 <template>
-    <v-data-table ref="table_oc" dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" :key="$attrs.key" :loading="$attrs.loading">
+    <v-data-table ref="table_oc" dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" :loading="$attrs.loading">
         <template v-slot:[`item.datetime`]="{ item }" >
             <div>{{ localtime(item.datetime)}}</div>
-        </template>                  
-        <template v-slot:[`item.name`]="{ item }">
-            <div v-html="$store.getters.getObjectPropertyByUrl('investments', item.investments,'fullname')"></div>
-        </template>              
+        </template>                    
         <template v-slot:[`item.operationstypes`]="{ item }">
             <div v-html="$store.getters.getObjectPropertyByUrl('operationstypes',item.operationstypes,'localname')"></div>
         </template>
@@ -72,7 +69,7 @@
 
         <template v-slot:[`body.append`]="{headers}">
             <tr style="background-color: GhostWhite" v-if="items.length>0">
-                <td v-for="(header,i) in headers" :key="i" >
+                <td v-for="(header,i) in headers" :key="'ROW'+i" >
                     <div v-if="header.value == 'datetime'">
                         Total
                     </div>
@@ -128,8 +125,6 @@
 </template>
 <script>    
     export default {
-        components:{
-        },
         props: {
             items: {
                 required: true
@@ -169,7 +164,6 @@
                 } else if (this.output=="user"){
                     return this.currency_html(value, this.currency_user)
                 }
-                console.log("AQUIN")
             },
             table_headers(){
                 var r
@@ -214,7 +208,7 @@
                     ]
                 }            
                 if (this.heterogeneus==true){
-                    r.splice(1, 0, { text: this.$t('Name'), value: 'name',sortable: true });
+                    r.splice(1, 0, { text: this.$t('Name'), value: 'name', sortable: true });
                 }
                 return r
             },
