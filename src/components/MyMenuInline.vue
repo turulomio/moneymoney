@@ -39,7 +39,7 @@ type puede ser redirection or command
                 <v-subheader inset>{{ subheader.subheader }}</v-subheader>
                 <v-list-item v-for="(item, index) in subheader.children" :key="index" @click="on_item_click(item)">
                 <v-list-item-icon>
-                    <v-icon v-text="item.icon"></v-icon>
+                    <v-icon>{{item.icon}}</v-icon>
                 </v-list-item-icon>
                     {{ item.name }}
                 </v-list-item>
