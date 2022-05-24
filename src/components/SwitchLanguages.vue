@@ -1,13 +1,17 @@
+/*
+    You must set in main.js import 'flag-icons/css/flag-icons.min.css' to use "fi" classes
+*/
+
 <template>
     <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
             <v-btn color="primary" v-bind="attrs" v-on="on" :close-on-content-click="false" >
-                <img :src="current.icon" />
+                <v-icon :class="'fi fib fi-'+current.icon_value"></v-icon>
             </v-btn>
         </template>
         <v-list>
             <v-list-item v-for="(item,index) in locales" :key="index" @click="switchLocale(item)">
-                <v-list-item-icon><img :src="item.icon" width="36px" height="36px"/></v-list-item-icon>
+                <v-list-item-icon :class="'fi fib fi-'+item.icon_value"></v-list-item-icon>
                 <v-list-item-title>{{ item.text }}</v-list-item-title>
             </v-list-item>
         </v-list>
@@ -16,8 +20,8 @@
 
 <script>
     var languages=[
-                    { text: "Español", value: "es", icon: require("../assets/es.svg")}, //Got from https://github.com/hampusborgos/country-flags
-                    { text: "English", value: "en", icon: require("../assets/us.svg")},
+                    { text: "Español", value: "es", icon_value:"es"},
+                    { text: "English", value: "en", icon_value:"gb"},
                   ];
 
     export default {
