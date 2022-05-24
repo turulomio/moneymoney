@@ -3,6 +3,9 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import {sortObjectsArray, my_round,capitalizeFirstLetter} from './my_commons.js'
 import CurrencyList from 'currency-list'
+
+import countries from 'flag-icons/country.json'
+
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
@@ -21,6 +24,7 @@ export const store = new Vuex.Store({
         banks: [],
         creditcards:[],
         concepts:[],
+        countries:countries,
         currencies: [],
         investments: [],
         leverages: [],
@@ -110,7 +114,15 @@ export const store = new Vuex.Store({
             } else {
                 return getters.currency_generic_string(num, currency, locale, decimals)
             }
-        }
+        },
+        getCountryNameByCode:(state) => (code) => {
+            var r=state['countries'].find(o => o.code==code)
+            if (r==null){
+                return ""
+            } else {
+                return r.name
+            }
+        },
     },
     mutations: { // Only sincronous changes data
         updateAccounts: (state, payload) =>{
@@ -125,6 +137,7 @@ export const store = new Vuex.Store({
         updateConcepts: (state, payload) =>{
             state.concepts=payload
         },
+
         updateCreditcards: (state, payload) =>{
             state.creditcards=payload
         },
@@ -212,6 +225,7 @@ export const store = new Vuex.Store({
                 store.$app.parseResponseError(error)
             });
         },
+
         getCreditcards(context){
             var start=new Date()
             return axios.get(`${store.state.apiroot}/api/creditcards/`, store.$app.myheaders())

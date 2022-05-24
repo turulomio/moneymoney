@@ -5,14 +5,19 @@ import i18n from './i18n'
 import VueRouter from 'vue-router';
 import {store} from './store.js'
 
+
+import 'flag-icons/css/flag-icons.min.css'
+ 
+
+
 import * as echarts from 'echarts';
 import ECharts from 'vue-echarts'
 Vue.component('v-chart', ECharts)
 
 import {transform} from 'echarts-stat'
 echarts.registerTransform(transform.regression);
-Vue.use(VueRouter);
 
+Vue.use(VueRouter);
 
 import About from './components/about'
 import Home from './components/Home'

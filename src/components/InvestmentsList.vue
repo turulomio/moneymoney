@@ -2,15 +2,14 @@
     <div>    
         <h1>{{ $t('Investments list') }}
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
-
         </h1>
             <v-row class="pa-4">
                 <v-checkbox class="ml-6 mr-10" v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" ></v-checkbox>
                 <v-text-field class="ml-10 mr-6" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"></v-text-field>
             </v-row>
-            <v-data-table dense :headers="investments_headers" :search="search" :items="investments_items" :sort-by="(showActive)? 'percentage_selling_point': 'fullname' " class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading_investments" :key="key">
+            <v-data-table dense :headers="investments_headers" :search="search" :items="investments_items" :sort-by="(showActive)? 'percentage_selling_point': 'fullname' " class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading_investments" fixed-header key="key">
                 <template v-slot:[`item.fullname`]="{ item }">
-                    {{item.fullname}}
+                    <v-icon :class="'mr-2 fi fib fi-'+item.flag" small :title="$store.getters.getCountryNameByCode(item.flag)"></v-icon>{{item.fullname}}
                 </template>                  
                 <template v-slot:[`item.last_datetime`]="{ item }">
                     <div v-html="(item.last_datetime) ? localtime(item.last_datetime) : $t('Update product quotes')" :class="(item.last_datetime) ? '' : 'boldred'"></div>
@@ -24,8 +23,8 @@
                 <template v-slot:[`item.invested_user`]="{ item }">
                     <v-row class="text-nowrap" justify="end">
                         <div v-html="localcurrency_html(item.invested_user )"></div>
-                        <v-icon small class="ml-1" @click="on_icon_short_long_clicked(item)" v-if="item.shares>=0" color="blue">mdi-arrow-up-circle-outline</v-icon>
-                        <v-icon small class="ml-1" @click="on_icon_short_long_clicked(item)" v-if="item.shares<0" color="orange">mdi-arrow-down-circle-outline</v-icon>
+                        <v-icon small class="ml-1" v-if="item.shares>=0" color="blue" :title="$t('Long position')">mdi-arrow-up-circle-outline</v-icon>
+                        <v-icon small class="ml-1" v-if="item.shares<0" color="orange" :title="$t('Short position')">mdi-arrow-down-circle-outline</v-icon>
                     </v-row>
                 </template>    
                 <template v-slot:[`item.gains_user`]="{ item }">
@@ -51,7 +50,7 @@
                     <v-icon small class="ml-1" v-if="(new Date().setHours(0,0,0,0)>new Date(item.selling_expiration).setHours(0,0,0,0)) && item.selling_expiration!=null" @click="changeSellingPrice(item)" color="#9933ff" style="font-weight:bold">mdi-alarm</v-icon>     
                 </template>                
                 <template v-slot:[`body.append`]="{headers}">
-                    <tr style="background-color: WhiteSmoke">
+                    <tr style="background-color: WhiteSmoke" >
                         <td v-for="(header,i) in headers" :key="i">
                             <div v-if="header.value == 'fullname'">
                                 {{ $t(`Total (${investments_items.length} investments):`)}}
@@ -217,14 +216,6 @@
                 this.dialog_change_selling_price=false
                 this.update_table()
             },
-            on_icon_short_long_clicked(item){
-                if (item.shares>=0){
-                    alert(this.$t('Long position'))
-                } else {
-                    alert(this.$t('Short position'))
-
-                }
-            },
             on_chkActive(){
                 this.update_table()
             },
@@ -259,6 +250,7 @@
         },
         mounted(){
             this.update_table()
+            console.log(this.$store.state.countries)
         }
     }
 </script>
