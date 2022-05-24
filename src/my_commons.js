@@ -218,3 +218,17 @@ export function ifnullempty(value){
     if (value==null) return ""
     return value
 }
+
+
+// Generate a hyperlinked_url (DRF hyperlinked url) from model and id uses $sotre for apiroot
+export function hyperlinked_url(model,id){
+    return `${this.$store.state.apiroot}/api/${model}/${id}/`
+}
+
+//Gets id (integer) from an hyperlinked_url(DRF hyperlinked ul)
+export function id_from_hyperlinked_url(url){
+    let r=url.split("/") //[ "http:", "", "localhost:8011", "api", "additive_risks", "0", "" ]
+    return parseInt(r[r.length-2])
+}
+
+
