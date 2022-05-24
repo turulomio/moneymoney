@@ -14,7 +14,7 @@
         <v-card >
             <v-data-table dense :headers="tableHeaders" :items="tableData"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['value']" :sort-desc="[true]" fixed-header height="650" :loading="loading">      
                 <template v-slot:[`item.name`]="{ item }">
-                    <v-icon :class="'mr-2 fi fib fi-'+item.flag" small></v-icon><span :class="class_name(item)">{{item.name}}</span>
+                    <v-icon :class="'mr-2 fi fib fi-'+item.flag" small :title="$store.getters.getCountryNameByCode(item.flag)"></v-icon><span :class="class_name(item)">{{item.name}}</span>
                 </template>                  
                 <template v-slot:[`item.productstypes`]="{ item }">
                     <div>{{ $store.getters.getObjectPropertyByUrl("productstypes",item.productstypes,"localname")}}</div>
