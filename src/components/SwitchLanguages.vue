@@ -6,13 +6,12 @@
     <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
             <v-btn color="primary" v-bind="attrs" v-on="on" :close-on-content-click="false" >
-                <v-icon :class="'fi fib fi-'+current.icon_value"></v-icon>
+                <v-icon :class="'fi fib fi-'+current.flag"></v-icon>
             </v-btn>
         </template>
         <v-list>
             <v-list-item v-for="(item,index) in locales" :key="index" @click="switchLocale(item)">
-                <v-list-item-icon :class="'fi fib fi-'+item.icon_value"></v-list-item-icon>
-                <v-list-item-title>{{ item.text }}</v-list-item-title>
+                <v-list-item-title><v-icon :class="'mr-2 fi fib fi-'+item.flag" big></v-icon>{{ item.text }}</v-list-item-title>
             </v-list-item>
         </v-list>
     </v-menu>    
@@ -20,8 +19,8 @@
 
 <script>
     var languages=[
-                    { text: "Español", value: "es", icon_value:"es"},
-                    { text: "English", value: "en", icon_value:"gb"},
+                    { text: "Español", value: "es", flag:"es"},
+                    { text: "English", value: "en", flag:"us"},
                   ];
 
     export default {
