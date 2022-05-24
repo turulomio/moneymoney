@@ -10,7 +10,7 @@
             </v-row>
             <v-data-table dense :headers="investments_headers" :search="search" :items="investments_items" :sort-by="(showActive)? 'percentage_selling_point': 'fullname' " class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading_investments" :key="key">
                 <template v-slot:[`item.fullname`]="{ item }">
-                    <v-icon :class="'fi fib fi-'+item.flag" small></v-icon> {{item.fullname}}
+                    <v-icon :class="'mr-2 fi fib fi-'+item.flag" small></v-icon>{{item.fullname}}
                 </template>                  
                 <template v-slot:[`item.last_datetime`]="{ item }">
                     <div v-html="(item.last_datetime) ? localtime(item.last_datetime) : $t('Update product quotes')" :class="(item.last_datetime) ? '' : 'boldred'"></div>
