@@ -97,6 +97,20 @@ export function RulesString(maxdigits,required){
     return r
 }
 
+export function RulesPassword(maxdigits,required){
+    var r
+    if (required==false){
+        r= [
+            v => (v==null || (v!=null && v.length<= maxdigits)) || this.$t('Must be a decimal number')
+        ]
+    } else { // required==true
+        r= [
+            v => (v!=null || v!="") || this.$t('String is required'),
+            v => (v!=null && v.length<= maxdigits) || this.$t(`String must be at most ${maxdigits} characters`)
+        ]
+    }
+    return r
+}
 export function RulesSelection(required){
     var r= []
     if (required==true){

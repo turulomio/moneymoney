@@ -16,7 +16,6 @@ export const store = new Vuex.Store({
         versiondate: new Date(2022, 1, 20, 20, 46),
         apiroot: process.env.VUE_APP_DJANGO_MONEYMONEY_URL,
         publicPath: process.env.VUE_APP_PUBLIC_PATH,
-        lastsearch: "",
         local_currency:"EUR",
         local_zone:"Europe/Madrid",
         catalog_manager: false,
@@ -31,6 +30,7 @@ export const store = new Vuex.Store({
         operationstypes: [],
         products: [],
         productstypes: [],
+        settings: null,
         stockmarkets:[],
         strategiestypes:[],
         recomendation_methods:[],
@@ -163,8 +163,7 @@ export const store = new Vuex.Store({
             state.productstypes=payload
         },
         updateSettings: (state, payload) =>{
-            state.local_zone=payload.local_zone
-            state.local_currency=payload.local_currency
+            state.settings=payload
         },
         updateStockmarkets: (state, payload) =>{
             state.stockmarkets=payload
@@ -325,7 +324,7 @@ export const store = new Vuex.Store({
             return axios.get(`${store.state.apiroot}/settings/`, store.$app.myheaders())
             .then((response) => {
                 context.commit("updateSettings", response.data)
-                console.log(`Updated ${response.data.length} settings in ${new Date()-start} ms`)
+                console.log(`Updated settings in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
