@@ -16,8 +16,6 @@ export const store = new Vuex.Store({
         versiondate: new Date(2022, 1, 20, 20, 46),
         apiroot: process.env.VUE_APP_DJANGO_MONEYMONEY_URL,
         publicPath: process.env.VUE_APP_PUBLIC_PATH,
-        local_currency:"EUR",
-        local_zone:"Europe/Madrid",
         catalog_manager: false,
         accounts: [],
         banks: [],

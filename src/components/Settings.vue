@@ -3,7 +3,7 @@
         <div >
             <h1 class="mb-2">{{ $t("Settings") }}</h1>
             
-            <v-form ref="form" v-model="form_valid" lazy-validation >
+            <v-form ref="form" v-model="form_valid"  >
 
                 <v-card class="mx-auto pa-6 mt-3" max-width="40%">
                     <v-card-title>{{ $t('Profile settings') }}</v-card-title>                    

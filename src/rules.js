@@ -82,35 +82,40 @@ export function RulesDate(required){
     return r
 }
 
+
+// Si required=true no puede ser ni null ni ""
 export function RulesString(maxdigits,required){
     var r
     if (required==false){
         r= [
-            v => (v==null || (v!=null && v.length<= maxdigits)) || this.$t('Must be a decimal number')
+            v => (v==null || v=="" || (v!=null && v.length>0 && v.length<= maxdigits)) ||  this.$t(`String must be empty or at most ${maxdigits} characters`)
         ]
     } else { // required==true
         r= [
-            v => (v!=null || v!="") || this.$t('String is required'),
+            v => (v!=null && v!="") || this.$t('String is required'),
             v => (v!=null && v.length<= maxdigits) || this.$t(`String must be at most ${maxdigits} characters`)
         ]
     }
     return r
 }
 
+// Si required=true no puede ser ni null ni ""
 export function RulesPassword(maxdigits,required){
     var r
     if (required==false){
         r= [
-            v => (v==null || (v!=null && v.length<= maxdigits)) || this.$t('Must be a decimal number')
+            v => (v==null || v=="" || (v!=null && v.length>=8 && v.length<= maxdigits)) ||  this.$t(`String must be empty or have between 8 and ${maxdigits} characters`)
         ]
     } else { // required==true
         r= [
-            v => (v!=null || v!="") || this.$t('String is required'),
-            v => (v!=null && v.length<= maxdigits) || this.$t(`String must be at most ${maxdigits} characters`)
+            v => (v!=null && v!="") || this.$t('String is required'),
+            v => (v!=null && v.length>=8 && v.length<= maxdigits) || this.$t(`String must have between 8 and ${maxdigits} characters`)
         ]
     }
+
     return r
 }
+
 export function RulesSelection(required){
     var r= []
     if (required==true){
@@ -129,3 +134,4 @@ export function RulesEmail(required){
     }
     return r
 }
+

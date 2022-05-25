@@ -250,7 +250,6 @@
         },
         mounted(){
             this.update_table()
-            console.log(this.$store.state.countries)
         }
     }
 </script>
