@@ -1,11 +1,7 @@
 <template>
     <div v-show="this.$store.state.logged">
-        <div class="login">
-            <h1>{{ $t("Statistics") }}</h1>
-            <v-card>
-            <chart-pie :name="$t('Money Money registers')" :items="items" height="600px" :key="key"></chart-pie>
-            </v-card>
-        </div>
+        <h1>{{ $t("Statistics") }}</h1>
+        <chart-pie :name="$t('Money Money registers')" :items="items" :key="key"></chart-pie>
     </div>
 </template>
 
@@ -28,10 +24,10 @@
                 .then((response) => {
                     this.parseResponse(response)
                     this.items=response.data 
+                    this.key=this.key+1
                 }, (error) => {
                     this.parseResponseError(error)
                 })
-                .finally(() => (this.isLoading = false));
             }
         },
         mounted(){

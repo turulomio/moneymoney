@@ -1,23 +1,23 @@
 <template>
-    <div>
+    <div class="ma-4">
         <p v-if="items.length==0">No data to show</p>
-        <v-card flat  v-if="items.length>0">
-            <v-row no-gutters :style="styleheight">
+        <v-card v-if="items.length>0">
+            <v-row :style="styleheight()">
                 <v-col>
-                    <v-chart ref="chart" autoresize :option="options" :key="key" @finished="on_finished"/>
+                    <v-chart autoresize :option="options" :key="key" @finished="on_finished"/>
                 </v-col>
-                <v-col v-show="showtable" >
+                <v-col v-if="new_show_data" >
                     <v-data-table dense :headers="tableHeaders"  :items="items" class="elevation-1" disable-pagination  hide-default-footer :sort-by="['value']" :sort-desc="['value']">
                         <template v-slot:[`item.percentage`]="{ item }">
                             {{ getPercentage(item) }}
-                        </template>    
+                        </template>
                         <template v-slot:[`body.append`]="{headers}">
                             <tr style="background-color: lightgrey">
                                 <td v-for="(header,i) in headers" :key="i">
-                                    <div v-if="header.value == 'name'">
+                                    <div v-if="header.value == 'name'" >
                                         Total
                                     </div>
-                                    <div v-if="header.value == 'value'" align="right">
+                                    <div v-if="header.value == 'value'"  align="right">
                                         {{total}}
                                     </div>
                                     <div v-if="header.value == 'percentage'" align="right">
@@ -29,12 +29,12 @@
                     </v-data-table>
                 </v-col>
             </v-row>       
+            <v-row>
+                <v-col align="center">
+                    <v-btn  color="primary" @click="buttonClick">{{buttontext}}</v-btn>
+                </v-col>
+            </v-row>
         </v-card>  
-        <v-row>
-            <v-col align="center">
-                <v-btn  v-if="show_data" color="primary" @click="buttonClick">{{buttontext}}</v-btn>
-            </v-col>
-        </v-row>
     </div>
 </template>
 
@@ -46,24 +46,24 @@
                 required: true
             },
             height: {
+                type: Number,
                 required: false,
                 default:600
             },
-            width: {
-                required: false,
-                default:1200
-            },
             save_prefix:{
+                type: Boolean,
                 required:false,
+                default:false,
             },
             show_data:{
+                type: Boolean,
                 required:false,
-                default:true,
+                default:false,
             },
         },
         data: function () {
             return {
-                showtable: false,
+                new_show_data: this.show_data, //To avoid prop mutation
                 key:0,
                 tableHeaders: [
                     { text: 'Name', value: 'name',sortable: true },
@@ -77,7 +77,9 @@
                 return {
                     tooltip: {
                         trigger: "item",
-                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        formatter: (params) => {
+                            return `${params.marker} ${params.data.name}: ${params.data.value} (${this.getPercentage(params.data)})`;
+                        },
                     },
                     series: [
                         {
@@ -97,24 +99,20 @@
                     ]
                 }
             },
-            styleheight: function(){
-                return `height: ${this.height}px; width: ${this.width}px;`
-            },
             buttontext: function(){
-                if (this.showtable){
-                    return "Hide table data"
+                if (this.new_show_data){
+                    return this.$t("Hide table data")
                 } else {
-                    return "Show table data"
+                    return this.$t("Show table data")
                 }
             },
             total: function(){
-                console.log("computed total")
                 return this.items.reduce((accum,item) => accum + item.value, 0)
             }
         },
         methods: {
             buttonClick(){
-                this.showtable=!this.showtable
+                this.new_show_data=!this.new_show_data
                 this.key=this.key+1
             },
             getPercentage(item){
@@ -122,7 +120,7 @@
                 
             },
             on_finished(){
-                if (this.save_prefix!=null){
+                if (this.save_prefix==true){
                     var filename=this.save_prefix
                     var data=this.$refs.chart.getDataURL().replace('data:image/png;base64,','')
                     axios.post(`${this.$store.state.apiroot}/binary/to/global/`, {global:filename,data:data,}, this.myheaders())
@@ -133,7 +131,11 @@
                     });
                 }
                 
-            }
+            },
+            styleheight: function(){
+                return `height: ${this.height}px`
+            },
+
         },
     }
 </script>
