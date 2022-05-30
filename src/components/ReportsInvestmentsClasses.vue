@@ -14,7 +14,7 @@
                 </v-tabs>
                 <v-tabs-items v-model="tab" v-if="data!=null">
                     <v-tab-item key="product">
-                        <ChartPie name="Investments by product" :items="echart_products_items" save_prefix="prueba.png" :key="key"></ChartPie>
+                        <ChartPie name="Investments by product" :items="echart_products_items" save_name="prueba.png" :key="key"></ChartPie>
                     </v-tab-item>
                     <v-tab-item key="pci">
                         <ChartPie name="Investments by pci" :items="echart_pci_items" :key="key"></ChartPie>

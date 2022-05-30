@@ -4,7 +4,7 @@
         <v-card v-if="items.length>0">
             <v-row :style="styleheight()">
                 <v-col>
-                    <v-chart autoresize :option="options" :key="key" @finished="on_finished"/>
+                    <v-chart ref="chart" autoresize :option="options" :key="key" @finished="on_finished"/>
                 </v-col>
                 <v-col v-if="new_show_data" >
                     <v-data-table dense :headers="tableHeaders"  :items="items" class="elevation-1" disable-pagination  hide-default-footer :sort-by="['value']" :sort-desc="['value']">
@@ -50,10 +50,9 @@
                 required: false,
                 default:600
             },
-            save_prefix:{
-                type: Boolean,
+            save_name:{
                 required:false,
-                default:false,
+                default:null,
             },
             show_data:{
                 type: Boolean,
@@ -120,10 +119,9 @@
                 
             },
             on_finished(){
-                if (this.save_prefix==true){
-                    var filename=this.save_prefix
+                if (this.save_name!=null){
                     var data=this.$refs.chart.getDataURL().replace('data:image/png;base64,','')
-                    axios.post(`${this.$store.state.apiroot}/binary/to/global/`, {global:filename,data:data,}, this.myheaders())
+                    axios.post(`${this.$store.state.apiroot}/binary/to/global/`, {global:this.save_name,data:data,}, this.myheaders())
                     .then(() => {
                         this.$emit("finished")
                     }, (error) => {
