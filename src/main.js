@@ -103,7 +103,8 @@ import {
 } from './my_commons.js'
 import {
     zulu2date,
-    date2zulu
+    date2zulu,
+    amount_to_invest,
 } from './functions.js'
 import {RulesFloat,RulesDate,RulesDatetime,RulesEmail,RulesInteger,RulesPassword,RulesString,RulesSelection, RulesFloatPositive, RulesFloatNegative, } from './rules.js'
 Vue.mixin({
@@ -112,6 +113,7 @@ Vue.mixin({
         }
     },
     methods: {
+        amount_to_invest,
         arrayofintegers_to_stringofintegers,
         arrayobjects_to_array,
         ifnullempty,

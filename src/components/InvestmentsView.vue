@@ -435,6 +435,7 @@
                     {title:this.$t('Selling expiration'), value: this.selling_expiration_message},
                     {title:this.$t('Active'), value: this.ios.investment.active},
                     {title:this.$t('Currency'), value: this.ios.product.currency},
+                    {title:this.$t('Next reinvest amount'), value: this.ios.product.currency},
                     {title:this.$t('Product'), value: this.ios.product.name},
                     {title:this.$t('Leverage'), value: this.leverage_message},
                     {title:this.$t('Daily adjustment'), value: this.ios.investment.daily_adjustment},
