@@ -20,7 +20,7 @@
                     <div>{{ $store.getters.getObjectPropertyByUrl("productstypes",item.productstypes,"localname")}}</div>
                 </template>  
                 <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon small @click="favoriteProduct(item)" :color="(favorites.includes(item.id))? 'orange': '' " class="mr-1">mdi-star-outline</v-icon>
+                    <v-icon small @click="favoriteProduct(item)" :color="(favorites.includes(item.url))? 'orange': '' " class="mr-1">mdi-star-outline</v-icon>
                     <v-icon class="mr-1" small @click="viewProduct(item)">mdi-eye-outline</v-icon>
                     <v-icon class="mr-1" small @click="editPersonalProduct(item)" v-if="item.id<0">mdi-pencil</v-icon>
                     <v-icon class="mr-1" small @click="editSystemProduct(item)"  color="#AA0000" v-if="item.id>=0 && $store.state.catalog_manager">mdi-pencil</v-icon>
@@ -231,7 +231,7 @@
                 this.tableData=[]
                 this.loading=true
                 this.$store.state.products.forEach(element => {
-                    if (this.favorites.includes(element.id)) {
+                    if (this.favorites.includes(element.url)) {
                          this.tableData.push(element)
                     }
                 });
@@ -255,26 +255,32 @@
             },
             favoriteProduct(item){
                 this.loading=true
-                this.product=item
-                var url
-                if (item==null){ //Load favorites
-                    url=null
-                } else{
-                    url=this.product.url //Add or remove
-                }
-
-                axios.post(`${this.$store.state.apiroot}/products/favorites/`, {product: url}, this.myheaders())
+                axios.post(`${this.$store.state.apiroot}/products/favorites/`, {product: item.url}, this.myheaders())
+                .then(() => {
+                    this.getFavoritesList()
+                    .then(()=>{
+                        this.refreshFavoriteProducts()
+                        this.loading=false
+                    })
+                }, (error) => {
+                    this.parseResponseError(error)
+                })
+            },
+            getFavoritesList(){
+                this.loading=true
+                return axios.get(`${this.$store.state.apiroot}/products/favorites/`, this.myheaders())
                 .then((response) => {
-                        this.favorites=response.data
-                        this.refreshSearch()
+                        this.favorites=response.data.data
+                        console.log(this.favorites)
                         this.loading=false
                 }, (error) => {
                     this.parseResponseError(error)
                 })
-            }
+            },
+
         },
         created(){
-            this.favoriteProduct(null)
+            this.getFavoritesList()
 
         }
         
