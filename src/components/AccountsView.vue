@@ -38,7 +38,7 @@
             </v-tab-item>
         </v-tabs>  
         <!-- DIALOG ACCOUNTSOPERATIONS ADD/UPDATE -->
-        <v-dialog v-model="dialog_ao" max-width="550">
+        <v-dialog v-model="dialog_ao" max-width="700">
             <v-card class="pa-8">
                 <AccountsoperationsCU :ao="ao" :key="key" @cruded="on_AccountsoperationsCU_cruded"></AccountsoperationsCU>
             </v-card>
