@@ -120,7 +120,11 @@
                     <div v-if="header.value == 'balance_user'" align="right">
                         <div v-html="currency(items.reduce((accum,item) => accum + item.balance_user, 0))"></div>
                     </div>
-            
+
+                    <div v-if="header.value == 'percentage_total_investment'" align="right">
+                        <div v-html="percentage_html(items.reduce((accum,item) => accum + item.gains_gross_investment, 0)/items.reduce((accum,item) => accum + item.invested_investment, 0))"></div>
+                    </div>
+  
                 </td>
             </tr>
         </template>
