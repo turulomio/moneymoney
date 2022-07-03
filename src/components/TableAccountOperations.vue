@@ -33,22 +33,32 @@
                 </tr>
             </template>
         </v-data-table>   
+        
         <!-- DIALOG ACCOUNTSOPERATIONS ADD/UPDATE -->
         <v-dialog v-model="dialog_ao" max-width="550">
             <v-card class="pa-8">
                 <AccountsoperationsCU :ao="ao" :deleting="ao_deleting" :key="key" @cruded="on_AccountsoperationsCU_cruded"></AccountsoperationsCU>
             </v-card>
         </v-dialog>
+        
         <!-- IO CU-->
         <v-dialog v-model="dialog_io" width="550" v-if="io">
             <v-card class="pa-3">
                 <InvestmentsoperationsCU :io="io" :investment="io_investment" :key="key"  @cruded="on_InvestmentsoperationsCU_cruded()"></InvestmentsoperationsCU>
             </v-card>
         </v-dialog>
+
         <!-- DIALOG ACCOUNT TRANSFER -->
         <v-dialog v-model="dialog_transfer" width="35%">
             <v-card class="pa-6">
                 <AccountsTransfer :at="at" :deleting="at_deleting" @cruded="on_AccountTransfer_cruded()" :key="key"></AccountsTransfer>
+            </v-card>
+        </v-dialog>
+
+        <!-- DIVIDEND CU-->
+        <v-dialog v-model="dividends_cu_dialog" width="35%">
+            <v-card class="pa-3">
+                <DividendsCU :dividend="dividend" :mode="dividends_cu_mode" :key="key"  @cruded="on_DividendsCU_cruded()"></DividendsCU>
             </v-card>
         </v-dialog>
     </div>
@@ -59,12 +69,14 @@
     import {empty_account_transfer} from '../empty_objects.js'
     import AccountsoperationsCU from './AccountsoperationsCU.vue'
     import AccountsTransfer from './AccountsTransfer.vue'
+    import DividendsCU from './DividendsCU.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     export default {
         components:{
             AccountsoperationsCU,
             AccountsTransfer,
             InvestmentsoperationsCU,
+            DividendsCU,
         },
     props: {
         items: {
@@ -108,6 +120,12 @@
             at:null,
             at_deleting: null,
             dialog_transfer: false,
+
+
+            // DIALOG DIVIDENDS CU
+            dividends_cu_dialog:false,
+            dividends_cu_mode: null,
+            dividend: null,
         }
     },
     watch: {
@@ -139,6 +157,17 @@
                     this.at_deleting=false
                     this.key=this.key+1
                     this.dialog_transfer=true
+                } else if ( item.comment.startsWith("10004,")){
+                    var dividend_string=item.comment.split(",")[1]
+                    axios.get(`${this.$store.state.apiroot}/api/dividends/${dividend_string}/`, this.myheaders())
+                    .then((response) => {
+                        this.dividend=response.data
+                        this.dividends_cu_mode="U"
+                        this.key=this.key+1
+                        this.dividends_cu_dialog=true
+                    }, (error) => {
+                        this.parseResponseError(error)
+                    })
                 } else { //It's not a especial comment
                     alert(this.$t("You can't edit this account operation"))
                     return
@@ -210,6 +239,10 @@
         },
         on_AccountsoperationsCU_cruded(){
             this.dialog_ao=false
+            this.$emit("cruded")
+        },
+        on_DividendsCU_cruded(){
+            this.dividends_cu_dialog=false
             this.$emit("cruded")
         },
         on_InvestmentsoperationsCU_cruded(){

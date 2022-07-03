@@ -43,7 +43,7 @@
             },
             investment: { // Only needs currrency paramenter
                 required: true 
-            }
+            },
         },
         data(){ 
             return {
