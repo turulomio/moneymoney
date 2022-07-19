@@ -11,7 +11,7 @@
   "dependencies": {
     "@intlify/vue-i18n-loader": "^1.1.0",
     "axios": "^0.27.2",
-    "core-js": "^3.23.4",
+    "core-js": "^3.23.5",
     "currency-list": "^1.0.8",
     "echarts": "^5.3.3",
     "echarts-stat": "^1.2.0",
@@ -28,15 +28,15 @@
     "vuex": "^3.6.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-eslint": "~5.0.8",
-    "@vue/cli-service": "~5.0.8",
-    "eslint": "^8.19.0",
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
+    "eslint": "^8.20.0",
     "eslint-plugin-vue": "^9.2.0",
-    "npm-check-updates": "^15.3.3",
+    "npm-check-updates": "^15.3.4",
     "sass": "^1.53.0",
     "sass-loader": "^10.2.0",
-    "vue-cli-plugin-i18n": "~2.3.1",
-    "vue-template-compiler": "^2.7.5"
+    "vue-cli-plugin-i18n": "^2.3.1",
+    "vue-template-compiler": "^2.7.7"
   },
   "browserslist": [
     "> 1%",
