@@ -301,13 +301,14 @@
                                     var gains_account_currency=this_.parseNumber(prompt( this_.$t("Please add the final gains in account currency"), 0 ));
                                     var shares=this_.listobjects_sum(this_.list_io_current,"shares")
                                     var average_price_current_account=this_.listobjects_average_ponderated(this_.list_io_current,'price_account', 'shares')
-                                    var leverage=this_.ios.investment.leverage_real_multiplier
+                                    var leverage=this_.ios.product.leverage_real_multiplier
                                     var currency_conversion=(gains_account_currency+shares*average_price_current_account*leverage)/(shares*selling_price_product_currency*leverage)
 
                                     this_.io=this_.empty_investment_operation()
                                     this_.io.shares=-shares
                                     this_.io.currency_conversion=currency_conversion
                                     this_.io.price=selling_price_product_currency
+                                    this_.io.investments=this_.investment.url
                                      
                                     this_.dialog_io=true
                                 },
