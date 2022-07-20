@@ -80,12 +80,12 @@
         </v-tabs-items> 
         <v-dialog v-model="dialog_evolution_chart">
             <v-card class="pa-4">
-                <InvestmentsoperationsEvolutionChart :investment="investment" :key="key" ></InvestmentsoperationsEvolutionChart>
+                <ChartInvestmentsoperationsEvolution :investment="investment" :key="key" ></ChartInvestmentsoperationsEvolution>
             </v-card>
         </v-dialog>
         <v-dialog v-model="dialog_evolution_chart_timeseries">
             <v-card class="pa-4">
-                <InvestmentsoperationsEvolutionChartTimeseries :investment="investment" :key="key" ></InvestmentsoperationsEvolutionChartTimeseries>
+                <ChartInvestmentsoperationsEvolutionTimeseries :investment="investment" :key="key" ></ChartInvestmentsoperationsEvolutionTimeseries>
             </v-card>
         </v-dialog>
 
@@ -136,8 +136,8 @@
     import ChartInvestments from './ChartInvestments.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import DividendsCU from './DividendsCU.vue'
-    import InvestmentsoperationsEvolutionChart from './InvestmentsoperationsEvolutionChart.vue'
-    import InvestmentsoperationsEvolutionChartTimeseries from './InvestmentsoperationsEvolutionChartTimeseries.vue'
+    import ChartInvestmentsoperationsEvolution from './ChartInvestmentsoperationsEvolution.vue'
+    import ChartInvestmentsoperationsEvolutionTimeseries from './ChartInvestmentsoperationsEvolutionTimeseries.vue'
     import InvestmentsoperationsReinvest from "./InvestmentsoperationsReinvest.vue"
     import InvestmentsChangeSellingPrice from './InvestmentsChangeSellingPrice.vue'
     import MyMenuInline from './MyMenuInline.vue'
@@ -160,8 +160,8 @@
             TableInvestmentOperationsHistorical,
             TableDividends,
             InvestmentsoperationsCU,
-            InvestmentsoperationsEvolutionChart,
-            InvestmentsoperationsEvolutionChartTimeseries,
+            ChartInvestmentsoperationsEvolution,
+            ChartInvestmentsoperationsEvolutionTimeseries,
             InvestmentsChangeSellingPrice,
         },
         props: {

@@ -1,10 +1,8 @@
-
 <template>
     <div>    
         <h1>{{ $t(`'${investment.name}' evolution`) }}</h1>
-        <v-card outlined class="ma-4 pa-4" height="600">
+        <v-card outlined class="ma-4 pa-4" :style="styleheight()">
             <v-chart
-                ref="chart"
                 :option="chart_option()"
                 autoresize
                 :loading="loading"
@@ -17,8 +15,13 @@
     import axios from 'axios'
     export default {
         props:{
-            investment:{
+            investment:{ //Object must have id and name
                 required:true,
+            },
+            height: {
+                type: Number,
+                required: false,
+                default:600
             },
         },
         data(){ 
@@ -49,7 +52,8 @@
                         }
                     },
                     xAxis: {
-                        type: 'time',
+                        type: 'category',
+                        data: this.datetimes,
                         axisLine: { lineStyle: { color: '#8392A5' } }
                     },
                     yAxis: {
@@ -60,14 +64,6 @@
                     grid: {
                         bottom: 80, 
                         left:80
-                    },
-                    toolbox: {
-                        feature: {
-                            dataZoom: {
-                                yAxisIndex: 'none'
-                            },
-                            saveAsImage: {}
-                        }
                     },
                     dataZoom: [{
                         textStyle: {
@@ -93,7 +89,6 @@
                             name: this.$t("Invested"),
                             data: this.invested,
                         },                
-
                         {
                             type: 'line',
                             name: this.$t("Balance"),
@@ -117,26 +112,21 @@
                     ]
                 }
             },
+            styleheight: function(){
+                return `height: ${this.height}px`
+            },
         },
         mounted(){
             axios.get(`${this.$store.state.apiroot}/investmentsoperations/evolutionchart/?investment=${this.investment.id}`, this.myheaders())
             .then((response) => {
                 console.log(response.data)
-                this.invested=[]    
-                this.dividends=[]
-                this.gains=[]
-                this.gains_dividends=[]   
-                this.balance=[]  
-                for (var i = 0; i < response.data.datetimes.length; i++) {
-                    this.invested.push([response.data.datetimes[i],response.data.invested[i]])
-                    this.dividends.push([response.data.datetimes[i],response.data.dividends[i]])
-                    this.gains.push([response.data.datetimes[i],response.data.gains[i]])
-                    this.gains_dividends.push([response.data.datetimes[i],response.data.gains_dividends[i]])
-                    this.balance.push([response.data.datetimes[i],response.data.balance[i]])
-                    i=i+1;
-                }
+                this.datetimes=response.data.datetimes
+                this.dividends=response.data.dividends
+                this.gains_dividends=response.data.gains_dividends
+                this.gains=response.data.gains
+                this.invested=response.data.invested
+                this.balance=response.data.balance
                 this.loading=false
-                console.log(this.invested)
             }, (error) => {
                 this.parseResponseError(error)
             });
