@@ -57,7 +57,7 @@
         <!-- Order CU dialog -->
         <v-dialog v-model="dialog_ordercu" max-width="550">
             <v-card class="pa-4">
-                <OrdersCU :order="order" @cruded="on_OrdersCU_cruded()" :key="key"></OrdersCU>
+                <OrdersCU :order="order" mode="C" @cruded="on_OrdersCU_cruded()" :key="key"></OrdersCU>
             </v-card>
         </v-dialog>
         <!-- Orders LIST -->

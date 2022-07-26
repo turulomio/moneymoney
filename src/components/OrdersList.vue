@@ -33,7 +33,7 @@
         <!-- Order CU dialog -->
         <v-dialog v-model="dialog_cu" max-width="550" persistent>
             <v-card class="pa-4">
-                <OrdersCU :order="order" @cruded="on_OrdersCU_cruded()" :key="key"></OrdersCU>
+                <OrdersCU :order="order" :mode="order_mode" @cruded="on_OrdersCU_cruded()" :key="key"></OrdersCU>
             </v-card>
         </v-dialog>
 
@@ -44,24 +44,16 @@
             </v-card>
         </v-dialog>
 
-        <!-- Investments operation CU dialog -->
-        <v-dialog v-model="dialog_io_cu" max-width="550" v-if="io" >
-            <v-card class="pa-4">
-                <InvestmentsoperationsCU :io="io" :investment="io_investment" @cruded="on_InvestmentsoperationsCU_cruded()" :key="key"></InvestmentsoperationsCU>
-            </v-card>
-        </v-dialog>
     </div>
 </template>
 <script>
     import axios from 'axios'
     import OrdersCU from './OrdersCU.vue'
     import InvestmentsoperationsReinvest from './InvestmentsoperationsReinvest.vue'
-    import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import MyMenuInline from './MyMenuInline.vue'
-    import {empty_order,empty_investments_operations_simulation, empty_investment_operation} from '../empty_objects.js'
+    import {empty_order,empty_investments_operations_simulation} from '../empty_objects.js'
     export default {
         components:{
-            InvestmentsoperationsCU,
             MyMenuInline,
             OrdersCU,
             InvestmentsoperationsReinvest,
@@ -72,7 +64,6 @@
                     {"id":0, "name":this.$t("Active")},
                     {"id":1, "name":this.$t("Expired")},
                     {"id":2, "name":this.$t("Executed")},
-
                 ],
                 state: 0,
                 headers: [
@@ -96,6 +87,7 @@
                                 icon: "mdi-pencil",
                                 code: function(this_){
                                     this_.order=this_.empty_order()
+                                    this_.order_mode="C"
                                     this_.dialog_cu=true
                                     this_.key=this_.key+1
                                 },
@@ -105,21 +97,16 @@
                 ],
                 dialog_cu:false,
                 order: null,
+                order_mode: null,
                 loading_table:false,
 
                 dialog_reinvest:false,
                 key:0,
-
-                //Dialog InvestmentsOperationsCU
-                dialog_io_cu:false,
-                io:null,
-                io_investment: null,
             }
         },
         methods: {
             empty_order,
             empty_investments_operations_simulation,
-            empty_investment_operation,
             on_OrdersCU_cruded(){
                 this.dialog_cu=false
                 this.update_table()
@@ -143,35 +130,18 @@
                     return true
                 }
             },
-            dialog_title(){
-                if(this.editing==true){
-                    return this.$t("Updating order")
-                } else {
-                    return this.$t("Creating a new order")
-                }
-            },
             editItem (item) {
                 this.order=item
+                this.order_mode="U"
                 this.key=this.key+1
                 this.dialog_cu=true
             },
             executeOrder (item) {
 
-                // Updates order
-                item.executed=new Date().toISOString()
-                axios.put(item.url, item,  this.myheaders())
-                .then(() => {
-                    this.update_table()
-                    this.io_investment={url:item.investments,currency:item.currency}
-                    this.io=this.empty_investment_operation()
-                    this.io.shares=item.shares
-                    this.io.price=item.price
-                    this.io.investments=item.investments
-                    this.key=this.key+1
-                    this.dialog_io_cu=true
-                }, (error) => {
-                    this.parseResponseError(error)
-                })
+                this.order=item
+                this.order_mode="E"
+                this.key=this.key+1
+                this.dialog_cu=true
             },
             orderView(item) {    
                 this.order=item               
@@ -179,17 +149,12 @@
                 this.dialog_reinvest=true
             },
             deleteItem (item) {
-               var r = confirm(this.$t("This order will be deleted. Do you want to continue?"))
-               if(r == false) {
-                  return
-               } 
-                axios.delete(item.url, this.myheaders())
-                .then((response) => {
-                    console.log(response);
-                    this.update_table()
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
+
+                this.order=item
+                this.order_mode="D"
+                this.key=this.key+1
+                this.dialog_cu=true
+
             },
             update_table(){
                 this.loading_table=true
@@ -214,12 +179,7 @@
             on_chkActive(){
                 this.update_table()
             },
-            on_InvestmentsoperationsCU_cruded(){
 
-                this.dialog_io_cu=false
-                this.io=null
-                this.io_investment=null
-            },
             setCheckboxLabel(){
                 if (this.showActive== true){
                     return this.$t("Uncheck to see inactive orders")

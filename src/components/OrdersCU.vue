@@ -6,13 +6,13 @@
             <v-icon class="ml-2" @click="$emit('cruded')">mdi-close</v-icon> 
         </h1>           
         <v-card class="pa-8 mt-2">
-            <v-form ref="form" v-model="form_valid" lazy-validation v-if="snackbar_message==''">
-                <MyDatePicker v-model="neworder.date" :label="$t('Set order date')" :rules="RulesDate(true)"></MyDatePicker>
-                <MyDatePicker v-model="neworder.expiration" :label="$t('Set order expiration date')" :rules="RulesDate(true)" ></MyDatePicker>
-                <v-autocomplete :items="$store.state.investments" v-model="neworder.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <MyDateTimePicker v-model="neworder.executed" v-if="editing==true" :label="$t('Set order execution date and time')"></MyDateTimePicker>
-                <v-text-field v-model="neworder.shares" type="number" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field v-model="neworder.price" type="number" :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesInteger(10,true)" counter="10"/>
+            <v-form ref="form" v-model="form_valid" :readonly="mode=='D'" lazy-validation v-if="snackbar_message==''">
+                <MyDatePicker v-model="neworder.date"  :readonly="mode=='D'" :label="$t('Set order date')" :rules="RulesDate(true)"></MyDatePicker>
+                <MyDatePicker v-model="neworder.expiration" :readonly="mode=='D'" :label="$t('Set order expiration date')" :rules="RulesDate(true)" ></MyDatePicker>
+                <v-autocomplete :items="$store.state.investments" :readonly="mode=='D'" v-model="neworder.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <MyDateTimePicker v-model="neworder.executed" :readonly="mode=='D'" v-if="mode=='U'" :label="$t('Set order execution date and time')"></MyDateTimePicker>
+                <v-text-field v-model="neworder.shares" :readonly="mode=='D'" type="number" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field v-model="neworder.price" :readonly="mode=='D'" type="number" :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesInteger(10,true)" counter="10"/>
             </v-form>
                 <div v-html="snackbar_message"></div>
             <v-card-actions>
@@ -21,6 +21,13 @@
                 <v-btn color="error" v-if="!snackbar_message==''" @click="on_message_close()" :disabled="!form_valid">{{ $t("Close message")}}</v-btn>
             </v-card-actions>
         </v-card>
+
+        <!-- Investments operation CU dialog -->
+        <v-dialog v-model="dialog_io_cu" max-width="550" v-if="io" >
+            <v-card class="pa-4">
+                <InvestmentsoperationsCU :io="io" :investment="io_investment" @cruded="on_InvestmentsoperationsCU_cruded()" :key="key"></InvestmentsoperationsCU>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 <script>
@@ -28,23 +35,28 @@
     import MyDatePicker from './MyDatePicker.vue'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import MyMenuInline from './MyMenuInline.vue'
+    import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
+    import {empty_investment_operation} from '../empty_objects.js'
     export default {
         components: {
+            InvestmentsoperationsCU,
             MyDatePicker,
             MyDateTimePicker,
             MyMenuInline,
         },
         props: {
-            // An account object
+            // An order object
             order: {
                 required: true // Null to create, order object to update
+            },
+            mode: {
+                required: true // Can be CUD and E for order execution
             }
         },
         data(){ 
             return {
                 form_valid:false,
                 neworder:null,
-                editing:false,
 
                 items: [
                     {
@@ -72,40 +84,74 @@
                 snackbar:false,
                 snackbar_message:"",
                 key:0,
+
+                //Dialog InvestmentsOperationsCU
+                dialog_io_cu:false,
+                io:null,
+                io_investment: null,
             }
         },
         methods: {
+            empty_investment_operation,
             title(){
-                if (this.editing){
+                if (this.mode=="U"){
                     return this.$t("Updating order")
-                } else {
+                } else  if (this.mode=="C"){
                     return this.$t("Creating a new order")
+                } else  if (this.mode=="E"){
+                    return this.$t("Order execution")
+                } else  if (this.mode=="D"){
+                    return this.$t("Deleting order")
                 }
             },
             button(){
-                if (this.editing){
-                    return this.$t("Update order")
-                } else {
-                    return this.$t("Add order")
+                if (this.mode=="U"){
+                    return this.$t("Update")
+                } else  if (this.mode=="C"){
+                    return this.$t("Create")
+                } else  if (this.mode=="E"){
+                    return this.$t("Execute")
+                } else  if (this.mode=="D"){
+                    return this.$t("Delete")
                 }
             },
             accept(){
                 if (this.$refs.form.validate()==false) return
                 
-                if (this.editing==true){
+                if (this.mode=="U"){
                     axios.put(this.neworder.url, this.neworder,  this.myheaders())
                     .then(() => {
                             this.show_snackbar_message()
                     }, (error) => {
                         this.parseResponseError(error)
                     })
-                } else{
+                } else if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/orders/`, this.neworder,  this.myheaders())
                     .then(() => {
                             this.show_snackbar_message()
                     }, (error) => {
                         this.parseResponseError(error)
                     })
+                } else if (this.mode=="E"){
+                    this.io_investment={url:this.neworder.investments,currency:this.neworder.currency}
+                    this.io=this.empty_investment_operation()
+                    this.io.shares=this.neworder.shares
+                    this.io.price=this.neworder.price
+                    this.io.investments=this.neworder.investments
+                    this.key=this.key+1
+                    this.dialog_io_cu=true
+                } else if (this.mode=="D"){
+                    var r = confirm(this.$t("This order will be deleted. Do you want to continue?"))
+                    if(r == false) {
+                        return
+                    } 
+                    axios.delete(this.neworder.url, this.myheaders())
+                    .then((response) => {
+                        console.log(response);
+                        this.$emit("cruded")
+                    }, (error) => {
+                        this.parseResponseError(error)
+                    });
                 }
             },
             needs_stop_loss_warning(){
@@ -138,12 +184,22 @@
             on_message_close(){
                 this.$emit("cruded")
                 this.snackbar_message=""
-            }
+            },           
+            on_InvestmentsoperationsCU_cruded(){
+                // Updates order
+                this.neworder.executed=new Date().toISOString()
+                axios.put(this.neworder.url, this.neworder,  this.myheaders())
+                .then(() => {
+                    this.$emit("cruded")
+                    this.dialog_io_cu=false
+                    this.io=null
+                    this.io_investment=null
+                }, (error) => {
+                    this.parseResponseError(error)
+                })
+            },
         },
         created(){
-            if (this.order.url!=null){
-                this.editing=true
-            }
             this.neworder=Object.assign({},this.order)
         }
     }
