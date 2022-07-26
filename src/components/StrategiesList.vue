@@ -52,9 +52,9 @@
         </v-card>
 
         <!-- Strategy CU -->
-        <v-dialog v-model="dialog_strategy_cu" max-width="550" ref="dialog_strategy_cu">
-            <v-card class="pa-4"  ref="vcard_strategy_cu">
-                <StrategyCU ref="strategy_cu" :strategy="strategy" :deleting="strategy_deleting" :key="key" @cruded="on_StrategyCU_cruded()"></StrategyCU>
+        <v-dialog v-model="dialog_strategy_cu" max-width="550">
+            <v-card class="pa-4">
+                <StrategyCU :strategy="strategy" :deleting="strategy_deleting" :key="key" @cruded="on_StrategyCU_cruded()"></StrategyCU>
             </v-card>
         </v-dialog>
 
@@ -147,7 +147,6 @@
                 this.strategy_deleting=true
                 this.key=this.key+1
                 this.dialog_strategy_cu=true
-                //this.$refs.strategy_cu.deleteStrategy(item)
             },
             viewItem (item) {
                 this.strategy=item
