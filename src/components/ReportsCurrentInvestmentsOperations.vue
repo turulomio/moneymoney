@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1 class="mb-3">{{ $t("Current investments operations list") }}</h1>
-        <TableInvestmentOperationsCurrent :items="list_io_current" heterogeneus currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="user" height="600" :key="key"></TableInvestmentOperationsCurrent>
+        <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="user" height="600" :key="key"></TableInvestmentOperationsCurrent>
                            
     </div>
 </template>

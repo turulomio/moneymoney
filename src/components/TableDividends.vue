@@ -5,7 +5,10 @@
                 <div>{{ localtime(item.datetime)}}</div>
             </template>         
            <template v-slot:[`item.concepts`]="{ item }">
-               <div v-html="$store.getters.getObjectPropertyByUrl('concepts',item.concepts,'name')"></div>
+               <div v-html="$store.getters.getObjectPropertyByUrl('concepts',item.concepts,'localname')"></div>
+           </template>       
+           <template v-slot:[`item.investments`]="{ item }">
+               <div v-html="$store.getters.getObjectPropertyByUrl('investments',item.investments,'fullname')"></div>
            </template> 
             <template v-slot:[`item.gross`]="{ item }">
                 <div v-html="currency(item.gross)"></div>
@@ -66,9 +69,10 @@
             currency_account: {
                 required: true
             },
-            homogeneous:{
+            homogeneous:{ //Only hides account if true
+                type: Boolean,
                 required:false,
-                default:true,
+                default:false,
             },
         },
         data: function(){
@@ -98,6 +102,7 @@
             table_headers(){
                 var r= [
                     { text: this.$t('Date and time'), value: 'datetime', sortable: true },
+                    { text: this.$t('Investment'), value: 'investments',sortable: true },
                     { text: this.$t('Concept'), value: 'concepts', sortable: true },
                     { text: this.$t('Gross'), value: 'gross', sortable: false, align:"right"},
                     { text: this.$t('Net'), value: 'net', sortable: false, align:"right"},
@@ -106,8 +111,8 @@
                     { text: this.$t('DPS'), value: 'dps', sortable: true , align:"right"},
                     { text: this.$t('Actions'), value: 'actions', sortable: false },
                 ]
-                if (this.heterogeneus==true){
-                    r.splice(1, 0, { text: this.$t('Account'), value: 'account',sortable: true });
+                if (this.homogeneous==true){
+                    r.splice(1, 1)
                 }
                 return r
             },
@@ -119,6 +124,8 @@
             }
         },
         mounted(){
+            console.log("AHORA")
+            console.log(this.items)
              this.gotoLastRow()
         }
     }

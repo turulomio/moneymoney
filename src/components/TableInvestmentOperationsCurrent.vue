@@ -77,7 +77,7 @@
                         Total
                     </div>
                  
-                    <div v-if="header.value == 'shares' && heterogeneus==false" align="right">
+                    <div v-if="header.value == 'shares' && homogeneous==true" align="right">
                         <div v-html="items.reduce((accum,item) => accum + item.shares, 0)"></div>
                     </div>
                     
@@ -87,7 +87,7 @@
                     <div v-if="header.value == 'price_investment'" align="right">
                         <div v-html="currency(listobjects_average_ponderated(items,'price_investment', 'shares'))"></div>
                     </div>
-                    <div v-if="header.value == 'price_user' && heterogeneus==false" align="right">
+                    <div v-if="header.value == 'price_user' && homogeneous==true" align="right">
                         <div v-html="currency(listobjects_average_ponderated(items,'price_user', 'shares'))"></div>
                     </div>
                     
@@ -148,7 +148,7 @@
                 required: true,
                 default:"EUR"
             },
-            heterogeneus:{
+            homogeneous:{ //Only hides account if true
                 type: Boolean,
                 required:false,
                 default:false,
@@ -214,7 +214,7 @@
                         { text: this.$t('% Total'), value: 'percentage_total_user',sortable: false, align:"right"},
                     ]
                 }            
-                if (this.heterogeneus==true){
+                if (this.homogeneous==false){
                     r.splice(1, 0, { text: this.$t('Name'), value: 'investments', sortable: true });
                 }
                 return r

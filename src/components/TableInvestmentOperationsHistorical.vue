@@ -3,7 +3,7 @@
             <template v-slot:[`item.dt_end`]="{ item }">
                 {{ localtime(item.dt_end)}}
             </template>                  
-            <template v-slot:[`item.name`]="{ item }">
+            <template v-slot:[`item.investments`]="{ item }">
                 <div v-html="$store.getters.getObjectPropertyByUrl('investments', item.investments,'fullname')"></div>
             </template>  
             <template v-slot:[`item.operationstypes`]="{ item }">
@@ -124,10 +124,10 @@
                 required: true
             },
 
-            heterogeneus:{
+            homogeneous:{ //Only hides account if true
                 type: Boolean,
                 required:false,
-                default:false
+                default:false,
             },
             output:{
                 required:true,
@@ -181,8 +181,8 @@
                         { text: this.$t('Gains'), value: 'gains_net_user',sortable: false, align:"right"},
                     ] 
                 }
-                if (this.heterogeneus==true){
-                    r.splice(2, 0, { text: this.$t('Name'), value: 'name',sortable: true });
+                if (this.homogeneous==false){
+                    r.splice(2, 0, { text: this.$t('Investment'), value: 'investments',sortable: true });
                 }
                 return r
             },

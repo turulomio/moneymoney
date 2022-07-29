@@ -13,22 +13,22 @@
             <v-tabs-items v-model="tab">
                 <v-tab-item key="incomes">        
                     <v-card class="pa-4">
-                    <TableAccountOperations :homogeneous="false" :items="incomes" :total_currency="$store.state.settings.local_currency" :showactions="false" height="600" class=" flex-grow-1 flex-shrink-0" ></TableAccountOperations>
+                    <TableAccountOperations :items="incomes" :total_currency="$store.state.settings.local_currency" :showactions="false" height="600" class=" flex-grow-1 flex-shrink-0" :key="key" ></TableAccountOperations>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="expenses">       
                     <v-card class="pa-4">
-                    <TableAccountOperations :homogeneous="false" :items="expenses" :total_currency="$store.state.settings.local_currency" :showactions="false" height="600" class=" flex-grow-1 flex-shrink-0" ></TableAccountOperations>
+                    <TableAccountOperations :items="expenses" :total_currency="$store.state.settings.local_currency" :showactions="false" height="600" class=" flex-grow-1 flex-shrink-0" :key="key" ></TableAccountOperations>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="dividends">     
                     <v-card class="pa-4">
-                        <TableDividends :items="dividends" currency_account="EUR"  height="600" output="user" :key="key" :homogeneous="false"></TableDividends>
+                        <TableDividends :items="dividends" currency_account="EUR"  height="600" output="user" :key="key"></TableDividends>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="gains">       
                     <v-card class="pa-4">
-                        <TableInvestmentOperationsHistorical :items="gains" :homogeneous="false" height="600" output="user" :key="key"></TableInvestmentOperationsHistorical>
+                        <TableInvestmentOperationsHistorical :items="gains" height="600" output="user" :key="key"></TableInvestmentOperationsHistorical>
 
                     </v-card>
                 </v-tab-item>

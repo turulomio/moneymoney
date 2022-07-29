@@ -72,9 +72,9 @@
                     { text: this.$t('Manual'), value: 'manual', sortable: true },
                     { text: this.$t('Actions'), value: 'actions', sortable: false },
                 ]
-                if (this.heterogeneus==true){
-                    r.splice(1, 0, { text: this.$t('Account'), value: 'account',sortable: true });
-                }
+                // if (this.heterogeneus==true){
+                //     r.splice(1, 0, { text: this.$t('Account'), value: 'account',sortable: true });
+                // }
                 return r
             },
             gotoLastRow(){

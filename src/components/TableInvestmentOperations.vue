@@ -75,10 +75,10 @@
                 required: true,
                 default:"EUR",
             },
-            heterogeneus:{
+            homogeneous:{ //Only hides account if true
                 type: Boolean,
                 required:false,
-                default:false
+                default:false,
             },
             showactions:{ //Used to edit io operation
                 required:false,
@@ -148,7 +148,7 @@
                 if (this.currency_investment==this.currency_account){
                     r.splice(8,1)
                 }
-                if (this.heterogeneus==true){
+                if (this.homogeneous==false){
                     r.splice(1, 0, { text: this.$t('Name'), value: 'name',sortable: true });
                 }
                 return r
