@@ -1,7 +1,7 @@
 <template>
     <div>    
         <h1>{{ $t(`'${investment.name}' evolution`) }}</h1>
-        <v-card outlined class="ma-4 pa-4" :style="styleheight()">
+        <v-card outlined class="ma-4 pa-4" :style="styleheight()" v-if="loading==false">
             <v-chart
                 :option="chart_option()"
                 autoresize
@@ -26,7 +26,6 @@
         },
         data(){ 
             return{
-                data:null,
                 balance: [],
                 datetimes:[],
                 invested:[],
@@ -119,7 +118,6 @@
         mounted(){
             axios.get(`${this.$store.state.apiroot}/investmentsoperations/evolutionchart/?investment=${this.investment.id}`, this.myheaders())
             .then((response) => {
-                console.log(response.data)
                 this.datetimes=response.data.datetimes
                 this.dividends=response.data.dividends
                 this.gains_dividends=response.data.gains_dividends

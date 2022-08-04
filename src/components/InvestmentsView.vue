@@ -78,11 +78,13 @@
                 </v-card>
             </v-tab-item>
         </v-tabs-items> 
+        <!-- EVOLUTION CHART -->
         <v-dialog v-model="dialog_evolution_chart">
             <v-card class="pa-4">
                 <ChartInvestmentsoperationsEvolution :investment="investment" :key="key" ></ChartInvestmentsoperationsEvolution>
             </v-card>
         </v-dialog>
+        <!-- EVOLUTION CHART TIME SERIES -->
         <v-dialog v-model="dialog_evolution_chart_timeseries">
             <v-card class="pa-4">
                 <ChartInvestmentsoperationsEvolutionTimeseries :investment="investment" :key="key" ></ChartInvestmentsoperationsEvolutionTimeseries>
@@ -235,6 +237,7 @@
                                 name:this.$t('Show evolution chart'),
                                 icon: "mdi-chart-areaspline",
                                 code: function(this_){
+                                    this_.key=this_.key+1
                                     this_.dialog_evolution_chart=true
                                 }
                             },
@@ -242,6 +245,7 @@
                                 name:this.$t('Show evolution chart with time series'),
                                 icon: "mdi-chart-areaspline",
                                 code: function(this_){
+                                    this_.key=this_.key+1
                                     this_.dialog_evolution_chart_timeseries=true
                                 }
                             },
