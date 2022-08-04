@@ -163,7 +163,7 @@
                 pr.percentage_gains=item.additional3
                 pr.amount_to_invest=item.additional4
                 pr.recomendation_methods=item.additional5
-                pr.only_first=item.additional6
+                pr.totalized_operations=item.additional6
                 pr.investments=[this.investment.id] // Is a string due tu uses api/strategies an in db is a string
                 var headers={...this.myheaders(),params:pr}
                 axios.get(`${this.$store.state.apiroot}/products/ranges/`, headers)

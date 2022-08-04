@@ -161,7 +161,7 @@
                     this.pr.percentage_gains=item.additional3
                     this.pr.amount_to_invest=item.additional4
                     this.pr.recomendation_methods=item.additional5
-                    this.pr.only_first=item.additional6
+                    this.pr.totalized_operations=item.additional6
                     this.pr.investments=item.investments
                     this.key=this.key+1
                     this.dialog_detailedview=true

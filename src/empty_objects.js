@@ -169,7 +169,7 @@ export function empty_quote(){
 export function empty_products_ranges(){
     return {
         product: null, //Integer not url
-        only_first: true,
+        totalized_operations: true,
         percentage_between_ranges: 2500,
         percentage_gains: 2500,
         amount_to_invest: 10000,
