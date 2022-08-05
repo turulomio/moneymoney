@@ -6,6 +6,14 @@
         <v-card outlined class="ma-4 pa-4">
             <v-checkbox v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" ></v-checkbox>
             <v-data-table dense :headers="strategies_headers" :items="strategies_items" sort-by="percentage_selling_point" class="elevation-1" hide-default-footer disable-pagination :loading="loading_strategies" :key="key">
+                <template v-slot:[`item.name`]="{ item }">
+                    <v-tooltip right>
+                        <template v-slot:activator="{ on }">
+                            <div v-on="on">{{ item.name }}</div>
+                        </template>
+                        <span>{{ item.comment }}</span>
+                    </v-tooltip>
+                </template>
                 <template v-slot:[`item.dt_from`]="{ item }">
                     {{localtime(item.dt_from)}}
                 </template>                  
