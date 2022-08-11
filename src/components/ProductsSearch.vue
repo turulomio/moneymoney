@@ -14,8 +14,14 @@
         <v-card >
             <v-data-table dense :headers="tableHeaders" :items="tableData"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['value']" :sort-desc="[true]" fixed-header height="650" :loading="loading">      
                 <template v-slot:[`item.name`]="{ item }">
-                    <v-icon :class="'mr-2 fi fib fi-'+item.flag" small :title="$store.getters.getCountryNameByCode(item.flag)"></v-icon><span :class="class_name(item)">{{item.name}}</span>
-                </template>                       
+
+                    <v-tooltip right>
+                        <template v-slot:activator="{ on }">
+                            <div v-on="on"><v-icon :class="'mr-2 fi fib fi-'+item.flag" small :title="$store.getters.getCountryNameByCode(item.flag)"></v-icon><span :class="class_name(item)">{{item.name}}</span></div>
+                        </template>
+                        <span>{{ $store.getters.getObjectPropertyByUrl("productstypes",item.productstypes,"localname")}}</span>
+                    </v-tooltip>
+                                    </template>                       
                 <template v-slot:[`item.last_datetime`]="{ item }">
                     {{localtime(item.last_datetime)}}
                 </template>     
@@ -24,10 +30,7 @@
                 </template>     
                 <template v-slot:[`item.percentage_last_year`]="{ item }">
                     <div v-html="percentage_html(item.percentage_last_year )"></div>
-                </template>             
-                <template v-slot:[`item.productstypes`]="{ item }">
-                    <div>{{ $store.getters.getObjectPropertyByUrl("productstypes",item.productstypes,"localname")}}</div>
-                </template>  
+                </template>
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small @click="favoriteProduct(item)" :color="(favorites.includes(item.url))? 'orange': '' " class="mr-1">mdi-star-outline</v-icon>
                     <v-icon class="mr-1" small @click="viewProduct(item)">mdi-eye-outline</v-icon>
@@ -71,17 +74,15 @@
                     { text: 'Id', value: 'id',sortable: true },
                     { text: 'Name', value: 'name',sortable: true},
                     { text: 'ISIN',  sortable: true, value: 'isin'},
-                    { text: this.$t('Type'),  sortable: true, value: 'productstypes'},
-                    { text: this.$t('Currency'),  sortable: true, value: 'currency'},
-                    { text: this.$t('Last datetime'), value: 'last_datetime',sortable: true},
+                    { text: this.$t('Last datetime'), value: 'last_datetime',sortable: true,width:"10%"},
                     { text: this.$t('Last'), value: 'last',sortable: true,align:"right"},
-                    { text: this.$t('Percentage last year'), value: 'percentage_last_year',sortable: true, align:"right"},
-                    { text: 'Yahoo',  sortable: true, value: 'ticker_yahoo'},
-                    { text: 'Morningstar',  sortable: true, value: 'ticker_morningstar'},
-                    { text: 'Google',  sortable: true, value: 'ticker_google'},
-                    { text: 'QueFondos',  sortable: true, value: 'ticker_quefondos'},
-                    { text: 'Investing.com',  sortable: true, value: 'ticker_investingcom'},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false },
+                    { text: this.$t('% last year'), value: 'percentage_last_year',sortable: true, align:"right"},
+                    { text: 'Yahoo',  sortable: true, value: 'ticker_yahoo',width:"6%"},
+                    { text: 'Morningstar',  sortable: true, value: 'ticker_morningstar',width:"6%"},
+                    { text: 'Google',  sortable: true, value: 'ticker_google',width:"6%"},
+                    { text: 'QueFondos',  sortable: true, value: 'ticker_quefondos',width:"6%"},
+                    { text: 'Investing.com',  sortable: true, value: 'ticker_investingcom',width:"6%"},
+                    { text: this.$t('Actions'), value: 'actions', sortable: false ,width:"6%"},
                 ],   
                 tableData: [],
                 items: [
