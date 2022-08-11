@@ -15,7 +15,16 @@
             <v-data-table dense :headers="tableHeaders" :items="tableData"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['value']" :sort-desc="[true]" fixed-header height="650" :loading="loading">      
                 <template v-slot:[`item.name`]="{ item }">
                     <v-icon :class="'mr-2 fi fib fi-'+item.flag" small :title="$store.getters.getCountryNameByCode(item.flag)"></v-icon><span :class="class_name(item)">{{item.name}}</span>
-                </template>                  
+                </template>                       
+                <template v-slot:[`item.last_datetime`]="{ item }">
+                    {{localtime(item.last_datetime)}}
+                </template>     
+                <template v-slot:[`item.last`]="{ item }">
+                    <div v-html="currency_html(item.last, item.currency)"></div>
+                </template>     
+                <template v-slot:[`item.percentage_last_year`]="{ item }">
+                    <div v-html="percentage_html(item.percentage_last_year )"></div>
+                </template>             
                 <template v-slot:[`item.productstypes`]="{ item }">
                     <div>{{ $store.getters.getObjectPropertyByUrl("productstypes",item.productstypes,"localname")}}</div>
                 </template>  
@@ -64,6 +73,9 @@
                     { text: 'ISIN',  sortable: true, value: 'isin'},
                     { text: this.$t('Type'),  sortable: true, value: 'productstypes'},
                     { text: this.$t('Currency'),  sortable: true, value: 'currency'},
+                    { text: this.$t('Last datetime'), value: 'last_datetime',sortable: true},
+                    { text: this.$t('Last'), value: 'last',sortable: true,align:"right"},
+                    { text: this.$t('Percentage last year'), value: 'percentage_last_year',sortable: true, align:"right"},
                     { text: 'Yahoo',  sortable: true, value: 'ticker_yahoo'},
                     { text: 'Morningstar',  sortable: true, value: 'ticker_morningstar'},
                     { text: 'Google',  sortable: true, value: 'ticker_google'},
@@ -195,25 +207,29 @@
                 this.dialog_products_cu=false,
                 this.$store.dispatch("getProducts").then(() => {
                     this.refreshSearch()
-                    console.log("AHORA")
                 })
             },
             refreshSearch(){
                 this.loading=true
+                this.tableData=[]
                 if (this.search==null){
-                    this.tableData=[]
+                    this.loading=false
                 } else {
-                    this.tableData=this.$store.state.products.filter(o => 
-                        o.name.toUpperCase().includes(this.search.toUpperCase()) ||
-                        this.ifnullempty(o.ticker_yahoo).toUpperCase().includes(this.search.toUpperCase()) ||
-                        this.ifnullempty(o.ticker_morningstar).toUpperCase().includes(this.search.toUpperCase()) ||
-                        this.ifnullempty(o.ticker_google).toUpperCase().includes(this.search.toUpperCase()) ||
-                        this.ifnullempty(o.ticker_quefondos).toUpperCase().includes(this.search.toUpperCase()) ||
-                        this.ifnullempty(o.ticker_investingcom).toUpperCase().includes(this.search.toUpperCase()) ||
-                        this.ifnullempty(o.isin).toUpperCase().includes(this.search.toUpperCase())
-                    )
+
+                    axios.get(`${this.$store.state.apiroot}/products/search/?search=${this.search}`, this.myheaders())
+                    .then((response) => {
+                            response.data.data.forEach(o=>{
+                                var p=this.$store.getters.getObjectByUrl("products",o.product)
+                                p.last=o.last
+                                p.last_datetime=o.last_datetime
+                                p.percentage_last_year=o.percentage_last_year
+                                this.tableData.push(p)
+                            })
+                            this.loading=false
+                    }, (error) => {
+                        this.parseResponseError(error)
+                    })
                 }
-                this.loading=false
             },
             refreshActiveInvestmentsProducts(){
                 this.tableData=[]
@@ -224,7 +240,6 @@
                          this.tableData.push(product)
                     }
                 });
-                console.log(this.tableData)
                 this.loading=false
             },
             refreshFavoriteProducts(){
@@ -271,7 +286,6 @@
                 return axios.get(`${this.$store.state.apiroot}/products/favorites/`, this.myheaders())
                 .then((response) => {
                         this.favorites=response.data.data
-                        console.log(this.favorites)
                         this.loading=false
                 }, (error) => {
                     this.parseResponseError(error)
