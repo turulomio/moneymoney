@@ -39,9 +39,14 @@
                 <template v-slot:[`item.percentage_invested`]="{ item }">
                     <div v-html="percentage_html(item.percentage_invested )"></div>
                 </template>  
-                <template v-slot:[`item.percentage_selling_point`]="{ item }">     
-                    <div  :class="item.percentage_selling_point<0.05 ? 'boldgreen' : ''" v-html="percentage_html(item.percentage_selling_point)"></div>
-                </template>              
+                <template v-slot:[`item.percentage_selling_point`]="{ item }">  
+                        <v-tooltip right>
+                        <template v-slot:activator="{ on }">
+                            <div v-on="on" :class="item.percentage_selling_point<0.05 ? 'boldgreen' : ''" v-html="percentage_html(item.percentage_selling_point)"></div>
+                        </template>
+                        <span><div v-html="tooltip_selling_percentage(item)"></div></span>
+                    </v-tooltip>   
+                                    </template>              
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small class="ml-1" @click="addQuote(item)">mdi-plus</v-icon>
                     <v-icon small class="ml-1" @click="editItem(item)">mdi-pencil</v-icon>
@@ -218,6 +223,13 @@
             },
             on_chkActive(){
                 this.update_table()
+            },
+            tooltip_selling_percentage(item){
+                return this.$t("Selling price: {0}.<br>Selling point gains {1}.<br>Order valid until {2}.").format(
+                    this.currency_string(item.selling_price,item.currency),
+                    this.currency_string(item.gains_at_selling_point_investment,item.currency),
+                    item.selling_expiration
+                    )
             },
             setCheckboxLabel(){
                 if (this.showActive== true){
