@@ -40,7 +40,7 @@
                     <div v-html="percentage_html(item.percentage_invested )"></div>
                 </template>  
                 <template v-slot:[`item.percentage_selling_point`]="{ item }">  
-                        <v-tooltip right>
+                        <v-tooltip left>
                         <template v-slot:activator="{ on }">
                             <div v-on="on" :class="item.percentage_selling_point<0.05 ? 'boldgreen' : ''" v-html="percentage_html(item.percentage_selling_point)"></div>
                         </template>

@@ -316,9 +316,7 @@
             },
         },
         created(){
-            this.product=this.$store.getters.getObjectByUrl("products",this.investment.product)
-            console.log("PRODUCTO")
-            console.log(this.product)
+            this.product=this.$store.getters.getObjectByUrl("products",this.investment.products)
             this.refreshStrategies()
             this.refreshInvestments(true)
             this.selling_expiration=this.investment.selling_expiration

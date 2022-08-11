@@ -77,13 +77,15 @@
                     <TableDividends :items="dividends_filtered" currency_account="EUR"  height="500" output="user" :key="key" @cruded="on_TableDividends_cruded()"></TableDividends>
                 </v-card>
             </v-tab-item>
-        </v-tabs-items> 
+        </v-tabs-items>
+
         <!-- EVOLUTION CHART -->
         <v-dialog v-model="dialog_evolution_chart">
             <v-card class="pa-4">
                 <ChartInvestmentsoperationsEvolution :investment="investment" :key="key" ></ChartInvestmentsoperationsEvolution>
             </v-card>
         </v-dialog>
+
         <!-- EVOLUTION CHART TIME SERIES -->
         <v-dialog v-model="dialog_evolution_chart_timeseries">
             <v-card class="pa-4">
