@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>{{ $t(`Reinvest / Disinvest dialog`)}}
+        <h1>{{ title_string }}
             <MyMenuInline :items="items" :context="this"></MyMenuInline>
         </h1>
         <v-card class="pa-4 mb-3 mt-3"  >
@@ -136,8 +136,6 @@
                                     this_.ios_before.io_current.forEach(o=>{
                                         invested=invested+o.invested_investment
                                     })
-                                    console.log(invested)
-
 
                                     var amount=this_.parseNumber(prompt( this_.$t("Please the amount to gain in this order"), 500 ));
                                     this_.gains_percentage=this_.my_round(parseFloat(amount/invested)*100,4)
@@ -147,7 +145,7 @@
                         ]
                     },
                     {
-                        subheader:this.$t('Options to desinvest'),
+                        subheader:this.$t('Options to divest'),
                         children: [
                             {
                                 name:this.$t('Integer shares to consolidate losses'),
@@ -204,6 +202,10 @@
                         ]
                     },
                 ],
+
+
+                title_string:"",
+
                 //View options
                 viewoptions:[
                     {id:1, name:'Before simulation'},
@@ -239,12 +241,26 @@
                 form_valid:false,
             }
         },
+        watch:{
+            newshares: function (){
+                this.update_title()
+            }
+        },
         methods: {
             empty_order,
             empty_investments_operations_simulation,
             empty_investment_operation,
             empty_investments_chart,
             empty_investments_chart_limit_line,
+            update_title(){
+                if (this.newshares==0){
+                    this.title_string= this.$t(`Reinvest / Divest dialog`)
+                } else if (this.newshares<0){
+                    this.title_string= this.$t("Divest dialog")
+                } else if (this.newshares>0){
+                    this.title_string= this.$t("Reinvest dialog")
+                }
+            },
             add_order(){
                 this.order=this.empty_order()
                 this.order.price=this.newprice
@@ -285,7 +301,6 @@
                 .then(([resQuotes, resBefore]) => {
                     this.ohcls=resQuotes.data 
                     this.ios_before=resBefore.data
-                    console.log(this.ios_before)
                     this.loading=false
                     this.refreshTables()
                 });
@@ -335,6 +350,7 @@
         },
         created(){
             this.newshares=this.shares
+            this.update_title()
             this.newprice=this.price
             this.investments.forEach(element => { this.newinvestments.push(element)});
             if (this.newinvestments.length>0) {
