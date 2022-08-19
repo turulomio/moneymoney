@@ -173,7 +173,7 @@
             on_finished(){
                 if (this.save_name!=null){
                     var filename=this.save_name
-                    var data=this.$refs.chart.getDataURL().replace('data:image/png;base64,','')
+                    var data=this.$refs.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff', excludeComponents:['dataZoom']}).replace('data:image/png;base64,','')
                     axios.post(`${this.$store.state.apiroot}/binary/to/global/`, {global:filename,data:data,}, this.myheaders())
                     .then(() => {
                         this.$emit("finished")
