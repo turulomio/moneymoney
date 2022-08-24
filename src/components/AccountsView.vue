@@ -94,6 +94,7 @@
         data () {
             return {
                 displayvalues:[
+                    {title:this.$t('Bank'), value: this.$store.getters.getObjectPropertyByUrl("banks",this.account.banks,"name")},
                     {title:this.$t('Number'), value: this.account.number},
                     {title:this.$t('Currency'), value: this.account.currency},
                     {title:this.$t('Active'), value: this.account.active},

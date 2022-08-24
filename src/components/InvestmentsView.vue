@@ -3,7 +3,7 @@
 -->
 <template>
     <div>
-        <h1>{{ investment.name }}
+        <h1>{{ investment.fullname }}
             <MyMenuInline :items="items"  :context="this"></MyMenuInline>
         </h1>
         <DisplayValues v-if="ios" :items="displayvalues()" :key="key"></DisplayValues>
