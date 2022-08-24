@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>{{ $t("Reinvest dialog") }}
+        <h1>{{ $t("Divest dialog") }}
             <MyMenuInline :items="items" :context="this"></MyMenuInline>
         </h1>
         <v-card class="pa-4 mb-3 mt-3"  >
@@ -10,7 +10,7 @@
                     <v-autocomplete :items="$store.getters.getInvestmentsByProduct(product)" v-model="newinvestments" :label="$t('Select investments to include')" item-text="fullname" item-value="url" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
 
                     <v-text-field class="mr-5" v-model="newprice" type="number" :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesInteger(10,true)" counter="10"/>
-                    <v-text-field v-model="newshares" type="number" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesInteger(10,true)" counter="10"/>
+                    <v-text-field v-model.number="newshares" type="number" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesInteger(10,true)" counter="10"/>
                 </v-row>
 
             <v-row>
@@ -109,27 +109,66 @@
             return {
                 items: [
                     {
-                        subheader:this.$t('Options to set shares'),
+                        subheader:this.$t('Options to divest'),
                         children: [
                             {
-                                name:this.$t('Integer shares from amount to reinvest'),
+                                name:this.$t('Calculate shares from losses amount'),
                                 code: function(this_){
-                                    var amount=this_.parseNumber(prompt( this_.$t("Please set the amount to invest in this order"), 10000 ));
-                                    this_.newshares=parseInt(amount/this_.newprice)
+                                    var losses=this_.parseNumber(prompt( this_.$t("Please set losses to consolidate (Positive amount)"), 500 ));
+
+                                    var resultado=0
+                                    for (var i = 0; i < this_.ios_before.io_current.length; i++) {
+                                        var o=this_.ios_before.io_current[i]
+                                        var gains=o.gains_gross_investment
+                                        if (losses+gains==0){
+                                            resultado=resultado+o.shares
+                                            break
+                                        } else if (losses+gains>0){
+                                            resultado=resultado+o.shares
+                                            losses=losses+gains
+                                        } else if (losses+gains<0){
+                                            resultado=resultado+Math.abs(parseInt(losses*o.shares/gains))
+                                            break
+                                        }
+                                    }
+
+
+                                    this_.newshares=-resultado
                                 },
                                 icon: "mdi-book-plus",
                             },
                             {
-                                name:this.$t('Decimal shares from amount to reinvest'),
+                                name:this.$t('Float shares to consolidate losses'),
                                 code: function(this_){
-                                    var amount=this_.parseNumber(prompt( this_.$t("Please set the amount to invest in this order"), 10000 ));
-                                    this_.newshares=amount/this_.newprice
+                                    var losses=this_.parseNumber(prompt( this_.$t("Please set losses to consolidate (Positive amount)"), 500 ));
+
+                                    var resultado=0
+                                    for (var i = 0; i < this_.ios_before.io_current.length; i++) {
+                                        var o=this_.ios_before.io_current[i]
+                                        var gains=o.gains_gross_investment
+                                        if (losses+gains==0){
+                                            resultado=resultado+o.shares
+                                            break
+                                        } else if (losses+gains>0){
+                                            resultado=resultado+o.shares
+                                            losses=losses+gains
+                                        } else if (losses+gains<0){
+                                            resultado=resultado+Math.abs(losses*o.shares/gains)
+                                            break
+                                        }
+                                    }
+
+
+                                    this_.newshares=-this_.my_round(resultado,6)
                                 },
                                 icon: "mdi-book-plus",
                             },
                         ]
                     },
                 ],
+
+
+                title_string:"",
 
                 //View options
                 viewoptions:[
@@ -177,6 +216,7 @@
             empty_investment_operation,
             empty_investments_chart,
             empty_investments_chart_limit_line,
+
             add_order(){
                 this.order=this.empty_order()
                 this.order.price=this.newprice
@@ -223,11 +263,24 @@
                     this.refreshTables()
                 });
             },
-            make_all_axios_after(){         
-                if (this.newshares<=0){
-                    alert(this.$t("To reinvest shares must be positive"))
+            make_all_axios_after(){
+                              
+                if (this.newshares>=0){
+                    alert(this.$t("To divest shares must be negative"))
                     return
                 }
+                //Calculate shares before
+                var shares_before=0
+                this.ios_before.io_current.forEach(o=>{
+                    shares_before=shares_before + o.shares
+                }) 
+
+                if (shares_before>=-this.newshares){
+                    alert(this.$t("You're divesting the whole investment shares ({0})").format(-this.newshares))
+                    return
+                }
+
+
                 this.viewoption=2
                 this.loading=true
                 axios.all([this.simulateOrderAfter()])

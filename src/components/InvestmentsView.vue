@@ -132,6 +132,12 @@
                 <InvestmentsoperationsReinvest :shares="reinvest_shares" :price="reinvest_price" :investments="reinvest_investments" :key="key"></InvestmentsoperationsReinvest>
             </v-card>
         </v-dialog>
+        <!-- Divest dialog -->
+        <v-dialog v-model="dialog_divest">
+            <v-card class="pa-4">
+                <InvestmentsoperationsDivest :shares="divest_shares" :price="divest_price" :investments="divest_investments" :key="key"></InvestmentsoperationsDivest>
+            </v-card>
+        </v-dialog>
     </div>  
 </template>
 <script>
@@ -142,6 +148,7 @@
     import DividendsCU from './DividendsCU.vue'
     import ChartInvestmentsoperationsEvolution from './ChartInvestmentsoperationsEvolution.vue'
     import ChartInvestmentsoperationsEvolutionTimeseries from './ChartInvestmentsoperationsEvolutionTimeseries.vue'
+    import InvestmentsoperationsDivest from "./InvestmentsoperationsDivest.vue"
     import InvestmentsoperationsReinvest from "./InvestmentsoperationsReinvest.vue"
     import InvestmentsChangeSellingPrice from './InvestmentsChangeSellingPrice.vue'
     import MyMenuInline from './MyMenuInline.vue'
@@ -156,6 +163,7 @@
             ChartInvestments,
             DisplayValues,
             DividendsCU,
+            InvestmentsoperationsDivest,
             InvestmentsoperationsReinvest,
             MyMenuInline,
             ProductsView,
@@ -355,6 +363,18 @@
                                 },
                                 icon: "mdi-book-plus",
                             },
+                            {
+                                name:this.$t('Divest operation'),
+                                code: function(this_){
+                                    this_.divest_investments=[]
+                                    this_.divest_investments.push(this_.investment.url)
+                                    this_.divest_shares=0
+                                    this_.divest_price=this_.investment.last
+                                    this_.key=this_.key+1                        
+                                    this_.dialog_divest=true
+                                },
+                                icon: "mdi-book-plus",
+                            },
                         ]
                     },
                     {
@@ -399,6 +419,11 @@
                 reinvest_investments:[],
                 reinvest_shares:0,
                 reinvest_price:0,
+                //dialog_divest
+                dialog_divest: false,
+                divest_investments:[],
+                divest_shares:0,
+                divest_price:0,
             }  
         },
         watch:{
