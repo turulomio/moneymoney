@@ -275,8 +275,8 @@
                     shares_before=shares_before + o.shares
                 }) 
 
-                if (shares_before>=-this.newshares){
-                    alert(this.$t("You're divesting the whole investment shares ({0})").format(-this.newshares))
+                if (Math.abs(this.newshares)>=shares_before){
+                    alert(this.$t("You're divesting the whole investment shares ({0})").format(Math.abs(this.newshares)))
                     return
                 }
 
