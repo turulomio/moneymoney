@@ -15,7 +15,10 @@
 
             <v-row>
                 <v-select class="mr-5" :disabled="loading || (ios_after==null)" :items="viewoptions" v-model="viewoption" :label="$t('Set a view option')"  item-text="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables()"></v-select>  
-                <v-text-field class="mr-5" autoindex="1" :disabled="loading" v-model="gains_percentage" type="number" :label="$t('Gains percentage')" :placeholder="$t('Gains percentage')" :rules="RulesFloat(8,true)" counter="8"/>
+                <v-select class="mr-5" :items="gains_methods" v-model="gains_method" :label="$t('Set a method to calculate gains')"  item-text="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
+
+
+                <v-text-field class="mr-5" autoindex="1" :disabled="loading" v-model.number="gains_value" type="number" :label="$t('Gains method value')" :placeholder="$t('Gains method value')" :rules="RulesFloat(8,true)" counter="8"/>
 
                 <v-btn class="mr-5" color="primary" @click="make_all_axios_after()" :disabled="!form_valid">{{ $t("Simulate") }}</v-btn>
                 <v-btn v-if="this.newinvestments.length==1" color="error" @click="add_order()" :disabled="!form_valid">{{ $t("Add order") }}</v-btn>                 
@@ -138,7 +141,7 @@
                                     })
 
                                     var amount=this_.parseNumber(prompt( this_.$t("Please the amount to gain in this order"), 500 ));
-                                    this_.gains_percentage=this_.my_round(parseFloat(amount/invested)*100,4)
+                                    this_.gains_value=this_.my_round(parseFloat(amount/invested)*100,4)
                                 },
                                 icon: "mdi-book-plus",
                             },
@@ -210,14 +213,19 @@
                 viewoptions:[
                     {id:1, name:'Before simulation'},
                     {id:2, name:'After simulation'},
+                ],                
+                gains_methods:[
+                    {id:1, name:'Gain a porcentage from invested amount'},
+                    {id:2, name:'Gain a fixed amount'},
                 ],
                 viewoption:1,
+                gains_method:1,
                 list_io_current:[],
                 list_io:[],
                 list_io_historical:[],
                 tab:3,
                 key:0,
-                gains_percentage:10,
+                gains_value:10,
 
                 //Order CU
                 dialog_order_cu:false,
@@ -301,6 +309,8 @@
                 .then(([resQuotes, resBefore]) => {
                     this.ohcls=resQuotes.data 
                     this.ios_before=resBefore.data
+                    console.log("BEFORE")
+                    console.log(this.ios_before)
                     this.loading=false
                     this.refreshTables()
                 });
@@ -311,6 +321,8 @@
                 axios.all([this.simulateOrderAfter()])
                 .then(([resAfter]) => {
                     this.ios_after=resAfter.data
+                    console.log("AFTER")
+                    console.log(this.ios_after)
                     this.loading=false
                     this.refreshTables()
                 });
@@ -319,11 +331,20 @@
                 var ll
                 this.chart_data=this.empty_investments_chart()
                 this.chart_data.ohcls=this.ohcls
-                if (this.ios_before.io_current.length>0){
+                if (this.ios_before.io_current.length>0){                  
+                    //Calculate shares before
+                    var shares_before=0
+                    this.ios_before.io_current.forEach(o=>{
+                        shares_before=shares_before + o.shares
+                    }) 
                     ll=this.empty_investments_chart_limit_line()
                     ll.buy=this.ios_before.investment.average_price_investment
                     ll.average=this.ios_before.investment.average_price_investment
-                    ll.sell=ll.average*(1+this.gains_percentage/100)
+                    if (this.gains_method==1){
+                        ll.sell=ll.average*(1+this.gains_value/100)
+                    } else {//P_f={P_o Ac Ap +G } over {Ac Ap } Fixed amount
+                        ll.sell=(ll.average*shares_before*this.ios_before.product.leverage_real_multiplier+this.gains_value)/(shares_before*this.ios_before.product.leverage_real_multiplier)
+                    }
                     this.chart_data.limitlines.push(ll)
 
                 }
@@ -335,6 +356,12 @@
                     this.list_io_historical=this.ios_before.io_historical
                     this.chart_data.io_object=this.ios_before
                 } else if(this.viewoption==2){//After
+                    //Calculate shares after
+                    var shares_after=0
+                    this.ios_after.io_current.forEach(o=>{
+                        shares_after=shares_after + o.shares
+                    }) 
+
                     this.list_io_current=this.ios_after.io_current
                     this.list_io=this.ios_after.io
                     this.list_io_historical=this.ios_after.io_historical
@@ -342,7 +369,11 @@
                     var ll2=this.empty_investments_chart_limit_line()
                     ll2.buy=this.newprice
                     ll2.average=this.ios_after.investment.average_price_investment
-                    ll2.sell=ll2.average*(1+this.gains_percentage/100)
+                    if (this.gains_method==1){
+                        ll2.sell=ll2.average*(1+this.gains_value/100)
+                    } else {//P_f={P_o Ac Ap +G } over {Ac Ap } Fixed amount
+                        ll2.sell=(ll2.average*shares_after*this.ios_after.product.leverage_real_multiplier+this.gains_value)/(shares_after*this.ios_after.product.leverage_real_multiplier)
+                    }
                     this.chart_data.limitlines.push(ll2)
                 }
                 this.key=this.key+1
