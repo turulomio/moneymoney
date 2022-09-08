@@ -185,7 +185,6 @@ export function empty_investments_operations_simulation(){
         dt:new Date().toISOString(),
         local_currency: null,
         operations:[],//Empty io
-        temporaltable: null, //Null if new simulation
     }
 }
 
@@ -194,7 +193,6 @@ export function empty_strategy_simulation(){
         strategy: null, //strategy url
         dt:null, //If null dt_end is dt_for_comparation
         operations:[],//Empty io must specifi investments_id
-        temporaltable: null, //Null if new simulation
     }
 }
 

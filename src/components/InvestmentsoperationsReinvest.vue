@@ -10,7 +10,7 @@
                     <v-autocomplete :items="$store.getters.getInvestmentsByProduct(product)" v-model="newinvestments" :label="$t('Select investments to include')" item-text="fullname" item-value="url" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
 
                     <v-text-field class="mr-5" v-model="newprice" type="number" :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesInteger(10,true)" counter="10"/>
-                    <v-text-field v-model="newshares" type="number" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesInteger(10,true)" counter="10"/>
+                    <v-text-field v-model.number="newshares" type="number" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesInteger(10,true)" counter="10"/>
                 </v-row>
 
             <v-row>
@@ -37,21 +37,21 @@
             <v-tab-item key="current">      
                 <div>
                     <v-card>
-                        <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="investment" height="400" :key="key" :loading="loading"></TableInvestmentOperationsCurrent>
+                        <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="investment" height="400" :key="key" homogeneous :loading="loading"></TableInvestmentOperationsCurrent>
                     </v-card>
                 </div>
             </v-tab-item>
             <v-tab-item key="operations">          
                 <div>
                     <v-card>
-                        <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment" :loading="loading"></TableInvestmentOperations>
+                        <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment" :loading="loading" homogeneous></TableInvestmentOperations>
                     </v-card>
                 </div>
             </v-tab-item>
             <v-tab-item key="historical">     
                 <div>            
                     <v-card>
-                        <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="investment" :homogeneous="true" :key="key" :loading="loading"></TableInvestmentOperationsHistorical>
+                        <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="investment" :key="key" :loading="loading" homogeneous></TableInvestmentOperationsHistorical>
                     </v-card>
                 </div>
             </v-tab-item>
@@ -195,6 +195,7 @@
                 var simulation=this.empty_investments_operations_simulation()
                 simulation.investments=this.newinvestments
                 simulation.local_currency=this.$store.state.settings.local_currency
+                console.log(simulation)
                 return axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
             },
             simulateOrderAfter(){
@@ -208,6 +209,7 @@
                 operation.comment="Simulation 1"
                 operation.investments=this.investments[0]
                 simulation.operations.push(operation)
+                console.log(simulation)
                 return axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
                 
             },
@@ -230,9 +232,12 @@
                 }
                 this.viewoption=2
                 this.loading=true
-                axios.all([this.simulateOrderAfter()])
-                .then(([resAfter]) => {
+                axios.all([this.simulateOrderBefore(),this.simulateOrderAfter()])
+                .then(([resBefore,resAfter]) => {
                     this.ios_after=resAfter.data
+                    this.ios_before=resBefore.data
+                    console.log("BEFORE")
+                    console.log(this.ios_before)
                     console.log("AFTER")
                     console.log(this.ios_after)
                     this.loading=false
