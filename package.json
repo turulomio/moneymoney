@@ -11,7 +11,7 @@
   "dependencies": {
     "@intlify/vue-i18n-loader": "^1.1.0",
     "axios": "^0.27.2",
-    "core-js": "^3.25.0",
+    "core-js": "^3.25.1",
     "currency-list": "^1.0.8",
     "echarts": "^5.3.3",
     "echarts-stat": "^1.2.0",
@@ -32,8 +32,8 @@
     "@vue/cli-service": "^5.0.8",
     "eslint": "^8.23.0",
     "eslint-plugin-vue": "^9.4.0",
-    "npm-check-updates": "^16.0.6",
-    "sass": "^1.54.8",
+    "npm-check-updates": "^16.1.0",
+    "sass": "^1.54.9",
     "sass-loader": "^13.0.2",
     "vue-cli-plugin-i18n": "^2.3.1",
     "vue-template-compiler": "^2.7.10"
