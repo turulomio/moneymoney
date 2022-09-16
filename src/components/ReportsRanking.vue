@@ -20,7 +20,7 @@
                     <div v-html="localcurrency_html(item.total )"></div>
                 </template>  
                 <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon small class="mr-2" @click="viewItem(item)">mdi-eye</v-icon>
+                    <v-icon small class="mr-2" @click="viewInvestmentsMerged(item)">mdi-eye</v-icon>
                 </template>    
                 <template v-slot:[`body.append`]="{headers}">
                     <tr style="background-color: GhostWhite" ref="lr" v-if="search==''">
@@ -46,12 +46,20 @@
                 </template>                        
             </v-data-table>
         </v-card>
+        <!-- Investments merged View dialog -->
+        <v-dialog v-model="dialog_investments_merged_view">
+            <v-card class="pa-4">
+                <InvestmentsMergedView :investments="investments" :key="key"></InvestmentsMergedView>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 <script>
     import axios from 'axios'
+    import InvestmentsMergedView from './InvestmentsMergedView.vue'
     export default {
         components:{
+            InvestmentsMergedView,
         },
         data(){ 
             return{
@@ -81,13 +89,18 @@
                 loading_table:false,
                 search:"",
                 only_current_investments:false,
+
+                // Investments merged view
+                dialog_investments_merged_view:false,
+                investments:null,
+                key:0,
             }
         },
         methods: {
-            viewItem (item) {
+            viewInvestmentsMerged (item) {
+                this.investments=item.investments
                 this.key=this.key+1
-                this.order=item
-                this.dialog_view=true
+                this.dialog_investments_merged_view=true
             },
             update_table(){
                 this.loading_table=true
@@ -95,7 +108,6 @@
                 axios.get(`${this.$store.state.apiroot}/reports/ranking/`, this.myheaders())
                 .then((response) => {
                     this.data=response.data
-                    console.log(response);
                     this.loading_table=false
                 }, (error) => {
                     this.parseResponseError(error)

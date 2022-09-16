@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>{{ strategy.name }}
+        <h1>{{ merged_name }}
             <MyMenuInline :items="items"  :context="this"></MyMenuInline>
         </h1>
         <DisplayValues v-if="ios" :items="displayvalues()" :key="key" :minimized_items="10"></DisplayValues>
@@ -80,7 +80,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import {empty_investment_operation, empty_strategy_simulation, empty_dividend,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
+    import {empty_investment_operation,empty_investments_operations_simulation, empty_dividend,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
     import MyMenuInline from './MyMenuInline.vue'
     import DisplayValues from './DisplayValues.vue'
     import TableDividends from './TableDividends.vue'
@@ -97,8 +97,9 @@
             TableDividends,
         },
         props: {
-            strategy: {
-                required: true
+            investments: { //Array. Remember all investments must be of the same product
+                required: true,
+                type: Array,
             },
         },
         data () {
@@ -169,6 +170,7 @@
                 ],
 
                 ios:null,
+                merged_name:"",
             }  
         },
         watch:{
@@ -181,23 +183,16 @@
             empty_investments_chart_limit_line,
             empty_dividend,
             empty_investment_operation,
-            empty_strategy_simulation,
+            empty_investments_operations_simulation,
             on_TableDividends_cruded(){
                 this.update_all()
             },
             displayvalues(){
-                var r= []
-
-                r.push({title:this.$t('From'), value: this.localtime(this.strategy.dt_from)})
-                r.push({title:this.$t('To'), value: this.localtime(this.strategy.dt_to)})
-                r.push({title:this.$t('Type'), value: this.$store.getters.getObjectPropertyById("strategiestypes", this.strategy.type, "name")})
-                r.push({title:this.$t('Investments'), value: this.strategy.investments.length})                
-                if (this.ios.strategy.additional1){//That means it has a product property
-                    this.leverage_message= this.$t(`${this.ios.product.leverage_multiplier } (Real: ${this.ios.product.leverage_real_multiplier })`)
-                    r.push({title:this.$t('Currency'), value: this.ios.product.currency})
-                    r.push({title:this.$t('Product'), value: this.ios.product.name})
-                    r.push({title:this.$t('Leverage'), value: this.leverage_message})
-                }
+                var r= []       
+                this.leverage_message= this.$t(`${this.$store.getters.getObjectPropertyByUrl("leverages",this.product.leverages,"multiplier")} (Real: ${this.product.real_leveraged_multiplier })`)
+                r.push({title:this.$t('Currency'), value: this.product.currency})
+                r.push({title:this.$t('Product'), value: this.product.name})
+                r.push({title:this.$t('Leverage'), value: this.leverage_message})
                 return r
             },
             setChkDividendsLabel(){
@@ -238,13 +233,21 @@
             },
 
             update_investmentsoperations(){
-                var simulation=this.empty_strategy_simulation()
-                simulation.strategy=this.strategy.url
-                var headers={...this.myheaders(),params:simulation}
-                return axios.get(`${this.$store.state.apiroot}/strategies/simulation/`, headers)
+                var simulation=this.empty_investments_operations_simulation()
+                simulation.investments=this.investments
+                simulation.local_currency=this.product.currency
+                return axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
             },
             update_dividends(){
-                var headers={...this.myheaders(),params:{investments:this.strategy.investments}}
+                //Convert this.investments to an array of ids
+                var investments_ids=[]
+                this.investments.forEach(o => {
+                    investments_ids.push(this.$store.getters.getObjectPropertyByUrl("investments", o,"id"))
+                });
+
+
+
+                var headers={...this.myheaders(),params:{investments:investments_ids}}
                 return axios.get(`${this.$store.state.apiroot}/api/dividends/`, headers)
             },
             update_all(){
@@ -269,7 +272,13 @@
             }
         },
         created(){
-            console.log(this.strategy)
+            console.log(this.investments)
+            if (this.investments.length>0){
+                var investment_0=this.$store.getters.getObjectByUrl("investments", this.investments[0])
+                this.product=this.$store.getters.getObjectByUrl("products", investment_0.products, "name")
+                console.log(this.product)
+                this.merged_name=this.$t("Merged investments of {0}").format(this.product.fullname)
+            }
             this.update_all()
         }
     }

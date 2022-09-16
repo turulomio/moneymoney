@@ -1,6 +1,3 @@
-<!--
-    Emits, @cruded when a dividend, investment or investment operation is cruded
--->
 <template>
     <div>
         <h1>{{ investment.fullname }}
