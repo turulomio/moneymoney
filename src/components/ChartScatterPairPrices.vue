@@ -4,7 +4,7 @@
         <h1 v-if="!notitle">{{ $t("Pair price scatter chart")}}</h1>
         <v-card outlined class="ma-4 pa-4" height="500">
             <v-chart
-                :option="chart_option()"
+                :option="chart_option(data)"
                 autoresize
                 :loading="loading"
             />
@@ -30,7 +30,7 @@
             }
         },
         methods: {
-            chart_option(){
+            chart_option(mydata){
                 return {   
                     dataset: [
                         {
@@ -39,8 +39,6 @@
                         {
                             transform: {
                                 type: 'ecStat:regression',
-                                // 'linear' by default.
-                                //config: { method: 'linear', formulaOn: 'end'}
                             }
                         }
                     ],
@@ -79,27 +77,35 @@
                     series: [
                         {
                             symbolSize: 10,
-                            data: this.data.prices,
+                            data: mydata.prices,
                             type: 'scatter',
-                            name: this.$t('Scatter')
+                            name: this.$t('Scatter'),
+                            color: 'green',
+                            itemStyle: {
+                                color: function(param) {
+                                    if (param.dataIndex>mydata.prices.length-2) return 'red'
+                                    if (param.dataIndex>mydata.prices.length-20) return 'orange'
+                                    return 'green'
+ 
+                                }
+                            },
                         },
                         {
                             name: this.$t('Linear regression'),
                             type: 'line',
                             datasetIndex: 1,
                             symbolSize: 0.1,
+                            color:'blue',
                             symbol: 'circle',
                             label: { show: true, fontSize: 16 },
                             labelLayout: { dx: -20 },
                             encode: { label: 2, tooltip: 1 }
-                        }
+                        },  
+
                     ]
                 };
             }
         },
-        created(){
-            console.log(this.data)
-        }
     }
 
 
