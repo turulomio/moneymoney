@@ -129,6 +129,23 @@
                             },
                         ]
                     },
+                    {
+                        subheader:this.$t('Options to select investments'),
+                        children: [
+                            {
+                                name:this.$t('Add all active investments of the same product'),
+                                code: function(this_){
+                                    console.log(this_.product)
+                                    this_.$store.state.investments.forEach(o=>{
+                                        if (this_.product==o.products && o.active && !this_.newinvestments.includes(o.url)){
+                                            this_.newinvestments.push(o.url)
+                                        }
+                                    })
+                                },
+                                icon: "mdi-book-plus",
+                            },
+                        ]
+                    },
                 ],
 
                 //View options
