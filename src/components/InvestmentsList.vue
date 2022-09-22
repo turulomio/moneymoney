@@ -6,6 +6,8 @@
             <v-row class="pa-4">
                 <v-checkbox class="ml-6 mr-10" v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" ></v-checkbox>
                 <v-text-field class="ml-10 mr-6" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"></v-text-field>
+
+                <v-btn color="primary" @click="products_autoupdate()" :loading="products_updating">{{ $t("Products autoupdate")}}</v-btn>
             </v-row>
             <v-data-table dense :headers="investments_headers" :search="search" :items="investments_items" :sort-by="(showActive)? 'percentage_selling_point': 'fullname' " class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading_investments" fixed-header key="key">
                 <template v-slot:[`item.fullname`]="{ item }">
@@ -169,7 +171,10 @@
 
                 // CHange selling price
                 dialog_change_selling_price:false,
-                selling_product:null
+                selling_product:null,
+
+                //Products auto update
+                products_updating:false,
             }
         },
         methods: { 
@@ -258,6 +263,18 @@
                 this.key=this.key+1
                 this.investment=item
                 this.dialog_view=true
+            },
+
+
+            products_autoupdate(){
+                this.products_updating=true
+                axios.post(`${this.$store.state.apiroot}/products/update/`, {auto:true,}, this.myheaders())
+                .then(() => {
+                        this.update_table()
+                        this.products_updating=false
+                }, (error) => {
+                    this.parseResponseError(error)
+                })
             },
         },
         mounted(){
