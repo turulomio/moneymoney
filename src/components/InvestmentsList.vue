@@ -7,7 +7,7 @@
                 <v-checkbox class="ml-6 mr-10" v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" ></v-checkbox>
                 <v-text-field class="ml-10 mr-6" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"></v-text-field>
 
-                <v-btn color="primary" @click="products_autoupdate()" :loading="products_updating">{{ $t("Products autoupdate")}}</v-btn>
+                <v-btn color="primary" class="mr-4" @click="products_autoupdate()" :loading="products_updating">{{ $t("Products autoupdate")}}</v-btn>
             </v-row>
             <v-data-table dense :headers="investments_headers" :search="search" :items="investments_items" :sort-by="(showActive)? 'percentage_selling_point': 'fullname' " class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading_investments" fixed-header key="key">
                 <template v-slot:[`item.fullname`]="{ item }">

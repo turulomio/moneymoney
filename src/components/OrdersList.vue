@@ -30,6 +30,9 @@
                 </template>                            
             </v-data-table>
         </v-card>
+        <div class="d-flex justify-center mb-4">
+                <v-btn color="primary" class="mr-4" @click="products_autoupdate()" :loading="products_updating">{{ $t("Products autoupdate")}}</v-btn>
+        </div>
         <!-- Order CU dialog -->
         <v-dialog v-model="dialog_cu" max-width="550" persistent>
             <v-card class="pa-4">
@@ -102,6 +105,8 @@
 
                 dialog_reinvest:false,
                 key:0,
+                //Products auto update
+                products_updating:false,
             }
         },
         methods: {
@@ -186,6 +191,17 @@
                 } else {
                     return this.$t("Check to see active orders")
                 }
+            },
+
+            products_autoupdate(){
+                this.products_updating=true
+                axios.post(`${this.$store.state.apiroot}/products/update/`, {auto:true,}, this.myheaders())
+                .then(() => {
+                        this.update_table()
+                        this.products_updating=false
+                }, (error) => {
+                    this.parseResponseError(error)
+                })
             },
 
         },
