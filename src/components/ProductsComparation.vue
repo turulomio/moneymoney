@@ -7,6 +7,7 @@
             <v-tab key="price_ratio">{{ $t("Price ratio")}}</v-tab>
             <v-tab key="price_ratio_chart">{{ $t("Price ratio chart")}}</v-tab>
             <v-tab key="pairs_price_scatter">{{ $t("Price scatter chart")}}</v-tab>
+            <v-tab key="pairs_comparation_by_quote">{{ $t("Comparation by quote")}}</v-tab>
             <v-tab-item key="price_ratio">     
                 <v-card class="pa-4 d-flex justify-center" outlined >
                     <v-data-table dense :headers="data_price_ratio_headers" :items="dbdata" sort-by="datetime" class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading" :key="key" height="500"> 
@@ -36,6 +37,22 @@
             <v-tab-item key="pairs_price_scatter">
                 <v-card class="padding" outlined>
                     <ChartScatterPairPrices notitle :data="cspp"></ChartScatterPairPrices>
+                </v-card>
+            </v-tab-item>
+            <v-tab-item key="pairs_comparation_by_quote">
+                <v-card class="padding" outlined>
+                    <v-row class="pa-8 mx-8">
+                        <v-text-field  v-model.number="quote_better_from" type="number" :label="$t('Quote better from (current price by default)')" :placeholder="$t('Quote better from')" autofocus :rules="RulesFloat(15,true)" counter="15"/>
+                        <v-text-field class="ml-4" v-model.number="quote_better_to" type="number" :label="$t('Quote better to (increases 0.5% by default)')" :placeholder="$t('Quote better to')" :rules="RulesFloat(15,true)" counter="15"/>
+                        <v-btn class="ml-4" vcolor="primary" @click="compare_by_quote()">{{ $t("Comparation by quote") }}</v-btn>
+                    </v-row>
+                    <v-data-table dense :headers="comparation_by_quote_headers" :items="comparation_by_quote" sort-by="datetime" class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading" :key="key" height="500"> 
+                        <template v-slot:[`item.better_datetime`]="{ item }">{{localtime(item.better_datetime)}}</template>  
+                        <template v-slot:[`item.worse_datetime`]="{ item }">{{localtime(item.worse_datetime)}}</template>  
+                        <template v-slot:[`item.better_quote`]="{ item }"><div v-html="currency_html(item.better_quote, product_a.currency)"></div></template>  
+                        <template v-slot:[`item.worse_quote`]="{ item }"><div  :class="comparation_by_quote_success(item) ? 'boldgreen' : 'boldred'" v-html="currency_html(item.worse_quote, product_a.currency)"></div></template>  
+                        <template v-slot:[`item.comment`]="{ item }">{{item.comment}}</template> 
+                    </v-data-table>
                 </v-card>
             </v-tab-item>
         </v-tabs>  
@@ -81,6 +98,21 @@
                 loading:false,
                 key:0,
 
+                //Comparation by quote
+                quote_better_from: 0,
+                quote_better_to:0,
+                comparation_by_quote_headers:[
+                    { text: this.$t('Better date and time'), sortable: true, value: 'better_datetime', width: "10%"},
+                    { text: this.$t('Better quote'), value: 'better_quote',  width: "10%", align:'right'},
+                    { text: this.$t('Worse date and time'), sortable: true, value: 'worse_datetime', width: "10%"},
+                    { text: this.$t('Worse quote'), value: 'worse_quote',  width: "10%", align:'right'},
+                    { text: this.$t('Comment'), value: 'comment',  width: "60%"},
+
+                    
+                ],
+                comparation_by_quote:[],
+                loading_by_quote:false,
+
             }
         },
         methods:{
@@ -91,11 +123,26 @@
                     {title:this.$t('Worse product'), value: this.product_b.name},
                 ]
             },
+            compare_by_quote(){               
+                this.loading_by_quote=true
+                axios.get(`${this.$store.state.apiroot}/products/comparation/by_quote/?a=${this.pc.a}&b=${this.pc.b}&quote_better_from=${this.quote_better_from}&quote_better_to=${this.quote_better_to}`, this.myheaders())
+                .then((response) => {
+                    if (response.data.success){
+                        this.comparation_by_quote=response.data.data
+                    } else {
+                        alert(this.$t("Answer is wrong"))
+                    }
+
+                    this.loading_by_quote=false
+                    this.key=this.key+1
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
+            },
             pairReport(){               
                 this.loading=true
                 axios.get(`${this.$store.state.apiroot}/products/pairs/?a=${this.pc.a}&b=${this.pc.b}`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     this.dbdata=response.data.data
                     this.product_a=response.data.product_a
                     this.product_b=response.data.product_b
@@ -113,6 +160,8 @@
                     this.dbdata.forEach((o,index) => {
                         this.cspp.prices.push([this.dbdata[index].price_better,this.dbdata[index].price_worse])
                     })
+                    this.quote_better_from=this.dbdata[this.dbdata.length-1].price_better
+                    this.quote_better_to=this.quote_better_from*1.005
 
                     this.loading=false
                     this.key=this.key+1
@@ -126,6 +175,11 @@
                 this.product_b=tmp
                 this.$refs.a.forceValue(this.product_a)
                 this.$refs.b.forceValue(this.product_b)
+            },
+            //Returns boolean if worse price is lower after time for the same price
+            comparation_by_quote_success(item){
+                if (item.worse_quote<this.comparation_by_quote[0].worse_quote) return true
+                return false
             }
         },
         mounted(){

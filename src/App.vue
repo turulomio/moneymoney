@@ -219,4 +219,5 @@ span.vuered{
 .v-date-picker-table {
     height: unset;
 }
+
 </style>
