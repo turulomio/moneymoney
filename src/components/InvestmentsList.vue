@@ -7,7 +7,10 @@
                 <v-checkbox class="ml-6 mr-10" v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" ></v-checkbox>
                 <v-text-field class="ml-10 mr-6" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"></v-text-field>
 
-                <v-btn color="primary" class="mr-4" @click="products_autoupdate()" :loading="products_updating">{{ $t("Products autoupdate")}}</v-btn>
+                <v-btn color="primary" class="mr-4" @click="products_autoupdate()" :loading="products_updating">{{ $t("Products autoupdate")}}
+                    <v-badge inline v-show="update_errors>0" color="error" class="ml-2" :content="$t('{0} errors').format(update_errors)"/>
+                </v-btn>
+                
             </v-row>
             <v-data-table dense :headers="investments_headers" :search="search" :items="investments_items" :sort-by="(showActive)? 'percentage_selling_point': 'fullname' " class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading_investments" fixed-header key="key">
                 <template v-slot:[`item.fullname`]="{ item }">
@@ -175,6 +178,7 @@
 
                 //Products auto update
                 products_updating:false,
+                update_errors:0,
             }
         },
         methods: { 
@@ -269,7 +273,11 @@
             products_autoupdate(){
                 this.products_updating=true
                 axios.post(`${this.$store.state.apiroot}/products/update/`, {auto:true,}, this.myheaders())
-                .then(() => {
+                .then((response) => {
+                        this.update_errors=0
+                        response.data.forEach(o=>{
+                            if (o.log.includes("Product")) this.update_errors=this.update_errors+1
+                        })
                         this.update_table()
                         this.products_updating=false
                 }, (error) => {

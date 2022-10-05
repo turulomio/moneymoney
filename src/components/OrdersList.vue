@@ -31,7 +31,9 @@
             </v-data-table>
         </v-card>
         <div class="d-flex justify-center mb-4">
-                <v-btn color="primary" class="mr-4" @click="products_autoupdate()" :loading="products_updating">{{ $t("Products autoupdate")}}</v-btn>
+                <v-btn color="primary" class="mr-4" @click="products_autoupdate()" :loading="products_updating">{{ $t("Products autoupdate")}}
+                    <v-badge inline v-show="update_errors>0" color="error" class="ml-2" :content="$t('{0} errors').format(update_errors)"/>
+                </v-btn>
         </div>
         <!-- Order CU dialog -->
         <v-dialog v-model="dialog_cu" max-width="550" persistent>
@@ -107,6 +109,7 @@
                 key:0,
                 //Products auto update
                 products_updating:false,
+                update_errors:0,
             }
         },
         methods: {
@@ -196,7 +199,11 @@
             products_autoupdate(){
                 this.products_updating=true
                 axios.post(`${this.$store.state.apiroot}/products/update/`, {auto:true,}, this.myheaders())
-                .then(() => {
+                .then((response) => {
+                        this.update_errors=0
+                        response.data.forEach(o=>{
+                            if (o.log.includes("Product")) this.update_errors=this.update_errors+1
+                        })
                         this.update_table()
                         this.products_updating=false
                 }, (error) => {
