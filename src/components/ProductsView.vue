@@ -105,6 +105,15 @@
                 <DpsCRUD :dps="dps" :mode="dps_crud_mode" @cruded="on_DpsCRUD_cruded()" :key="key"></DpsCRUD>
             </v-card>
         </v-dialog>
+
+
+
+        <!-- QUOTES MASSIVE UPDATE -->
+        <v-dialog v-model="dialog_quotes_massive_update" width="90%">
+            <v-card class="pa-4">
+                <QuotesMassiveUpdate :product="product" @cruded="on_QuotesMassiveUpdate_cruded()" :key="key"></QuotesMassiveUpdate>
+            </v-card>
+        </v-dialog>
     </div>
 </template>  
 <script>     
@@ -114,6 +123,7 @@
     import ChartProduct from './ChartProduct.vue'
     import DisplayValues from './DisplayValues.vue'
     import EstimationsDpsCU from './EstimationsDpsCU.vue'
+    import QuotesMassiveUpdate from './QuotesMassiveUpdate.vue'
     import TableDPS from './TableDPS.vue'
     import TableEstimationsDPS from './TableEstimationsDPS.vue'
     import TableOHCLS from './TableOHCLS.vue'
@@ -127,6 +137,7 @@
             EstimationsDpsCU,
             MyMenuInline,
             QuotesCU,
+            QuotesMassiveUpdate,
             TableDPS,
             TableEstimationsDPS,
             TableQuotes,
@@ -164,6 +175,14 @@
                                     this_.dialog_quotescu=true
                                 },
                                 icon: "mdi-plus",
+                            },
+                            {
+                                name:this.$t('Quotes massive update'),
+                                code: function(this_){
+                                    this_.dialog_quotes_massive_update=true
+                                    this_.key=this_.key+1
+                                },
+                                icon: "mdi-update",
                             },
                         ]
                     },
@@ -255,6 +274,9 @@
                 dps_crud_dialog: false,
                 dps_crud_mode: null,
                 dps: null,
+
+                //QUOTES MASSIVE UPDATE
+                dialog_quotes_massive_update:false,
             }
         },
         methods: {
@@ -312,6 +334,10 @@
             on_DpsCRUD_cruded(){
                 this.dps_crud_dialog=false
                 this.key=this.key+1
+            },
+            on_QuotesMassiveUpdate_cruded(){
+                this.dialog_quotes_massive_update=false
+                this.on_TableQuotes_cruded()
             }
         },
 
