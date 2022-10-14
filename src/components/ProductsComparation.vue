@@ -160,7 +160,7 @@
                     this.dbdata.forEach((o,index) => {
                         this.cspp.prices.push([this.dbdata[index].price_better,this.dbdata[index].price_worse])
                     })
-                    this.quote_better_from=this.dbdata[this.dbdata.length-1].price_better
+                    this.quote_better_from=this.product_a.current_price
                     this.quote_better_to=this.quote_better_from*1.005
 
                     this.loading=false
