@@ -175,6 +175,7 @@ export function empty_products_ranges(){
         amount_to_invest: 10000,
         recomendation_methods: 1,
         investments: [], // List of integers. In db is strategy einvestmeents is a string of integers
+        additional_ranges: 3,
     }
 }
 
