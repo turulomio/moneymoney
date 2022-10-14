@@ -15,7 +15,7 @@
                 <v-text-field dense :readonly="mode=='D'" v-model="newproduct.percentage" :label="$t('Set product percentage')" :placeholder="$t('Set product percentage')" :rules="RulesInteger(3,true)" counter="3" />
                 <v-text-field dense :readonly="mode=='D'" v-model="newproduct.pci"  :label="$t('Set product pci')" :placeholder="$t('Set product pci')" :rules="RulesString(true)" counter="200" />
 
-                <v-autocomplete :items="$store.state.leverages" :readonly="mode=='D'" v-model="newproduct.leverages" :label="$t('Select a product leverage')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :items="$store.state.leverages" :readonly="mode=='D'" v-model="newproduct.leverages" :label="$t('Select a product leverage')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-autocomplete :items="$store.state.stockmarkets" :readonly="mode=='D'" v-model="newproduct.stockmarkets" :label="$t('Select a product stock market')" item-text="localname" item-value="url" :rules="RulesSelection(true)">
                     <template v-slot:item="{ item }">
                         <v-icon :class="'mr-2 fi fib fi-'+item.country" color="primary"></v-icon>{{ item.localname }} 
