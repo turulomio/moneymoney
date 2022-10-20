@@ -85,7 +85,25 @@
                     { text: this.$t('Actions'), value: 'actions', sortable: false ,width:"6%"},
                 ],   
                 tableData: [],
-                items: [
+                items: this.menuinline_items(),
+                loading: false,
+                key:0,
+                favorites: [],
+
+
+                //DIALOG PRODUCTS VIEW
+                dialog_productsview:false,
+                product:null,
+
+                //DIALOG PRODUCTS CU
+                dialog_products_cu:false,
+                product_cu_mode:null,
+                product_cu_system:null,
+            }
+        },
+        methods: {
+            menuinline_items()  {
+                var r=[
                     {
                         subheader:this.$t('Product orders'),
                         children: [
@@ -146,23 +164,12 @@
                             },
                         ]
                     },
-                ],
-                loading: false,
-                key:0,
-                favorites: [],
-
-
-                //DIALOG PRODUCTS VIEW
-                dialog_productsview:false,
-                product:null,
-
-                //DIALOG PRODUCTS CU
-                dialog_products_cu:false,
-                product_cu_mode:null,
-                product_cu_system:null,
-            }
-        },
-        methods: {
+                ]
+                if (this.$store.state.catalog_manager==false){
+                    r[0].children.splice(1, 1)
+                }
+                return r
+            },
             editPersonalProduct(item){
                 console.log(item)
                 this.product=item

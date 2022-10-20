@@ -261,7 +261,7 @@ export const store = new Vuex.Store({
             var start=new Date()
             return axios.get(`${store.state.apiroot}/api/leverages/`, store.$app.myheaders())
             .then((response) => {
-                context.commit('updateLeverages', sortObjectsArray(response.data, "name"))
+                context.commit('updateLeverages', sortObjectsArray(response.data, "multiplier"))
                 console.log(`Updated ${response.data.length} leverages in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
@@ -331,7 +331,7 @@ export const store = new Vuex.Store({
             var start=new Date()
             return axios.get(`${store.state.apiroot}/api/stockmarkets/`, store.$app.myheaders())
             .then((response) => {
-                context.commit("updateStockmarkets", response.data)
+                context.commit("updateStockmarkets", sortObjectsArray(response.data, "localname"))
                 console.log(`Updated ${response.data.length} stock markets in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)

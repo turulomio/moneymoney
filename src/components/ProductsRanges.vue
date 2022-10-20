@@ -12,6 +12,7 @@
                 </v-row>
                 <v-row class="pl-5 pr-5">
                 <v-select class="mr-5" :items="$store.state.recomendation_methods" v-model="newpr.recomendation_methods" :label="$t('Set recomendation method')"  item-text="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
+                <v-text-field class="mr-5" v-model.number="newpr.additional_ranges" type="number" :label="$t('Additional ranges to show')" :placeholder="$t('Additional ranges to show')" :rules="RulesInteger(2,true)" counter="2"/>
                 <v-checkbox class="mr-5" v-model="newpr.totalized_operations" :label="$t('Show totalized investments operations?')" ></v-checkbox>
                 <v-autocomplete :items="$store.getters.getInvestmentsByProduct(newpr.product)" v-model="newpr.investments" :label="$t('Select investments to include')" item-text="fullname" item-value="id" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
                 <v-btn class="mt-4" color="primary" @click="accept()" :disabled="!form_valid">{{ $t("Show ranges") }}</v-btn>
