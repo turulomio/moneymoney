@@ -231,4 +231,26 @@ export function id_from_hyperlinked_url(url){
     return parseInt(r[r.length-2])
 }
 
-
+// file is the value of v-file-input. La funcion donde se pone la función debe ser async y para recibir valor const l= await getBase64(file)
+// Returns an object with image in base64, jsimage, and mime parameters
+export function getBase64(file) {
+    // Returns a promise which gets resolved or rejected based on the reader events
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        // Sets up even listeners BEFORE you call reader.readAsDataURL
+        reader.onload = function () {
+            const result = reader.result
+            var r={
+                jsimage: result,
+                image: result.split(",")[1],
+                mime: result.split(";base64,")[0].split(":")[1],
+            }
+            return resolve(r)
+        };
+        reader.onerror = function (error) {
+            return reject(error);
+        };
+        // Calls reader function
+        reader.readAsDataURL(file);
+    })
+}

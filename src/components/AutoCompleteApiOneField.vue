@@ -11,6 +11,7 @@
         :label="label"
         :placeholder="this.$attrs.placeholder"
         prepend-icon="mdi-database-search"
+        :rules="$attrs.rules"
       ></v-combobox>
       <v-autocomplete v-if="!this.canadd"
         v-model="select"
@@ -24,6 +25,7 @@
         :label="label"
         :placeholder="this.$attrs.placeholder"
         prepend-icon="mdi-database-search"
+        :rules="$attrs.rules"
       ></v-autocomplete>
     </div>
 </template>
