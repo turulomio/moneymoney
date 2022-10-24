@@ -205,6 +205,9 @@ span.vuered{
     color: Green;
     font-weight: 900;
 }
+.bold{
+    font-weight: 900;
+}
 .v-application .inform {
     margin-bottom: 1px;
     background-color: white !important;
