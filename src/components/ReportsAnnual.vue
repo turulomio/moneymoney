@@ -70,7 +70,7 @@
                                 <div v-html="localcurrency_html(item.total)"></div>
                             </template>   
                             <template v-slot:[`item.gains`]="{ item }">
-                                <div v-html="localcurrency_html(item.gains)"></div>
+                                <div v-html="localcurrency_html(item.gains+item.fast_operations)"></div>
                             </template>   data
                             <template v-slot:[`item.dividends`]="{ item }">
                                 <div v-html="localcurrency_html(item.dividends)"></div>
@@ -479,6 +479,7 @@
                 })
                 axios.get(`${this.$store.state.apiroot}/reports/annual/income/${this.year}/`, this.myheaders())
                 .then((response) => {
+                        console.log(response.data)
                         this.total_annual_incomes=response.data
                         this.loading_annual_incomes=false
                 }, (error) => {

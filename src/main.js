@@ -36,6 +36,7 @@ import ProductsUpdate from './components/ProductsUpdate'
 import ProductsCatalogUpdate from './components/ProductsCatalogUpdate'
 import ReportsAnnual from './components/ReportsAnnual'
 import ReportsConcepts from './components/ReportsConcepts'
+import ReportsDerivatives from './components/ReportsDerivatives'
 import ReportsDividends from './components/ReportsDividends'
 import ReportsEvolution from './components/ReportsEvolution'
 import ReportsInvestmentsClasses from './components/ReportsInvestmentsClasses'
@@ -69,6 +70,7 @@ const router = new VueRouter({
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/products/update/`, name: 'products_update', component: ProductsUpdate },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/annual/`, name: 'reports_annual', component: ReportsAnnual },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/concepts/`, name: 'reports_concepts', component: ReportsConcepts },
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/derivatives/`, name: 'reports_derivatives', component: ReportsDerivatives },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/dividens/`, name: 'reports_dividends', component: ReportsDividends },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/investmentsclasses/`, name: 'reports_investments_classes', component: ReportsInvestmentsClasses },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/reports/investments/lastoperation/`, name: 'reports_lastoperation', component: ReportsInvestmentsLastOperation },

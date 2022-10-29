@@ -9,6 +9,7 @@
             <v-tab key="expenses">{{ $t('Expenses') }}</v-tab>
             <v-tab key="dividends">{{ $t('Dividends') }}</v-tab>
             <v-tab key="gains">{{ $t('Gains') }}</v-tab>
+            <v-tab key="fast_operations">{{ $t('Fast operations') }}</v-tab>
             <v-tabs-slider color="yellow"></v-tabs-slider>
             <v-tabs-items v-model="tab">
                 <v-tab-item key="incomes">        
@@ -29,7 +30,17 @@
                 <v-tab-item key="gains">       
                     <v-card class="pa-4">
                         <TableInvestmentOperationsHistorical :items="gains" height="600" output="user" :key="key"></TableInvestmentOperationsHistorical>
+                        <p class="bold my-4" style="text-align:center" v-html='$t("Final gains = Gains + Fast operations gains= {0} + {1} = {2}").format(
+                            localcurrency_html(listobjects_sum(gains,"gains_net_user")),
+                            localcurrency_html(listobjects_sum(fast_operations,"amount")),
+                            localcurrency_html(listobjects_sum(gains,"gains_net_user") +listobjects_sum(fast_operations,"amount"))
+                        )'></p>
 
+                    </v-card>
+                </v-tab-item>
+                <v-tab-item key="fast_operations">       
+                    <v-card class="pa-4">
+                        <TableAccountOperations :items="fast_operations" :total_currency="$store.state.settings.local_currency" :showactions="false" height="600" class=" flex-grow-1 flex-shrink-0" :key="key" ></TableAccountOperations>
                     </v-card>
                 </v-tab-item>
             </v-tabs-items> 
@@ -63,6 +74,7 @@
                 incomes:[],
                 dividends:[],
                 gains:[],
+                fast_operations:[],
                 key:0,
                 tab:3,
             }  
@@ -79,6 +91,7 @@
                     this.gains=response.data.gains
                     this.incomes=response.data.incomes
                     this.dividends=response.data.dividends
+                    this.fast_operations=response.data.fast_operations
                     this.key=this.key+1
                     this.loading=false
                     console.log(this.dividends)
