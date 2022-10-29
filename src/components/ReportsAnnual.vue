@@ -70,8 +70,11 @@
                                 <div v-html="localcurrency_html(item.total)"></div>
                             </template>   
                             <template v-slot:[`item.gains`]="{ item }">
-                                <div v-html="localcurrency_html(item.gains+item.fast_operations)"></div>
-                            </template>   data
+                                <div v-html="localcurrency_html(item.gains)"></div>
+                            </template>
+                            <template v-slot:[`item.fast_operations`]="{ item }">
+                                <div v-html="localcurrency_html(item.fast_operations)"></div>
+                            </template>
                             <template v-slot:[`item.dividends`]="{ item }">
                                 <div v-html="localcurrency_html(item.dividends)"></div>
                             </template>    
@@ -291,6 +294,7 @@
                     { text: this.$t('Incomes'), value: 'incomes', sortable: true, align:'right'},
                     { text: this.$t('Expenses'), value: 'expenses', sortable: true, align:'right'},
                     { text: this.$t('Gains'), value: 'gains',sortable: true, align:'right'},
+                    { text: this.$t('Fast operations'), value: 'fast_operations',sortable: true, align:'right'},
                     { text: this.$t('Dividends'), value: 'dividends', sortable: true, align:'right'},
                     { text: this.$t('Total'), value: 'total', sortable: true, align:'right'},
                     { text: this.$t('Actions'), value: 'actions', sortable: true, align:'right'},
@@ -394,7 +398,7 @@
                 this.total_invest_or_work=[]
                 
                 for (var i=0; i<12; i++){
-                    let month_gains= this.total_annual_incomes[i].gains
+                    let month_gains= this.total_annual_incomes[i].gains + this.total_annual_incomes[i].dividends + this.total_annual_incomes[i].fast_operations
                     let month_expenses=this.total_annual_incomes[i].expenses
                     let diff=month_gains+month_expenses
                     this.total_invest_or_work.push({
@@ -439,7 +443,7 @@
                 var cumulative_gains=0
                 
                 for (var i=0; i<12; i++){
-                    let month_gains= this.total_annual_incomes[i].gains + this.total_annual_incomes[i].dividends
+                    let month_gains= this.total_annual_incomes[i].gains + this.total_annual_incomes[i].dividends + this.total_annual_incomes[i].fast_operations
                     cumulative_target=cumulative_target+this.month_target
                     cumulative_gains=cumulative_gains+month_gains
                     this.total_target.push({
