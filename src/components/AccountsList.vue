@@ -123,7 +123,7 @@
                         subheader: this.$t("Account operations options"),
                         children: [
                             {
-                                name:"Search by string",
+                                name: this.$t("Search by string"),
                                 icon: "mdi-magnify",
                                 code: function(this_){
                                     this_.key=this_.key+1

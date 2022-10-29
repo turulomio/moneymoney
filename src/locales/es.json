@@ -723,5 +723,11 @@
   "You must set a new selling order.": "Debes establecer una nueva orden de venta.",
   "You need a Internet connection to update from MoneyMoney repository in Github": "Necesitas una conexión a Internet para actualizar desde el repositorio de MoneyMoney en Github",
   "You still have to work": "Todavía tienes que trabajar",
-  "You're divesting the whole investment shares ({0})": "Estás desinvirtiendo todas las acciones de la inversion ({0})"
+  "You're divesting the whole investment shares ({0})": "Estás desinvirtiendo todas las acciones de la inversion ({0})",
+  "Search by string": "Busca por cadena de texto",
+  "Quote better from (current price by default)": "Desde el valor de la cotización del mejor (precio actual por defecto)",
+  "Quote better from": "Desde el valor de la cotización del mejor",
+  "Quote better to (increases 0.5% by default)": "Hasta el valor de la cotización del mejor (incrementa un 0.5% por defecto)",
+  "Quote better to": "Hasta el valor de la cotización del mejor",
+  "Select the year from which to display the report": "Establece el año desde el cual mostrar el informe"
 }

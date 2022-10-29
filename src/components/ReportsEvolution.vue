@@ -3,7 +3,7 @@
         <h1>{{ $t("Evolution report") }}</h1>
         <div class="d-flex justify-center mb-4">
             <v-card width="20%" class="pa-5">
-                <v-select dense label="Select the year from which to display the report" v-model="year" :items="years()" @change="change_year()"></v-select>
+                <v-select dense :label="$t('Select the year from which to display the report')" v-model="year" :items="years()" @change="change_year()"></v-select>
             </v-card>
         </div>
         <div class="ma-4">
