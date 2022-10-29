@@ -5,9 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve --port 8005 --mode development",
     "build": "vue-cli-service build --mode production",
-    "lint": "vue-cli-service lint",
-    "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\" --output npm_i18n_report.json",
-    "i18n:add": "vue-cli-service i18n:add --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\""
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@intlify/vue-i18n-loader": "^1.1.0",

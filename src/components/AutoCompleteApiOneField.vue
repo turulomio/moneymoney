@@ -18,7 +18,7 @@
         :items="items"
         :loading="isLoading"
         :search-input.sync="search" 
-        :no-data-text="$t('You can\'t select a item, search again')"
+        :no-data-text="$t(`You can't select a item, search again`)"
         hide-selected
         background-color="#ffeeee"
         outlined

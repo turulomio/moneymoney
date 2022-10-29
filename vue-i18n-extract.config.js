@@ -3,9 +3,9 @@ module.exports = {
   "languageFiles": "./src/locales/*.?(json|yaml|yml|js)",
   "exclude": [],
   "output": false,
-  "add": false,
-  "remove": false,
+  "add": true,
+  "remove": true,
   "ci": false,
-  "separator": "",
+  "separator": "###",
   "noEmptyTranslation": ""
 }

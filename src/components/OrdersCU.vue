@@ -65,7 +65,7 @@
                             {
                                 name:this.$t('Integer shares from price'),
                                 code: function(this_){
-                                    var amount=this_.parseNumber(prompt( this_.$t("Please the amount to invest in this order"), 10000 ));
+                                    var amount=this_.parseNumber(prompt( this_.$t("Set the amount to invest in this order"), 10000 ));
                                     this_.neworder.shares=parseInt(amount/this_.neworder.price)
                                 },
                                 icon: "mdi-book-plus",
@@ -73,7 +73,7 @@
                             {
                                 name:this.$t('Decimal shares from price'),
                                 code: function(this_){
-                                    var amount=this_.parseNumber(prompt( this_.$t("Please the amount to invest in this order"), 10000 ));
+                                    var amount=this_.parseNumber(prompt( this_.$t("Set the amount to invest in this order"), 10000 ));
                                     this_.neworder.shares=amount/this_.neworder.price
                                 },
                                 icon: "mdi-book-plus",

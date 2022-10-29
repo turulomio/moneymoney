@@ -45,7 +45,7 @@
                         <v-text-field  v-model.number="quote_better_from" type="number" :label="$t('Quote better from (current price by default)')" :placeholder="$t('Quote better from')" autofocus :rules="RulesFloat(15,true)" counter="15"/>
                         <v-text-field class="ml-4" v-model.number="quote_better_to" type="number" :label="$t('Quote better to (increases 0.5% by default)')" :placeholder="$t('Quote better to')" :rules="RulesFloat(15,true)" counter="15"/>
                         <v-checkbox class="ml-4" v-model="filter_quotes" :label="$t('Filter values that exceed the maximum difference minutes')" @click="get_comparation_by_quote_filter_by_minutes"></v-checkbox>
-                        <v-text-field class="ml-4" type="number" v-model.number="filter_max_minutes_apart" :label="$t('Maximum quotes minutes apart')" :placeholder="$t('Maximum quotes minutes appart')" :rules="RulesInteger(4,true)" counter="4" @change="get_comparation_by_quote_filter_by_minutes"/>
+                        <v-text-field class="ml-4" type="number" v-model.number="filter_max_minutes_apart" :label="$t('Maximum quotes minutes apart')" :placeholder="$t('Maximum quotes minutes apart')" :rules="RulesInteger(4,true)" counter="4" @change="get_comparation_by_quote_filter_by_minutes"/>
                         <v-btn class="ml-4" vcolor="primary" @click="compare_by_quote()">{{ $t("Comparation by quote") }}</v-btn>
 
                     </v-row>
