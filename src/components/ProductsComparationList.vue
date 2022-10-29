@@ -76,7 +76,7 @@
                         subheader: this.$t("Products comparation options"),
                         children: [
                             {
-                                name:"Add a new products comparation",
+                                name: this.$t("Add a new products comparation"),
                                 icon: "mdi-plus",
                                 code: function(this_){
                                     this_.pc=this_.empty_products_comparation()

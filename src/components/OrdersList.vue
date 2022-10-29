@@ -88,7 +88,7 @@
                         subheader: this.$t("Order options"),
                         children: [
                             {
-                                name:"Add a new order",
+                                name:this.$t("Add a new order"),
                                 icon: "mdi-pencil",
                                 code: function(this_){
                                     this_.order=this_.empty_order()

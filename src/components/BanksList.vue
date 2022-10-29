@@ -83,7 +83,7 @@
                         subheader: this.$t("Bank options"),
                         children: [
                             {
-                                name:"Add a new bank",
+                                name:this.$t("Add a new bank"),
                                 icon: "mdi-pencil",
                                 code: function(this_){
                                     this_.editing=false

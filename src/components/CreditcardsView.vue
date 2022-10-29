@@ -69,7 +69,7 @@
                         subheader: this.$t("Credit card operation options"),
                         children: [
                             {
-                                name:"Add a new credit card operation",
+                                name: this.$t("Add a new credit card operation"),
                                 icon: "mdi-plus",
                                 code: function(this_){
                                     this_.paying=false
@@ -81,7 +81,7 @@
                                 },
                             },
                             {
-                                name:"Make a credit card payment",
+                                name: this.$t("Make a credit card payment"),
                                 icon: "mdi-cart",
                                 code: function(this_){
                                     this_.paying=true

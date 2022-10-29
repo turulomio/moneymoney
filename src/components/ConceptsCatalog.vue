@@ -65,7 +65,7 @@
                         subheader: this.$t("Investment options"),
                         children: [
                             {
-                                name:"Add a new concept",
+                                name: this.$t("Add a new concept"),
                                 icon: "mdi-plus",
                                 code: function(this_){
                                     this_.concept=this_.empty_concept()

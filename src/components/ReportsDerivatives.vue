@@ -9,7 +9,7 @@
             </v-tabs>
             <v-tabs-items v-model="tab">
                 <v-tab-item key="0">    
-                    <p class="bold my-4" style="text-align:center">{{$t("This report sums the following accounts operations: 'Derivatives. Daily adjustment', 'Operation commission', 'Fast investment operations. Gains' and 'Fast investment operations. Losses'")}}</p>
+                    <p class="bold my-4" style="text-align:center">{{$t("This report sums the following accounts operations: 'Derivatives. Daily adjustment', 'Derivatives. Operation commission', 'Fast investment operations'")}}</p>
                     <v-card class="pa-4" outlined >
                         <v-data-table dense :headers="derivatives_headers" :items="derivatives" class="elevation-1" disable-pagination  hide-default-footer  fixed-header :loading="loading">
                             <template v-slot:[`item.m1`]="{ item }"><div v-html="localcurrency_html(item.m1 )"></div></template>  

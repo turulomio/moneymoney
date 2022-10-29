@@ -148,7 +148,7 @@
                         subheader: this.$t("Investment options"),
                         children: [
                             {
-                                name:"Add a new investment",
+                                name: this.$t("Add a new investment"),
                                 icon: "mdi-pencil",
                                 code: function(this_){
                                     this_.investment=this_.empty_investment()

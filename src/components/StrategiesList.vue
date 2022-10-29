@@ -115,7 +115,7 @@
                         subheader: this.$t("Strategy options"),
                         children: [
                             {
-                                name:"Add a new strategy",
+                                name: this.$t("Add a new strategy"),
                                 icon: "mdi-pencil",
                                 code: function(this_){
                                     this_.strategy=this_.empty_strategy()

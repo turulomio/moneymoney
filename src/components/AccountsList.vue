@@ -100,7 +100,7 @@
                         subheader: this.$t("Account options"),
                         children: [
                             {
-                                name:"Add a new account",
+                                name: this.$t("Add a new account"),
                                 icon: "mdi-pencil",
                                 code: function(this_){
                                     this_.account=this_.empty_account()
