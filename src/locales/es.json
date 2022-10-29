@@ -697,5 +697,5 @@
   "String must be empty or at most {0} characters": "La cadena debe estar vacía o tener como mucho {0} caracteres",
   "String must be at most {0} characters": "La cadena debe tener como mucho {0} caracteres",
   "String must have between 8 and {0} characters": "La cadena debe tener entre 8 y {0} caracteres",
-  "Pairs in same account": "Pares en la misma cuenta",
+  "Pairs in same account": "Pares en la misma cuenta"
 }
