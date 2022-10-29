@@ -1,6 +1,6 @@
 <template>
     <div class="paragraph">
-        <h1>{{ $t(`About Money Money`) }}</h1>
+        <h1>{{ $t("About Money Money") }}</h1>
         <h2>{{ `${$store.state.version} (${$store.state.versiondate.toISOString().slice(0,10)})` }}</h2>
         
         <v-container  class="paragraph">
