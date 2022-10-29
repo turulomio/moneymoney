@@ -1,6 +1,6 @@
 <template>
     <div class="pa-6">
-        <h1>{{ $t(`Products update`)}}</h1>
+        <h1>{{ $t("Products update")}}</h1>
         <v-card class="pa-5">
             <v-form  method="post">
                     <v-file-input 

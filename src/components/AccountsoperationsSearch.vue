@@ -1,7 +1,7 @@
 
 <template>
     <div>    
-        <h1>{{ $t(`Accounts operations search`) }}</h1>
+        <h1>{{ $t("Accounts operations search") }}</h1>
         <v-card outlined class="ma-4 pa-4">   
             <v-row>
             <v-text-field  class="pa-4" v-model="search" type="text" :label="$t('Enter a string to search')" :placeholder="$t('Operation comment')" autofocus  counter="200"/>

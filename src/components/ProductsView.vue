@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>{{ $t(`Products view`)}}
+        <h1>{{ $t("Products view")}}
             <MyMenuInline :items="items" :context="this"></MyMenuInline>
         </h1>
 

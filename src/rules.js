@@ -3,13 +3,14 @@ export function RulesInteger(maxdigits=10,required=true){
     var r
     if (required==false){
         r= [
-            v => (v!= null && v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
+            v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
             v => (v!=null && !isNaN(parseInt(v))) || this.$t('Must be a integer number')
         ]
     } else { // required==true
         r= [
             v => (v==0 || !!v) || this.$t('Number is required'),
-            v => (v!= null && v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
+            v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
+            v => (v!=null && !isNaN(parseInt(v))) || this.$t('Must be a integer number'),
             v => (!isNaN(parseInt(v))) || this.$t('Must be a integer number')
         ]
     }
@@ -23,13 +24,13 @@ export function RulesFloat(maxdigits,required){
     var r
     if (required==false){
         r= [
-            v => (v==null || (v!= null && v.toString().length <=maxdigits)) || this.$t(`Number must be at most ${maxdigits} characters`),
+            v => (v==null || (v!= null && v.toString().length <=maxdigits)) || this.$t("Number must be at most {0} characters").format(maxdigits),
             v => (v==null || (v!=null && !isNaN(parseFloat(v)))) || this.$t('Must be a decimal number')
         ]
     } else { // required==true
         r= [
             v => (v==0 || !!v) || this.$t('Number is required'),
-            v => (v!= null && v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
+            v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
             v => (!isNaN(parseFloat(v))) || this.$t('Must be a decimal number')
         ]
     }
@@ -40,7 +41,7 @@ export function RulesFloat(maxdigits,required){
 export function RulesFloatPositive(maxdigits,required){
     var r= [
         v => (v==0 || !!v) || this.$t('Number is required'),
-        v => (v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
+        v => (v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
         v => (!isNaN(parseFloat(v))) || this.$t('Must be a number'),
         v => (v>=0) || this.$t('Must be a positive number')
     ]
@@ -52,7 +53,7 @@ export function RulesFloatPositive(maxdigits,required){
 export function RulesFloatNegative(maxdigits,required){
     var r= [
         v => (v==0 || !!v) || this.$t('Number is required'),
-        v => (v.toString().length <=maxdigits) || this.$t(`Number must be at most ${maxdigits} characters`),
+        v => (v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
         v => (!isNaN(parseFloat(v))) || this.$t('Must be a number'),
         v => (v<=0) || this.$t('Must be a negative number')
     ]
@@ -88,12 +89,12 @@ export function RulesString(maxdigits,required){
     var r
     if (required==false){
         r= [
-            v => (v==null || v=="" || (v!=null && v.length>0 && v.length<= maxdigits)) ||  this.$t(`String must be empty or at most ${maxdigits} characters`)
+            v => (v==null || v=="" || (v!=null && v.length>0 && v.length<= maxdigits)) ||  this.$t("String must be empty or at most {0} characters").format(maxdigits)
         ]
     } else { // required==true
         r= [
             v => (v!=null && v!="") || this.$t('String is required'),
-            v => (v!=null && v.length<= maxdigits) || this.$t(`String must be at most ${maxdigits} characters`)
+            v => (v!=null && v.length<= maxdigits) || this.$t("String must be at most {0} characters").format(maxdigits)
         ]
     }
     return r
@@ -104,12 +105,12 @@ export function RulesPassword(maxdigits,required){
     var r
     if (required==false){
         r= [
-            v => (v==null || v=="" || (v!=null && v.length>=8 && v.length<= maxdigits)) ||  this.$t(`String must be empty or have between 8 and ${maxdigits} characters`)
+            v => (v==null || v=="" || (v!=null && v.length>=8 && v.length<= maxdigits)) || this.$t("String must have between 8 and {0} characters").format(maxdigits)
         ]
     } else { // required==true
         r= [
             v => (v!=null && v!="") || this.$t('String is required'),
-            v => (v!=null && v.length>=8 && v.length<= maxdigits) || this.$t(`String must have between 8 and ${maxdigits} characters`)
+            v => (v!=null && v.length>=8 && v.length<= maxdigits) || this.$t("String must have between 8 and {0} characters").format(maxdigits)
         ]
     }
 

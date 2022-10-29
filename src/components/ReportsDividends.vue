@@ -117,7 +117,7 @@
             },
             total(){
                 var total=this.items.reduce((accum,item) => accum + item.estimated, 0)
-                return this.$t(`If I kept the investments for a year I would get ${this.localcurrency_string(total)}`)
+                return this.$t("If I kept the investments for a year I would get {0}").format( this.localcurrency_string(total))
             }
             
         },

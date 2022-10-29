@@ -189,7 +189,10 @@
             },
             displayvalues(){
                 var r= []       
-                this.leverage_message= this.$t(`${this.$store.getters.getObjectPropertyByUrl("leverages",this.product.leverages,"multiplier")} (Real: ${this.product.real_leveraged_multiplier })`)
+                this.leverage_message= this.$t("{0} (Real: {1})").format(
+                    this.$store.getters.getObjectPropertyByUrl("leverages",this.product.leverages,"multiplier"),
+                    this.product.real_leveraged_multiplier
+                    )
                 r.push({title:this.$t('Currency'), value: this.product.currency})
                 r.push({title:this.$t('Product'), value: this.product.name})
                 r.push({title:this.$t('Leverage'), value: this.leverage_message})

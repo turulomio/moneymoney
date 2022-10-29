@@ -1,7 +1,7 @@
 
 <template>
     <div>    
-        <h1>{{ $t(`'${investment.name}' evolution`) }}</h1>
+        <h1>{{ $t("'${0}' evolution").format(investment.name) }}</h1>
         <v-card outlined class="ma-4 pa-4"  :style="styleheight()" v-if="loading==false">
             <v-chart
                 :option="chart_option()"

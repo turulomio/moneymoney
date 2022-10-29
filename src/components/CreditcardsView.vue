@@ -114,7 +114,10 @@
             empty_cco,
             changeSelected(selected_items){
                 this.selected_items=selected_items
-                this.paying_string=this.$t(`Make a payment of ${selected_items.length} operations valued in ${this.currency_string(this.listobjects_sum(selected_items,"amount"), this.account.currency) }`) 
+                this.paying_string=this.$t("Make a payment of {0} operations valued in {1}").format(
+                    selected_items.length,
+                    this.currency_string(this.listobjects_sum(selected_items,"amount"), this.account.currency)
+                )
             },
             update_table(refresh_key=true){
                 this.loading_cco=true

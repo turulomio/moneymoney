@@ -1,7 +1,7 @@
 
 <template>
     <div>    
-        <h1>{{ $t(`Bank details of '{0}'`).format(bank.name) }}</h1>
+        <h1>{{ $t("Bank details of '{0}'").format(bank.name) }}</h1>
 
         <DisplayValues :items="displayvalues()" :minimized_items="1"></DisplayValues>
 

@@ -63,7 +63,7 @@
                     <tr style="background-color: WhiteSmoke" >
                         <td v-for="(header,i) in headers" :key="i">
                             <div v-if="header.value == 'fullname'">
-                                {{ $t(`Total (${investments_items.length} investments):`)}}
+                                {{ $t("Total ({0}):").format(investments_items.length)}}
                             </div>
                             <div v-if="header.value == 'daily_difference'" align="right" v-html="localcurrency_html(listobjects_sum(investments_items,'daily_difference'))">
                             </div>
@@ -250,7 +250,11 @@
             update_foot(){
                 var positives=this.listobjects_sum(this.investments_items.filter((o) => o.gains_user >=0), "gains_user")
                 var negatives=this.listobjects_sum(this.investments_items.filter((o) => o.gains_user <0), "gains_user")
-                this.foot= "<p>" + this.$t(`Positive gains - Negative gains = ${this.localcurrency_html(positives)} ${this.localcurrency_html(negatives)} = ${this.localcurrency_html(positives+negatives)}`) + "</p>"
+                this.foot= "<p>" + this.$t("Positive gains - Negative gains = {0} {1} = {2}").format(
+                    this.localcurrency_html(positives),
+                    this.localcurrency_html(negatives),
+                    this.localcurrency_html(positives+negatives)
+                 ) + "</p>"
             },
             update_table(){
                 this.loading_investments=true

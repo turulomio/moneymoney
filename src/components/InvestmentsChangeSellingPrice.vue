@@ -267,7 +267,10 @@
                 }
                     
                 var gai=(this.selected_selling_price-this.selected_average_price)*this.selected_shares*this.product.real_leveraged_multiplier
-                this.button_text=this.$t(`Set selected investments selling price to ${this.currency_string(this.selected_selling_price, this.product.currency, this.product.decimals)} to gain ${this.currency_string(gai,this.product.currency, 2)}`)
+                this.button_text=this.$t("Set selected investments selling price to {0} to gain {1}").format(
+                    this.currency_string(this.selected_selling_price, this.product.currency, this.product.decimals),
+                    this.currency_string(gai,this.product.currency, 2)
+                )
 
             },
             refreshInvestments(select_current){

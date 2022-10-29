@@ -193,7 +193,7 @@
                 r.push({title:this.$t('Type'), value: this.$store.getters.getObjectPropertyById("strategiestypes", this.strategy.type, "name")})
                 r.push({title:this.$t('Investments'), value: this.strategy.investments.length})                
                 if (this.ios.strategy.additional1){//That means it has a product property
-                    this.leverage_message= this.$t(`${this.ios.product.leverage_multiplier } (Real: ${this.ios.product.leverage_real_multiplier })`)
+                    this.leverage_message= this.$t("{0} (Real: {1}").format(this.ios.product.leverage_multiplier, this.ios.product.leverage_real_multiplier )
                     r.push({title:this.$t('Currency'), value: this.ios.product.currency})
                     r.push({title:this.$t('Product'), value: this.ios.product.name})
                     r.push({title:this.$t('Leverage'), value: this.leverage_message})

@@ -3,7 +3,7 @@
 -->
 <template>
     <div>
-        <h1>{{ $t(`Annual incomes detail ({0}-{1})`).format(this.year, this.month) }}</h1>
+        <h1>{{ $t("Annual incomes detail ({0}-{1})").format(this.year, this.month) }}</h1>
         <v-tabs class="mt-4" v-model="tab" background-color="primary" dark next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
             <v-tab key="incomes">{{ $t('Incomes') }}</v-tab>
             <v-tab key="expenses">{{ $t('Expenses') }}</v-tab>

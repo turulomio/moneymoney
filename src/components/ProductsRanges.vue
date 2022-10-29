@@ -37,10 +37,10 @@
                             <v-icon small v-if="item.recomendation_invest" >mdi-check-outline</v-icon>
                         </template>                        
                          <template v-slot:[`item.investments_inside`]="{ item }">
-                            <div v-for="o in item.investments_inside" :key="o.name" @click="on_investments_inside_click(o)">{{ $t(`${o.name}. Invested: ${currency_string(o.invested, prdata.product.currency)}`) }}<br></div>
+                            <div v-for="o in item.investments_inside" :key="o.name" @click="on_investments_inside_click(o)">{{ $t("{0}. Invested: {1}").format(o.name, currency_string(o.invested, prdata.product.currency)) }}<br></div>
                         </template>                      
                         <template v-slot:[`item.orders_inside`]="{ item }">
-                            <div  v-for="o in item.orders_inside" :key="o.name" @click="on_orders_inside_click(o)">{{ $t(`${o.name}. Amount: ${currency_string(o.amount, prdata.product.currency)}`) }}<br></div>
+                            <div  v-for="o in item.orders_inside" :key="o.name" @click="on_orders_inside_click(o)">{{ $t("{0}. Amount: {1}").format(o.name, currency_string(o.amount, prdata.product.currency)) }}<br></div>
                         </template>
                         <template v-slot:[`item.actions`]="{ item }">
                             <v-icon small class="mr-2" @click="addOrder(item)" :color="(item.recomendation_invest) ? '' : 'red'">mdi-cart</v-icon>
@@ -151,14 +151,14 @@
                 .then((response) => {
                     this.prdata=response.data
                     this.tableData=this.prdata.pr
-                    this.currentpricelabel= this.$t(`Current price: ${this.currency_string(this.prdata.product.last, this.prdata.product.currency)}`) 
+                    this.currentpricelabel= this.$t("Current price: {0}").format(this.currency_string(this.prdata.product.last, this.prdata.product.currency))
                     this.loading=false
                 }, (error) => {
                     this.parseResponseError(error)
                 });
             },
             showLimits(item){
-                let s=this.$t(`Range center: ${this.currency_string(item.value, this.prdata.product.currency)}`)
+                let s=this.$t("Range center: {0}").format(this.currency_string(item.value, this.prdata.product.currency))
                 
                 
                 alert(`${s}\n${item.limits}`)

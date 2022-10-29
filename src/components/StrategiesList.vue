@@ -46,7 +46,7 @@
                     <tr style="background-color: WhiteSmoke">
                         <td v-for="(header,i) in headers" :key="i">
                             <div v-if="header.value == 'name'">
-                                {{$t(`Total (${strategies_items.length} strategies)`)}}
+                                {{$t("Total ({0} strategies)").format(strategies_items.length) }}
                             </div>
                             <div v-if="header.value == 'invested'" align="right" v-html="localcurrency_html(listobjects_sum(strategies_items,'invested'))"></div>
                             <div v-if="header.value == 'gains_current_net_user'" align="right" v-html="localcurrency_html(listobjects_sum(strategies_items,'gains_current_net_user'))"></div>

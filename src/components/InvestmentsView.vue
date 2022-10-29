@@ -524,11 +524,16 @@
                     this.list_io_current=resIO.data[0].io_current
                     this.list_io_historical=resIO.data[0].io_historical
 
-                    this.leverage_message= this.$t(`${this.ios.product.leverage_multiplier } (Real: ${this.ios.product.leverage_real_multiplier })`)
+                    this.leverage_message= this.$t("{0} (Real: {1})").format(
+                        this.ios.product.leverage_multiplier,
+                        this.ios.product.leverage_real_multiplier
+                    )
 
                     this.selling_point_message=this.currency_string(this.ios.investment.selling_price, this.ios.product.currency)
                     if (this.ios.investment.gains_at_sellingpoint){
-                        this.selling_point_message=this.selling_point_message+ this.$t(`, to gain ${this.currency_string(this.ios.investment.gains_at_sellingpoint, this.ios.product.currency)}`)
+                        this.selling_point_message=this.selling_point_message+ this.$t(", to gain {0}").format(
+                            this.currency_string(this.ios.investment.gains_at_sellingpoint, this.ios.product.currency)
+                    )
                     }
                     this.selling_expiration_message=`${this.ios.investment.selling_expiration}`
                     if (new Date(this.ios.investment.selling_expiration).setHours(0,0,0,0)<new Date().setHours(0,0,0,0)){

@@ -372,7 +372,10 @@
             footer_gainsbyproductstypes(){
                 var gross_gains=this.listobjects_sum(this.total_annual_gainsbyproductstypes,'gains_gross')+this.listobjects_sum(this.total_annual_gainsbyproductstypes,'dividends_gross')
                 var net_gains=this.listobjects_sum(this.total_annual_gainsbyproductstypes,'gains_net')+this.listobjects_sum(this.total_annual_gainsbyproductstypes,'dividends_net')
-                return this.$t(`<p class='mt-4'>Gross gains + Gross dividends = ${this.localcurrency_html(gross_gains)}.</p><p>Net gains + Net dividends = ${this.localcurrency_html(net_gains)}.</p>`)
+                return "<p class='mt-4'>"+
+                    this.$t("Gross gains + Gross dividends = {0}.").format(this.localcurrency_html(gross_gains)) +
+                    "</p><p>" + 
+                    this.$t("Net gains + Net dividends = {0}.").format(this.localcurrency_html(net_gains))+"</p>"
             },
             incomeDetails(item){
                 this.month=item.month_number
@@ -461,7 +464,7 @@
                 this.loading_target=false
                 
                 var current_percentage=cumulative_gains/this.last_year_balance
-                this.current_assets_gains_percentage_message=this.$t(`Currently, gains annual percentage is ${this.percentage_html(current_percentage)}`)
+                this.current_assets_gains_percentage_message=this.$t("Currently, gains annual percentage is {0}.").format(this.percentage_html(current_percentage))
 
             },
             refreshTables(){
@@ -472,7 +475,10 @@
                 axios.get(`${this.$store.state.apiroot}/reports/annual/${this.year}/`, this.myheaders())
                 .then((response) => {
                         this.last_year_balance=response.data.last_year_balance
-                        this.last_year_balance_string=this.$t(`Last year balance (${this.localtime(response.data.dtaware_last_year)}) is ${this.localcurrency_html(response.data.last_year_balance)}`) 
+                        this.last_year_balance_string=this.$t("Last year balance ({0}) is {1}").format(
+                            this.localtime(response.data.dtaware_last_year),
+                            this.localcurrency_html(response.data.last_year_balance)
+                        )
                         this.total_annual=response.data.data
                         this.loading_annual=false
                         this.refreshTotalTarget()

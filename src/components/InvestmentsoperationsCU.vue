@@ -111,7 +111,10 @@
                 } else {
                     net=gross-this.newio.taxes-this.newio.commission
                 }
-                return this.$t(`Gross balance: ${this.currency_html(gross, this.investment.currency)}. Net balance: ${this.currency_html(net, this.investment.currency)}`)
+                return this.$t("Gross balance: {0}. Net balance: {1}").format(
+                    this.currency_html(gross, this.investment.currency),
+                    this.currency_html(net, this.investment.currency)
+                )
             },
             setShares(value){
                 this.newio.shares=value

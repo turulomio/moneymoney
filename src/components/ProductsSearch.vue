@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>{{ $t(`Products search`)}}
+        <h1>{{ $t("Products search")}}
             <MyMenuInline :items="items" :context="this"></MyMenuInline>
         </h1>
 

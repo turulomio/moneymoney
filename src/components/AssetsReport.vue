@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>{{ $t(`Assets Report`) }}</h1>
+        <h1>{{ $t("Assets Report") }}</h1>
             <div class="d-flex justify-center mb-4">
         <v-card width="20%" class="pa-4">          
              <v-select class="pa-4" dense label="Select a format" v-model="format" :items="['pdf','odt','docx']"></v-select>       
