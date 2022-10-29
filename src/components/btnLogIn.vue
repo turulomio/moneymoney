@@ -4,7 +4,7 @@
         <v-icon>mdi-account</v-icon>
         <span class="mr-2 text-no-wrap text-truncate">{{ $t("Log in") }}</span>
     </v-btn>    
-    <v-dialog v-model="dialog" max-width="450" persistent>
+    <v-dialog v-model="dialog" max-width="600" persistent>
         <v-card  class="pa-6">
             <h1 class="mb-2">{{ $t("Enter your credentials") }}</h1>
             <v-form ref="form" v-model="form_valid" lazy-validation>

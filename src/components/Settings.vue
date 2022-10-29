@@ -16,8 +16,8 @@
                         <v-text-field v-model="new_settings.first_name" :label="$t('Set your name')" :placeholder="$t('Set your name')" :rules="RulesString(200,true)" counter="200"/>
                         <v-text-field v-model="new_settings.last_name" :label="$t('Set your last name')" :placeholder="$t('Set your last name')" :rules="RulesString(200,true)" counter="200"/>
                         <v-text-field v-model="new_settings.user_email" :label="$t('Set your email')" :placeholder="$t('Set your email')" :rules="RulesEmail(true)" counter="200"/>
-                        <v-text-field type="password" v-model="new_settings.newp" :label="$t('Set your new password. Leave empty if you don\'t want to change it')" :placeholder="$t('Set your password')" :rules="RulesPassword(40,false)" counter="40"/>
-                        <v-text-field type="password" v-model="dupnewp" :label="$t('Set your new password. Leave empty if you don\'t want to change it')" :placeholder="$t('Set your password')" :rules="RulesPassword(40,false)" counter="40"/>
+                        <v-text-field type="password" v-model="new_settings.newp" :label="$t(`Set your new password. Leave empty if you don't want to change it`)" :placeholder="$t('Set your password')" :rules="RulesPassword(40,false)" counter="40"/>
+                        <v-text-field type="password" v-model="dupnewp" :label="$t(`Set your new password. Leave empty if you don't want to change it`)" :placeholder="$t('Set your password')" :rules="RulesPassword(40,false)" counter="40"/>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="amounts" >
