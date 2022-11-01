@@ -43,11 +43,10 @@ export function RulesFloatGZ(maxdigits,required){
     if (required==false){
         r= [
             v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
-            v => (v!=null && !isNaN(parseFloat(v))) || this.$t('Must be a number greater than zero'),
+            v => (v==null || v=='' || (v!=null && !isNaN(parseFloat(v)) && v>0)) || this.$t('Must be a number greater than zero'),
         ]
     } else { // required==true
         r= [
-            v => (!!v) || this.$t('Number is required'),
             v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
             v => (v!=null && !isNaN(parseFloat(v)) && v>0) || this.$t('Must be a number greater than zero'),
         ]
@@ -61,11 +60,10 @@ export function RulesFloatGEZ(maxdigits,required){
     if (required==false){
         r= [
             v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
-            v => (v!=null && !isNaN(parseFloat(v))) || this.$t('Must be a number greater than and equal to zero'),
+            v => (v==null ||  v==''|| (v!=null && !isNaN(parseFloat(v)))) || this.$t('Must be a number greater than and equal to zero'),
         ]
     } else { // required==true
         r= [
-            v => (!!v) || this.$t('Number is required'),
             v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
             v => (v!=null && !isNaN(parseFloat(v)) && v>=0) || this.$t('Must be a number greater than and equal to zero'),
         ]
