@@ -108,7 +108,7 @@ import {
     date2zulu,
     amount_to_invest,
 } from './functions.js'
-import {RulesFloat,RulesDate,RulesDatetime,RulesEmail,RulesInteger,RulesPassword,RulesString,RulesSelection, RulesFloatPositive, RulesFloatNegative, } from './rules.js'
+import {RulesFloat,RulesDate,RulesDatetime,RulesEmail,RulesInteger,RulesPassword,RulesString,RulesSelection, RulesFloatGZ, RulesFloatGEZ, RulesFloatLEZ, } from './rules.js'
 Vue.mixin({
     data: function () {
         return {
@@ -140,8 +140,9 @@ Vue.mixin({
         RulesPassword,
         RulesString,
         RulesSelection,
-        RulesFloatPositive,
-        RulesFloatNegative,
+        RulesFloatGZ,
+        RulesFloatGEZ,
+        RulesFloatLEZ,
 
 
         currency_string(num, currency, decimals=2){

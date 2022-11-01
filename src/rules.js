@@ -37,20 +37,42 @@ export function RulesFloat(maxdigits,required){
     return r
 
 }
-
-export function RulesFloatPositive(maxdigits,required){
-    var r= [
-        v => (v==0 || !!v) || this.$t('Number is required'),
-        v => (v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
-        v => (!isNaN(parseFloat(v))) || this.$t('Must be a number'),
-        v => (v>=0) || this.$t('Must be a positive number')
-    ]
+//Float Greaater Zero
+export function RulesFloatGZ(maxdigits,required){
+    var r
     if (required==false){
-        r.shift()
+        r= [
+            v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
+            v => (v!=null && !isNaN(parseFloat(v))) || this.$t('Must be a number greater than zero'),
+        ]
+    } else { // required==true
+        r= [
+            v => (!!v) || this.$t('Number is required'),
+            v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
+            v => (v!=null && !isNaN(parseFloat(v)) && v>0) || this.$t('Must be a number greater than zero'),
+        ]
     }
     return r
 }
-export function RulesFloatNegative(maxdigits,required){
+
+//Number Greater Equal Zero
+export function RulesFloatGEZ(maxdigits,required){
+    var r
+    if (required==false){
+        r= [
+            v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
+            v => (v!=null && !isNaN(parseFloat(v))) || this.$t('Must be a number greater than and equal to zero'),
+        ]
+    } else { // required==true
+        r= [
+            v => (!!v) || this.$t('Number is required'),
+            v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
+            v => (v!=null && !isNaN(parseFloat(v)) && v>=0) || this.$t('Must be a number greater than and equal to zero'),
+        ]
+    }
+    return r
+}
+export function RulesFloatLEZ(maxdigits,required){
     var r= [
         v => (v==0 || !!v) || this.$t('Number is required'),
         v => (v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),

@@ -7,8 +7,8 @@
                 <MyDateTimePicker :readonly="deleting" v-model="newat.datetime" :label="$t('Set transfer date and time')"></MyDateTimePicker>
                 <v-autocomplete :readonly="deleting" :items="$store.state.accounts.filter(v =>v.active==true)" v-model="newat.account_origin" :label="$t('Select an origin account')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-autocomplete :readonly="deleting" :items="$store.state.accounts.filter(v =>v.active==true)" v-model="newat.account_destiny" :label="$t('Select a destiny account')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field :readonly="deleting" v-model="newat.amount" type="number" :label="$t('Set transfer amount')" :placeholder="$t('Set transfer amount')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newat.commission" type="number" :label="$t('Set transfer commission')" :placeholder="$t('Set transfer commission')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field :readonly="deleting" v-model="newat.amount" type="number" :label="$t('Set transfer amount')" :placeholder="$t('Set transfer amount')" :rules="RulesFloatGZ(10,true)" counter="10"/>
+                <v-text-field :readonly="deleting" v-model="newat.commission" type="number" :label="$t('Set transfer commission')" :placeholder="$t('Set transfer commission')" :rules="RulesFloatGEZ(10,true)" counter="10"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -63,15 +63,7 @@
                     if (this.newat.account_origin==this.newat.account_destiny){
                         alert(this.$t("Transfer accounts can't be the same"))
                         return
-                    }
-                    if (this.newat.amount==0){
-                        alert(this.$t("Transfer amount can't be 0"))
-                        return
-                    }
-                    if (this.newat.commission<0){
-                        alert(this.$t("Transfer commission can't be negative"))
-                        return
-                    }    
+                    } 
                 }
 
                 if (this.mode=="C"){
