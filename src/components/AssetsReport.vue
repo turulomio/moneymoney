@@ -1,46 +1,22 @@
 <template>
     <div>
         <h1>{{ $t("Assets Report") }}</h1>
-            <div class="d-flex justify-center mb-4">
-        <v-card width="20%" class="pa-4">          
-             <v-select class="pa-4" dense label="Select a format" v-model="format" :items="['pdf','odt','docx']"></v-select>       
+        <div class="d-flex justify-center mb-4" width="20%">                
+            <v-card width="20%" class="pa-4">      
+    
+                <v-select class="pa-4" dense label="Select a format" v-model="format" :items="['pdf','odt','docx']"></v-select>       
+                <v-alert dense class=" px-10" outlined :type="(unogenerator_working) ? 'success':'error'"> {{ (unogenerator_working) ? $t("Unogenerator is ready"): $t("Unogenerator is not working. Please contact system administrator")}}</v-alert>
 
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn class="pa-4" color="primary" :disabled="!can_launch()" @click="launch_report()">{{ $t("Generate report") }}</v-btn>
-                <v-spacer></v-spacer>
-            </v-card-actions>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn class="pa-4" :loading="loading" color="primary" :disabled="!can_launch()" @click="launch_report()">{{ $t("Generate report") }}</v-btn>
+                    <v-spacer></v-spacer>
+                </v-card-actions>
 
-        </v-card>
-        </div>
-        <div class="text-center mt-4" v-if="loading">
-            <v-progress-circular
-            indeterminate
-            color="primary"
-            ></v-progress-circular>
-
-            <v-progress-circular
-            indeterminate
-            color="red"
-            ></v-progress-circular>
-
-            <v-progress-circular
-            indeterminate
-            color="purple"
-            ></v-progress-circular>
-
-            <v-progress-circular
-            indeterminate
-            color="green"
-            ></v-progress-circular>
-
-            <v-progress-circular
-            indeterminate
-            color="amber"
-            ></v-progress-circular>
+            </v-card>
         </div>
         <div v-if="data">
-            <ChartEvolutionAssets save_name="base64_assetsreport_evolution.png" @finished="finished_evolution_assets=true;" ></ChartEvolutionAssets>
+            <ChartEvolutionAssets v-if="unogenerator_working" save_name="base64_assetsreport_evolution.png" @finished="finished_evolution_assets=true;" ></ChartEvolutionAssets>
             <ChartPie name="Investments by product" :items="echart_products_items" save_name="base64_assetsreport_classes_by_product.png" :heigth="height" :show_data="false" @finished="finished_by_product=true;" ></ChartPie>
             <ChartPie name="Investments by pci" :items="echart_pci_items" save_name="base64_assetsreport_classes_by_pci.png" :heigth="height" :show_data="false" @finished="finished_by_pci=true;"></ChartPie>
             <ChartPie name="Investments by variable percentage" :items="echart_percentage_items" save_name="base64_assetsreport_classes_by_percentage.png" :heigth="height" :show_data="false" @finished="finished_by_percentage=true;"></ChartPie>
@@ -74,6 +50,7 @@
                 finished_evolution_assets:false,
 
                 format:"pdf",
+                unogenerator_working:false,
             }
         },        
         computed:{
@@ -173,9 +150,22 @@
                     this.parseResponseError(error)
                 });
             },
+            check_unogenerator_server(){
+                axios.get(`${this.$store.state.apiroot}/unogenerator/working/`, this.myheaders())
+                .then((response) => {
+                    this.unogenerator_working=response.data.success
+                    if (this.unogenerator_working){
+                        this.update_pies()
+                    }
+                    this.key=this.key+1
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
+
+            }
         },
         created(){
-            this.update_pies()
+            this.check_unogenerator_server()
         }
     }
 </script>
