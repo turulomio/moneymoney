@@ -121,7 +121,7 @@
             },
             update_table(refresh_key=true){
                 this.loading_cco=true
-                axios.get(`${this.$store.state.apiroot}/creditcardsoperations/withbalance?paid=false&creditcard=${this.cc.id}`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/creditcardsoperations/withbalance/?paid=false&creditcard=${this.cc.id}`, this.myheaders())
                 .then((response) => {
                     this.items_cco=response.data
                     this.loading_cco=false 

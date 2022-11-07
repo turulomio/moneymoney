@@ -172,7 +172,7 @@
             },
             update_table(){
                 this.loading_accounts=true
-                axios.get(`${this.$store.state.apiroot}/accounts/withbalance?active=${this.showActive}`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/accounts/withbalance/?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
                     this.accounts_items=response.data
                     this.loading_accounts=false

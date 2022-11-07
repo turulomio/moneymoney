@@ -92,7 +92,7 @@
             },
             update_accounts(){
                 this.loading_accounts=true
-                axios.get(`${this.$store.state.apiroot}/accounts/withbalance?bank=${this.bank.id}`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/accounts/withbalance/?bank=${this.bank.id}`, this.myheaders())
                 .then((response) => {
                     this.loading_accounts=false
                     this.accounts_items=response.data
@@ -104,7 +104,7 @@
             },
             update_investments(){
                 this.loading_investments=true
-                axios.get(`${this.$store.state.apiroot}/investments/withbalance?bank=${this.bank.id}`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/investments/withbalance/?bank=${this.bank.id}`, this.myheaders())
                 .then((response) => {
                     this.key=this.key+1
                     this.loading_investments=false

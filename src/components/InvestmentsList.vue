@@ -258,7 +258,7 @@
             },
             update_table(){
                 this.loading_investments=true
-                axios.get(`${this.$store.state.apiroot}/investments/withbalance?active=${this.showActive}`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/investments/withbalance/?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
                     this.investments_items=response.data
                     this.update_foot()
