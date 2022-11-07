@@ -13,6 +13,15 @@ String.prototype.format = function() {
 };
 
 
+
+
+Number.prototype.countDecimals = function () {
+    if(Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    return this.toString().split(".")[1].length || 0; 
+}
+
+
+
 export function my_round(num, decimals = 2) {
     return Math.round(num*Math.pow(10, decimals))/Math.pow(10, decimals)
 }
