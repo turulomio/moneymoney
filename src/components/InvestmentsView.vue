@@ -509,7 +509,7 @@
             },
 
             update_investmentsoperations(){
-                return axios.get(`${this.$store.state.apiroot}/investmentsoperations/full?investments=${this.investment.id}`, this.myheaders())
+                return axios.get(`${this.$store.state.apiroot}/investmentsoperations/full/?investments=${this.investment.id}`, this.myheaders())
             },
             update_dividends(){
                 var headers={...this.myheaders(),params:{investments:[this.investment.id,]}}
