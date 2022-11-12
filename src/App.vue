@@ -190,6 +190,16 @@ h1   {
     padding-top: 6px;
 }
 
+h2 {
+    text-align: center;
+    font-weight: normal;
+}
+
+paragraph{
+    text-align:justify;
+    padding: 30px;
+}
+
 .v-card__title {
     margin-top: 0px;
     padding: 0px 0px 10px 0px;

@@ -1,158 +1,214 @@
+// IMPORTANT
+// v-text-field can't be type="number" it doesn't recognized alpha characters
+// v-model.number can be used
 
-export function RulesInteger(maxdigits=10,required=true){
-    var r
-    if (required==false){
-        r= [
-            v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
-            v => (v!=null && !isNaN(parseInt(v))) || this.$t('Must be a integer number')
+
+// TO improve readibility I will emule rules behavier
+// Rules returns [] when everything is ok, returns a ['comment'] to show error
+
+
+
+var self = {
+    isNullOrEmpty: function(n){
+        var r=false
+        if (n==null) return r=true
+        if (n=="") return r=true
+        //console.log(`isnullorempty: ${n} ${typeof n}: ${r}`)
+        return r
+    },
+    //Returns if it's a Number, with required attribute
+    isNumber: function(n){
+        if (isNaN(parseFloat(n))==false) return true
+        return false
+    },
+    isNumberWithRequired: function(n,required){
+        var r=false
+        if (required==true){
+            if (self.isNumber(n)) r= true
+        } else {
+            if (self.isNullOrEmpty(n) || self.isNumber(n)) r= true
+        }
+        //console.log(`isnumberwithrequired: ${n} ${required} ${typeof n}: ${r}`)
+        return r
+    },
+    //Returns if it's a Number with max digits, with required attribute
+    isNumberMaxDigitsWithRequired: function(n,required,maxdigits){
+        var r=false
+        if (self.isNumberWithRequired(n,required) && n.toString().length<=maxdigits) r=true
+        //console.log(`isnumbermaxdigitswithrequired: ${n} ${required} ${typeof n} ${maxdigits}: ${r}`)
+        return r
+    },
+
+    //Counts the number of decimals of a number
+    countDecimals: function (n) {
+
+        if(Math.floor(n) === n) return 0;
+        return n.toString().split(".")[1].length || 0; 
+    },
+       
+    
+        
+    RulesInteger: function(maxdigits,required){
+        var r
+        if (required==false){
+            r= [
+                v => self.isNumberMaxDigitsWithRequired(v,required,maxdigits) || this.$t('Field can be empty or a number with {0} characters at most').format(maxdigits),
+                v => (self.isNullOrEmpty(v) || self.isNumber(v) && self.countDecimals(v)<=0) || this.$t('Must be an integer number'),
+            ]
+        } else { // required==true
+            r= [
+                v => self.isNumberMaxDigitsWithRequired(v,required,maxdigits)|| this.$t('Field must be a number with at most {0} characters').format(maxdigits),
+                v => self.countDecimals(v)<=0 || this.$t('Must be an integer number'),
+            ]
+        }
+        return r
+    },
+
+
+    // If required==true must be 0 or a number
+    // If required==false can be null,
+    RulesFloat: function (maxdigits, required, maxdecimals){
+        var r
+        if (required==false){
+            r= [
+                v => self.isNumberMaxDigitsWithRequired(v,required,maxdigits) || this.$t('Field can be empty or a number with {0} characters at most').format(maxdigits),
+                v => (self.isNullOrEmpty(v) || self.isNumber(v) && self.countDecimals(v)<=maxdecimals) || this.$t('Must be a number with {0} decimal places at most').format(maxdecimals),
+            ]
+        } else { // required==true
+            r= [
+                v => self.isNumberMaxDigitsWithRequired(v,required,maxdigits)|| this.$t('Field must be a number with at most {0} characters').format(maxdigits),
+                v => self.countDecimals(v)<=maxdecimals || this.$t('Must be a number with {0} decimal places at most').format(maxdecimals),
+            ]
+        }
+        return r
+    },
+    //Float Greaater Zero
+    RulesFloatGZ: function (maxdigits, required, maxdecimals){
+        var r
+        if (required==false){
+            r= [
+                v => self.isNumberMaxDigitsWithRequired(v,required,maxdigits) || this.$t('Field can be empty or a number with {0} characters at most').format(maxdigits),
+                v => (self.isNullOrEmpty(v) || self.isNumber(v) && v>0) || this.$t('Must be a number greater than zero'),
+                v => (self.isNullOrEmpty(v) || self.isNumber(v) && self.countDecimals(v)<=maxdecimals) || this.$t('Must be a number with {0} decimal places at most').format(maxdecimals),
+            ]
+        } else { // required==true
+            r= [
+                v => self.isNumberMaxDigitsWithRequired(v,required,maxdigits)|| this.$t('Field must be a number with at most {0} characters').format(maxdigits),
+                v => v>0 || this.$t('Must be a number greater than zero'),
+                v => self.countDecimals(v)<=maxdecimals || this.$t('Must be a number with {0} decimal places at most').format(maxdecimals),
+            ]
+        }
+        return r
+    },
+    //Number Greater Equal Zero
+    RulesFloatGEZ: function (maxdigits, required, maxdecimals){
+        var r
+        if (required==false){
+            r= [
+                v => self.isNumberMaxDigitsWithRequired(v,required,maxdigits) || this.$t('Field can be empty or a number with {0} characters at most').format(maxdigits),
+                v => (self.isNullOrEmpty(v) || self.isNumber(v) && v>=0) || this.$t('Must be a number greater than zero'),
+                v => (self.isNullOrEmpty(v) || self.isNumber(v) && self.countDecimals(v)<=maxdecimals) || this.$t('Must be a number with {0} decimal places at most').format(maxdecimals),
+            ]
+        } else { // required==true
+            r= [
+                v => self.isNumberMaxDigitsWithRequired(v,required,maxdigits)|| this.$t('Field must be a number with at most {0} characters').format(maxdigits),
+                v => v>=0 || this.$t('Must be a number greater than zero'),
+                v => self.countDecimals(v)<=maxdecimals || this.$t('Must be a number with {0} decimal places at most').format(maxdecimals),
+            ]
+        }
+        return r
+    },
+    RulesFloatLEZ: function(maxdigits, required, maxdecimals){
+        var r
+        if (required==false){
+            r= [
+                v => self.isNumberMaxDigitsWithRequired(v,required,maxdigits) || this.$t('Field can be empty or a number with {0} characters at most').format(maxdigits),
+                v => (self.isNullOrEmpty(v) || self.isNumber(v) && v<=0) || this.$t('Must be a number greater than zero'),
+                v => (self.isNullOrEmpty(v) || self.isNumber(v) && self.countDecimals(v)<=maxdecimals) || this.$t('Must be a number with {0} decimal places at most').format(maxdecimals),
+            ]
+        } else { // required==true
+            r= [
+                v => self.isNumberMaxDigitsWithRequired(v,required,maxdigits)|| this.$t('Field must be a number with at most {0} characters').format(maxdigits),
+                v => v<=0 || this.$t('Must be a number greater than zero'),
+                v => self.countDecimals(v)<=maxdecimals || this.$t('Must be a number with {0} decimal places at most').format(maxdecimals),
+            ]
+        }
+        return r
+    },
+
+
+    RulesDatetime: function(required){
+        var r= [
+            v => (!!v) || this.$t('You must select date and time'),
         ]
-    } else { // required==true
-        r= [
-            v => (v==0 || !!v) || this.$t('Number is required'),
-            v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
-            v => (v!=null && !isNaN(parseInt(v))) || this.$t('Must be a integer number'),
-            v => (!isNaN(parseInt(v))) || this.$t('Must be a integer number')
+        if (required==false){
+            r.shift()
+        }
+        return r
+    },
+    RulesDate:function(required){
+        var r= [
+                v => (!!v) || this.$t("You must select a date"),
+            ]
+        if (required==false){
+            r.shift()
+        }
+        return r
+    },
+
+
+    // Si required=true no puede ser ni null ni ""
+    RulesString:function(maxdigits,required){
+        var r
+        if (required==false){
+            r= [
+                v => (v==null || v=="" || (v!=null && v.length>0 && v.length<= maxdigits)) ||  this.$t("String must be empty or at most {0} characters").format(maxdigits)
+            ]
+        } else { // required==true
+            r= [
+                v => (v!=null && v!="") || this.$t('String is required'),
+                v => (v!=null && v.length<= maxdigits) || this.$t("String must be at most {0} characters").format(maxdigits)
+            ]
+        }
+        return r
+    },
+
+    // Si required=true no puede ser ni null ni ""
+    RulesPassword:function(maxdigits,required){
+        var r
+        if (required==false){
+            r= [
+                v => (v==null || v=="" || (v!=null && v.length>=8 && v.length<= maxdigits)) || this.$t("String must have between 8 and {0} characters").format(maxdigits)
+            ]
+        } else { // required==true
+            r= [
+                v => (v!=null && v!="") || this.$t('String is required'),
+                v => (v!=null && v.length>=8 && v.length<= maxdigits) || this.$t("String must have between 8 and {0} characters").format(maxdigits)
+            ]
+        }
+
+        return r
+    },
+
+    RulesSelection: function(required){
+        var r= []
+        if (required==true){
+            r.push((v) => !!v || this.$t('Selection is required'))
+        }
+        return r
+    },
+    RulesEmail: function(required){
+
+        var r=  [
+            v => !!v || this.$t('Email is required'),
+            v => /.+@.+/.test(v) || this.$t('Invalid Email address') 
         ]
-    }
-    return r
+        if (required==false){
+            r.shift()
+        }
+        return r
+    },
+
 }
 
-
-// If required==true must be 0 or a number
-// If required==false can be null,
-export function RulesFloat(maxdigits,required){
-    var r
-    if (required==false){
-        r= [
-            v => (v==null || (v!= null && v.toString().length <=maxdigits)) || this.$t("Number must be at most {0} characters").format(maxdigits),
-            v => (v==null || (v!=null && !isNaN(parseFloat(v)))) || this.$t('Must be a decimal number')
-        ]
-    } else { // required==true
-        r= [
-            v => (v==0 || !!v) || this.$t('Number is required'),
-            v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
-            v => (!isNaN(parseFloat(v))) || this.$t('Must be a decimal number')
-        ]
-    }
-    return r
-
-}
-//Float Greaater Zero
-export function RulesFloatGZ(maxdigits,required){
-    var r
-    if (required==false){
-        r= [
-            v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
-            v => (v==null || v=='' || (v!=null && !isNaN(parseFloat(v)) && v>0)) || this.$t('Must be a number greater than zero'),
-        ]
-    } else { // required==true
-        r= [
-            v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
-            v => (v!=null && !isNaN(parseFloat(v)) && v>0) || this.$t('Must be a number greater than zero'),
-        ]
-    }
-    return r
-}
-
-//Number Greater Equal Zero
-export function RulesFloatGEZ(maxdigits,required){
-    var r
-    if (required==false){
-        r= [
-            v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
-            v => (v==null ||  v==''|| (v!=null && !isNaN(parseFloat(v)))) || this.$t('Must be a number greater than and equal to zero'),
-        ]
-    } else { // required==true
-        r= [
-            v => (v!= null && v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
-            v => (v!=null && !isNaN(parseFloat(v)) && v>=0) || this.$t('Must be a number greater than and equal to zero'),
-        ]
-    }
-    return r
-}
-export function RulesFloatLEZ(maxdigits,required){
-    var r= [
-        v => (v==0 || !!v) || this.$t('Number is required'),
-        v => (v.toString().length <=maxdigits) || this.$t("Number must be at most {0} characters").format(maxdigits),
-        v => (!isNaN(parseFloat(v))) || this.$t('Must be a number'),
-        v => (v<=0) || this.$t('Must be a negative number')
-    ]
-    if (required==false){
-        r.shift()
-    }
-    return r
-}
-
-
-export function RulesDatetime(required){
-    var r= [
-        v => (!!v) || this.$t('You must select date and time'),
-    ]
-    if (required==false){
-        r.shift()
-    }
-    return r
-}
-export function RulesDate(required){
-    var r= [
-            v => (!!v) || this.$t("You must select a date"),
-        ]
-    if (required==false){
-        r.shift()
-    }
-    return r
-}
-
-
-// Si required=true no puede ser ni null ni ""
-export function RulesString(maxdigits,required){
-    var r
-    if (required==false){
-        r= [
-            v => (v==null || v=="" || (v!=null && v.length>0 && v.length<= maxdigits)) ||  this.$t("String must be empty or at most {0} characters").format(maxdigits)
-        ]
-    } else { // required==true
-        r= [
-            v => (v!=null && v!="") || this.$t('String is required'),
-            v => (v!=null && v.length<= maxdigits) || this.$t("String must be at most {0} characters").format(maxdigits)
-        ]
-    }
-    return r
-}
-
-// Si required=true no puede ser ni null ni ""
-export function RulesPassword(maxdigits,required){
-    var r
-    if (required==false){
-        r= [
-            v => (v==null || v=="" || (v!=null && v.length>=8 && v.length<= maxdigits)) || this.$t("String must have between 8 and {0} characters").format(maxdigits)
-        ]
-    } else { // required==true
-        r= [
-            v => (v!=null && v!="") || this.$t('String is required'),
-            v => (v!=null && v.length>=8 && v.length<= maxdigits) || this.$t("String must have between 8 and {0} characters").format(maxdigits)
-        ]
-    }
-
-    return r
-}
-
-export function RulesSelection(required){
-    var r= []
-    if (required==true){
-        r.push((v) => !!v || this.$t('Selection is required'))
-    }
-    return r
-}
-export function RulesEmail(required){
-
-    var r=  [
-        v => !!v || this.$t('Email is required'),
-        v => /.+@.+/.test(v) || this.$t('Invalid Email address') 
-    ]
-    if (required==false){
-        r.shift()
-    }
-    return r
-}
-
+module.exports=self
