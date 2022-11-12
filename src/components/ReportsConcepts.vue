@@ -14,7 +14,7 @@
             </v-tabs>
             <v-tabs-items v-model="tab">
                 <v-tab-item key="positive">
-                    <v-card class="padding" outlined>
+                    <v-card outlined>
                         <v-data-table dense :headers="itemsHeaders" :items="itemsPositive"  class="elevation-1" disable-pagination  hide-default-footer :loading="loading" height="300">
                             <template v-slot:[`item.concept`]="{ item }">
                                 <div v-html="$store.getters.getObjectPropertyByUrl('concepts',item.concept,'name')"></div>
@@ -37,7 +37,7 @@
                                         <div v-if="header.value == 'concept'">
                                             Total
                                         </div>
-                                        <div v-if="header.value == 'total'" align="right">
+                                        <div v-if="header.value == 'total'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(itemsPositive,'total'))"></div>
                                         </div>
                                     </td>
@@ -47,7 +47,7 @@
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="negative">     
-                    <v-card class="padding" outlined>
+                    <v-card outlined>
                         <v-data-table dense :headers="itemsHeaders" :items="itemsNegative"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['year']" :loading="loading">
                             <template v-slot:[`item.concept`]="{ item }">
                                 <div v-html="$store.getters.getObjectPropertyByUrl('concepts',item.concept,'name')"></div>
@@ -70,7 +70,7 @@
                                         <div v-if="header.value == 'concept'">
                                             Total
                                         </div>
-                                        <div v-if="header.value == 'total'" align="right">
+                                        <div v-if="header.value == 'total'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(itemsNegative,'total'))"></div>
                                         </div>
                                     </td>

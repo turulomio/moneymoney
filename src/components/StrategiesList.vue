@@ -48,11 +48,11 @@
                             <div v-if="header.value == 'name'">
                                 {{$t("Total ({0} strategies)").format(strategies_items.length) }}
                             </div>
-                            <div v-if="header.value == 'invested'" align="right" v-html="localcurrency_html(listobjects_sum(strategies_items,'invested'))"></div>
-                            <div v-if="header.value == 'gains_current_net_user'" align="right" v-html="localcurrency_html(listobjects_sum(strategies_items,'gains_current_net_user'))"></div>
-                            <div v-if="header.value == 'gains_historical_net_user'" align="right" v-html="localcurrency_html(listobjects_sum(strategies_items,'gains_historical_net_user'))"></div>
-                            <div v-if="header.value == 'dividends_net_user'" align="right" v-html="localcurrency_html(listobjects_sum(strategies_items,'dividends_net_user'))"></div>
-                            <div v-if="header.value == 'total_net_user'" align="right" v-html="localcurrency_html(listobjects_sum(strategies_items,'total_net_user'))"></div>
+                            <div v-if="header.value == 'invested'" class="d-flex justify-end" v-html="localcurrency_html(listobjects_sum(strategies_items,'invested'))"></div>
+                            <div v-if="header.value == 'gains_current_net_user'" class="d-flex justify-end" v-html="localcurrency_html(listobjects_sum(strategies_items,'gains_current_net_user'))"></div>
+                            <div v-if="header.value == 'gains_historical_net_user'" class="d-flex justify-end" v-html="localcurrency_html(listobjects_sum(strategies_items,'gains_historical_net_user'))"></div>
+                            <div v-if="header.value == 'dividends_net_user'" class="d-flex justify-end" v-html="localcurrency_html(listobjects_sum(strategies_items,'dividends_net_user'))"></div>
+                            <div v-if="header.value == 'total_net_user'" class="d-flex justify-end" v-html="localcurrency_html(listobjects_sum(strategies_items,'total_net_user'))"></div>
                         </td>
                     </tr>
                 </template>

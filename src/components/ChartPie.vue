@@ -17,10 +17,10 @@
                                     <div v-if="header.value == 'name'" >
                                         Total
                                     </div>
-                                    <div v-if="header.value == 'value'"  align="right">
+                                    <div v-if="header.value == 'value'"  class="d-flex justify-end">
                                         {{total}}
                                     </div>
-                                    <div v-if="header.value == 'percentage'" align="right">
+                                    <div v-if="header.value == 'percentage'" class="d-flex justify-end">
                                         100 %
                                     </div>
                                 </td>

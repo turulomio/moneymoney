@@ -30,17 +30,17 @@
                 </v-card>
             </v-tab-item>
             <v-tab-item key="price_ratio_chart">
-                <v-card class="padding" outlined>
+                <v-card outlined>
                     <ChartPriceRatio notitle :product_a="product_a" :product_b="product_b" :data="data_price_ratio_chart"></ChartPriceRatio>
                 </v-card>
             </v-tab-item>
             <v-tab-item key="pairs_price_scatter">
-                <v-card class="padding" outlined>
+                <v-card outlined>
                     <ChartScatterPairPrices notitle :data="cspp"></ChartScatterPairPrices>
                 </v-card>
             </v-tab-item>
             <v-tab-item key="pairs_comparation_by_quote">
-                <v-card class="padding" outlined>
+                <v-card outlined>
                     <v-row class="pa-8 mx-8">
                         <v-text-field  v-model.number="quote_better_from" type="number" :label="$t('Quote better from (current price by default)')" :placeholder="$t('Quote better from')" autofocus :rules="RulesFloat(15,true)" counter="15"/>
                         <v-text-field class="ml-4" v-model.number="quote_better_to" type="number" :label="$t('Quote better to (increases 0.5% by default)')" :placeholder="$t('Quote better to')" :rules="RulesFloat(15,true)" counter="15"/>

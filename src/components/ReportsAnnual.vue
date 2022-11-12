@@ -20,8 +20,8 @@
                 <v-tabs-slider color="yellow"></v-tabs-slider>
             </v-tabs>
             <v-tabs-items v-model="tab">
-                <v-tab-item key="0">
-                    <v-card class="padding" outlined>            
+                <v-tab-item key="0"> <!-- MONTH EVOLUTION -->
+                    <v-card outlined>            
                         <v-data-table dense :headers="total_annual_headers" :items="total_annual"  class="elevation-1" disable-pagination  hide-default-footer :loading="loading_annual">      
                             <template v-slot:[`item.account_balance`]="{ item }">
                                 <div v-html="localcurrency_html(item.account_balance)"></div>
@@ -44,10 +44,10 @@
                                         <div v-if="header.value == 'month'">
                                             Total
                                         </div>
-                                        <div v-if="header.value == 'diff_lastmonth'" align="right">
+                                        <div v-if="header.value == 'diff_lastmonth'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(total_annual,'diff_lastmonth'))"></div>
                                         </div>
-                                        <div v-if="header.value == 'percentage_year'" align="right">
+                                        <div v-if="header.value == 'percentage_year'" class="d-flex justify-end">
                                             <div v-html="percentage_html(listobjects_sum(total_annual,'diff_lastmonth')/last_year_balance)"></div>
                                         </div>
                                     </td>
@@ -57,8 +57,8 @@
                         </v-data-table>   
                     </v-card>
                 </v-tab-item>
-                <v-tab-item key="1">     
-                    <v-card class="padding" outlined>            
+                <v-tab-item key="1">     <!-- INCOME REPORT -->
+                    <v-card outlined>            
                         <v-data-table dense :headers="total_annual_incomes_headers" :items="total_annual_incomes"  class="elevation-1" disable-pagination  hide-default-footer :loading="loading_annual_incomes">      
                             <template v-slot:[`item.expenses`]="{ item }">
                                 <div v-html="localcurrency_html(item.expenses)"></div>
@@ -87,19 +87,22 @@
                                         <div v-if="header.value == 'month'">
                                             Total
                                         </div>
-                                        <div v-if="header.value == 'expenses'" align="right">
+                                        <div v-if="header.value == 'expenses'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'expenses'))"></div>
                                         </div>
-                                        <div v-if="header.value == 'incomes'" align="right">
+                                        <div v-if="header.value == 'incomes'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'incomes'))"></div>
                                         </div>
-                                        <div v-if="header.value == 'gains'" align="right">
+                                        <div v-if="header.value == 'gains'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'gains'))"></div>
                                         </div>
-                                        <div v-if="header.value == 'dividends'" align="right">
+                                        <div v-if="header.value == 'fast_operations'" class="d-flex justify-end">
+                                            <div  v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'fast_operations'))"></div>
+                                        </div>
+                                        <div v-if="header.value == 'dividends'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'dividends'))"></div>
                                         </div>
-                                        <div v-if="header.value == 'total'" align="right">
+                                        <div v-if="header.value == 'total'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(total_annual_incomes,'total'))"></div>
                                         </div>
                                     </td>
@@ -110,7 +113,7 @@
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="2">     
-                    <v-card class="padding" outlined>
+                    <v-card outlined>
                         <v-data-table dense :headers="total_annual_gainsbyproductstypes_headers" :items="total_annual_gainsbyproductstypes"  class="elevation-1" disable-pagination  hide-default-footer :loading="loading_annual_gainsbyproductstypes">      
                             <template v-slot:[`item.dividends_gross`]="{ item }">
                                 <div v-html="localcurrency_html(item.dividends_gross)"></div>
@@ -130,16 +133,16 @@
                                         <div v-if="header.value == 'name'">
                                             Total
                                         </div>
-                                        <div v-if="header.value == 'dividends_gross'" align="right">
+                                        <div v-if="header.value == 'dividends_gross'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(total_annual_gainsbyproductstypes,'dividends_gross'))"></div>
                                         </div>
-                                        <div v-if="header.value == 'dividends_net'" align="right">
+                                        <div v-if="header.value == 'dividends_net'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(total_annual_gainsbyproductstypes,'dividends_net'))"></div>
                                         </div>
-                                        <div v-if="header.value == 'gains_gross'" align="right">
+                                        <div v-if="header.value == 'gains_gross'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(total_annual_gainsbyproductstypes,'gains_gross'))"></div>
                                         </div>
-                                        <div v-if="header.value == 'gains_net'" align="right">
+                                        <div v-if="header.value == 'gains_net'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(total_annual_gainsbyproductstypes,'gains_net'))"></div>
                                         </div>
                                     </td>
@@ -173,10 +176,10 @@
                                         <div v-if="header.value == 'month'">
                                             Total
                                         </div>
-                                        <div v-if="header.value == 'month_target'" align="right">
+                                        <div v-if="header.value == 'month_target'" class="d-flex justify-end">
                                             <div v-html="localcurrency_string(listobjects_sum(total_target,'month_target'))" ></div>
                                         </div>
-                                        <div v-if="header.value == 'month_gains'" align="right">
+                                        <div v-if="header.value == 'month_gains'" class="d-flex justify-end">
                                             <div v-html="localcurrency_string(listobjects_sum(total_target,'month_gains'))" :class="(month_target*12<listobjects_sum(total_target,'month_gains')) ? 'boldgreen' : 'boldred'"></div>
                                         </div>
                                     </td>
@@ -205,13 +208,13 @@
                                         <div v-if="header.value == 'month'">
                                             Total
                                         </div>
-                                        <div v-if="header.value == 'gains'" align="right">
+                                        <div v-if="header.value == 'gains'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(total_invest_or_work,'gains'))" ></div>
                                         </div>
-                                        <div v-if="header.value == 'expenses'" align="right">
+                                        <div v-if="header.value == 'expenses'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(total_invest_or_work,'expenses'))" ></div>
                                         </div>
-                                        <div v-if="header.value == 'diff'" align="right">
+                                        <div v-if="header.value == 'diff'" class="d-flex justify-end">
                                             <div v-html="localcurrency_string(listobjects_sum(total_invest_or_work,'diff'))" :class="(listobjects_sum(total_invest_or_work,'diff')>0) ? 'boldgreen' : 'boldred'"></div>
                                         </div>
                                     </td>
@@ -240,13 +243,13 @@
                                         <div v-if="header.value == 'month'">
                                             Total
                                         </div>
-                                        <div v-if="header.value == 'incomes'" align="right">
+                                        <div v-if="header.value == 'incomes'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(total_make_ends_meet,'incomes'))" ></div>
                                         </div>
-                                        <div v-if="header.value == 'expenses'" align="right">
+                                        <div v-if="header.value == 'expenses'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(total_make_ends_meet,'expenses'))" ></div>
                                         </div>
-                                        <div v-if="header.value == 'diff'" align="right">
+                                        <div v-if="header.value == 'diff'" class="d-flex justify-end">
                                             <div v-html="localcurrency_string(listobjects_sum(total_make_ends_meet,'diff'))" :class="(listobjects_sum(total_make_ends_meet,'diff')>0) ? 'boldgreen' : 'boldred'"></div>
                                         </div>
                                     </td>
@@ -281,53 +284,53 @@
                 tab:0,   
                 total_annual: [],
                 total_annual_headers: [
-                    { text: this.$t('Month'), value: 'month',sortable: false },
-                    { text: this.$t('Account balance'), value: 'account_balance', sortable: false, align:'right'},
-                    { text: this.$t('Investment balance'), value: 'investment_balance', sortable: false, align:'right'},
-                    { text: this.$t('Total balance'), value: 'total',sortable: false, align:'right'},
-                    { text: this.$t('Last month difference'), value: 'diff_lastmonth', sortable: false, align:'right'},
-                    { text: this.$t('% year to date'), value: 'percentage_year', sortable: false, align:'right'},
+                    { text: this.$t('Month'), value: 'month',sortable: false , width:"15%"},
+                    { text: this.$t('Account balance'), value: 'account_balance', sortable: false, align:'right', width:"17%"},
+                    { text: this.$t('Investment balance'), value: 'investment_balance', sortable: false, align:'right', width:"17%"},
+                    { text: this.$t('Total balance'), value: 'total',sortable: false, align:'right', width:"17%"},
+                    { text: this.$t('Last month difference'), value: 'diff_lastmonth', sortable: false, align:'right', width:"17%"},
+                    { text: this.$t('% year to date'), value: 'percentage_year', sortable: false, align:'right', width:"17%"},
                 ],   
                 total_annual_incomes:[],
                 total_annual_incomes_headers: [
-                    { text: this.$t('Month'), value: 'month',sortable: true },
-                    { text: this.$t('Incomes'), value: 'incomes', sortable: true, align:'right'},
-                    { text: this.$t('Expenses'), value: 'expenses', sortable: true, align:'right'},
-                    { text: this.$t('Gains'), value: 'gains',sortable: true, align:'right'},
-                    { text: this.$t('Fast operations'), value: 'fast_operations',sortable: true, align:'right'},
-                    { text: this.$t('Dividends'), value: 'dividends', sortable: true, align:'right'},
-                    { text: this.$t('Total'), value: 'total', sortable: true, align:'right'},
-                    { text: this.$t('Actions'), value: 'actions', sortable: true, align:'right'},
+                    { text: this.$t('Month'), value: 'month',sortable: true , width:"12.5%"},
+                    { text: this.$t('Incomes'), value: 'incomes', sortable: true, align:'right', width:"12.5%"},
+                    { text: this.$t('Expenses'), value: 'expenses', sortable: true, align:'right', width:"12.5%"},
+                    { text: this.$t('Gains'), value: 'gains',sortable: true, align:'right', width:"12.5%"},
+                    { text: this.$t('Fast operations'), value: 'fast_operations',sortable: true, align:'right', width:"12.5%"},
+                    { text: this.$t('Dividends'), value: 'dividends', sortable: true, align:'right', width:"12.5%"},
+                    { text: this.$t('Total'), value: 'total', sortable: true, align:'right', width:"12.5%"},
+                    { text: this.$t('Actions'), value: 'actions', sortable: true, align:'right', width:"12.5%"},
                 ],     
                 total_annual_gainsbyproductstypes:[],
                 total_annual_gainsbyproductstypes_headers: [
-                    { text: this.$t('Name'), value: 'name',sortable: true },
-                    { text: this.$t('Gross gains'), value: 'gains_gross', sortable: true, align:'right'},
-                    { text: this.$t('Gross dividends'), value: 'dividends_gross', sortable: true, align:'right'},
-                    { text: this.$t('Net gains'), value: 'gains_net',sortable: true, align:'right'},
-                    { text: this.$t('Net dividends'), value: 'dividends_net', sortable: true, align:'right'},
+                    { text: this.$t('Name'), value: 'name',sortable: true},
+                    { text: this.$t('Gross gains'), value: 'gains_gross', sortable: true, align:'right', width:"22%"},
+                    { text: this.$t('Gross dividends'), value: 'dividends_gross', sortable: true, align:'right', width:"22%"},
+                    { text: this.$t('Net gains'), value: 'gains_net',sortable: true, align:'right', width:"22%"},
+                    { text: this.$t('Net dividends'), value: 'dividends_net', sortable: true, align:'right', width:"22%"},
                 ],   
                 total_target:[],
                 total_target_headers: [
                     { text: this.$t('Month'), value: 'month',sortable: true },
-                    { text: this.$t('Month target'), value: 'month_target',sortable: true,align:'right' },
-                    { text: this.$t('Month gains'), value: 'month_gains', sortable: true, align:'right'},
-                    { text: this.$t('Cumulative target'), value: 'cumulative_target', sortable: true, align:'right'},
-                    { text: this.$t('Cumulative gains'), value: 'cumulative_gains',sortable: true, align:'right'},
+                    { text: this.$t('Month target'), value: 'month_target',sortable: true,align:'right', width:"22%"},
+                    { text: this.$t('Month gains'), value: 'month_gains', sortable: true, align:'right', width:"22%"},
+                    { text: this.$t('Cumulative target'), value: 'cumulative_target', sortable: true, align:'right', width:"22%"},
+                    { text: this.$t('Cumulative gains'), value: 'cumulative_gains',sortable: true, align:'right', width:"22%"},
                 ],   
                 total_invest_or_work:[],
                 total_invest_or_work_headers: [
                     { text: this.$t('Month'), value: 'month',sortable: true },
-                    { text: this.$t('Gains'), value: 'gains',sortable: true,align:'right' },
-                    { text: this.$t('Expenses'), value: 'expenses', sortable: true, align:'right'},
-                    { text: this.$t('Diff'), value: 'diff', sortable: true, align:'right'},
+                    { text: this.$t('Gains'), value: 'gains',sortable: true,align:'right', width:"27%"},
+                    { text: this.$t('Expenses'), value: 'expenses', sortable: true, align:'right', width:"27%"},
+                    { text: this.$t('Diff'), value: 'diff', sortable: true, align:'right', width:"27%"},
                 ],    
                 total_make_ends_meet:[],
                 total_make_ends_meet_headers: [
                     { text: this.$t('Month'), value: 'month',sortable: true },
-                    { text: this.$t('Incomes'), value: 'incomes',sortable: true,align:'right' },
-                    { text: this.$t('Expenses'), value: 'expenses', sortable: true, align:'right'},
-                    { text: this.$t('Diff'), value: 'diff', sortable: true, align:'right'},
+                    { text: this.$t('Incomes'), value: 'incomes',sortable: true,align:'right', width:"27%"},
+                    { text: this.$t('Expenses'), value: 'expenses', sortable: true, align:'right', width:"27%"},
+                    { text: this.$t('Diff'), value: 'diff', sortable: true, align:'right', width:"27%"},
                 ],   
                 year: new Date().getFullYear(),
                 last_year_balance:0,

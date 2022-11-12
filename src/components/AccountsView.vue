@@ -15,7 +15,7 @@
                 </v-card>
             </v-tab-item>
             <v-tab-item key="cc">
-                <v-card class="padding" outlined>
+                <v-card outlined>
                     <v-checkbox v-model="showActiveCC" :label="setCheckboxLabelCC()" @click="on_chkActive_cc()" ></v-checkbox>
                     <v-data-table dense :headers="table_cc_headers" :items="table_cc"  class="elevation-1" disable-pagination  hide-default-footer sort-by="name" fixed-header max-height="400" :key="key">
                         <template v-slot:[`item.deferred`]="{ item }">

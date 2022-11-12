@@ -14,7 +14,7 @@
             </v-tabs>
             <v-tabs-items v-model="tab">
                 <v-tab-item key="0">
-                    <v-card class="padding" outlined>
+                    <v-card outlined>
                         <v-data-table dense :headers="assetsHeaders" :items="assetsData"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['year']" :loading="loading_assets">
                             <template v-slot:[`item.balance_start`]="{ item }">
                                 <div v-html="localcurrency_html(item.balance_start)"></div>
@@ -46,19 +46,19 @@
                                         <div v-if="header.value == 'year'">
                                             Total
                                         </div>
-                                        <div v-if="header.value == 'dividends_net'" align="right">
+                                        <div v-if="header.value == 'dividends_net'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(assetsData,'dividends_net'))"></div>
                                         </div>
-                                        <div v-if="header.value == 'gains_net'" align="right">
+                                        <div v-if="header.value == 'gains_net'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(assetsData,'gains_net'))"></div>
                                         </div>
-                                        <div v-if="header.value == 'incomes'" align="right">
+                                        <div v-if="header.value == 'incomes'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(assetsData,'incomes'))"></div>
                                         </div>
-                                        <div v-if="header.value == 'expenses'" align="right">
+                                        <div v-if="header.value == 'expenses'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(assetsData,'expenses'))"></div>
                                         </div>
-                                        <div v-if="header.value == 'total'" align="right">
+                                        <div v-if="header.value == 'total'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(assetsData,'total'))"></div>
                                         </div>
                                     </td>
@@ -68,7 +68,7 @@
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="1">     
-                    <v-card class="padding" outlined>
+                    <v-card outlined>
                         <v-data-table dense :headers="investedHeaders" :items="investedData"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['year']" :loading="loading_invested">
                             <template v-slot:[`item.invested`]="{ item }">
                                 <div v-html="localcurrency_html(item.invested)"></div>
@@ -100,16 +100,16 @@
                                         <div v-if="header.value == 'year'">
                                             Total
                                         </div>
-                                        <div v-if="header.value == 'net_gains_plus_dividends'" align="right">
+                                        <div v-if="header.value == 'net_gains_plus_dividends'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(investedData,'net_gains_plus_dividends'))"></div>
                                         </div>
-                                        <div v-if="header.value == 'custody_commissions'" align="right">
+                                        <div v-if="header.value == 'custody_commissions'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(investedData,'custody_commissions'))"></div>
                                         </div>
-                                        <div v-if="header.value == 'taxes'" align="right">
+                                        <div v-if="header.value == 'taxes'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(investedData,'taxes'))"></div>
                                         </div>
-                                        <div v-if="header.value == 'investment_commissions'" align="right">
+                                        <div v-if="header.value == 'investment_commissions'" class="d-flex justify-end">
                                             <div v-html="localcurrency_html(listobjects_sum(investedData,'investment_commissions'))"></div>
                                         </div>
                                     </td>

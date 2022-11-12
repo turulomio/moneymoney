@@ -33,7 +33,7 @@
                             <div v-if="header.value == 'localname'">
                                 Total
                             </div>
-                            <div v-if="header.value == 'balance_user'" align="right" v-html="localcurrency_html(listobjects_sum(accounts_items,'balance_user'))">
+                            <div v-if="header.value == 'balance_user'" class="d-flex justify-end" v-html="localcurrency_html(listobjects_sum(accounts_items,'balance_user'))">
                             </div>
                         </td>
                     </tr>

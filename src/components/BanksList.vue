@@ -30,11 +30,11 @@
                             <div v-if="header.value == 'name'">
                                 Total
                             </div>
-                            <div v-if="header.value == 'balance_accounts'" align="right" v-html="localcurrency_html(listobjects_sum(data,'balance_accounts'))">
+                            <div v-if="header.value == 'balance_accounts'" class="d-flex justify-end" v-html="localcurrency_html(listobjects_sum(data,'balance_accounts'))">
                             </div>
-                            <div v-if="header.value == 'balance_investments'" align="right" v-html="localcurrency_html(listobjects_sum(data,'balance_investments'))">
+                            <div v-if="header.value == 'balance_investments'" class="d-flex justify-end" v-html="localcurrency_html(listobjects_sum(data,'balance_investments'))">
                             </div>
-                            <div v-if="header.value == 'balance_total'" align="right" v-html="localcurrency_html(listobjects_sum(data,'balance_total'))">
+                            <div v-if="header.value == 'balance_total'" class="d-flex justify-end" v-html="localcurrency_html(listobjects_sum(data,'balance_total'))">
                             </div>
                         </td>
                     </tr>

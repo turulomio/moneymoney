@@ -24,7 +24,7 @@
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
-                                    <v-card class="padding" v-if="!loading">
+                                    <v-card v-if="!loading">
                                             <TableInvestmentOperationsCurrent :items="list_io_current" homogeneous currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="account" height="400" :key="key"></TableInvestmentOperationsCurrent>
                                     </v-card>
                             </v-tab-item>
@@ -38,12 +38,12 @@
                         <v-tab key="investment">{{ $t('Investment currency') }}</v-tab>
                             <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
-                            <v-card class="padding" v-if="!loading">
+                            <v-card v-if="!loading">
                                 <TableInvestmentOperations :items="io_filtered" homogeneous currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="500" :key="key" output="investment" @cruded="on_TableInvestmentsOperations_cruded()" @onedit="on_TableInvestmentsOperations_edit"></TableInvestmentOperations>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
-                                <v-card class="padding" v-if="!loading">
+                                <v-card v-if="!loading">
                                     <TableInvestmentOperations :items="io_filtered" homogeneous currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="500" :key="key" output="account" :showactions="false"></TableInvestmentOperations>
                                 </v-card>
                             </v-tab-item>
@@ -56,12 +56,12 @@
                         <v-tab key="investmenth">{{ $t('Investment currency') }}</v-tab>
                             <v-tab key="accounth">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investmenth">     
-                            <v-card class="padding"  v-if="!loading">
+                            <v-card  v-if="!loading">
                                 <TableInvestmentOperationsHistorical :items="list_io_historical" homogeneous height="500" output="investment" :key="key"></TableInvestmentOperationsHistorical>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="accounth">
-                                <v-card class="padding" v-if="!loading">
+                                <v-card v-if="!loading">
                                     <TableInvestmentOperationsHistorical :items="list_io_historical" homogeneous height="500" output="account" :key="key"></TableInvestmentOperationsHistorical>
                                 </v-card>
                             </v-tab-item>
@@ -69,7 +69,7 @@
                 </div>
             </v-tab-item>
             <v-tab-item key="dividends">     
-                <v-card class="padding" v-if="!loading">
+                <v-card v-if="!loading">
                     <v-checkbox v-model="showAllDividends" :label="setChkDividendsLabel()" @click="on_chkDividends()"></v-checkbox>
                     <TableDividends :items="dividends_filtered" currency_account="EUR"  height="500" output="user" :key="key" @cruded="on_TableDividends_cruded()"></TableDividends>
                 </v-card>

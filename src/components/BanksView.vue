@@ -20,7 +20,7 @@
                             <div v-if="header.value == 'name'">
                                 Total
                             </div>
-                            <div v-if="header.value == 'balance_user'" align="right" v-html="localcurrency_html(listobjects_sum(accounts_items,'balance_user'))">
+                            <div v-if="header.value == 'balance_user'" class="d-flex justify-end" v-html="localcurrency_html(listobjects_sum(accounts_items,'balance_user'))">
                             </div>
                         </td>
                     </tr>
@@ -42,7 +42,7 @@
                             <div v-if="header.value == 'name'">
                                 Total
                             </div>
-                            <div v-if="header.value == 'balance_user'" align="right" v-html="localcurrency_html(listobjects_sum(investments_items,'balance_user'))">
+                            <div v-if="header.value == 'balance_user'" class="d-flex justify-end" v-html="localcurrency_html(listobjects_sum(investments_items,'balance_user'))">
                             </div>
                         </td>
                     </tr>

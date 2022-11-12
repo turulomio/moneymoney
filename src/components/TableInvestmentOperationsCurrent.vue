@@ -77,51 +77,51 @@
                         Total
                     </div>
                  
-                    <div v-if="header.value == 'shares' && homogeneous==true" align="right">
+                    <div v-if="header.value == 'shares' && homogeneous==true" class="d-flex justify-end">
                         <div v-html="items.reduce((accum,item) => accum + item.shares, 0)"></div>
                     </div>
                     
-                    <div v-if="header.value == 'price_account'" align="right">
+                    <div v-if="header.value == 'price_account'" class="d-flex justify-end">
                         <div v-html="currency(listobjects_average_ponderated(items,'price_account', 'shares'))"></div>
                     </div>
-                    <div v-if="header.value == 'price_investment'" align="right">
+                    <div v-if="header.value == 'price_investment'" class="d-flex justify-end">
                         <div v-html="currency(listobjects_average_ponderated(items,'price_investment', 'shares'))"></div>
                     </div>
-                    <div v-if="header.value == 'price_user' && homogeneous==true" align="right">
+                    <div v-if="header.value == 'price_user' && homogeneous==true" class="d-flex justify-end">
                         <div v-html="currency(listobjects_average_ponderated(items,'price_user', 'shares'))"></div>
                     </div>
                     
-                    <div v-if="header.value == 'gains_gross_account'" align="right">
+                    <div v-if="header.value == 'gains_gross_account'" class="d-flex justify-end">
                         <div v-html="currency(items.reduce((accum,item) => accum + item.gains_gross_account, 0))"></div>
                     </div>
-                    <div v-if="header.value == 'gains_gross_investment'" align="right">
+                    <div v-if="header.value == 'gains_gross_investment'" class="d-flex justify-end">
                         <div v-html="currency(items.reduce((accum,item) => accum + item.gains_gross_investment, 0))"></div>
                     </div>
-                    <div v-if="header.value == 'gains_gross_user'" align="right">
+                    <div v-if="header.value == 'gains_gross_user'" class="d-flex justify-end">
                         <div v-html="currency(items.reduce((accum,item) => accum + item.gains_gross_user, 0))"></div>
                     </div>
                     
-                    <div v-if="header.value == 'invested_account'" align="right">
+                    <div v-if="header.value == 'invested_account'" class="d-flex justify-end">
                         <div v-html="currency(items.reduce((accum,item) => accum + item.invested_account, 0))"></div>
                     </div>
-                    <div v-if="header.value == 'invested_investment'" align="right">
+                    <div v-if="header.value == 'invested_investment'" class="d-flex justify-end">
                         <div v-html="currency(items.reduce((accum,item) => accum + item.invested_investment, 0))"></div>
                     </div>
-                    <div v-if="header.value == 'invested_user'" align="right">
+                    <div v-if="header.value == 'invested_user'" class="d-flex justify-end">
                         <div v-html="currency(items.reduce((accum,item) => accum + item.invested_user, 0))"></div>
                     </div>
                     
-                    <div v-if="header.value == 'balance_account'" align="right">
+                    <div v-if="header.value == 'balance_account'" class="d-flex justify-end">
                         <div v-html="currency(items.reduce((accum,item) => accum + item.balance_account, 0))"></div>
                     </div>
-                    <div v-if="header.value == 'balance_investment'" align="right">
+                    <div v-if="header.value == 'balance_investment'" class="d-flex justify-end">
                         <div v-html="currency(items.reduce((accum,item) => accum + item.balance_investment, 0))"></div>
                     </div>
-                    <div v-if="header.value == 'balance_user'" align="right">
+                    <div v-if="header.value == 'balance_user'" class="d-flex justify-end">
                         <div v-html="currency(items.reduce((accum,item) => accum + item.balance_user, 0))"></div>
                     </div>
 
-                    <div v-if="header.value == 'percentage_total_investment'" align="right">
+                    <div v-if="header.value == 'percentage_total_investment'" class="d-flex justify-end">
                         <div v-html="percentage_html(items.reduce((accum,item) => accum + item.gains_gross_investment, 0)/items.reduce((accum,item) => accum + item.invested_investment, 0))"></div>
                     </div>
   
