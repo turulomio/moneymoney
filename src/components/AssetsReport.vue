@@ -5,7 +5,7 @@
             <v-card width="20%" class="pa-4">      
     
                 <v-select class="pa-4" dense label="Select a format" v-model="format" :items="['pdf','odt','docx']"></v-select>       
-                <v-alert dense class=" px-10" outlined :type="(unogenerator_working) ? 'success':'error'"> {{ (unogenerator_working) ? $t("Unogenerator is ready"): $t("Unogenerator is not working. Please contact system administrator")}}</v-alert>
+                <v-alert dense class=" px-10" outlined :type="(unogenerator_working) ? 'success':'error'"> {{ (unogenerator_working) ? $t("UnoGenerator is ready"): $t("UnoGenerator is not working. Please contact system administrator")}}</v-alert>
 
                 <v-card-actions>
                     <v-spacer></v-spacer>

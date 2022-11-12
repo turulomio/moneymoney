@@ -246,7 +246,7 @@
   "Enter an integer number": "Introduce un número entero",
   "Enter password": "Introduce la contraseña",
   "Enter user": "Introduce el usuario",
-  "Enter your credentials": "Introduce sus credenciales",
+  "Enter your credentials": "Introduce tus credenciales",
   "Especial products": "Productos especiales",
   "Estimated balance": "Saldo estimado",
   "Estimation date": "Fecha de la estimación",
@@ -380,7 +380,6 @@
   "Must be a integer number": "Debe ser un número entero",
   "Must be a negative number": "Debe ser un número negativo",
   "Must be a number": "Debe ser un número",
-  "Must be a positive number": "Debe ser un número positivo",
   "Name": "Nombre",
   "Negative balance concepts": "Conceptos con saldo negativo",
   "Net dividends": "Dividendos netos",
@@ -663,8 +662,6 @@
   "Total shares": "Total de acciones",
   "Total": "Total",
   "Transfer accounts can't be the same": "Las cuentas de la transferencia no pueden ser la misma",
-  "Transfer amount can't be 0": "El importe de la transferencia no puede ser 0",
-  "Transfer commission can't be negative": "La comisión de la transferencia no puede ser negativa",
   "Type": "Tipo",
   "Uncheck to see current investment operations": "Desmarca para ver las operaciones de inversión actuales",
   "Uncheck to see dividends of current investment operations": "Desmarca para ver dividendos de las operaciones de inversión actuales",
@@ -729,5 +726,9 @@
   "Quote better from": "Desde el valor de la cotización del mejor",
   "Quote better to (increases 0.5% by default)": "Hasta el valor de la cotización del mejor (incrementa un 0.5% por defecto)",
   "Quote better to": "Hasta el valor de la cotización del mejor",
-  "Select the year from which to display the report": "Establece el año desde el cual mostrar el informe"
+  "Select the year from which to display the report": "Establece el año desde el cual mostrar el informe",
+  "UnoGenerator is ready": "UnoGenerator está preparado",
+  "UnoGenerator is not working. Please contact system administrator": "UnoGenerator no está funcionando. Por favor contacta con el Administrador del Sistema",
+  "Must be a number greater than zero": "El número debe ser mayor que cero",
+  "Must be a number greater than and equal to zero": "El número debe ser mayor o igual que cero"
 }
