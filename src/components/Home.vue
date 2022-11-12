@@ -2,13 +2,13 @@
     <div>
         <h1>{{ $t("Wellcome to Money Money") }}</h1>
         <h2>{{ `${$store.state.version} (${$store.state.versiondate.toISOString().slice(0,10)})` }}</h2>
-        <v-card   width="30%">
+        <!-- <v-card   width="30%">
             <v-form ref="form" v-model="form_valid">
                 <v-text-field v-model.number="a" :label="$t('Not required')" :rules="RulesInteger(10,false)" counter="10"/>
                 <v-text-field v-model.number="b" :label="$t('Required')" autofocus :rules="RulesInteger(10,true)" counter="10"/>
             </v-form>   
             <v-btn @click="$refs.form.validate()">Validate</v-btn>
-        </v-card>
+        </v-card> -->
         <v-img src="@/assets/moneymoney.png" height="200px" contain ></v-img>
         <v-alert dense class="ma-15 px-10" outlined type="error" v-if="message.length>0"> {{message}}</v-alert>            
 
@@ -20,9 +20,9 @@
         data(){
             return {
                 message:"",
-                a:12,
-                b:12,
-                form_valid:false,
+                // a:12,
+                // b:12,
+                // form_valid:false,
             }
         },
         methods:{

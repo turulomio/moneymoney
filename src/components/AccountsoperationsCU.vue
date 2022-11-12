@@ -2,10 +2,10 @@
     <div>
         <h1>{{dialog_title_ao()}}</h1>
         <v-form ref="form_ao" v-model="form_valid_ao" lazy-validation>
-            <v-autocomplete :readonly="deleting" autoindex="3" :items="$store.state.accounts.filter(v =>v.active==true)" v-model="newao.accounts" :label="$t('Select an account')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+            <v-autocomplete :readonly="deleting" autoindex="3" :items="$store.state.accounts.filter(v =>v.active==true)" v-model="newao.accounts" :label="$t('Select an account')" item-text="localname" item-value="url" :rules="RulesSelection(true)" @change="on_account_change"></v-autocomplete>
             <MyDateTimePicker :readonly="deleting" autoindex="4" label="Select operation date and time" v-model="newao.datetime" :rules="RulesDatetime(true)"></MyDateTimePicker>
             <v-autocomplete :readonly="deleting" autoindex="0" autofocus :items="$store.state.concepts" v-model="newao.concepts" :label="$t('Select a concept')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-            <v-text-field :readonly="deleting" autoindex="1" v-model="newao.amount" type="number" :label="$t('Operation amount')" :placeholder="$t('Account number')" :rules="RulesFloat(30,true)" counter="30"/>
+            <v-text-field :readonly="deleting" autoindex="1" v-model="newao.amount" type="number" :label="$t('Operation amount')" :placeholder="$t('Account number')" :rules="RulesFloat(30,true,this.account.decimals)" counter="30"/>
             <v-text-field :readonly="deleting" autoindex="2" v-model="newao.comment" type="text" :label="$t('Operation comment')" :placeholder="$t('Operation comment')" counter="200"/>
         </v-form>
         <v-card-actions>
@@ -36,6 +36,7 @@
         },
         data () {
             return {
+                account: null,
                 newao:null,
                 form_valid_ao:true,
                 following_ao:false,
@@ -110,6 +111,10 @@
                 }, (error) => {
                     this.parseResponseError(error)
                 });
+            },
+            on_account_change(){
+                this.account=this.$store.getters.getObjectByUrl("accounts",this.newao.accounts)
+
             }
         },
         created(){
@@ -120,6 +125,7 @@
                 this.editing=false
             }
             this.newao=Object.assign({},this.ao)
+            this.on_account_change() //Updates  account object
         }
 
 
