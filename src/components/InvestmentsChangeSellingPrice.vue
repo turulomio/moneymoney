@@ -33,17 +33,17 @@
         <v-tabs-items v-model="tab">
             <v-tab-item key="percentage">      
                 <v-card class="pa-3" outlined>
-                    <v-text-field :name="this.$t('Set a gains percentage')" v-model.number="percentage" :counter="10" :label="this.$t('Set a gains percentage')" :placeholder="this.$t('Enter an amount')" :rules="this.RulesFloat(10,true)" autofocus></v-text-field>
+                    <v-text-field :name="this.$t('Set a gains percentage')" v-model.number="percentage" :counter="10" :label="this.$t('Set a gains percentage')" :placeholder="this.$t('Enter an amount')" :rules="this.RulesFloat(10,true,6)" autofocus></v-text-field>
                 </v-card>
             </v-tab-item>
             <v-tab-item key="gain">     
                 <v-card class="pa-3" outlined>
-                    <v-text-field :name="this.$t('Set a gain')" v-model.number="gains" :counter="10" :label="this.$t('Set a gain')" :placeholder="this.$t('Enter an amount')" :rules="this.RulesFloat(10,true)"></v-text-field>
+                    <v-text-field :name="this.$t('Set a gain')" v-model.number="gains" :counter="10" :label="this.$t('Set a gain')" :placeholder="this.$t('Enter an amount')" :rules="this.RulesFloat(10,true,6)"></v-text-field>
                 </v-card>
             </v-tab-item>
             <v-tab-item key="price">     
                 <v-card class="pa-3" outlined>
-                    <v-text-field :name="this.$t('Set a price')" v-model.number="price" :counter="10" :label="this.$t('Set a price')" :placeholder="this.$t('Enter an amount')" :rules="this.RulesFloat(10,true)"></v-text-field>
+                    <v-text-field :name="this.$t('Set a price')" v-model.number="price" :counter="10" :label="this.$t('Set a price')" :placeholder="this.$t('Enter an amount')" :rules="this.RulesFloat(10,true,6)"></v-text-field>
                 </v-card>
             </v-tab-item>
             <v-tab-item key="range">     

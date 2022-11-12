@@ -18,7 +18,7 @@
                 <v-select class="mr-5" :items="gains_methods" v-model="gains_method" :label="$t('Set a method to calculate gains')"  item-text="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
 
 
-                <v-text-field class="mr-5" autoindex="1" :disabled="loading" v-model.number="gains_value"  :label="$t('Gains method value')" :placeholder="$t('Gains method value')" :rules="RulesFloat(8,true)" counter="8"/>
+                <v-text-field class="mr-5" autoindex="1" :disabled="loading" v-model.number="gains_value"  :label="$t('Gains method value')" :placeholder="$t('Gains method value')" :rules="RulesFloat(8,true,6)" counter="8"/>
 
                 <v-btn class="mr-5" color="primary" @click="make_all_axios_after()" :disabled="!form_valid">{{ $t("Simulate") }}</v-btn>
                 <v-btn v-if="this.newinvestments.length==1" color="error" @click="add_order()" :disabled="!form_valid">{{ $t("Add order") }}</v-btn>                 

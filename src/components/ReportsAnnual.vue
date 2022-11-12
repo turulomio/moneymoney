@@ -4,7 +4,7 @@
             <div class="d-flex justify-center mb-4">
                 <v-card width="20%" class="pa-5">
                     <v-select dense :label="$t('Select the year from which to display the report')" v-model="year" :items="years()" @change="change_year()"></v-select>              
-                    <v-text-field v-model.number="target"  :label="$t('Set annual gains target')" :placeholder="$t('Set annual gains target')" :rules="RulesFloat(6,true)" counter="6" suffix=" %" autofocus/>
+                    <v-text-field v-model.number="target"  :label="$t('Set annual gains target')" :placeholder="$t('Set annual gains target')" :rules="RulesFloat(6,true,6)" counter="6" suffix=" %" autofocus/>
                 </v-card>
             </div>
         <div class="pa-6">
