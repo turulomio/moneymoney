@@ -32,7 +32,7 @@
 
                     <v-col>
                         <v-row class="mt-12 pt-12 ml-4">             
-                            <v-text-field class="shrink" reverse v-if="localValue" v-model="milliseconds" type="number" :label="$t('Milliseconds')" :placeholder="$t('Milliseconds')" :rules="RulesString(3,true)" counter="3" @change="on_milliseconds_change()"></v-text-field>        
+                            <v-text-field class="shrink" reverse v-if="localValue" v-model="milliseconds"  :label="$t('Milliseconds')" :placeholder="$t('Milliseconds')" :rules="RulesString(3,true)" counter="3" @change="on_milliseconds_change()"></v-text-field>        
                             <v-icon class="mr-8 ml-4" x-small @click="on_milliseconds_backspace">mdi-backspace</v-icon>
                         </v-row>
                     </v-col>    

@@ -23,17 +23,17 @@
                 <v-tab-item key="amounts" >
                     <v-card class="mx-auto pa-6 mt-3" max-width="40%">
                         <v-card-title>{{ $t('Amount to invest') }}</v-card-title>                    
-                        <v-text-field v-model="new_settings.invest_amount_1" type="number" :label="$t('First amount to invest')" :placeholder="$t('First amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
-                        <v-text-field v-model="new_settings.invest_amount_2" type="number" :label="$t('Second amount to invest')" :placeholder="$t('Second amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
-                        <v-text-field v-model="new_settings.invest_amount_3" type="number" :label="$t('Third amount to invest')" :placeholder="$t('Third amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
-                        <v-text-field v-model="new_settings.invest_amount_4" type="number" :label="$t('Fourth amount to invest')" :placeholder="$t('Fourth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
-                        <v-text-field v-model="new_settings.invest_amount_5" type="number" :label="$t('Fifth amount to invest')" :placeholder="$t('Fifth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model="new_settings.invest_amount_1"  :label="$t('First amount to invest')" :placeholder="$t('First amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model="new_settings.invest_amount_2"  :label="$t('Second amount to invest')" :placeholder="$t('Second amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model="new_settings.invest_amount_3"  :label="$t('Third amount to invest')" :placeholder="$t('Third amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model="new_settings.invest_amount_4"  :label="$t('Fourth amount to invest')" :placeholder="$t('Fourth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model="new_settings.invest_amount_5"  :label="$t('Fifth amount to invest')" :placeholder="$t('Fifth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
 
 
                     </v-card>                        
 
                     <v-card class="mx-auto pa-6 mt-3" max-width="40%">
-                            <v-text-field v-model="example_invested" type="number" :step="1000" :label="$t('Example. Invested amount')" :placeholder="$t('Example. Invested amount')" :rules="RulesInteger(10,true)" counter="10"/>
+                            <v-text-field v-model="example_invested"  :step="1000" :label="$t('Example. Invested amount')" :placeholder="$t('Example. Invested amount')" :rules="RulesInteger(10,true)" counter="10"/>
                             <p>{{example_amount_to_invest}}</p>
                     </v-card>
                 </v-tab-item>

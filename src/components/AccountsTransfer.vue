@@ -7,8 +7,8 @@
                 <MyDateTimePicker :readonly="deleting" v-model="newat.datetime" :label="$t('Set transfer date and time')"></MyDateTimePicker>
                 <v-autocomplete :readonly="deleting" :items="$store.state.accounts.filter(v =>v.active==true)" v-model="newat.account_origin" :label="$t('Select an origin account')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-autocomplete :readonly="deleting" :items="$store.state.accounts.filter(v =>v.active==true)" v-model="newat.account_destiny" :label="$t('Select a destiny account')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field :readonly="deleting" v-model="newat.amount" type="number" :label="$t('Set transfer amount')" :placeholder="$t('Set transfer amount')" :rules="RulesFloatGZ(10,true)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newat.commission" type="number" :label="$t('Set transfer commission')" :placeholder="$t('Set transfer commission')" :rules="RulesFloatGEZ(10,true)" counter="10"/>
+                <v-text-field :readonly="deleting" v-model="newat.amount"  :label="$t('Set transfer amount')" :placeholder="$t('Set transfer amount')" :rules="RulesFloatGZ(10,true,get_transfer_decimals())" counter="10"/>
+                <v-text-field :readonly="deleting" v-model="newat.commission"  :label="$t('Set transfer commission')" :placeholder="$t('Set transfer commission')" :rules="RulesFloatGEZ(10,true,get_transfer_decimals())" counter="10"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -129,7 +129,25 @@
                     });
 
                 }
+            },     
+            get_transfer_decimals(){
+                //Must be the lowest decimals from both accounts
+                var r
+
+                var ao=this.$store.getters.getObjectByUrl("accounts",this.newat.account_origin)
+                var ad=this.$store.getters.getObjectByUrl("accounts",this.newat.account_destiny)
+                if (ad==null || ao==null){
+                    r=6
+                } else {
+                    if (ao.decimals>ad.decimals) {
+                        r= ad.decimals
+                    } else {
+                        r= ao.decimals
+                    }
+                }
+                return r
             }
+
         },
         created(){
             // Guess crud mode
@@ -143,7 +161,6 @@
                 this.mode="D"
                 this.query_ao()
             }
-
 
         }
     }

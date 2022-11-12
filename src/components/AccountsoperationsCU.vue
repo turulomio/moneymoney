@@ -5,7 +5,7 @@
             <v-autocomplete :readonly="deleting" autoindex="3" :items="$store.state.accounts.filter(v =>v.active==true)" v-model="newao.accounts" :label="$t('Select an account')" item-text="localname" item-value="url" :rules="RulesSelection(true)" @change="on_account_change"></v-autocomplete>
             <MyDateTimePicker :readonly="deleting" autoindex="4" label="Select operation date and time" v-model="newao.datetime" :rules="RulesDatetime(true)"></MyDateTimePicker>
             <v-autocomplete :readonly="deleting" autoindex="0" autofocus :items="$store.state.concepts" v-model="newao.concepts" :label="$t('Select a concept')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-            <v-text-field :readonly="deleting" autoindex="1" v-model="newao.amount" type="number" :label="$t('Operation amount')" :placeholder="$t('Account number')" :rules="RulesFloat(30,true,this.account.decimals)" counter="30"/>
+            <v-text-field :readonly="deleting" autoindex="1" v-model="newao.amount"  :label="$t('Operation amount')" :placeholder="$t('Account number')" :rules="RulesFloat(30,true,this.account.decimals)" counter="30"/>
             <v-text-field :readonly="deleting" autoindex="2" v-model="newao.comment" type="text" :label="$t('Operation comment')" :placeholder="$t('Operation comment')" counter="200"/>
         </v-form>
         <v-card-actions>

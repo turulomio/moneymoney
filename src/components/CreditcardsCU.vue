@@ -5,7 +5,7 @@
             <v-autocomplete :items="$store.state.accounts.filter(v =>v.active==true)" v-model="newcc.accounts" :label="$t('Select an account')" item-text="name" item-value="url"  :rules="RulesSelection(true)"></v-autocomplete>
             <v-text-field v-model="newcc.name" type="text" :label="$t('Credit card name')" :placeholder="$t('Credit card name')" autofocus  counter="200" :rules="RulesString(200,true)"/>
             <v-text-field v-model="newcc.number" type="text" :label="$t('Credit card number')"  :placeholder="$t('Credit card number')" counter="30" :rules="RulesString(30,false)"/>
-            <v-text-field v-model="newcc.maximumbalance" type="number" :label="$t('Credit card maximum balance')"  :placeholder="$t('Credit card maximum balance')" :rules="RulesInteger(10,true)" counter="10"/>
+            <v-text-field v-model="newcc.maximumbalance"  :label="$t('Credit card maximum balance')"  :placeholder="$t('Credit card maximum balance')" :rules="RulesInteger(10,true)" counter="10"/>
             <v-checkbox v-model="newcc.active" :label="$t('Is active?')"></v-checkbox>
             <v-checkbox v-model="newcc.deferred" :label="$t('Has deferred payments?')"></v-checkbox>
         </v-form>

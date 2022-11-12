@@ -7,12 +7,12 @@
                 <v-autocomplete :readonly="mode=='D'" :items="$store.state.investments" v-model="newdividend.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker :readonly="mode=='D'" v-model="newdividend.datetime" :label="$t('Set investment execution date and time')"></MyDateTimePicker>
                 <v-autocomplete :readonly="mode=='D'" :items="$store.getters.getConceptsForDividends()" v-model="newdividend.concepts" :label="$t('Select a concept')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field :readonly="mode=='D'" v-model="newdividend.gross" type="number" :label="$t('Set dividend gross balance')" :placeholder="$t('Set dividend gross balance')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model="newdividend.net" type="number" :label="$t('Set dividend net balance')" :placeholder="$t('Set dividend net balance')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model="newdividend.taxes" type="number" :label="$t('Set dividend taxes')" :placeholder="$t('Set dividend taxes')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model="newdividend.commission" type="number" :label="$t('Set dividend commission')" :placeholder="$t('Set dividend commission')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model="newdividend.dps" type="number" :label="$t('Set dividend per share')" :placeholder="$t('Set dividend per share')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model="newdividend.currency_conversion" type="number" :label="$t('Set dividend currency conversion')" :placeholder="$t('Set dividend currency conversion')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newdividend.gross"  :label="$t('Set dividend gross balance')" :placeholder="$t('Set dividend gross balance')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newdividend.net"  :label="$t('Set dividend net balance')" :placeholder="$t('Set dividend net balance')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newdividend.taxes"  :label="$t('Set dividend taxes')" :placeholder="$t('Set dividend taxes')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newdividend.commission"  :label="$t('Set dividend commission')" :placeholder="$t('Set dividend commission')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newdividend.dps"  :label="$t('Set dividend per share')" :placeholder="$t('Set dividend per share')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newdividend.currency_conversion"  :label="$t('Set dividend currency conversion')" :placeholder="$t('Set dividend currency conversion')" :rules="RulesInteger(10,true)" counter="10"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>

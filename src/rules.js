@@ -41,8 +41,10 @@ var self = {
 
     //Counts the number of decimals of a number
     countDecimals: function (n) {
-
+        if (isNaN(n)) return 0
         if(Math.floor(n) === n) return 0;
+        var arr=String(n).split(".")
+        if (arr.length!=2) return 0
         return n.toString().split(".")[1].length || 0; 
     },
        

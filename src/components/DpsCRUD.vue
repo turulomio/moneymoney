@@ -6,7 +6,7 @@
                 <v-col>
                     <MyDatePicker :readonly="mode=='D'" v-model="newdps.date" :label="$t('Select DPS date')" :rules="RulesDate(true)"></MyDatePicker>
                     <MyDatePicker :readonly="mode=='D'" v-model="newdps.paydate" :label="$t('Select DPS pay date')" :rules="RulesDate(true)"></MyDatePicker>
-                    <v-text-field :readonly="mode=='D'" v-model="newdps.gross" type="number" :label="$t('Enter a DPS')" :counter="10" :placeholder="$t('Enter a DPS')" :rules="RulesFloat(10, true)"></v-text-field>
+                    <v-text-field :readonly="mode=='D'" v-model="newdps.gross"  :label="$t('Enter a DPS')" :counter="10" :placeholder="$t('Enter a DPS')" :rules="RulesFloat(10, true)"></v-text-field>
                 </v-col>
                 <v-card-actions>
                     <v-spacer></v-spacer>

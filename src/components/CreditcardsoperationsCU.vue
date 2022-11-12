@@ -6,7 +6,7 @@
                 <v-autocomplete :readonly="deleting" :items="$store.state.creditcards.filter(v =>v.active==true)" v-model="newcco.creditcards" :label="$t('Select a credit card')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker :readonly="deleting" label="Select operation date and time" v-model="newcco.datetime" :rules="RulesDatetime(true)" ></MyDateTimePicker>
                 <v-autocomplete :readonly="deleting" autoindex="0" :items="$store.state.concepts" v-model="newcco.concepts" :label="$t('Select a concept')" item-text="localname" item-value="url" :rules="RulesSelection(true)" autofocus></v-autocomplete>
-                <v-text-field :readonly="deleting" autoindex="1" v-model="newcco.amount" type="number" :label="$t('Operation amount')" :placeholder="$t('Operation amount')" :rules="RulesFloat(30,true)" counter="30"/>
+                <v-text-field :readonly="deleting" autoindex="1" v-model="newcco.amount"  :label="$t('Operation amount')" :placeholder="$t('Operation amount')" :rules="RulesFloat(15,true,get_account_decimals())" counter="15"/>
                 <v-text-field :readonly="deleting" autoindex="2" v-model="newcco.comment" type="text" :label="$t('Operation comment')" :placeholder="$t('Operation comment')" :rules="RulesString(200, false)" counter="200"/>
             </v-form>
             <v-card-actions>
@@ -114,6 +114,14 @@
                     })
                 }
             },
+
+            get_account_decimals(){
+                var r
+                var cc=this.$store.getters.getObjectByUrl("creditcards",this.newcco.creditcards)
+                var account=this.$store.getters.getObjectByUrl("accounts", cc.accounts)
+                r=account.decimals
+                return r
+            }
         },
         created(){
             if ( this.cco.url!=null){ // EDITING TIENE IO URL

@@ -11,8 +11,8 @@
                 <MyDatePicker v-model="neworder.expiration" :readonly="mode=='D'" :label="$t('Set order expiration date')" :rules="RulesDate(true)" ></MyDatePicker>
                 <v-autocomplete :items="$store.state.investments" :readonly="mode=='D'" v-model="neworder.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker v-model="neworder.executed" :readonly="mode=='D'" v-if="mode=='U'" :label="$t('Set order execution date and time')"></MyDateTimePicker>
-                <v-text-field v-model="neworder.shares" :readonly="mode=='D'" type="number" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field v-model="neworder.price" :readonly="mode=='D'" type="number" :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field v-model="neworder.shares" :readonly="mode=='D'"  :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field v-model="neworder.price" :readonly="mode=='D'"  :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesInteger(10,true)" counter="10"/>
             </v-form>
                 <div v-html="snackbar_message"></div>
             <v-card-actions>
