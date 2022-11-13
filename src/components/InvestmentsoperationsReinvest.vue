@@ -9,8 +9,8 @@
                     <v-autocomplete class="mr-5" :items="$store.state.products" v-model="product" :label="$t('Select a product')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                     <v-autocomplete :items="$store.getters.getInvestmentsByProduct(product)" v-model="newinvestments" :label="$t('Select investments to include')" item-text="fullname" item-value="url" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
 
-                    <v-text-field class="mr-5" v-model="newprice"  :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesInteger(10,true)" counter="10"/>
-                    <v-text-field v-model.number="newshares"  :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesInteger(10,true)" counter="10"/>
+                    <v-text-field class="mr-5" v-model="newprice"  :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesFloatGEZ(10,true, product_decimals)" counter="10"/>
+                    <v-text-field v-model.number="newshares"  :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesFloatGEZ(14,true,6)" counter="14"/>
                 </v-row>
 
             <v-row>
@@ -186,6 +186,11 @@
                 ios_after:null,
                 loading:false,
                 form_valid:false,
+            }
+        },
+        computed:{
+            product_decimals: function(){
+                return this.$store.getters.getObjectPropertyByUrl("products",this.product,"decimals")
             }
         },
         methods: {
