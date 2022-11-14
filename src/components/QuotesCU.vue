@@ -7,7 +7,7 @@
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <v-autocomplete dense :items="$store.state.products" v-model="newquote.products" :label="$t('Select a product')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker v-model="newquote.datetime" :label="$t('Set quote date and time')"></MyDateTimePicker>
-                <v-text-field dense v-model.number="newquote.quote"  :label="$t('Set quote')" :placeholder="$t('Set quote')" :rules="RulesInteger(10,true)" counter="10" autofocus/>
+                <v-text-field dense v-model.number="newquote.quote"  :label="$t('Set quote')" :placeholder="$t('Set quote')" :rules="RulesFloatGEZ(12,true,product_object.decimals)" counter="12" autofocus/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -33,17 +33,18 @@
                 required: true // Null to create, io object to update
             },
         },
-        watch:{
-            'newquote.products': function (newVal){
-                var product=this.$store.getters.getObjectByUrl("products", newVal)
-                this.stockmarket=this.$store.getters.getObjectByUrl("stockmarkets",product.stockmarkets)
+        computed:{
+            product_object: function(){
+                return this.$store.getters.getObjectByUrl("products",this.newquote.products)
+            },
+            product_stockmarket: function(){
+                return this.$store.getters.getObjectByUrl("stockmarkets",this.product_object.stockmarkets)
             },
         },
         data(){ 
             return {
                 form_valid:false,
                 newquote: null,
-                stockmarket:null,
                 editing:false,
                 menuinline_items: [
                     {
@@ -53,28 +54,28 @@
                                 name: this.$t("Set the time at the start of the futures stock market"),
                                 icon: "mdi-calendar",
                                 code: function(this_){
-                                   this_.newquote.datetime=moment(`${this_.newquote.datetime.slice(0,10)}T${this_.stockmarket.starts_futures}`).toISOString()
+                                   this_.newquote.datetime=moment(`${this_.newquote.datetime.slice(0,10)}T${this_.product_stockmarket.starts_futures}`).toISOString()
                                 },
                             },
                             {
                                 name: this.$t("Set the time at the start of the stock market"),
                                 icon: "mdi-calendar ",
                                 code: function(this_){
-                                   this_.newquote.datetime=moment(`${this_.newquote.datetime.slice(0,10)}T${this_.stockmarket.starts}`).toISOString()
+                                   this_.newquote.datetime=moment(`${this_.newquote.datetime.slice(0,10)}T${this_.product_stockmarket.starts}`).toISOString()
                                 },
                             },
                             {
                                 name: this.$t("Set the time at the close of the stock market"),
                                 icon: "mdi-calendar ",
                                 code: function(this_){
-                                   this_.newquote.datetime=moment(`${this_.newquote.datetime.slice(0,10)}T${this_.stockmarket.closes}`).toISOString()
+                                   this_.newquote.datetime=moment(`${this_.newquote.datetime.slice(0,10)}T${this_.product_stockmarket.closes}`).toISOString()
                                 },
                             },
                             {
                                 name: this.$t("Set the time at the close of the futures stock market"),
                                 icon: "mdi-calendar ",
                                 code: function(this_){
-                                   this_.newquote.datetime=moment(`${this_.newquote.datetime.slice(0,10)}T${this_.stockmarket.closes_futures}`).toISOString()
+                                   this_.newquote.datetime=moment(`${this_.newquote.datetime.slice(0,10)}T${this_.product_stockmarket.closes_futures}`).toISOString()
                                 },
                             },
                         ]
