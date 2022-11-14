@@ -9,10 +9,10 @@
                 <v-autocomplete dense :items="$store.state.investments" v-model="newio.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker v-model="newio.datetime" :label="$t('Set investment operation date and time')"></MyDateTimePicker>
                 <v-autocomplete dense :items="$store.getters.getOperationstypesForInvestmentsOperations()" v-model="newio.operationstypes" :label="$t('Select an operation type')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field dense v-model.number="newio.shares"  :label="$t('Set investment operation shares')" :placeholder="$t('Set investment operation shares')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field dense v-model.number="newio.price"  :label="$t('Set investment operation price')" :placeholder="$t('Set investment operation price')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field dense v-model.number="newio.taxes"  :label="$t('Set investment operation taxes')" :placeholder="$t('Set investment operation taxes')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field dense v-model.number="newio.commission"  :label="$t('Set investment operation commission')" :placeholder="$t('Set investment operation commission')" :rules="RulesInteger(10,true)" counter="10"/>            
+                <v-text-field dense v-model.number="newio.shares"  :label="$t('Set investment operation shares')" :placeholder="$t('Set investment operation shares')" :rules="RulesFloatGEZ(12,true,6)" counter="12"/>
+                <v-text-field dense v-model.number="newio.price"  :label="$t('Set investment operation price')" :placeholder="$t('Set investment operation price')" :rules="RulesFloatGEZ(12,true,product_decimals)" counter="12"/>
+                <v-text-field dense v-model.number="newio.taxes"  :label="$t('Set investment operation taxes')" :placeholder="$t('Set investment operation taxes')" :rules="RulesFloatGEZ(12,true,accounts_decimals)" counter="12"/>
+                <v-text-field dense v-model.number="newio.commission"  :label="$t('Set investment operation commission')" :placeholder="$t('Set investment operation commission')" :rules="RulesFloatGEZ(12,true,accounts_decimals)" counter="12"/>
                 <v-text-field dense v-model="newio.comment" type="text" :label="$t('Set investment operation comment')" :placeholder="$t('Set investment operation comment')" :rules="RulesString(255,false)" counter="255"/>
                 <CurrencyFactor :label="$t('Set currency conversion factor')" v-model="newio.currency_conversion" :currency_from="investment.currency" :currency_to="investment.currency_account"></CurrencyFactor>
                 <v-checkbox dense v-model="newio.show_in_ranges" :label="$t('Show in ranges?')" ></v-checkbox>
@@ -65,6 +65,14 @@
                 form_valid:false,
                 newio: null,
                 editing:false,
+            }
+        },
+        computed:{
+            product_decimals: function(){
+                return this.$store.getters.getObjectPropertyByUrl("products",this.investment.products,"decimals")
+            },
+            accounts_decimals: function(){
+                return this.$store.getters.getObjectPropertyByUrl("accounts",this.investment.accounts,"decimals")
             }
         },
         methods: {
