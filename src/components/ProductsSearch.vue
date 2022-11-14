@@ -4,15 +4,16 @@
             <MyMenuInline :items="items" :context="this"></MyMenuInline>
         </h1>
 
-        <v-card width="45%" class="pa-8 ma-3 mx-lg-auto">
+        <v-card width="45%" class="pa-8 ma-3 mx-auto">
                 <v-row>
-                    <v-text-field dense name="search" v-model="search" :label="$t('Search products')"  :placeholder="$t('Enter a string')" autofocus v-on:keyup.enter="refreshSearch()"></v-text-field>
-                    <v-btn :disabled="loading" dense class="ml-4" color="error" @click="submit()">{{ $t("Search") }}</v-btn>
+                    <v-text-field name="search" v-model="search" :label="$t('Search products')"  :placeholder="$t('Enter a string')" autofocus @keyup.enter="refreshSearch()"></v-text-field>
+                    <v-checkbox :disabled="disabled_check" class="ml-4" v-model="obsoletes" :label="$t('Show obsolete products?')" ></v-checkbox>
+                    <v-btn :disabled="loading"  class="ml-4" color="error" @click="refreshSearch()">{{ $t("Search") }}</v-btn>
                 </v-row>
         </v-card>
 
         <v-card >
-            <v-data-table dense :headers="tableHeaders" :items="tableData"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['value']" :sort-desc="[true]" fixed-header height="650" :loading="loading">      
+            <v-data-table dense :headers="tableHeaders" :items="tableData"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['name']" fixed-header height="650" :loading="loading">      
                 <template v-slot:[`item.name`]="{ item }">
 
                     <v-tooltip right>
@@ -70,6 +71,7 @@
         data () {
             return {
                 search: null,
+                obsoletes: false,
                 tableHeaders: [
                     { text: 'Id', value: 'id',sortable: true },
                     { text: 'Name', value: 'name',sortable: true},
@@ -99,6 +101,14 @@
                 dialog_products_cu:false,
                 product_cu_mode:null,
                 product_cu_system:null,
+            }
+        },
+        computed:{
+            disabled_check: function (){
+                if ([":PERSONAL",":INVESTMENTS",":FAVORITES",":ACTIVE_INVESTMENTS"].includes(this.search)){
+                    return true
+                }
+                return false
             }
         },
         methods: {
@@ -137,28 +147,32 @@
                             {
                                 name:this.$t('Favorite products'),
                                 code: function(this_){
-                                    this_.refreshFavoriteProducts()
+                                    this_.search=":FAVORITES"
+                                    this_.refreshSearch()
                                 },
                                 icon: "mdi-star-outline",
                             },
                             {
                                 name:this.$t('Active investments products'),
                                 code: function(this_){
-                                    this_.refreshActiveInvestmentsProducts()
+                                    this_.search=":ACTIVE_INVESTMENTS"
+                                    this_.refreshSearch()
                                 },
                                 icon: "mdi-plus",
                             },
                             {
                                 name:this.$t('All investments products'),
                                 code: function(this_){
-                                    this_.refreshInvestmentsProducts()
+                                    this_.search=":INVESTMENTS"
+                                    this_.refreshSearch()
                                 },
                                 icon: "mdi-plus",
                             },
                             {
                                 name:this.$t('Personal products'),
                                 code: function(this_){
-                                    this_.refreshPersonalProducts()
+                                    this_.search=":PERSONAL"
+                                    this_.refreshSearch()
                                 },
                                 icon: "mdi-plus",
                             },
@@ -207,9 +221,6 @@
                 }
                 return "text-decoration-line-through"
             },
-            submit(){
-                this.refreshSearch()
-            },
             on_ProductsCU_cruded(){
                 this.loading=true
                 this.dialog_products_cu=false,
@@ -217,14 +228,15 @@
                     this.refreshSearch()
                 })
             },
-            refreshSearch(){
+            refreshSearch(){         
                 this.loading=true
                 this.tableData=[]
-                if (this.search==null){
+
+                if (this.search==null || this.search==""){
                     this.loading=false
                 } else {
 
-                    axios.get(`${this.$store.state.apiroot}/products/search/?search=${this.search}`, this.myheaders())
+                    axios.get(`${this.$store.state.apiroot}/products/search/?search=${this.search}&obsoletes=${this.obsoletes}`, this.myheaders())
                     .then((response) => {
                             response.data.data.forEach(o=>{
                                 var p=this.$store.getters.getObjectByUrl("products",o.product)
@@ -238,56 +250,6 @@
                         this.parseResponseError(error)
                     })
                 }
-            },
-            refreshActiveInvestmentsProducts(){
-                this.tableData=[]
-                this.loading=true
-                this.$store.getters.getInvestmentsActive().forEach(element => {
-                    let product = this.$store.getters.getObjectByUrl("products",element.products)
-                    if (!this.tableData.find(o => o.url === product.url)) {
-                         this.tableData.push(product)
-                    }
-                });
-                this.loading=false
-            },
-            refreshFavoriteProducts(){
-                this.tableData=[]
-                this.loading=true
-                this.$store.state.products.forEach(element => {
-                    if (this.favorites.includes(element.url)) {
-                         this.tableData.push(element)
-                    }
-                });
-                this.loading=false
-            },
-            refreshInvestmentsProducts(){
-                this.tableData=[]
-                this.loading=true
-                this.$store.state.investments.forEach(element => {
-                    let product = this.$store.getters.getObjectByUrl("products",element.products)
-                    if (!this.tableData.find(o => o.url === product.url)) {
-                         this.tableData.push(product)
-                    }
-                });
-                this.loading=false
-            },
-            refreshPersonalProducts(){
-                this.loading=true
-                this.tableData=this.$store.state.products.filter( element => element.id<0)
-                this.loading=false
-            },
-            favoriteProduct(item){
-                this.loading=true
-                axios.post(`${this.$store.state.apiroot}/products/favorites/`, {product: item.url}, this.myheaders())
-                .then(() => {
-                    this.getFavoritesList()
-                    .then(()=>{
-                        this.refreshFavoriteProducts()
-                        this.loading=false
-                    })
-                }, (error) => {
-                    this.parseResponseError(error)
-                })
             },
             getFavoritesList(){
                 this.loading=true
