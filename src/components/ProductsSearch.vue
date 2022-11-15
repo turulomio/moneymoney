@@ -6,7 +6,7 @@
 
         <v-card width="45%" class="pa-8 ma-3 mx-auto">
                 <v-row>
-                    <v-text-field name="search" v-model="search" :label="$t('Search products')"  :placeholder="$t('Enter a string')" autofocus @keyup.enter="refreshSearch()"></v-text-field>
+                    <v-text-field :disabled="loading" name="search" v-model="search" :label="$t('Search products')"  :placeholder="$t('Enter a string')" autofocus @keyup.enter="refreshSearch()"></v-text-field>
                     <v-checkbox :disabled="disabled_check" class="ml-4" v-model="obsoletes" :label="$t('Show obsolete products?')" ></v-checkbox>
                     <v-btn :disabled="loading"  class="ml-4" color="error" @click="refreshSearch()">{{ $t("Search") }}</v-btn>
                 </v-row>
@@ -15,14 +15,11 @@
         <v-card >
             <v-data-table dense :headers="tableHeaders" :items="tableData"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['name']" fixed-header height="650" :loading="loading">      
                 <template v-slot:[`item.name`]="{ item }">
-
-                    <v-tooltip right>
-                        <template v-slot:activator="{ on }">
-                            <div v-on="on"><v-icon :class="'mr-2 fi fib fi-'+item.flag" small :title="$store.getters.getCountryNameByCode(item.flag)"></v-icon><span :class="class_name(item)">{{item.name}}</span></div>
-                        </template>
-                        <span>{{ $store.getters.getObjectPropertyByUrl("productstypes",item.productstypes,"localname")}}</span>
-                    </v-tooltip>
-                                    </template>                       
+                    <v-icon :class="'mr-2 fi fib fi-'+item.flag" small :title="$store.getters.getCountryNameByCode(item.flag)"></v-icon><span :class="class_name(item)">{{item.name}}</span>
+                </template>  
+                <template v-slot:[`item.type`]="{ item }">
+                    {{ $store.getters.getObjectPropertyByUrl("productstypes",item.productstypes,"localname")}}
+                </template>                                    
                 <template v-slot:[`item.last_datetime`]="{ item }">
                     {{localtime(item.last_datetime)}}
                 </template>     
@@ -73,12 +70,13 @@
                 search: null,
                 obsoletes: false,
                 tableHeaders: [
-                    { text: 'Id', value: 'id',sortable: true },
-                    { text: 'Name', value: 'name',sortable: true},
-                    { text: 'ISIN',  sortable: true, value: 'isin'},
+                    { text: this.$t('Id'), value: 'id',sortable: true },
+                    { text: this.$t('Name'), value: 'name',sortable: true},
+                    { text: this.$t('Type'), value: 'type',sortable: true},
+                    { text: this.$t('ISIN'),  sortable: true, value: 'isin'},
                     { text: this.$t('Last datetime'), value: 'last_datetime',sortable: true,width:"10%"},
-                    { text: this.$t('Last'), value: 'last',sortable: true,align:"right"},
-                    { text: this.$t('% last year'), value: 'percentage_last_year',sortable: true, align:"right"},
+                    { text: this.$t('Last'), value: 'last',sortable: true,align:"right",width:"6%"},
+                    { text: this.$t('% last year'), value: 'percentage_last_year',sortable: true, align:"right",width:"6%"},
                     { text: 'Yahoo',  sortable: true, value: 'ticker_yahoo',width:"6%"},
                     { text: 'Morningstar',  sortable: true, value: 'ticker_morningstar',width:"6%"},
                     { text: 'Google',  sortable: true, value: 'ticker_google',width:"6%"},

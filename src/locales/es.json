@@ -376,10 +376,6 @@
   "Month gains": "Ganancias mensuales",
   "Month": "Mes",
   "Month target": "Objetivo mensual",
-  "Must be a decimal number": "Debe ser un número decimal",
-  "Must be a integer number": "Debe ser un número entero",
-  "Must be a negative number": "Debe ser un número negativo",
-  "Must be a number": "Debe ser un número",
   "Name": "Nombre",
   "Negative balance concepts": "Conceptos con saldo negativo",
   "Net dividends": "Dividendos netos",
@@ -390,8 +386,6 @@
   "Net shouldn't be 0 when gross is not": "El importe neto no debería ser 0 cuando el bruto no lo es ",
   "Next reinvest amount": "Siguiente cantidad de reinversión",
   "November": "Noviembre",
-  "Number is required": "Un número es requerido",
-  "Number must be at most {0} characters": "El número debe tener como mucho {0} caracteres",
   "Number": "Número",
   "Number of shares selected": "Número de acciones seleccionadas",
   "Obsolete": "Obsoleto",
@@ -730,5 +724,12 @@
   "UnoGenerator is ready": "UnoGenerator está preparado",
   "UnoGenerator is not working. Please contact system administrator": "UnoGenerator no está funcionando. Por favor contacta con el Administrador del Sistema",
   "Must be a number greater than zero": "El número debe ser mayor que cero",
-  "Must be a number greater than and equal to zero": "El número debe ser mayor o igual que cero"
+  "Not required": "No obligatorio",
+  "Required": "Obligatorio",
+  "Show obsolete products?": "¿Mostrar productos obsoletos?",
+  "ISIN": "ISIN",
+  "Field can be empty or a number with {0} digits at most": "El campo puede estar vacio o un número con {0} digitos como mucho",
+  "Must be an integer number": "Debe ser un número entero",
+  "Field must be a number with at most {0} digits": "El campo debe ser un número con {0} digitos como mucho",
+  "Must be a number with {0} decimal places at most": "Debe ser un número con {0} posiciones decimales como mucho"
 }
