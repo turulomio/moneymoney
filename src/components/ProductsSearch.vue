@@ -4,16 +4,18 @@
             <MyMenuInline :items="items" :context="this"></MyMenuInline>
         </h1>
 
-        <v-card width="45%" class="pa-8 ma-3 mx-auto">
+        <v-card width="65%" class="pa-8 ma-3 mx-auto">
                 <v-row>
                     <v-text-field :disabled="loading" name="search" v-model="search" :label="$t('Search products')"  :placeholder="$t('Enter a string')" autofocus @keyup.enter="refreshSearch()"></v-text-field>
-                    <v-checkbox :disabled="disabled_check" class="ml-4" v-model="obsoletes" :label="$t('Show obsolete products?')" ></v-checkbox>
+                    <div width="10px">
+                        <v-select :items="obsolete_filter_items" v-model="obsolete_filter" class="ml-4" :disabled="loading" :label="$t('Filter by status')"  item-text="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
+                    </div>
                     <v-btn :disabled="loading"  class="ml-4" color="error" @click="refreshSearch()">{{ $t("Search") }}</v-btn>
                 </v-row>
         </v-card>
 
         <v-card >
-            <v-data-table dense :headers="tableHeaders" :items="tableData"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['name']" fixed-header height="650" :loading="loading">      
+            <v-data-table dense :headers="tableHeaders" :items="filtered_products"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['name']" fixed-header height="650" :loading="loading">      
                 <template v-slot:[`item.name`]="{ item }">
                     <v-icon :class="'mr-2 fi fib fi-'+item.flag" small :title="$store.getters.getCountryNameByCode(item.flag)"></v-icon><span :class="class_name(item)">{{item.name}}</span>
                 </template>  
@@ -68,7 +70,6 @@
         data () {
             return {
                 search: null,
-                obsoletes: false,
                 tableHeaders: [
                     { text: this.$t('Id'), value: 'id',sortable: true },
                     { text: this.$t('Name'), value: 'name',sortable: true},
@@ -84,11 +85,18 @@
                     { text: 'Investing.com',  sortable: true, value: 'ticker_investingcom',width:"6%"},
                     { text: this.$t('Actions'), value: 'actions', sortable: false ,width:"6%"},
                 ],   
-                tableData: [],
+                products: [],
                 items: this.menuinline_items(),
                 loading: false,
                 key:0,
                 favorites: [],
+
+                obsolete_filter_items:[
+                    {id:1, name: this.$t('Only active products')},
+                    {id:2, name: this.$t('Only obsolete products')},
+                    {id:3, name: this.$t('All products')},
+                ],       
+                obsolete_filter:1,
 
 
                 //DIALOG PRODUCTS VIEW
@@ -107,7 +115,15 @@
                     return true
                 }
                 return false
-            }
+            },
+            filtered_products: function (){
+                if (this.obsolete_filter==1){ //Only active
+                    return this.products.filter(o=> o.obsolete==false)
+                } else if (this.obsolete_filter==2){ //Only obsolete
+                    return this.products.filter(o=> o.obsolete==true)
+                }
+                return this.products
+            },
         },
         methods: {
             menuinline_items()  {
@@ -228,20 +244,20 @@
             },
             refreshSearch(){         
                 this.loading=true
-                this.tableData=[]
+                this.products=[]
 
                 if (this.search==null || this.search==""){
                     this.loading=false
                 } else {
 
-                    axios.get(`${this.$store.state.apiroot}/products/search/?search=${this.search}&obsoletes=${this.obsoletes}`, this.myheaders())
+                    axios.get(`${this.$store.state.apiroot}/products/search/?search=${this.search}`, this.myheaders())
                     .then((response) => {
                             response.data.data.forEach(o=>{
                                 var p=this.$store.getters.getObjectByUrl("products",o.product)
                                 p.last=o.last
                                 p.last_datetime=o.last_datetime
                                 p.percentage_last_year=o.percentage_last_year
-                                this.tableData.push(p)
+                                this.products.push(p)
                             })
                             this.loading=false
                     }, (error) => {
