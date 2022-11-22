@@ -54,7 +54,7 @@ var self = {
         var r
         if (required==false){
             r= [
-                v => self.isNumberMaxDigitsWithRequired(v,required,maxdigits) || this.$t('Field can be empty or a number with {0} digits at most').format(maxdigits),
+                v => (self.isNullOrEmpty(v) || self.isNumberMaxDigitsWithRequired(v,required,maxdigits)) || this.$t('Field can be empty or a number with {0} digits at most').format(maxdigits),
                 v => (self.isNullOrEmpty(v) || self.isNumber(v) && self.countDecimals(v)<=0) || this.$t('Must be an integer number'),
             ]
         } else { // required==true
@@ -73,7 +73,7 @@ var self = {
         var r
         if (required==false){
             r= [
-                v => self.isNumberMaxDigitsWithRequired(v,required,maxdigits) || this.$t('Field can be empty or a number with {0} digits at most').format(maxdigits),
+                v => (self.isNullOrEmpty(v) || self.isNumberMaxDigitsWithRequired(v,required,maxdigits)) || this.$t('Field can be empty or a number with {0} digits at most').format(maxdigits),
                 v => (self.isNullOrEmpty(v) || self.isNumber(v) && self.countDecimals(v)<=maxdecimals) || this.$t('Must be a number with {0} decimal places at most').format(maxdecimals),
             ]
         } else { // required==true
@@ -89,7 +89,7 @@ var self = {
         var r
         if (required==false){
             r= [
-                v => self.isNumberMaxDigitsWithRequired(v,required,maxdigits) || this.$t('Field can be empty or a number with {0} digits at most').format(maxdigits),
+                v => (self.isNullOrEmpty(v) || self.isNumberMaxDigitsWithRequired(v,required,maxdigits)) || this.$t('Field can be empty or a number with {0} digits at most').format(maxdigits),
                 v => (self.isNullOrEmpty(v) || self.isNumber(v) && v>0) || this.$t('Must be a number greater than zero'),
                 v => (self.isNullOrEmpty(v) || self.isNumber(v) && self.countDecimals(v)<=maxdecimals) || this.$t('Must be a number with {0} decimal places at most').format(maxdecimals),
             ]
@@ -107,7 +107,7 @@ var self = {
         var r
         if (required==false){
             r= [
-                v => self.isNumberMaxDigitsWithRequired(v,required,maxdigits) || this.$t('Field can be empty or a number with {0} digits at most').format(maxdigits),
+                v => (self.isNullOrEmpty(v) || self.isNumberMaxDigitsWithRequired(v,required,maxdigits)) || this.$t('Field can be empty or a number with {0} digits at most').format(maxdigits),
                 v => (self.isNullOrEmpty(v) || self.isNumber(v) && v>=0) || this.$t('Must be a number greater than zero'),
                 v => (self.isNullOrEmpty(v) || self.isNumber(v) && self.countDecimals(v)<=maxdecimals) || this.$t('Must be a number with {0} decimal places at most').format(maxdecimals),
             ]
@@ -124,7 +124,7 @@ var self = {
         var r
         if (required==false){
             r= [
-                v => self.isNumberMaxDigitsWithRequired(v,required,maxdigits) || this.$t('Field can be empty or a number with {0} digits at most').format(maxdigits),
+                v => (self.isNullOrEmpty(v) || self.isNumberMaxDigitsWithRequired(v,required,maxdigits)) || this.$t('Field can be empty or a number with {0} digits at most').format(maxdigits),
                 v => (self.isNullOrEmpty(v) || self.isNumber(v) && v<=0) || this.$t('Must be a number greater than zero'),
                 v => (self.isNullOrEmpty(v) || self.isNumber(v) && self.countDecimals(v)<=maxdecimals) || this.$t('Must be a number with {0} decimal places at most').format(maxdecimals),
             ]
