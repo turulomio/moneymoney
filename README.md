@@ -1,5 +1,10 @@
 # MoneyMoney 
 
+
+## Backend
+
+Backend is in https://github.com/turulomio/django_moneymoney
+
 ## Project setup
 ```
 npm install
