@@ -279,15 +279,18 @@
                                 icon: "mdi-magnify",
                             },
                             {
-                                name:this.$t('Add a quote to product'),
-                                type: "redirection",
-                                command:"{% url 'quote_new' products_id=investment.products.id %}",
-                                icon: "mdi-book-plus",
-                            },
-                            {
                                 name:this.$t('Delete last quote'),
-                                type: "redirection",
-                                command:"{% url 'quote_delete_last' products_id=investment.products.id %}?next={% url 'investment_list_active')",
+                                code: function(this_){
+                                    this_.product=this_.$store.getters.getObjectByUrl("products",this_.investment.products)
+
+                                    axios.post(`${this_.$store.state.apiroot}/api/products/${this_.product.id}/delete_last_quote/`, [], this_.myheaders())
+                                    .then(() => {
+                                        this_.key=this_.key+1
+                                        this_.$emit("cruded") 
+                                    }, (error) => {
+                                        this_.parseResponseError(error)
+                                    });
+                                },
                                 icon: "mdi-delete",
                             },
                         ]
