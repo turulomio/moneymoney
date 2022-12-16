@@ -6,6 +6,7 @@ export function empty_account(){
         currency: "EUR",    
         banks:null,
         url:null,
+        decimals:2,
     }
 }
 

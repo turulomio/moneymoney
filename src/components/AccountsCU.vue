@@ -8,6 +8,8 @@
                 <v-checkbox v-model="newaccount.active" :readonly="deleting" :label="$t('Is active?')" ></v-checkbox>
                 <v-text-field v-model="newaccount.number" :readonly="deleting" type="text" :label="$t('Account number')" :placeholder="$t('Account number')" :rules="RulesString(30,false)" counter="30"/>
                 <v-autocomplete :items="$store.state.currencies" :readonly="deleting" v-model="newaccount.currency" :label="$t('Select a currency')" item-text="fullname" item-value="code" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-text-field v-model.number="newaccount.decimals" :readonly="deleting" :label="$t('Account decimals')" :placeholder="$t('Account decimals')" autofocus :rules="RulesInteger(1,true)" counter="1"/>
+
            </v-form>   
             <v-card-actions>
                 <v-spacer></v-spacer>
