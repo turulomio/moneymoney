@@ -250,7 +250,7 @@
                     this.loading=false
                 } else {
 
-                    axios.get(`${this.$store.state.apiroot}/products/search/?search=${this.search}`, this.myheaders())
+                    axios.get(`${this.$store.state.apiroot}/api/products/search_with_quotes/?search=${this.search}`, this.myheaders())
                     .then((response) => {
                             response.data.data.forEach(o=>{
                                 var p=this.$store.getters.getObjectByUrl("products",o.product)
