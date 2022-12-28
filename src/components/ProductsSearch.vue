@@ -192,6 +192,51 @@
                             },
                         ]
                     },
+                    {
+                        subheader:this.$t('Products by type'),
+                        children: [
+                            {
+                                name:this.$t('Indices'),
+                                code: function(this_){
+                                    this_.search=":INDICES"
+                                    this_.refreshSearch()
+                                },
+                                icon: "mdi-chart-line",
+                            },
+                            {
+                                name:this.$t('CFD & Futures'),
+                                code: function(this_){
+                                    this_.search=":CFD_FUTURES"
+                                    this_.refreshSearch()
+                                },
+                                icon: "mdi-chart-line",
+                            },
+                            {
+                                name:this.$t('ETF'),
+                                code: function(this_){
+                                    this_.search=":ETF"
+                                    this_.refreshSearch()
+                                },
+                                icon: "mdi-chart-line",
+                            },
+                            {
+                                name:this.$t('Bonds'),
+                                code: function(this_){
+                                    this_.search=":BONDS"
+                                    this_.refreshSearch()
+                                },
+                                icon: "mdi-chart-line",
+                            },
+                            {
+                                name:this.$t('Currencies'),
+                                code: function(this_){
+                                    this_.search=":CURRENCIES"
+                                    this_.refreshSearch()
+                                },
+                                icon: "mdi-chart-line",
+                            },
+                        ]
+                    },
                 ]
                 if (this.$store.state.catalog_manager==false){
                     r[0].children.splice(1, 1)
