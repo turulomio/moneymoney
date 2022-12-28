@@ -43,7 +43,7 @@
                 <v-card outlined>
                     <v-row class="pa-8 mx-8">
                         <v-text-field  v-model.number="quote_better_from"  :label="$t('Quote better from (current price by default)')" :placeholder="$t('Quote better from')" autofocus :rules="RulesFloat(15,true,6)" counter="15"/>
-                        <v-text-field class="ml-4" v-model.number="quote_better_to"  :label="$t('Quote better to (increases 0.5% by default)')" :placeholder="$t('Quote better to')" :rules="RulesFloat(15,true,6)" counter="15"/>
+                        <v-text-field class="ml-4" v-model.number="quote_better_to"  :label="$t('Quote better to (increases 0.1% by default)')" :placeholder="$t('Quote better to')" :rules="RulesFloat(15,true,6)" counter="15"/>
                         <v-checkbox class="ml-4" v-model="filter_quotes" :label="$t('Filter values that exceed the maximum difference minutes')" @click="get_comparation_by_quote_filter_by_minutes"></v-checkbox>
                         <v-text-field class="ml-4"  v-model.number="filter_max_minutes_apart" :label="$t('Maximum quotes minutes apart')" :placeholder="$t('Maximum quotes minutes apart')" :rules="RulesInteger(4,true)" counter="4" @change="get_comparation_by_quote_filter_by_minutes"/>
                         <v-btn class="ml-4" vcolor="primary" @click="compare_by_quote()">{{ $t("Comparation by quote") }}</v-btn>
@@ -176,7 +176,7 @@
                         this.cspp.prices.push([this.dbdata[index].price_better,this.dbdata[index].price_worse])
                     })
                     this.quote_better_from=this.product_a.current_price
-                    this.quote_better_to=this.my_round(this.quote_better_from*1.005,3)
+                    this.quote_better_to=this.my_round(this.quote_better_from*1.001,3)
 
                     this.loading=false
                     this.key=this.key+1
