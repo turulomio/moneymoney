@@ -9,7 +9,7 @@
             </v-card>
         </div>
         <v-card outlined class="ma-4 pa-4">
-            <v-data-table dense :headers="headers" :items="data" :sort-by="getSort()" :sort-desc="getSortDesc()" class="elevation-1" hide-default-footer disable-pagination :loading="loading_table">
+            <v-data-table dense :headers="headers" :items="data" :sort-by="getSort()" :sort-desc="getSortDesc()" class="elevation-1" hide-default-footer disable-pagination :loading="loading_table"  @click:row="orderView" style="cursor: pointer">
                 <template v-slot:[`item.price`]="{ item }">
                     <div v-html="currency_html(item.price, item.currency )"></div>
                 </template>  
@@ -25,7 +25,6 @@
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small class="mr-2" @click="executeOrder(item)">mdi-play</v-icon>
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon small class="mr-2" @click="orderView(item)">mdi-eye</v-icon>
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
                 </template>                            
             </v-data-table>

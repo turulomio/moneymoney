@@ -12,7 +12,7 @@
                 </v-btn>
                 
             </v-row>
-            <v-data-table dense :headers="investments_headers" :search="search" :items="investments_items" :sort-by="(showActive)? 'percentage_selling_point': 'fullname' " class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading_investments" fixed-header key="key">
+            <v-data-table dense :headers="investments_headers" :search="search" :items="investments_items" :sort-by="(showActive)? 'percentage_selling_point': 'fullname' " class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading_investments" fixed-header :key="key" @click:row="viewItem" style="cursor: pointer">
                 <template v-slot:[`item.fullname`]="{ item }">
                     <v-icon :class="'mr-2 fi fib fi-'+item.flag" small :title="$store.getters.getCountryNameByCode(item.flag)"></v-icon>{{item.fullname}}
                 </template>                  
@@ -55,7 +55,6 @@
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small class="ml-1" @click="addQuote(item)">mdi-plus</v-icon>
                     <v-icon small class="ml-1" @click="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon small class="ml-1" @click="viewItem(item)">mdi-eye</v-icon>
                     <v-icon small class="ml-1" @click="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
                     <v-icon small class="ml-1" v-if="(new Date().setHours(0,0,0,0)>new Date(item.selling_expiration).setHours(0,0,0,0)) && item.selling_expiration!=null" @click="changeSellingPrice(item)" color="#9933ff" style="font-weight:bold">mdi-alarm</v-icon>     
                 </template>                
@@ -140,7 +139,7 @@
                     { text: this.$t('Balance'), value: 'balance_user', align:'right',  width: "7%"},
                     { text: this.$t('% Invested'), value: 'percentage_invested', align:'right',  width: "7%"},
                     { text: this.$t('% Selling point'), value: 'percentage_selling_point', align:'right',  width: "7%"},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false , width: "7%"},
+                    { text: this.$t('Actions'), value: 'actions', sortable: false , width: "6%"},
                 ],
                 investments_items:[],
                 menuinline_items: [

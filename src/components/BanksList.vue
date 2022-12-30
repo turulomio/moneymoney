@@ -5,8 +5,8 @@
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
         </h1>
         <v-card outlined class="ma-4 pa-4">
-            <v-checkbox v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" ></v-checkbox>
-            <v-data-table dense :headers="headers" :items="data" sort-by="name" class="elevation-1" hide-default-footer :loading="loading_table">
+            <v-checkbox v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" />
+            <v-data-table dense :headers="headers" :items="data" sort-by="name" class="elevation-1 " hide-default-footer :loading="loading_table" @click:row="viewItem" style="cursor: pointer">
                 <template v-slot:[`item.active`]="{ item }">
                     <v-icon small v-if="item.active" >mdi-check-outline</v-icon>
                 </template>  
@@ -20,7 +20,6 @@
                     <div v-html="localcurrency_html(item.balance_total )"></div>
                 </template>  
                 <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon small class="mr-2" @click="viewItem(item)">mdi-eye</v-icon>
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small @click="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
                 </template>                            
@@ -75,7 +74,7 @@
                     { text: this.$t('Accounts balance'), value: 'balance_accounts', align:'right',  width: "12%"},
                     { text: this.$t('Investments balance'), value: 'balance_investments', align:'right',  width: "12%"},
                     { text: this.$t('Total balance'), value: 'balance_total', align:'right',  width: "12%"},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false , width: "12%"},
+                    { text: this.$t('Actions'), value: 'actions', sortable: false , width: "7%"},
                 ],
                 data:[],
                 menuinline_items: [

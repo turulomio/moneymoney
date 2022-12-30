@@ -15,7 +15,7 @@
         </v-card>
 
         <v-card >
-            <v-data-table dense :headers="tableHeaders" :items="filtered_products"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['name']" fixed-header height="650" :loading="loading">      
+            <v-data-table dense :headers="tableHeaders" :items="filtered_products"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['name']" fixed-header height="650" :loading="loading"  @click:row="viewProduct" style="cursor: pointer">      
                 <template v-slot:[`item.name`]="{ item }">
                     <v-icon :class="'mr-2 fi fib fi-'+item.flag" small :title="$store.getters.getCountryNameByCode(item.flag)"></v-icon><span :class="class_name(item)">{{item.name}}</span>
                 </template>  
@@ -33,7 +33,6 @@
                 </template>
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small @click="favoriteProduct(item)" :color="(favorites.includes(item.url))? 'orange': '' " class="mr-1">mdi-star-outline</v-icon>
-                    <v-icon class="mr-1" small @click="viewProduct(item)">mdi-eye-outline</v-icon>
                     <v-icon class="mr-1" small @click="editPersonalProduct(item)" v-if="item.id<0">mdi-pencil</v-icon>
                     <v-icon class="mr-1" small @click="editSystemProduct(item)"  color="#AA0000" v-if="item.id>=0 && $store.state.catalog_manager">mdi-pencil</v-icon>
                     <v-icon class="mr-1" small @click="deletePersonalProduct(item)" v-if="item.id<0 && item.uses==0">mdi-delete</v-icon>

@@ -4,7 +4,7 @@
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>    
         </h1>
 
-        <v-data-table dense :headers="headers" :items="items" sort-by="name" class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading" :key="key">
+        <v-data-table dense :headers="headers" :items="items" sort-by="name" class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading" :key="key"  @click:row="pairReportItem" style="cursor: pointer">
         
             <template v-slot:[`item.a`]="{ item }">
                 <div v-html="$store.getters.getObjectPropertyByUrl('products', item.a, 'name' )"></div>
@@ -13,7 +13,6 @@
                 <div v-html="$store.getters.getObjectPropertyByUrl('products', item.b, 'name' )"></div>
             </template>     
             <template v-slot:[`item.actions`]="{ item }">
-                <v-icon small class="mr-2" @click="pairReportItem(item)">mdi-eye</v-icon>
                 <v-icon small class="mr-2" @click="editPair(item)">mdi-pencil</v-icon>
                 <v-icon small class="mr-2" @click="deletePair(item)">mdi-delete</v-icon>
             </template>

@@ -5,7 +5,7 @@
         </h1>
         <v-card outlined class="ma-4 pa-4">
             <v-checkbox v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" ></v-checkbox>
-            <v-data-table dense :headers="accounts_headers" :items="accounts_items" sort-by="percentage_selling_point" class="elevation-1" hide-default-footer disable-pagination :loading="loading_accounts" :key="key" >
+            <v-data-table dense :headers="accounts_headers" :items="accounts_items" sort-by="percentage_selling_point" class="elevation-1" hide-default-footer disable-pagination :loading="loading_accounts" :key="key"  @click:row="viewItem" style="cursor: pointer">
                 <template v-slot:[`item.last_datetime`]="{ item }">
                     {{localtime(item.last_datetime)}}
                 </template>             
@@ -23,7 +23,6 @@
                 </template>         
 
                 <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon small class="mr-2" @click="viewItem(item)">mdi-eye</v-icon>
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small @click="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
                 </template>                  
@@ -92,7 +91,7 @@
                     { text: this.$t('Number'), value: 'number',  width: "10%", align:'right'},
                     { text: this.$t('Balance'), value: 'balance_account',  width: "12%", align:'right'},
                     { text: this.$t('Balance user currency'), value: 'balance_user', width: "12%", align:'right'},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false , width: "8%"},
+                    { text: this.$t('Actions'), value: 'actions', sortable: false , width: "7%"},
                 ],
                 accounts_items:[],
                 menuinline_items: [
