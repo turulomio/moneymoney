@@ -5,7 +5,7 @@
         </h1>
         <h2>{{ get_option_name(option) }}</h2>
         <v-card outlined class="ma-4 pa-4">
-            <TableQuotes :quotes="quotes" :key="key" no_delete_confirmation @cruded="on_TableQuotes_cruded" :loading="loading"></TableQuotes>
+            <TableQuotes :items="quotes" :key="key" no_delete_confirmation @cruded="on_TableQuotes_cruded" :loading="loading"></TableQuotes>
         </v-card>
     </div>
 </template>
