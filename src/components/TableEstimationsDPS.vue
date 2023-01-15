@@ -55,7 +55,7 @@
                 if(r == false) {
                     return
                 } 
-                axios.post(`${this.$store.state.apiroot}/estimations/dps/delete/`, item, this.myheaders())
+                axios.delete(item.url, this.myheaders())
                 .then(() => {
                     this.$emit("cruded")
                     this.refresh()
@@ -87,7 +87,7 @@
             },
             refresh(){
                 this.loading=true
-                axios.get(`${this.$store.state.apiroot}/estimations/dps/list/?product=${this.product.url}`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/api/estimationsdps/?product=${this.product.url}`, this.myheaders())
                 .then((response) => {
                     this.items=response.data
                     this.loading=false

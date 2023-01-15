@@ -34,7 +34,7 @@
         methods:{
             submit(){
                 if (this.$refs.form.validate()==false) return
-                axios.post(`${this.$store.state.apiroot}/estimations/dps/add/`, this.newestimation, this.myheaders())
+                axios.post(`${this.$store.state.apiroot}/api/estimationsdps/`, this.newestimation, this.myheaders())
                 .then(() => {
                     this.$emit("cruded")
                 }, (error) => {

@@ -194,7 +194,7 @@
                                 code: function(this_){
                                     this_.key=this_.key+1
                                     this_.estimation=this_.empty_estimation_dps()
-                                    this_.estimation.product=this_.product.url
+                                    this_.estimation.products=this_.product.url
                                     this_.dialog_estimationdps=true
                                 },
                                 icon: "mdi-plus",

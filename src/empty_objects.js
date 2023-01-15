@@ -75,7 +75,7 @@ export function empty_estimation_dps(){
     return {
         year: new Date().getFullYear(),
         estimation: 0,
-        product: null,
+        products: null,
     }
 }
 
