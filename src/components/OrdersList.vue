@@ -167,11 +167,11 @@
                 this.loading_table=true
                 var url=""
                 if (this.state==0){//Active
-                    url=`${this.$store.state.apiroot}/orders/list/?active=true`
+                    url=`${this.$store.state.apiroot}/api/orders/?active=true`
                 } else if (this.state==1) { //expired
-                    url=`${this.$store.state.apiroot}/orders/list/?expired=true`
+                    url=`${this.$store.state.apiroot}/api/orders/?expired=true`
                 } else if (this.state==2) { //executed
-                    url=`${this.$store.state.apiroot}/orders/list/?executed=true`
+                    url=`${this.$store.state.apiroot}/api/orders/?executed=true`
                 }
 
 

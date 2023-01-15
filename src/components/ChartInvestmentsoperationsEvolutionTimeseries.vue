@@ -125,7 +125,8 @@
             },
         },
         mounted(){
-            axios.get(`${this.$store.state.apiroot}/investmentsoperations/evolutionchart/?investment=${this.investment.id}`, this.myheaders())
+
+            axios.get(`${this.investment.url}operations_evolution_chart/`, this.myheaders())
             .then((response) => {
                 this.invested=[]    
                 this.dividends=[]

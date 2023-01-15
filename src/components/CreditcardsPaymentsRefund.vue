@@ -48,7 +48,7 @@
         },
         methods: {
             refundPayment() {
-                axios.post(`${this.$store.state.apiroot}/creditcardsoperations/payment/refund/`, {accountsoperations_id: this.payment}, this.myheaders())
+                axios.post(`${this.$store.state.apiroot}/api/accountsoperations/${this.payment}/ccpaymentrefund/`, {}, this.myheaders())
                 .then((response) => {
                     console.log(response.data)
                     this.items_cco=[]
@@ -61,7 +61,7 @@
                 });
             },
             updatePayments(){
-                axios.get(`${this.$store.state.apiroot}/creditcards/payments/?creditcard=${this.cc.url}`, this.myheaders())
+                axios.get(`${this.cc.url}payments/`, this.myheaders())
                 .then((response) => {
                     this.payments=[]
                     response.data.forEach(o=> {
@@ -77,16 +77,6 @@
                     this.parseResponseError(error)
                 });
 
-            },
-            update_table(){
-                this.loading=true
-                axios.get(`${this.$store.state.apiroot}/concepts/used/`, this.myheaders())
-                .then((response) => {
-                    this.concepts=response.data
-                    this.loading=false
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
             },
         },
         created(){

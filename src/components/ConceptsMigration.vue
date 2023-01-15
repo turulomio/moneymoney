@@ -49,7 +49,7 @@
                 if(r == false) {
                     return
                 }  
-                axios.post(`${this.$store.state.apiroot}/concepts/migration/`, {from:this.from_url,to:this.to}, this.myheaders())
+                axios.post(`${this.from_url}data_transfer/`, {to:this.to}, this.myheaders())
                 .then(() => {
                     this.$emit('cruded')
                 }, (error) => {

@@ -195,7 +195,7 @@
             empty_credit_card,
             refreshTable(){
                 //var this_=this //Needs this inside axios seems with browser vue method
-                axios.get(`${this.$store.state.apiroot}/accountsoperations/withbalance/?account=${this.account.id}&year=${this.monthpicker.slice(0,4)}&month=${this.monthpicker.slice(5,7)}`, this.myheaders())                
+                axios.get(`${this.account.url}monthoperations/?year=${this.monthpicker.slice(0,4)}&month=${this.monthpicker.slice(5,7)}`, this.myheaders())                
                 .then((response) => {
                     this.items_ao=response.data;
                     if (this.$refs.tao) this.$refs.tao.gotoLastRow()
@@ -205,7 +205,7 @@
                 });
             },
             refreshTableCC(){
-                axios.get(`${this.$store.state.apiroot}/creditcards/withbalance/?account=${this.account.id}&active=${this.showActiveCC}`, this.myheaders())                
+                axios.get(`${this.$store.state.apiroot}/api/creditcards/withbalance/?account=${this.account.id}&active=${this.showActiveCC}`, this.myheaders())                
                 .then((response) => {
                     this.table_cc=response.data;
                 }) 

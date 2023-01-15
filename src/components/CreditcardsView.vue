@@ -121,7 +121,7 @@
             },
             update_table(refresh_key=true){
                 this.loading_cco=true
-                axios.get(`${this.$store.state.apiroot}/creditcardsoperations/withbalance/?paid=false&creditcard=${this.cc.id}`, this.myheaders())
+                axios.get(`${this.cc.url}operationswithbalance/?paid=false`, this.myheaders())
                 .then((response) => {
                     this.items_cco=response.data
                     this.loading_cco=false 
@@ -140,7 +140,7 @@
                     cco:ids,
                     dt_payment: this.dt_payment,
                 }
-                axios.post(`${this.$store.state.apiroot}/creditcardsoperations/payment/${this.cc.id}/`, data, this.myheaders())
+                axios.post(`${this.cc.url}pay/`, data, this.myheaders())
                 .then(() => {
                         this.$emit("cruded")
                         this.update_table()     

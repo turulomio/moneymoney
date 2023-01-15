@@ -126,7 +126,7 @@
 
             update_table(){
                 this.loading_table=true
-                axios.get(`${this.$store.state.apiroot}/banks/withbalance/?active=${this.showActive}`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/api/banks/withbalance/?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
                     this.data=response.data
                     this.loading_table=false

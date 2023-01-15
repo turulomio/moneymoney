@@ -16,12 +16,12 @@
             </v-card>
         </div>
         <div v-if="data">
-            <ChartEvolutionAssets v-if="unogenerator_working" save_name="base64_assetsreport_evolution.png" @finished="finished_evolution_assets=true;" ></ChartEvolutionAssets>
-            <ChartPie name="Investments by product" :items="echart_products_items" save_name="base64_assetsreport_classes_by_product.png" :heigth="height" :show_data="false" @finished="finished_by_product=true;" ></ChartPie>
-            <ChartPie name="Investments by pci" :items="echart_pci_items" save_name="base64_assetsreport_classes_by_pci.png" :heigth="height" :show_data="false" @finished="finished_by_pci=true;"></ChartPie>
-            <ChartPie name="Investments by variable percentage" :items="echart_percentage_items" save_name="base64_assetsreport_classes_by_percentage.png" :heigth="height" :show_data="false" @finished="finished_by_percentage=true;"></ChartPie>
-            <ChartPie name="Investments by product type" :items="echart_producttype_items" save_name="base64_assetsreport_classes_by_producttype.png" :heigth="height" :show_data="false" @finished="finished_by_producttype=true;"></ChartPie>
-            <ChartPie name="Investments by leverage" :items="echart_leverage_items" save_name="base64_assetsreport_classes_by_leverage.png" :heigth="height" :show_data="false" @finished="finished_by_leverage=true;"></ChartPie>
+            <ChartEvolutionAssets v-if="unogenerator_working" save_name="assetsreport_evolution" @finished="finished_evolution_assets=true;" ></ChartEvolutionAssets>
+            <ChartPie name="Investments by product" :items="echart_products_items" save_name="assetsreport_classes_by_product" :heigth="height" :show_data="false" @finished="finished_by_product=true;" ></ChartPie>
+            <ChartPie name="Investments by pci" :items="echart_pci_items" save_name="assetsreport_classes_by_pci" :heigth="height" :show_data="false" @finished="finished_by_pci=true;"></ChartPie>
+            <ChartPie name="Investments by variable percentage" :items="echart_percentage_items" save_name="assetsreport_classes_by_percentage" :heigth="height" :show_data="false" @finished="finished_by_percentage=true;"></ChartPie>
+            <ChartPie name="Investments by product type" :items="echart_producttype_items" save_name="assetsreport_classes_by_producttype" :heigth="height" :show_data="false" @finished="finished_by_producttype=true;"></ChartPie>
+            <ChartPie name="Investments by leverage" :items="echart_leverage_items" save_name="assetsreport_classes_by_leverage" :heigth="height" :show_data="false" @finished="finished_by_leverage=true;"></ChartPie>
         </div>
     </div>
 </template>

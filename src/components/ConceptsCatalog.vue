@@ -123,7 +123,7 @@
             },
             update_table(){
                 this.loading=true
-                axios.get(`${this.$store.state.apiroot}/concepts/used/`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/api/concepts/used/`, this.myheaders())
                 .then((response) => {
                     this.concepts=response.data
                     this.loading=false

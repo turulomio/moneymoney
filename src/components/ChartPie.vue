@@ -120,8 +120,8 @@
             },
             on_finished(){
                 if (this.save_name!=null){
-                    var data=this.$refs.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff'}).replace('data:image/png;base64,','')
-                    axios.post(`${this.$store.state.apiroot}/binary/to/global/`, {global:this.save_name,data:data,}, this.myheaders())
+                    var data=this.$refs.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff'})
+                    axios.post(`${this.$store.state.apiroot}/storefile/`, {filename:this.save_name,data:data,}, this.myheaders())
                     .then(() => {
                         this.$emit("finished")
                     }, (error) => {

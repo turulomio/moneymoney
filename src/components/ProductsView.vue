@@ -315,7 +315,7 @@
                 return axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl/?product=${this.product.url}`, this.myheaders())
             },
             refreshInformation(){
-                return axios.get(`${this.$store.state.apiroot}/products/information/?product=${this.product.url}`, this.myheaders())
+                return axios.get(`${this.product.url}historical_information/`, this.myheaders())
             },
             make_all_axios(){
                 this.loading=true
