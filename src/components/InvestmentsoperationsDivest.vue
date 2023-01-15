@@ -251,13 +251,13 @@
             simulateOrderBefore(){
                 var simulation=this.empty_investments_operations_simulation()
                 simulation.investments=this.newinvestments
-                simulation.local_currency=this.$store.state.settings.local_currency
+                simulation.local_currency=this.$store.state.profile.currency
                 return axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
             },
             simulateOrderAfter(){
                 var simulation=this.empty_investments_operations_simulation()
                 simulation.investments=this.newinvestments
-                simulation.local_currency=this.$store.state.settings.local_currency
+                simulation.local_currency=this.$store.state.profile.currency
                 var operation=this.empty_investment_operation()
                 operation.datetime=simulation.dt
                 operation.shares=this.newshares

@@ -13,21 +13,21 @@
                 <v-tab-item key="profile" >
                     <v-card class="mx-auto pa-6 mt-3" max-width="40%">
                         <v-card-title>{{ $t('Profile settings') }}</v-card-title>                    
-                        <v-text-field v-model="new_settings.first_name" :label="$t('Set your name')" :placeholder="$t('Set your name')" :rules="RulesString(200,true)" counter="200"/>
-                        <v-text-field v-model="new_settings.last_name" :label="$t('Set your last name')" :placeholder="$t('Set your last name')" :rules="RulesString(200,true)" counter="200"/>
-                        <v-text-field v-model="new_settings.user_email" :label="$t('Set your email')" :placeholder="$t('Set your email')" :rules="RulesEmail(true)" counter="200"/>
-                        <v-text-field type="password" v-model="new_settings.newp" :label="$t(`Set your new password. Leave empty if you don't want to change it`)" :placeholder="$t('Set your password')" :rules="RulesPassword(40,false)" counter="40"/>
+                        <v-text-field v-model="new_profile.first_name" :label="$t('Set your name')" :placeholder="$t('Set your name')" :rules="RulesString(200,true)" counter="200"/>
+                        <v-text-field v-model="new_profile.last_name" :label="$t('Set your last name')" :placeholder="$t('Set your last name')" :rules="RulesString(200,true)" counter="200"/>
+                        <v-text-field v-model="new_profile.email" :label="$t('Set your email')" :placeholder="$t('Set your email')" :rules="RulesEmail(true)" counter="200"/>
+                        <v-text-field type="password" v-model="new_profile.newp" :label="$t(`Set your new password. Leave empty if you don't want to change it`)" :placeholder="$t('Set your password')" :rules="RulesPassword(40,false)" counter="40"/>
                         <v-text-field type="password" v-model="dupnewp" :label="$t(`Set your new password. Leave empty if you don't want to change it`)" :placeholder="$t('Set your password')" :rules="RulesPassword(40,false)" counter="40"/>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="amounts" >
                     <v-card class="mx-auto pa-6 mt-3" max-width="40%">
                         <v-card-title>{{ $t('Amount to invest') }}</v-card-title>                    
-                        <v-text-field v-model="new_settings.invest_amount_1"  :label="$t('First amount to invest')" :placeholder="$t('First amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
-                        <v-text-field v-model="new_settings.invest_amount_2"  :label="$t('Second amount to invest')" :placeholder="$t('Second amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
-                        <v-text-field v-model="new_settings.invest_amount_3"  :label="$t('Third amount to invest')" :placeholder="$t('Third amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
-                        <v-text-field v-model="new_settings.invest_amount_4"  :label="$t('Fourth amount to invest')" :placeholder="$t('Fourth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
-                        <v-text-field v-model="new_settings.invest_amount_5"  :label="$t('Fifth amount to invest')" :placeholder="$t('Fifth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model="new_profile.invest_amount_1"  :label="$t('First amount to invest')" :placeholder="$t('First amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model="new_profile.invest_amount_2"  :label="$t('Second amount to invest')" :placeholder="$t('Second amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model="new_profile.invest_amount_3"  :label="$t('Third amount to invest')" :placeholder="$t('Third amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model="new_profile.invest_amount_4"  :label="$t('Fourth amount to invest')" :placeholder="$t('Fourth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model="new_profile.invest_amount_5"  :label="$t('Fifth amount to invest')" :placeholder="$t('Fifth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
 
 
                     </v-card>                        
@@ -40,16 +40,16 @@
                 <v-tab-item key="local_settings">
                     <v-card class="mx-auto pa-6" max-width="40%">
                         <v-card-title>{{ $t('Personal preferences') }}</v-card-title>
-                        <v-autocomplete :items="$store.state.currencies" v-model="new_settings.local_currency" :label="$t('Select your local currency')" item-text="fullname" item-value="code" :rules="RulesSelection(true)"></v-autocomplete>
-                        <v-autocomplete :items="timezones" v-model="new_settings.local_zone" :label="$t('Select your localtime zone')" :rules="RulesSelection(true)"></v-autocomplete>
+                        <v-autocomplete :items="$store.state.currencies" v-model="new_profile.currency" :label="$t('Select your local currency')" item-text="fullname" item-value="code" :rules="RulesSelection(true)"></v-autocomplete>
+                        <v-autocomplete :items="timezones" v-model="new_profile.zone" :label="$t('Select your localtime zone')" :rules="RulesSelection(true)"></v-autocomplete>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="investing_com" >                 
                     <v-card class="mx-auto pa-6 mt-3" max-width="40%">
                         <v-card-title>{{ $t('Investing.com portfolio settings') }}</v-card-title>
-                        <v-textarea v-model="new_settings.investing_com_referer" :label="$t('Select your Investing.com referer')" :rules="RulesString(2000, true)"></v-textarea>
-                        <v-textarea v-model="new_settings.investing_com_cookie" :label="$t('Select your Investing.com cookie')" :rules="RulesString(10000, true)"></v-textarea>
-                        <v-textarea v-model="new_settings.investing_com_url" :label="$t('Select your Investing.com url')" :rules="RulesString(2000, true)"></v-textarea>
+                        <v-textarea v-model="new_profile.investing_com_referer" :label="$t('Select your Investing.com referer')" :rules="RulesString(2000, false)"></v-textarea>
+                        <v-textarea v-model="new_profile.investing_com_cookie" :label="$t('Select your Investing.com cookie')" :rules="RulesString(10000, false)"></v-textarea>
+                        <v-textarea v-model="new_profile.investing_com_url" :label="$t('Select your Investing.com url')" :rules="RulesString(2000, false)"></v-textarea>
                     </v-card>
                 </v-tab-item>
             </v-tabs-items>
@@ -69,7 +69,7 @@
                 form_valid: true,
                 tab:0,
                 timezones:[],
-                new_settings:null,
+                new_profile:null,
                 dupnewp:"",
                 example_invested:0,
                 example_amount_to_invest:0,
@@ -85,27 +85,19 @@
 
 
             save_settings(){
-                if (this.new_settings.newp!=this.dupnewp){
+                if (this.new_profile.newp!=this.dupnewp){
                     alert(this.$t("Passwords must be equal"))
                     return
                 }
 
                 if (this.$refs.form.validate()==false) return
-
-                axios.post(`${this.$store.state.apiroot}/settings/`, this.new_settings, this.myheaders())
+                axios.put(`${this.$store.state.apiroot}/profile/`, this.new_profile, this.myheaders())
                 .then((response) => {
                     console.log(response.data)
-                    let msg
-                    if (response.data.local_settings && response.data.investing_com && response.data.profile && response.data.invest_amounts) {
-                        msg=this.$t("Settings saved")
-                     } else {
-                        msg=this.$t("There was a problem saving settings")
-                     }
-                    if (response.data.password) msg=msg+"\n" + this.$t("Password changed")
-                    alert(msg)
-                    this.new_settings.newp=""
-                    this.$store.dispatch("getSettings").then(() =>{
-                        console.log(this.$store.state.settings)
+                    alert(this.$t("Settings saved"))
+                    this.new_profile.newp=""
+                    this.$store.dispatch("getProfile").then(() =>{
+                        console.log(this.$store.state.profile)
                         this.$router.push("home")
                     })
                 }, (error) => {
@@ -126,8 +118,9 @@
         },
         created(){
             this.make_all_axios()
-            this.new_settings=Object.assign({},this.$store.state.settings)
-            this.new_settings.newp=""
+            this.new_profile=Object.assign({},this.$store.state.profile)
+            console.log(this.new_profile)
+            this.new_profile.newp=""
 
         }
     }

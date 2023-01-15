@@ -11,7 +11,7 @@ export function date2zulu(value){
 // invested is the amount to invest in local currency
 // Se aplica un margin del 10%  
 export function amount_to_invest( invested ){
-    let s=this.$store.state.settings
+    let s=this.$store.state.profile
 
     let sum_1=s.invest_amount_1
     let sum_2=(s.invest_amount_1+s.invest_amount_2)

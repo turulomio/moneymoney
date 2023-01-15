@@ -28,7 +28,7 @@ export const store = new Vuex.Store({
         operationstypes: [],
         products: [],
         productstypes: [],
-        settings: null,
+        profile: null,
         stockmarkets:[],
         strategiestypes:[],
         recomendation_methods:[],
@@ -160,8 +160,8 @@ export const store = new Vuex.Store({
         updateProductstypes: (state, payload) =>{
             state.productstypes=payload
         },
-        updateSettings: (state, payload) =>{
-            state.settings=payload
+        updateProfile: (state, payload) =>{
+            state.profile=payload
         },
         updateStockmarkets: (state, payload) =>{
             state.stockmarkets=payload
@@ -186,7 +186,7 @@ export const store = new Vuex.Store({
                 context.dispatch("getOperationstypes"),
                 context.dispatch("getProductstypes"),
                 context.dispatch("getRecomendationMethods"),
-                context.dispatch("getSettings"),
+                context.dispatch("getProfile"),
                 context.dispatch("getStockmarkets"),
                 context.dispatch("getStrategiesTypes"),
                 context.dispatch("getProducts")
@@ -317,12 +317,12 @@ export const store = new Vuex.Store({
                 store.$app.parseResponseError(error)
             });
         },
-        getSettings(context){
+        getProfile(context){
             var start=new Date()
-            return axios.get(`${store.state.apiroot}/settings/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/profile/`, store.$app.myheaders())
             .then((response) => {
-                context.commit("updateSettings", response.data)
-                console.log(`Updated settings in ${new Date()-start} ms`)
+                context.commit("updateProfile", response.data)
+                console.log(`Updated profile in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });

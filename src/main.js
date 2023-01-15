@@ -158,10 +158,10 @@ Vue.mixin({
             return percentage_generic_html(num,this.$i18n.locale,decimals )
         },
         localcurrency_string(num, decimals=2){
-            return this.$store.getters.currency_generic_string(num, this.$store.state.settings.local_currency, this.$i18n.locale,decimals )
+            return this.$store.getters.currency_generic_string(num, this.$store.state.profile.currency, this.$i18n.locale,decimals )
         },
         localcurrency_html(num, decimals=2){
-            return this.$store.getters.currency_generic_html(num, this.$store.state.settings.local_currency, this.$i18n.locale,decimals )
+            return this.$store.getters.currency_generic_html(num, this.$store.state.profile.currency, this.$i18n.locale,decimals )
         },
 
 
