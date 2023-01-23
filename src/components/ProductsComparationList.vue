@@ -4,7 +4,7 @@
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>    
         </h1>
 
-        <v-data-table dense :headers="headers" :items="items" sort-by="name" class="elevation-1 ma-4" hide-default-footer disable-pagination :loading="loading" :key="key"  @click:row="pairReportItem" style="cursor: pointer">
+        <v-data-table dense :headers="headers" :items="items" sort-by="name" class="elevation-1 ma-4 cursorpointer" hide-default-footer disable-pagination :loading="loading" :key="key"  @click:row="pairReportItem">
         
             <template v-slot:[`item.a`]="{ item }">
                 <div v-html="$store.getters.getObjectPropertyByUrl('products', item.a, 'name' )"></div>

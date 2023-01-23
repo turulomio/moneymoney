@@ -195,6 +195,10 @@ h2 {
     font-weight: normal;
 }
 
+.cursorpointer {
+    cursor: pointer;
+}
+
 paragraph{
     text-align:justify;
     padding: 30px;
