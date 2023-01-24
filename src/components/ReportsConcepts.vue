@@ -15,7 +15,7 @@
             <v-tabs-items v-model="tab">
                 <v-tab-item key="positive">
                     <v-card outlined>
-                        <v-data-table dense :headers="itemsHeaders" :items="itemsPositive"  class="elevation-1" disable-pagination  hide-default-footer :loading="loading" height="300">
+                        <v-data-table dense :headers="itemsHeaders" :items="itemsPositive"  class="elevation-1 cursorpointer" disable-pagination  hide-default-footer :loading="loading" height="300" @click:row="viewHistoricalReport">
                             <template v-slot:[`item.concept`]="{ item }">
                                 <div v-html="$store.getters.getObjectPropertyByUrl('concepts',item.concept,'name')"></div>
                             </template> 
@@ -27,10 +27,7 @@
                             </template>  
                             <template v-slot:[`item.percentage_total`]="{ item }">
                                 <div v-html="percentage_html(item.percentage_total)"></div>
-                            </template>              
-                            <template v-slot:[`item.actions`]="{ item }">
-                                <v-icon small @click="viewHistoricalReport(item)">mdi-eye</v-icon>   
-                            </template>             
+                            </template>       
                             <template v-slot:[`body.append`]="{headers}">
                                 <tr style="background-color: GhostWhite" ref="lr">
                                     <td v-for="(header,i) in headers" :key="i" >
@@ -48,7 +45,7 @@
                 </v-tab-item>
                 <v-tab-item key="negative">     
                     <v-card outlined>
-                        <v-data-table dense :headers="itemsHeaders" :items="itemsNegative"  class="elevation-1" disable-pagination  hide-default-footer :sort-by="['year']" :loading="loading">
+                        <v-data-table dense :headers="itemsHeaders" :items="itemsNegative"  class="elevation-1 cursorpointer" disable-pagination  hide-default-footer :sort-by="['year']" :loading="loading" @click:row="viewHistoricalReport">
                             <template v-slot:[`item.concept`]="{ item }">
                                 <div v-html="$store.getters.getObjectPropertyByUrl('concepts',item.concept,'name')"></div>
                             </template> 
@@ -60,10 +57,7 @@
                             </template>  
                             <template v-slot:[`item.percentage_total`]="{ item }">
                                 <div v-html="percentage_html(item.percentage_total)"></div>
-                            </template>          
-                            <template v-slot:[`item.actions`]="{ item }">
-                                <v-icon small @click="viewHistoricalReport(item)">mdi-eye</v-icon>   
-                            </template>                    
+                            </template>                   
                             <template v-slot:[`body.append`]="{headers}">
                                 <tr style="background-color: GhostWhite" ref="lr">
                                     <td v-for="(header,i) in headers" :key="i" >
@@ -105,7 +99,6 @@
                     { text: this.$t('Total'), value: 'total',sortable: true, align:'right'},
                     { text: this.$t('Total percentage'), value: 'percentage_total',sortable: true, align:'right'},
                     { text: this.$t('Median'), value: 'median',sortable: true, align:'right'},
-                    { text: 'Actions', value: 'actions', sortable: false },
                 ],   
                 itemsPositive: [],
                 itemsNegative: [],

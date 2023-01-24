@@ -17,7 +17,7 @@
             <v-tab-item key="cc">
                 <v-card outlined>
                     <v-checkbox v-model="showActiveCC" :label="setCheckboxLabelCC()" @click="on_chkActive_cc()" ></v-checkbox>
-                    <v-data-table dense :headers="table_cc_headers" :items="table_cc"  class="elevation-1" disable-pagination  hide-default-footer sort-by="name" fixed-header max-height="400" :key="key">
+                    <v-data-table dense :headers="table_cc_headers" :items="table_cc"  class="elevation-1 cursorpointer" disable-pagination  hide-default-footer sort-by="name" fixed-header max-height="400" :key="key" @click:row="viewCC">
                         <template v-slot:[`item.deferred`]="{ item }">
                             <v-simple-checkbox v-model="item.deferred" disabled></v-simple-checkbox>
                         </template>  
@@ -28,7 +28,6 @@
                             <div v-html="currency_html(item.balance, item.account_currency )"></div>
                         </template>     
                         <template v-slot:[`item.actions`]="{ item }">
-                            <v-icon v-if="item.deferred" small class="mr-2" @click="viewCC(item)">mdi-eye</v-icon>
                             <v-icon v-if="!item.deferred" small class="mr-2" @click="CCONotDeferred(item)">mdi-plus</v-icon>
                             <v-icon small class="mr-2" @click="editCC(item)">mdi-pencil</v-icon>
                             <v-icon small @click="deleteCC(item)" v-if="item.is_deletable">mdi-delete</v-icon>
@@ -220,6 +219,10 @@
                 this.key=this.key+1
             },
             viewCC(item){
+                if (item.deferred==false){
+                    alert(this.$t("This is a debit credit card. Your operations are added to account directly"))
+                    return
+                }
                 this.cc=item
                 this.key=this.key+1
                 this.dialog_ccview=true
