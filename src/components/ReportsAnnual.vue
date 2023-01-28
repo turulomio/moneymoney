@@ -59,7 +59,7 @@
                 </v-tab-item>
                 <v-tab-item key="1">     <!-- INCOME REPORT -->
                     <v-card outlined>            
-                        <v-data-table dense :headers="total_annual_incomes_headers" :items="total_annual_incomes"  class="elevation-1" disable-pagination  hide-default-footer :loading="loading_annual_incomes">      
+                        <v-data-table dense :headers="total_annual_incomes_headers" :items="total_annual_incomes"  class="elevation-1 cursorpointer" disable-pagination  hide-default-footer :loading="loading_annual_incomes" @click:row="incomeDetails">      
                             <template v-slot:[`item.expenses`]="{ item }">
                                 <div v-html="localcurrency_html(item.expenses)"></div>
                             </template>      
@@ -77,10 +77,7 @@
                             </template>
                             <template v-slot:[`item.dividends`]="{ item }">
                                 <div v-html="localcurrency_html(item.dividends)"></div>
-                            </template>    
-                            <template v-slot:[`item.actions`]="{ item }">
-                                <v-icon small class="mr-2" @click="incomeDetails(item)">mdi-pencil</v-icon>
-                            </template> 
+                            </template>
                             <template v-slot:[`body.append`]="{headers}">
                                 <tr style="background-color: GhostWhite" ref="lr">
                                     <td v-for="(header,i) in headers" :key="i" >
@@ -300,7 +297,6 @@
                     { text: this.$t('Fast operations'), value: 'fast_operations',sortable: true, align:'right', width:"12.5%"},
                     { text: this.$t('Dividends'), value: 'dividends', sortable: true, align:'right', width:"12.5%"},
                     { text: this.$t('Total'), value: 'total', sortable: true, align:'right', width:"12.5%"},
-                    { text: this.$t('Actions'), value: 'actions', sortable: true, align:'right', width:"12.5%"},
                 ],     
                 total_annual_gainsbyproductstypes:[],
                 total_annual_gainsbyproductstypes_headers: [

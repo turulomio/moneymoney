@@ -5,7 +5,7 @@
         </h1>
         <v-card outlined class="ma-4 pa-4">
             <v-checkbox v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" ></v-checkbox>
-            <v-data-table dense :headers="strategies_headers" :items="strategies_items" sort-by="percentage_selling_point" class="elevation-1" hide-default-footer disable-pagination :loading="loading_strategies" :key="key">
+            <v-data-table dense :headers="strategies_headers" :items="strategies_items" sort-by="percentage_selling_point" class="elevation-1 cursorpointer" hide-default-footer disable-pagination :loading="loading_strategies" :key="key" @click:row="detailedviewItem">
                 <template v-slot:[`item.name`]="{ item }">
                     <v-tooltip right>
                         <template v-slot:activator="{ on }">
@@ -39,7 +39,6 @@
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small class="mr-2" @click="viewItem(item)">mdi-eye</v-icon>
                     <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon small class="mr-2" @click="detailedviewItem(item)">mdi-chart-box</v-icon>
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
                 </template>                  
                 <template v-slot:[`body.append`]="{headers}">
