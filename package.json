@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@intlify/vue-i18n-loader": "^1.1.0",
-    "axios": "^1.2.3",
+    "axios": "^1.2.5",
     "core-js": "^3.27.2",
     "currency-list": "^1.0.8",
     "echarts": "^5.4.1",
@@ -31,7 +31,7 @@
     "@vue/cli-service": "^5.0.8",
     "eslint": "^8.32.0",
     "eslint-plugin-vue": "^9.9.0",
-    "npm-check-updates": "^16.6.2",
+    "npm-check-updates": "^16.6.3",
     "sass": "^1.57.1",
     "sass-loader": "^13.2.0",
     "vue-i18n-extract": "^2.0.7",
