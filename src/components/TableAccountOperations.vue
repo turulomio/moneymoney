@@ -10,8 +10,8 @@
             <template v-slot:[`item.balance`]="{ item }">
                 <div v-html="currency_html(item.balance, item.currency)"></div>
             </template>   
-            <template v-slot:[`item.account`]="{ item }">
-                <div v-html="$store.getters.getObjectPropertyByUrl('accounts', item.account, 'fullname')"></div>
+            <template v-slot:[`item.accounts`]="{ item }">
+                <div v-html="$store.getters.getObjectPropertyByUrl('accounts', item.accounts, 'fullname')"></div>
             </template> 
             <template v-slot:[`item.concepts`]="{ item }">
                 <div class="cursorpointer" v-html="$store.getters.getObjectPropertyByUrl('concepts', item.concepts, 'localname')" @click="viewHistoricalConcept(item)"></div>
@@ -226,7 +226,7 @@
         table_headers(){
             var r= [
                 { text: this.$t('Date and time'), value: 'datetime', sortable: true, width:"12%" },
-                { text: this.$t('Account'), value: 'account', sortable: true, width:"20%" },
+                { text: this.$t('Account'), value: 'accounts', sortable: true, width:"20%" },
                 { text: this.$t('Concept'), value: 'concepts', sortable: true, width:"20%"},
                 { text: this.$t('Amount'), value: 'amount', sortable: true, align:"right", width:"8%"},
                 { text: this.$t('Balance'), value: 'balance', sortable: false, align:"right", width:"8%"},

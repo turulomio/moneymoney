@@ -8,55 +8,63 @@
             </v-card>
         </v-layout>
         <p></p>
-        <v-data-table dense :headers="tableHeaders" :items="tableData" class="elevation-1 ma-4" disable-pagination  hide-default-footer :key="refreshKey"  height="500">        
+        <v-data-table dense :headers="tableHeaders" :items="tableData" class="elevation-1 ma-4" disable-pagination  hide-default-footer fixed-header :key="key"  height="500">        
             <template v-slot:[`item.m1`]="{ item }">
-                <div v-html="localcurrency_html(item.m1)"></div>
+                <div v-html="localcurrency_html(item.m1)" @click="showConceptsHistoricalDetail(item,1)"></div>
             </template> 
             <template v-slot:[`item.m2`]="{ item }">
-                <div v-html="localcurrency_html(item.m2)"></div>
+                <div v-html="localcurrency_html(item.m2)" @click="showConceptsHistoricalDetail(item,2)"></div>
             </template> 
             <template v-slot:[`item.m3`]="{ item }">
-                <div v-html="localcurrency_html(item.m3)"></div>
+                <div v-html="localcurrency_html(item.m3)" @click="showConceptsHistoricalDetail(item,3)"></div>
             </template> 
             <template v-slot:[`item.m4`]="{ item }">
-                <div v-html="localcurrency_html(item.m4)"></div>
+                <div v-html="localcurrency_html(item.m4)" @click="showConceptsHistoricalDetail(item,4)"></div>
             </template> 
             <template v-slot:[`item.m5`]="{ item }">
-                <div v-html="localcurrency_html(item.m5)"></div>
+                <div v-html="localcurrency_html(item.m5)" @click="showConceptsHistoricalDetail(item,5)"></div>
             </template> 
             <template v-slot:[`item.m6`]="{ item }">
-                <div v-html="localcurrency_html(item.m6)"></div>
+                <div v-html="localcurrency_html(item.m6)" @click="showConceptsHistoricalDetail(item,6)"></div>
             </template> 
             <template v-slot:[`item.m7`]="{ item }">
-                <div v-html="localcurrency_html(item.m7)"></div>
+                <div v-html="localcurrency_html(item.m7)" @click="showConceptsHistoricalDetail(item,7)"></div>
             </template> 
             <template v-slot:[`item.m8`]="{ item }">
-                <div v-html="localcurrency_html(item.m8)"></div>
+                <div v-html="localcurrency_html(item.m8)" @click="showConceptsHistoricalDetail(item,8)"></div>
             </template> 
             <template v-slot:[`item.m9`]="{ item }">
-                <div v-html="localcurrency_html(item.m9)"></div>
+                <div v-html="localcurrency_html(item.m9)" @click="showConceptsHistoricalDetail(item,9)"></div>
             </template> 
             <template v-slot:[`item.m10`]="{ item }">
-                <div v-html="localcurrency_html(item.m10)"></div>
+                <div v-html="localcurrency_html(item.m10)" @click="showConceptsHistoricalDetail(item,10)"></div>
             </template> 
             <template v-slot:[`item.m11`]="{ item }">
-                <div v-html="localcurrency_html(item.m11)"></div>
+                <div v-html="localcurrency_html(item.m11)" @click="showConceptsHistoricalDetail(item,11)"></div>
             </template> 
             <template v-slot:[`item.m12`]="{ item }">
-                <div v-html="localcurrency_html(item.m12)"></div>
+                <div v-html="localcurrency_html(item.m12)" @click="showConceptsHistoricalDetail(item,12)"></div>
             </template> 
             <template v-slot:[`item.total`]="{ item }">
-                <div v-html="localcurrency_html(item.total)"></div>
+                <div v-html="localcurrency_html(item.total)" @click="showConceptsHistoricalDetail(item)"></div>
             </template> 
         </v-data-table>
 
+        <!-- VIEW HISTORICAL REPORT DETAIL dialog -->
+        <v-dialog v-model="dialog_historical_concepts_detail">
+            <v-card class="pa-4">
+                <ReportsConceptsHistoricalDetail :concept="concept" :year="year" :month="month" :key="key" />
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
 <script>
     import axios from 'axios'
+    import ReportsConceptsHistoricalDetail from './ReportsConceptsHistoricalDetail.vue'
     export default {
         components:{
+            ReportsConceptsHistoricalDetail,
         },
         props:{
             concept:{
@@ -92,31 +100,41 @@
                 total:0,
                 median:0,
                 average:0,
-                refreshKey: 0,
+                key: 0,
                 selected_concept:null,
                 loading:false,
+
+                //Historical concept detail
+                dialog_historical_concepts_detail:false,
+                year:null,
+                month:null,
             }
         },
         methods:{
             refreshTable(){
                 this.loading=true
-                axios.get(`${this.$store.state.apiroot}/reports/concepts/historical/?concept=${this.selected_concept}` , this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/reports/concepts/historical/?concept=${this.selected_concept}`, this.myheaders())
                 .then( (response)=> {
                     this.tableData=response.data.data;
                     this.total=response.data.total
                     this.median=response.data.median
                     this.average=response.data.average
                     console.log(this.tableData)
-                    this.refreshKey=this.refreshKey+1;
+                    this.key=this.key+1;
                     this.loading=false
                 }) 
                 .catch((error) => {
                     this.parseResponseError(error)
                 });
+            },
+            showConceptsHistoricalDetail(item,month=null){
+                this.year=item.year
+                this.month=month
+                this.key=this.key+1
+                this.dialog_historical_concepts_detail=true
             }
         },
         created(){
-            console.log(this.concept)
             this.selected_concept=this.concept
             this.refreshTable()
         }
