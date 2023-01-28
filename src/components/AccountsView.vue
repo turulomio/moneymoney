@@ -194,7 +194,6 @@
             empty_account_transfer,
             empty_credit_card,
             refreshTable(){
-                //var this_=this //Needs this inside axios seems with browser vue method
                 axios.get(`${this.account.url}monthoperations/?year=${this.monthpicker.slice(0,4)}&month=${this.monthpicker.slice(5,7)}`, this.myheaders())                
                 .then((response) => {
                     this.items_ao=response.data;

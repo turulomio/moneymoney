@@ -6,7 +6,7 @@
         </h1>
         <v-card outlined class="ma-4 pa-4">
             <v-checkbox v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" />
-            <v-data-table dense :headers="headers" :items="data" sort-by="name" class="elevation-1 " hide-default-footer :loading="loading_table" @click:row="viewItem" style="cursor: pointer">
+            <v-data-table dense :headers="headers" :items="data" sort-by="name" class="elevation-1 cursorpointer" hide-default-footer :loading="loading_table" @click:row="viewItem">
                 <template v-slot:[`item.active`]="{ item }">
                     <v-icon small v-if="item.active" >mdi-check-outline</v-icon>
                 </template>  

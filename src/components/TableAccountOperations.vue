@@ -14,7 +14,7 @@
                 <div v-html="$store.getters.getObjectPropertyByUrl('accounts', item.account, 'fullname')"></div>
             </template> 
             <template v-slot:[`item.concepts`]="{ item }">
-                <div v-html="$store.getters.getObjectPropertyByUrl('concepts', item.concepts, 'localname')"></div>
+                <div class="cursorpointer" v-html="$store.getters.getObjectPropertyByUrl('concepts', item.concepts, 'localname')" @click="viewHistoricalConcept(item)"></div>
             </template>
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="editAO(item)">mdi-pencil</v-icon>
@@ -61,6 +61,14 @@
                 <DividendsCU :dividend="dividend" :mode="dividends_cu_mode" :key="key"  @cruded="on_DividendsCU_cruded()"></DividendsCU>
             </v-card>
         </v-dialog>
+
+
+        <!-- VIEW HISTORICAL REPORT dialog -->
+        <v-dialog v-model="dialog_historical_concepts">
+            <v-card class="pa-4">
+                <ReportsConceptsHistorical :concept="concept" :key="key" />
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -71,12 +79,14 @@
     import AccountsTransfer from './AccountsTransfer.vue'
     import DividendsCU from './DividendsCU.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
+    import ReportsConceptsHistorical from './ReportsConceptsHistorical.vue'
     export default {
         components:{
             AccountsoperationsCU,
             AccountsTransfer,
             InvestmentsoperationsCU,
             DividendsCU,
+            ReportsConceptsHistorical,
         },
     props: {
         items: {
@@ -127,6 +137,10 @@
             dividends_cu_dialog:false,
             dividends_cu_mode: null,
             dividend: null,
+
+            //DIALOG HISTORICAL CONECPTS
+            dialog_historical_concepts:false,
+            concept: null
         }
     },
     watch: {
@@ -230,9 +244,7 @@
             return r
         },
         gotoLastRow(){          
-            
             if(this.$refs.table_ao) this.$vuetify.goTo(100000, { container:  this.$refs.table_ao.$el.childNodes[0]}) 
-
         },
         on_AccountTransfer_cruded(){
             this.dialog_transfer=false
@@ -249,6 +261,13 @@
         on_InvestmentsoperationsCU_cruded(){
             this.dialog_io=false
             this.$emit("cruded")
+        },
+        viewHistoricalConcept(item){
+            // this.concept=this.$store.getters.getObjectPropertyByUrl('concepts', item.concepts, 'localname')
+            console.log(item)
+            this.concept=item.concepts
+            this.dialog_historical_concepts=true
+
         }
     },
     mounted(){

@@ -209,6 +209,10 @@ span.vuered{
     color:red;
 }
 
+.cursorpointer {
+    cursor: pointer;
+}
+
 
 .boldred{
     color: red;

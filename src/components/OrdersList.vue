@@ -9,7 +9,7 @@
             </v-card>
         </div>
         <v-card outlined class="ma-4 pa-4">
-            <v-data-table dense :headers="headers" :items="data" :sort-by="getSort()" :sort-desc="getSortDesc()" class="elevation-1" hide-default-footer disable-pagination :loading="loading_table"  @click:row="orderView" style="cursor: pointer">
+            <v-data-table dense :headers="headers" :items="data" :sort-by="getSort()" :sort-desc="getSortDesc()" class="elevation-1 cursorpointer" hide-default-footer disable-pagination :loading="loading_table"  @click:row="orderView">
                 <template v-slot:[`item.price`]="{ item }">
                     <div v-html="currency_html(item.price, item.currency )"></div>
                 </template>  
