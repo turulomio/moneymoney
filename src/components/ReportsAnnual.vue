@@ -1,12 +1,12 @@
 <template>
     <div>
         <h1>{{ $t("Total report") }}</h1>
-            <div class="d-flex justify-center mb-4">
-                <v-card width="20%" class="pa-5">
-                    <v-select dense :label="$t('Select the year from which to display the report')" v-model="year" :items="years()" @change="change_year()"></v-select>              
-                    <v-text-field v-model.number="target"  :label="$t('Set annual gains target')" :placeholder="$t('Set annual gains target')" :rules="RulesFloat(6,true,6)" counter="6" suffix=" %" autofocus/>
-                </v-card>
-            </div>
+        <v-form ref="form" v-model="form_valid" class="d-flex justify-center mb-4">
+            <v-card width="20%" class="pa-5">
+                <v-select dense :label="$t('Select the year from which to display the report')" v-model="year" :items="years()" @change="change_year()"></v-select>              
+                <v-text-field v-model.number="target"  :label="$t('Set annual gains target')" :placeholder="$t('Set annual gains target')" :rules="RulesFloat(6,true,6)" counter="6" suffix=" %" autofocus/>
+            </v-card>
+        </v-form>
         <div class="pa-6">
             <p>{{ last_year_balance_string }}</p>
 
@@ -341,7 +341,8 @@
                 key:0,
 
                 // TARGET
-                target: 4,
+                form_valid:false,
+                target: this.$store.state.profile.annual_gains_target,
                 month_target: 0,
                 loading_target: false,
                 current_assets_gains_percentage_message:0,
@@ -438,33 +439,42 @@
 
             },
             refreshTotalTarget(){
+                
+                if (this.$refs.form.validate()==false) return
                 this.loading_target=true
-                this.total_target=[]
-                this.month_target=this.last_year_balance*(this.target/100)/12
-                var cumulative_target=0
-                var cumulative_gains=0
-                
-                for (var i=0; i<12; i++){
-                    let month_gains= this.total_annual_incomes[i].gains + this.total_annual_incomes[i].dividends + this.total_annual_incomes[i].fast_operations
-                    cumulative_target=cumulative_target+this.month_target
-                    cumulative_gains=cumulative_gains+month_gains
-                    this.total_target.push({
-                        month: this.$t(moment().month(i).format("MMMM")),
-                        month_target:this.month_target,
-                        month_gains: month_gains,
-                        cumulative_target: cumulative_target,
-                        cumulative_gains: cumulative_gains,
-                        color_month_gains: (this.month_target<month_gains) ? "boldgreen" : "boldred",
-                        color_month_cumulative_gains: (cumulative_target<cumulative_gains) ? "boldgreen" : "boldred",
+                //Updates annual_gains_target in profile
+                var new_profile=Object.assign({},this.$store.state.profile)
+                new_profile.annual_gains_target=this.target
+                axios.put(`${this.$store.state.apiroot}/profile/`, new_profile, this.myheaders())
+                .then(() => {
+                    this.$store.dispatch("getProfile").then(() =>{
+                        this.total_target=[]
+                        this.month_target=this.last_year_balance*(this.target/100)/12
+                        var cumulative_target=0
+                        var cumulative_gains=0
+
+                        for (var i=0; i<12; i++){
+                            let month_gains= this.total_annual_incomes[i].gains + this.total_annual_incomes[i].dividends + this.total_annual_incomes[i].fast_operations
+                            cumulative_target=cumulative_target+this.month_target
+                            cumulative_gains=cumulative_gains+month_gains
+                            this.total_target.push({
+                                month: this.$t(moment().month(i).format("MMMM")),
+                                month_target:this.month_target,
+                                month_gains: month_gains,
+                                cumulative_target: cumulative_target,
+                                cumulative_gains: cumulative_gains,
+                                color_month_gains: (this.month_target<month_gains) ? "boldgreen" : "boldred",
+                                color_month_cumulative_gains: (cumulative_target<cumulative_gains) ? "boldgreen" : "boldred",
+                            })
+                        }
+
+                        var current_percentage=cumulative_gains/this.last_year_balance
+                        this.current_assets_gains_percentage_message=this.$t("Currently, gains annual percentage is {0}.").format(this.percentage_html(current_percentage))
+                        this.loading_target=false
                     })
-
-
-                }
-                this.loading_target=false
-                
-                var current_percentage=cumulative_gains/this.last_year_balance
-                this.current_assets_gains_percentage_message=this.$t("Currently, gains annual percentage is {0}.").format(this.percentage_html(current_percentage))
-
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
             },
             refreshTables(){
                 this.loading_annual=true
@@ -488,9 +498,8 @@
                 })
                 axios.get(`${this.$store.state.apiroot}/reports/annual/income/${this.year}/`, this.myheaders())
                 .then((response) => {
-                        console.log(response.data)
-                        this.total_annual_incomes=response.data
-                        this.loading_annual_incomes=false
+                    this.total_annual_incomes=response.data
+                    this.loading_annual_incomes=false
                 }, (error) => {
                     this.parseResponseError(error)
                 })            
