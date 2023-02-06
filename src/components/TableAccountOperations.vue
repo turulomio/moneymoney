@@ -20,14 +20,17 @@
                 <v-icon small class="mr-2" @click="editAO(item)">mdi-pencil</v-icon>
                 <v-icon small class="mr-2" @click="deleteAO(item)">mdi-delete</v-icon>
             </template>
-            <template v-slot:[`body.append`]="{headers}" v-if="total_currency!=null">
+            <template v-slot:[`body.append`]="{headers}" v-if="showtotal && items.length>0">
                 <tr style="background-color: GhostWhite">
                     <td v-for="(header,i) in headers" :key="`row${i}`" >
                         <div v-if="header.value == 'datetime'">
-                            Total
+                            {{ $t("Total ({0} registers):").format(items.length)}}
                         </div>
                         <div v-if="header.value == 'amount'">
-                            <div class="text-right" v-html="currency_html(listobjects_sum(items,'amount'),total_currency)"></div>
+                            <div v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items,'amount'),total_currency)"></div>
+                        </div>
+                        <div v-if="header.value == 'comment_decoded'">
+                            <div v-if="!all_items_has_same_currency" >{{ $t("Can't sum amounts due to they have different currencies") }}</div>
                         </div>
                     </td>
                 </tr>
@@ -92,26 +95,52 @@
         items: {
             required: true
         },
-        total_currency: { // Only in homogeneous. Each item must have it's currency. This is only for totals.
-                        // If null doesn't show total. Total can be showed in homogeneos or not. It depends on the query if has same currency
-            required: false,
-            default: null,
-        },
-        homogeneous:{ //Only hides account if true
+        showtotal:{// Items must have currency attribute
             type: Boolean,
-            required:false,
-            default:false,
-        },
-        showselected:{
             required:false,
             default: false,
         },
-        showactions:{
+        showaccount:{// Items must have accounts attribute
+            type: Boolean,
             required:false,
-            default: true,
+            default: false,
+        },
+        showbalance:{// Items must have balance attribute
+            type: Boolean,
+            required:false,
+            default: false,
+        },
+        showselected:{
+            type: Boolean,
+            required:false,
+            default: false,
+        },
+        hideactions:{
+            type: Boolean,
+            required:false,
+            default: false,
         }
     },
+    computed:{
+        total_currency(){
+            if (this.items.length==0) return ""
+            return this.items[0].currency
+        },
+        all_items_has_same_currency(){
+            console.log("ALL_ITEMS")
+            console.log(this.items.length)
+            if (this.items.length==0) return false
+            var first_currency=this.items[0].currency
+            var r=true
+            this.items.forEach(item => {//For Each doesn't allow to return false
+                if (item.currency!=first_currency)  {
+                    r=false
+                }
+            });
+            return r
+        }
 
+    },
     data: function(){
         return {
             selected: [],
@@ -151,8 +180,6 @@
     methods: {
         empty_account_transfer,
         editAO (item) {
-            console.log(item)
-            
             if (item.is_editable==false){// Account operation is not editable
             
                 if (item.comment.startsWith("10000,")){ //It's an investment operation 
@@ -232,13 +259,13 @@
                 { text: this.$t('Balance'), value: 'balance', sortable: false, align:"right", width:"8%"},
                 { text: this.$t('Comment'), value: 'comment_decoded', sortable: true},
             ]
-            if (this.showactions==true){
+            if (this.hideactions==false){
                 r.push({ text: this.$t('Actions'), value: 'actions', sortable: false , width:"6%"})
             }
-            if (this.homogeneous==false){
+            if (this.showbalance==false){
                 r.splice(4, 1);
             }
-            if (this.homogeneous==true){
+            if (this.showaccount==false){
                 r.splice(1, 1);
             }
             return r
@@ -271,6 +298,8 @@
         }
     },
     mounted(){
+        console.log(this.items[0])
+        console.log(this.all_items_has_same_currency)
         this.gotoLastRow()
     }
 }

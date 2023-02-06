@@ -14,12 +14,12 @@
             <v-tabs-items v-model="tab">
                 <v-tab-item key="incomes">        
                     <v-card class="pa-4">
-                    <TableAccountOperations :items="incomes" :total_currency="$store.state.profile.currency" :showactions="false" height="600" class=" flex-grow-1 flex-shrink-0" :key="key" ></TableAccountOperations>
+                        <TableAccountOperations :items="incomes" showtotal hideactions showaccount height="600" class=" flex-grow-1 flex-shrink-0" :key="key" />
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="expenses">       
                     <v-card class="pa-4">
-                    <TableAccountOperations :items="expenses" :total_currency="$store.state.profile.currency" :showactions="false" height="600" class=" flex-grow-1 flex-shrink-0" :key="key" ></TableAccountOperations>
+                        <TableAccountOperations :items="expenses" showtotal hideactions showaccount height="600" class=" flex-grow-1 flex-shrink-0" :key="key" />
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="dividends">     
@@ -40,7 +40,7 @@
                 </v-tab-item>
                 <v-tab-item key="fast_operations">       
                     <v-card class="pa-4">
-                        <TableAccountOperations :items="fast_operations" :total_currency="$store.state.profile.currency" :showactions="false" height="600" class=" flex-grow-1 flex-shrink-0" :key="key" ></TableAccountOperations>
+                        <TableAccountOperations :items="fast_operations" showtotal hideactions showaccount height="600" class=" flex-grow-1 flex-shrink-0" :key="key" />
                     </v-card>
                 </v-tab-item>
             </v-tabs-items> 

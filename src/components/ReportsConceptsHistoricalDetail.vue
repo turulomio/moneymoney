@@ -3,7 +3,7 @@
     <div>    
         <h1>{{ title }}</h1>
         <v-card outlined class="ma-4 pa-4">
-            <TableAccountOperations :homogeneous="false" :items="items_ao" height="400" class="flex-grow-1 flex-shrink-0" @editAO="editAO" @deleteAO="deleteAO" :key="key"/>
+            <TableAccountOperations showaccount showtotal :items="items_ao" height="400" class="flex-grow-1 flex-shrink-0" @editAO="editAO" @deleteAO="deleteAO" :key="key"/>
         </v-card>
         <!-- DIALOG ACCOUNTSOPERATIONS ADD/UPDATE -->
         <v-dialog v-model="dialog_ao" max-width="550">

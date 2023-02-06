@@ -7,7 +7,7 @@
             <v-text-field  class="pa-4" v-model="search" type="text" :label="$t('Enter a string to search')" :placeholder="$t('Operation comment')" autofocus  counter="200"/>
             <v-btn class="mt-2 "  color="error" @click="on_button_click()">{{ $t("Search") }}</v-btn>
             </v-row>
-            <TableAccountOperations :homogeneous="false" :items="items_ao" height="400" class=" flex-grow-1 flex-shrink-0" @editAO="editAO" @deleteAO="deleteAO" :key="key"></TableAccountOperations>
+            <TableAccountOperations showaccount showtotal :items="items_ao" height="400" class=" flex-grow-1 flex-shrink-0" @editAO="editAO" @deleteAO="deleteAO" :key="key" />
         </v-card>
         <!-- DIALOG ACCOUNTSOPERATIONS ADD/UPDATE -->
         <v-dialog v-model="dialog_ao" max-width="550">
