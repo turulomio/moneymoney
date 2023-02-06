@@ -9,6 +9,10 @@
             </v-form>   
             <v-btn @click="$refs.form.validate()">Validate</v-btn>
         </v-card> -->
+        <v-card class="mx-auto" width="80%">
+        <MyMonthPicker v-model="ym" />
+    </v-card>
+        <p>{{ ym  }}</p>
         <v-img src="@/assets/moneymoney.png" height="200px" contain ></v-img>
         <v-alert dense class="ma-15 px-10" outlined type="error" v-if="message.length>0"> {{message}}</v-alert>            
 
@@ -16,13 +20,19 @@
 </template>
 <script>
     import axios from 'axios'
+    import MyMonthPicker from './MyMonthPicker.vue';
     export default {
+        components:{
+            MyMonthPicker,
+        },
         data(){
             return {
                 message:"",
                 // a:12,
                 // b:12,
                 // form_valid:false,
+
+                ym:null
             }
         },
         methods:{

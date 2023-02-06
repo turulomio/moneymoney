@@ -1,22 +1,13 @@
-<!--
-    Value:
-        Can be:
-            - A Date iso string  new Date().toISOString().split("T")[0]
-            - null. Se grabaría como null
--->
-
-
 <template>
-    <v-card flat>
-        <v-row  class="ml-0 mr-0">                   
-            <v-icon  @click="localValue=new Date().toISOString().slice(0,10)">mdi-calendar</v-icon>
-            <v-btn color="primary"> c </v-btn>
-            <v-btn color="primary">cc</v-btn>
-            <v-select :items="years"></v-select>
-            <v-select :items="months"></v-select>
-            <v-btn color="primary">></v-btn>
-            <v-btn>>></v-btn>
-            <v-icon x-small @click="localValue=null" >mdi-backspace</v-icon>
+    <v-card outlined class="px-6 pt-8 pb-4">
+        <v-row>                  
+            <v-btn @click="substractYear()" class="mr-2">&#60;&#60;</v-btn>
+            <v-btn @click="substractMonth()" class="mr-2">&#60;</v-btn>
+            <v-select v-model="new_value.year" dense class="mr-2" :items="years" :label="$t('Select a year')" />
+            <v-select v-model="new_value.month" dense class="mr-2" :items="months" :label="$t('Select a month')" />
+            <v-btn @click="addMonth()" class="mr-2">&#62;</v-btn>
+            <v-btn @click="addYear()" class="mr-2">&#62;&#62;</v-btn>
+            <v-btn @click="setCurrentMonth()"><v-icon color="#757575;">mdi-calendar</v-icon></v-btn>
         </v-row>
     </v-card>
 </template>
@@ -57,10 +48,6 @@
         },
         data: function(){
             return {
-                menu: false,
-                localValue: null,
-                representation:"",
-                years: this.range(this.fromyear, this.toyear),
                 months: [
                     { text: this.$t('January'), value: 1 },
                     { text: this.$t('February'), value: 2 },
@@ -75,40 +62,60 @@
                     { text: this.$t('November'), value: 11 },
                     { text: this.$t('December'), value: 12 },
                 ],
+                new_value:{year:null,month:null},
             }
         },
-        watch: {
-            localValue (newValue) {
-                this.$emit('input', newValue)
-                this.setRepresentation()            },
-            value (newValue) {
-                this.localValue = newValue
-            }
+        computed:{
+            years(){
+                var r=[]
+                for (var i = this.fromyear;i<this.toyear+1;i++){
+                    r.push({text: "Year " + i.toString(),value:i})
+
+                }
+                return r
+            },
         },
         methods: {
-            range(start,stop, step){
-                return Array.from({ length: (stop - start) / step + 1}, (_, i) => start + (i * step));
+            setCurrentMonth(){
+                var d=new Date()
+                this.setDate(d.getFullYear(), d.getMonth()+1)
             },
-            setRepresentation(){
-                if (this.localValue==null){
-                    this.representation=""
-                } else {
-                    this.representation=this.localValue
-                }
+            setDate(year,month){
+                this.new_value.year=year
+                this.new_value.month=month
+                this.$emit("input",this.new_value)
+
             },
-            first_day_of_week(){
-                if (this.$i18n.locale=="es"){
-                    return 1
+            substractYear(){
+                this.setDate(this.new_value.year-1,this.new_value.month)
+
+            },
+            substractMonth(){
+                if (this.new_value.month==1){
+                    this.setDate(this.new_value.year-1, 12)
                 } else {
-                    return 0
+                    this.setDate(this.new_value.year,this.new_value.month-1)
                 }
-            }
+
+            },
+            addMonth(){
+                if (this.new_value.month==12){
+                    this.setDate(this.new_value.year+1, 1)
+                } else {
+                    this.setDate(this.new_value.year,this.new_value.month+1)
+                }
+
+            },
+            addYear(){
+                this.setDate(this.new_value.year+1,this.new_value.month)
+
+            },
         },
         created(){
             if (this.value){
                 this.new_value=Object.assign({},this.value)
             } else {
-                this.new_value={year:new Date().getFullYear(),month:new Date().getMonth()+1}
+                this.setCurrentMonth()
             }
             
         },
