@@ -127,8 +127,6 @@
             return this.items[0].currency
         },
         all_items_has_same_currency(){
-            console.log("ALL_ITEMS")
-            console.log(this.items.length)
             if (this.items.length==0) return false
             var first_currency=this.items[0].currency
             var r=true
@@ -298,8 +296,6 @@
         }
     },
     mounted(){
-        console.log(this.items[0])
-        console.log(this.all_items_has_same_currency)
         this.gotoLastRow()
     }
 }

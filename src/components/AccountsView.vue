@@ -3,7 +3,8 @@
         <h1>{{ $t("Account details of '{0}'").format(account.localname) }}
         <MyMenuInline :items="items"  :context="this"></MyMenuInline>  </h1>
         <DisplayValues :items="displayvalues"></DisplayValues>
-   
+        <MyMonthPicker v-model="ym"></MyMonthPicker>
+
         <v-tabs v-model="tab"  background-color="primary" dark>
             <v-tab key="ao">{{ $t("Account operations")}}</v-tab>
             <v-tab key="cc">{{ $t("Credit cards")}}</v-tab>
@@ -71,6 +72,7 @@
     import AccountsTransfer from './AccountsTransfer.vue'
     import DisplayValues from './DisplayValues.vue'
     import MyMenuInline from './MyMenuInline.vue'
+    import MyMonthPicker from './MyMonthPicker.vue'
     import CreditcardsCU from './CreditcardsCU.vue'
     import CreditcardsView from './CreditcardsView.vue'
     import TableAccountOperations from './TableAccountOperations.vue'
@@ -84,6 +86,7 @@
             TableAccountOperations,
             CreditcardsCU,
             CreditcardsView,
+            MyMonthPicker,
         },
         props:{
             account:{
@@ -100,6 +103,7 @@
                     {title:this.$t('Id'), value: this.account.id},
                 ],
                 monthpicker: new Date().toISOString().substr(0, 7),
+                ym:{year:new Date().getFullYear(),month: new Date().getMonth()+1},
                 tab:0,
                 key:0,
                 items_ao: [],           
