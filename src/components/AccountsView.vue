@@ -3,16 +3,16 @@
         <h1>{{ $t("Account details of '{0}'").format(account.localname) }}
         <MyMenuInline :items="items"  :context="this"></MyMenuInline>  </h1>
         <DisplayValues :items="displayvalues"></DisplayValues>
-        <MyMonthPicker v-model="ym"></MyMonthPicker>
 
         <v-tabs v-model="tab"  background-color="primary" dark>
             <v-tab key="ao">{{ $t("Account operations")}}</v-tab>
             <v-tab key="cc">{{ $t("Credit cards")}}</v-tab>
             <v-tab-item key="ao">     
                 <v-card class="pa-4 d-flex justify-center" outlined style="min-width: 100px; max-width: 100%;">
-                    <v-date-picker dense no-title class="mymonthpicker " ref="monthpicker" v-model="monthpicker" type="month"></v-date-picker>
-                    <v-divider class="mx-2" vertical ></v-divider>
+                    <v-col>
+                    <MyMonthPicker v-model="ym" @input="refreshTable()"/>
                     <TableAccountOperations ref="tao" showtotal showbalance :items="items_ao" :total_currency="account.currency" height="400" class=" flex-grow-1 flex-shrink-0" @cruded="on_TableAccountOperations_cruded()"></TableAccountOperations>
+                    </v-col>
                 </v-card>
             </v-tab-item>
             <v-tab-item key="cc">
@@ -102,8 +102,7 @@
                     {title:this.$t('Active'), value: this.account.active},
                     {title:this.$t('Id'), value: this.account.id},
                 ],
-                monthpicker: new Date().toISOString().substr(0, 7),
-                ym:{year:new Date().getFullYear(),month: new Date().getMonth()+1},
+                ym: null,
                 tab:0,
                 key:0,
                 items_ao: [],           
@@ -180,11 +179,6 @@
                 ao: null,
             }  
         },
-        watch:{
-            monthpicker: function (){
-                this.refreshTable()
-            }
-        },
         methods: {
             CCONotDeferred(item){
                 this.ao=this.empty_account_operation()
@@ -197,7 +191,8 @@
             empty_account_transfer,
             empty_credit_card,
             refreshTable(){
-                axios.get(`${this.account.url}monthoperations/?year=${this.monthpicker.slice(0,4)}&month=${this.monthpicker.slice(5,7)}`, this.myheaders())                
+                console.log(this.ym)
+                axios.get(`${this.account.url}monthoperations/?year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())                
                 .then((response) => {
                     this.items_ao=response.data;
                     if (this.$refs.tao) this.$refs.tao.gotoLastRow()
@@ -281,7 +276,7 @@
                 }
             },
         },
-        created(){
+        mounted(){
             this.refreshTable()
             this.refreshTableCC()
         }
