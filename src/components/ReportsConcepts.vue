@@ -1,12 +1,10 @@
 <template>
     <div>
         <h1>{{ $t("Concepts report") }}</h1>
-        <div class="d-flex justify-center mb-4">
-            <v-card  class="pa-2 mt-4">             
-                <v-date-picker landscape dense no-title label="Select a month" class="mymonthpicker " v-model="monthpicker" type="month"></v-date-picker>
-            </v-card>
-        </div>
-        <div class="ma-4">
+        <MyMonthPicker v-model="ym" @input="refreshTables()"/>
+
+
+        <div class="mx-4">
             <v-tabs  background-color="primary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
                 <v-tab key="positive">{{ $t("Positive balance concepts") }}</v-tab>
                 <v-tab key="negative">{{ $t("Negative balance concepts") }}</v-tab>
@@ -86,14 +84,17 @@
 <script>     
     import axios from 'axios'
     import ReportsConceptsHistorical from './ReportsConceptsHistorical'
+    import MyMonthPicker from './MyMonthPicker.vue'
+
     export default {
         components:{
             ReportsConceptsHistorical,
+            MyMonthPicker,
         },
         data(){
             return {
                 tab:1,
-                monthpicker: new Date().toISOString().slice(0,7),
+                ym: null,
                 itemsHeaders: [
                     { text: this.$t('Concept'), value: 'concept',sortable: true },
                     { text: this.$t('Total'), value: 'total',sortable: true, align:'right'},
@@ -108,18 +109,10 @@
                 concept:null,
             }
         },
-        watch:{
-            monthpicker: function (){
-                this.refreshTables()
-            }
-        },
         methods:{
             refreshTables(){
                 this.loading=true
-                var mp=this.monthpicker.split("-")
-                console.log(this.monthpicker)
-                console.log(mp)
-                axios.get(`${this.$store.state.apiroot}/reports/concepts/?year=${mp[0]}&month=${mp[1]}`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/reports/concepts/?year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())
                 .then((response) => {
                     console.log(response.data)
                     this.itemsPositive=response.data.positive
