@@ -8,11 +8,9 @@
             <v-tab key="ao">{{ $t("Account operations")}}</v-tab>
             <v-tab key="cc">{{ $t("Credit cards")}}</v-tab>
             <v-tab-item key="ao">     
-                <v-card class="pa-4 d-flex justify-center" outlined style="min-width: 100px; max-width: 100%;">
-                    <v-col>
+                <v-card class="d-flex justify-center flex-column" outlined>
                     <MyMonthPicker v-model="ym" @input="refreshTable()"/>
-                    <TableAccountOperations ref="tao" showtotal showbalance :items="items_ao" :total_currency="account.currency" height="400" class=" flex-grow-1 flex-shrink-0" @cruded="on_TableAccountOperations_cruded()"></TableAccountOperations>
-                    </v-col>
+                    <TableAccountOperations ref="tao" showtotal showbalance :items="items_ao" :total_currency="account.currency" height="400" @cruded="on_TableAccountOperations_cruded()"></TableAccountOperations>
                 </v-card>
             </v-tab-item>
             <v-tab-item key="cc">
@@ -191,7 +189,6 @@
             empty_account_transfer,
             empty_credit_card,
             refreshTable(){
-                console.log(this.ym)
                 axios.get(`${this.account.url}monthoperations/?year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())                
                 .then((response) => {
                     this.items_ao=response.data;
@@ -277,7 +274,7 @@
             },
         },
         mounted(){
-            this.refreshTable()
+            // this.refreshTable() Not needed due to a MyMonthPicker Input
             this.refreshTableCC()
         }
     }

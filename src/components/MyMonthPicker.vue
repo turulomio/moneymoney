@@ -1,14 +1,12 @@
 <template>
-    <v-card outlined class="px-6 pt-8 pb-4">
-        <v-row>                  
-            <v-btn @click="substractYear()" class="mr-2">&#60;&#60;</v-btn>
-            <v-btn @click="substractMonth()" class="mr-2">&#60;</v-btn>
-            <v-select v-model="new_value.year" dense class="mr-2" :items="years" :label="$t('Select a year')" />
-            <v-select v-model="new_value.month" dense class="mr-2" :items="months" :label="$t('Select a month')" />
-            <v-btn @click="addMonth()" class="mr-2">&#62;</v-btn>
-            <v-btn @click="addYear()" class="mr-2">&#62;&#62;</v-btn>
-            <v-btn @click="setCurrentMonth()"><v-icon color="#757575;">mdi-calendar</v-icon></v-btn>
-        </v-row>
+    <v-card class="px-6 pt-8 pb-4 d-flex justify-center" flat>
+        <v-btn @click="substractYear()" class="mr-2">&#60;&#60;</v-btn>
+        <v-btn @click="substractMonth()" class="mr-2">&#60;</v-btn>
+        <v-text-field v-model="new_value.year" dense class="mr-2 " :label="$t('Select a year')" style="max-width: 200px;"/>
+        <v-select v-model="new_value.month" dense  class="mr-2 " :items="months" :label="$t('Select a month')" style="max-width: 200px;"/>
+        <v-btn @click="addMonth()" class="mr-2">&#62;</v-btn>
+        <v-btn @click="addYear()" class="mr-2">&#62;&#62;</v-btn>
+        <v-btn @click="setCurrentMonth()"><v-icon color="#757575;">mdi-calendar</v-icon></v-btn>
     </v-card>
 </template>
 <script>
@@ -66,14 +64,6 @@
             }
         },
         computed:{
-            years(){
-                var r=[]
-                for (var i = this.fromyear;i<this.toyear+1;i++){
-                    r.push({text: "Year " + i.toString(),value:i})
-
-                }
-                return r
-            },
         },
         methods: {
             setCurrentMonth(){
@@ -81,8 +71,7 @@
                 this.setDate(d.getFullYear(), d.getMonth()+1)
             },
             setDate(year,month){
-                this.new_value.year=year
-                this.new_value.month=month
+                this.new_value={year:year,month:month}
                 this.$emit("input",this.new_value)
 
             },
