@@ -17,7 +17,7 @@
             <v-tab key="chart">{{ $t("Chart")}}</v-tab>
             <v-tabs-items v-model="tab">
                 <v-tab-item key="percentage_evolution">     
-                    <v-card class="pa-4 d-flex justify-center" outlined >
+                    <v-card class="pa-1" outlined >
                         <v-data-table dense :headers="percentage_headers" :items="this.information.percentages" class="elevation-1" disable-pagination  hide-default-footer  fixed-header :loading="loading">
                             <template v-slot:[`item.m1`]="{ item }"><div v-html="percentage_html(item.m1 )"></div></template>  
                             <template v-slot:[`item.m2`]="{ item }"><div v-html="percentage_html(item.m2 )"></div></template>  
@@ -36,7 +36,7 @@
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="quotes_evolution">     
-                    <v-card class="pa-4 d-flex justify-center" outlined >
+                    <v-card class="pa-1" outlined >
                         <v-data-table dense :headers="quotes_headers" :items="this.information.quotes" class="elevation-1" disable-pagination  hide-default-footer  fixed-header :loading="loading">
                             <template v-slot:[`item.m1`]="{ item }"><div v-html="currency_html(item.m1 , product.currency)"></div></template>  
                             <template v-slot:[`item.m2`]="{ item }"><div v-html="currency_html(item.m2 , product.currency)"></div></template>  
@@ -54,26 +54,25 @@
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="dps_estimations">     
-                    <v-card class="pa-4 d-flex justify-center" outlined >
+                    <v-card class="pa-1" outlined >
                         <TableEstimationsDPS :product="product" :key="key"></TableEstimationsDPS>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="dps">     
-                    <v-card class="pa-4 d-flex justify-center" outlined >
+                    <v-card class="pa-1" outlined >
                         <TableDPS :product="product" :key="key" :height="400"></TableDPS>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="ohcls">
-                    <v-card class="pa-4 d-flex justify-center" outlined style="min-width: 100px; max-width: 100%;">
-                        <v-date-picker dense no-title class="mymonthpicker" v-model="monthpicker_ohcls" type="month" @change="on_monthpicker_ohcls_change()"></v-date-picker>
-                        <v-divider class="mx-2" vertical ></v-divider>
+                    <v-card class="pa-1 d-flex flex-column" outlined >                    
+                        <MyMonthPicker v-model="ohcls_ym" @input="on_monthpicker_ohcls_change()"/>
                         <TableOHCLS :product="product" :items="ohcls_month" :key="key" :height="400" @cruded="on_TableQuotes_cruded()"></TableOHCLS>
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="quotes">
-                    <v-card class="pa-4 d-flex justify-center" outlined style="min-width: 100px; max-width: 100%;">
-                        <v-date-picker dense no-title class="mymonthpicker" v-model="monthpicker_quotes" type="month" @change="on_monthpicker_quotes_change()"></v-date-picker>
-                        <v-divider class="mx-2" vertical ></v-divider>
+                    <v-card class="pa-1 d-flex flex-column" outlined >      
+                            
+                        <MyMonthPicker v-model="quotes_ym" @input="on_monthpicker_quotes_change()"/>
                         <TableQuotes :product="product" :items="quotes_month" :key="key" :height="400" @cruded="on_TableQuotes_cruded()"></TableQuotes>
                     </v-card>
                 </v-tab-item>
@@ -123,6 +122,7 @@
     import ChartProduct from './ChartProduct.vue'
     import DisplayValues from './DisplayValues.vue'
     import EstimationsDpsCU from './EstimationsDpsCU.vue'
+    import MyMonthPicker from './MyMonthPicker.vue'
     import QuotesMassiveUpdate from './QuotesMassiveUpdate.vue'
     import TableDPS from './TableDPS.vue'
     import TableEstimationsDPS from './TableEstimationsDPS.vue'
@@ -143,6 +143,7 @@
             TableQuotes,
             TableOHCLS,
             DpsCRUD,
+            MyMonthPicker,
         },
 
         props: {
@@ -252,12 +253,12 @@
                     { text: this.$t('November'), value: 'm11', sortable: true, align:"right" },
                     { text: this.$t('December'), value: 'm12', sortable: true, align:"right" },
                 ],
-                monthpicker_quotes: this.get_current_monthpicker_string(),
-                monthpicker_ohcls: this.get_current_monthpicker_string(),
 
 
                 //Product chart
                 ohcls:[],
+                ohcls_ym:null,
+                quotes_ym:null,
                 ohcls_month: [],
                 quotes_month:[],
 
@@ -288,10 +289,7 @@
                 this.key=this.key+1
             },
             on_monthpicker_quotes_change(){
-                let year=this.monthpicker_quotes.slice(0,4)
-                let month=this.monthpicker_quotes.slice(5,7)
-
-                axios.get(`${this.$store.state.apiroot}/api/quotes/?product=${this.product.url}&year=${year}&month=${month}`, this.myheaders())                
+                axios.get(`${this.$store.state.apiroot}/api/quotes/?product=${this.product.url}&year=${this.quotes_ym.year}&month=${this.quotes_ym.month}`, this.myheaders())                
                 .then((response) => {
                     this.quotes_month=response.data
                 }) 
@@ -300,10 +298,7 @@
                 });
             },
             on_monthpicker_ohcls_change(){
-                let year=this.monthpicker_ohcls.slice(0,4)
-                let month=this.monthpicker_ohcls.slice(5,7)
-        
-                axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl/?product=${this.product.url}&year=${year}&month=${month}`, this.myheaders())                
+                axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl/?product=${this.product.url}&year=${this.ohcls_ym.year}&month=${this.ohcls_ym.month}`, this.myheaders())                
                 .then((response) => {
                     this.ohcls_month=response.data
                 }) 
