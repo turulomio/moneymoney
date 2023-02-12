@@ -23,7 +23,7 @@
                     <v-icon small class="mr-2" @click="viewInvestmentsMerged(item)">mdi-eye</v-icon>
                 </template>    
                 <template v-slot:[`body.append`]="{headers}">
-                    <tr style="background-color: GhostWhite" ref="lr" v-if="search==''">
+                    <tr class="totalrow" ref="lr" v-if="search==''">
                         <td v-for="(header,i) in headers" :key="i" >
                             <div v-if="header.value == 'name'">
                                 Total

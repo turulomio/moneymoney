@@ -218,16 +218,24 @@ span.vuered{
     color: red;
     font-weight: 900;
 }
+
 .boldgreen{
     color: Green;
     font-weight: 900;
 }
+
 .bold{
     font-weight: 900;
 }
+
 .v-application .inform {
     margin-bottom: 1px;
     background-color: white !important;
+}
+
+.totalrow{
+    background-color: WhiteSmoke;
+    font-weight: 600;
 }
 
 

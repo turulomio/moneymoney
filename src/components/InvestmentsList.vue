@@ -51,7 +51,7 @@
                         </template>
                         <span><div v-html="tooltip_selling_percentage(item)"></div></span>
                     </v-tooltip>   
-                                    </template>              
+                </template>              
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small class="ml-1" @click="addQuote(item)">mdi-plus</v-icon>
                     <v-icon small class="ml-1" @click="editItem(item)">mdi-pencil</v-icon>
@@ -59,7 +59,7 @@
                     <v-icon small class="ml-1" v-if="(new Date().setHours(0,0,0,0)>new Date(item.selling_expiration).setHours(0,0,0,0)) && item.selling_expiration!=null" @click="changeSellingPrice(item)" color="#9933ff" style="font-weight:bold">mdi-alarm</v-icon>     
                 </template>                
                 <template v-slot:[`body.append`]="{headers}">
-                    <tr style="background-color: WhiteSmoke" >
+                    <tr class="totalrow" >
                         <td v-for="(header,i) in headers" :key="i">
                             <div v-if="header.value == 'fullname'">
                                 {{ $t("Total ({0}):").format(investments_items.length)}}

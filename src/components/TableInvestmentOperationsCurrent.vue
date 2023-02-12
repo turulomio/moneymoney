@@ -71,7 +71,7 @@
         </template>   
 
         <template v-slot:[`body.append`]="{headers}">
-            <tr style="background-color: GhostWhite" v-if="items.length>0">
+            <tr class="totalrow" v-if="items.length>0">
                 <td v-for="(header,i) in headers" :key="'ROW'+i" >
                     <div v-if="header.value == 'datetime'">
                         Total

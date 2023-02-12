@@ -18,7 +18,7 @@
                 <v-icon small class="mr-2" @click="deleteCCO(item)">mdi-delete</v-icon>
             </template>
             <template v-slot:[`body.append`]="{headers}" v-if="total_currency!=null">
-                <tr style="background-color: GhostWhite">
+                <tr class="totalrow">
                     <td v-for="(header,i) in headers" :key="i" >
                         <div v-if="header.value == 'datetime'">
                             Total

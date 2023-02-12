@@ -27,7 +27,7 @@
                                 <div v-html="percentage_html(item.percentage_total)"></div>
                             </template>       
                             <template v-slot:[`body.append`]="{headers}">
-                                <tr style="background-color: GhostWhite" ref="lr">
+                                <tr class="totalrow" ref="lr">
                                     <td v-for="(header,i) in headers" :key="i" >
                                         <div v-if="header.value == 'concept'">
                                             Total
@@ -57,7 +57,7 @@
                                 <div v-html="percentage_html(item.percentage_total)"></div>
                             </template>                   
                             <template v-slot:[`body.append`]="{headers}">
-                                <tr style="background-color: GhostWhite" ref="lr">
+                                <tr class="totalrow" ref="lr">
                                     <td v-for="(header,i) in headers" :key="i" >
                                         <div v-if="header.value == 'concept'">
                                             Total

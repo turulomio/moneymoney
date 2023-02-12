@@ -15,7 +15,7 @@
                     <div v-html="localcurrency_html(item.balance_user )"></div>
                 </template>                          
                 <template v-slot:[`body.append`]="{headers}">
-                    <tr style="background-color: WhiteSmoke">
+                    <tr class="totalrow">
                         <td v-for="(header,i) in headers" :key="i">
                             <div v-if="header.value == 'name'">
                                 Total
@@ -37,7 +37,7 @@
                     <div v-html="localcurrency_html(item.balance_user )"></div>
                 </template>                          
                 <template v-slot:[`body.append`]="{headers}">
-                    <tr style="background-color: WhiteSmoke">
+                    <tr class="totalrow">
                         <td v-for="(header,i) in headers" :key="i">
                             <div v-if="header.value == 'name'">
                                 Total

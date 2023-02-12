@@ -21,7 +21,7 @@
                 <v-icon small class="mr-2" @click="deleteAO(item)">mdi-delete</v-icon>
             </template>
             <template v-slot:[`body.append`]="{headers}" v-if="showtotal && items.length>0">
-                <tr style="background-color: GhostWhite">
+                <tr class="totalrow">
                     <td v-for="(header,i) in headers" :key="`row${i}`" >
                         <div v-if="header.value == 'datetime'">
                             {{ $t("Total ({0} registers):").format(items.length)}}

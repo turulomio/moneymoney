@@ -27,7 +27,7 @@
                 <v-icon small class="mr-2" @click="deleteDividend(item)">mdi-delete</v-icon>
             </template>
             <template v-slot:[`body.append`]="{headers}">
-                <tr style="background-color: GhostWhite" v-if="items.length>0">
+                <tr class="totalrow" v-if="items.length>0">
                     <td v-for="(header,i) in headers" :key="i" >
                         <div v-if="header.value == 'datetime'">
                             Total
