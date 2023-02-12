@@ -113,7 +113,7 @@
         methods:{
             refreshTable(){
                 this.loading=true
-                axios.get(`${this.$store.state.apiroot}/reports/concepts/historical/?concept=${this.selected_concept}`, this.myheaders())
+                axios.get(`${this.selected_concept}historical_report/`, this.myheaders())
                 .then( (response)=> {
                     this.tableData=response.data.data;
                     this.total=response.data.total

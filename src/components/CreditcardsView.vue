@@ -14,7 +14,7 @@
             <v-tab-item key="cco">      
                 <div>
                     <v-card outlined class="ma-4 pa-4">
-                        <TableCreditcardsOperations :showselected="paying" :showactions="true" homogeneous :items="items_cco" :total_currency="account.currency" height="400" ref="table_cc" class=" flex-grow-1 flex-shrink-0" :locale='this.$i18n.locale' @changeSelected="changeSelected" @cruded="on_TableCreditcardsOperations_cruded()" :key="key"></TableCreditcardsOperations>
+                        <TableCreditcardsOperations :showselected="paying" showbalance showtotal :items="items_cco" height="400" ref="table_cc" class=" flex-grow-1 flex-shrink-0" :locale='this.$i18n.locale' @changeSelected="changeSelected" @cruded="on_TableCreditcardsOperations_cruded()" :key="key"></TableCreditcardsOperations>
                     </v-card>
                     <v-card outlined class="ma-4 pa-4" v-if="paying">
                         <MyDateTimePicker label="Select payment date and time" v-model="dt_payment" ></MyDateTimePicker>
