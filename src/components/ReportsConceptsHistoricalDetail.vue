@@ -4,9 +4,9 @@
         <h1>{{ title }}</h1>
         <v-card outlined class="ma-4 pa-4">
             <p class="bold">{{ $t("Account operations") }}</p>
-            <TableAccountOperations showaccount showtotal :items="data.ao" height="250" class="flex-grow-1 flex-shrink-0" @editAO="editAO" @deleteAO="deleteAO" :key="key"/>
+            <TableAccountOperations showaccount showtotal :items="data.ao" height="250" class="flex-grow-1 flex-shrink-0" @editAO="editAO" @deleteAO="deleteAO" :key="'AO'+key"/>
             <p class="mt-4 bold">{{ $t("Credit card operations") }}</p>
-            <TableCreditcardsOperations showcc showtotal :items="data.cco" height="250" class=" flex-grow-1 flex-shrink-0" :key="key" />
+            <TableCreditcardsOperations showcc showtotal :items="data.cco" height="250" class=" flex-grow-1 flex-shrink-0" :key="'CC'+key" />
             <p class="mt-4 bold" v-html="total"></p>
         </v-card>
         <!-- DIALOG ACCOUNTSOPERATIONS ADD/UPDATE -->
