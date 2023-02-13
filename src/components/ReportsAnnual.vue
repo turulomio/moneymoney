@@ -39,7 +39,7 @@
                                 <div v-html="percentage_html(item.percentage_year)"></div>
                             </template>   
                             <template v-slot:[`body.append`]="{headers}">
-                                <tr style="background-color: GhostWhite" ref="lr">
+                                <tr class="totalrow" ref="lr">
                                     <td v-for="(header,i) in headers" :key="i" >
                                         <div v-if="header.value == 'month'">
                                             Total
@@ -79,7 +79,7 @@
                                 <div v-html="localcurrency_html(item.dividends)"></div>
                             </template>
                             <template v-slot:[`body.append`]="{headers}">
-                                <tr style="background-color: GhostWhite" ref="lr">
+                                <tr class="totalrow" ref="lr">
                                     <td v-for="(header,i) in headers" :key="i" >
                                         <div v-if="header.value == 'month'">
                                             Total
@@ -125,7 +125,7 @@
                                 <div v-html="localcurrency_html(item.gains_net)"></div>
                             </template>    
                             <template v-slot:[`body.append`]="{headers}">
-                                <tr style="background-color: GhostWhite" ref="lr">
+                                <tr class="totalrow" ref="lr">
                                     <td v-for="(header,i) in headers" :key="i" >
                                         <div v-if="header.value == 'name'">
                                             Total
@@ -168,7 +168,7 @@
                                 <div v-html="localcurrency_string(item.cumulative_gains)" :class="item.color_month_cumulative_gains"></div>
                             </template>
                             <template v-slot:[`body.append`]="{headers}">
-                                <tr style="background-color: GhostWhite" ref="lr">
+                                <tr class="totalrow" ref="lr">
                                     <td v-for="(header,i) in headers" :key="i" >
                                         <div v-if="header.value == 'month'">
                                             Total
@@ -200,7 +200,7 @@
                                 <div v-html="localcurrency_string(item.diff)" :class="item.color_diff"></div>
                             </template>
                             <template v-slot:[`body.append`]="{headers}">
-                                <tr style="background-color: GhostWhite" ref="lr">
+                                <tr class="totalrow" ref="lr">
                                     <td v-for="(header,i) in headers" :key="i" >
                                         <div v-if="header.value == 'month'">
                                             Total
@@ -235,7 +235,7 @@
                                 <div v-html="localcurrency_string(item.diff)" :class="item.color_diff"></div>
                             </template>
                             <template v-slot:[`body.append`]="{headers}">
-                                <tr style="background-color: GhostWhite" ref="lr">
+                                <tr class="totalrow" ref="lr">
                                     <td v-for="(header,i) in headers" :key="i" >
                                         <div v-if="header.value == 'month'">
                                             Total

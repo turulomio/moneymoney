@@ -7,8 +7,8 @@
                 <MyDateTimePicker :readonly="deleting" v-model="newat.datetime" :label="$t('Set transfer date and time')"></MyDateTimePicker>
                 <v-autocomplete :readonly="deleting" :items="$store.state.accounts.filter(v =>v.active==true)" v-model="newat.account_origin" :label="$t('Select an origin account')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-autocomplete :readonly="deleting" :items="$store.state.accounts.filter(v =>v.active==true)" v-model="newat.account_destiny" :label="$t('Select a destiny account')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field :readonly="deleting" v-model="newat.amount"  :label="$t('Set transfer amount')" :placeholder="$t('Set transfer amount')" :rules="RulesFloatGZ(10,true,get_transfer_decimals())" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newat.commission"  :label="$t('Set transfer commission')" :placeholder="$t('Set transfer commission')" :rules="RulesFloatGEZ(10,true,get_transfer_decimals())" counter="10"/>
+                <v-text-field :readonly="deleting" v-model.number="newat.amount"  :label="$t('Set transfer amount')" :placeholder="$t('Set transfer amount')" :rules="RulesFloatGZ(10,true,get_transfer_decimals())" counter="10"/>
+                <v-text-field :readonly="deleting" v-model.number="newat.commission"  :label="$t('Set transfer commission')" :placeholder="$t('Set transfer commission')" :rules="RulesFloatGEZ(10,true,get_transfer_decimals())" counter="10"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -59,6 +59,7 @@
             },
             acceptTransfer(){             
                 if( this.$refs.form.validate()==false) return   
+                console.log(this.newat)
                 if (this.deleting==false){ // Due it has not all values
                     if (this.newat.account_origin==this.newat.account_destiny){
                         alert(this.$t("Transfer accounts can't be the same"))

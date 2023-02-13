@@ -41,7 +41,7 @@
                                 <div v-html="localcurrency_html(item.total)"></div>
                             </template>                
                             <template v-slot:[`body.append`]="{headers}">
-                                <tr style="background-color: GhostWhite" ref="lr">
+                                <tr class="totalrow" ref="lr">
                                     <td v-for="(header,i) in headers" :key="i" >
                                         <div v-if="header.value == 'year'">
                                             Total
@@ -95,7 +95,7 @@
                                 <div v-html="localcurrency_html(item.investment_commissions)"></div>
                             </template>            
                             <template v-slot:[`body.append`]="{headers}">
-                                <tr style="background-color: GhostWhite" ref="lr">
+                                <tr class="totalrow" ref="lr">
                                     <td v-for="(header,i) in headers" :key="i" >
                                         <div v-if="header.value == 'year'">
                                             Total

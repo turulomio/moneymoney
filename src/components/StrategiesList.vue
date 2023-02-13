@@ -42,7 +42,7 @@
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
                 </template>                  
                 <template v-slot:[`body.append`]="{headers}">
-                    <tr style="background-color: WhiteSmoke">
+                    <tr class="totalrow">
                         <td v-for="(header,i) in headers" :key="i">
                             <div v-if="header.value == 'name'">
                                 {{$t("Total ({0} strategies)").format(strategies_items.length) }}

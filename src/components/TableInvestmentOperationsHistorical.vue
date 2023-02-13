@@ -68,7 +68,7 @@
                 <div v-html="currency_html(item.gains_net_investment, item.currency_investment)"></div>
             </template>           
             <template v-slot:[`body.append`]="{headers}">
-                <tr style="background-color: GhostWhite" v-if="items.length>0">
+                <tr class="totalrow" v-if="items.length>0">
                     <td v-for="(header,i) in headers" :key="i" >
                         <div v-if="header.value == 'dt_end'">
                             Total

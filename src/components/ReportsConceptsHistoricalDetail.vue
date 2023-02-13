@@ -3,7 +3,11 @@
     <div>    
         <h1>{{ title }}</h1>
         <v-card outlined class="ma-4 pa-4">
-            <TableAccountOperations showaccount showtotal :items="items_ao" height="400" class="flex-grow-1 flex-shrink-0" @editAO="editAO" @deleteAO="deleteAO" :key="key"/>
+            <p class="bold">{{ $t("Account operations") }}</p>
+            <TableAccountOperations showaccount showtotal :items="data.ao" height="250" class="flex-grow-1 flex-shrink-0" @editAO="editAO" @deleteAO="deleteAO" :key="'AO'+key"/>
+            <p class="mt-4 bold">{{ $t("Credit card operations") }}</p>
+            <TableCreditcardsOperations showcc showtotal :items="data.cco" height="250" class=" flex-grow-1 flex-shrink-0" :key="'CC'+key" />
+            <p class="mt-4 bold" v-html="total"></p>
         </v-card>
         <!-- DIALOG ACCOUNTSOPERATIONS ADD/UPDATE -->
         <v-dialog v-model="dialog_ao" max-width="550">
@@ -15,11 +19,13 @@
 </template>
 <script>
     import axios from 'axios'
-    import AccountsoperationsCU from './AccountsoperationsCU.vue'
     import TableAccountOperations from './TableAccountOperations.vue'
+    import AccountsoperationsCU from './AccountsoperationsCU.vue'
+    import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
     export default {
         components:{
             TableAccountOperations,
+            TableCreditcardsOperations,
             AccountsoperationsCU,
         },
         props:{
@@ -37,7 +43,7 @@
         },
         data(){ 
             return {
-                items_ao:[],
+                data:[],
                 ao:null,
                 loading:false,
                 search:"",
@@ -55,6 +61,9 @@
                     return this.$t("'{0}' operations at {1}-{2}").format(concept.localname,this.year,this.month)
                 }
 
+            },
+            total: function(){
+                return this.$t("Total: {0}").format(this.localcurrency_html(this.listobjects_sum(this.data.ao,"amount")+this.listobjects_sum(this.data.cco,"amount")))
             }
         },
         methods: {
@@ -86,10 +95,10 @@
             },
             update_table(){
                 this.loading=true
-                axios.get(`${this.$store.state.apiroot}/api/accountsoperations/?concept=${this.concept}&year=${this.year}&month=${this.month}` , this.myheaders())
+                axios.get(`${this.concept}historical_report_detail/?year=${this.year}&month=${this.month}` , this.myheaders())
                 .then( (response)=> {
                     console.log(response.data)
-                    this.items_ao=response.data
+                    this.data=response.data.data
                     this.key=this.key+1;
                     this.loading=false
                 }) 
