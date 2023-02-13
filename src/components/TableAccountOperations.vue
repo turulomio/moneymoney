@@ -40,7 +40,7 @@
         <!-- DIALOG ACCOUNTSOPERATIONS ADD/UPDATE -->
         <v-dialog v-model="dialog_ao" max-width="550">
             <v-card class="pa-8">
-                <AccountsoperationsCU :ao="ao" :deleting="ao_deleting" :key="key" @cruded="on_AccountsoperationsCU_cruded"></AccountsoperationsCU>
+                <AccountsoperationsCU ref="aocu" :ao="ao" :mode="ao_mode" :key="key" @cruded="on_AccountsoperationsCU_cruded"></AccountsoperationsCU>
             </v-card>
         </v-dialog>
         
@@ -147,7 +147,7 @@
             // DIALOG ACCOUNT OPERATIONS
             dialog_ao:false,
             ao: null,
-            ao_deleting:false,
+            ao_mode:null,
 
             // DIALOG INVESTMENT OPERATIONS CU
             dialog_io:false,
@@ -179,7 +179,6 @@
         empty_account_transfer,
         editAO (item) {
             if (item.is_editable==false){// Account operation is not editable
-            
                 if (item.comment.startsWith("10000,")){ //It's an investment operation 
                     var io_string= item.comment.split(",")[1]
                     //Gets
@@ -214,13 +213,12 @@
                 }
             } else { // Account operation is editable
                 this.ao=item
-                this.ao_deleting=false
-                this.dialog_ao=true
+                this.ao_mode='U'
                 this.key=this.key+1
+                this.dialog_ao=true
             }
         },
         deleteAO (item) {
-            console.log(item)
             if (this.ao_to_find_transfer(item)){// Tries to find transfer to delete it
                 this.at=this.ao_to_find_transfer(item)
                 this.at_deleting=true
@@ -231,7 +229,7 @@
                 return
             } else { //Editables
                 this.ao=item
-                this.ao_deleting=true
+                this.ao_mode='D'
                 this.key=this.key+1
                 this.dialog_ao=true
             }

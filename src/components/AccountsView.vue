@@ -38,7 +38,7 @@
         <!-- DIALOG ACCOUNTSOPERATIONS ADD/UPDATE -->
         <v-dialog v-model="dialog_ao" max-width="700">
             <v-card class="pa-8">
-                <AccountsoperationsCU :ao="ao" :key="key" @cruded="on_AccountsoperationsCU_cruded"></AccountsoperationsCU>
+                <AccountsoperationsCU :ao="ao" :mode="ao_mode" :key="key" @cruded="on_AccountsoperationsCU_cruded"></AccountsoperationsCU>
             </v-card>
         </v-dialog>
         <!-- DIALOG CREDIT CARD ADD/UPDATE -->
@@ -123,7 +123,8 @@
                                 name:this.$t('Add an account operation'), 
                                 code: function(this_){
                                     this_.ao=this_.empty_account_operation()
-                                    this_.ao.accounts=this_.account.url,
+                                    this_.ao_mode="C"
+                                    this_.ao.accounts=this_.account.url
                                     this_.key=this_.key+1
                                     this_.ao_deleting=false
                                     this_.dialog_ao=true
@@ -139,7 +140,7 @@
                                 code: function(this_){
                                     this_.editing_cc=false
                                     this_.cc=this_.empty_credit_card()
-                                    this_.cc.accounts=this_.account.url,
+                                    this_.cc.accounts=this_.account.url
                                     console.log(this_.cc)
                                     this_.key=this_.key+1
                                     this_.dialog_cc=true
@@ -175,6 +176,7 @@
                 // DIALOG ACCOUNT OPERATIONS
                 dialog_ao:false,
                 ao: null,
+                ao_mode: null,
             }  
         },
         methods: {
