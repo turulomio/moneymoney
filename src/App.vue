@@ -227,6 +227,10 @@ span.vuered{
 .bold{
     font-weight: 900;
 }
+.boldcenter{
+    font-weight: 900;
+    text-align: center;
+}
 
 .v-application .inform {
     margin-bottom: 1px;

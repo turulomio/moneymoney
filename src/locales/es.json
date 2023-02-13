@@ -650,7 +650,6 @@
   "This bank will be deleted. Do you want to continue?": "Este banco será borrado. ¿Quieres continuar?",
   "This order will be deleted. Do you want to continue?": "Esta orden será borrada. ¿Quieres continuar?",
   "This product will be deleted. Do you want to continue?": "El producto será borrado. ¿Quieres continuar?",
-  "This report sums the following accounts operations: 'Derivatives. Daily adjustment', 'Derivatives. Operation commission', 'Fast investment operations'": "Este informe suma las siguientes operaciones de cuentas: 'Derivados. Ajuste diario', 'Derivados. Comisión de operación', 'Operaciones rápidas de inversión'",
   "This strategy will be deleted. Do you want to continue?": "Esta estrategia será borrada. ¿Quieres continuar?",
   "Ticker Google": "Ticker de Google",
   "Ticker Investing.com": "Ticker de Investing.com",
@@ -747,5 +746,6 @@
   "Total ({0} registers):": "Total ({0} registros):",
   "Can't sum amounts due to they have different currencies": "No puedo sumar las cantidades debido a que tienen diferentes divisas",
   "Quote better to (increases 0.1% by default)": "Hasta la cotización del mejor (incrementa un 0.1% por defecto)",
-  "Accounts operations": "Operaciones de cuentas"
+  "Accounts operations": "Operaciones de cuentas",
+  "This report sums the following accounts operations: 'Derivatives. Daily adjustment', 'Derivatives. Operation commission', 'Derivatives. Swaps' and 'Fast investment operations'": "Este informe suma las siguientes operaciones de cuentas: 'Derivados. Ajuste diario', 'Derivados. Comisión de operación', 'Derivados. Swaps' y 'Operaciones rápidas de inversión'"
 }
