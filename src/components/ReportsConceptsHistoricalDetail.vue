@@ -3,9 +3,9 @@
     <div>    
         <h1>{{ title }}</h1>
         <v-card outlined class="ma-4 pa-4">
-            <p class="bold">{{ $t("Account operations") }}</p>
+            <p class="bold">{{ $t("Accounts operations") }}</p>
             <TableAccountOperations showaccount showtotal :items="data.ao" height="250" class="flex-grow-1 flex-shrink-0" :key="'AO'+key" @cruded="on_TableAccountsoperations_cruded"/>
-            <p class="mt-4 bold">{{ $t("Credit card operations") }}</p>
+            <p class="mt-4 bold">{{ $t("Credit cards operations") }}</p>
             <TableCreditcardsOperations showcc showtotal :items="data.cco" height="250" class=" flex-grow-1 flex-shrink-0" :key="'CC'+key" @cruded="on_TableAccountsoperations_cruded"/>
             <p class="mt-4 bold" v-html="total"></p>
         </v-card>
