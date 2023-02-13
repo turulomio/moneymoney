@@ -230,14 +230,4 @@ span.vuered{
     background-color: white !important;
 }
 
-
-/*SLIM MONTHPICKER*/
-.v-date-picker-table--month td {
-    height: unset;
-}
-
-.v-date-picker-table {
-    height: unset;
-}
-
 </style>
