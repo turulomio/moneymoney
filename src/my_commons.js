@@ -195,6 +195,7 @@ export function percentage_generic_html(num, locale, decimals=2){
 }
 
 export function listobjects_sum(lo,key){
+    if (lo.length==0) return 0
     return lo.reduce((accum,item) => accum + item[key], 0)
 }
 

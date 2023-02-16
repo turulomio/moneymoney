@@ -73,6 +73,7 @@
     import AccountsTransfer from './AccountsTransfer.vue'
     import {empty_account,empty_account_transfer} from '../empty_objects.js'
     export default {
+        name:"AccountsList",
         components:{
             MyMenuInline,
             AccountsCU,

@@ -4,7 +4,7 @@
  
         <v-layout style="justify-content: center;">
             <v-card  class="pa-6">
-                <v-select :label="$t('Select a concept')" v-model="selected_concept" :items="$store.state.concepts" item-value="url" item-text="name"></v-select>
+                <v-select :label="$t('Select a concept')" v-model="selected_concept" :items="$store.state.concepts" item-value="url" item-text="localname"></v-select>
             </v-card>
         </v-layout>
         <p></p>
@@ -63,6 +63,7 @@
     import axios from 'axios'
     import ReportsConceptsHistoricalDetail from './ReportsConceptsHistoricalDetail.vue'
     export default {
+        name:"ReportsConceptsHistorical",
         components:{
             ReportsConceptsHistoricalDetail,
         },
@@ -74,7 +75,6 @@
         },
         watch:{
             selected_concept: function(){
-                console.log(this.selected_concept)
                 this.refreshTable()
             }
         },
@@ -115,12 +115,11 @@
                 this.loading=true
                 axios.get(`${this.selected_concept}historical_report/`, this.myheaders())
                 .then( (response)=> {
-                    this.tableData=response.data.data;
+                    this.tableData=response.data.data
                     this.total=response.data.total
                     this.median=response.data.median
                     this.average=response.data.average
-                    console.log(this.tableData)
-                    this.key=this.key+1;
+                    this.key=this.key+1
                     this.loading=false
                 }) 
                 .catch((error) => {

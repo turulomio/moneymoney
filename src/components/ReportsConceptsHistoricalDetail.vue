@@ -7,7 +7,7 @@
             <TableAccountOperations showaccount showtotal :items="data.ao" height="250" class="flex-grow-1 flex-shrink-0" :key="'AO'+key" @cruded="on_TableAccountsoperations_cruded"/>
             <p class="mt-4 bold">{{ $t("Credit cards operations") }}</p>
             <TableCreditcardsOperations showcc showtotal :items="data.cco" height="250" class=" flex-grow-1 flex-shrink-0" :key="'CC'+key" @cruded="on_TableAccountsoperations_cruded"/>
-            <p class="mt-4 bold" v-html="total"></p>
+            <p class="mt-4 bold"  v-html="total"></p>
         </v-card>
     </div>
 </template>
@@ -16,6 +16,7 @@
     import TableAccountOperations from './TableAccountOperations.vue'
     import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
     export default {
+        name: "ReportsConceptsHistoricalDetail",
         components:{
             TableAccountOperations,
             TableCreditcardsOperations,
@@ -35,7 +36,7 @@
         },
         data(){ 
             return {
-                data:[],
+                data: {ao: [],cco:[]},
                 key:0,
             }
         },
@@ -50,7 +51,8 @@
 
             },
             total: function(){
-                return this.$t("Total: {0}").format(this.localcurrency_html(this.listobjects_sum(this.data.ao,"amount")+this.listobjects_sum(this.data.cco,"amount")))
+                if (this.data) return this.$t("Total: {0}").format(this.localcurrency_html(this.listobjects_sum(this.data.ao,"amount")+this.listobjects_sum(this.data.cco,"amount")))
+                return ""
             }
         },
         methods: {
@@ -71,8 +73,8 @@
                 });
             },
         },
-        mounted(){
-            this.update_table()
+        async created(){
+            await this.update_table()
         }
     }
 </script>

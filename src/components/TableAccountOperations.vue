@@ -84,6 +84,7 @@
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import ReportsConceptsHistorical from './ReportsConceptsHistorical.vue'
     export default {
+        name: "TableAccountOperations",
         components:{
             AccountsoperationsCU,
             AccountsTransfer,
@@ -286,9 +287,8 @@
             this.$emit("cruded")
         },
         viewHistoricalConcept(item){
-            // this.concept=this.$store.getters.getObjectPropertyByUrl('concepts', item.concepts, 'localname')
-            console.log(item)
             this.concept=item.concepts
+            this.key=this.key+1
             this.dialog_historical_concepts=true
 
         }

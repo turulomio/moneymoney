@@ -76,6 +76,7 @@
     import TableAccountOperations from './TableAccountOperations.vue'
     import {empty_account_operation,empty_credit_card,empty_account_transfer} from '../empty_objects.js'
     export default {
+        name:"AccountsView",
         components:{
             AccountsoperationsCU,
             AccountsTransfer,
