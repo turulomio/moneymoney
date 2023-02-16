@@ -164,7 +164,6 @@
 
                     //Price ratio chart
                     this.data_price_ratio_chart=[]
-                    console.log(this.dbdata)
                     this.dbdata.forEach(o => this.data_price_ratio_chart.push([o.datetime,o.price_ratio]))
 
                     //Price scatter
