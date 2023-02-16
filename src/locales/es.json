@@ -747,5 +747,6 @@
   "Can't sum amounts due to they have different currencies": "No puedo sumar las cantidades debido a que tienen diferentes divisas",
   "Quote better to (increases 0.1% by default)": "Hasta la cotización del mejor (incrementa un 0.1% por defecto)",
   "Accounts operations": "Operaciones de cuentas",
-  "This report sums the following accounts operations: 'Derivatives. Daily adjustment', 'Derivatives. Operation commission', 'Derivatives. Swaps' and 'Fast investment operations'": "Este informe suma las siguientes operaciones de cuentas: 'Derivados. Ajuste diario', 'Derivados. Comisión de operación', 'Derivados. Swaps' y 'Operaciones rápidas de inversión'"
+  "This report sums the following accounts operations: 'Derivatives. Daily adjustment', 'Derivatives. Operation commission', 'Derivatives. Swaps' and 'Fast investment operations'": "Este informe suma las siguientes operaciones de cuentas: 'Derivados. Ajuste diario', 'Derivados. Comisión de operación', 'Derivados. Swaps' y 'Operaciones rápidas de inversión'",
+  "Total derivatives: {0}": "Total derivados: {0}"
 }
