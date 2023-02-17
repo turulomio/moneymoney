@@ -20,8 +20,8 @@
         <v-card class="pa-6">
             <v-card-title>{{ $t("Select two products") }}</v-card-title>
             <v-card-subtitle>{{ $t("Put in first place the one with better behaviour") }}</v-card-subtitle>
-            <v-autocomplete :items="$store.state.products" v-model="product_a" :label="$t('Select a product')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-            <v-autocomplete :items="$store.state.products" v-model="product_b" :label="$t('Select a product')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+            <AutocompleteProducts v-model="product_a" :label="$t('Select the best product')" :rules="RulesSelection(true)"  />
+            <AutocompleteProducts v-model="product_b" :label="$t('Select the worst product')" :rules="RulesSelection(true)"  />
             <v-card-actions>
                 <v-btn color="primary" @click="change" :disabled="(product_a==null || product_b==null)">{{ $t('Switch') }}</v-btn>
                 <v-btn color="primary" @click="pairReport" :disabled="(product_a==null || product_b==null)">{{ $t('Pair report') }}</v-btn>
@@ -47,11 +47,13 @@
     import MyMenuInline from './MyMenuInline.vue'
     import ProductsComparation from './ProductsComparation.vue'
     import ProductsComparationCU from './ProductsComparationCU.vue'
+    import AutocompleteProducts from './AutocompleteProducts.vue'
     export default {
         components:{
             MyMenuInline,
             ProductsComparation,
             ProductsComparationCU,
+            AutocompleteProducts,
         },
         data(){ 
             return {

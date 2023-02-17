@@ -5,8 +5,8 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <v-text-field v-model="newpc.name" :label="$t('Set name')" :placeholder="$t('Set name')" :rules="RulesString(200,true)" counter="200"/>
-                <v-autocomplete :items="$store.state.products" v-model="newpc.a" :label="$t('Select product A (stronger)')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-autocomplete :items="$store.state.products" v-model="newpc.b" :label="$t('Select product B')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <AutocompleteProducts v-model="newpc.a" :rules="RulesSelection(true)" :label="$t('Select product A (stronger)')" />
+                <AutocompleteProducts v-model="newpc.b" :rules="RulesSelection(true)" :label="$t('Select product B')" />
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -17,7 +17,12 @@
 </template>
 <script>
     import axios from 'axios'
+    import AutocompleteProducts from './AutocompleteProducts.vue'
     export default {
+        components: {
+
+            AutocompleteProducts,
+        },
         props: {
             // An account object
             pc: {

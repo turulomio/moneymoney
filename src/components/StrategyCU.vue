@@ -10,7 +10,7 @@
                 <v-select :readonly="deleting" dense :items="$store.state.strategiestypes" v-model="newstrategy.type" :label="$t('Select strategy type')" item-text="name" item-value="id" :rules="RulesSelection(true)" @change="on_strategy_type_change()"></v-select>
                 <v-textarea :readonly="deleting" dense v-model="newstrategy.comment" :label="$t('Set strategy comment')" :placeholder="$t('Set strategy comment')" :rules="RulesString(200,false)" counter="200"></v-textarea>
                 <v-text-field :readonly="deleting" dense v-model.number="newstrategy.additional1" v-if="additional_visibility[0]" :label="additional_labels[0]" :placeholder="additional_labels[0]" :rules="RulesInteger(10,false)" counter="10"/>
-                <v-autocomplete class="mr-5" :items="$store.state.products" v-model="product"  item-text="name" item-value="id" :rules="RulesSelection(true)" v-if="product_visibility" :label="this.$t('Select a product')"></v-autocomplete>  
+                <AutocompleteProducts v-model="product" :rules="RulesSelection(true)" v-if="product_visibility" />  
                 <v-text-field :readonly="deleting" dense v-model.number="newstrategy.additional2" v-if="additional_visibility[1]" :label="additional_labels[1]" :placeholder="additional_labels[1]" :rules="RulesInteger(10,false)" counter="10"/>
                 <v-text-field :readonly="deleting" dense v-model.number="newstrategy.additional3" v-if="additional_visibility[2]" :label="additional_labels[2]" :placeholder="additional_labels[2]" :rules="RulesInteger(10,false)" counter="10"/>
                 <v-text-field :readonly="deleting" dense v-model.number="newstrategy.additional4" v-if="additional_visibility[3]" :label="additional_labels[3]" :placeholder="additional_labels[3]" :rules="RulesInteger(10,false)" counter="10"/>
@@ -36,9 +36,11 @@
 <script>
     import axios from 'axios'
     import MyDateTimePicker from './MyDateTimePicker.vue'
+    import AutocompleteProducts from './AutocompleteProducts.vue'
     export default {
         components: {
             MyDateTimePicker,
+            AutocompleteProducts,
         },
         props: {
             // An account object

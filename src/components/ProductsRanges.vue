@@ -5,7 +5,7 @@
             
             <v-form ref="form" v-model="form_valid" lazy-validation>             
                 <v-row class="pl-5 pr-5">
-                <v-autocomplete class="mr-5" :items="$store.state.products" v-model="newpr.product" :label="$t('Select a product')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <AutocompleteProducts v-model="newpr.product" :rules="RulesSelection(true)"  />
                 <v-text-field class="mr-5" v-model="newpr.percentage_between_ranges"  :label="$t('Set percentage between ranges x1000')" :placeholder="$t('Set percentage between ranges x1000')" :rules="RulesInteger(10,true)" counter="10"/>
                 <v-text-field class="mr-5" v-model="newpr.percentage_gains"  :label="$t('Set percentage gains x1000')" :placeholder="$t('Set percentage gains x1000')" :rules="RulesInteger(10,true)" counter="10"/>
                 <v-text-field  v-model="newpr.amount_to_invest"  :label="$t('Set the amount to invest')" :placeholder="$t('Set the amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
@@ -80,7 +80,7 @@
 <script>    
     import {empty_products_ranges, empty_order} from '../empty_objects.js'
     import axios from 'axios'
-    
+    import AutocompleteProducts from './AutocompleteProducts.vue'
     import ChartProductsRanges from './ChartProductsRanges.vue'
     import InvestmentsView from './InvestmentsView.vue'
     import OrdersList from './OrdersList.vue'
@@ -91,6 +91,7 @@
             OrdersCU,
             OrdersList,
             InvestmentsView,
+            AutocompleteProducts,
         },
         props:{
             pr:{

@@ -4,8 +4,8 @@
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
         </h1>           
         <v-card class="pa-8 mt-2">
-            <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-autocomplete dense :items="$store.state.products" v-model="newquote.products" :label="$t('Select a product')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+            <v-form ref="form" v-model="form_valid" lazy-validation>                    <AutocompleteProducts v-model="product" :rules="RulesSelection(true)"  />
+                <AutocompleteProducts v-model="newquote.products" :rules="RulesSelection(true)"  />
                 <MyDateTimePicker v-model="newquote.datetime" :label="$t('Set quote date and time')"></MyDateTimePicker>
                 <v-text-field dense v-model.number="newquote.quote"  :label="$t('Set quote')" :placeholder="$t('Set quote')" :rules="RulesFloatGEZ(12,true,product_object.decimals)" counter="12" autofocus/>
             </v-form>
@@ -19,6 +19,7 @@
 <script>
     import axios from 'axios'
     import {empty_quote} from '../empty_objects.js'
+    import AutocompleteProducts from './AutocompleteProducts.vue'
     import moment from 'moment-timezone';
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import MyMenuInline from './MyMenuInline.vue'
@@ -26,6 +27,7 @@
         components: {
             MyDateTimePicker,
             MyMenuInline,
+            AutocompleteProducts,
         },
         props: {
             // An account object

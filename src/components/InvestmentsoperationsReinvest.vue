@@ -5,8 +5,8 @@
         </h1>
         <v-card class="pa-4 mb-3 mt-3"  >
             <v-form ref="form" v-model="form_valid" lazy-validation class="pa-4">
-                <v-row>
-                    <v-autocomplete class="mr-5" :items="$store.state.products" v-model="product" :label="$t('Select a product')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-row>                
+                    <AutocompleteProducts class="mr-5" v-model="product" :rules="RulesSelection(true)"  />
                     <v-autocomplete :items="$store.getters.getInvestmentsByProduct(product)" v-model="newinvestments" :label="$t('Select investments to include')" item-text="fullname" item-value="url" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
 
                     <v-text-field class="mr-5" v-model="newprice"  :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesFloatGEZ(10,true, product_decimals)" counter="10"/>
@@ -78,6 +78,7 @@
     import {empty_order, empty_investments_operations_simulation,empty_investment_operation,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
     import ChartInvestments from './ChartInvestments.vue'
     import OrdersCU from './OrdersCU.vue'
+    import AutocompleteProducts from './AutocompleteProducts.vue'
     import TableInvestmentOperations from './TableInvestmentOperations.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
@@ -90,6 +91,7 @@
             TableInvestmentOperations,
             TableInvestmentOperationsHistorical,
             TableInvestmentOperationsCurrent,
+            AutocompleteProducts,
         },
         props: {
             investments: {
