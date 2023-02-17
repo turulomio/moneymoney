@@ -14,6 +14,7 @@
 </template>
 <script>
     export default {
+        name: "ChartScatterPairPrices",
         props:{
             data:{// empty_chart_scatter_pair_prices
                 required:true,
