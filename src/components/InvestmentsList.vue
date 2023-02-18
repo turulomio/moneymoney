@@ -53,9 +53,9 @@
                     </v-tooltip>   
                 </template>              
                 <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon small class="ml-1" @click="addQuote(item)">mdi-plus</v-icon>
-                    <v-icon small class="ml-1" @click="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon small class="ml-1" @click="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
+                    <v-icon small class="ml-1" @click.stop="addQuote(item)">mdi-plus</v-icon>
+                    <v-icon small class="ml-1" @click.stop="editItem(item)">mdi-pencil</v-icon>
+                    <v-icon small class="ml-1" @click.stop="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
                     <v-icon small class="ml-1" v-if="(new Date().setHours(0,0,0,0)>new Date(item.selling_expiration).setHours(0,0,0,0)) && item.selling_expiration!=null" @click="changeSellingPrice(item)" color="#9933ff" style="font-weight:bold">mdi-alarm</v-icon>     
                 </template>                
                 <template v-slot:[`body.append`]="{headers}">

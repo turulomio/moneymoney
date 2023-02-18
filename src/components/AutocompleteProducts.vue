@@ -1,15 +1,14 @@
 <template>
-    <v-autocomplete :items="$store.state.products" v-model="new_value" :label="mylabel" item-value="url" :rules="$attrs.rules" @change="on_change">
+    <v-autocomplete :items="$store.state.products" v-model="new_value" :label="mylabel" :return-object="returnObject" item-value="url" :rules="$attrs.rules" @change="on_change">
+
         <template slot="item" slot-scope="{ item }">
-            <v-list-tile-content>
-                <v-icon :class="'mr-2 fi fib fi-'+item.flag" small :title="$store.getters.getCountryNameByCode(item.flag)"></v-icon>{{item.fullname}}
-            </v-list-tile-content>
+            <div><v-icon :class="'mr-3 fi fib fi-'+item.flag" small :title="$store.getters.getCountryNameByCode(item.flag)"></v-icon>
+                {{item.fullname}}</div>
         </template>
 
-        <template v-slot:selection="{ item }">
-            <v-list-tile-content>
-                <v-icon :class="'mr-2 fi fib fi-'+item.flag" small :title="$store.getters.getCountryNameByCode(item.flag)"></v-icon>{{item.fullname}}
-            </v-list-tile-content>
+        <template slot="selection" slot-scope="{ item }">       
+            <div><v-icon :class="'mr-3 fi fib fi-'+item.flag" small :title="$store.getters.getCountryNameByCode(item.flag)"></v-icon>
+                {{item.fullname}}</div>
       </template>
 
     </v-autocomplete>
@@ -41,17 +40,11 @@ export default {
     },
     methods:{
         on_change(item){
-            if (this.returnObject){
-                this.new_value=item
-            } else {
-                this.new_value=item.url
-            }
-            this.new_value=item.url
+            this.new_value=item
             this.$emit("input", this.new_value)
         },
     },
     created(){
-        console.log(this.$attrs)
         this.new_value=this.value
     }
 }
