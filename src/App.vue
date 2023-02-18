@@ -150,7 +150,8 @@
             <v-btn color="primary" :to="{ name: 'assetsreport'}" v-if="$store.state.logged"><v-icon dark>mdi-book</v-icon></v-btn>
             <v-spacer />
             <h1 class="font-weight-black text-no-wrap text-truncate" >{{ $t("Money Money. Another way to manage your finances") }}</h1>
-            <v-spacer />
+            <v-spacer />            
+            <v-btn color="primary" :to="{ name: 'currencies'}" v-if="$store.state.logged"><v-icon dark>mdi-currency-eur</v-icon></v-btn>
             <SwitchLanguages />
             <btnLogIn v-show="!this.$store.state.logged"/>
             <btnLogOut v-show="this.$store.state.logged"/>

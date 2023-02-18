@@ -25,6 +25,7 @@ import AccountsList from './components/AccountsList'
 import AssetsReport from './components/AssetsReport'
 import BanksList from './components/BanksList'
 import ConceptsCatalog from './components/ConceptsCatalog'
+import Currencies from './components/Currencies'
 import ChartEvolutionAssets from './components/ChartEvolutionAssets'
 import InvestmentsList from './components/InvestmentsList'
 import MaintenanceQuotes from './components/MaintenanceQuotes'
@@ -60,6 +61,7 @@ const router = new VueRouter({
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/assets/report/`, name: 'assetsreport', component: AssetsReport },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/banks/list/`, name: 'banks_list', component: BanksList },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/concepts/catalog/`, name: 'concepts_catalog', component: ConceptsCatalog },
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/currencies/`, name: 'currencies', component: Currencies },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/investments/list/`, name: 'investments_list', component: InvestmentsList },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/orders/list/`, name: 'orders_list', component: OrdersList },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/maintenance/quotes/`, name: 'maintenance_quotes', component: MaintenanceQuotes },
