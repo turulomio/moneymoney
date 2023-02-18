@@ -10,17 +10,6 @@
                     <v-icon v-if="item.supported" small class="mr-2" @click="addItem(item)">mdi-plus</v-icon>
                     <v-icon v-if="item.factor" small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon v-if="item.factor" small @click="deleteItem(item)">mdi-delete</v-icon>
-                </template>                  
-                <template v-slot:[`body.append`]="{headers}">
-                    <tr class="totalrow">
-                        <td v-for="(header,i) in headers" :key="i">
-                            <div v-if="header.value == 'localname'">
-                                Total
-                            </div>
-                            <div v-if="header.value == 'balance_user'" class="d-flex justify-end" v-html="localcurrency_html(listobjects_sum(accounts_items,'balance_user'))">
-                            </div>
-                        </td>
-                    </tr>
                 </template>
             </v-data-table>
         </v-card>
