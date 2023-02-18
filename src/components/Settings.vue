@@ -92,12 +92,10 @@
 
                 if (this.$refs.form.validate()==false) return
                 axios.put(`${this.$store.state.apiroot}/profile/`, this.new_profile, this.myheaders())
-                .then((response) => {
-                    console.log(response.data)
+                .then(() => {
                     alert(this.$t("Settings saved"))
                     this.new_profile.newp=""
                     this.$store.dispatch("getProfile").then(() =>{
-                        console.log(this.$store.state.profile)
                         this.$router.push("home")
                     })
                 }, (error) => {
@@ -119,7 +117,6 @@
         created(){
             this.make_all_axios()
             this.new_profile=Object.assign({},this.$store.state.profile)
-            console.log(this.new_profile)
             this.new_profile.newp=""
 
         }

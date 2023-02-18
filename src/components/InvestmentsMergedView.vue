@@ -258,7 +258,6 @@
                 axios.all([this.update_investmentsoperations(), this.update_dividends()])
                 .then(([resIO, resDividends]) => {
                     this.ios=resIO.data
-                    console.log(this.ios)   
                     this.list_io=resIO.data.io
                     this.list_io_current=resIO.data.io_current
                     this.list_io_historical=resIO.data.io_historical
@@ -275,11 +274,9 @@
             }
         },
         created(){
-            console.log(this.investments)
             if (this.investments.length>0){
                 var investment_0=this.$store.getters.getObjectByUrl("investments", this.investments[0])
                 this.product=this.$store.getters.getObjectByUrl("products", investment_0.products, "name")
-                console.log(this.product)
                 this.merged_name=this.$t("Merged investments of {0}").format(this.product.fullname)
             }
             this.update_all()

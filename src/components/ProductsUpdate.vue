@@ -49,7 +49,6 @@
                 data.append('csv_file1', this.filename)
                 axios.post(`${this.$store.state.apiroot}/products/update/`, data, this.myheaders_formdata())
                 .then((response) => {
-                        console.log(response.data)
                         this.items=response.data
                         this.filename=[]
                         this.loading=false

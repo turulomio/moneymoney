@@ -153,7 +153,6 @@
                 this.loading=true
                 axios.get(`${this.$store.state.apiroot}/reports/evolutionassets/chart/?from=${this.from}`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     this.balance=[]
                     this.accounts=[]
                     this.investments=[]

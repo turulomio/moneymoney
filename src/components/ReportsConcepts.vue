@@ -114,7 +114,6 @@
                 this.loading=true
                 axios.get(`${this.$store.state.apiroot}/reports/concepts/?year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     this.itemsPositive=response.data.positive
                     this.itemsNegative=response.data.negative
                     this.loading=false

@@ -27,7 +27,6 @@
                 this.loading=true
                 axios.get(`${this.$store.state.apiroot}/reports/investmentsoperations/current/` , this.myheaders())
                 .then( (response)=> {
-                    console.log(response.data)
                     this.list_io_current=response.data;
                     this.key=this.key+1;
                     this.loading=false

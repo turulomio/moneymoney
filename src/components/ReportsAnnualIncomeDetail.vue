@@ -86,7 +86,6 @@
                 this.loading=true
                 axios.get(`${this.$store.state.apiroot}/reports/annual/income/details/${this.year}/${this.month}/`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     this.expenses=response.data.expenses
                     this.gains=response.data.gains
                     this.incomes=response.data.incomes
@@ -94,7 +93,6 @@
                     this.fast_operations=response.data.fast_operations
                     this.key=this.key+1
                     this.loading=false
-                    console.log(this.dividends)
                 }, (error) => {
                     this.parseResponseError(error)
                 });

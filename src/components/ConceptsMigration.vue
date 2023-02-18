@@ -33,8 +33,6 @@
         },
         methods: {
             migrate(){
-                console.log(this.from_url)
-                console.log(this.to)
                 if( this.$refs.form.validate()==false) return
                 var concept_from=this.$store.getters.getObjectByUrl("concepts",this.from_url)
                 var concept_to=this.$store.getters.getObjectByUrl("concepts",this.to)
@@ -58,7 +56,6 @@
             },
         },
         created(){
-            console.log(this.from.name)
             this.from_url=this.from.url
         }
     }

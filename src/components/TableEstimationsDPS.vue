@@ -97,7 +97,6 @@
             }
         },
         created(){
-            console.log(this.product)
             this.refresh()
         }
     }

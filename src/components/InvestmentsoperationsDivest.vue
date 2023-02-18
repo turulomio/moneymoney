@@ -173,7 +173,6 @@
                             {
                                 name:this.$t('Add all active investments of the same product'),
                                 code: function(this_){
-                                    console.log(this_.product)
                                     this_.$store.state.investments.forEach(o=>{
                                         if (this_.product==o.products && o.active && !this_.newinvestments.includes(o.url)){
                                             this_.newinvestments.push(o.url)
@@ -276,8 +275,6 @@
                 .then(([resQuotes, resBefore]) => {
                     this.ohcls=resQuotes.data 
                     this.ios_before=resBefore.data
-                    console.log("BEFORE")
-                    console.log(this.ios_before)
                     this.loading=false
                     this.refreshTables()
                 });
@@ -305,8 +302,6 @@
                 axios.all([this.simulateOrderAfter()])
                 .then(([resAfter]) => {
                     this.ios_after=resAfter.data
-                    console.log("AFTER")
-                    console.log(this.ios_after)
                     this.loading=false
                     this.refreshTables()
                 });

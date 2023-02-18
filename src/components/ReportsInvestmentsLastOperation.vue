@@ -127,7 +127,6 @@
                 this.loading=true
                 axios.get(`${this.$store.state.apiroot}/reports/investments/lastoperation/?method=${this.method}` , this.myheaders())
                 .then( (response)=> {
-                    console.log(response.data)
                     this.tableData=response.data;
                     this.refreshKey=this.refreshKey+1;
                     this.loading=false

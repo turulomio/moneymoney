@@ -137,7 +137,6 @@
                             {
                                 name:this.$t('Add all active investments of the same product'),
                                 code: function(this_){
-                                    console.log(this_.product)
                                     this_.$store.state.investments.forEach(o=>{
                                         if (this_.product==o.products && o.active && !this_.newinvestments.includes(o.url)){
                                             this_.newinvestments.push(o.url)
@@ -219,7 +218,6 @@
                 var simulation=this.empty_investments_operations_simulation()
                 simulation.investments=this.newinvestments
                 simulation.local_currency=this.$store.state.profile.currency
-                console.log(simulation)
                 return axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
             },
             simulateOrderAfter(){
@@ -233,7 +231,6 @@
                 operation.comment="Simulation 1"
                 operation.investments=this.investments[0]
                 simulation.operations.push(operation)
-                console.log(simulation)
                 return axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
                 
             },
@@ -243,8 +240,6 @@
                 .then(([resQuotes, resBefore]) => {
                     this.ohcls=resQuotes.data 
                     this.ios_before=resBefore.data
-                    console.log("BEFORE")
-                    console.log(this.ios_before)
                     this.loading=false
                     this.refreshTables()
                 });
@@ -260,10 +255,6 @@
                 .then(([resBefore,resAfter]) => {
                     this.ios_after=resAfter.data
                     this.ios_before=resBefore.data
-                    console.log("BEFORE")
-                    console.log(this.ios_before)
-                    console.log("AFTER")
-                    console.log(this.ios_after)
                     this.loading=false
                     this.refreshTables()
                 });

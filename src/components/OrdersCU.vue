@@ -8,7 +8,7 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" :readonly="mode=='D'" lazy-validation v-if="snackbar_message==''">
                 <MyDatePicker v-model="neworder.date"  :readonly="mode=='D'" :label="$t('Set order date')" :rules="RulesDate(true)"></MyDatePicker>
-                <MyDatePicker v-model="neworder.expiration" :readonly="mode=='D'" :label="$t('Set order expiration date')" :rules="RulesDate(true)" ></MyDatePicker>
+                <MyDatePicker v-model="neworder.expiration" :readonly="mode=='D'" :label="$t('Set order expiration date')" :rules="RulesDate(false)" />
                 <v-autocomplete :items="$store.state.investments" :readonly="mode=='D'" v-model="neworder.investments" :label="$t('Select an investment')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker v-model="neworder.executed" :readonly="mode=='D'" v-if="mode=='U'" :label="$t('Set order execution date and time')"></MyDateTimePicker>
                 <v-text-field v-model.number="neworder.shares" :readonly="mode=='D'" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesFloatGEZ(12,true,6)" counter="12"/>
@@ -153,8 +153,7 @@
                         return
                     } 
                     axios.delete(this.neworder.url, this.myheaders())
-                    .then((response) => {
-                        console.log(response);
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)

@@ -54,7 +54,6 @@
                 data.append('type',1)
                 axios.post(`${this.$store.state.apiroot}/quotes/massive_update/`, data, this.myheaders_formdata())
                 .then((response) => {
-                        console.log(response.data)
                         this.items=response.data.data
                         //this.filename=[]
                         this.loading=false

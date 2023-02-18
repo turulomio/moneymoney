@@ -207,7 +207,6 @@
                 this.loading_invested=true
                 axios.get(`${this.$store.state.apiroot}/reports/evolutionassets/${this.year}/`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     this.assetsData=response.data
                     this.loading_assets=false
                     this.key=this.key+1
@@ -216,7 +215,6 @@
                 });
                 axios.get(`${this.$store.state.apiroot}/reports/evolutioninvested/${this.year}/`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     this.investedData=response.data
                     this.loading_invested=false
                     this.key=this.key+1

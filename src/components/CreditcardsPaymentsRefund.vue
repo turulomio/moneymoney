@@ -49,8 +49,7 @@
         methods: {
             refundPayment() {
                 axios.post(`${this.$store.state.apiroot}/api/accountsoperations/${this.payment}/ccpaymentrefund/`, {}, this.myheaders())
-                .then((response) => {
-                    console.log(response.data)
+                .then(() => {
                     this.items_cco=[]
                     this.updatePayments()
                     this.$emit("cruded")
@@ -65,13 +64,11 @@
                 .then((response) => {
                     this.payments=[]
                     response.data.forEach(o=> {
-                        console.log(o)
                         this.payments.push({
                             id: o.accountsoperations_id,
                             name:this.$t("{0} were paid {1} ({2} operations)").format(this.localtime(o.datetime), this.currency_string(o.amount, this.account.currency), o.count),
                         })
                     });
-                    console.log(this.payments)
                     this.loading=false
                 }, (error) => {
                     this.parseResponseError(error)
@@ -80,9 +77,7 @@
             },
         },
         created(){
-            console.log(this.cc)
             this.account=this.$store.getters.getObjectByUrl("accounts",this.cc.accounts)
-            console.log(this.account)
             this.updatePayments()
         }
     }

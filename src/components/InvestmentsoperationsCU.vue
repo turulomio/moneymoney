@@ -93,19 +93,16 @@
                 }
             },
             accept(){
-                console.log("Accepting")
                 if (this.editing==true){
                     axios.put(this.newio.url, this.newio,  this.myheaders())
-                    .then((response) => {
-                            console.log(response.data)
+                    .then(() => {
                             this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
                 } else{
                     axios.post(`${this.$store.state.apiroot}/api/investmentsoperations/`, this.newio,  this.myheaders())
-                    .then((response) => {
-                            console.log(response)
+                    .then(() => {
                             this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)

@@ -52,8 +52,6 @@
                 }
             },
             accept(){
-                console.log("Accepting")
-                console.log(this.newpc.price)
                 if (this.editing==true){
                     axios.put(this.newpc.url, this.newpc,  this.myheaders())
                     .then(() => {
@@ -77,7 +75,6 @@
                 this.editing=true
             }
             this.newpc=Object.assign({},this.pc)
-            console.log(this.newpc)
         }
     }
 </script>

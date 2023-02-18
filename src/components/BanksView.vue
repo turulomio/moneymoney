@@ -96,7 +96,6 @@
                 .then((response) => {
                     this.loading_accounts=false
                     this.accounts_items=response.data
-                    console.log(response);
                     this.key=this.key+1
                 }, (error) => {
                     this.parseResponseError(error)
@@ -109,7 +108,6 @@
                     this.key=this.key+1
                     this.loading_investments=false
                     this.investments_items=response.data
-                    console.log(response);
                     this.key=this.key+1
                 }, (error) => {
                     this.parseResponseError(error)

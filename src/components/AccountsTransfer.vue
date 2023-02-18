@@ -59,7 +59,6 @@
             },
             acceptTransfer(){             
                 if( this.$refs.form.validate()==false) return   
-                console.log(this.newat)
                 if (this.deleting==false){ // Due it has not all values
                     if (this.newat.account_origin==this.newat.account_destiny){
                         alert(this.$t("Transfer accounts can't be the same"))
@@ -69,8 +68,7 @@
 
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/accounts/transfer/`, this.newat,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -78,8 +76,7 @@
                 }
                 if (this.mode=="U"){
                     axios.put(`${this.$store.state.apiroot}/accounts/transfer/`, this.newat,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -90,8 +87,7 @@
                     if(r == true) {
                         var headers={...this.myheaders(),data:this.newat}
                         axios.delete(`${this.$store.state.apiroot}/accounts/transfer/`, headers)
-                        .then((response) => {
-                            console.log(response.data)
+                        .then(() => {
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)
@@ -112,7 +108,6 @@
                         this.newat.account_destiny=resAoDestiny.data.accounts
                         this.newat.amount=resAoDestiny.data.amount
                         this.newat.commission=Math.abs(resAoCommission.data.amount)
-                        console.log(this.newat)
                         this.loading=false
                         this.key=this.key+1
                     });
@@ -124,7 +119,6 @@
                         this.newat.account_origin=resAoOrigin.data.accounts
                         this.newat.account_destiny=resAoDestiny.data.accounts
                         this.newat.amount=resAoDestiny.data.amount  
-                        console.log(this.newat)
                         this.loading=false
                         this.key=this.key+1
                     });

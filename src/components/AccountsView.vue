@@ -142,7 +142,6 @@
                                     this_.editing_cc=false
                                     this_.cc=this_.empty_credit_card()
                                     this_.cc.accounts=this_.account.url
-                                    console.log(this_.cc)
                                     this_.key=this_.key+1
                                     this_.dialog_cc=true
                                 },
@@ -235,8 +234,7 @@
                     return
                 }  
                 axios.delete(item.url, this.myheaders())
-                .then((response) => {
-                    console.log(response);
+                .then(() => {
                     this.refreshTableCC()
                 }, (error) => {
                     this.parseResponseError(error)

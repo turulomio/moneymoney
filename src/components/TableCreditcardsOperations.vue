@@ -144,7 +144,6 @@
             },
             gotoLastRow(){          
             //this.$vuetify.goTo(100000, { container:  this.$refs[this.$vnode.tag].$el.children[0].children[0].children[2].children ,duration: 500}) 
-            // console.log(this.$refs.table_ao.$el.childNodes[0])
             //     this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs.table_ao.$el.childNodes[0]}) 
 
             },

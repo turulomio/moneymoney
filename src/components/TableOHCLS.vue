@@ -63,7 +63,6 @@
                if(r == false) {
                   return
                } 
-               console.log(item)
                 var headers={...this.myheaders(),data:{product:this.product.url,date:item.date}}
                 axios.delete(`${this.$store.state.apiroot}/products/quotes/ohcl/`, headers)
                 .then(() => {
@@ -90,10 +89,5 @@
                 this.$emit("cruded")
             }
         },
-        mounted(){
-            // this.gotoLastRow()
-            // this.key=this.key+1
-            // console.log("DIVIDENDS TABLE")
-        }
     }
 </script>

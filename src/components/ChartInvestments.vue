@@ -192,7 +192,6 @@
                 this.limitlines.push(avg)
                 this.limitlines.push(sell)
             })
-             console.log(this.limitlines)
              this.data.io_object.io.forEach(o=> {
                 if (o.shares>=0){
                     this.buys.push([o.datetime,o.price])

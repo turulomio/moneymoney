@@ -101,7 +101,6 @@
                 } else if (this.newstrategy.type==1){//Product pairs
                 }
 
-                console.log(this.newstrategy)
                 if (this.editing==true){
                     axios.put(this.newstrategy.url, this.newstrategy,  this.myheaders())
                     .then(() => {

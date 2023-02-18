@@ -95,7 +95,6 @@
             },
             accept(){
                 if (this.$refs.form.validate()==false) return
-                console.log(this.newproduct)
                 this.newproduct.system=this.system
                 if (this.mode=="U"){
                     axios.put(this.newproduct.url, this.newproduct,  this.myheaders())

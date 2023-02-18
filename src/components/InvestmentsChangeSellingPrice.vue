@@ -278,8 +278,6 @@
                 axios.get(`${this.$store.state.apiroot}/investmentsoperationstotalmanager/investments/sameproduct/?product=${this.product.url}`, this.myheaders())
                 .then((response) => {
                     this.dividends=response.data
-                    console.log("AHORA")
-                    console.log(response.data)
                     this.data=[]
                     var o;
                     response.data.forEach( iot => {

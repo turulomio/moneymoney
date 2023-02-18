@@ -162,8 +162,7 @@
                     return
                 } 
                 axios.delete(`${this.$store.state.apiroot}/api/investmentsoperations/${item.id}/`, this.myheaders())
-                .then((response) => {
-                    console.log(response);
+                .then(() => {
                     this.$emit("cruded")
                 }, (error) => {
                     this.parseResponseError(error)

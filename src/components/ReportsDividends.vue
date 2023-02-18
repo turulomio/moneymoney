@@ -89,11 +89,9 @@
             },
             empty_estimation_dps,
             submit(){
-                console.log(this.estimation)
                 if (this.$refs.form.validate()==false) return
                 axios.post(`${this.$store.state.apiroot}/estimations/dps/add/`, this.estimation, this.myheaders())
-                .then((response) => {
-                    console.log(response.data)
+                .then(() => {
                     this.dialog=false
                     this.refreshTable()
                 }, (error) => {
@@ -108,7 +106,6 @@
                 this.loading_dividends=true
                 axios.get(`${this.$store.state.apiroot}/reports/dividends/`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     this.items=response.data
                     this.loading_dividends=false
                 }, (error) => {

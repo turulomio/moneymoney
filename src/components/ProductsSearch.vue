@@ -242,7 +242,6 @@
                 return r
             },
             editPersonalProduct(item){
-                console.log(item)
                 this.product=item
                 this.product_cu_mode="U"
                 this.product_cu_system=false

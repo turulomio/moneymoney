@@ -124,8 +124,6 @@
             }
         },
         mounted(){
-            console.log("AHORA")
-            console.log(this.items)
              this.gotoLastRow()
         }
     }

@@ -194,8 +194,7 @@
                   return
                } 
                 axios.delete(item.url, this.myheaders())
-                .then((response) => {
-                    console.log(response);
+                .then(() => {
                     this.update_table()
                 }, (error) => {
                     this.parseResponseError(error)

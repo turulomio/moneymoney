@@ -168,17 +168,14 @@
                 this.dialog_ordercu=false
                 this.refreshTable()
             },
-            on_orders_inside_click(o){
-                console.log(o)
+            on_orders_inside_click(){
                 this.dialog_orders_list=true
             },
             on_dialog_orders_list_click_outside(){
-                console.log("FUERA")
                 this.dialog_orders_list=false
                 this.refreshTable()
             },
             on_investments_inside_click(inv){
-                console.log(inv)
                 this.investment=inv
                 this.dialog_investment_view=true
             },

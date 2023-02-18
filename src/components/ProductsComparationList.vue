@@ -122,8 +122,7 @@
                 this.pc.b=this.product_b
                 this.key=this.key+1
             },
-            pairReportItem(item){            
-                console.log(item)   
+            pairReportItem(item){       
                 this.product_a=item.a
                 this.product_b=item.b
             },

@@ -183,7 +183,6 @@
                     this.milliseconds=arr[2]
                 }
                 this.setRepresentation()
-            //    console.log(this.date,this.time,this.milliseconds, this.representation, this.value)
             }
         },
         methods: {
@@ -213,7 +212,6 @@
                 this.menu=false
             },
             on_time_click(){
-                console.log(this.time)
                 if (this.$refs.time.selecting == 3) {
                     this.on_close()
                 }
