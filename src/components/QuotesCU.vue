@@ -5,9 +5,9 @@
         </h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <AutocompleteProducts v-model="new_quote.products" :rules="RulesSelection(true)"  />
-                <MyDateTimePicker v-model="new_quote.datetime" :label="$t('Set quote date and time')"></MyDateTimePicker>
-                <v-text-field dense v-model.number="new_quote.quote"  :label="$t('Set quote')" :placeholder="$t('Set quote')" :rules="RulesFloatGEZ(12,true,product_object.decimals)" counter="12" autofocus/>
+                <AutocompleteProducts :readonly="mode=='D'" v-model="new_quote.products" :rules="RulesSelection(true)"  />
+                <MyDateTimePicker :readonly="mode=='D'" v-model="new_quote.datetime" :label="$t('Set quote date and time')"></MyDateTimePicker>
+                <v-text-field  :readonly="mode=='D'" dense v-model.number="new_quote.quote"  :label="$t('Set quote')" :placeholder="$t('Set quote')" :rules="RulesFloatGEZ(12,true,product_object.decimals)" counter="12" autofocus/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>

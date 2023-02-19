@@ -85,9 +85,9 @@
         </v-tabs>  
 
         <!-- QUOTES CU -->
-        <v-dialog v-model="dialog_quotescu" width="35%">
+        <v-dialog v-model="dialog_quotescu" width="65%">
             <v-card class="pa-4">
-                <QuotesCU :quote="quote"></QuotesCU>
+                <QuotesCU :quote="quote" :mode="quote_mode" :key="key" />
             </v-card>
         </v-dialog>
 
@@ -172,6 +172,7 @@
                                 name:this.$t('Add a quote'),
                                 code: function(this_){
                                     this_.quote=this_.empty_quote()
+                                    this_.quote_mode="C"
                                     this_.quote.products=this_.product.url
                                     this_.dialog_quotescu=true
                                 },
@@ -266,6 +267,7 @@
                 // Quotes CU
                 dialog_quotescu: false,
                 quote:null,
+                quote_mode:null,
 
                 //Estimations DPS CU
                 dialog_estimationdps: false,

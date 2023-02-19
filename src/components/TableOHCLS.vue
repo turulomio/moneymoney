@@ -19,21 +19,13 @@
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="deleteOHCL(item)">mdi-delete</v-icon>
             </template>
-        </v-data-table>   
-        <!-- QUOTES CU-->
-        <v-dialog v-model="dialog_quotes_cu" width="35%">
-            <v-card class="pa-3">
-                <QuotesCU :quote="quote" :investment="investment" :key="key"  @cruded="on_QuotesCU_cruded()"></QuotesCU>
-            </v-card>
-        </v-dialog>
+        </v-data-table>
     </div>
 </template>
 <script>    
     import axios from 'axios'
-    import QuotesCU from './QuotesCU.vue'
     export default {
         components:{
-            QuotesCU,
         },
         props: {
             items: {
@@ -45,19 +37,10 @@
         },
         data: function(){
             return {
-                dialog_quotes_cu:false,
-                quote: null,
-                investment: null,
                 key: 0,
             }
         },
         methods: {
-            editQuote(item){
-                this.quote=item
-                this.investment={url:this.dividend.investments}
-                this.dialog_dividend=true
-                this.key=this.key+1
-            },
             deleteOHCL(item){
                var r = confirm(this.$t("Do you want to delete this OHCL quotes?"))
                if(r == false) {
@@ -85,9 +68,6 @@
             gotoLastRow(){
                 this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs[this.$vnode.tag].$el.childNodes[0] }) 
             },
-            on_QuotesCU_cruded(){
-                this.$emit("cruded")
-            }
         },
     }
 </script>

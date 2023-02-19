@@ -96,7 +96,7 @@
         <!-- DIALOG  ADD QUOTE -->
         <v-dialog v-model="dialog_quotescu" width="450">
             <v-card class="pa-4">
-                <QuotesCU :quote="quote" :key="key" @cruded="on_QuotesCU_cruded"></QuotesCU>
+                <QuotesCU :quote="quote" :mode="quote_mode" :key="key" @cruded="on_QuotesCU_cruded"></QuotesCU>
             </v-card>
         </v-dialog>
 
@@ -170,6 +170,7 @@
                 // QuoteCU add
                 dialog_quotescu:false,
                 quote:null,
+                quote_mode:null,
 
                 // CHange selling price
                 dialog_change_selling_price:false,
@@ -184,6 +185,7 @@
             addQuote(item){
                 this.quote=this.empty_quote()
                 this.quote.products=item.products
+                this.quote_mode="C"
                 this.dialog_quotescu=true
                 this.key=this.key+1
 

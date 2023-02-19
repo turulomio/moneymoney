@@ -13,15 +13,14 @@
             </template>
         </v-data-table>   
         <!-- QUOTES CU-->
-        <v-dialog v-model="dialog_quotes_cu" width="35%">
+        <v-dialog v-model="dialog_quotes_cu" width="65%">
             <v-card class="pa-3">
-                <QuotesCU :quote="quote" :key="key"  @cruded="on_QuotesCU_cruded()"></QuotesCU>
+                <QuotesCU :quote="quote" :mode="quote_mode" :key="key"  @cruded="on_QuotesCU_cruded()"></QuotesCU>
             </v-card>
         </v-dialog>
     </div>
 </template>
-<script>    
-    import axios from 'axios'
+<script>
     import QuotesCU from './QuotesCU.vue'
     export default {
         components:{
@@ -53,22 +52,15 @@
         methods: {
             editQuote(item){
                 this.quote=item
+                this.quote_mode="U"
                 this.key=this.key+1
                 this.dialog_quotes_cu=true
             },
             deleteQuote(item){
-                if (this.no_delete_confirmation==false){
-                    var r = confirm(this.$t("Do you want to delete this quote?"))
-                    if(r == false) {
-                        return
-                    } 
-                }
-                axios.delete(item.url, this.myheaders())
-                .then(() => {
-                    this.$emit("cruded")
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
+                this.quote=item
+                this.quote_mode="D"
+                this.key=this.key+1
+                this.dialog_quotes_cu=true
             },
             table_headers(){
                 var r= [

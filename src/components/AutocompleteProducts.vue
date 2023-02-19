@@ -1,5 +1,5 @@
 <template>
-    <v-autocomplete :items="$store.state.products" v-model="new_value" :label="mylabel" :return-object="returnObject" item-value="url" :rules="$attrs.rules" @change="on_change">
+    <v-autocomplete :readonly="readonly" :items="$store.state.products" v-model="new_value" :label="mylabel" :return-object="returnObject" item-value="url" :rules="$attrs.rules" @change="on_change">
 
         <template slot="item" slot-scope="{ item }">
             <div><v-icon :class="'mr-3 fi fib fi-'+item.flag" small :title="$store.getters.getCountryNameByCode(item.flag)"></v-icon>
@@ -25,7 +25,12 @@ export default {
             type: Boolean,
             required:false,
             default:false,
-        }
+        },
+        readonly: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
     },
     computed:{
         mylabel(){
@@ -46,6 +51,7 @@ export default {
     },
     created(){
         this.new_value=this.value
+        //console.log(this.$attrs)
     }
 }
 </script>
