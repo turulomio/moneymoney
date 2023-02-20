@@ -84,7 +84,7 @@
         <!-- DIALOG CU INVESTMERNT -->
         <v-dialog v-model="dialog" max-width="550">
             <v-card class="pa-6">
-                <InvestmentsCU :investment="investment" :key="key" @cruded="on_InvestmentsCU_cruded"></InvestmentsCU>
+                <InvestmentsCU :investment="investment" :mode="investment_mode" :key="key" @cruded="on_InvestmentsCU_cruded"></InvestmentsCU>
             </v-card>
         </v-dialog>
         <!-- DIALOG  VIEW INVESTMERNT -->
@@ -151,6 +151,7 @@
                                 icon: "mdi-pencil",
                                 code: function(this_){
                                     this_.investment=this_.empty_investment()
+                                    this_.investment_mode="C"
                                     this_.key=this_.key+1
                                     this_.dialog=true
                                 },
@@ -160,6 +161,7 @@
                 ],
                 dialog:false,
                 investment: null,
+                investment_mode: null,
                 loading_investments:false,
                 search:"",
 
@@ -191,19 +193,14 @@
 
             },
             deleteItem (item) {
-               var r = confirm(this.$t("Do you want to delete this investment?"))
-               if(r == false) {
-                  return
-               } 
-                axios.delete(item.url, this.myheaders())
-                .then(() => {
-                    this.update_table()
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
+                this.investment=item
+                this.investment_mode="D"
+                this.key=this.key+1
+                this.dialog=true
             },
             editItem (item) {
                 this.investment=item
+                this.investment_mode="U"
                 this.key=this.key+1
                 this.dialog=true
             },

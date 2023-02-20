@@ -2,11 +2,11 @@
   <div>
         <h1 class="mb-2">{{dialog_title()}}</h1>
         <v-form ref="form" v-model="form_valid" lazy-validation>
-            <v-autocomplete :items="$store.state.accounts.filter(v =>v.active==true)" v-model="newinvestment.accounts" :label="$t('Select an account')" item-text="name" item-value="url"  :rules="RulesSelection(true)"></v-autocomplete>
-            <v-text-field v-model="newinvestment.name" type="text" :label="$t('Investment name')"  :placeholder="$t('Investment name')" autofocus :rules="RulesString(200,true)"/>
-            <AutocompleteProducts v-model="newinvestment.products" :rules="RulesSelection(true)"  />
-            <v-checkbox v-model="newinvestment.active" :label="$t('Is active?')" ></v-checkbox>
-            <v-checkbox v-model="newinvestment.daily_adjustment" :label="$t('Has daily adjustment?')" ></v-checkbox>
+            <v-autocomplete :readonly="mode=='D'" :items="$store.state.accounts.filter(v =>v.active==true)" v-model="new_investment.accounts" :label="$t('Select an account')" item-text="name" item-value="url"  :rules="RulesSelection(true)"></v-autocomplete>
+            <v-text-field :readonly="mode=='D'" v-model="new_investment.name" type="text" :label="$t('Investment name')"  :placeholder="$t('Investment name')" autofocus :rules="RulesString(200,true)"/>
+            <AutocompleteProducts :readonly="mode=='D'" v-model="new_investment.products" :rules="RulesSelection(true)"  />
+            <v-checkbox :readonly="mode=='D'" v-model="new_investment.active" :label="$t('Is active?')" ></v-checkbox>
+            <v-checkbox :readonly="mode=='D'" v-model="new_investment.daily_adjustment" :label="$t('Has daily adjustment?')" ></v-checkbox>
         </v-form>
         <v-card-actions>
             <v-spacer></v-spacer>
@@ -23,62 +23,73 @@
             AutocompleteProducts,
         },
         props:{
-            investment:{
+            investment:{ //Object
                 required:true,
+            },
+            mode: {
+                required: true // Can be CUD
             }
         },
         data(){ 
             return{
                 form_valid: false,
-                editing:false,
-                newinvestment:null
+                new_investment:null
             }
         },
         methods:{
 
-            button(){
-                if(this.editing==true){
-                    return this.$t("Update")
-                } else {
-                    return this.$t("Create")
-                }
-            },     
-            dialog_title(){
-                if(this.editing==true){
+            title(){
+                if (this.mode=="U"){
                     return this.$t("Updating investment")
-                } else {
+                } else  if (this.mode=="C"){
                     return this.$t("Creating a new investment")
+                } else  if (this.mode=="D"){
+                    return this.$t("Deleting investment")
+                }
+            },
+            button(){
+                if (this.mode=="U"){
+                    return this.$t("Update")
+                } else  if (this.mode=="C"){
+                    return this.$t("Create")
+                } else  if (this.mode=="D"){
+                    return this.$t("Delete")
                 }
             },
             acceptDialog(){
                 if (this.$refs.form.validate()==false) return
-                if (this.editing==true){               
-                    axios.put(this.newinvestment.url, this.newinvestment, this.myheaders())
+                if (this.mode=="U"){        
+                    axios.put(this.new_investment.url, this.new_investment, this.myheaders())
                     .then(() => {
                         this.$store.dispatch("getInvestments")
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
-                } else{
-                    axios.post(`${this.$store.state.apiroot}/api/investments/`, this.newinvestment,  this.myheaders())
+                } else if (this.mode=="C") {
+                    axios.post(`${this.$store.state.apiroot}/api/investments/`, this.new_investment,  this.myheaders())
                     .then(() => {
                         this.$store.dispatch("getInvestments")
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
-                }
+                } else if (this.mode=="D") {
+                    var r = confirm(this.$t("Do you want to delete this investment?"))
+                    if(r == false) {
+                        return
+                    } 
+                    axios.delete(this.new_investment.url, this.myheaders())
+                    .then(() => {
+                        this.update_table()
+                    }, (error) => {
+                        this.parseResponseError(error)
+                    });
+                    }
             },
         },
         created(){
-
-            if ( this.investment.url!=null){ // EDITING TIENE IO URL
-                this.editing=true
-            } else { // NEW IO BUT SETTING VALUES WITH URL=null
-                this.editing=false
-            }
-            this.newinvestment=Object.assign({},this.investment)
+            this.new_investment=Object.assign({},this.investment)
         }
     }
 </script>
