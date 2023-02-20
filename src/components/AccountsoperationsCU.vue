@@ -11,7 +11,7 @@
         <v-card-actions>
             <v-spacer></v-spacer> 
             <v-btn color="primary" @click="following_ao=false;acceptDialogAO()" :disabled="!form_valid_ao">{{ button() }}</v-btn>
-            <v-btn v-if="!mode=='D' && !mode=='U'" color="primary" @click="following_ao=true;acceptDialogAO()" :disabled="!form_valid_ao" >{{ $t("Add and follow") }}</v-btn>
+            <v-btn v-if="mode=='C'" color="primary" @click="following_ao=true;acceptDialogAO()" :disabled="!form_valid_ao" >{{ $t("Add and follow") }}</v-btn>
         </v-card-actions>
     </div>
 </template>
