@@ -44,7 +44,7 @@
         <!-- DIALOG CREDIT CARD ADD/UPDATE -->
         <v-dialog v-model="dialog_cc" max-width="550">
             <v-card class="pa-4">
-                <CreditcardsCU :cc="cc" @cruded="on_CreditcardsCU_cruded()" :key="key"></CreditcardsCU>
+                <CreditcardsCU :cc="cc" :mode="cc_mode" @cruded="on_CreditcardsCU_cruded()" :key="key" />
             </v-card>
         </v-dialog>
 
@@ -139,9 +139,9 @@
                             { 
                                 name:this.$t('Add a credit card'), 
                                 code: function(this_){
-                                    this_.editing_cc=false
                                     this_.cc=this_.empty_credit_card()
                                     this_.cc.accounts=this_.account.url
+                                    this_.cc_mode="C"
                                     this_.key=this_.key+1
                                     this_.dialog_cc=true
                                 },
@@ -163,6 +163,7 @@
                 showActiveCC:true,
                 dialog_cc:false,
                 cc: null,
+                cc_mode: null,
 
                 // DIALOG ACCOUNT TRANSFER
                 at: null,
@@ -212,8 +213,9 @@
           
             editCC(item){
                 this.cc=item
-                this.dialog_cc=true
+                this.cc_mode="U"
                 this.key=this.key+1
+                this.dialog_cc=true
             },
             viewCC(item){
                 if (item.deferred==false){
@@ -225,20 +227,10 @@
                 this.dialog_ccview=true
             },
             deleteCC(item){
-                var r = confirm(this.$t("Do you want to delete this credit card?"))
-                if(r == false) {
-                    return
-                }  
-                r = confirm(this.$t("Are you sure?. If you used this credit card you should mark it as inactive"))
-                if(r == false) {
-                    return
-                }  
-                axios.delete(item.url, this.myheaders())
-                .then(() => {
-                    this.refreshTableCC()
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
+                this.cc=item
+                this.cc_mode="D"
+                this.key=this.key+1
+                this.dialog_cc=true
             },
             on_AccountsoperationsCU_cruded(following){
                 this.dialog_ao=following

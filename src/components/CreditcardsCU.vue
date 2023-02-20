@@ -1,13 +1,13 @@
 <template>
-    <div>
-        <h1 class="mb-4">{{dialog_title_cc()}}</h1>
+    <div class="pa-2">
+        <h1 class="mb-4">{{ title() }}</h1>
         <v-form ref="form" v-model="form_valid_cc" lazy-validation>
-            <v-autocomplete :items="$store.state.accounts.filter(v =>v.active==true)" v-model="newcc.accounts" :label="$t('Select an account')" item-text="name" item-value="url"  :rules="RulesSelection(true)"></v-autocomplete>
-            <v-text-field v-model="newcc.name" type="text" :label="$t('Credit card name')" :placeholder="$t('Credit card name')" autofocus  counter="200" :rules="RulesString(200,true)"/>
-            <v-text-field v-model="newcc.number" type="text" :label="$t('Credit card number')"  :placeholder="$t('Credit card number')" counter="30" :rules="RulesString(30,false)"/>
-            <v-text-field v-model="newcc.maximumbalance"  :label="$t('Credit card maximum balance')"  :placeholder="$t('Credit card maximum balance')" :rules="RulesInteger(10,true)" counter="10"/>
-            <v-checkbox v-model="newcc.active" :label="$t('Is active?')"></v-checkbox>
-            <v-checkbox v-model="newcc.deferred" :label="$t('Has deferred payments?')"></v-checkbox>
+            <v-autocomplete :readonly="mode=='D'" :items="$store.state.accounts.filter(v =>v.active==true)" v-model="new_cc.accounts" :label="$t('Select an account')" item-text="name" item-value="url"  :rules="RulesSelection(true)"></v-autocomplete>
+            <v-text-field :readonly="mode=='D'" v-model="new_cc.name" type="text" :label="$t('Credit card name')" :placeholder="$t('Credit card name')" autofocus  counter="200" :rules="RulesString(200,true)"/>
+            <v-text-field :readonly="mode=='D'" v-model="new_cc.number" type="text" :label="$t('Credit card number')"  :placeholder="$t('Credit card number')" counter="30" :rules="RulesString(30,false)"/>
+            <v-text-field :readonly="mode=='D'" v-model="new_cc.maximumbalance"  :label="$t('Credit card maximum balance')"  :placeholder="$t('Credit card maximum balance')" :rules="RulesInteger(10,true)" counter="10"/>
+            <v-checkbox :readonly="mode=='D'" v-model="new_cc.active" :label="$t('Is active?')"></v-checkbox>
+            <v-checkbox :readonly="mode=='D'" v-model="new_cc.deferred" :label="$t('Has deferred payments?')"></v-checkbox>
         </v-form>
         <v-card-actions>
             <v-spacer></v-spacer>
@@ -19,63 +19,77 @@
 <script>    
     import axios from 'axios' 
     export default {
-        components:{
-        },
         props:{
             cc:{
                 required:true,
+            },
+            mode: {
+                required: true // Can be CUD
             }
         },
         data () {
             return {
-                newcc:null,
+                new_cc:null,
                 form_valid_cc:true,
-                editing_cc:false,
             }
         },
         methods:{
-            button(){
-                if(this.editing_cc==true){
-                    return this.$t("Update")
-                } else {
-                    return this.$t("Create")
-                }
-            },     
-            dialog_title_cc(){
-                if(this.editing_cc==true){
-                    return this.$t("Updating credit card")
-                } else {
+            title(){
+                if (this.mode=="U"){
+                    return this.$t("Updating a credit card")
+                } else  if (this.mode=="C"){
                     return this.$t("Creating a new credit card")
+                } else  if (this.mode=="D"){
+                    return this.$t("Deleting a credit card")
                 }
-            },            
+            },
+            button(){
+                if (this.mode=="U"){
+                    return this.$t("Update")
+                } else  if (this.mode=="C"){
+                    return this.$t("Create")
+                } else  if (this.mode=="D"){
+                    return this.$t("Delete")
+                }
+            },       
             acceptDialogCC(){
-                if (this.editing_cc==true){               
-                    axios.put(this.newcc.url, this.newcc, this.myheaders())
+                if (this.mode=="U"){               
+                    axios.put(this.new_cc.url, this.new_cc, this.myheaders())
                     .then(() => {
                             this.$store.dispatch("getCreditcards")
                             this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
-                } else{
-                    axios.post(`${this.$store.state.apiroot}/api/creditcards/`, this.newcc,  this.myheaders())
+                } else if (this.mode=="C") {
+                    axios.post(`${this.$store.state.apiroot}/api/creditcards/`, this.new_cc,  this.myheaders())
                     .then(() => {
                         this.$store.dispatch("getCreditcards")
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
+                } else if (this.mode=="D") {
+                    var r = confirm(this.$t("Do you want to delete this credit card?"))
+                    if(r == false) {
+                        return
+                    }  
+                    r = confirm(this.$t("Are you sure?. If you used this credit card you should mark it as inactive"))
+                    if(r == false) {
+                        return
+                    }  
+                    axios.delete(this.new_cc.url, this.myheaders())
+                    .then(() => {
+                        this.$store.dispatch("getCreditcards")
+                        this.$emit("cruded")
+                    }, (error) => {
+                        this.parseResponseError(error)
+                    });
                 }
             },
         },  
         created(){
-
-            if ( this.cc.url!=null){ // EDITING TIENE IO URL
-                this.editing_cc=true
-            } else { // NEW IO BUT SETTING VALUES WITH URL=null
-                this.editing_cc=false
-            }
-            this.newcc=Object.assign({},this.cc)
+            this.new_cc=Object.assign({},this.cc)
         }
     }
 </script>
