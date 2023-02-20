@@ -34,7 +34,7 @@
         <!-- ESTIMATIONS_DPS CU -->
         <v-dialog v-model="dialog" width="35%">
             <v-card class="pa-4">
-                <EstimationsDpsCU :estimation="estimation" @cruded="on_EstimationsDpsCU_cruded()" :key="key"></EstimationsDpsCU>
+                <EstimationsDpsCU :estimation="estimation" :mode="estimation_mode" @cruded="on_EstimationsDpsCU_cruded()" :key="key" />
             </v-card>
         </v-dialog>
     </div>
@@ -69,6 +69,7 @@
                 //Estimations DPS CU
                 dialog:false,
                 estimation: null,
+                estimation_mode: null,
                 key: 0,
             }
         },
@@ -82,22 +83,13 @@
                 return false
             },
             addEstimation(item){
+                this.estimation=this.empty_estimation_dps()
+                this.estimation.products=item.product
+                this.estimation_mode="C"
                 this.key=this.key+1
                 this.dialog=true
-                this.estimation=this.empty_estimation_dps()
-                this.estimation.product=item.product
             },
             empty_estimation_dps,
-            submit(){
-                if (this.$refs.form.validate()==false) return
-                axios.post(`${this.$store.state.apiroot}/estimations/dps/add/`, this.estimation, this.myheaders())
-                .then(() => {
-                    this.dialog=false
-                    this.refreshTable()
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
             on_EstimationsDpsCU_cruded(){
                 this.dialog=false
                 this.refreshTable()

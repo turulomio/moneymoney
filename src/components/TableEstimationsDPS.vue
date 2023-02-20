@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" :ref="$vnode.tag">
+        <v-data-table dense :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer :sort-by="['year']" fixed-header :height="$attrs.height" :ref="$vnode.tag">
 
             <template v-slot:[`item.estimation`]="{ item }">
                 <div v-html="currency(item.estimation)"></div>
@@ -16,7 +16,7 @@
         <!-- DIVIDEND CU-->
         <v-dialog v-model="dialog_estimation_dps" width="35%">
             <v-card class="pa-3">
-                <EstimationsDpsCU :estimation="estimation_dps" :key="key"  @cruded="on_EstimationsDpsCU_cruded()"></EstimationsDPSCU>
+                <EstimationsDpsCU :estimation="estimation_dps" :mode="estimation_dps_mode" :key="key"  @cruded="on_EstimationsDpsCU_cruded()" />
             </v-card>
         </v-dialog>
     </div>
@@ -37,6 +37,7 @@
             return {
                 dialog_estimation_dps:false,
                 estimation_dps: null,
+                estimation_dps_mode: null,
                 items:[],
                 key: 0,
             }
@@ -47,21 +48,15 @@
             },
             editEstimationDPS(item){
                 this.estimation_dps=item
+                this.estimation_dps_mode="U"
                 this.dialog_estimation_dps=true
                 this.key=this.key+1
             },
             deleteEstimationDPS(item){
-                var r = confirm(this.$t("Do you want to delete this DPS estimation?"))
-                if(r == false) {
-                    return
-                } 
-                axios.delete(item.url, this.myheaders())
-                .then(() => {
-                    this.$emit("cruded")
-                    this.refresh()
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
+                this.estimation_dps=item
+                this.estimation_dps_mode="D"
+                this.dialog_estimation_dps=true
+                this.key=this.key+1
             },
             table_headers(){
                 var r= [
@@ -72,9 +67,6 @@
                     { text: this.$t('Manual'), value: 'manual', sortable: true },
                     { text: this.$t('Actions'), value: 'actions', sortable: false },
                 ]
-                // if (this.heterogeneus==true){
-                //     r.splice(1, 0, { text: this.$t('Account'), value: 'account',sortable: true });
-                // }
                 return r
             },
             gotoLastRow(){
@@ -83,13 +75,13 @@
             on_EstimationsDpsCU_cruded(){
                 this.dialog_estimation_dps=false
                 this.refresh()
-                this.$emit("cruded")
             },
             refresh(){
                 this.loading=true
                 axios.get(`${this.$store.state.apiroot}/api/estimationsdps/?product=${this.product.url}`, this.myheaders())
                 .then((response) => {
                     this.items=response.data
+                    this.key=this.key+1
                     this.loading=false
                 }, (error) => {
                     this.parseResponseError(error)

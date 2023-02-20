@@ -94,7 +94,7 @@
         <!-- ESTIMATIONS_DPS CU -->
         <v-dialog v-model="dialog_estimationdps" width="35%">
             <v-card class="pa-4">
-                <EstimationsDpsCU :estimation="estimation" @cruded="on_EstimationsDpsCU_cruded()" :key="key"></EstimationsDpsCU>
+                <EstimationsDpsCU :estimation="estimation" :mode="estimation_mode" @cruded="on_EstimationsDpsCU_cruded()" :key="key"></EstimationsDpsCU>
             </v-card>
         </v-dialog>
 
@@ -194,9 +194,10 @@
                             {
                                 name:this.$t('Add a DPS estimation'),
                                 code: function(this_){
-                                    this_.key=this_.key+1
                                     this_.estimation=this_.empty_estimation_dps()
                                     this_.estimation.products=this_.product.url
+                                    this_.estimation_mode="C"
+                                    this_.key=this_.key+1
                                     this_.dialog_estimationdps=true
                                 },
                                 icon: "mdi-plus",
@@ -272,6 +273,7 @@
                 //Estimations DPS CU
                 dialog_estimationdps: false,
                 estimation: null,
+                estimation_mode: null,
 
                 //DPS CRUD DIALOG
                 dps_crud_dialog: false,
@@ -287,8 +289,8 @@
             empty_quote,
             empty_estimation_dps,
             on_EstimationsDpsCU_cruded(){
-                this.dialog_estimationdps=false
                 this.key=this.key+1
+                this.dialog_estimationdps=false
             },
             on_monthpicker_quotes_change(){
                 axios.get(`${this.$store.state.apiroot}/api/quotes/?product=${this.product.url}&year=${this.quotes_ym.year}&month=${this.quotes_ym.month}`, this.myheaders())                
