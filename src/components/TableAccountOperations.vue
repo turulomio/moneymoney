@@ -47,7 +47,7 @@
         <!-- IO CU-->
         <v-dialog v-model="dialog_io" width="550" v-if="io">
             <v-card class="pa-3">
-                <InvestmentsoperationsCU :io="io" :investment="io_investment" :key="key"  @cruded="on_InvestmentsoperationsCU_cruded()"></InvestmentsoperationsCU>
+                <InvestmentsoperationsCU :io="io" :mode="io_mode" :key="key" @cruded="on_InvestmentsoperationsCU_cruded()" />
             </v-card>
         </v-dialog>
 
@@ -153,7 +153,7 @@
             // DIALOG INVESTMENT OPERATIONS CU
             dialog_io:false,
             io: null,
-            io_investment:null,
+            io_mode:null,
 
             // DIALOG ACCOUNT TRANSFER
             at:null,
@@ -186,7 +186,7 @@
                     axios.get(`${this.$store.state.apiroot}/api/investmentsoperations/${io_string}/`, this.myheaders())
                     .then((response) => {
                         this.io=response.data
-                        this.io_investment={ url: response.data.investments, currency: response.data.currency }
+                        this.io_mode="U"
                         this.key=this.key+1
                         this.dialog_io=true
                     }, (error) => {

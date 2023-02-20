@@ -39,7 +39,7 @@
                             <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card v-if="!loading">
-                                <TableInvestmentOperations :items="io_filtered" homogeneous currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="500" :key="key" output="investment" @cruded="on_TableInvestmentsOperations_cruded()" @onedit="on_TableInvestmentsOperations_edit"></TableInvestmentOperations>
+                                <TableInvestmentOperations :items="io_filtered" homogeneous currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="500" :key="key" output="investment" @cruded="on_TableInvestmentsOperations_cruded()" />
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
@@ -91,9 +91,9 @@
         </v-dialog>
 
         <!-- IO CU-->
-        <v-dialog v-model="dialog_io" width="550">
+        <v-dialog v-model="dialog_io" width="65%">
             <v-card class="pa-3">
-                <InvestmentsoperationsCU :io="io" :investment="investment" :key="key"  @cruded="on_InvestmentsoperationsCU_cruded()"></InvestmentsoperationsCU>
+                <InvestmentsoperationsCU :io="io" :mode="io_mode" :key="key"  @cruded="on_InvestmentsoperationsCU_cruded()" />
             </v-card>
         </v-dialog>
 
@@ -188,6 +188,7 @@
                 list_io_historical: [],
                 dialog_io:false,
                 io:null,
+                io_mode:null,
                 loading:true,
                 dividends: [],
                 dividends_filtered: [],
@@ -303,6 +304,7 @@
                                 code: function(this_){
                                     this_.io=this_.empty_investment_operation()
                                     this_.io.investments=this_.investment.url
+                                    this_.io_mode="C"
                                     this_.key=this_.key+1
                                     this_.dialog_io=true
                                 },
@@ -455,11 +457,6 @@
             },
             on_TableInvestmentsOperations_cruded(){//Emited deleting IO
                 this.on_InvestmentsoperationsCU_cruded()
-            },
-            on_TableInvestmentsOperations_edit(io){
-                this.dialog_io=true
-                this.io=io
-                this.key=this.key+1
             },
             displayvalues(){
                 return [

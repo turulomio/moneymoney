@@ -25,7 +25,7 @@
         <!-- Investments operation CU dialog -->
         <v-dialog v-model="dialog_io_cu" max-width="550" v-if="io" >
             <v-card class="pa-4">
-                <InvestmentsoperationsCU :io="io" :investment="io_investment" @cruded="on_InvestmentsoperationsCU_cruded()" :key="key"></InvestmentsoperationsCU>
+                <InvestmentsoperationsCU :io="io" :mode="io_mode" @cruded="on_InvestmentsoperationsCU_cruded()" :key="key" />
             </v-card>
         </v-dialog>
     </div>
@@ -88,7 +88,7 @@
                 //Dialog InvestmentsOperationsCU
                 dialog_io_cu:false,
                 io:null,
-                io_investment: null,
+                io_mode: null,
             }
         },        
         computed:{
@@ -140,11 +140,11 @@
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=="E"){
-                    this.io_investment={url:this.neworder.investments,currency:this.neworder.currency}
                     this.io=this.empty_investment_operation()
                     this.io.shares=this.neworder.shares
                     this.io.price=this.neworder.price
                     this.io.investments=this.neworder.investments
+                    this.io_mode="C"
                     this.key=this.key+1
                     this.dialog_io_cu=true
                 } else if (this.mode=="D"){
@@ -199,7 +199,6 @@
                     this.$emit("cruded")
                     this.dialog_io_cu=false
                     this.io=null
-                    this.io_investment=null
                 }, (error) => {
                     this.parseResponseError(error)
                 })

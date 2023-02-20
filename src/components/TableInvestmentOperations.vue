@@ -1,10 +1,3 @@
-<!--
-    Actions:
-       - cruded
-       - onedit
--->
-
-
 <template>
     <div>
         <v-data-table dense v-model="selected" :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" ref="table_o" :key="$attrs.key" :loading="$attrs.loading">
@@ -53,12 +46,21 @@
                 <v-icon small class="mr-2" @click="deleteIO(item)">mdi-delete</v-icon>
             </template>
         </v-data-table>
+        <!-- IO CU-->
+        <v-dialog v-model="dialog_io" width="65%">
+            <v-card class="pa-3">
+                <InvestmentsoperationsCU :io="io" :mode="io_mode" :key="key"  @cruded="on_InvestmentsoperationsCU_cruded()" />
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
-<script>    
-    import axios from 'axios'
+<script>
+    import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     export default {
+        components:{
+            InvestmentsoperationsCU,
+        },
         props: {
             items: {
                 required: true
@@ -93,6 +95,10 @@
             return {
                 selected: [],
                 key:0,  
+
+                dialog_io:false,
+                io:null,
+                io_mode:null,
             }
         },
         computed:{
@@ -154,19 +160,16 @@
                 return r
             },
             editIO(item){
-                this.$emit("onedit",item)
+                this.io=item
+                this.io_mode="U"
+                this.key=this.key+1
+                this.dialog_io=true
             },
             deleteIO(item){
-                var r = confirm(this.$t("Do you want to delete this investment operation?"))
-                if(r == false) {
-                    return
-                } 
-                axios.delete(`${this.$store.state.apiroot}/api/investmentsoperations/${item.id}/`, this.myheaders())
-                .then(() => {
-                    this.$emit("cruded")
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
+                this.io=item
+                this.io_mode="D"
+                this.key=this.key+1
+                this.dialog_io=true
             },
             gotoLastRow(){
                 this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs.table_o.$el.childNodes[0] }) 
