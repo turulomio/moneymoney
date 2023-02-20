@@ -36,7 +36,7 @@
         <!-- DIALOG PRODUCT COMPARATION CY-->
         <v-dialog v-model="dialog_cu" max-width="40%">
             <v-card class="pa-4">
-                <ProductsComparationCU :pc="pc" :key="key"  @cruded="on_ProductsComparationCU_cruded()"></ProductsComparationCU>
+                <ProductsComparationCU :pc="pc" :mode="pc_mode" :key="key"  @cruded="on_ProductsComparationCU_cruded()" />
             </v-card>
         </v-dialog>
     </div>
@@ -81,6 +81,7 @@
                                 icon: "mdi-plus",
                                 code: function(this_){
                                     this_.pc=this_.empty_products_comparation()
+                                    this_.pc_mode="C"
                                     this_.key=this_.key+1
                                     this_.dialog_cu=true
                                 },
@@ -89,26 +90,21 @@
                     },
                 ],
                 pc:null,
+                pc_mode:null,
             }
         },
         methods:{
             deletePair(item){
-               var r = confirm(this.$t("Do you want to delete this products comparation?"))
-               if(r == false) {
-                  return
-               } 
-                axios.delete(item.url, this.myheaders())
-                .then(() => {
-                    this.refreshTable()
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
+                this.pc=item
+                this.pc_mode="D"
+                this.key=this.key+1
+                this.dialog_cu=true
             },
             editPair(item){
                 this.pc=item
+                this.pc_mode="U"
                 this.key=this.key+1
                 this.dialog_cu=true
-
             },
             empty_products_comparation,
             on_ProductsComparationCU_cruded(){
