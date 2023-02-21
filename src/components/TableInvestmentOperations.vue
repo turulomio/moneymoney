@@ -58,6 +58,7 @@
 <script>
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     export default {
+        name:"TableInvestmentOperations",
         components:{
             InvestmentsoperationsCU,
         },
