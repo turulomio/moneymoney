@@ -20,12 +20,12 @@
                         <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card v-if="!loading">
-                                <TableInvestmentOperationsCurrent :items="list_io_current" :currency="product.currency" output="investment" height="400" :key="key"></TableInvestmentOperationsCurrent>
+                                <TableInvestmentOperationsCurrent :items="list_io_current" output="investment" height="400" :key="key"></TableInvestmentOperationsCurrent>
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
                                 <v-card v-if="!loading">
-                                    <TableInvestmentOperationsCurrent :items="list_io_current" currency="EUR" output="account" height="400" :key="key" />
+                                    <TableInvestmentOperationsCurrent :items="list_io_current" output="account" height="400" :key="key" />
                                 </v-card>
                             </v-tab-item>
                     </v-tabs>

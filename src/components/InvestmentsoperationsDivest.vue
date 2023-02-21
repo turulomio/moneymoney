@@ -37,7 +37,7 @@
             <v-tab-item key="current">      
                 <div>
                     <v-card>
-                        <TableInvestmentOperationsCurrent showtotal :items="list_io_current" :currency="product.currency" output="investment" height="400" :key="key" :loading="loading" />
+                        <TableInvestmentOperationsCurrent showtotal :items="list_io_current" output="investment" height="400" :key="key" :loading="loading" />
                     </v-card>
                 </div>
             </v-tab-item>

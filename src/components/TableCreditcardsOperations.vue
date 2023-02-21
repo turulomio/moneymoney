@@ -21,7 +21,7 @@
                 <tr class="totalrow">
                     <td v-for="(header,i) in headers" :key="i" >
                         <div v-if="header.value == 'datetime'">
-                            {{ $t("Total ({0} registers):").format(items.length)}}
+                            {{ $t("Total ({0} registers)").format(items.length)}}
                         </div>
                         <div v-if="header.value == 'amount'">
                             <div class="text-right" v-html="currency_html(listobjects_sum(items,'amount'),total_currency)"></div>

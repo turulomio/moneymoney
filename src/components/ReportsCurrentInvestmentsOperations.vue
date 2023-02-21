@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1 class="mb-3">{{ $t("Current investments operations list") }}</h1>
-        <TableInvestmentOperationsCurrent showinvestment showtotal :items="list_io_current" :currency="$store.state.profile.currency" output="user" height="600" :key="key"></TableInvestmentOperationsCurrent>
+        <TableInvestmentOperationsCurrent showinvestment showtotal :items="list_io_current" output="user" height="600" :key="key"></TableInvestmentOperationsCurrent>
                            
     </div>
 </template>

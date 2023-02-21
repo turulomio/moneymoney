@@ -20,12 +20,12 @@
                         <v-tab key="user">{{ $t('User currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card v-if="!loading">
-                                <TableInvestmentOperationsCurrent :items="list_io_current" showinvestment showtotal :currency="ios.product.currency" output="investment" height="400" :key="key" />
+                                <TableInvestmentOperationsCurrent :items="list_io_current" showinvestment showtotal output="investment" height="400" :key="key" />
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="user">
                                 <v-card v-if="!loading">
-                                    <TableInvestmentOperationsCurrent :items="list_io_current" showinvestment showtotal :currency="$store.state.profile.currency" output="user" height="400" :key="key"></TableInvestmentOperationsCurrent>
+                                    <TableInvestmentOperationsCurrent :items="list_io_current" showinvestment showtotal output="user" height="400" :key="key"></TableInvestmentOperationsCurrent>
                                 </v-card>
                             </v-tab-item>
                     </v-tabs>

@@ -743,7 +743,7 @@
   "'{0}' operations at year {1}": "'{0}' operaciones en el año {1}",
   "'{0}' operations at {1}-{2}": "'{0}' operaciones en el mes {1}",
   "Total: {0}": "Total: {0}",
-  "Total ({0} registers):": "Total ({0} registros):",
+  "Total ({0} registers)": "Total ({0} registros):",
   "Can't sum amounts due to they have different currencies": "No puedo sumar las cantidades debido a que tienen diferentes divisas",
   "Quote better to (increases 0.1% by default)": "Hasta la cotización del mejor (incrementa un 0.1% por defecto)",
   "Accounts operations": "Operaciones de cuentas",
