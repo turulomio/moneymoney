@@ -189,6 +189,16 @@
             }
         },
         methods: {
+            // Currencies are part of the item
+            currency(item){
+                if (this.output=="account"){
+                    return item.currency_account
+                } else if (this.output=="investment"){
+                    return item.currency_investment
+                } else if (this.output=="user"){
+                    return item.currency_user
+                }
+            },
             table_headers(){
                 var r
                 if (this.output=="account"){
@@ -235,16 +245,6 @@
                     r.splice(1, 0, { text: this.$t('Name'), value: 'investments', sortable: true });
                 }
                 return r
-            },
-            // Currencies are part of the item
-            currency(item){
-                if (this.output=="account"){
-                    return item.currency_account
-                } else if (this.output=="investment"){
-                    return item.currency_investment
-                } else if (this.output=="user"){
-                    return item.currency_user
-                }
             },
             gotoLastRow(){
                 if (this.$refs.table_oc) this.$vuetify.goTo(1000000, { container:  this.$refs.table_oc.$el.childNodes[0] }) 

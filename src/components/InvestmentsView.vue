@@ -39,12 +39,12 @@
                             <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card v-if="!loading">
-                                <TableInvestmentOperations :items="io_filtered" homogeneous currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="500" :key="key" output="investment" @cruded="on_TableInvestmentsOperations_cruded()" />
+                                <TableInvestmentOperations :items="io_filtered" height="500" :key="key" output="investment" @cruded="on_TableInvestmentsOperations_cruded()" />
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
                                 <v-card v-if="!loading">
-                                    <TableInvestmentOperations :items="io_filtered" homogeneous currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="500" :key="key" output="account" :showactions="false"></TableInvestmentOperations>
+                                    <TableInvestmentOperations :items="io_filtered" height="500" :key="key" output="account" :showactions="false" />
                                 </v-card>
                             </v-tab-item>
                     </v-tabs>

@@ -2,43 +2,43 @@
     <div>
         <v-data-table dense v-model="selected" :headers="table_headers()" :items="items" class="elevation-1" disable-pagination  hide-default-footer sort-by="datetime" fixed-header :height="$attrs.height" ref="table_o" :key="$attrs.key" :loading="$attrs.loading">
             <template v-slot:[`item.datetime`]="{ item,index }">
-            <div :ref="index">{{ localtime(item.datetime)}}</div>
+              <div :ref="index">{{ localtime(item.datetime)}}</div>
             </template>           
            <template v-slot:[`item.operationstypes`]="{ item }">
                <div v-html="$store.getters.getObjectPropertyByUrl('operationstypes',item.operationstypes,'localname')"></div>
            </template>
             <template v-slot:[`item.price`]="{ item }">
-            {{ currency_string(item.price, currency_investment)}}
+            {{ currency_string(item.price, currency(item))}}
             </template>
                          
             <template v-slot:[`item.name`]="{ item }">
                 <div v-html="$store.getters.getObjectPropertyByUrl('investments', item.investments,'fullname')"></div>
             </template>  
             <template v-slot:[`item.gross_account`]="{ item }">
-            {{ currency_string(item.gross_account, currency_account)}}
+            {{ currency_string(item.gross_account, currency(item))}}
             </template>
             <template v-slot:[`item.gross_investment`]="{ item }">
-            {{ currency_string(item.gross_investment, currency_investment)}}
+            {{ currency_string(item.gross_investment, currency(item))}}
             </template>
             <template v-slot:[`item.gross_user`]="{ item }">
-            {{ currency_string(item.gross_user, currency_user)}}
+            {{ currency_string(item.gross_user, currency(item))}}
             </template>
             
             <template v-slot:[`item.commission`]="{ item }">
-            {{ currency_string(item.commission, currency_investment)}}
+            {{ currency_string(item.commission, currency(item))}}
             </template>
             <template v-slot:[`item.taxes`]="{ item }">
-            {{ currency_string(item.taxes, currency_investment)}}
+            {{ currency_string(item.taxes, currency(item))}}
             </template>
             
             <template v-slot:[`item.net_account`]="{ item }">
-            {{ currency_string(item.net_account, currency_account)}}
+            {{ currency_string(item.net_account, currency(item))}}
             </template>
             <template v-slot:[`item.net_investment`]="{ item }">
-            {{ currency_string(item.net_investment, currency_investment)}}
+            {{ currency_string(item.net_investment, currency(item))}}
             </template>
             <template v-slot:[`item.net_user`]="{ item }">
-            {{ currency_string(item.net_user, currency_user)}}
+            {{ currency_string(item.net_user, currency(item))}}
             </template>
             
             <template v-slot:[`item.actions`]="{ item }">
@@ -65,23 +65,6 @@
             items: {
                 required: true
             },
-            currency_account: {
-                required: true,
-                default:"EUR",
-            },
-            currency_investment: {
-                required: true,
-                default:"EUR",
-            },
-            currency_user: {
-                required: true,
-                default:"EUR",
-            },
-            homogeneous:{ //Only hides account if true
-                type: Boolean,
-                required:false,
-                default:false,
-            },
             showactions:{ //Used to edit io operation
                 required:false,
                 default:true
@@ -89,6 +72,11 @@
             output:{ // "investmnt", account or user to see table ouput
                 required:true,
                 default: "investment",
+            },
+            showinvestment:{// Items must have accounts attribute
+                type: Boolean,
+                required:false,
+                default: false,
             },
         },
         data: function(){
@@ -101,9 +89,17 @@
                 io_mode:null,
             }
         },
-        computed:{
-        },
         methods: {
+            // Currencies are part of the item
+            currency(item){
+                if (this.output=="account"){
+                    return item.currency_account
+                } else if (this.output=="investment"){
+                    return item.currency_investment
+                } else if (this.output=="user"){
+                    return item.currency_user
+                }
+            },
             table_headers(){
                 var r
                 if (this.output=="account"){
@@ -154,7 +150,7 @@
                 if (this.currency_investment==this.currency_account){
                     r.splice(8,1)
                 }
-                if (this.homogeneous==false){
+                if (this.showinvestment==true){
                     r.splice(1, 0, { text: this.$t('Name'), value: 'name',sortable: true });
                 }
                 return r

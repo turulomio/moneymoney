@@ -44,7 +44,7 @@
             <v-tab-item key="operations">          
                 <div>
                     <v-card>
-                        <TableInvestmentOperations :items="list_io" currency_account="EUR" currency_investment="EUR" currency_user="EUR" height="400" :key="key" output="investment" :loading="loading"></TableInvestmentOperations>
+                        <TableInvestmentOperations :items="list_io" height="400" :key="key" output="investment" :loading="loading" />
                     </v-card>
                 </div>
             </v-tab-item>
