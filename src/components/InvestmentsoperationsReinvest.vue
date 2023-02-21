@@ -51,7 +51,7 @@
             <v-tab-item key="historical">     
                 <div>            
                     <v-card>
-                        <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="investment" :key="key" :loading="loading" homogeneous></TableInvestmentOperationsHistorical>
+                        <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="investment" :key="key" :loading="loading" showtotal />
                     </v-card>
                 </div>
             </v-tab-item>

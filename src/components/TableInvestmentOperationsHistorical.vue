@@ -68,46 +68,43 @@
                 <div v-html="currency_html(item.gains_net_investment, item.currency_investment)"></div>
             </template>           
             <template v-slot:[`body.append`]="{headers}">
-                <tr class="totalrow" v-if="items.length>0">
+                <tr class="totalrow" v-if="items.length>0 && showtotal">
                     <td v-for="(header,i) in headers" :key="i" >
                         <div v-if="header.value == 'dt_end'">
-                            Total
+                            {{ $t("Total ({0} registers)").format(items.length)}}
                         </div>
                         
-                        <div v-if="header.value == 'gains_gross_investment'" class="d-flex justify-end">
-                            <div v-html="currency_html(listobjects_sum(items,'gains_gross_investment'), items[0].currency_investment)"></div>
+                        <div v-if="header.value == 'gains_gross_investment' && all_items_has_same_currency" class="d-flex justify-end">
+                            <div v-html="currency_html(listobjects_sum(items,'gains_gross_investment'), total_currency)"></div>
                         </div>
-                        <div v-if="header.value == 'gains_gross_account'" class="d-flex justify-end">
-                            <div v-html="currency_html(listobjects_sum(items,'gains_gross_account'), items[0].currency_account)"></div>
-                        </div>
-                        <div v-if="header.value == 'gains_gross_user'" class="d-flex justify-end">
-                            <div v-html="currency_html(listobjects_sum(items,'gains_gross_user'), items[0].currency_user)"></div>
+                        <div v-if="header.value == 'gains_gross_user' && all_items_has_same_currency" class="d-flex justify-end">
+                            <div v-html="currency_html(listobjects_sum(items,'gains_gross_user'), total_currency)"></div>
                         </div>
                         
-                        <div v-if="header.value == 'gains_net_investment'" class="d-flex justify-end">
-                            <div v-html="currency_html(listobjects_sum(items,'gains_net_investment'), items[0].currency_investment)"></div>
+                        <div v-if="header.value == 'gains_net_investment' && all_items_has_same_currency" class="d-flex justify-end">
+                            <div v-html="currency_html(listobjects_sum(items,'gains_net_investment'), total_currency)"></div>
                         </div>
-                        <div v-if="header.value == 'gains_net_account'" class="d-flex justify-end">
-                            <div v-html="currency_html(listobjects_sum(items,'gains_net_account'), items[0].currency_account)"></div>
+                        <div v-if="header.value == 'gains_net_account' && all_items_has_same_currency" class="d-flex justify-end">
+                            <div v-html="currency_html(listobjects_sum(items,'gains_net_account'), total_currency)"></div>
                         </div>
-                        <div v-if="header.value == 'gains_net_user'" class="d-flex justify-end">
-                            <div v-html="currency_html(listobjects_sum(items,'gains_net_user'), items[0].currency_user)"></div>
+                        <div v-if="header.value == 'gains_net_user' && all_items_has_same_currency" class="d-flex justify-end">
+                            <div v-html="currency_html(listobjects_sum(items,'gains_net_user'), total_currency)"></div>
                         </div>
                         
                         
-                        <div v-if="header.value == 'commissions_investment'" class="d-flex justify-end">
-                            <div v-html="currency_html(listobjects_sum(items,'commissions_investment'), items[0].currency_investment)"></div>
+                        <div v-if="header.value == 'commissions_investment' && all_items_has_same_currency" class="d-flex justify-end">
+                            <div v-html="currency_html(listobjects_sum(items,'commissions_investment'), total_currency)"></div>
                         </div>
-                        <div v-if="header.value == 'commissions_account'" class="d-flex justify-end">
-                            <div v-html="currency_html(listobjects_sum(items,'commissions_account'), items[0].currency_account)"></div>
+                        <div v-if="header.value == 'commissions_account' && all_items_has_same_currency" class="d-flex justify-end">
+                            <div v-html="currency_html(listobjects_sum(items,'commissions_account'), total_currency)"></div>
                         </div>
                         
                         
-                        <div v-if="header.value == 'taxes_investment'" class="d-flex justify-end">
-                            <div v-html="currency_html(listobjects_sum(items,'taxes_investment'), items[0].currency_investment)"></div>
+                        <div v-if="header.value == 'taxes_investment' && all_items_has_same_currency" class="d-flex justify-end">
+                            <div v-html="currency_html(listobjects_sum(items,'taxes_investment'), total_currency)"></div>
                         </div>
-                        <div v-if="header.value == 'taxes_account'" class="d-flex justify-end">
-                            <div v-html="currency_html(listobjects_sum(items,'taxes_account'), items[0].currency_account)"></div>
+                        <div v-if="header.value == 'taxes_account' && all_items_has_same_currency" class="d-flex justify-end">
+                            <div v-html="currency_html(listobjects_sum(items,'taxes_account'), total_currency)"></div>
                         </div>
                     </td>
                 </tr>
@@ -116,29 +113,58 @@
 </template>
 <script>    
     export default {
-        components:{
-        },
-
+        name: "TableInvestmentOperationsHistorical",
         props: {
             items: {
                 required: true
             },
-
-            homogeneous:{ //Only hides account if true
-                type: Boolean,
-                required:false,
-                default:false,
-            },
             output:{
                 required:true,
-                default:"account",
+            },
+            showtotal:{// Items must have currency attribute
+                type: Boolean,
+                required:false,
+                default: false,
+            },
+            showinvestment:{// Items must have accounts attribute
+                type: Boolean,
+                required:false,
+                default: false,
             },
         },
         data: function(){
             return {
             }
+        },        
+        computed:{
+            // To sum amounts
+            all_items_has_same_currency(){
+                if (this.items.length==0) return false
+                var first_currency=this.currency(this.items[0])
+                var r=true
+                this.items.forEach(item => {//For Each doesn't allow to return false
+                    if (this.currency(item)!=first_currency)  {
+                        r=false
+                    }
+                });
+                return r
+            },
+            total_currency: function(){
+                if (this.items.length==0) return "Bad currency"
+                return this.currency(this.items[0])
+            }
         },
         methods: {
+            // Currencies are part of the item
+            currency(item){
+                if (this.output=="account"){
+                    return item.currency_account
+                } else if (this.output=="investment"){
+                    return item.currency_investment
+                } else if (this.output=="user"){
+                    return item.currency_user
+                }
+            },
             table_headers(){
                 var r
                 if (this.output=="account"){
@@ -181,7 +207,7 @@
                         { text: this.$t('Gains'), value: 'gains_net_user',sortable: false, align:"right"},
                     ] 
                 }
-                if (this.homogeneous==false){
+                if (this.showinvestment==true){
                     r.splice(2, 0, { text: this.$t('Investment'), value: 'investments',sortable: true });
                 }
                 return r

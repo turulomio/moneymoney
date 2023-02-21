@@ -10,10 +10,10 @@
             <div v-html="$store.getters.getObjectPropertyByUrl('operationstypes',item.operationstypes,'localname')"></div>
         </template>
         <template v-slot:[`item.price_account`]="{ item }">
-            <div v-html="currency_html(item.price_account, currency(item))"></div>
+            <div v-html="currency_html(item.price_account, item.currency_account)"></div>
         </template>        
         <template v-slot:[`item.price_investment`]="{ item }" >
-            <div v-html="currency_html(item.price_investment, currency(item))"></div>
+            <div v-html="currency_html(item.price_investment, item.currency_investment)"></div>
         </template>  
         <template v-slot:[`item.price_user`]="{ item }">
             <div v-html="currency_html(item.price_user, currency(item))"></div>

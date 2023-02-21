@@ -29,7 +29,7 @@
                 </v-tab-item>
                 <v-tab-item key="gains">       
                     <v-card class="pa-4">
-                        <TableInvestmentOperationsHistorical :items="gains" height="600" output="user" :key="key"></TableInvestmentOperationsHistorical>
+                        <TableInvestmentOperationsHistorical :items="gains" height="600" output="user" :key="key" showtotal showinvestment/>
                         <p class="bold my-4" style="text-align:center" v-html='$t("Final gains = Gains + Fast operations gains= {0} + {1} = {2}").format(
                             localcurrency_html(listobjects_sum(gains,"gains_net_user")),
                             localcurrency_html(listobjects_sum(fast_operations,"amount")),
