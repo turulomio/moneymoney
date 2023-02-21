@@ -37,7 +37,7 @@
             <v-tab-item key="current">      
                 <div>
                     <v-card>
-                        <TableInvestmentOperationsCurrent :items="list_io_current" currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="investment" height="400" :key="key" homogeneous :loading="loading"></TableInvestmentOperationsCurrent>
+                        <TableInvestmentOperationsCurrent showtotal :items="list_io_current" :currency="product.currency" output="investment" height="400" :key="key" :loading="loading" />
                     </v-card>
                 </div>
             </v-tab-item>
@@ -212,7 +212,7 @@
                 this.dialog_order_cu=false
             },
             refreshProductQuotes(){
-                return axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl?product=${this.product}`, this.myheaders())
+                return axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl?product=${this.product.url}`, this.myheaders())
             },
             simulateOrderBefore(){
                 var simulation=this.empty_investments_operations_simulation()
@@ -316,8 +316,9 @@
             this.newprice=this.price
             this.investments.forEach(element => { this.newinvestments.push(element)});
             if (this.newinvestments.length>0) {
-                this.product=this.$store.getters.getObjectPropertyByUrl("investments", this.newinvestments[0],"products")
-            }
+
+                var product_url=this.$store.getters.getObjectPropertyByUrl("investments", this.newinvestments[0],"products")
+                this.product=this.$store.getters.getObjectByUrl("products", product_url)            }
             this.make_all_axios_before()
         }
         

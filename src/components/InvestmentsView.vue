@@ -20,13 +20,13 @@
                         <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card v-if="!loading">
-                                <TableInvestmentOperationsCurrent :items="list_io_current" homogeneous currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="investment" height="500" :key="key"></TableInvestmentOperationsCurrent>
+                                <TableInvestmentOperationsCurrent :items="list_io_current" showtotal :currency="ios.product.currency" output="investment" height="500" :key="key" />
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
-                                    <v-card v-if="!loading">
-                                            <TableInvestmentOperationsCurrent :items="list_io_current" homogeneous currency_account="EUR" currency_investment="EUR" currency_user="EUR" output="account" height="400" :key="key"></TableInvestmentOperationsCurrent>
-                                    </v-card>
+                                <v-card v-if="!loading">
+                                    <TableInvestmentOperationsCurrent :items="list_io_current" showtotal :currency="account.currency" output="account" height="400" :key="key" />
+                                </v-card>
                             </v-tab-item>
                     </v-tabs>
                 </div>
@@ -177,6 +177,11 @@
             investment: {
                 required: true
             },
+        },
+        computed:{
+            account: function(){
+                return this.$store.getters.getObjectByUrl("accounts",this.investment.accounts)
+            }
         },
         data () {
             return {

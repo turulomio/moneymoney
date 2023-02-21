@@ -10,44 +10,44 @@
             <div v-html="$store.getters.getObjectPropertyByUrl('operationstypes',item.operationstypes,'localname')"></div>
         </template>
         <template v-slot:[`item.price_account`]="{ item }">
-            <div v-html="currency(item.price_account)"></div>
+            <div v-html="currency_html(item.price_account, currency)"></div>
         </template>        
         <template v-slot:[`item.price_investment`]="{ item }" >
-            <div v-html="currency(item.price_investment)"></div>
+            <div v-html="currency_html(item.price_investment, currency)"></div>
         </template>  
         <template v-slot:[`item.price_user`]="{ item }">
-            <div v-html="currency(item.price_user)"></div>
+            <div v-html="currency_html(item.price_user, currency)"></div>
         </template>  
         <template v-slot:[`item.gains_gross_account`]="{ item }">
-            <div v-html="currency(item.gains_gross_account)"></div>
+            <div v-html="currency_html(item.gains_gross_account, currency)"></div>
         </template>  
         <template v-slot:[`item.gains_gross_investment`]="{ item }">
-            <div v-html="currency(item.gains_gross_investment)"></div>
+            <div v-html="currency_html(item.gains_gross_investment, currency)"></div>
         </template>  
         <template v-slot:[`item.gains_gross_user`]="{ item }">
-            <div v-html="currency(item.gains_gross_user)"></div>
+            <div v-html="currency_html(item.gains_gross_user, currency)"></div>
         </template>  
         
 
          
         <template v-slot:[`item.invested_account`]="{ item }">
-            <div v-html="currency(item.invested_account)"></div>
+            <div v-html="currency_html(item.invested_account, currency)"></div>
         </template>  
         <template v-slot:[`item.invested_investment`]="{ item }">
-            <div v-html="currency(item.invested_investment)"></div>
+            <div v-html="currency_html(item.invested_investment, currency)"></div>
         </template>
         <template v-slot:[`item.invested_user`]="{ item }">
-            <div v-html="currency(item.invested_user)"></div>
+            <div v-html="currency_html(item.invested_user, currency)"></div>
         </template> 
         
         <template v-slot:[`item.balance_account`]="{ item }">
-            <div v-html="currency(item.balance_account)"></div>
+            <div v-html="currency_html(item.balance_account, currency)"></div>
         </template>  
         <template v-slot:[`item.balance_investment`]="{ item }">
-            <div v-html="currency(item.balance_investment)"></div>
+            <div v-html="currency_html(item.balance_investment, currency)"></div>
         </template>  
         <template v-slot:[`item.balance_user`]="{ item }">
-            <div v-html="currency(item.balance_user)"></div>
+            <div v-html="currency_html(item.balance_user, currency)"></div>
         </template> 
 
         <template v-slot:[`item.percentage_annual_investment`]="{ item }">
@@ -71,54 +71,55 @@
         </template>   
 
         <template v-slot:[`body.append`]="{headers}">
-            <tr class="totalrow" v-if="items.length>0">
+            <tr class="totalrow" v-if="items.length>0 && showtotal">
                 <td v-for="(header,i) in headers" :key="'ROW'+i" >
                     <div v-if="header.value == 'datetime'">
                         Total
                     </div>
                  
-                    <div v-if="header.value == 'shares' && homogeneous==true" class="d-flex justify-end">
+                    <div v-if="header.value == 'shares' && all_items_have_same_product" class="d-flex justify-end">
                         <div v-html="items.reduce((accum,item) => accum + item.shares, 0)"></div>
                     </div>
                     
-                    <div v-if="header.value == 'price_account'" class="d-flex justify-end">
-                        <div v-html="currency(listobjects_average_ponderated(items,'price_account', 'shares'))"></div>
+                    <div v-if="header.value == 'price_account' && all_items_have_same_product" class="d-flex justify-end">
+                        <div v-html="currency_html(listobjects_average_ponderated(items,'price_account', 'shares'), currency)"></div>
                     </div>
-                    <div v-if="header.value == 'price_investment'" class="d-flex justify-end">
-                        <div v-html="currency(listobjects_average_ponderated(items,'price_investment', 'shares'))"></div>
+                    <div v-if="header.value == 'price_investment' && all_items_have_same_product" class="d-flex justify-end">
+                        <div v-html="currency_html(listobjects_average_ponderated(items,'price_investment', 'shares'), currency)"></div>
                     </div>
-                    <div v-if="header.value == 'price_user' && homogeneous==true" class="d-flex justify-end">
-                        <div v-html="currency(listobjects_average_ponderated(items,'price_user', 'shares'))"></div>
+                    <div v-if="header.value == 'price_user' && all_items_have_same_product" class="d-flex justify-end">
+                        <div v-html="currency_html(listobjects_average_ponderated(items,'price_user', 'shares'), currency)"></div>
                     </div>
                     
                     <div v-if="header.value == 'gains_gross_account'" class="d-flex justify-end">
-                        <div v-html="currency(items.reduce((accum,item) => accum + item.gains_gross_account, 0))"></div>
+                        <div v-html="currency_html(items.reduce((accum,item) => accum + item.gains_gross_account, 0), currency)"></div>
                     </div>
                     <div v-if="header.value == 'gains_gross_investment'" class="d-flex justify-end">
-                        <div v-html="currency(items.reduce((accum,item) => accum + item.gains_gross_investment, 0))"></div>
+                        <div v-html="currency_html(items.reduce((accum,item) => accum + item.gains_gross_investment, 0), currency)"></div>
                     </div>
                     <div v-if="header.value == 'gains_gross_user'" class="d-flex justify-end">
-                        <div v-html="currency(items.reduce((accum,item) => accum + item.gains_gross_user, 0))"></div>
+                        <div v-html="currency_html(items.reduce((accum,item) => accum + item.gains_gross_user, 0), currency)"></div>
                     </div>
                     
                     <div v-if="header.value == 'invested_account'" class="d-flex justify-end">
-                        <div v-html="currency(items.reduce((accum,item) => accum + item.invested_account, 0))"></div>
+                        <div v-html="currency_html(items.reduce((accum,item) => accum + item.invested_account, 0), currency)"></div>
                     </div>
                     <div v-if="header.value == 'invested_investment'" class="d-flex justify-end">
-                        <div v-html="currency(items.reduce((accum,item) => accum + item.invested_investment, 0))"></div>
+                        <div v-html="currency_html(items.reduce((accum,item) => accum + item.invested_investment, 0), currency)"></div>
                     </div>
                     <div v-if="header.value == 'invested_user'" class="d-flex justify-end">
-                        <div v-html="currency(items.reduce((accum,item) => accum + item.invested_user, 0))"></div>
+                        <div v-html="currency_html(items.reduce((accum,item) => accum + item.invested_user, 0), currency)"></div>
                     </div>
                     
                     <div v-if="header.value == 'balance_account'" class="d-flex justify-end">
-                        <div v-html="currency(items.reduce((accum,item) => accum + item.balance_account, 0))"></div>
+                        <div v-html="currency_html(items.reduce((accum,item) => accum + item.balance_account, 0), currency)"></div>
                     </div>
+                     
                     <div v-if="header.value == 'balance_investment'" class="d-flex justify-end">
-                        <div v-html="currency(items.reduce((accum,item) => accum + item.balance_investment, 0))"></div>
+                        <div v-html="currency_html(items.reduce((accum,item) => accum + item.balance_investment, 0), currency)"></div>
                     </div>
                     <div v-if="header.value == 'balance_user'" class="d-flex justify-end">
-                        <div v-html="currency(items.reduce((accum,item) => accum + item.balance_user, 0))"></div>
+                        <div v-html="currency_html(items.reduce((accum,item) => accum + item.balance_user, 0), currency)"></div>
                     </div>
 
                     <div v-if="header.value == 'percentage_total_investment'" class="d-flex justify-end">
@@ -136,42 +137,44 @@
             items: {
                 required: true
             },
-            currency_account: {
+            currency: { //Currency used for output selection
                 required: true,
-                default:"EUR"
             },
-            currency_investment: {
-                required: true,
-                default:"EUR"
-            },
-            currency_user: {
-                required: true,
-                default:"EUR"
-            },
-            homogeneous:{ //Only hides account if true
+            showinvestment:{// Items must have accounts attribute
                 type: Boolean,
                 required:false,
-                default:false,
+                default: false,
             },
-            output:{
+            output:{ // account, investment, user
                 required:true,
-                default:"account",
+            },
+            showtotal:{// Items must have currency attribute
+                type: Boolean,
+                required:false,
+                default: false,
             },
         },
         data: function(){
             return {
             }
         },
+        computed:{
+            all_items_have_same_product: function(){           
+                if (this.items.length==0) return false
+                var first_investment=this.$store.getters.getObjectByUrl("investments", this.items[0].investments)
+                var first_product_url=this.$store.getters.getObjectPropertyByUrl("products", first_investment.products,"url")
+                var r=true
+                this.items.forEach(item => {//For Each doesn't allow to return false
+                    var investment=this.$store.getters.getObjectByUrl("investments", item.investments)
+                    var product_url=this.$store.getters.getObjectPropertyByUrl("products", investment.products,"url")
+                    if (product_url!=first_product_url)  {
+                        r=false
+                    }
+                });
+                return r
+            }
+        },
         methods: {
-            currency(value){
-                if (this.output=="account"){
-                    return this.currency_html(value, this.currency_account)
-                } else if (this.output=="investment"){
-                    return this.currency_html(value, this.currency_investment)
-                } else if (this.output=="user"){
-                    return this.currency_html(value, this.currency_user)
-                }
-            },
             table_headers(){
                 var r
                 if (this.output=="account"){
@@ -183,9 +186,9 @@
                         { text: this.$t('Invested'), value: 'invested_account',sortable: false, align:"right"},
                         { text: this.$t('Balance'), value: 'balance_account',sortable: false, align:"right"},
                         { text: this.$t('Gross gains'), value: 'gains_gross_account',sortable: false, align:"right"},
-                       { text: this.$t('% annual'), value: 'percentage_annual_account',sortable: false, align:"right"},
-                       { text: this.$t('% APR'), value: 'percentage_apr_account',sortable: false, align:"right"},
-                       { text: this.$t('% Total'), value: 'percentage_total_account',sortable: false, align:"right"},
+                        { text: this.$t('% annual'), value: 'percentage_annual_account',sortable: false, align:"right"},
+                        { text: this.$t('% APR'), value: 'percentage_apr_account',sortable: false, align:"right"},
+                        { text: this.$t('% Total'), value: 'percentage_total_account',sortable: false, align:"right"},
                     ]
                 } else if (this.output=="investment"){
                     r= [
@@ -214,7 +217,7 @@
                         { text: this.$t('% Total'), value: 'percentage_total_user',sortable: false, align:"right"},
                     ]
                 }            
-                if (this.homogeneous==false){
+                if (this.showinvestment==true){
                     r.splice(1, 0, { text: this.$t('Name'), value: 'investments', sortable: true });
                 }
                 return r
