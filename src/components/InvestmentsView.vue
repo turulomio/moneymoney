@@ -348,6 +348,7 @@
                                     this_.io.investments=this_.investment.url
                                     this_.io.shares=-shares
                                     this_.io.price=this_.investment.selling_price
+                                    this_.io_mode="C"
                                     if (shares>=0){
                                         this_.io.operationstypes=this_.$store.getters.getObjectById("operationstypes",5).url//Sales
                                     } else {
