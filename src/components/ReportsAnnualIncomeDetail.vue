@@ -24,7 +24,7 @@
                 </v-tab-item>
                 <v-tab-item key="dividends">     
                     <v-card class="pa-4">
-                        <TableDividends :items="dividends" currency_account="EUR"  height="600" output="user" :key="key"></TableDividends>
+                        <TableDividends :items="dividends" showinvestment height="600" :key="key" />
                     </v-card>
                 </v-tab-item>
                 <v-tab-item key="gains">       

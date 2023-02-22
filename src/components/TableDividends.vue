@@ -11,16 +11,16 @@
                <div v-html="$store.getters.getObjectPropertyByUrl('investments',item.investments,'fullname')"></div>
            </template> 
             <template v-slot:[`item.gross`]="{ item }">
-                <div v-html="currency(item.gross)"></div>
+                <div v-html="currency_html(item.gross,item.currency)"></div>
             </template>   
             <template v-slot:[`item.net`]="{ item }">
-                <div v-html="currency(item.net)"></div>
+                <div v-html="currency_html(item.net,item.currency)"></div>
             </template>   
             <template v-slot:[`item.commission`]="{ item }">
-                <div v-html="currency(item.commission)"></div>
+                <div v-html="currency_html(item.commission,item.currency)"></div>
             </template>   
             <template v-slot:[`item.taxes`]="{ item }">
-                <div v-html="currency(item.taxes)"></div>
+                <div v-html="currency_html(item.taxes,item.currency)"></div>
             </template>   
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="editDividend(item)">mdi-pencil</v-icon>
@@ -30,19 +30,19 @@
                 <tr class="totalrow" v-if="items.length>0">
                     <td v-for="(header,i) in headers" :key="i" >
                         <div v-if="header.value == 'datetime'">
-                            Total
+                          {{ $t("Total ({0} registers)").format(items.length)}}
                         </div>
-                        <div v-if="header.value == 'gross'">
-                            <div class="text-right" v-html="currency(listobjects_sum(items,'gross'))"></div>
+                        <div v-if="header.value == 'gross' && all_items_has_same_currency">
+                            <div class="text-right" v-html="currency_html(listobjects_sum(items,'gross'),total_currency)"></div>
                         </div>
-                        <div v-if="header.value == 'net'">
-                            <div class="text-right" v-html="currency(listobjects_sum(items,'net'))"></div>
+                        <div v-if="header.value == 'net' && all_items_has_same_currency">
+                            <div class="text-right" v-html="currency_html(listobjects_sum(items,'net'), total_currency)"></div>
                         </div>
-                        <div v-if="header.value == 'commission'">
-                            <div class="text-right" v-html="currency(listobjects_sum(items,'commission'))"></div>
+                        <div v-if="header.value == 'commission' && all_items_has_same_currency">
+                            <div class="text-right" v-html="currency_html(listobjects_sum(items,'commission'), total_currency)"></div>
                         </div>
-                        <div v-if="header.value == 'taxes'">
-                            <div class="text-right" v-html="currency(listobjects_sum(items,'taxes'))"></div>
+                        <div v-if="header.value == 'taxes' && all_items_has_same_currency">
+                            <div class="text-right" v-html="currency_html(listobjects_sum(items,'taxes'), total_currency)"></div>
                         </div>
                     </td>
                 </tr>
@@ -66,14 +66,29 @@
             items: {
                 required: true
             },
-            currency_account: {
-                required: true
-            },
-            homogeneous:{ //Only hides account if true
+            showinvestment:{ //Only hides account if true
                 type: Boolean,
                 required:false,
                 default:false,
             },
+        },        
+        computed:{
+            // To sum amounts
+            all_items_has_same_currency(){
+                if (this.items.length==0) return false
+                var first_currency=this.items[0].currency
+                var r=true
+                this.items.forEach(item => {//For Each doesn't allow to return false
+                    if (item.currency!=first_currency)  {
+                        r=false
+                    }
+                });
+                return r
+            },
+            total_currency: function(){
+                if (this.items.length==0) return "Bad currency"
+                return this.items[0].currency
+            }
         },
         data: function(){
             return {
@@ -84,9 +99,6 @@
             }
         },
         methods: {
-            currency(value){
-                return this.currency_html(value, this.currency_account)
-            },
             editDividend(item){
                 this.dividend=item
                 this.dividends_cu_mode="U"
@@ -111,7 +123,7 @@
                     { text: this.$t('DPS'), value: 'dps', sortable: true , align:"right"},
                     { text: this.$t('Actions'), value: 'actions', sortable: false },
                 ]
-                if (this.homogeneous==true){
+                if (this.showinvestment==false){
                     r.splice(1, 1)
                 }
                 return r

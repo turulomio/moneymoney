@@ -71,7 +71,7 @@
             <v-tab-item key="dividends">     
                 <v-card v-if="!loading">
                     <v-checkbox v-model="showAllDividends" :label="setChkDividendsLabel()" @click="on_chkDividends()"></v-checkbox>
-                    <TableDividends :items="dividends_filtered" currency_account="EUR"  height="300" output="user" :key="key" @cruded="on_TableDividends_cruded()"></TableDividends>
+                    <TableDividends :items="dividends_filtered" height="300" showinvestment :key="key" @cruded="on_TableDividends_cruded()" />
                 </v-card>
             </v-tab-item>
         </v-tabs-items> 
