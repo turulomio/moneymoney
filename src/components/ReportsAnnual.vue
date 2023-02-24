@@ -481,32 +481,27 @@
                 this.loading_annual_incomes=true
                 this.loading_annual_gainsbyproductstypes=true
                 this.last_year_balance_string=""
-                axios.get(`${this.$store.state.apiroot}/reports/annual/${this.year}/`, this.myheaders())
-                .then((response) => {
-                        this.last_year_balance=response.data.last_year_balance
-                        this.last_year_balance_string=this.$t("Last year balance ({0}) is {1}").format(
-                            this.localtime(response.data.dtaware_last_year),
-                            this.localcurrency_html(response.data.last_year_balance)
-                        )
-                        this.total_annual=response.data.data
-                        this.loading_annual=false
-                        this.refreshTotalTarget()
-                        this.refreshInvestOrWork()
-                        this.refreshMakeEndsMeet()
-                }, (error) => {
-                    this.parseResponseError(error)
-                })
-                axios.get(`${this.$store.state.apiroot}/reports/annual/income/${this.year}/`, this.myheaders())
-                .then((response) => {
-                    this.total_annual_incomes=response.data
+
+
+                axios.all([
+                    axios.get(`${this.$store.state.apiroot}/reports/annual/${this.year}/`, this.myheaders()),
+                    axios.get(`${this.$store.state.apiroot}/reports/annual/income/${this.year}/`, this.myheaders()),
+                    axios.get(`${this.$store.state.apiroot}/reports/annual/gainsbyproductstypes/${this.year}/`, this.myheaders())
+                ]).then(([resRA, resRAI, resRAG]) => {
+                    this.last_year_balance=resRA.data.last_year_balance
+                    this.last_year_balance_string=this.$t("Last year balance ({0}) is {1}").format(
+                        this.localtime(resRA.data.dtaware_last_year),
+                        this.localcurrency_html(resRA.data.last_year_balance)
+                    )
+                    this.total_annual=resRA.data.data
+                    this.loading_annual=false
+                    this.total_annual_incomes=resRAI.data
                     this.loading_annual_incomes=false
-                }, (error) => {
-                    this.parseResponseError(error)
-                })            
-                axios.get(`${this.$store.state.apiroot}/reports/annual/gainsbyproductstypes/${this.year}/`, this.myheaders())
-                .then((response) => {
-                        this.total_annual_gainsbyproductstypes=response.data
-                        this.loading_annual_gainsbyproductstypes=false
+                    this.total_annual_gainsbyproductstypes=resRAG.data
+                    this.loading_annual_gainsbyproductstypes=false
+                    this.refreshTotalTarget()
+                    this.refreshInvestOrWork()
+                    this.refreshMakeEndsMeet()
                 }, (error) => {
                     this.parseResponseError(error)
                 })
