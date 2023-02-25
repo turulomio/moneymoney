@@ -13,7 +13,7 @@
             <div v-html="currency_html(item.price_account, item.currency_account)"></div>
         </template>        
         <template v-slot:[`item.price_investment`]="{ item }" >
-            <div v-html="currency_html(item.price_investment, item.currency_investment)"></div>
+            <div v-html="currency_html(item.price_investment, item.currency_product)"></div>
         </template>  
         <template v-slot:[`item.price_user`]="{ item }">
             <div v-html="currency_html(item.price_user, currency(item))"></div>

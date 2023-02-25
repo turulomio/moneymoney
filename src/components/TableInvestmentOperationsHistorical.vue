@@ -50,22 +50,22 @@
             
             
             <template v-slot:[`item.gross_start_investment`]="{ item }">
-                <div v-html="currency_html(item.gross_start_investment, item.currency_investment)"></div>
+                <div v-html="currency_html(item.gross_start_investment, item.currency_product)"></div>
             </template>
             <template v-slot:[`item.gross_end_investment`]="{ item }">
-                <div v-html="currency_html(item.gross_end_investment, item.currency_investment)"></div>
+                <div v-html="currency_html(item.gross_end_investment, item.currency_product)"></div>
             </template>
             <template v-slot:[`item.gains_gross_investment`]="{ item }" >
-                <div v-html="currency_html(item.gains_gross_investment, item.currency_investment)"></div>
+                <div v-html="currency_html(item.gains_gross_investment, item.currency_product)"></div>
             </template>
             <template v-slot:[`item.commissions_investment`]="{ item }">
-                <div v-html="currency_html(item.commissions_investment, item.currency_investment)"></div>
+                <div v-html="currency_html(item.commissions_investment, item.currency_product)"></div>
             </template>
             <template v-slot:[`item.taxes_investment`]="{ item }">
-                <div v-html="currency_html(item.taxes_investment, item.currency_investment)"></div>
+                <div v-html="currency_html(item.taxes_investment, item.currency_product)"></div>
             </template>
             <template v-slot:[`item.gains_net_investment`]="{ item }">
-                <div v-html="currency_html(item.gains_net_investment, item.currency_investment)"></div>
+                <div v-html="currency_html(item.gains_net_investment, item.currency_product)"></div>
             </template>           
             <template v-slot:[`body.append`]="{headers}">
                 <tr class="totalrow" v-if="items.length>0 && showtotal">

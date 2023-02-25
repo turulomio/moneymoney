@@ -147,6 +147,13 @@
         },
         created(){
             this.new_io=Object.assign({},this.io)
+            if ("investments" in this.new_io==false){//Plio misses investments.url
+                this.new_io.investments=this.$store.getters.getObjectPropertyById("investments", this.new_io.investments_id,"url")
+                this.new_io.url=this.hyperlinked_url("investmentsoperations",this.new_io.id)
+                this.new_io.operationstypes=this.$store.getters.getObjectPropertyById("operationstypes", this.new_io.operationstypes_id,"url")
+            }
+            console.log(this.new_io)
+            
         }
     }
 </script>

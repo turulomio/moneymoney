@@ -148,7 +148,7 @@
                     r.push({ text: this.$t('Actions'), value: 'actions', sortable: false })
                 }
                 
-                if (this.currency_investment==this.currency_account){
+                if (this.currency_product==this.currency_account){
                     r.splice(8,1)
                 }
                 if (this.showinvestment==true){
