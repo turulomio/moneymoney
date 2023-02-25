@@ -201,7 +201,7 @@ export function empty_strategy_simulation(){
 export function empty_investments_chart(){
     return {
         ohcls:[],
-        io_object: [], //investmentsoperations object also simulations
+        plio_id: null, //plio_id
         limitlines:[],//empty_investments_chart_limit_line
     }
 }

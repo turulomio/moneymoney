@@ -28,10 +28,15 @@
                 limitlines:[], //Array of lines n%3==0 buy, n%3==1 average n%3==2  sell
             }
         },
+        computed:{
+            product: function(){
+                return this.$store.getters.getObjectById("products",this.data.plio_id.data.products_id)
+            }
+        },
         methods: {
             chart_option(){
                 var legends= [
-                            this.data.io_object.product.name, 
+                            this.product.fullname, 
                             this.$t("Buys"), 
                             this.$t("Sells"), 
                     ]
@@ -95,7 +100,7 @@
                 var r=[]
                 r.push({
                     type: 'line',
-                    name: this.data.io_object.product.name, 
+                    name: this.product.fullname, 
                     data: this.closes,
                     showSymbol:false,
                 })
@@ -174,7 +179,7 @@
                 return colors[num]
             },
         },
-        mounted(){
+        created(){
              this.loading=false
              this.data.ohcls.forEach(o=> {
                 this.closes.push([new Date(o.date), o.close])
@@ -192,7 +197,7 @@
                 this.limitlines.push(avg)
                 this.limitlines.push(sell)
             })
-             this.data.io_object.io.forEach(o=> {
+             this.data.plio_id.io.forEach(o=> {
                 if (o.shares>=0){
                     this.buys.push([o.datetime,o.price])
                 } else {

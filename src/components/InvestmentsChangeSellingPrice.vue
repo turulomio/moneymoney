@@ -97,7 +97,8 @@
             return{
                 tab:2,
                 form_valid:false,
-                data: [],
+                plio:null,
+                data:[],
                 selected:[],
                 tableHeaders: [
                     { text: this.$t('Id'), value: 'id', sortable: true },
@@ -190,6 +191,19 @@
                 this.calculate()
             },
         },
+        computed:{
+
+            investments_same_product(){
+                //Returns an array of integers
+                var r=[]
+                this.$store.state.investments.forEach(inv=>{
+                    if (inv.products==this.product.url && inv.active){
+                        r.push(inv.id)
+                    }
+                })
+                return r
+            }
+        },
         methods:{
             displayvalues(){
                 return [
@@ -275,23 +289,28 @@
             },
             refreshInvestments(select_current){
                 this.loading_ios=true
-                axios.get(`${this.$store.state.apiroot}/investmentsoperationstotalmanager/investments/sameproduct/?product=${this.product.url}`, this.myheaders())
+                var headers={...this.myheaders(),params:{investments: this.investments_same_product,mode:2}}
+                axios.get(`${this.$store.state.apiroot}/investmentsoperations/full/`, headers )
                 .then((response) => {
-                    this.dividends=response.data
-                    this.data=[]
-                    var o;
-                    response.data.forEach( iot => {
+                    this.plio=response.data
+                    console.log(this.plio)
+                    var o
+                    var plio_id
+
+                    this.investments_same_product.forEach( investments_id => {
+                        plio_id=this.plio[investments_id.toString()]
+                        var inv=this.$store.getters.getObjectById("investments",investments_id)
                         o={
-                            id: iot.investment.id,
-                            url: iot.investment.url,
-                            name: (this.investment.url==iot.investment.url) ? iot.investment.name+" (current)" : iot.investment.name,
-                            shares: iot.io_current.shares,
-                            selling_price: iot.investment.selling_price,
-                            selling_expiration: iot.investment.selling_expiration,
-                            average_price: iot.io_current.average_price_investment,
-                            invested_investment: iot.io_current.invested_investment,
-                            balance_investment: iot.io_current.balance_investment,
-                            currency:iot.product.currency,
+                            id: investments_id,
+                            url: inv.url,
+                            name: (this.investment.url==inv.url) ? inv.fullname+" (current)" : inv.fullname,
+                            shares: plio_id.total_io_current.shares,
+                            selling_price: inv.selling_price,
+                            selling_expiration: inv.selling_expiration,
+                            average_price: plio_id.total_io_current.average_price_investment,
+                            invested_investment: plio_id.total_io_current.invested_investment,
+                            balance_investment: plio_id.total_io_current.balance_investment,
+                            currency: plio_id.data.currency_product,
                             
                         }
                         this.data.push(o)

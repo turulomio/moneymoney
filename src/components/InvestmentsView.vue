@@ -217,7 +217,7 @@
                                     .then((response) => {
                                         this_.chart_data=this_.empty_investments_chart()
                                         this_.chart_data.ohcls=response.data
-                                        this_.chart_data.io_object=this_.plio_id
+                                        this_.chart_data.plio_id=this_.plio_id
                                         var ll
                                         if (this_.plio_id.io_current.length>0){
                                             ll=this_.empty_investments_chart_limit_line()
@@ -515,7 +515,8 @@
             },
 
             update_investmentsoperations(){
-                return axios.get(`${this.$store.state.apiroot}/investmentsoperations/full/?investments=${this.investment.id}`, this.myheaders())
+                var headers={...this.myheaders(),params:{investments:[this.investment.id,], mode:1}}
+                return axios.get(`${this.$store.state.apiroot}/investmentsoperations/full/`, headers)
             },
             update_dividends(){
                 var headers={...this.myheaders(),params:{investments:[this.investment.id,]}}
