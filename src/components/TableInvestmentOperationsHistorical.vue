@@ -160,7 +160,7 @@
                 if (this.output=="account"){
                     return item.currency_account
                 } else if (this.output=="investment"){
-                    return item.currency_investment
+                    return item.currency_product
                 } else if (this.output=="user"){
                     return item.currency_user
                 }

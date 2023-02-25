@@ -159,11 +159,11 @@
             // To sum shares and average price
             all_items_have_same_product: function(){           
                 if (this.items.length==0) return false
-                var first_investment=this.$store.getters.getObjectByUrl("investments", this.items[0].investments)
+                var first_investment=this.$store.getters.getObjectById("investments", this.items[0].investments_id)
                 var first_product_url=this.$store.getters.getObjectPropertyByUrl("products", first_investment.products,"url")
                 var r=true
                 this.items.forEach(item => {//For Each doesn't allow to return false
-                    var investment=this.$store.getters.getObjectByUrl("investments", item.investments)
+                    var investment=this.$store.getters.getObjectById("investments", item.investments_id)
                     var product_url=this.$store.getters.getObjectPropertyByUrl("products", investment.products,"url")
                     if (product_url!=first_product_url)  {
                         r=false
@@ -194,7 +194,7 @@
                 if (this.output=="account"){
                     return item.currency_account
                 } else if (this.output=="investment"){
-                    return item.currency_investment
+                    return item.currency_product
                 } else if (this.output=="user"){
                     return item.currency_user
                 }

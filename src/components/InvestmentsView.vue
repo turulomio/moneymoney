@@ -3,7 +3,7 @@
         <h1>{{ investment.fullname }}
             <MyMenuInline :items="items"  :context="this"></MyMenuInline>
         </h1>
-        <DisplayValues v-if="ios" :items="displayvalues()" :key="key"></DisplayValues>
+        <DisplayValues v-if="plio_id" :items="displayvalues()" :key="key"></DisplayValues>
 
         <v-tabs  background-color="primary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
             <v-tab key="current">{{ $t('Current investment operations') }}</v-tab>
@@ -20,12 +20,12 @@
                         <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card v-if="!loading">
-                                <TableInvestmentOperationsCurrent :items="list_io_current" showtotal output="investment" height="500" :key="key" />
+                                <TableInvestmentOperationsCurrent :items="plio_id.io_current" showtotal output="investment" height="500" :key="key" />
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
                                 <v-card v-if="!loading">
-                                    <TableInvestmentOperationsCurrent :items="list_io_current" showtotal output="account" height="400" :key="key" />
+                                    <TableInvestmentOperationsCurrent :items="plio_id.io_current" showtotal output="account" height="400" :key="key" />
                                 </v-card>
                             </v-tab-item>
                     </v-tabs>
@@ -57,12 +57,12 @@
                             <v-tab key="accounth">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investmenth">     
                             <v-card  v-if="!loading">
-                                <TableInvestmentOperationsHistorical :items="list_io_historical" showtotal height="500" output="investment" :key="key" />
+                                <TableInvestmentOperationsHistorical :items="plio_id.io_historical" showtotal height="500" output="investment" :key="key" />
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="accounth">
                                 <v-card v-if="!loading">
-                                    <TableInvestmentOperationsHistorical :items="list_io_historical" showtotal height="500" output="account" :key="key" />
+                                    <TableInvestmentOperationsHistorical :items="plio_id.io_historical" showtotal height="500" output="account" :key="key" />
                                 </v-card>
                             </v-tab-item>
                     </v-tabs>
@@ -111,15 +111,15 @@
             </v-card>
         </v-dialog>
         <!-- INVESTMENT CHART-->
-        <v-dialog v-model="dialog_investment_chart" v-if="ios">
+        <v-dialog v-model="dialog_investment_chart" v-if="plio_id">
             <v-card class="pa-3">
                 <ChartInvestments :data="chart_data" :key="key"></ChartInvestments>
             </v-card>
         </v-dialog>
         <!-- INVESTMENT change selling price-->
-        <v-dialog v-model="dialog_io_sameproduct" v-if="ios">
+        <v-dialog v-model="dialog_io_sameproduct" v-if="plio_id">
             <v-card class="pa-3">
-                <InvestmentsChangeSellingPrice :product="ios.product" :investment="investment" :key="key" @cruded="on_InvestmentsChangeSellingPrice_cruded()"></InvestmentsChangeSellingPrice>
+                <InvestmentsChangeSellingPrice :product="product.url" :investment="investment" :key="key" @cruded="on_InvestmentsChangeSellingPrice_cruded()"></InvestmentsChangeSellingPrice>
             </v-card>
         </v-dialog>
 
@@ -181,6 +181,10 @@
         computed:{
             account: function(){
                 return this.$store.getters.getObjectByUrl("accounts",this.investment.accounts)
+            },
+            product: function(){
+                return this.$store.getters.getObjectByUrl("products",this.investment.products)
+
             }
         },
         data () {
@@ -188,9 +192,6 @@
                 tab:0,
                 tabcurrent:0,
                 key:0,
-                list_io: [],
-                list_io_current: [],
-                list_io_historical: [],
                 dialog_io:false,
                 io:null,
                 io_mode:null,
@@ -212,16 +213,16 @@
                                 name:this.$t('Investment chart'),
                                 icon: "mdi-chart-areaspline",
                                 code: function(this_){
-                                    axios.get(`${this_.$store.state.apiroot}/products/quotes/ohcl?product=${this_.ios.product.url}`, this_.myheaders())
+                                    axios.get(`${this_.$store.state.apiroot}/products/quotes/ohcl?product=${this_.product.url}`, this_.myheaders())
                                     .then((response) => {
                                         this_.chart_data=this_.empty_investments_chart()
                                         this_.chart_data.ohcls=response.data
-                                        this_.chart_data.io_object=this_.ios
+                                        this_.chart_data.io_object=this_.plio_id
                                         var ll
-                                        if (this_.list_io_current.length>0){
+                                        if (this_.plio_id.io_current.length>0){
                                             ll=this_.empty_investments_chart_limit_line()
-                                            ll.buy=this_.ios.investment.average_price_investment
-                                            ll.average=this_.ios.investment.average_price_investment
+                                            ll.buy=this_.investment.average_price_investment
+                                            ll.average=this_.investment.average_price_investment
                                             ll.sell=this_.investment.selling_price
                                             this_.chart_data.limitlines.push(ll)
                                         }
@@ -320,9 +321,9 @@
                                 code: function(this_){
                                     var selling_price_product_currency=this_.parseNumber(prompt( this_.$t("Please add the operation close price in product currency"), 0 ));
                                     var gains_account_currency=this_.parseNumber(prompt( this_.$t("Please add the final gains in account currency"), 0 ));
-                                    var shares=this_.listobjects_sum(this_.list_io_current,"shares")
-                                    var average_price_current_account=this_.listobjects_average_ponderated(this_.list_io_current,'price_account', 'shares')
-                                    var leverage=this_.ios.product.leverage_real_multiplier
+                                    var shares=this_.listobjects_sum(this_.plio_id.io_current,"shares")
+                                    var average_price_current_account=this_.listobjects_average_ponderated(this_.plio_id.io_current,'price_account', 'shares')
+                                    var leverage=this_.product.leverage_real_multiplier
                                     var currency_conversion=(gains_account_currency+shares*average_price_current_account*leverage)/(shares*selling_price_product_currency*leverage)
 
                                     this_.io=this_.empty_investment_operation()
@@ -338,11 +339,11 @@
                             {
                                 name:this.$t('Sell/Buy all shares to selling price'),
                                 code: function(this_){
-                                    if (this_.investment.currency!=this_.ios.product.currency){
+                                    if (this_.investment.currency!=this_.product.currency){
                                         alert(this_.$t("You can't use this option if investment and product currencies are not the same"))
                                         return
                                     }
-                                    var shares=this_.listobjects_sum(this_.list_io_current,"shares")
+                                    var shares=this_.listobjects_sum(this_.plio_id.io_current,"shares")
 
                                     this_.io=this_.empty_investment_operation()
                                     this_.io.investments=this_.investment.url
@@ -405,7 +406,7 @@
                 dialog_evolution_chart:false,
                 dialog_evolution_chart_timeseries:false,
 
-                ios:null,
+                plio_id:null,
 
                 // Dividend CU
                 dividends_cu_dialog:false,
@@ -414,7 +415,6 @@
 
                 // Dividend Produts view
                 dialog_productview:false,
-                product: null,
 
                 // Investment chart
                 dialog_investment_chart:false,
@@ -468,13 +468,13 @@
                 return [
                     {title:this.$t('Selling point'), value: this.selling_point_message},
                     {title:this.$t('Selling expiration'), value: this.selling_expiration_message},
-                    {title:this.$t('Active'), value: this.ios.investment.active},
-                    {title:this.$t('Currency'), value: this.ios.product.currency},
-                    {title:this.$t('Next reinvest amount'), value: this.ios.product.currency},
-                    {title:this.$t('Product'), value: this.ios.product.name},
+                    {title:this.$t('Active'), value: this.investment.active},
+                    {title:this.$t('Currency'), value: this.plio_id.data.currency_product},
+                    {title:this.$t('Next reinvest amount'), value: this.plio_id.data.currency_product},
+                    {title:this.$t('Product'), value: this.product.fullname},
                     {title:this.$t('Leverage'), value: this.leverage_message},
-                    {title:this.$t('Daily adjustment'), value: this.ios.investment.daily_adjustment},
-                    {title:this.$t('Id'), value: this.ios.investment.id},
+                    {title:this.$t('Daily adjustment'), value: this.investment.daily_adjustment},
+                    {title:this.$t('Id'), value: this.investment.id},
                 ]
             },
             setChkDividendsLabel(){
@@ -493,12 +493,12 @@
             },
             on_chkShowAllIO_click(){
                 if (this.chkShowAllIO==true){
-                    this.io_filtered=this.list_io
+                    this.io_filtered=this.plio_id.io
                 } else {
-                    if (this.list_io_current.length==0){
+                    if (this.plio_id.io_current.length==0){
                         this.io_filtered=[]
                     } else {
-                        this.io_filtered=this.list_io.filter((d)=> new Date(d.datetime)>=new Date(this.list_io_current[0].datetime))
+                        this.io_filtered=this.plio_id.io.filter((d)=> new Date(d.datetime)>=new Date(this.plio_id.io_current[0].datetime))
                     }
                 }
             },
@@ -506,10 +506,10 @@
                 if (this.showAllDividends==true){
                     this.dividends_filtered=this.dividends
                 } else {
-                    if (this.list_io_current.length==0){
+                    if (this.plio_id.io_current.length==0){
                         this.dividends_filtered=[]
                     } else {
-                        this.dividends_filtered=this.dividends.filter((d)=> new Date(d.datetime)>=new Date(this.list_io_current[0].datetime))
+                        this.dividends_filtered=this.dividends.filter((d)=> new Date(d.datetime)>=new Date(this.plio_id.io_current[0].datetime))
                     }
                 }
             },
@@ -525,24 +525,22 @@
                 this.loading=true
                 axios.all([this.update_investmentsoperations(), this.update_dividends()])
                 .then(([resIO, resDividends]) => {
-                    this.ios=resIO.data[0]
-                    this.list_io=resIO.data[0].io
-                    this.list_io_current=resIO.data[0].io_current
-                    this.list_io_historical=resIO.data[0].io_historical
+                    console.log(resIO.data)
+                    this.plio_id=resIO.data[this.investment.id]
 
                     this.leverage_message= this.$t("{0} (Real: {1})").format(
-                        this.ios.product.leverage_multiplier,
-                        this.ios.product.leverage_real_multiplier
+                        this.plio_id.data.multiplier,
+                        this.plio_id.data.leverage_real_multiplier
                     )
 
-                    this.selling_point_message=this.currency_string(this.ios.investment.selling_price, this.ios.product.currency)
-                    if (this.ios.investment.gains_at_sellingpoint){
+                    this.selling_point_message=this.currency_string(this.investment.selling_price, this.product.currency)
+                    if (this.investment.gains_at_sellingpoint){
                         this.selling_point_message=this.selling_point_message+ this.$t(", to gain {0}").format(
-                            this.currency_string(this.ios.investment.gains_at_sellingpoint, this.ios.product.currency)
+                            this.currency_string(this.investment.gains_at_sellingpoint, this.product.currency)
                     )
                     }
-                    this.selling_expiration_message=`${this.ios.investment.selling_expiration}`
-                    if (new Date(this.ios.investment.selling_expiration).setHours(0,0,0,0)<new Date().setHours(0,0,0,0)){
+                    this.selling_expiration_message=`${this.investment.selling_expiration}`
+                    if (new Date(this.investment.selling_expiration).setHours(0,0,0,0)<new Date().setHours(0,0,0,0)){
                         this.selling_expiration_message=this.selling_expiration_message+ '.<span class="vuered"> '+ this.$t('You must set a new selling order.') + '</span>'
                     }
                     this.on_chkShowAllIO_click()
@@ -556,7 +554,9 @@
             }
         },
         created(){
+            console.log(this.investment)
             this.update_all()
+            console.log(this.product)
         }
     }
 </script>
