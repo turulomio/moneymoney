@@ -178,7 +178,7 @@
             },
             update_table(){
                 this.loading_strategies=true
-                axios.get(`${this.$store.state.apiroot}/strategies/withbalance/?active=${this.showActive}`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/api/strategies/withbalance/?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
                     this.strategies_items=response.data
                     this.loading_strategies=false
