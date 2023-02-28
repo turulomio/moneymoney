@@ -129,12 +129,6 @@
                 <InvestmentsoperationsReinvest :shares="reinvest_shares" :price="reinvest_price" :plio_id="plio_id" :key="key"></InvestmentsoperationsReinvest>
             </v-card>
         </v-dialog>
-        <!-- Divest dialog -->
-        <v-dialog v-model="dialog_divest">
-            <v-card class="pa-4">
-                <InvestmentsoperationsDivest :shares="divest_shares" :price="divest_price" :investments="divest_investments" :key="key"></InvestmentsoperationsDivest>
-            </v-card>
-        </v-dialog>
     </div>  
 </template>
 <script>
@@ -145,7 +139,6 @@
     import DividendsCU from './DividendsCU.vue'
     import ChartInvestmentsoperationsEvolution from './ChartInvestmentsoperationsEvolution.vue'
     import ChartInvestmentsoperationsEvolutionTimeseries from './ChartInvestmentsoperationsEvolutionTimeseries.vue'
-    import InvestmentsoperationsDivest from "./InvestmentsoperationsDivest.vue"
     import InvestmentsoperationsReinvest from "./InvestmentsoperationsReinvest.vue"
     import InvestmentsChangeSellingPrice from './InvestmentsChangeSellingPrice.vue'
     import MyMenuInline from './MyMenuInline.vue'
@@ -160,7 +153,6 @@
             ChartInvestments,
             DisplayValues,
             DividendsCU,
-            InvestmentsoperationsDivest,
             InvestmentsoperationsReinvest,
             MyMenuInline,
             ProductsView,
@@ -361,24 +353,12 @@
                                 icon: "mdi-book-plus",
                             },
                             {
-                                name:this.$t('Reinvest operation'),
+                                name:this.$t('Reinvest/Divest operation'),
                                 code: function(this_){
                                     this_.reinvest_shares=0
                                     this_.reinvest_price=this_.investment.last
                                     this_.key=this_.key+1                        
                                     this_.dialog_reinvest=true
-                                },
-                                icon: "mdi-book-plus",
-                            },
-                            {
-                                name:this.$t('Divest operation'),
-                                code: function(this_){
-                                    this_.divest_investments=[]
-                                    this_.divest_investments.push(this_.investment.url)
-                                    this_.divest_shares=0
-                                    this_.divest_price=this_.investment.last
-                                    this_.key=this_.key+1                        
-                                    this_.dialog_divest=true
                                 },
                                 icon: "mdi-book-plus",
                             },

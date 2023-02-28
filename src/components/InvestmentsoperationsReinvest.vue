@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>{{ $t("Reinvest dialog") }}
+        <h1>{{ title }}
             <MyMenuInline :items="items" :context="this"></MyMenuInline>
         </h1>                
         <v-select class="mr-5" :items="re_or_di_items" v-model="re_or_di" :label="$t('Do you want to reinvest or divest?')"  item-text="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables()"></v-select>  
@@ -10,7 +10,7 @@
                 <v-row>                
                     <AutocompleteProducts class="mr-5" v-model="product" :rules="RulesSelection(true)"  />
                     <v-text-field class="mr-5" v-model="newprice"  :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesFloatGEZ(10,true, product.decimals)" counter="10"/>
-                    <v-text-field v-model.number="newshares"  :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesFloatGEZ(14,true,6)" counter="14"/>
+                    <v-text-field v-model.number="newshares"  :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesFloat(14,true,6)" counter="14"/>
                 </v-row>
 
             <v-row>
@@ -111,7 +111,7 @@
             return {
                 items: [
                     {
-                        subheader:this.$t('Options to set shares'),
+                        subheader:this.$t('Options to reinvest'),
                         children: [
                             {
                                 name:this.$t('Integer shares from amount to reinvest'),
@@ -126,6 +126,63 @@
                                 code: function(this_){
                                     var amount=this_.parseNumber(prompt( this_.$t("Please set the amount to invest in this order"), 10000 ));
                                     this_.newshares=amount/this_.newprice
+                                },
+                                icon: "mdi-book-plus",
+                            },
+                        ]
+                    },
+                    {
+                        subheader:this.$t('Options to divest'),
+                        children: [
+                            {
+                                name:this.$t('Calculate shares from losses amount'),
+                                code: function(this_){
+                                    var losses=this_.parseNumber(prompt( this_.$t("Please set losses to consolidate (Positive amount)"), 500 ));
+
+                                    var resultado=0
+                                    for (var i = 0; i < this_.ios_before.io_current.length; i++) {
+                                        var o=this_.ios_before.io_current[i]
+                                        var gains=o.gains_gross_investment
+                                        if (losses+gains==0){
+                                            resultado=resultado+o.shares
+                                            break
+                                        } else if (losses+gains>0){
+                                            resultado=resultado+o.shares
+                                            losses=losses+gains
+                                        } else if (losses+gains<0){
+                                            resultado=resultado+Math.abs(parseInt(losses*o.shares/gains))
+                                            break
+                                        }
+                                    }
+
+
+                                    this_.newshares=-resultado
+                                },
+                                icon: "mdi-book-plus",
+                            },
+                            {
+                                name:this.$t('Float shares to consolidate losses'),
+                                code: function(this_){
+                                    var losses=this_.parseNumber(prompt( this_.$t("Please set losses to consolidate (Positive amount)"), 500 ));
+
+                                    var resultado=0
+                                    for (var i = 0; i < this_.ios_before.io_current.length; i++) {
+                                        var o=this_.ios_before.io_current[i]
+                                        var gains=o.gains_gross_investment
+                                        if (losses+gains==0){
+                                            resultado=resultado+o.shares
+                                            break
+                                        } else if (losses+gains>0){
+                                            resultado=resultado+o.shares
+                                            losses=losses+gains
+                                        } else if (losses+gains<0){
+                                            resultado=resultado+Math.abs(losses*o.shares/gains)
+                                            break
+                                        }
+                                    }
+
+
+                                    this_.newshares=-this_.my_round(resultado,6)
                                 },
                                 icon: "mdi-book-plus",
                             },
@@ -149,6 +206,7 @@
                     },
                 ],
 
+                title:"",
                 //View options
                 re_or_di_items:[
                     {id:1, name: this.$t('Reinvest')},
@@ -197,7 +255,7 @@
                 } else {
                     return this.plio_id_after
                 }
-            }
+            },
         },
         methods: {
             empty_order,
@@ -205,6 +263,13 @@
             empty_investment_operation,
             empty_investments_chart,
             empty_investments_chart_limit_line,
+            set_title(){
+                if (this.re_or_di==1){
+                    this.title= this.$t("Reinvest dialog")
+                } else {
+                    this.title=this.$t("Divest dialog")
+                }
+            },
             add_order(){
                 this.order=this.empty_order()
                 this.order.price=this.newprice
@@ -240,9 +305,25 @@
                     this.refreshTables()
                 });
             },
-            make_all_axios_after(){         
-                if (this.newshares<=0){
+            make_all_axios_after(){  
+                
+                //Calculate shares before
+                var shares_before=0
+                this.plio_id.io_current.forEach(o=>{
+                    shares_before=shares_before + o.shares
+                }) 
+       
+                if (this.newshares<=0 && this.re_or_di==1){
                     alert(this.$t("To reinvest shares must be positive"))
+                    return
+                }
+                if (this.newshares>=0 && this.re_or_di==2){
+                    alert(this.$t("To divest shares must be negative"))
+                    return
+                }
+
+                if (Math.abs(this.newshares)>=shares_before && this.re_or_di==2){
+                    alert(this.$t("You're divesting the whole investment shares ({0})").format(Math.abs(this.newshares)))
                     return
                 }
                 this.viewoption=2
@@ -255,6 +336,7 @@
                 });
             },
             refreshTables(){
+                this.set_title()
                 var ll
                 this.chart_data=this.empty_investments_chart()
                 this.chart_data.plio_id=this.plio_id_current
@@ -302,8 +384,6 @@
             this.newshares=this.shares
             this.newprice=this.price
             this.product=this.$store.getters.getObjectById("products", this.plio_id_current.data.products_id)
-            console.log(this.product)
-            console.log(this.plio_id)
             this.make_all_axios_before()
         }
         
