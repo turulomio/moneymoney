@@ -82,7 +82,7 @@ export function empty_estimation_dps(){
 
 export function empty_investment_operation(){
     return {
-        datetime: new Date().toISOString(),
+        datetime: new Date(),
         operationstypes: `${this.$store.state.apiroot}/api/operationstypes/4/`,
         shares:0,
         taxes:0,
@@ -183,9 +183,7 @@ export function empty_products_ranges(){
 
 export function empty_investments_operations_simulation(){
     return {
-        investments: [], //urls
-        dt:new Date().toISOString(),
-        local_currency: null,
+        plio_id: null, //plio_id objecrt
         operations:[],//Empty io
     }
 }

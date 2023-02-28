@@ -2,19 +2,19 @@
     <div>
         <h1>{{ $t("Reinvest dialog") }}
             <MyMenuInline :items="items" :context="this"></MyMenuInline>
-        </h1>
+        </h1>                
+        <v-select class="mr-5" :items="re_or_di_items" v-model="re_or_di" :label="$t('Do you want to reinvest or divest?')"  item-text="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables()"></v-select>  
+
         <v-card class="pa-4 mb-3 mt-3"  >
             <v-form ref="form" v-model="form_valid" lazy-validation class="pa-4">
                 <v-row>                
                     <AutocompleteProducts class="mr-5" v-model="product" :rules="RulesSelection(true)"  />
-                    <v-autocomplete :items="$store.getters.getInvestmentsByProduct(product)" v-model="newinvestments" :label="$t('Select investments to include')" item-text="fullname" item-value="url" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
-
                     <v-text-field class="mr-5" v-model="newprice"  :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesFloatGEZ(10,true, product_decimals)" counter="10"/>
                     <v-text-field v-model.number="newshares"  :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesFloatGEZ(14,true,6)" counter="14"/>
                 </v-row>
 
             <v-row>
-                <v-select class="mr-5" :disabled="loading || (ios_after==null)" :items="viewoptions" v-model="viewoption" :label="$t('Set a view option')"  item-text="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables()"></v-select>  
+                <v-select class="mr-5" :disabled="loading || (plio_id_after==null)" :items="viewoptions" v-model="viewoption" :label="$t('Set a view option')"  item-text="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables()"></v-select>  
                 <v-select class="mr-5" :items="gains_methods" v-model="gains_method" :label="$t('Set a method to calculate gains')"  item-text="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
 
 
@@ -26,32 +26,32 @@
             </v-form>  
 
         </v-card>
-        <v-tabs v-if="ios_before" background-color="primary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
+        <v-tabs v-if="plio_id_current" background-color="primary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
             <v-tab key="current">{{ $t('Current investment operations') }}</v-tab>
             <v-tab key="operations">{{ $t('Investment operations') }}</v-tab>
             <v-tab key="historical">{{ $t('Historical investment operations') }}</v-tab>
             <v-tab key="chart">{{ $t('Investment chart') }}</v-tab>
             <v-tabs-slider color="yellow"></v-tabs-slider>
         </v-tabs>
-        <v-tabs-items v-if="ios_before" v-model="tab">
+        <v-tabs-items v-if="plio_id_current" v-model="tab">
             <v-tab-item key="current">      
                 <div>
                     <v-card>
-                        <TableInvestmentOperationsCurrent showtotal :items="list_io_current" output="investment" height="400" :key="key" :loading="loading" />
+                        <TableInvestmentOperationsCurrent showtotal :items="plio_id_current.io_current" output="investment" height="400" :key="key" :loading="loading" />
                     </v-card>
                 </div>
             </v-tab-item>
             <v-tab-item key="operations">          
                 <div>
                     <v-card>
-                        <TableInvestmentOperations :items="list_io" height="400" :key="key" output="investment" :loading="loading" />
+                        <TableInvestmentOperations :items="plio_id_current.io" height="400" :key="key" output="investment" :loading="loading" />
                     </v-card>
                 </div>
             </v-tab-item>
             <v-tab-item key="historical">     
                 <div>            
                     <v-card>
-                        <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="investment" :key="key" :loading="loading" showtotal />
+                        <TableInvestmentOperationsHistorical :items="plio_id_current.io_historical" height="400" output="investment" :key="key" :loading="loading" showtotal />
                     </v-card>
                 </div>
             </v-tab-item>
@@ -94,8 +94,8 @@
             AutocompleteProducts,
         },
         props: {
-            investments: {
-                type: Array,
+            plio_id: { //object plinvestmentsoperations id can be investment or virtual investment (Merged)
+                       //it uses only current_operations to make simulation 
                 required: true,
             },
             shares: {
@@ -150,6 +150,11 @@
                 ],
 
                 //View options
+                re_or_di_items:[
+                    {id:1, name: this.$t('Reinvest')},
+                    {id:2, name: this.$t('Divest')},
+                ],      
+                re_or_di:1,
                 viewoptions:[
                     {id:1, name:'Before simulation'},
                     {id:2, name:'After simulation'},
@@ -160,10 +165,7 @@
                 ],
                 viewoption:1,
                 gains_method:1,
-                list_io_current:[],
-                list_io:[],
-                list_io_historical:[],
-                tab:3,
+                tab:0,
                 key:0,
                 gains_value:10,
 
@@ -183,8 +185,7 @@
 
                 //simulation
                 ohcls:null,
-                ios_before:null,
-                ios_after:null,
+                plio_id_after:null,
                 loading:false,
                 form_valid:false,
             }
@@ -192,6 +193,13 @@
         computed:{
             product_decimals: function(){
                 return this.$store.getters.getObjectPropertyByUrl("products",this.product,"decimals")
+            },
+            plio_id_current: function(){
+                if (this.viewoption==1){
+                    return this.plio_id
+                } else {
+                    return this.plio_id_after
+                }
             }
         },
         methods: {
@@ -214,32 +222,23 @@
             refreshProductQuotes(){
                 return axios.get(`${this.$store.state.apiroot}/products/quotes/ohcl?product=${this.product.url}`, this.myheaders())
             },
-            simulateOrderBefore(){
-                var simulation=this.empty_investments_operations_simulation()
-                simulation.investments=this.newinvestments
-                simulation.local_currency=this.$store.state.profile.currency
-                return axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
-            },
             simulateOrderAfter(){
                 var simulation=this.empty_investments_operations_simulation()
-                simulation.investments=this.newinvestments
-                simulation.local_currency=this.$store.state.profile.currency
+                simulation.plio_id=this.plio_id
                 var operation=this.empty_investment_operation()
-                operation.datetime=simulation.dt
                 operation.shares=this.newshares
                 operation.price=this.newprice
                 operation.comment="Simulation 1"
-                operation.investments=this.investments[0]
+                operation.investments=this.plio_id.investments_id
                 simulation.operations.push(operation)
                 return axios.post(`${this.$store.state.apiroot}/investmentsoperations/full/simulation/`, simulation, this.myheaders())
                 
             },
             make_all_axios_before(){
                 this.loading=true
-                axios.all([this.refreshProductQuotes(), this.simulateOrderBefore()])
-                .then(([resQuotes, resBefore]) => {
-                    this.ohcls=resQuotes.data 
-                    this.ios_before=resBefore.data
+                axios.all([this.refreshProductQuotes(),])
+                .then(([resQuotes,]) => {
+                    this.ohcls=resQuotes.data
                     this.loading=false
                     this.refreshTables()
                 });
@@ -251,10 +250,9 @@
                 }
                 this.viewoption=2
                 this.loading=true
-                axios.all([this.simulateOrderBefore(),this.simulateOrderAfter()])
-                .then(([resBefore,resAfter]) => {
-                    this.ios_after=resAfter.data
-                    this.ios_before=resBefore.data
+                axios.all([this.simulateOrderAfter(),])
+                .then(([resAfter,]) => {
+                    this.plio_id_after=resAfter.data
                     this.loading=false
                     this.refreshTables()
                 });
@@ -263,19 +261,19 @@
                 var ll
                 this.chart_data=this.empty_investments_chart()
                 this.chart_data.ohcls=this.ohcls
-                if (this.ios_before.io_current.length>0){                  
+                if (this.plio_id_current.io_current.length>0){                  
                     //Calculate shares before
                     var shares_before=0
-                    this.ios_before.io_current.forEach(o=>{
+                    this.plio_id_current.io_current.forEach(o=>{
                         shares_before=shares_before + o.shares
                     }) 
                     ll=this.empty_investments_chart_limit_line()
-                    ll.buy=this.ios_before.investment.average_price_investment
-                    ll.average=this.ios_before.investment.average_price_investment
+                    ll.buy=this.plio_id_current.total_io_current.average_price_investment
+                    ll.average=this.plio_id_current.total_io_current.average_price_investment
                     if (this.gains_method==1){
                         ll.sell=ll.average*(1+this.gains_value/100)
                     } else {//P_f={P_o Ac Ap +G } over {Ac Ap } Fixed amount
-                        ll.sell=(ll.average*shares_before*this.ios_before.product.leverage_real_multiplier+this.gains_value)/(shares_before*this.ios_before.product.leverage_real_multiplier)
+                        ll.sell=(ll.average*shares_before*this.product.leverage_real_multiplier+this.gains_value)/(shares_before*this.product.leverage_real_multiplier)
                     }
                     this.chart_data.limitlines.push(ll)
 
@@ -283,28 +281,25 @@
 
 
                 if(this.viewoption==1){ //Before
-                    this.list_io_current=this.ios_before.io_current
-                    this.list_io=this.ios_before.io
-                    this.list_io_historical=this.ios_before.io_historical
-                    this.chart_data.io_object=this.ios_before
+                    this.chart_data.io_object=this.plio_id_current
                 } else if(this.viewoption==2){//After
                     //Calculate shares after
                     var shares_after=0
-                    this.ios_after.io_current.forEach(o=>{
+                    this.plio_id_after.io_current.forEach(o=>{
                         shares_after=shares_after + o.shares
                     }) 
 
-                    this.list_io_current=this.ios_after.io_current
-                    this.list_io=this.ios_after.io
-                    this.list_io_historical=this.ios_after.io_historical
-                    this.chart_data.io_object=this.ios_after
+                    this.list_io_current=this.plio_id_after.io_current
+                    this.list_io=this.plio_id_after.io
+                    this.list_io_historical=this.plio_id_after.io_historical
+                    this.chart_data.io_object=this.plio_id_after
                     var ll2=this.empty_investments_chart_limit_line()
                     ll2.buy=this.newprice
-                    ll2.average=this.ios_after.investment.average_price_investment
+                    ll2.average=this.plio_id_after.investment.average_price_investment
                     if (this.gains_method==1){
                         ll2.sell=ll2.average*(1+this.gains_value/100)
                     } else {//P_f={P_o Ac Ap +G } over {Ac Ap } Fixed amount
-                        ll2.sell=(ll2.average*shares_after*this.ios_after.product.leverage_real_multiplier+this.gains_value)/(shares_after*this.ios_after.product.leverage_real_multiplier)
+                        ll2.sell=(ll2.average*shares_after*this.plio_id_after.product.leverage_real_multiplier+this.gains_value)/(shares_after*this.plio_id_after.product.leverage_real_multiplier)
                     }
                     this.chart_data.limitlines.push(ll2)
                 }
@@ -312,13 +307,11 @@
             },
         },
         created(){
+            //This components
             this.newshares=this.shares
             this.newprice=this.price
-            this.investments.forEach(element => { this.newinvestments.push(element)});
-            if (this.newinvestments.length>0) {
-
-                var product_url=this.$store.getters.getObjectPropertyByUrl("investments", this.newinvestments[0],"products")
-                this.product=this.$store.getters.getObjectByUrl("products", product_url)            }
+            this.product=this.$store.getters.getObjectById("products", this.plio_id_current.data.products_id)
+            console.log(this.plio_id)
             this.make_all_axios_before()
         }
         

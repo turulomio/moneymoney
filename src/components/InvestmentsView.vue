@@ -126,7 +126,7 @@
         <!-- Reinvest dialog -->
         <v-dialog v-model="dialog_reinvest">
             <v-card class="pa-4">
-                <InvestmentsoperationsReinvest :shares="reinvest_shares" :price="reinvest_price" :investments="reinvest_investments" :key="key"></InvestmentsoperationsReinvest>
+                <InvestmentsoperationsReinvest :shares="reinvest_shares" :price="reinvest_price" :plio_id="plio_id" :key="key"></InvestmentsoperationsReinvest>
             </v-card>
         </v-dialog>
         <!-- Divest dialog -->
@@ -363,8 +363,6 @@
                             {
                                 name:this.$t('Reinvest operation'),
                                 code: function(this_){
-                                    this_.reinvest_investments=[]
-                                    this_.reinvest_investments.push(this_.investment.url)
                                     this_.reinvest_shares=0
                                     this_.reinvest_price=this_.investment.last
                                     this_.key=this_.key+1                        
@@ -424,7 +422,6 @@
 
                 //dialog_reinvest
                 dialog_reinvest: false,
-                reinvest_investments:[],
                 reinvest_shares:0,
                 reinvest_price:0,
                 //dialog_divest
@@ -528,6 +525,7 @@
                 .then(([resIO, resDividends]) => {
                     console.log(resIO.data)
                     this.plio_id=resIO.data[this.investment.id]
+                    console.log(this.plio_id)
 
                     this.leverage_message= this.$t("{0} (Real: {1})").format(
                         this.plio_id.data.multiplier,
@@ -555,9 +553,7 @@
             }
         },
         created(){
-            console.log(this.investment)
             this.update_all()
-            console.log(this.product)
         }
     }
 </script>
