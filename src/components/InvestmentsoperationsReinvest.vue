@@ -3,7 +3,7 @@
         <h1>{{ title }}
             <MyMenuInline :items="items" :context="this"></MyMenuInline>
         </h1>                
-        <v-select class="mr-5" :items="re_or_di_items" v-model="re_or_di" :label="$t('Do you want to reinvest or divest?')"  item-text="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables()"></v-select>  
+        <v-select class="mr-5" :items="re_or_di_items" v-model="re_or_di" :label="$t('Do you want to reinvest or divest?')"  item-text="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables"></v-select>  
 
         <v-card class="pa-4 mb-3 mt-3"  >
             <v-form ref="form" v-model="form_valid" lazy-validation class="pa-4">
@@ -14,14 +14,14 @@
                 </v-row>
 
             <v-row>
-                <v-select class="mr-5" :disabled="loading || (plio_id_after==null)" :items="viewoptions" v-model="viewoption" :label="$t('Set a view option')"  item-text="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables()"></v-select>  
+                <v-select class="mr-5" :disabled="loading || (plio_id_after==null)" :items="viewoptions" v-model="viewoption" :label="$t('Set a view option')"  item-text="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables"></v-select>  
                 <v-select class="mr-5" :items="gains_methods" v-model="gains_method" :label="$t('Set a method to calculate gains')"  item-text="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
 
 
                 <v-text-field class="mr-5" autoindex="1" :disabled="loading" v-model.number="gains_value"  :label="$t('Gains method value')" :placeholder="$t('Gains method value')" :rules="RulesFloat(8,true,6)" counter="8"/>
 
-                <v-btn class="mr-5" color="primary" @click="make_all_axios_after()" :disabled="!form_valid">{{ $t("Simulate") }}</v-btn>
-                <v-btn v-if="this.newinvestments.length==1" color="error" @click="add_order()" :disabled="!form_valid">{{ $t("Add order") }}</v-btn>                 
+                <v-btn class="mr-5" color="primary" @click="make_all_axios_after" :disabled="!form_valid">{{ $t("Simulate") }}</v-btn>
+                <v-btn v-if="this.newinvestments.length==1" color="error" @click="add_order" :disabled="!form_valid">{{ $t("Add order") }}</v-btn>                 
             </v-row>
             </v-form>  
 
@@ -67,7 +67,7 @@
         <!-- Order CU dialog -->
         <v-dialog v-model="dialog_order_cu" max-width="550">
             <v-card class="pa-4">
-                <OrdersCU :order="order" mode="C" :key="key" @cruded="on_OrdersCU_cruded()"></OrdersCU>
+                <OrdersCU :order="order" mode="C" :key="key" @cruded="on_OrdersCU_cruded"></OrdersCU>
             </v-card>
         </v-dialog>
     </div>

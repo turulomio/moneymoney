@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ investment.fullname }}
-            <MyMenuInline :items="items"  :context="this"></MyMenuInline>
+            <MyMenuInline :items="items" :context="this"></MyMenuInline>
         </h1>
         <DisplayValues v-if="plio_id" :items="displayvalues()" :key="key"></DisplayValues>
 
@@ -33,13 +33,13 @@
             </v-tab-item>
             <v-tab-item key="operations">          
                 <div>
-                    <v-checkbox v-model="chkShowAllIO" :label="set_chkShowAllIO_label()" @click="on_chkShowAllIO_click()"></v-checkbox>
+                    <v-checkbox v-model="chkShowAllIO" :label="set_chkShowAllIO_label()" @click="on_chkShowAllIO_click"></v-checkbox>
                     <v-tabs vertical  v-model="tabcurrent">
                         <v-tab key="investment">{{ $t('Investment currency') }}</v-tab>
                             <v-tab key="account">{{ $t('Account currency') }}</v-tab>
                         <v-tab-item key="investment">     
                             <v-card v-if="!loading">
-                                <TableInvestmentOperations :items="io_filtered" height="500" :key="key" output="investment" @cruded="on_TableInvestmentsOperations_cruded()" />
+                                <TableInvestmentOperations :items="io_filtered" height="500" :key="key" output="investment" @cruded="on_TableInvestmentsOperations_cruded" />
                             </v-card>
                         </v-tab-item>
                             <v-tab-item key="account">
@@ -70,8 +70,8 @@
             </v-tab-item>
             <v-tab-item key="dividends">     
                 <v-card v-if="!loading">
-                    <v-checkbox v-model="showAllDividends" :label="setChkDividendsLabel()" @click="on_chkDividends()"></v-checkbox>
-                    <TableDividends :items="dividends_filtered" height="500" :key="key" @cruded="on_TableDividends_cruded()" />
+                    <v-checkbox v-model="showAllDividends" :label="setChkDividendsLabel()" @click="on_chkDividends"></v-checkbox>
+                    <TableDividends :items="dividends_filtered" height="500" :key="key" @cruded="on_TableDividends_cruded" />
                 </v-card>
             </v-tab-item>
         </v-tabs-items>
@@ -93,14 +93,14 @@
         <!-- IO CU-->
         <v-dialog v-model="dialog_io" width="65%">
             <v-card class="pa-3">
-                <InvestmentsoperationsCU :io="io" :mode="io_mode" :key="key"  @cruded="on_InvestmentsoperationsCU_cruded()" />
+                <InvestmentsoperationsCU :io="io" :mode="io_mode" :key="key"  @cruded="on_InvestmentsoperationsCU_cruded" />
             </v-card>
         </v-dialog>
 
         <!-- DIVIDEND CU-->
         <v-dialog v-model="dividends_cu_dialog" width="35%">
             <v-card class="pa-3">
-                <DividendsCU :dividend="dividend" :mode="dividends_cu_mode" :key="key"  @cruded="on_DividendsCU_cruded()"></DividendsCU>
+                <DividendsCU :dividend="dividend" :mode="dividends_cu_mode" :key="key"  @cruded="on_DividendsCU_cruded"></DividendsCU>
             </v-card>
         </v-dialog>
 
@@ -119,7 +119,7 @@
         <!-- INVESTMENT change selling price-->
         <v-dialog v-model="dialog_io_sameproduct" v-if="plio_id">
             <v-card class="pa-3">
-                <InvestmentsChangeSellingPrice :product="product.url" :investment="investment" :key="key" @cruded="on_InvestmentsChangeSellingPrice_cruded()"></InvestmentsChangeSellingPrice>
+                <InvestmentsChangeSellingPrice :product="product.url" :investment="investment" :key="key" @cruded="on_InvestmentsChangeSellingPrice_cruded"></InvestmentsChangeSellingPrice>
             </v-card>
         </v-dialog>
 
@@ -503,9 +503,7 @@
                 this.loading=true
                 axios.all([this.update_investmentsoperations(), this.update_dividends()])
                 .then(([resIO, resDividends]) => {
-                    console.log(resIO.data)
                     this.plio_id=resIO.data[this.investment.id]
-                    console.log(this.plio_id)
 
                     this.leverage_message= this.$t("{0} (Real: {1})").format(
                         this.plio_id.data.multiplier,

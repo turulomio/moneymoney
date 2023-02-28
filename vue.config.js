@@ -1,5 +1,4 @@
 
-console.log(process.env)
 var wp
 if (process.env.NODE_ENV==="production"){
   wp={
@@ -30,7 +29,6 @@ var common={
     },
   },
 }
-console.log({...wp,...common})
 
 
 

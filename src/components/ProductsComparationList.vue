@@ -20,8 +20,8 @@
         <v-card class="pa-6">
             <v-card-title>{{ $t("Select two products") }}</v-card-title>
             <v-card-subtitle>{{ $t("Put in first place the one with better behaviour") }}</v-card-subtitle>
-            <AutocompleteProducts v-model="product_a" :label="$t('Select the best product')" :rules="RulesSelection(true)"  />
-            <AutocompleteProducts v-model="product_b" :label="$t('Select the worst product')" :rules="RulesSelection(true)"  />
+            <AutocompleteProducts v-model="product_a" :label="$t('Select the best product')" :rules="RulesSelection(true)" :key="'A'+key" />
+            <AutocompleteProducts v-model="product_b" :label="$t('Select the worst product')" :rules="RulesSelection(true)" :key="'B'+key" />
             <v-card-actions>
                 <v-btn color="primary" @click="change" :disabled="(product_a==null || product_b==null)">{{ $t('Switch') }}</v-btn>
                 <v-btn color="primary" @click="pairReport" :disabled="(product_a==null || product_b==null)">{{ $t('Pair report') }}</v-btn>
@@ -36,7 +36,7 @@
         <!-- DIALOG PRODUCT COMPARATION CY-->
         <v-dialog v-model="dialog_cu" max-width="40%">
             <v-card class="pa-4">
-                <ProductsComparationCU :pc="pc" :mode="pc_mode" :key="key"  @cruded="on_ProductsComparationCU_cruded()" />
+                <ProductsComparationCU :pc="pc" :mode="pc_mode" :key="key"  @cruded="on_ProductsComparationCU_cruded" />
             </v-card>
         </v-dialog>
     </div>
@@ -121,6 +121,8 @@
             pairReportItem(item){       
                 this.product_a=item.a
                 this.product_b=item.b
+                this.key=this.key+1
+                console.log(this.product_a)
             },
             refreshTable(){               
                 this.loading=true
