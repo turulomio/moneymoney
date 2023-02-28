@@ -9,7 +9,7 @@
             <v-form ref="form" v-model="form_valid" lazy-validation class="pa-4">
                 <v-row>                
                     <AutocompleteProducts class="mr-5" v-model="product" :rules="RulesSelection(true)"  />
-                    <v-text-field class="mr-5" v-model="newprice"  :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesFloatGEZ(10,true, product_decimals)" counter="10"/>
+                    <v-text-field class="mr-5" v-model="newprice"  :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesFloatGEZ(10,true, product.decimals)" counter="10"/>
                     <v-text-field v-model.number="newshares"  :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesFloatGEZ(14,true,6)" counter="14"/>
                 </v-row>
 
@@ -191,9 +191,6 @@
             }
         },
         computed:{
-            product_decimals: function(){
-                return this.$store.getters.getObjectPropertyByUrl("products",this.product,"decimals")
-            },
             plio_id_current: function(){
                 if (this.viewoption==1){
                     return this.plio_id
@@ -260,46 +257,40 @@
             refreshTables(){
                 var ll
                 this.chart_data=this.empty_investments_chart()
+                this.chart_data.plio_id=this.plio_id_current
                 this.chart_data.ohcls=this.ohcls
-                if (this.plio_id_current.io_current.length>0){                  
+                if (this.plio_id.io_current.length>0){                  
                     //Calculate shares before
                     var shares_before=0
-                    this.plio_id_current.io_current.forEach(o=>{
+                    this.plio_id.io_current.forEach(o=>{
                         shares_before=shares_before + o.shares
                     }) 
                     ll=this.empty_investments_chart_limit_line()
-                    ll.buy=this.plio_id_current.total_io_current.average_price_investment
-                    ll.average=this.plio_id_current.total_io_current.average_price_investment
+                    ll.buy=this.plio_id.total_io_current.average_price_investment
+                    ll.average=this.plio_id.total_io_current.average_price_investment
                     if (this.gains_method==1){
                         ll.sell=ll.average*(1+this.gains_value/100)
                     } else {//P_f={P_o Ac Ap +G } over {Ac Ap } Fixed amount
-                        ll.sell=(ll.average*shares_before*this.product.leverage_real_multiplier+this.gains_value)/(shares_before*this.product.leverage_real_multiplier)
+                        ll.sell=(ll.average*shares_before*this.product.real_leveraged_multiplier+this.gains_value)/(shares_before*this.product.real_leveraged_multiplier)
                     }
                     this.chart_data.limitlines.push(ll)
 
                 }
 
 
-                if(this.viewoption==1){ //Before
-                    this.chart_data.io_object=this.plio_id_current
-                } else if(this.viewoption==2){//After
+                if(this.viewoption==2){//After
                     //Calculate shares after
                     var shares_after=0
-                    this.plio_id_after.io_current.forEach(o=>{
+                    this.plio_id_current.io_current.forEach(o=>{
                         shares_after=shares_after + o.shares
                     }) 
-
-                    this.list_io_current=this.plio_id_after.io_current
-                    this.list_io=this.plio_id_after.io
-                    this.list_io_historical=this.plio_id_after.io_historical
-                    this.chart_data.io_object=this.plio_id_after
                     var ll2=this.empty_investments_chart_limit_line()
                     ll2.buy=this.newprice
-                    ll2.average=this.plio_id_after.investment.average_price_investment
+                    ll2.average=this.plio_id_current.total_io_current.average_price_investment
                     if (this.gains_method==1){
                         ll2.sell=ll2.average*(1+this.gains_value/100)
                     } else {//P_f={P_o Ac Ap +G } over {Ac Ap } Fixed amount
-                        ll2.sell=(ll2.average*shares_after*this.plio_id_after.product.leverage_real_multiplier+this.gains_value)/(shares_after*this.plio_id_after.product.leverage_real_multiplier)
+                        ll2.sell=(ll2.average*shares_after*this.product.real_leveraged_multiplier+this.gains_value)/(shares_after*this.product.real_leveraged_multiplier)
                     }
                     this.chart_data.limitlines.push(ll2)
                 }
@@ -311,6 +302,7 @@
             this.newshares=this.shares
             this.newprice=this.price
             this.product=this.$store.getters.getObjectById("products", this.plio_id_current.data.products_id)
+            console.log(this.product)
             console.log(this.plio_id)
             this.make_all_axios_before()
         }
