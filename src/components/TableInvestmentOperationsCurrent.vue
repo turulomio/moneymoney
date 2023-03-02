@@ -4,7 +4,7 @@
             <div>{{ localtime(item.datetime)}}</div>
         </template>             
         <template v-slot:[`item.investments`]="{ item }" >
-            <div>{{ $store.getters.getObjectPropertyByUrl("investments",item.investments,"fullname")}}</div>
+            <div>{{ $store.getters.getObjectPropertyById("investments",item.investments_id,"fullname")}}</div>
         </template>                    
         <template v-slot:[`item.operationstypes`]="{ item }">
             <div v-html="$store.getters.getObjectPropertyByUrl('operationstypes',item.operationstypes,'localname')"></div>
