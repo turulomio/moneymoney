@@ -166,7 +166,7 @@
             InvestmentsChangeSellingPrice,
         },
         props: {
-            investment: {
+            investment_id: { //url
                 required: true
             },
         },
@@ -181,6 +181,7 @@
         },
         data () {
             return {
+                investment:null,//Object of $store
                 tab:0,
                 tabcurrent:0,
                 key:0,
@@ -435,13 +436,15 @@
             },
             on_InvestmentsChangeSellingPrice_cruded(){
                 this.dialog_io_sameproduct=false
-                this.update_all()
                 this.$emit("cruded")
+                this.key=this.key+1
+                this.update_all()
             },
             on_TableInvestmentsOperations_cruded(){//Emited deleting IO
                 this.on_InvestmentsoperationsCU_cruded()
             },
             displayvalues(){
+
                 return [
                     {title:this.$t('Selling point'), value: this.selling_point_message},
                     {title:this.$t('Selling expiration'), value: this.selling_expiration_message},
@@ -492,30 +495,36 @@
             },
 
             update_investmentsoperations(){
-                var headers={...this.myheaders(),params:{investments:[this.investment.id,], mode:1}}
+                var headers={...this.myheaders(),params:{investments:[this.investment_id,], mode:1}}
                 return axios.get(`${this.$store.state.apiroot}/investmentsoperations/full/`, headers)
             },
             update_dividends(){
-                var headers={...this.myheaders(),params:{investments:[this.investment.id,]}}
+                var headers={...this.myheaders(),params:{investments:[this.investment_id,]}}
                 return axios.get(`${this.$store.state.apiroot}/api/dividends/`, headers)
             },
             update_all(){
                 this.loading=true
+                this.investment=this.$store.getters.getObjectById("investments",this.investment_id)
+                console.log("UPDATED")
+                console.log(this.investment.selling_expiration)
+                console.log(this.investment.selling_price)
+
                 axios.all([this.update_investmentsoperations(), this.update_dividends()])
                 .then(([resIO, resDividends]) => {
-                    this.plio_id=resIO.data[this.investment.id]
+                    this.plio_id=resIO.data[this.investment_id]
+                    console.log(this.plio_id)
 
                     this.leverage_message= this.$t("{0} (Real: {1})").format(
                         this.plio_id.data.multiplier,
-                        this.plio_id.data.leverage_real_multiplier
+                        this.plio_id.data.real_leverages
                     )
 
-                    this.selling_point_message=this.currency_string(this.investment.selling_price, this.product.currency)
-                    if (this.investment.gains_at_sellingpoint){
-                        this.selling_point_message=this.selling_point_message+ this.$t(", to gain {0}").format(
-                            this.currency_string(this.investment.gains_at_sellingpoint, this.product.currency)
+                    console.log(this.plio_id.data.real_leverages)
+                    var gains_at_selling_point_investment=(this.investment.selling_price-this.plio_id.total_io_current.average_price_investment)*this.plio_id.total_io_current.shares*this.plio_id.data.real_leverages
+                    this.selling_point_message=this.selling_point_message+ this.$t("{0}, to gain {1}").format(
+                        this.currency_string(this.investment.selling_price, this.product.currency),
+                        this.currency_string(gains_at_selling_point_investment, this.product.currency)
                     )
-                    }
                     this.selling_expiration_message=`${this.investment.selling_expiration}`
                     if (new Date(this.investment.selling_expiration).setHours(0,0,0,0)<new Date().setHours(0,0,0,0)){
                         this.selling_expiration_message=this.selling_expiration_message+ '.<span class="vuered"> '+ this.$t('You must set a new selling order.') + '</span>'
@@ -531,6 +540,11 @@
             }
         },
         created(){
+            console.log(this.investment_id)
+            var inv=this.$store.getters.getObjectById("investments",this.investment_id)
+            console.log("CREATED")
+            console.log(inv.selling_expiration)
+            console.log(inv.selling_price)
             this.update_all()
         }
     }

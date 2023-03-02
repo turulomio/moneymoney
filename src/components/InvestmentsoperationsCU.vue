@@ -1,4 +1,3 @@
-
 <template>
     <div>    
         <h1 class="mb-4">{{ title() }}
@@ -152,7 +151,6 @@
                 this.new_io.url=this.hyperlinked_url("investmentsoperations",this.new_io.id)
                 this.new_io.operationstypes=this.$store.getters.getObjectPropertyById("operationstypes", this.new_io.operationstypes_id,"url")
             }
-            console.log(this.new_io)
             
         }
     }

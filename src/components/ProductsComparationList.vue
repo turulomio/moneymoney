@@ -122,7 +122,6 @@
                 this.product_a=item.a
                 this.product_b=item.b
                 this.key=this.key+1
-                console.log(this.product_a)
             },
             refreshTable(){               
                 this.loading=true

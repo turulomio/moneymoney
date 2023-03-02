@@ -242,11 +242,14 @@
                 }
                 axios.post(`${this.$store.state.apiroot}/investments/changesellingprice/`, p, this.myheaders())
                 .then(() => {
-                    this.loading_ios=false
-                    this.refreshInvestments( false )
-                    this.key=this.key+1
-                    alert(this.$t("Remember to set your order in the bank"))
-                    this.$emit("cruded")
+                    this.$store.dispatch("getInvestments")
+                    .then(()=>{
+                        this.loading_ios=false
+                        this.refreshInvestments( false )
+                        this.key=this.key+1
+                        alert(this.$t("Remember to set your order in the bank"))
+                        this.$emit("cruded")
+                    })
                 }, (error) => {
                     this.parseResponseError(error)
                 });
@@ -261,10 +264,13 @@
                 }
                 axios.post(`${this.$store.state.apiroot}/investments/changesellingprice/`, p, this.myheaders())
                 .then(() => {
-                    this.refreshInvestments( false )
-                    this.key=this.key+1
-                    alert(this.$t("Remember to set your order in the bank"))
-                    this.$emit("cruded")
+                    this.$store.dispatch("getInvestments")
+                    .then(()=>{
+                        this.refreshInvestments( false )
+                        this.key=this.key+1
+                        alert(this.$t("Remember to set your order in the bank"))
+                        this.$emit("cruded")
+                    })
                 }, (error) => {
                     this.parseResponseError(error)
                 });
@@ -293,7 +299,6 @@
                 axios.get(`${this.$store.state.apiroot}/investmentsoperations/full/`, headers )
                 .then((response) => {
                     this.plio=response.data
-                    console.log(this.plio)
                     var o
                     var plio_id
 

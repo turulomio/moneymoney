@@ -88,9 +88,9 @@
             </v-card>
         </v-dialog>
         <!-- DIALOG  VIEW INVESTMERNT -->
-        <v-dialog v-model="dialog_view">
+        <v-dialog v-model="dialog_view" v-if="investment">
             <v-card class="pa-4">
-                <InvestmentsView :investment="investment" :key="key" @cruded="on_InvestmentView_cruded"></InvestmentsView>
+                <InvestmentsView :investment_id="investment.id" :key="key" @cruded="on_InvestmentView_cruded"></InvestmentsView>
             </v-card>
         </v-dialog>
         <!-- DIALOG  ADD QUOTE -->
@@ -265,8 +265,8 @@
                 });
             },
             viewItem (item) {
-                this.key=this.key+1
                 this.investment=item
+                this.key=this.key+1
                 this.dialog_view=true
             },
 
