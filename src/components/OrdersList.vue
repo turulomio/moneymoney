@@ -30,21 +30,21 @@
             </v-data-table>
         </v-card>
         <div class="d-flex justify-center mb-4">
-                <v-btn color="primary" class="mr-4" @click="products_autoupdate()" :loading="products_updating">{{ $t("Products autoupdate")}}
+                <v-btn color="primary" class="mr-4" @click="products_autoupdate" :loading="products_updating">{{ $t("Products autoupdate")}}
                     <v-badge inline v-show="update_errors>0" color="error" class="ml-2" :content="$t('{0} errors').format(update_errors)"/>
                 </v-btn>
         </div>
         <!-- Order CU dialog -->
         <v-dialog v-model="dialog_cu" max-width="550" persistent>
             <v-card class="pa-4">
-                <OrdersCU :order="order" :mode="order_mode" @cruded="on_OrdersCU_cruded()" :key="key"></OrdersCU>
+                <OrdersCU :order="order" :mode="order_mode" @cruded="on_OrdersCU_cruded" :key="key"></OrdersCU>
             </v-card>
         </v-dialog>
 
         <!-- Order View dialog -->
         <v-dialog v-model="dialog_reinvest">
             <v-card class="pa-4">
-                <InvestmentsoperationsReinvest v-if="order!=null" :price="order.price" :shares="order.shares" :investments="new Array(this.order.investments)" :key="key"></InvestmentsoperationsReinvest>
+                <InvestmentsoperationsReinvest :plio_id="plio_id" v-if="order!=null" :price="order.price" :shares="order.shares" :investments="new Array(this.order.investments)" :key="key" />
             </v-card>
         </v-dialog>
 
@@ -103,8 +103,9 @@
                 order: null,
                 order_mode: null,
                 loading_table:false,
-
+                //Reinvest
                 dialog_reinvest:false,
+                plio_id:null,
                 key:0,
                 //Products auto update
                 products_updating:false,
@@ -144,16 +145,23 @@
                 this.dialog_cu=true
             },
             executeOrder (item) {
-
                 this.order=item
                 this.order_mode="E"
                 this.key=this.key+1
                 this.dialog_cu=true
             },
             orderView(item) {    
-                this.order=item               
-                this.key=this.key+1
-                this.dialog_reinvest=true
+                this.order=item
+                var investments_id=this.id_from_hyperlinked_url(item.investments)
+                var headers={...this.myheaders(),params:{investments:[investments_id,], mode:1}}
+                axios.get(`${this.$store.state.apiroot}/investmentsoperations/full/`, headers)
+                .then((response)=>{
+                    this.plio_id=response.data[investments_id]
+                    this.key=this.key+1
+                    this.dialog_reinvest=true
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
             },
             deleteItem (item) {
 
