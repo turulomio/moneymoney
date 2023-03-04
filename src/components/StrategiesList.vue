@@ -37,9 +37,9 @@
                 </template>           
 
                 <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon small class="mr-2" @click="viewItem(item)">mdi-eye</v-icon>
-                    <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+                    <v-icon small class="mr-2" @click.stop="viewItem(item)">mdi-eye</v-icon>
+                    <v-icon small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
+                    <v-icon small @click.stop="deleteItem(item)">mdi-delete</v-icon>
                 </template>                  
                 <template v-slot:[`body.append`]="{headers}">
                     <tr class="totalrow">
@@ -61,7 +61,7 @@
         <!-- Strategy CU -->
         <v-dialog v-model="dialog_strategy_cu" max-width="550">
             <v-card class="pa-4">
-                <StrategyCU :strategy="strategy" :deleting="strategy_deleting" :key="key" @cruded="on_StrategyCU_cruded()"></StrategyCU>
+                <StrategyCU :strategy="strategy" :deleting="strategy_deleting" :key="key" @cruded="on_StrategyCU_cruded" />
             </v-card>
         </v-dialog>
 

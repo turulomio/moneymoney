@@ -15,63 +15,28 @@
         <v-tabs-items v-model="tab">
             <v-tab-item key="current">      
                 <div>
-                    <v-tabs vertical  v-model="tabcurrent">
-                        <v-tab key="investment">{{ $t('Investment currency') }}</v-tab>
-                        <v-tab key="user">{{ $t('User currency') }}</v-tab>
-                        <v-tab-item key="investment">     
-                            <v-card v-if="!loading">
-                                <TableInvestmentOperationsCurrent :items="list_io_current" showinvestment showtotal output="investment" height="400" :key="key" />
-                            </v-card>
-                        </v-tab-item>
-                            <v-tab-item key="user">
-                                <v-card v-if="!loading">
-                                    <TableInvestmentOperationsCurrent :items="list_io_current" showinvestment showtotal output="user" height="400" :key="key"></TableInvestmentOperationsCurrent>
-                                </v-card>
-                            </v-tab-item>
-                    </v-tabs>
+                    <v-card v-if="!loading">
+                        <TableInvestmentOperationsCurrent :items="plio_id.io_current" showinvestment showtotal output="user" height="400" :key="key" />
+                    </v-card>
                 </div>
             </v-tab-item>
             <v-tab-item key="operations">          
                 <div>
-                    <v-checkbox v-model="chkShowAllIO" :label="set_chkShowAllIO_label()" @click="on_chkShowAllIO_click()"></v-checkbox>
-                    <v-tabs vertical  v-model="tabcurrent">
-                        <v-tab key="investment">{{ $t('Investment currency') }}</v-tab>
-                        <v-tab key="account">{{ $t('Account currency') }}</v-tab>
-                        <v-tab-item key="investment">     
-                            <v-card v-if="!loading">
-                                <TableInvestmentOperations :items="io_filtered" height="400" :key="key" output="investment" :showactions="false" />
-                            </v-card>
-                        </v-tab-item>
-                            <v-tab-item key="account">
-                                <v-card v-if="!loading">
-                                    <TableInvestmentOperations :items="io_filtered" height="400" :key="key" output="account" :showactions="false" />
-                                </v-card>
-                            </v-tab-item>
-                    </v-tabs>
+                    <v-card v-if="!loading">
+                        <TableInvestmentOperations showinvestment :items="plio_id.io" height="400" :key="key" output="user" :showactions="false" />
+                    </v-card>
                 </div>
             </v-tab-item>
             <v-tab-item key="historical">     
                 <div>            
-                    <v-tabs vertical  v-model="tabcurrent">
-                        <v-tab key="investmenth">{{ $t('Investment currency') }}</v-tab>
-                            <v-tab key="accounth">{{ $t('Account currency') }}</v-tab>
-                        <v-tab-item key="investmenth">     
-                            <v-card  v-if="!loading">
-                                <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="investment" :key="key" showinvestment showtotal />
-                            </v-card>
-                        </v-tab-item>
-                            <v-tab-item key="accounth">
-                                <v-card v-if="!loading">
-                                    <TableInvestmentOperationsHistorical :items="list_io_historical" height="400" output="account" :key="key" showinvestment showtotal />
-                                </v-card>
-                            </v-tab-item>
-                    </v-tabs>
+                    <v-card v-if="!loading">
+                        <TableInvestmentOperationsHistorical :items="plio_id.io_historical" height="400" output="user" :key="key" showinvestment showtotal />
+                    </v-card>
                 </div>
             </v-tab-item>
             <v-tab-item key="dividends">     
                 <v-card v-if="!loading">
-                    <v-checkbox v-model="showAllDividends" :label="setChkDividendsLabel()" @click="on_chkDividends()"></v-checkbox>
-                    <TableDividends :items="dividends_filtered" height="300" showinvestment :key="key" @cruded="on_TableDividends_cruded()" />
+                    <TableDividends :items="dividends_filtered" height="300" showinvestment :key="key" @cruded="on_TableDividends_cruded" />
                 </v-card>
             </v-tab-item>
         </v-tabs-items> 
@@ -80,7 +45,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import {empty_investment_operation, empty_strategy_simulation, empty_dividend,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
+    import {empty_strategy_simulation, empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
     import MyMenuInline from './MyMenuInline.vue'
     import DisplayValues from './DisplayValues.vue'
     import TableDividends from './TableDividends.vue'
@@ -97,28 +62,20 @@
             TableDividends,
         },
         props: {
-            strategy: {
+            strategy: { //Object
                 required: true
             },
         },
         data () {
             return {
                 tab:0,
-                tabcurrent:0,
                 key:0,
-                list_io: [],
-                list_io_current: [],
-                list_io_historical: [],
                 dialog_io:false,
                 io:null,
                 loading:true,
                 dividends: [],
                 dividends_filtered: [],
                 io_filtered:[],
-                selling_expiration_message:"",
-                selling_point_message:"",
-                showAllDividends:false,
-                chkShowAllIO:false,
                 leverage_message:"",
                 chart_data: null,
                 items: [
@@ -129,7 +86,7 @@
                                 name:this.$t('Investment chart'),
                                 icon: "mdi-chart-areaspline",
                                 code: function(this_){
-                                    axios.get(`${this_.$store.state.apiroot}/products/quotes/ohcl?product=${this_.ios.product.url}`, this_.myheaders())
+                                    axios.get(`${this_.$store.state.apiroot}/products/quotes/ohcl?product=${this_.product.url}`, this_.myheaders())
                                     .then((response) => {
                                         this_.chart_data=this_.empty_investments_chart()
                                         this_.chart_data.ohcls=response.data
@@ -171,16 +128,17 @@
                 ios:null,
             }  
         },
-        watch:{
-            tab: function (){
-                this.key=this.key+1
+        computed:{
+            product: function (){
+                if (this.strategy.additional1!=null){
+                    return this.$store.getters.getObjectById("products", this.strategy.additional1)
+                }
+                return null
             }
         },
         methods: {
             empty_investments_chart,
             empty_investments_chart_limit_line,
-            empty_dividend,
-            empty_investment_operation,
             empty_strategy_simulation,
             on_TableDividends_cruded(){
                 this.update_all()
@@ -192,56 +150,16 @@
                 r.push({title:this.$t('To'), value: this.localtime(this.strategy.dt_to)})
                 r.push({title:this.$t('Type'), value: this.$store.getters.getObjectPropertyById("strategiestypes", this.strategy.type, "name")})
                 r.push({title:this.$t('Investments'), value: this.strategy.investments.length})                
-                if (this.ios.strategy.additional1){//That means it has a product property
-                    this.leverage_message= this.$t("{0} (Real: {1})").format(this.ios.product.leverage_multiplier, this.ios.product.leverage_real_multiplier )
-                    r.push({title:this.$t('Currency'), value: this.ios.product.currency})
-                    r.push({title:this.$t('Product'), value: this.ios.product.name})
+                if (this.strategy.additional1){//That means it has a product property
+                    this.leverage_message= this.$t("{0} (Real: {1})").format(this.product.leverage_multiplier, this.product.leverage_real_multiplier )
+                    r.push({title:this.$t('Currency'), value: this.product.currency})
+                    r.push({title:this.$t('Product'), value: this.product.name})
                     r.push({title:this.$t('Leverage'), value: this.leverage_message})
                 }
                 return r
             },
-            setChkDividendsLabel(){
-                if (this.showAllDividends== true){
-                    return this.$t("Uncheck to see dividends of current investment operations")
-                } else {
-                    return this.$t("Check to see all dividends")
-                }
-            },
-            set_chkShowAllIO_label(){
-                if (this.chkShowAllIO== true){
-                    return this.$t("Uncheck to see current investment operations")
-                } else {
-                    return this.$t("Check to see all investment operations")
-                }
-            },
-            on_chkShowAllIO_click(){
-                if (this.chkShowAllIO==true){
-                    this.io_filtered=this.list_io
-                } else {
-                    if (this.list_io_current.length==0){
-                        this.io_filtered=[]
-                    } else {
-                        this.io_filtered=this.list_io.filter((d)=> new Date(d.datetime)>=new Date(this.list_io_current[0].datetime))
-                    }
-                }
-            },
-            on_chkDividends(){
-                if (this.showAllDividends==true){
-                    this.dividends_filtered=this.dividends
-                } else {
-                    if (this.list_io_current.length==0){
-                        this.dividends_filtered=[]
-                    } else {
-                        this.dividends_filtered=this.dividends.filter((d)=> new Date(d.datetime)>=new Date(this.list_io_current[0].datetime))
-                    }
-                }
-            },
-
             update_investmentsoperations(){
-                var simulation=this.empty_strategy_simulation()
-                simulation.strategy=this.strategy.url
-                var headers={...this.myheaders(),params:simulation}
-                return axios.get(`${this.$store.state.apiroot}/strategies/simulation/`, headers)
+                return axios.get(`${this.strategy.url}plio_id/`, this.myheaders())
             },
             update_dividends(){
                 var headers={...this.myheaders(),params:{investments:this.strategy.investments}}
@@ -251,16 +169,8 @@
                 this.loading=true
                 axios.all([this.update_investmentsoperations(), this.update_dividends()])
                 .then(([resIO, resDividends]) => {
-                    this.ios=resIO.data
-                    this.list_io=resIO.data.io
-                    this.list_io_current=resIO.data.io_current
-                    this.list_io_historical=resIO.data.io_historical
-
-
-                    this.on_chkShowAllIO_click()
-
+                    this.plio_id=resIO.data
                     this.dividends=resDividends.data
-                    this.on_chkDividends()
                     this.displayvalues()
                     this.loading=false
                     this.key=this.key+1
