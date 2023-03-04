@@ -231,7 +231,9 @@
             },
             submit(){                               
                 if (this.$refs.form.validate()==false) return
-                if (this.selling_expiration != null && new Date(this.selling_expiration).setHours(0,0,0,0)<new Date().setHours(0,0,0,0)) alert(this.$t("Selling expiration date is in the past"))
+                if (this.selling_expiration != null && new Date(this.selling_expiration).setHours(0,0,0,0)<new Date().setHours(0,0,0,0)) {
+                    alert(this.$t("Selling expiration date is in the past"))
+                }
 
                 var s= new Array()
                 this.selected.forEach(v=> s.push(v.url))
@@ -243,10 +245,14 @@
                 axios.post(`${this.$store.state.apiroot}/investments/changesellingprice/`, p, this.myheaders())
                 .then(() => {
                     this.$store.dispatch("getInvestments")
-                    .then(()=>{
-                        this.loading_ios=false
-                        this.refreshInvestments( false )
+                    .then((a)=>{
+                        console.log(a)
                         this.key=this.key+1
+                        var after=this.$store.getters.getObjectByUrl("investments",this.investment.url)
+                        console.log("after")
+                        console.log(after.selling_expiration)
+                        console.log(after.selling_price)
+                        this.loading_ios=false
                         alert(this.$t("Remember to set your order in the bank"))
                         this.$emit("cruded")
                     })

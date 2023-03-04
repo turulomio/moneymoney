@@ -143,7 +143,15 @@ export const store = new Vuex.Store({
             state.currencies=payload
         },
         updateInvestments: (state, payload) =>{
+            state.investments=null
             state.investments=payload
+            state.investments.forEach(o=>{
+                if (o.id==440){
+                    console.log("DENTRO")
+                    console.log(o.selling_price)
+                    console.log(o.selling_expiration)
+                }
+            })
         },
         updateLeverages: (state, payload) =>{
             state.leverages=payload
