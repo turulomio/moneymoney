@@ -332,10 +332,6 @@
                             {
                                 name:this.$t('Sell/Buy all shares to selling price'),
                                 code: function(this_){
-                                    if (this_.investment.currency!=this_.product.currency){
-                                        alert(this_.$t("You can't use this option if investment and product currencies are not the same"))
-                                        return
-                                    }
                                     var shares=this_.listobjects_sum(this_.plio_id.io_current,"shares")
 
                                     this_.io=this_.empty_investment_operation()
@@ -405,11 +401,6 @@
                 dialog_reinvest: false,
                 reinvest_shares:0,
                 reinvest_price:0,
-                //dialog_divest
-                dialog_divest: false,
-                divest_investments:[],
-                divest_shares:0,
-                divest_price:0,
             }  
         },
         watch:{
