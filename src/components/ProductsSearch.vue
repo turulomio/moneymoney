@@ -33,10 +33,10 @@
                 </template>
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small @click.stop="toggleFavorite(item)" :color="($store.state.profile.favorites.includes(item.url))? 'orange': '' " class="mr-1">mdi-star-outline</v-icon>
-                    <v-icon class="mr-1" small @click.stop="editPersonalProduct(item)" v-if="item.id<0">mdi-pencil</v-icon>
-                    <v-icon class="mr-1" small @click.stop="editSystemProduct(item)"  color="#AA0000" v-if="item.id>=0 && $store.state.catalog_manager">mdi-pencil</v-icon>
-                    <v-icon class="mr-1" small @click.stop="deletePersonalProduct(item)" v-if="item.id<0 && item.uses==0">mdi-delete</v-icon>
-                    <v-icon class="mr-1" small @click.stop="deleteSystemProduct(item)" color="#AA0000" v-if="item.id>=0 && $store.state.catalog_manager">mdi-delete</v-icon>
+                    <v-icon class="mr-1" small @click.stop="editPersonalProduct(item)" v-if="item.id>0">mdi-pencil</v-icon>
+                    <v-icon class="mr-1" small @click.stop="editSystemProduct(item)"  color="#AA0000" v-if="item.id<=0 && $store.state.catalog_manager">mdi-pencil</v-icon>
+                    <v-icon class="mr-1" small @click.stop="deletePersonalProduct(item)" v-if="item.id>0 && item.uses==0">mdi-delete</v-icon>
+                    <v-icon class="mr-1" small @click.stop="deleteSystemProduct(item)" color="#AA0000" v-if="item.id<=0 && $store.state.catalog_manager">mdi-delete</v-icon>
                 </template>
             </v-data-table>   
         </v-card>
