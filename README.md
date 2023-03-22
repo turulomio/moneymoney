@@ -1,5 +1,7 @@
 # MoneyMoney 
 
+This project has been archived because it has been migrated to vue3 and vuetify3. You can find it in https://github.com/turulomio/moneymoney3o/
+
 
 ## Backend
 
