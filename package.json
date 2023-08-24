@@ -1,0 +1,38 @@
+{
+  "name": "vuetify-project",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "translate": "./node_modules/.bin/vue-i18n-extract"
+
+  },
+  "dependencies": {
+    "@mdi/font": "^7.2.96",
+    "@vuepic/vue-datepicker": "^6.0.1",
+    "axios": "^1.4.0",
+    "currency-list": "^1.0.8",
+    "echarts-stat": "^1.2.0",
+    "flag-icons": "^6.11.0",
+    "moment-timezone": "^0.5.43",
+    "npm-check-updates": "^16.13.1",
+    "pinia": "^2.1.6",
+    "roboto-fontface": "*",
+    "vue": "^3.3.4",
+    "vue-echarts": "^6.6.1",
+    "vue-i18n": "^9.2.2",
+    "vue-i18n-extract": "^2.0.7",
+    "vue-router": "^4.2.4",
+    "vuetify": "^3.3.14",
+    "webfontloader": "^1.6.28"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.3.3",
+    "eslint": "^8.47.0",
+    "eslint-plugin-vue": "^9.17.0",
+    "vite": "^4.4.9",
+    "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-vuetify": "^1.0.2"
+  }
+}
