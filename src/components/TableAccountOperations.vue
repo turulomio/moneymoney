@@ -10,8 +10,8 @@
             <template #item.balance="{item}">
                 <div class="text-right" v-html="currency_html(item.raw.balance, item.raw.currency)"></div>
             </template>   
-            <template #item.account="{item}">
-                <div v-html="store().accounts.get(item.accounts).fullname"></div>
+            <template #item.accounts="{item}">
+                <div v-html="store().accounts.get(item.raw.accounts).fullname"></div>
             </template> 
             <template #item.concepts="{item}">
                 <div class="cursorpointer" v-html="store().concepts.get(item.raw.concepts).localname" @click="viewHistoricalConcept(item.raw)"></div>
@@ -21,42 +21,20 @@
                 <v-icon small class="mr-2" @click="editAO(item.raw)">mdi-pencil</v-icon>
                 <v-icon small class="mr-2" @click="deleteAO(item.raw)">mdi-delete</v-icon>
             </template>
-            <!-- <template v-slot:footer.prepend="{headers}">
-                <tr>
-                    <td>{{ localtime(headers.datetime) }}</td>
-                    <td>{{ item.columns.concepts }}</td>
-                    <td>{{ currency_html(item.columns.amount,item.columns.currency) }}</td>
-                    <td>{{ item.columns.balance }}</td>
-                    <td>{{ item.columns.comment }}</td>
-                    <td>{{ item.columns.actions }}</td>
-                </tr>
-            </template> -->
-            <!-- <template v-slot:tfoot="{headers}" v-if="showtotal && items.length>0">
-                <tr class="totalrow">
-                    <td v-for="(header,i) in headers" :key="i" >
-                        <div v-if="header.key == 'datetime'">{{ $t("Total ([0] registers)").format(items.length)}}</div>
-                        <div v-if="header.key == 'amount'  && all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items,'amount'),total_currency)"></div>
-                        <div v-if="header.key == 'comment' && !all_items_has_same_currency" >{{ $t("Can't sum amounts due to they have different currencies") }}</div>
-                    </td>
-                </tr>
-            </template> -->
             <template #tbody v-if="showtotal && items.length>0">
                 <tr class="totalrow">
                     <td>{{ $t("Total ([0] registers)").format(items.length)}}</td>
                     <td></td>
+                    <td v-if="showaccount"></td>
                     <td v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items,'amount'),total_currency)"></td>
                     <td v-if="!all_items_has_same_currency" >{{ $t("Can't sum amounts due to they have different currencies") }}</td>
-
-                    <td></td>
                     <td></td>
                     <td></td>
                 </tr>
                 <div id="bottom"></div>
             </template>
             
-         <template #bottom >
-            {{ $t("[0] registers").format(items.length) }}
-        </template>
+         <template #bottom ></template>
         </v-data-table>   
         
         <!-- DIALOG ACCOUNTSOPERATIONS ADD/UPDATE -->
