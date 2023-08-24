@@ -99,7 +99,7 @@
                         </template>
                         <v-list-item link router :to="{ name: 'about'}" :title="$t('About')" />
                         <v-list-item link router :to="{ name: 'statistics'}" :title="$t('Statistics')" />
-                        <v-list-item  href="https://github.com/turulomio/moneymoney3o/" target="_blank" :title="$t('Money Money Github')" />
+                        <v-list-item  href="https://github.com/turulomio/moneymoney/" target="_blank" :title="$t('Money Money Github')" />
                     </v-list-group>     
                 </v-list>
             </v-card>

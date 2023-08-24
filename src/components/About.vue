@@ -27,7 +27,7 @@
             }
         },
         mounted(){
-            this.$refs.github.innerHTML=this.$t("Project main page is located in Github, where you can help me coding or translating to different languages.").replace("Github",'<a href="https://github.com/turulomio/moneymoney3o" target="_blank">Github</a>')
+            this.$refs.github.innerHTML=this.$t("Project main page is located in Github, where you can help me coding or translating to different languages.").replace("Github",'<a href="https://github.com/turulomio/moneymoney" target="_blank">Github</a>')
         }
     }
 </script>

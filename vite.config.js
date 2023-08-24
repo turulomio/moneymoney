@@ -26,7 +26,7 @@ export default defineConfig({
     __VUE_I18N_LEGACY_API__: true,
     __INTLIFY_PROD_DEVTOOLS__: false,
   },
-  base: '/moneymoney3o',
+  base: '/moneymoney',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
