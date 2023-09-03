@@ -15,7 +15,7 @@
 <!--                     BANKS -->
                     <v-list-item link router :to="{ name: 'banks_list'}" v-if="store().logged" prepend-icon="mdi-bank" :title="$t('Banks')" />
 <!--                     ACCOUNTS -->
-                    <v-list-item link router :to="{ name: 'accounts_list'}"  v-if="store().logged" prepend-icon="mdi-calculator" :title="$t('Accounts')" />
+                    <v-list-item link router :to="{ name: 'accounts_list'}" v-if="store().logged" prepend-icon="mdi-calculator" :title="$t('Accounts')" />
 <!--                     INVESTMENTS -->
                     <v-list-item link router :to="{ name: 'investments_list'}" v-if="store().logged" prepend-icon="mdi-finance" :title="$t('Investments')" />
 
@@ -23,7 +23,7 @@
                     <v-list-item link router :to="{ name: 'orders_list'}" v-if="store().logged" prepend-icon="mdi-cart" :title="$t('Orders')" />
 
 <!--                     PRODUCTS -->
-                    <v-list-group value="Products"  v-if="store().logged">
+                    <v-list-group value="Products" v-if="store().logged">
                         <template v-slot:activator="{ props }">
                             <v-list-item v-bind="props" prepend-icon="mdi-account-circle" :title="$t('Products')"></v-list-item>
                         </template>
@@ -33,7 +33,7 @@
                     </v-list-group>        
             
 <!--                     REPORTS -->
-                    <v-list-group value="Reports"  v-if="store().logged">
+                    <v-list-group value="Reports" v-if="store().logged">
                         <template v-slot:activator="{ props }">
                             <v-list-item v-bind="props" prepend-icon="mdi-file-chart-outline" :title="$t('Reports')"></v-list-item>
                         </template>
@@ -76,7 +76,7 @@
 <!--                     STRATEGIES -->
                     <v-list-item link router :to="{ name: 'strategies_list'}" v-if="store().logged" prepend-icon="mdi-strategy" :title="$t('Strategies')" />
 <!--                     ADMINISTRATION -->
-                    <v-list-group value="Administration"  v-if="store().logged">
+                    <v-list-group value="Administration" v-if="store().logged">
                         <template v-slot:activator="{ props }">
                             <v-list-item v-bind="props" prepend-icon="mdi-file-chart-outline" :title="$t('Administration')"></v-list-item>
                         </template>
@@ -93,12 +93,12 @@
                     </v-list-group>    
 
 <!--                     HELP -->
-                    <v-list-group value="Help"  v-if="store().logged">
+                    <v-list-group value="Help">
                         <template v-slot:activator="{ props }">
                             <v-list-item v-bind="props" prepend-icon="mdi-lifebuoy" :title="$t('Help')"></v-list-item>
                         </template>
                         <v-list-item link router :to="{ name: 'about'}" :title="$t('About')" />
-                        <v-list-item link router :to="{ name: 'statistics'}" :title="$t('Statistics')" />
+                        <v-list-item link router :to="{ name: 'statistics'}" :title="$t('Statistics')" v-if="store().logged"/>
                         <v-list-item  href="https://github.com/turulomio/moneymoney/" target="_blank" :title="$t('Money Money Github')" />
                     </v-list-group>     
                 </v-list>
