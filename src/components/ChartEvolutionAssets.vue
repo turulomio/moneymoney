@@ -35,6 +35,7 @@
                 accounts:[],
                 investments:[],
                 invested:[],
+                zerorisk:[],
                 from: new Date().getFullYear()-3,
 
             }
@@ -44,7 +45,7 @@
                 // var =this
                 return {
                     legend: {
-                        data: [this.$t("Balance"),this.$t("Accounts"),this.$t("Investments"),this.$t("Invested")],
+                        data: [this.$t("Balance"),this.$t("Accounts"),this.$t("Investments"),this.$t("Invested"),this.$t("Zero risk")],
                         inactiveColor: '#777',
                     },
                     tooltip: {
@@ -63,7 +64,8 @@
                                 params[0].marker + params[0].seriesName + ": " + this.localcurrency_string(params[0].data[1])  + "<br>"  + 
                                 params[1].marker + params[1].seriesName + ": " + this.localcurrency_string(params[1].data[1])  + "<br>"  + 
                                 params[2].marker + params[2].seriesName + ": " + this.localcurrency_string(params[2].data[1])  + "<br>"  + 
-                                params[3].marker + params[3].seriesName + ": " + this.localcurrency_string(params[3].data[1]) 
+                                params[3].marker + params[3].seriesName + ": " + this.localcurrency_string(params[3].data[1])  + "<br>"  + 
+                                params[4].marker + params[4].seriesName + ": " + this.localcurrency_string(params[4].data[1]) 
                         }
                     },
                     xAxis: {
@@ -125,6 +127,16 @@
                                 width:1
                             }
                         },
+                        {
+                            type:"line",
+                            name: this.$t("Zero risk"),
+                            data: this.zerorisk, 
+                            smooth:true,
+                            showSymbol:false, 
+                            lineStyle:{
+                                width:1
+                            }
+                        },
                     ]
                 }
             },
@@ -144,11 +156,13 @@
                     this.accounts=[]
                     this.investments=[]
                     this.invested=[]
+                    this.zerorisk
                     response.data.forEach(o => {
                         this.balance.push([o.datetime, o.total_user])
                         this.accounts.push([o.datetime, o.accounts_user])
                         this.investments.push([o.datetime, o.investments_user])
                         this.invested.push([o.datetime, o.invested_user])
+                        this.zerorisk.push([o.datetime, o.zerorisk_user])
 
                     })
                     this.loading=false
