@@ -26,6 +26,7 @@ import ReportsInvestmentsClasses from './components/ReportsInvestmentsClasses'
 import ReportscurrentInvestmentsOperations from './components/ReportsCurrentInvestmentsOperations'
 import ReportsInvestmentsLastOperation from './components/ReportsInvestmentsLastOperation'
 import ReportsRanking from './components/ReportsRanking'
+import ReportsZeroRisk from './components/ReportsZeroRisk.vue'
 import Settings from './components/Settings'
 import Statistics from './components/Statistics'
 import StrategiesList from './components/StrategiesList'
@@ -59,6 +60,7 @@ export const router = createRouter({
     { path: `${import.meta.env.BASE_URL}/reports/investmentsoperations/current/`, name: 'reports_investmentsoperations_current', component: ReportscurrentInvestmentsOperations },
     { path: `${import.meta.env.BASE_URL}/reports/ranking/`, name: 'reports_ranking', component: ReportsRanking },
     { path: `${import.meta.env.BASE_URL}/reports/evolution/`, name: 'reports_evolution', component: ReportsEvolution },
+    { path: `${import.meta.env.BASE_URL}/reports/zerorisk/`, name: 'reports_zero_risk', component: ReportsZeroRisk },
     { path: `${import.meta.env.BASE_URL}/reports/evolution/chart/`, name: 'reports_evolution_chart', component: ChartEvolutionAssets },
     { path: `${import.meta.env.BASE_URL}/settings/`, name: 'settings', component: Settings },
     { path: `${import.meta.env.BASE_URL}/statistics/`, name: 'statistics', component: Statistics },
