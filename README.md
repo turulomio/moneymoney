@@ -1,26 +1,53 @@
 # MoneyMoney 
 
-This is the Vue 3 evolution of the project https://github.com/turulomio/moneymoney/ and it's the frontend app of  https://github.com/turulomio/django_moneymoney backend.
+This is the Vue 3 evolution of the branch vue2 of project https://github.com/turulomio/moneymoney/ and it's the frontend app of  https://github.com/turulomio/django_moneymoney backend.
 
 ## Installation
-```
-npm install
+
+### Unogenerator installation
+You must configure unogenerator.
+
+If you want to install it in Gentoo you can use my ebuild at myportage.
+
+In other Linux distributions you must run
+
+```bash
+    pip install unogenerator
+    unogenator_start
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
+### Django_moneymoney installation
+
+ You need to create a new database. I recommend postgresql.
+
+`createdb -U postgres moneymoney -h 127.0.0.1`
+
+Clone https://github.com/turulomio/django_moneymoney and https://github.com/turulomio/moneymoney repositories or download same version releases
+
+```bash
+cd django_moneymoney
+poetry shell
+poetry install
 ```
 
-### Compiles and minifies for production
+Edit settings.py if needed and run backend
+
+```bash
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py loaddata_catalogs
+python manage.py runserver
 ```
-npm run build
+
+
+### MoneyMoney installation
+
+Compiles and hot-reloads for development
+```bash
+cd moneymoney
+npm run dev
 ```
 
-
-### Customize configuration
-
-See [Configuration Reference](https://vitejs.dev/config/).
 
 ## Changelog
 
