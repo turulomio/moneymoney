@@ -24,6 +24,10 @@ See [Configuration Reference](https://vitejs.dev/config/).
 
 ## Changelog
 
+### 1.0.0 (2023-09-09)
+- MoneyMoney frontend migrated to vue3 and vuetify3
+- All features were added
+
 ### 0.3.0 (2022-07-03)
 - Adding missing features
 
