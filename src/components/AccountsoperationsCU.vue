@@ -1,11 +1,11 @@
 <template>
     <div>
         <h1>{{dialog_title_ao()}}</h1>
-        <v-form ref="form_ao" v-model="form_valid_ao">
+        <v-form ref="form" v-model="form_valid">
             <v-autocomplete :readonly="mode=='D'" autoindex="5" :items="getArrayFromMap(store().accounts).filter(v =>v.active==true)" v-model="newao.accounts" :label="$t('Select an account')" item-title="localname" item-value="url" :rules="RulesSelection(true)" @change="on_account_change"></v-autocomplete>
             <MyDateTimePicker :readonly="mode=='D'" autoindex="6" label="Select operation date and time" v-model="newao.datetime" />
             <v-autocomplete :readonly="mode=='D'" autoindex="0" autofocus :items="getArrayFromMap(store().concepts)" v-model="newao.concepts" :label="$t('Select a concept')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-            <v-text-field :readonly="mode=='D'" autoindex="1" v-model="newao.amount"  :label="$t('Operation amount')" :placeholder="$t('Account number')" :rules="RulesFloat(30,true,this.account.decimals)" counter="30"/>
+            <v-text-field :readonly="mode=='D'" autoindex="1" v-model.number="newao.amount"  :label="$t('Operation amount')" :placeholder="$t('Account number')" :rules="RulesFloat(30,true,this.account.decimals)" counter="30"/>
             <v-text-field :readonly="mode=='D'" autoindex="2" v-model="newao.comment" type="text" :label="$t('Operation comment')" :placeholder="$t('Operation comment')" counter="200"/>
         </v-form>
         <v-card-actions>
@@ -35,15 +35,15 @@
             return {
                 account: null,
                 newao:null,
-                form_valid_ao:true,
+                form_valid:true,
                 following_ao:false,
             }
         },
         methods:{
             acceptDialogAO(){
                 //Validation
-                if (this.form_valid_ao!=true) {
-                    this.$refs.form_ao.validate()
+                if (this.form_valid!=true) {
+                    this.$refs.form.validate()
                     return
                 }
                 var concept=this.store().concepts.get(this.newao.concepts)

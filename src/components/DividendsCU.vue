@@ -7,12 +7,12 @@
                 <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().investments)" v-model="newdividend.investments" :label="$t('Select an investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker :readonly="mode=='D'" v-model="newdividend.datetime" :label="$t('Set investment execution date and time')" />
                 <v-autocomplete :readonly="mode=='D'" :items="this.getConceptsForDividends()" v-model="newdividend.concepts" :label="$t('Select a concept')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field :readonly="mode=='D'" v-model="newdividend.gross"  :label="$t('Set dividend gross balance')" :placeholder="$t('Set dividend gross balance')" :rules="RulesFloat(10,true,2)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model="newdividend.net"  :label="$t('Set dividend net balance')" :placeholder="$t('Set dividend net balance')" :rules="RulesFloat(10,true,2)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model="newdividend.taxes"  :label="$t('Set dividend taxes')" :placeholder="$t('Set dividend taxes')" :rules="RulesFloatGEZ(10,true,2)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model="newdividend.commission"  :label="$t('Set dividend commission')" :placeholder="$t('Set dividend commission')" :rules="RulesFloatGEZ(10,true,2)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model="newdividend.dps"  :label="$t('Set dividend per share')" :placeholder="$t('Set dividend per share')" :rules="RulesFloat(10,true,6)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model="newdividend.currency_conversion"  :label="$t('Set dividend currency conversion')" :placeholder="$t('Set dividend currency conversion')" :rules="RulesFloat(10,true,6)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model.number="newdividend.gross"  :label="$t('Set dividend gross balance')" :placeholder="$t('Set dividend gross balance')" :rules="RulesFloat(10,true,2)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model.number="newdividend.net"  :label="$t('Set dividend net balance')" :placeholder="$t('Set dividend net balance')" :rules="RulesFloat(10,true,2)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model.number="newdividend.taxes"  :label="$t('Set dividend taxes')" :placeholder="$t('Set dividend taxes')" :rules="RulesFloatGEZ(10,true,2)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model.number="newdividend.commission"  :label="$t('Set dividend commission')" :placeholder="$t('Set dividend commission')" :rules="RulesFloatGEZ(10,true,2)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model.number="newdividend.dps"  :label="$t('Set dividend per share')" :placeholder="$t('Set dividend per share')" :rules="RulesFloat(10,true,6)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model.number="newdividend.currency_conversion"  :label="$t('Set dividend currency conversion')" :placeholder="$t('Set dividend currency conversion')" :rules="RulesFloat(10,true,6)" counter="10"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -22,8 +22,7 @@
     </div>
 </template>
 <script>
-    
-import axios from 'axios'
+    import axios from 'axios'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     export default {
         components: {

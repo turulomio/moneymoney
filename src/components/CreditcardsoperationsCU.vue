@@ -6,7 +6,7 @@
                 <v-autocomplete :readonly="deleting" :items="getArrayFromMap(store().creditcards).filter(v =>v.active==true)" v-model="newcco.creditcards" :label="$t('Select a credit card')" item-title="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker :readonly="deleting" label="Select operation date and time" v-model="newcco.datetime" />
                 <v-autocomplete :readonly="deleting" autoindex="0" :items="getArrayFromMap(store().concepts)" v-model="newcco.concepts" :label="$t('Select a concept')" item-title="localname" item-value="url" :rules="RulesSelection(true)" autofocus></v-autocomplete>
-                <v-text-field :readonly="deleting" autoindex="1" v-model="newcco.amount"  :label="$t('Operation amount')" :placeholder="$t('Operation amount')" :rules="RulesFloat(15,true,get_account_decimals())" counter="15"/>
+                <v-text-field :readonly="deleting" autoindex="1" v-model.number="newcco.amount"  :label="$t('Operation amount')" :placeholder="$t('Operation amount')" :rules="RulesFloat(15,true,get_account_decimals())" counter="15"/>
                 <v-text-field :readonly="deleting" autoindex="2" v-model="newcco.comment" type="text" :label="$t('Operation comment')" :placeholder="$t('Operation comment')" :rules="RulesString(200, false)" counter="200"/>
             </v-form>
             <v-card-actions>
