@@ -1,6 +1,6 @@
 <template>
     <div>        
-        <v-data-table  ref="table_ao" :show-select="showselected" v-model="selected" density="compact" :headers="table_headers()" :items="items" class="elevation-1" :sort-by="[{ key: 'datetime', order: 'asc' }]" fixed-header :height="$attrs.height"  :items-per-page="items_per_page" fixed-footer>
+        <v-data-table  ref="table" :show-select="showselected" v-model="selected" density="compact" :headers="table_headers()" :items="items" class="elevation-1" :sort-by="[{ key: 'datetime', order: 'asc' }]" fixed-header :height="$attrs.height"  :items-per-page="items_per_page" fixed-footer>
 
             <template #item.datetime="{item}">
                 <div >{{ localtime(item.raw.datetime)}}</div>
@@ -18,11 +18,11 @@
                 <div v-html="store().concepts.get(item.raw.concepts).name"></div>
             </template>
             <template #item.actions="{item}">
-                <v-icon small class="mr-2" @click="editCCO(item)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" @click="deleteCCO(item)">mdi-delete</v-icon>
+                <v-icon small class="mr-2" @click="copyCCO(item.raw)">mdi-content-copy</v-icon>
+                <v-icon small class="mr-2" @click="editCCO(item.raw)">mdi-pencil</v-icon>
+                <v-icon small class="mr-2" @click="deleteCCO(item.raw)">mdi-delete</v-icon>
             </template>
             <template #tbody v-if="showtotal && items.length>0">
-                <div id="bottom"></div>
                 <tr class="totalrow">
                     <td>{{ $t("Total ([0] registers)").format(items.length)}}</td>
                     <td></td>
@@ -31,6 +31,7 @@
                     <td></td>
                     <td></td>
                 </tr>
+                <div id="bottom"></div>
             </template>
          <template #bottom ></template>
         </v-data-table>
@@ -46,6 +47,7 @@
 
 <script>     
     import CreditcardsoperationsCU from './CreditcardsoperationsCU.vue'
+    import {empty_cco} from '../empty_objects.js'
     export default {
         components:{
             CreditcardsoperationsCU,
@@ -105,9 +107,7 @@
 
         },
         watch: {
-
             selected(){
-                console.log(this.selected.length)
                 this.$emit("changeSelected",this.selected_items)
             }
         },
@@ -125,15 +125,26 @@
             }
         },
         methods: {
+            empty_cco,
             editCCO(item){
-                this.cco=item.raw
+                this.cco=item
                 this.cco_deleting=false
                 this.key=this.key+1
                 this.dialog=true
             },
             deleteCCO(item){
-                this.cco=item.raw
+                this.cco=item
                 this.cco_deleting=true
+                this.key=this.key+1
+                this.dialog=true
+            },
+            copyCCO (item) {
+                this.cco=this.empty_cco()
+                this.cco_mode="C"
+                this.cco.concepts=item.concepts
+                this.cco.amount=item.amount
+                this.cco.comment=item.comment
+                this.cco.creditcards=item.creditcards
                 this.key=this.key+1
                 this.dialog=true
             },
@@ -151,18 +162,28 @@
                 }
                 r.push({ title: this.$t('Comment'), key: 'comment', sortable: true})
                 if (this.hideactions==false){
-                    r.push({ title: this.$t('Actions'), key: 'actions', sortable: false     , width:"6%"})
+                    r.push({ title: this.$t('Actions'), key: 'actions', sortable: false, width:"8%"})
                 }
                 return r
-            },
-            gotoLastRow(){          
-            //this.$vuetify.goTo(100000, { container:  this.$refs[this.$vnode.tag].$el.children[0].children[0].children[2].children ,duration: 500}) 
-            //     this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs.table_ao.$el.childNodes[0]}) 
-
+            },        
+            gotoLastRow(){ 
+                const element = document.getElementById("bottom")
+                //const element= this.$refs.table_ao
+                // console.log(element)
+                const previous=element?.previousElementSibling
+                // console.log("prev",previous,previous.childElementCount)
+                // console.log(this.items.length)
+                const last_tr=previous?.children.item(previous.childElementCount-1)
+                console.log("CCO", last_tr)
+                if (last_tr){ 
+                    console.log("Going")
+                    last_tr.scrollIntoView(false)
+                }
             },
             on_CreditcardsoperationsCU_cruded(){
                 this.$emit("cruded")
                 this.dialog=false
+                this.gotoLastRow()
             }
         },
         mounted(){

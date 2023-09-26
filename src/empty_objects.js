@@ -148,7 +148,6 @@ export function empty_cco(){
     return {
         datetime: new Date(),
         concepts: null,
-        operationstypes:null,
         amount: 0,
         comment: "",    
         creditcards: null,
