@@ -18,19 +18,19 @@
             <v-window-item key="percentage_evolution">     
                 <v-card class="pa-1" outlined v-if="this.information">
                     <v-data-table density="compact" :headers="percentage_headers" :items="information.percentages" class="elevation-1"   fixed-header :loading="loading"     :items-per-page="10000" >
-                        <template #item.m1="{item}"><div class="text-right" v-html="percentage_html(item.raw.m1 )"></div></template>  
-                        <template #item.m2="{item}"><div class="text-right" v-html="percentage_html(item.raw.m2 )"></div></template>  
-                        <template #item.m3="{item}"><div class="text-right" v-html="percentage_html(item.raw.m3 )"></div></template>  
-                        <template #item.m4="{item}"><div class="text-right" v-html="percentage_html(item.raw.m4 )"></div></template>  
-                        <template #item.m5="{item}"><div class="text-right" v-html="percentage_html(item.raw.m5 )"></div></template>  
-                        <template #item.m6="{item}"><div class="text-right" v-html="percentage_html(item.raw.m6 )"></div></template>  
-                        <template #item.m7="{item}"><div class="text-right" v-html="percentage_html(item.raw.m7 )"></div></template>  
-                        <template #item.m8="{item}"><div class="text-right" v-html="percentage_html(item.raw.m8 )"></div></template>  
-                        <template #item.m9="{item}"><div class="text-right" v-html="percentage_html(item.raw.m9 )"></div></template>  
-                        <template #item.m10="{item}"><div class="text-right" v-html="percentage_html(item.raw.m10 )"></div></template>  
-                        <template #item.m11="{item}"><div class="text-right" v-html="percentage_html(item.raw.m11 )"></div></template>  
-                        <template #item.m12="{item}"><div class="text-right" v-html="percentage_html(item.raw.m12 )"></div></template>  
-                        <template #item.total="{item}"><div class="text-right" v-html="percentage_html(item.raw.total )"></div></template> 
+                        <template #item.m1="{item}"><div class="text-right" v-html="percentage_html(item.m1 )"></div></template>  
+                        <template #item.m2="{item}"><div class="text-right" v-html="percentage_html(item.m2 )"></div></template>  
+                        <template #item.m3="{item}"><div class="text-right" v-html="percentage_html(item.m3 )"></div></template>  
+                        <template #item.m4="{item}"><div class="text-right" v-html="percentage_html(item.m4 )"></div></template>  
+                        <template #item.m5="{item}"><div class="text-right" v-html="percentage_html(item.m5 )"></div></template>  
+                        <template #item.m6="{item}"><div class="text-right" v-html="percentage_html(item.m6 )"></div></template>  
+                        <template #item.m7="{item}"><div class="text-right" v-html="percentage_html(item.m7 )"></div></template>  
+                        <template #item.m8="{item}"><div class="text-right" v-html="percentage_html(item.m8 )"></div></template>  
+                        <template #item.m9="{item}"><div class="text-right" v-html="percentage_html(item.m9 )"></div></template>  
+                        <template #item.m10="{item}"><div class="text-right" v-html="percentage_html(item.m10 )"></div></template>  
+                        <template #item.m11="{item}"><div class="text-right" v-html="percentage_html(item.m11 )"></div></template>  
+                        <template #item.m12="{item}"><div class="text-right" v-html="percentage_html(item.m12 )"></div></template>  
+                        <template #item.total="{item}"><div class="text-right" v-html="percentage_html(item.total )"></div></template> 
                 <template #bottom ></template>    
                     </v-data-table>   
                     <p class="boldcenter mt-4" v-html="$t('Product quotes percentage from first data: [0]').format(percentage_html(information.percentages[information.percentages.length-1].from_first_quote))"></p>
@@ -39,18 +39,18 @@
             <v-window-item key="quotes_evolution">     
                 <v-card class="pa-1" outlined  v-if="this.information">
                     <v-data-table density="compact" :headers="quotes_headers" :items="this.information.quotes" class="elevation-1"    fixed-header :loading="loading"    :items-per-page="10000" >
-                        <template #item.m1="{item}"><div class="text-right" v-html="currency_html(item.raw.m1 , product.currency)"></div></template>  
-                        <template #item.m2="{item}"><div class="text-right" v-html="currency_html(item.raw.m2 , product.currency)"></div></template>  
-                        <template #item.m3="{item}"><div class="text-right" v-html="currency_html(item.raw.m3 , product.currency)"></div></template>  
-                        <template #item.m4="{item}"><div class="text-right" v-html="currency_html(item.raw.m4 , product.currency)"></div></template>  
-                        <template #item.m5="{item}"><div class="text-right" v-html="currency_html(item.raw.m5 , product.currency)"></div></template>  
-                        <template #item.m6="{item}"><div class="text-right" v-html="currency_html(item.raw.m6 , product.currency)"></div></template>  
-                        <template #item.m7="{item}"><div class="text-right" v-html="currency_html(item.raw.m7 , product.currency)"></div></template>  
-                        <template #item.m8="{item}"><div class="text-right" v-html="currency_html(item.raw.m8 , product.currency)"></div></template>  
-                        <template #item.m9="{item}"><div class="text-right" v-html="currency_html(item.raw.m9 , product.currency)"></div></template>  
-                        <template #item.m10="{item}"><div class="text-right" v-html="currency_html(item.raw.m10 , product.currency)"></div></template>  
-                        <template #item.m11="{item}"><div class="text-right" v-html="currency_html(item.raw.m11 , product.currency)"></div></template>  
-                        <template #item.m12="{item}"><div class="text-right" v-html="currency_html(item.raw.m12 , product.currency)"></div></template>  
+                        <template #item.m1="{item}"><div class="text-right" v-html="currency_html(item.m1 , product.currency)"></div></template>  
+                        <template #item.m2="{item}"><div class="text-right" v-html="currency_html(item.m2 , product.currency)"></div></template>  
+                        <template #item.m3="{item}"><div class="text-right" v-html="currency_html(item.m3 , product.currency)"></div></template>  
+                        <template #item.m4="{item}"><div class="text-right" v-html="currency_html(item.m4 , product.currency)"></div></template>  
+                        <template #item.m5="{item}"><div class="text-right" v-html="currency_html(item.m5 , product.currency)"></div></template>  
+                        <template #item.m6="{item}"><div class="text-right" v-html="currency_html(item.m6 , product.currency)"></div></template>  
+                        <template #item.m7="{item}"><div class="text-right" v-html="currency_html(item.m7 , product.currency)"></div></template>  
+                        <template #item.m8="{item}"><div class="text-right" v-html="currency_html(item.m8 , product.currency)"></div></template>  
+                        <template #item.m9="{item}"><div class="text-right" v-html="currency_html(item.m9 , product.currency)"></div></template>  
+                        <template #item.m10="{item}"><div class="text-right" v-html="currency_html(item.m10 , product.currency)"></div></template>  
+                        <template #item.m11="{item}"><div class="text-right" v-html="currency_html(item.m11 , product.currency)"></div></template>  
+                        <template #item.m12="{item}"><div class="text-right" v-html="currency_html(item.m12 , product.currency)"></div></template>  
                 <template #bottom ></template>   
                     </v-data-table>   
                 </v-card>

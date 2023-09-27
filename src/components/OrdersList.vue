@@ -12,22 +12,22 @@
 
             <v-data-table density="compact" :headers="headers" :items="data" class="elevation-1 cursorpointer" :sort-by="getSort()" :loading="loading_table"  @click:row="orderView" :items-per-page="10000" >
                 <template #item.price="{ item }">
-                    <div class="text-right" v-html="currency_html(item.raw.price, item.raw.currency )"></div>
+                    <div class="text-right" v-html="currency_html(item.price, item.currency )"></div>
                 </template>  
                 <template #item.amount="{ item }">
-                    <div class="text-right" v-html="currency_html(item.raw.amount, item.raw.currency )"></div>
+                    <div class="text-right" v-html="currency_html(item.amount, item.currency )"></div>
                 </template>  
                 <template #item.percentage_from_price="{ item }">
-                    <div class="text-right" v-html="percentage_html(item.raw.percentage_from_price )"></div>
+                    <div class="text-right" v-html="percentage_html(item.percentage_from_price )"></div>
                 </template>  
-                <template #item.shares="{item}"><div class="text-right">{{ item.raw.shares }}</div></template>
+                <template #item.shares="{item}"><div class="text-right">{{ item.shares }}</div></template>
                 <template #item.executed="{ item }">
-                    <div v-html="localtime(item.raw.executed )"></div>
+                    <div v-html="localtime(item.executed )"></div>
                 </template>  
                 <template #item.actions="{item}">
-                    <v-icon small class="mr-2" @click.stop="executeOrder(item.raw)">mdi-play</v-icon>
-                    <v-icon small class="mr-2" @click.stop="editItem(item.raw)">mdi-pencil</v-icon>
-                    <v-icon small @click.stop="deleteItem(item.raw)">mdi-delete</v-icon>
+                    <v-icon small class="mr-2" @click.stop="executeOrder(item)">mdi-play</v-icon>
+                    <v-icon small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
+                    <v-icon small @click.stop="deleteItem(item)">mdi-delete</v-icon>
                 </template>          
                 <template #tbody v-if="data.length>0">
                     <tr class="totalrow pa-6">
@@ -153,8 +153,8 @@
                 this.dialog_cu=true
             },
             orderView(event,object) {    
-                this.order=object.item.raw
-                var investments_id=this.id_from_hyperlinked_url(object.item.raw.investments)
+                this.order=object.item
+                var investments_id=this.id_from_hyperlinked_url(object.item.investments)
                 var simulation=this.empty_ios()
                 simulation.investments.push(investments_id)
                 simulation.currency=this.store().profile.currency

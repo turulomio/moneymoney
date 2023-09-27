@@ -2,17 +2,17 @@
     <div>
         <v-data-table density="compact" :headers="table_headers()" :items="items" class="elevation-1" :sort-by="[{key:'year',order:'asc'}]" fixed-header :height="$attrs.height"    :items-per-page="10000" >
             <template #item.datetime="{item}">
-                {{ localtime(item.raw.datetime) }}
+                {{ localtime(item.datetime) }}
             </template>                 
             <template #item.investments="{item}">
-                {{ store().investments.get(item.raw.investments).fullname }}
+                {{ store().investments.get(item.investments).fullname }}
             </template>              
             <template #item.amount="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.amount,item.raw.currency)"></div>
+                <div class="text-right" v-html="currency_html(item.amount,item.currency)"></div>
             </template>            
             <template #item.actions="{item}">
-                <v-icon small class="mr-2" @click="editFOC(item.raw)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" @click="deleteFOC(item.raw)">mdi-delete</v-icon>
+                <v-icon small class="mr-2" @click="editFOC(item)">mdi-pencil</v-icon>
+                <v-icon small class="mr-2" @click="deleteFOC(item)">mdi-delete</v-icon>
             </template>
                 <template #bottom ></template>   
         </v-data-table>   

@@ -2,11 +2,11 @@
     <div>
         <v-data-table density="compact" :headers="table_headers" :items="items" class="elevation-1" :sort-by="[{key:'date',order:'asc'}]" fixed-header :height="$attrs.height" ref="table_dps">
             <template #item.gross="{item}">
-                <div v-html="currency_html(item.raw.gross, product.currency)"></div>
+                <div v-html="currency_html(item.gross, product.currency)"></div>
             </template>       
             <template #item.actions="{item}">
-                <v-icon small class="mr-2" @click="editDPS(item.raw)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" @click="deleteDPS(item.raw)">mdi-delete</v-icon>
+                <v-icon small class="mr-2" @click="editDPS(item)">mdi-pencil</v-icon>
+                <v-icon small class="mr-2" @click="deleteDPS(item)">mdi-delete</v-icon>
             </template>
                 <template #bottom ></template>   
         </v-data-table>   

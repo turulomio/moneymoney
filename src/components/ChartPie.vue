@@ -9,10 +9,10 @@
                 <v-col v-if="new_show_data" >
                     <v-data-table density="compact" :headers="tableHeaders"  :items="items" class="elevation-1" :sort-by="[{key:'value',order:'desc'}]" :items-per-page="10000" >
                         <template #item.percentage="{item}">
-                            <div class="text-right">{{ getPercentage(item.raw) }}</div>
+                            <div class="text-right">{{ getPercentage(item) }}</div>
                         </template>
                         <template #item.value="{item}">
-                            <div class="text-right">{{ item.raw.value }}</div>
+                            <div class="text-right">{{ item.value }}</div>
                         </template>
                         <template #tbody>
                             <tr class="totalrow">

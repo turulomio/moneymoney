@@ -15,31 +15,31 @@
                     </v-tooltip>
                 </template> -->  
                 <template #item.dt_from="{item}">
-                    <div v-html="localtime(item.raw.dt_from )"></div>
+                    <div v-html="localtime(item.dt_from )"></div>
                 </template>        
                 <template #item.dt_to="{item}">
-                    <div v-html="localtime(item.raw.dt_to )"></div>
+                    <div v-html="localtime(item.dt_to )"></div>
                 </template>   
                 <template #item.invested="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.raw.invested)"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.invested)"></div>
                 </template>    
                 <template #item.gains_current_net_user="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.raw.gains_current_net_user)"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.gains_current_net_user)"></div>
                 </template>    
                 <template #item.gains_historical_net_user="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.raw.gains_historical_net_user)"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.gains_historical_net_user)"></div>
                 </template>    
                 <template #item.dividends_net_user="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.raw.dividends_net_user)"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.dividends_net_user)"></div>
                 </template>    
                 <template #item.total_net_user="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.raw.total_net_user)"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.total_net_user)"></div>
                 </template>           
 
                 <template #item.actions="{item}">
-                    <v-icon small class="mr-2" @click.stop="viewItem(item.raw)">mdi-eye</v-icon>
-                    <v-icon small class="mr-2" @click.stop="editItem(item.raw)">mdi-pencil</v-icon>
-                    <v-icon small @click.stop="deleteItem(item.raw)">mdi-delete</v-icon>
+                    <v-icon small class="mr-2" @click.stop="viewItem(item)">mdi-eye</v-icon>
+                    <v-icon small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
+                    <v-icon small @click.stop="deleteItem(item)">mdi-delete</v-icon>
                 </template>                  
                 <template #tbody v-if="strategies_items.length>0">
                     <tr class="totalrow">
@@ -161,15 +161,15 @@
                 this.dialog_view=true
             },
             detailedviewItem (event,object) {
-                if (object.item.raw.type==2){//RANGES
+                if (object.item.type==2){//RANGES
                     this.pr=this.empty_products_ranges()
-                    this.pr.product=`${this.store().apiroot}/api/products/${object.item.raw.additional1}/`
-                    this.pr.percentage_between_ranges=object.item.raw.additional2
-                    this.pr.percentage_gains=object.item.raw.additional3
-                    this.pr.amount_to_invest=object.item.raw.additional4
-                    this.pr.recomendation_methods=object.item.raw.additional5
-                    this.pr.totalized_operations=object.item.raw.additional6
-                    this.pr.investments=object.item.raw.investments
+                    this.pr.product=`${this.store().apiroot}/api/products/${object.item.additional1}/`
+                    this.pr.percentage_between_ranges=object.item.additional2
+                    this.pr.percentage_gains=object.item.additional3
+                    this.pr.amount_to_invest=object.item.additional4
+                    this.pr.recomendation_methods=object.item.additional5
+                    this.pr.totalized_operations=object.item.additional6
+                    this.pr.investments=object.item.investments
                     this.key=this.key+1
                     this.dialog_detailedview=true
                 } else {

@@ -14,19 +14,19 @@
                     <p class="boldcenter my-4">{{$t("This report sums the following accounts operations: 'Derivatives. Daily adjustment', 'Derivatives. Operation commission', 'Derivatives. Swaps' and 'Fast investment operations'")}}</p>
                     <v-card class="pa-4" outlined >
                         <v-data-table density="compact" :headers="derivatives_headers" :items="items.derivatives" class="elevation-1"  fixed-header :loading="loading"    :items-per-page="10000" >
-                            <template #item.m1="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m1 )"></div></template>  
-                            <template #item.m2="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m2 )"></div></template>  
-                            <template #item.m3="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m3 )"></div></template>  
-                            <template #item.m4="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m4 )"></div></template>  
-                            <template #item.m5="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m5 )"></div></template>  
-                            <template #item.m6="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m6 )"></div></template>  
-                            <template #item.m7="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m7 )"></div></template>  
-                            <template #item.m8="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m8 )"></div></template>  
-                            <template #item.m9="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m9 )"></div></template>  
-                            <template #item.m10="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m10 )"></div></template>  
-                            <template #item.m11="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m11 )"></div></template>  
-                            <template #item.m12="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m12 )"></div></template> 
-                            <template #item.total="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.total )"></div></template>  
+                            <template #item.m1="{item}"><div class="text-right" v-html="localcurrency_html(item.m1 )"></div></template>  
+                            <template #item.m2="{item}"><div class="text-right" v-html="localcurrency_html(item.m2 )"></div></template>  
+                            <template #item.m3="{item}"><div class="text-right" v-html="localcurrency_html(item.m3 )"></div></template>  
+                            <template #item.m4="{item}"><div class="text-right" v-html="localcurrency_html(item.m4 )"></div></template>  
+                            <template #item.m5="{item}"><div class="text-right" v-html="localcurrency_html(item.m5 )"></div></template>  
+                            <template #item.m6="{item}"><div class="text-right" v-html="localcurrency_html(item.m6 )"></div></template>  
+                            <template #item.m7="{item}"><div class="text-right" v-html="localcurrency_html(item.m7 )"></div></template>  
+                            <template #item.m8="{item}"><div class="text-right" v-html="localcurrency_html(item.m8 )"></div></template>  
+                            <template #item.m9="{item}"><div class="text-right" v-html="localcurrency_html(item.m9 )"></div></template>  
+                            <template #item.m10="{item}"><div class="text-right" v-html="localcurrency_html(item.m10 )"></div></template>  
+                            <template #item.m11="{item}"><div class="text-right" v-html="localcurrency_html(item.m11 )"></div></template>  
+                            <template #item.m12="{item}"><div class="text-right" v-html="localcurrency_html(item.m12 )"></div></template> 
+                            <template #item.total="{item}"><div class="text-right" v-html="localcurrency_html(item.total )"></div></template>  
                 <template #bottom ></template>   
                         </v-data-table>   
                     </v-card>
@@ -42,19 +42,19 @@
                     <p class="boldcenter my-4">{{$t("This report sums the following accounts operations: 'Derivatives. Daily adjustment', 'Derivatives. Operation commission', 'Derivatives. Swaps', 'Fast investment operations' and 'Fast investment operations coverage'")}}</p>
                     <v-card class="pa-4" outlined >
                         <v-data-table density="compact" :headers="derivatives_headers" :items="items.balance" class="elevation-1"  fixed-header :loading="loading"    :items-per-page="10000" >
-                            <template #item.m1="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m1 )"></div></template>  
-                            <template #item.m2="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m2 )"></div></template>  
-                            <template #item.m3="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m3 )"></div></template>  
-                            <template #item.m4="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m4 )"></div></template>  
-                            <template #item.m5="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m5 )"></div></template>  
-                            <template #item.m6="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m6 )"></div></template>  
-                            <template #item.m7="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m7 )"></div></template>  
-                            <template #item.m8="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m8 )"></div></template>  
-                            <template #item.m9="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m9 )"></div></template>  
-                            <template #item.m10="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m10 )"></div></template>  
-                            <template #item.m11="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m11 )"></div></template>  
-                            <template #item.m12="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.m12 )"></div></template> 
-                            <template #item.total="{item}"><div class="text-right" v-html="localcurrency_html(item.raw.total )"></div></template>  
+                            <template #item.m1="{item}"><div class="text-right" v-html="localcurrency_html(item.m1 )"></div></template>  
+                            <template #item.m2="{item}"><div class="text-right" v-html="localcurrency_html(item.m2 )"></div></template>  
+                            <template #item.m3="{item}"><div class="text-right" v-html="localcurrency_html(item.m3 )"></div></template>  
+                            <template #item.m4="{item}"><div class="text-right" v-html="localcurrency_html(item.m4 )"></div></template>  
+                            <template #item.m5="{item}"><div class="text-right" v-html="localcurrency_html(item.m5 )"></div></template>  
+                            <template #item.m6="{item}"><div class="text-right" v-html="localcurrency_html(item.m6 )"></div></template>  
+                            <template #item.m7="{item}"><div class="text-right" v-html="localcurrency_html(item.m7 )"></div></template>  
+                            <template #item.m8="{item}"><div class="text-right" v-html="localcurrency_html(item.m8 )"></div></template>  
+                            <template #item.m9="{item}"><div class="text-right" v-html="localcurrency_html(item.m9 )"></div></template>  
+                            <template #item.m10="{item}"><div class="text-right" v-html="localcurrency_html(item.m10 )"></div></template>  
+                            <template #item.m11="{item}"><div class="text-right" v-html="localcurrency_html(item.m11 )"></div></template>  
+                            <template #item.m12="{item}"><div class="text-right" v-html="localcurrency_html(item.m12 )"></div></template> 
+                            <template #item.total="{item}"><div class="text-right" v-html="localcurrency_html(item.total )"></div></template>  
                 <template #bottom ></template>   
                         </v-data-table>   
                     </v-card>

@@ -3,14 +3,14 @@
         <v-data-table density="compact" :headers="table_headers()" :items="items" class="elevation-1" :sort-by="[{key:'year',order:'asc'}]" fixed-header :height="$attrs.height"    :items-per-page="10000" >
 
             <template #item.estimation="{item}">
-                <div v-html="currency(item.raw.estimation)"></div>
+                <div v-html="currency(item.estimation)"></div>
             </template>          
             <template #item.manual="{item}">
-                <v-icon small v-if="item.raw.manual" >mdi-check-outline</v-icon>
+                <v-icon small v-if="item.manual" >mdi-check-outline</v-icon>
             </template>      
             <template #item.actions="{item}">
-                <v-icon small class="mr-2" @click="editEstimationDPS(item.raw)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" @click="deleteEstimationDPS(item.raw)">mdi-delete</v-icon>
+                <v-icon small class="mr-2" @click="editEstimationDPS(item)">mdi-pencil</v-icon>
+                <v-icon small class="mr-2" @click="deleteEstimationDPS(item)">mdi-delete</v-icon>
             </template>
                 <template #bottom ></template>   
         </v-data-table>   

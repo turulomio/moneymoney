@@ -5,21 +5,21 @@
         </h1>
         <v-data-table density="compact" :headers="investments_headers" :search="search" :items="concepts" :sort-by="[{key:'id',order:'asc'}]" class="elevation-1 ma-4" :loading="loading" :key="key"    :items-per-page="10000" >
             <template #item.editable="{item}">
-                <v-icon small v-if="item.raw.editable" >mdi-check-outline</v-icon>
+                <v-icon small v-if="item.editable" >mdi-check-outline</v-icon>
             </template>             
             <template #item.operationstypes="{item}">
-               <div v-html="this.store().operationstypes.get(item.raw.operationstypes).localname"></div>
+               <div v-html="this.store().operationstypes.get(item.operationstypes).localname"></div>
            </template>           
             <template #item.name="{item}">
-               <div v-html="item.raw.name" :class="(item.raw.editable==true && item.raw.id<1000) ? 'boldred' : ''"></div>
+               <div v-html="item.name" :class="(item.editable==true && item.id<1000) ? 'boldred' : ''"></div>
            </template>
             <template #item.balance_user="{item}">
-                <div v-html="localcurrency_html(item.raw.balance_user )"></div>
+                <div v-html="localcurrency_html(item.balance_user )"></div>
             </template>          
             <template #item.actions="{item}">
-                <v-icon v-if="item.raw.editable" small class="ml-1" @click.stop="editItem(item)">mdi-pencil</v-icon>
-                <v-icon v-if="item.raw.editable && item.raw.used==0" small class="ml-1" @click.stop="deleteItem(item)">mdi-delete</v-icon>
-                <v-icon v-if="item.raw.migrable" small class="ml-1" @click.stop="migrateConcept(item)" color="#9933ff" style="font-weight:bold">mdi-folder-move-outline</v-icon>     
+                <v-icon v-if="item.editable" small class="ml-1" @click.stop="editItem(item)">mdi-pencil</v-icon>
+                <v-icon v-if="item.editable && item.used==0" small class="ml-1" @click.stop="deleteItem(item)">mdi-delete</v-icon>
+                <v-icon v-if="item.migrable" small class="ml-1" @click.stop="migrateConcept(item)" color="#9933ff" style="font-weight:bold">mdi-folder-move-outline</v-icon>     
             </template> 
             <template #bottom ></template>                  
         </v-data-table>

@@ -4,18 +4,18 @@
         <v-card outlined class="pa-4 mx-auto" width="50%" flat>
             <v-data-table density="compact" :headers="headers" :items="items" :sort-by="[{key:'from',order:'asc'}]" class="elevation-1 cursorpointer" :key="key"     :items-per-page="10000" >
                 <template #item.datetime="{item}">
-                    {{localtime(item.raw.datetime)}}
+                    {{localtime(item.datetime)}}
                 </template>     
                 <template #item.supported="{item}">
-                    <v-icon small v-if="item.raw.supported" >mdi-check-outline</v-icon>
+                    <v-icon small v-if="item.supported" >mdi-check-outline</v-icon>
                 </template>     
                 <template #item.quote="{item}">
-                    {{ my_round(item.raw.quote,6) }}
+                    {{ my_round(item.quote,6) }}
                 </template>       
                 <template #item.actions="{item}">
-                    <v-icon v-if="item.raw.can_c" small class="mr-2" @click="addItem(item)">mdi-plus</v-icon>
-                    <v-icon v-if="item.raw.can_rud" small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon v-if="item.raw.can_rud" small @click="deleteItem(item)">mdi-delete</v-icon>
+                    <v-icon v-if="item.can_c" small class="mr-2" @click="addItem(item)">mdi-plus</v-icon>
+                    <v-icon v-if="item.can_rud" small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+                    <v-icon v-if="item.can_rud" small @click="deleteItem(item)">mdi-delete</v-icon>
                 </template>
                 <template #bottom ></template>   
             </v-data-table>

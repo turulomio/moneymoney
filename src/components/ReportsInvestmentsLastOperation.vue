@@ -11,37 +11,37 @@
         <p></p>
         <v-data-table density="compact" :headers="tableHeaders" :items="tableData" class="elevation-1 ma-4" item-key="id" :key="refreshKey" :sort-by="[{key:'percentage_last',order:'desc'}]" @click:row="viewMerged" :items-per-page="10000" >
             <template #item.datetime="{item}">
-                    {{ localtime(item.raw.data.last_datetime)  }} 
+                    {{ localtime(item.data.last_datetime)  }} 
             </template>            
             <template #item.name="{item}">
-                    {{ item.raw.data.name  }} 
+                    {{ item.data.name  }} 
             </template>
             <template #item.shares="{item}">
-                <div class="text-right">{{ item.raw.total_io_current.shares  }} </div>
+                <div class="text-right">{{ item.total_io_current.shares  }} </div>
             </template>
             <template #item.last_shares="{item}">
-                <div class="text-right">{{ item.raw.data.last_shares  }} </div>
+                <div class="text-right">{{ item.data.last_shares  }} </div>
             </template>
 
             <template #item.balance="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.total_io_current.balance_futures_user)"></div>
+                <div class="text-right" v-html="localcurrency_html(item.total_io_current.balance_futures_user)"></div>
             </template>
             <template #item.gains="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.total_io_current.gains_gross_user)"></div>
+                <div class="text-right" v-html="localcurrency_html(item.total_io_current.gains_gross_user)"></div>
             </template>
             <template #item.percentage_last="{item}">
-                <div  :class="item.raw.data.percentage_last<limit/100 ? 'boldred text-right' : 'text-right'" v-html="percentage_html(item.raw.data.percentage_last)"></div>
+                <div  :class="item.data.percentage_last<limit/100 ? 'boldred text-right' : 'text-right'" v-html="percentage_html(item.data.percentage_last)"></div>
             </template>
             <template #item.percentage_invested="{item}">
-                <div class="text-right" v-html="percentage_html(item.raw.data.percentage_invested)"></div>
+                <div class="text-right" v-html="percentage_html(item.data.percentage_invested)"></div>
             </template>
             <template #item.percentage_sellingpoint="{item}">
-                <div class="text-right" v-html="percentage_html(item.raw.data.percentage_sellingpoint)"></div>
+                <div class="text-right" v-html="percentage_html(item.data.percentage_sellingpoint)"></div>
             </template>
             <template #item.actions="{item}">                   
                 <v-row class="text-nowrap" justify="center">
-                    <v-icon small @click.stop="orderAtPercentage(item.raw)">mdi-cart</v-icon>   
-                    <div @click.stop="reinvestAtPercentage(item.raw)"> <v-img color="#757575" :src="imgReinvest"  :height="16" :width="16" contain ></v-img></div>
+                    <v-icon small @click.stop="orderAtPercentage(item)">mdi-cart</v-icon>   
+                    <div @click.stop="reinvestAtPercentage(item)"> <v-img color="#757575" :src="imgReinvest"  :height="16" :width="16" contain ></v-img></div>
                 </v-row>
             </template>
                 <template #bottom ></template>   
@@ -150,11 +150,11 @@
             },
             viewMerged(event,object){                
                 if (this.method==0){//Normal investment
-                    this.investment_id=object.item.raw.data.investments_id
+                    this.investment_id=object.item.data.investments_id
                     this.key=this.key+1
                     this.dialog_iv=true
                 } else if (this.method==1){//Merged
-                    this.ios_id=object.item.raw
+                    this.ios_id=object.item
                     this.key=this.key+1
                     this.dialog_imv=true
                 }

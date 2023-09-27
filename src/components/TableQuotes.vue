@@ -3,14 +3,14 @@
         <v-data-table density="compact" :headers="table_headers()" :items="items" class="elevation-1" :sort-by="[{key:'datetime',order:'asc'}]" fixed-header :height="$attrs.height" :loading="$attrs.loading" :items-per-page="10000" >
 
             <template #item.datetime="{item}">
-                <div>{{ localtime(item.raw.datetime)}}</div>
+                <div>{{ localtime(item.datetime)}}</div>
             </template>        
             <template #item.quote="{item}">
-                <div v-html="currency_html(item.raw.quote,item.raw.currency,item.raw.decimals)"></div>
+                <div v-html="currency_html(item.quote,item.currency,item.decimals)"></div>
             </template>   
             <template #item.actions="{item}">
-                <v-icon small class="mr-2" @click="editQuote(item.raw)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" @click="deleteQuote(item.raw)">mdi-delete</v-icon>
+                <v-icon small class="mr-2" @click="editQuote(item)">mdi-pencil</v-icon>
+                <v-icon small class="mr-2" @click="deleteQuote(item)">mdi-delete</v-icon>
             </template>
                 <template #bottom ></template>   
         </v-data-table>   

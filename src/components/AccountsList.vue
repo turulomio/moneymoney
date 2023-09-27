@@ -7,24 +7,24 @@
             <v-checkbox v-model="showActive" :label="chkLabel" ></v-checkbox>
             <v-data-table :headers="accounts_headers" density="compact" :items="accounts_items" :sort-by="[{key:'datetime',order:'asc'}]" class="elevation-1 cursorpointer" fixed-header :loading="loading_accounts" :key="key" @click:row="viewItem" :items-per-page="1000000">
                 <template #item.last_datetime="{item}">
-                    {{localtime(item.raw.last_datetime)}}
+                    {{localtime(item.last_datetime)}}
                 </template>             
                 <template #item.banks="{item}">
-                    <div v-html="store().banks.get(item.raw.banks).localname"></div>
+                    <div v-html="store().banks.get(item.banks).localname"></div>
                 </template>     
                 <template #item.balance_user="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.raw.balance_user)"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.balance_user)"></div>
                 </template>     
                 <template #item.balance_account="{item}">
-                    <div class="text-right" v-html="currency_html(item.raw.balance_account, item.raw.currency )"></div>
+                    <div class="text-right" v-html="currency_html(item.balance_account, item.currency )"></div>
                 </template>                   
                 <template #item.active="{item}">
-                    <div class="text-center"><v-icon small v-if="item.raw.active" >mdi-check-outline</v-icon></div>
+                    <div class="text-center"><v-icon small v-if="item.active" >mdi-check-outline</v-icon></div>
                 </template>         
 
                 <template #item.actions="{item}">
-                    <v-icon small class="mr-2" @click.stop="editItem(item.raw)">mdi-pencil</v-icon>
-                    <v-icon small @click.stop="deleteItem(item.raw)" v-if="item.raw.is_deletable">mdi-delete</v-icon>
+                    <v-icon small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
+                    <v-icon small @click.stop="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
                 </template>   
                 <template #bottom ></template>        
                 <template #tbody>
@@ -168,7 +168,7 @@
                 this.dialog=true
             },
             viewItem (event,object) {
-                this.account=object.item.raw
+                this.account=object.item
                 this.key=this.key+1
                 this.dialog_view=true
             },

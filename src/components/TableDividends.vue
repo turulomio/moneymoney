@@ -2,30 +2,30 @@
     <div>
         <v-data-table density="compact" :headers="table_headers()" :items="items" class="elevation-1" :sort-by="[{key:'datetime',order:'asc'}]" fixed-header :height="$attrs.height"     :items-per-page="10000" >
             <template #item.datetime="{item}">
-                <div>{{ localtime(item.raw.datetime)}}</div>
+                <div>{{ localtime(item.datetime)}}</div>
             </template>         
             <template #item.concepts="{item}">
-               <div v-html="store().concepts.get(item.raw.concepts).localname"></div>
+               <div v-html="store().concepts.get(item.concepts).localname"></div>
            </template>       
             <template #item.investments="{item}">
-               <div v-html="store().investments.get(item.raw.investments).fullname"></div>
+               <div v-html="store().investments.get(item.investments).fullname"></div>
            </template> 
             <template #item.gross="{item}">
-                <div v-html="currency_html(item.raw.gross,item.raw.currency)"></div>
+                <div v-html="currency_html(item.gross,item.currency)"></div>
             </template>   
             <template #item.net="{item}">
-                <div v-html="currency_html(item.raw.net,item.raw.currency)"></div>
+                <div v-html="currency_html(item.net,item.currency)"></div>
             </template>   
             <template #item.commission="{item}">
-                <div v-html="currency_html(item.raw.commission,item.raw.currency)"></div>
+                <div v-html="currency_html(item.commission,item.currency)"></div>
             </template>   
             <template #item.taxes="{item}">
-                <div v-html="currency_html(item.raw.taxes,item.raw.currency)"></div>
+                <div v-html="currency_html(item.taxes,item.currency)"></div>
             </template>   
             <template #item.actions="{item}">
-                <v-icon small class="mr-2" @click="copyDividend(item.raw)">mdi-content-copy</v-icon>
-                <v-icon small class="mr-2" @click="editDividend(item.raw)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" @click="deleteDividend(item.raw)">mdi-delete</v-icon>
+                <v-icon small class="mr-2" @click="copyDividend(item)">mdi-content-copy</v-icon>
+                <v-icon small class="mr-2" @click="editDividend(item)">mdi-pencil</v-icon>
+                <v-icon small class="mr-2" @click="deleteDividend(item)">mdi-delete</v-icon>
             </template>
             <template #tbody>
                 <tr class="totalrow" v-if="items.length>0">

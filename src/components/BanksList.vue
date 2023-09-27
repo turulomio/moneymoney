@@ -8,23 +8,23 @@
             <v-checkbox v-model="showActive" :label="chkLabel" />
             <v-data-table density="compact" :headers="headers" :items="data" class="elevation-1 cursorpointer" :loading="loading_table" :sort-by="[{key:'localname',order:'asc'}]" @click:row="viewItem" :items-per-page="10000" >
                 <template #item.localname="{item}">
-                    {{ item.raw.localname }}
+                    {{ item.localname }}
                 </template>
                 <template #item.active="{item}">
-                    <v-icon small v-if="item.raw.active" >mdi-check-outline</v-icon>
+                    <v-icon small v-if="item.active" >mdi-check-outline</v-icon>
                 </template>  
                 <template #item.balance_accounts="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.raw.balance_accounts )"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.balance_accounts )"></div>
                 </template>  
                 <template #item.balance_investments="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.raw.balance_investments )"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.balance_investments )"></div>
                 </template>  
                 <template #item.balance_total="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.raw.balance_total )"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.balance_total )"></div>
                 </template>  
                 <template #item.actions="{item}">
                     <v-icon small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon small @click.stop="deleteItem(item)" v-if="item.raw.is_deletable">mdi-delete</v-icon>
+                    <v-icon small @click.stop="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
                 </template>
                 <template #tbody>
                     <tr class="totalrow pa-6">
@@ -124,7 +124,7 @@
                 this.dialog=true
             },
             viewItem (event,object) {
-                this.bank=object.item.raw
+                this.bank=object.item
                 this.key=this.key+1
                 this.dialog_view=true
             },

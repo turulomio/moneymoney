@@ -13,47 +13,47 @@
         </v-row>
         <v-data-table density="compact" :headers="investments_headers" :items="investments_items" class="elevation-1" :sort-by="table_sort_by()" fixed-header  :items-per-page="items_per_page" fixed-footer @click:row="viewItem" :loading="loading" :search="search">
             <template #item.fullname="{item}">
-                <v-icon :class="'fi fib fi-'+item.raw.flag" small :title="this.getCountryNameByCode(item.raw.flag)"></v-icon>
-                <v-icon small class="ml-1" v-if="item.raw.shares>=0" color="blue" :title="$t('Long position')">mdi-arrow-up-circle-outline</v-icon>
-                <v-icon small class="ml-1" v-if="item.raw.shares<0" color="orange" :title="$t('Short position')">mdi-arrow-down-circle-outline</v-icon>
-                {{item.raw.fullname}}
+                <v-icon :class="'fi fib fi-'+item.flag" small :title="this.getCountryNameByCode(item.flag)"></v-icon>
+                <v-icon small class="ml-1" v-if="item.shares>=0" color="blue" :title="$t('Long position')">mdi-arrow-up-circle-outline</v-icon>
+                <v-icon small class="ml-1" v-if="item.shares<0" color="orange" :title="$t('Short position')">mdi-arrow-down-circle-outline</v-icon>
+                {{item.fullname}}
             </template>                  
             <template #item.last_datetime="{item}">
-                <div v-html="(item.raw.last_datetime) ? localtime(item.raw.last_datetime) : $t('Update product quotes')" :class="(item.raw.last_datetime) ? '' : 'boldred'"></div>
+                <div v-html="(item.last_datetime) ? localtime(item.last_datetime) : $t('Update product quotes')" :class="(item.last_datetime) ? '' : 'boldred'"></div>
             </template>  
             <template #item.last="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.last,item.raw.currency )"></div>
+                <div class="text-right" v-html="currency_html(item.last,item.currency )"></div>
             </template>   
             <template #item.balance_user="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.balance_user )"></div>
+                <div class="text-right" v-html="localcurrency_html(item.balance_user )"></div>
             </template>     
             <template #item.invested_user="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.raw.invested_user )"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.invested_user )"></div>
             </template>    
             <template #item.gains_user="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.gains_user )"></div>
+                <div class="text-right" v-html="localcurrency_html(item.gains_user )"></div>
             </template>     
             <template #item.daily_difference="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.daily_difference )"></div>
+                <div class="text-right" v-html="localcurrency_html(item.daily_difference )"></div>
             </template>   
             <template #item.daily_percentage="{item}">
-                <div class="text-right" v-html="percentage_html(item.raw.daily_percentage )"></div>
+                <div class="text-right" v-html="percentage_html(item.daily_percentage )"></div>
             </template>  
             <template #item.percentage_invested="{item}">
-                <div class="text-right" v-html="percentage_html(item.raw.percentage_invested )"></div>
+                <div class="text-right" v-html="percentage_html(item.percentage_invested )"></div>
             </template>  
             <template #item.percentage_selling_point="{item}">
-                <v-tooltip left :text="tooltip_selling_percentage(item.raw)">
+                <v-tooltip left :text="tooltip_selling_percentage(item)">
                     <template v-slot:activator="{ props }">
-                        <div  class="text-right" v-bind="props" :class="item.raw.percentage_selling_point<0.05 ? 'boldgreen' : ''" v-html="percentage_html(item.raw.percentage_selling_point)"></div>
+                        <div  class="text-right" v-bind="props" :class="item.percentage_selling_point<0.05 ? 'boldgreen' : ''" v-html="percentage_html(item.percentage_selling_point)"></div>
                     </template>
                 </v-tooltip>   
             </template>              
             <template #item.actions="{item}">
-                <v-icon small class="ml-1" @click.stop="addQuote(item.raw)">mdi-plus</v-icon>
-                <v-icon small class="ml-1" @click.stop="editItem(item.raw)">mdi-pencil</v-icon>
-                <v-icon small class="ml-1" @click.stop="deleteItem(item.raw)" v-if="item.raw.is_deletable">mdi-delete</v-icon>
-                <v-icon small class="ml-1" v-if="(new Date().setHours(0,0,0,0)>new Date(item.raw.selling_expiration).setHours(0,0,0,0)) && item.raw.selling_expiration!=null" @click.stop="changeSellingPrice(item.raw)" color="#9933ff" style="font-weight:bold">mdi-alarm</v-icon>     
+                <v-icon small class="ml-1" @click.stop="addQuote(item)">mdi-plus</v-icon>
+                <v-icon small class="ml-1" @click.stop="editItem(item)">mdi-pencil</v-icon>
+                <v-icon small class="ml-1" @click.stop="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
+                <v-icon small class="ml-1" v-if="(new Date().setHours(0,0,0,0)>new Date(item.selling_expiration).setHours(0,0,0,0)) && item.selling_expiration!=null" @click.stop="changeSellingPrice(item)" color="#9933ff" style="font-weight:bold">mdi-alarm</v-icon>     
             </template>
             
          <template #bottom ></template>
@@ -267,7 +267,7 @@
                 });
             },
             viewItem (event,object) {
-                this.investment=object.item.raw
+                this.investment=object.item
                 this.key=this.key+1
                 this.dialog_view=true
             },

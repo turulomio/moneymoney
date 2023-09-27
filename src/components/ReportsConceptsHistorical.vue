@@ -10,43 +10,43 @@
         <p></p>
         <v-data-table density="compact" :headers="tableHeaders" :items="tableData" class="elevation-1 ma-4" fixed-header :key="key"  height="500"    :items-per-page="10000" >        
             <template #item.m1="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.m1)" @click="showConceptsHistoricalDetail(item.raw,1)"></div>
+                <div class="text-right" v-html="localcurrency_html(item.m1)" @click="showConceptsHistoricalDetail(item,1)"></div>
             </template> 
             <template #item.m2="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.m2)" @click="showConceptsHistoricalDetail(item.raw,2)"></div>
+                <div class="text-right" v-html="localcurrency_html(item.m2)" @click="showConceptsHistoricalDetail(item,2)"></div>
             </template> 
             <template #item.m3="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.m3)" @click="showConceptsHistoricalDetail(item.raw,3)"></div>
+                <div class="text-right" v-html="localcurrency_html(item.m3)" @click="showConceptsHistoricalDetail(item,3)"></div>
             </template> 
             <template #item.m4="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.m4)" @click="showConceptsHistoricalDetail(item.raw,4)"></div>
+                <div class="text-right" v-html="localcurrency_html(item.m4)" @click="showConceptsHistoricalDetail(item,4)"></div>
             </template> 
             <template #item.m5="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.m5)" @click="showConceptsHistoricalDetail(item.raw,5)"></div>
+                <div class="text-right" v-html="localcurrency_html(item.m5)" @click="showConceptsHistoricalDetail(item,5)"></div>
             </template> 
             <template #item.m6="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.m6)" @click="showConceptsHistoricalDetail(item.raw,6)"></div>
+                <div class="text-right" v-html="localcurrency_html(item.m6)" @click="showConceptsHistoricalDetail(item,6)"></div>
             </template> 
             <template #item.m7="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.m7)" @click="showConceptsHistoricalDetail(item.raw,7)"></div>
+                <div class="text-right" v-html="localcurrency_html(item.m7)" @click="showConceptsHistoricalDetail(item,7)"></div>
             </template> 
             <template #item.m8="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.m8)" @click="showConceptsHistoricalDetail(item.raw,8)"></div>
+                <div class="text-right" v-html="localcurrency_html(item.m8)" @click="showConceptsHistoricalDetail(item,8)"></div>
             </template> 
             <template #item.m9="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.m9)" @click="showConceptsHistoricalDetail(item.raw,9)"></div>
+                <div class="text-right" v-html="localcurrency_html(item.m9)" @click="showConceptsHistoricalDetail(item,9)"></div>
             </template> 
             <template #item.m10="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.m10)" @click="showConceptsHistoricalDetail(item.raw,10)"></div>
+                <div class="text-right" v-html="localcurrency_html(item.m10)" @click="showConceptsHistoricalDetail(item,10)"></div>
             </template> 
             <template #item.m11="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.m11)" @click="showConceptsHistoricalDetail(item.raw,11)"></div>
+                <div class="text-right" v-html="localcurrency_html(item.m11)" @click="showConceptsHistoricalDetail(item,11)"></div>
             </template> 
             <template #item.m12="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.m12)" @click="showConceptsHistoricalDetail(item.raw,12)"></div>
+                <div class="text-right" v-html="localcurrency_html(item.m12)" @click="showConceptsHistoricalDetail(item,12)"></div>
             </template> 
             <template #item.total="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.total)" @click="showConceptsHistoricalDetail(item.raw)"></div>
+                <div class="text-right" v-html="localcurrency_html(item.total)" @click="showConceptsHistoricalDetail(item)"></div>
             </template> 
                 <template #bottom ></template>   
         </v-data-table>

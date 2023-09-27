@@ -3,14 +3,14 @@
         <h1>{{ $t('Zero risk assets') }}</h1>
         <v-data-table density="compact" :headers="investments_headers" :items="investments_items" class="elevation-1" :sort-by="[{key:'fullname',order:'asc'}]" fixed-header  :items-per-page="5000000" fixed-footer @click:row="viewItem" :loading="loading">
             <template #item.fullname="{item}">
-                <v-icon :class="'fi fib fi-'+item.raw.flag" small :title="this.getCountryNameByCode(item.raw.flag)"></v-icon>
-                <v-icon small class="ml-1" v-if="item.raw.shares>=0" color="blue" :title="$t('Long position')">mdi-arrow-up-circle-outline</v-icon>
-                <v-icon small class="ml-1" v-if="item.raw.shares<0" color="orange" :title="$t('Short position')">mdi-arrow-down-circle-outline</v-icon>
-                {{item.raw.fullname}}
+                <v-icon :class="'fi fib fi-'+item.flag" small :title="this.getCountryNameByCode(item.flag)"></v-icon>
+                <v-icon small class="ml-1" v-if="item.shares>=0" color="blue" :title="$t('Long position')">mdi-arrow-up-circle-outline</v-icon>
+                <v-icon small class="ml-1" v-if="item.shares<0" color="orange" :title="$t('Short position')">mdi-arrow-down-circle-outline</v-icon>
+                {{item.fullname}}
             </template>                  
  
             <template #item.balance_user="{item}">
-                <div class="text-right" v-html="localcurrency_html(item.raw.balance_user )"></div>
+                <div class="text-right" v-html="localcurrency_html(item.balance_user )"></div>
             </template>
             
          <template #bottom ></template>
@@ -75,8 +75,8 @@
                 });
             },
             viewItem (event,object) {
-                if (object.item.raw.id==null) return //Accounts total balance
-                this.investment=object.item.raw
+                if (object.item.id==null) return //Accounts total balance
+                this.investment=object.item
                 this.key=this.key+1
                 this.dialog_view=true
             },

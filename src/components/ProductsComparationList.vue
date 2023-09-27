@@ -7,14 +7,14 @@
         <v-data-table density="compact" :headers="headers" :items="items" :sort-by="[{key:'name',order:'asc'}]" class="elevation-1 ma-4 cursorpointer" :loading="loading" :key="key"  @click:row="pairReportItem"    :items-per-page="10000" >
         
             <template #item.a="{item}">
-                <div v-html="this.store().products.get(item.raw.a).name"></div>
+                <div v-html="this.store().products.get(item.a).name"></div>
             </template> 
             <template #item.b="{item}">
-                <div v-html="this.store().products.get(item.raw.b).name"></div>
+                <div v-html="this.store().products.get(item.b).name"></div>
             </template>     
             <template #item.actions="{item}">
-                <v-icon small class="mr-2" @click="editPair(item.raw)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" @click="deletePair(item.raw)">mdi-delete</v-icon>
+                <v-icon small class="mr-2" @click="editPair(item)">mdi-pencil</v-icon>
+                <v-icon small class="mr-2" @click="deletePair(item)">mdi-delete</v-icon>
             </template>
             <template #bottom ></template>   
         </v-data-table>
@@ -120,8 +120,8 @@
                 this.key=this.key+1
             },
             pairReportItem(event,object){       
-                this.product_a=object.item.raw.a
-                this.product_b=object.item.raw.b
+                this.product_a=object.item.a
+                this.product_b=object.item.b
                 this.key=this.key+1
             },
             refreshTable(){               

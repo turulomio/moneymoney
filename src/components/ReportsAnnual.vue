@@ -23,19 +23,19 @@
                     <v-card outlined>            
                         <v-data-table density="compact" :headers="total_annual_headers" :items="total_annual"  class="elevation-1" :loading="loading_annual"     :items-per-page="10000" >
                             <template #item.account_balance="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.account_balance)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.account_balance)"></div>
                             </template>      
                             <template #item.investment_balance="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.investment_balance)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.investment_balance)"></div>
                             </template>   
                             <template #item.total="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.total)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.total)"></div>
                             </template>   
                             <template #item.diff_lastmonth="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.diff_lastmonth)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.diff_lastmonth)"></div>
                             </template>   
                             <template #item.percentage_year="{item}">
-                                <div class="text-right" v-html="percentage_html(item.raw.percentage_year)"></div>
+                                <div class="text-right" v-html="percentage_html(item.percentage_year)"></div>
                             </template>   
                              <template #tbody>
                                 <tr class="totalrow" v-if="total_annual.length>0">
@@ -55,22 +55,22 @@
                     <v-card outlined>            
                         <v-data-table density="compact" :headers="total_annual_incomes_headers" :items="total_annual_incomes"  class="elevation-1 cursorpointer" :loading="loading_annual_incomes" @click:row="incomeDetails"    :items-per-page="10000" >     
                             <template #item.expenses="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.expenses)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.expenses)"></div>
                             </template>      
                             <template #item.incomes="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.incomes)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.incomes)"></div>
                             </template>   
                             <template #item.total="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.total)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.total)"></div>
                             </template>   
                             <template #item.gains="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.gains)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.gains)"></div>
                             </template>
                             <template #item.fast_operations="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.fast_operations)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.fast_operations)"></div>
                             </template>
                             <template #item.dividends="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.dividends)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.dividends)"></div>
                             </template>
                              <template #tbody>
                                 <tr class="totalrow" ref="lr" v-if="total_annual_incomes.length>0">
@@ -92,16 +92,16 @@
                     <v-card outlined>
                         <v-data-table density="compact" :headers="total_annual_gainsbyproductstypes_headers" :items="total_annual_gainsbyproductstypes"  class="elevation-1" :loading="loading_annual_gainsbyproductstypes"    :items-per-page="10000" >    
                             <template #item.dividends_gross="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.dividends_gross)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.dividends_gross)"></div>
                             </template>      
                             <template #item.dividends_net="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.dividends_net)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.dividends_net)"></div>
                             </template>   
                             <template #item.gains_gross="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.gains_gross)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.gains_gross)"></div>
                             </template>   
                             <template #item.gains_net="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.gains_net)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.gains_net)"></div>
                             </template>    
                              <template #tbody>
                                 <tr class="totalrow" ref="lr" v-if="total_annual_gainsbyproductstypes.length>0">
@@ -123,16 +123,16 @@
     
                         <v-data-table density="compact" :headers="total_target_headers" :items="total_target"  class="elevation-1" :loading="loading_target"     :items-per-page="10000" >
                             <template #item.month_target="{item}">
-                                <div class="text-right" v-html="localcurrency_string(item.raw.month_target)"></div>
+                                <div class="text-right" v-html="localcurrency_string(item.month_target)"></div>
                             </template>      
                             <template #item.month_gains="{item}">
-                                <div class="text-right" v-html="localcurrency_string(item.raw.month_gains)" :class="item.raw.color_month_gains"></div>
+                                <div class="text-right" v-html="localcurrency_string(item.month_gains)" :class="item.color_month_gains"></div>
                             </template>   
                             <template #item.cumulative_target="{item}">
-                                <div class="text-right" v-html="localcurrency_string(item.raw.cumulative_target)"></div>
+                                <div class="text-right" v-html="localcurrency_string(item.cumulative_target)"></div>
                             </template>   
                             <template #item.cumulative_gains="{item}">
-                                <div class="text-right" v-html="localcurrency_string(item.raw.cumulative_gains)" :class="item.raw.color_month_cumulative_gains"></div>
+                                <div class="text-right" v-html="localcurrency_string(item.cumulative_gains)" :class="item.color_month_cumulative_gains"></div>
                             </template>
                              <template #tbody>
                                 <tr class="totalrow" ref="lr"  v-if="total_target.length>0">
@@ -152,13 +152,13 @@
                     <v-card  outlined width="100%">
                         <v-data-table density="compact" :headers="total_invest_or_work_headers" :items="total_invest_or_work"  class="elevation-1" :loading="loading_invest_or_work"    :items-per-page="10000" >  
                             <template #item.gains="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.gains)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.gains)"></div>
                             </template>      
                             <template #item.expenses="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.expenses)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.expenses)"></div>
                             </template>   
                             <template #item.diff="{item}">
-                                <div v-html="localcurrency_string(item.raw.diff)" :class="item.raw.color_diff + ' right'"></div>
+                                <div v-html="localcurrency_string(item.diff)" :class="item.color_diff + ' right'"></div>
                             </template>
                              <template #tbody>
                                 <tr class="totalrow" ref="lr"  v-if="total_invest_or_work.length>0">
@@ -178,13 +178,13 @@
                     <v-card  outlined width="100%">
                         <v-data-table density="compact" :headers="total_make_ends_meet_headers" :items="total_make_ends_meet"  class="elevation-1" :loading="loading_make_ends_meet"    :items-per-page="10000" >   
                             <template #item.incomes="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.incomes)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.incomes)"></div>
                             </template>      
                             <template #item.expenses="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.expenses)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.expenses)"></div>
                             </template>   
                             <template #item.diff="{item}">
-                                <div class="text-right" v-html="localcurrency_string(item.raw.diff)" :class="item.raw.color_diff"></div>
+                                <div class="text-right" v-html="localcurrency_string(item.diff)" :class="item.color_diff"></div>
                             </template>
                              <template #tbody>
                                 <tr class="totalrow" ref="lr"   v-if="total_make_ends_meet.length>0">
@@ -320,7 +320,7 @@
                     this.$t("Net gains + Net dividends = [0].").format(this.localcurrency_html(net_gains))+"</p>"
             },
             incomeDetails(event,object){
-                this.month=object.item.raw.month_number
+                this.month=object.item.month_number
                 this.dialog_income_details=true
                 this.key=this.key+1  
             },

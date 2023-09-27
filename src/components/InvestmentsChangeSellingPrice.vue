@@ -4,19 +4,19 @@
         <div v-html="$t('Table with all investments with the same product as current investment:')"></div>
         <v-data-table ref="table" v-model="selected_ids" show-select :headers="tableHeaders" :items="data" class="elevation-1 mt-2" density="compact" height="300" fixed-header :items-per-page="10000" >
             <template #item.fullname="{item}">
-                {{ store().investments.get(item.raw.url).fullname }}
+                {{ store().investments.get(item.url).fullname }}
             </template>            
             <template #item.selling_price="{item}">
-                <div class="text-right">{{ currency_string(item.raw.selling_price, item.raw.currency)}}</div>
+                <div class="text-right">{{ currency_string(item.selling_price, item.currency)}}</div>
             </template>
             <template #item.average_price="{item}">
-                <div class="text-right">{{ currency_string(item.raw.average_price, item.raw.currency)}}</div>
+                <div class="text-right">{{ currency_string(item.average_price, item.currency)}}</div>
             </template>
             <template #item.invested_investment="{item}">
-                <div class="text-right">{{ currency_string(item.raw.invested_investment, item.raw.currency)}}</div>
+                <div class="text-right">{{ currency_string(item.invested_investment, item.currency)}}</div>
             </template>
             <template #item.balance_investment="{item}">
-                <div class="text-right">{{ currency_string(item.raw.balance_investment, item.raw.currency)}}</div>
+                <div class="text-right">{{ currency_string(item.balance_investment, item.currency)}}</div>
             </template>
             <template #bottom ></template>   
         </v-data-table>

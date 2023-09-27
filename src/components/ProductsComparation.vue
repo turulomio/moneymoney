@@ -22,23 +22,23 @@
                     <v-data-table-virtual density="compact" :headers="data_price_ratio_headers" :items="dbdata" :sort-by="[{key:'datetime',order:'desc'}]" class="elevation-1 ma-4" :loading="loading" :key="key" height="500" fixed-header     :items-per-page="10000" > 
 
                         <template #item.datetime="{item}">
-                            {{localtime(item.raw.datetime)}}
+                            {{localtime(item.datetime)}}
                         </template>  
 
                         <template #item.price_better="{item}">
-                            <div class="text-right" v-html="currency_html(item.raw.price_better, product_a.currency)"></div>
+                            <div class="text-right" v-html="currency_html(item.price_better, product_a.currency)"></div>
                         </template>  
                         <template #item.price_worse="{item}">
-                            <div class="text-right" v-html="currency_html(item.raw.price_worse, product_b.currency)"></div>
+                            <div class="text-right" v-html="currency_html(item.price_worse, product_b.currency)"></div>
                         </template>  
                         <template #item.price_ratio_percentage_from_start="{item}">
-                            <div class="text-right" v-html="percentage_html(item.raw.price_ratio_percentage_from_start )"></div>
+                            <div class="text-right" v-html="percentage_html(item.price_ratio_percentage_from_start )"></div>
                         </template>
                         <template #item.price_ratio="{item}">
-                            <div class="text-right" v-text="item.raw.price_ratio"></div>
+                            <div class="text-right" v-text="item.price_ratio"></div>
                         </template>
                         <template #item.diff="{item}">
-                            <div class="text-right" v-text="item.raw.diff"></div>
+                            <div class="text-right" v-text="item.diff"></div>
                         </template>
                         <template #bottom ></template>   
                     </v-data-table-virtual>
@@ -68,19 +68,19 @@
                     <v-data-table density="compact" :headers="data_price_ratio_headers" :items="comparation_by_quote" :sort-by="[{key:'datetime',order:'desc'}]" class="elevation-1 ma-4" :loading="loading" :key="key" height="500" fixed-header    :items-per-page="10000" > 
 
                         <template #item.datetime="{item}">
-                            {{localtime(item.raw.datetime)}}
+                            {{localtime(item.datetime)}}
                         </template>  
                         <template #item.price_better="{item}">
-                            <div class="text-right" v-html="currency_html(item.raw.price_better, product_a.currency)"></div>
+                            <div class="text-right" v-html="currency_html(item.price_better, product_a.currency)"></div>
                         </template>  
                         <template #item.price_worse="{item}">
-                            <div class="text-right" v-html="currency_html(item.raw.price_worse, product_b.currency)"></div>
+                            <div class="text-right" v-html="currency_html(item.price_worse, product_b.currency)"></div>
                         </template>  
                         <template #item.price_ratio="{item}">
-                            <div class="text-right" v-text="item.raw.price_ratio"></div>
+                            <div class="text-right" v-text="item.price_ratio"></div>
                         </template>
                         <template #item.price_ratio_percentage_from_start="{item}">
-                            <div class="text-right" v-html="percentage_html(item.raw.price_ratio_percentage_from_start )"></div>
+                            <div class="text-right" v-html="percentage_html(item.price_ratio_percentage_from_start )"></div>
                         </template>
                         <template #bottom ></template>   
                     </v-data-table>

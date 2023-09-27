@@ -2,24 +2,24 @@
     <div>
         <v-data-table  ref="table_ao" :show-select="showselected" v-model="selected" density="compact" :headers="table_headers()" :items="items" class="elevation-1" :sort-by="[{ key: 'datetime', order: 'asc' }]" fixed-header :height="$attrs.height"  :items-per-page="items_per_page" fixed-footer>
             <template #item.datetime="{item}">
-                {{ localtime(item.raw.datetime) }}
+                {{ localtime(item.datetime) }}
             </template>  
             <template #item.amount="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.amount,item.raw.currency)"></div>
+                <div class="text-right" v-html="currency_html(item.amount,item.currency)"></div>
             </template>   
             <template #item.balance="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.balance, item.raw.currency)"></div>
+                <div class="text-right" v-html="currency_html(item.balance, item.currency)"></div>
             </template>   
             <template #item.accounts="{item}">
-                <div v-html="store().accounts.get(item.raw.accounts).fullname"></div>
+                <div v-html="store().accounts.get(item.accounts).fullname"></div>
             </template> 
             <template #item.concepts="{item}">
-                <div class="cursorpointer" v-html="store().concepts.get(item.raw.concepts).localname" @click="viewHistoricalConcept(item.raw)"></div>
+                <div class="cursorpointer" v-html="store().concepts.get(item.concepts).localname" @click="viewHistoricalConcept(item)"></div>
             </template>
             <template #item.actions="{item}">
-                <v-icon small class="mr-2" @click="copyAO(item.raw)">mdi-content-copy</v-icon>
-                <v-icon small class="mr-2" @click="editAO(item.raw)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" @click="deleteAO(item.raw)">mdi-delete</v-icon>
+                <v-icon small class="mr-2" @click="copyAO(item)">mdi-content-copy</v-icon>
+                <v-icon small class="mr-2" @click="editAO(item)">mdi-pencil</v-icon>
+                <v-icon small class="mr-2" @click="deleteAO(item)">mdi-delete</v-icon>
             </template>
             <template #tbody v-if="showtotal && items.length>0">
                 <tr class="totalrow">

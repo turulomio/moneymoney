@@ -3,49 +3,49 @@
         <v-data-table density="compact" v-model="selected" :headers="table_headers()" :items="items" class="elevation-1" :sort-by="[{key:'datetime',order:'asc'}]" fixed-header :height="$attrs.height" ref="table_o" :key="$attrs.key" :loading="$attrs.loading"    :items-per-page="10000" >
 
             <template #item.datetime="{item}">
-              <div>{{ localtime(item.raw.datetime)}}</div>
+              <div>{{ localtime(item.datetime)}}</div>
             </template>             
             <template #item.investments="{item}">
-                <div>{{ getMapObjectById("investments",item.raw.investments_id).fullname }}</div>
+                <div>{{ getMapObjectById("investments",item.investments_id).fullname }}</div>
             </template>                    
             <template #item.operationstypes="{item}">
                 <!-- <div v-html="store().operationstypes.get(item.operationstypes)"></div> -->
-                <div>{{ getMapObjectById("operationstypes",item.raw.operationstypes_id).localname }}</div>
+                <div>{{ getMapObjectById("operationstypes",item.operationstypes_id).localname }}</div>
             </template>
             <template #item.price="{item}">
-            {{ currency_string(item.raw.price, currency(item.raw))}}
+            {{ currency_string(item.price, currency(item))}}
             </template>
             <template #item.gross_account="{item}">
-            {{ currency_string(item.raw.gross_account, currency(item.raw))}}
+            {{ currency_string(item.gross_account, currency(item))}}
             </template>
             <template #item.gross_investment="{item}">
-            {{ currency_string(item.raw.gross_investment, currency(item.raw))}}
+            {{ currency_string(item.gross_investment, currency(item))}}
             </template>
             <template #item.gross_user="{item}">
-            {{ currency_string(item.raw.gross_user, currency(item.raw))}}
+            {{ currency_string(item.gross_user, currency(item))}}
             </template>
             
             <template #item.commission="{item}">
-            {{ currency_string(item.raw.commission, currency(item.raw))}}
+            {{ currency_string(item.commission, currency(item))}}
             </template>
             <template #item.taxes="{item}">
-            {{ currency_string(item.raw.taxes, currency(item.raw))}}
+            {{ currency_string(item.taxes, currency(item))}}
             </template>
             
             <template #item.net_account="{item}">
-            {{ currency_string(item.raw.net_account, currency(item.raw))}}
+            {{ currency_string(item.net_account, currency(item))}}
             </template>
             <template #item.net_investment="{item}">
-            {{ currency_string(item.raw.net_investment, currency(item.raw))}}
+            {{ currency_string(item.net_investment, currency(item))}}
             </template>
             <template #item.net_user="{item}">
-            {{ currency_string(item.raw.net_user, currency(item.raw))}}
+            {{ currency_string(item.net_user, currency(item))}}
             </template>
             
             <template #item.actions="{item}">
-                <v-icon small class="mr-2" @click="copyIO(item.raw)">mdi-content-copy</v-icon>
-                <v-icon small class="mr-2" @click="editIO(item.raw)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" @click="deleteIO(item.raw)">mdi-delete</v-icon>
+                <v-icon small class="mr-2" @click="copyIO(item)">mdi-content-copy</v-icon>
+                <v-icon small class="mr-2" @click="editIO(item)">mdi-pencil</v-icon>
+                <v-icon small class="mr-2" @click="deleteIO(item)">mdi-delete</v-icon>
             </template>
                 <template #bottom ></template>   
         </v-data-table>

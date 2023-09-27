@@ -3,24 +3,24 @@
         <v-data-table  ref="table" :show-select="showselected" v-model="selected" density="compact" :headers="table_headers()" :items="items" class="elevation-1" :sort-by="[{ key: 'datetime', order: 'asc' }]" fixed-header :height="$attrs.height"  :items-per-page="items_per_page" fixed-footer>
 
             <template #item.datetime="{item}">
-                <div >{{ localtime(item.raw.datetime)}}</div>
+                <div >{{ localtime(item.datetime)}}</div>
             </template>          
             <template #item.amount="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.amount,item.raw.currency)"></div>
+                <div class="text-right" v-html="currency_html(item.amount,item.currency)"></div>
             </template>   
             <template #item.balance="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.balance, item.raw.currency)"></div>
+                <div class="text-right" v-html="currency_html(item.balance, item.currency)"></div>
             </template>   
             <template #item.creditcard="{item}">
-                <div v-html="store().creditcards.get(item.raw.creditcards).name"></div>
+                <div v-html="store().creditcards.get(item.creditcards).name"></div>
             </template>  
             <template #item.concepts="{item}">
-                <div v-html="store().concepts.get(item.raw.concepts).name"></div>
+                <div v-html="store().concepts.get(item.concepts).name"></div>
             </template>
             <template #item.actions="{item}">
-                <v-icon small class="mr-2" @click="copyCCO(item.raw)">mdi-content-copy</v-icon>
-                <v-icon small class="mr-2" @click="editCCO(item.raw)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" @click="deleteCCO(item.raw)">mdi-delete</v-icon>
+                <v-icon small class="mr-2" @click="copyCCO(item)">mdi-content-copy</v-icon>
+                <v-icon small class="mr-2" @click="editCCO(item)">mdi-pencil</v-icon>
+                <v-icon small class="mr-2" @click="deleteCCO(item)">mdi-delete</v-icon>
             </template>
             <template #tbody v-if="showtotal && items.length>0">
                 <tr class="totalrow">

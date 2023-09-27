@@ -17,26 +17,26 @@
         <v-card >
             <v-data-table density="compact" :headers="tableHeaders" :items="filtered_products" class="elevation-1 cursorpointer" :sort-by="[{key:'name',order:'asc'}]" fixed-header height="650" :loading="loading"  @click:row="viewProduct"    :items-per-page="10000" >
                 <template #item.name="{item}">
-                    <v-icon :class="'mr-2 fi fib fi-'+item.raw.flag" small :title="this.getCountryNameByCode(item.raw.flag)"></v-icon><span :class="class_name(item.raw)">{{item.raw.name}}</span>
+                    <v-icon :class="'mr-2 fi fib fi-'+item.flag" small :title="this.getCountryNameByCode(item.flag)"></v-icon><span :class="class_name(item)">{{item.name}}</span>
                 </template>  
             <template #item.type="{item}">
-                    {{ this.store().productstypes.get(item.raw.productstypes).localname }}
+                    {{ this.store().productstypes.get(item.productstypes).localname }}
                 </template>                                    
             <template #item.last_datetime="{item}">
-                    {{localtime(item.raw.last_datetime)}}
+                    {{localtime(item.last_datetime)}}
                 </template>     
             <template #item.last="{item}">
-                    <div class="text-right" v-html="currency_html(item.raw.last, item.raw.currency)"></div>
+                    <div class="text-right" v-html="currency_html(item.last, item.currency)"></div>
                 </template>     
             <template #item.percentage_last_year="{item}">
-                    <div class="text-right" v-html="percentage_html(item.raw.percentage_last_year )"></div>
+                    <div class="text-right" v-html="percentage_html(item.percentage_last_year )"></div>
                 </template>
             <template #item.actions="{item}">
-                    <v-icon small @click.stop="toggleFavorite(item.raw)" :color="(store().profile.favorites.includes(item.raw.url))? 'orange': '' " class="mr-1">mdi-star-outline</v-icon>
-                    <v-icon class="mr-1" small @click.stop="editPersonalProduct(item.raw)" v-if="item.raw.id>0">mdi-pencil</v-icon>
-                    <v-icon class="mr-1" small @click.stop="editSystemProduct(item.raw)"  color="#AA0000" v-if="item.raw.id<=0 && store().catalog_manager">mdi-pencil</v-icon>
-                    <v-icon class="mr-1" small @click.stop="deletePersonalProduct(item.raw)" v-if="item.raw.id>0 && item.raw.uses==0">mdi-delete</v-icon>
-                    <v-icon class="mr-1" small @click.stop="deleteSystemProduct(item.raw)" color="#AA0000" v-if="item.raw.id<=0 && store().catalog_manager">mdi-delete</v-icon>
+                    <v-icon small @click.stop="toggleFavorite(item)" :color="(store().profile.favorites.includes(item.url))? 'orange': '' " class="mr-1">mdi-star-outline</v-icon>
+                    <v-icon class="mr-1" small @click.stop="editPersonalProduct(item)" v-if="item.id>0">mdi-pencil</v-icon>
+                    <v-icon class="mr-1" small @click.stop="editSystemProduct(item)"  color="#AA0000" v-if="item.id<=0 && store().catalog_manager">mdi-pencil</v-icon>
+                    <v-icon class="mr-1" small @click.stop="deletePersonalProduct(item)" v-if="item.id>0 && item.uses==0">mdi-delete</v-icon>
+                    <v-icon class="mr-1" small @click.stop="deleteSystemProduct(item)" color="#AA0000" v-if="item.id<=0 && store().catalog_manager">mdi-delete</v-icon>
                 </template>
                 <template #bottom ></template>   
             </v-data-table>   
@@ -268,7 +268,7 @@
             },
             empty_product,
             viewProduct(event,object){
-                this.product=object.item.raw
+                this.product=object.item
                 this.key=this.key+1
                 this.dialog_productsview=true
             },

@@ -3,72 +3,72 @@
            :items-per-page="10000" >
 
             <template #item.dt_end="{item}">
-                {{ localtime(item.raw.dt_end)}}
+                {{ localtime(item.dt_end)}}
             </template>                       
         <template #item.investments="{item}">
-            <div>{{ getMapObjectById("investments",item.raw.investments_id).fullname }}</div>
+            <div>{{ getMapObjectById("investments",item.investments_id).fullname }}</div>
         </template>                    
         <template #item.operationstypes="{item}">
             <!-- <div v-html="store().operationstypes.get(item.operationstypes)"></div> -->
-            <div>{{ getMapObjectById("operationstypes",item.raw.operationstypes_id).localname }}</div>
+            <div>{{ getMapObjectById("operationstypes",item.operationstypes_id).localname }}</div>
         </template>
             <template #item.gross_start_user="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.gross_start_user, item.raw.currency_user)"></div>
+                <div class="text-right" v-html="currency_html(item.gross_start_user, item.currency_user)"></div>
             </template>
             <template #item.gross_end_user="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.gross_end_user, item.raw.currency_user)"></div>
+                <div class="text-right" v-html="currency_html(item.gross_end_user, item.currency_user)"></div>
             </template>
             <template #item.gains_gross_user="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.gains_gross_user, item.raw.currency_user)"></div>
+                <div class="text-right" v-html="currency_html(item.gains_gross_user, item.currency_user)"></div>
             </template>
             <template #item.commissions_user="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.commissions_user, item.raw.currency_user)"></div>
+                <div class="text-right" v-html="currency_html(item.commissions_user, item.currency_user)"></div>
             </template>
             <template #item.taxes_user="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.taxes_user, item.raw.currency_user)"></div>
+                <div class="text-right" v-html="currency_html(item.taxes_user, item.currency_user)"></div>
             </template>
             <template #item.gains_net_user="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.gains_net_user, item.raw.currency_user)"></div>
+                <div class="text-right" v-html="currency_html(item.gains_net_user, item.currency_user)"></div>
             </template>
             
             
             <template #item.gross_start_account="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.gross_start_account, item.raw.currency_account)"></div>
+                <div class="text-right" v-html="currency_html(item.gross_start_account, item.currency_account)"></div>
             </template>
             <template #item.gross_end_account="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.gross_end_account, item.raw.currency_account)"></div>
+                <div class="text-right" v-html="currency_html(item.gross_end_account, item.currency_account)"></div>
             </template>
             <template #item.gains_gross_account="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.gains_gross_account, item.raw.currency_account)"></div>
+                <div class="text-right" v-html="currency_html(item.gains_gross_account, item.currency_account)"></div>
             </template>
             <template #item.commissions_account="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.commissions_account, item.raw.currency_account)"></div>
+                <div class="text-right" v-html="currency_html(item.commissions_account, item.currency_account)"></div>
             </template>
             <template #item.taxes_account="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.taxes_account, item.raw.currency_account)"></div>
+                <div class="text-right" v-html="currency_html(item.taxes_account, item.currency_account)"></div>
             </template>
             <template #item.gains_net_account="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.gains_net_account, item.raw.currency_account)"></div>
+                <div class="text-right" v-html="currency_html(item.gains_net_account, item.currency_account)"></div>
             </template>
             
             
             <template #item.gross_start_investment="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.gross_start_investment, item.raw.currency_product)"></div>
+                <div class="text-right" v-html="currency_html(item.gross_start_investment, item.currency_product)"></div>
             </template>
             <template #item.gross_end_investment="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.gross_end_investment, item.raw.currency_product)"></div>
+                <div class="text-right" v-html="currency_html(item.gross_end_investment, item.currency_product)"></div>
             </template>
             <template #item.gains_gross_investment="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.gains_gross_investment, item.raw.currency_product)"></div>
+                <div class="text-right" v-html="currency_html(item.gains_gross_investment, item.currency_product)"></div>
             </template>
             <template #item.commissions_investment="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.commissions_investment, item.raw.currency_product)"></div>
+                <div class="text-right" v-html="currency_html(item.commissions_investment, item.currency_product)"></div>
             </template>
             <template #item.taxes_investment="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.taxes_investment, item.raw.currency_product)"></div>
+                <div class="text-right" v-html="currency_html(item.taxes_investment, item.currency_product)"></div>
             </template>
             <template #item.gains_net_investment="{item}">
-                <div class="text-right" v-html="currency_html(item.raw.gains_net_investment, item.raw.currency_product)"></div>
+                <div class="text-right" v-html="currency_html(item.gains_net_investment, item.currency_product)"></div>
             </template>           
             <template #tbody>
                 <tr class="totalrow" v-if="items.length>0 && showtotal">

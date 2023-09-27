@@ -31,19 +31,19 @@
                     <p >{{ currentpricelabel }}</p>
                     <v-data-table density="compact" :headers="tableHeaders" :items="tableData" class="elevation-1" :sort-by="['value']" :sort-type="['desc']" fixed-header height="360"     :items-per-page="10000" >
                         <template #item.value="{item}">
-                            <div  @click="showLimits(item.raw)" :class="item.raw.current_in_range ? 'boldgreen' : ''">{{currency_string(item.raw.value, prdata.product.currency) }}</div>
+                            <div  @click="showLimits(item)" :class="item.current_in_range ? 'boldgreen' : ''">{{currency_string(item.value, prdata.product.currency) }}</div>
                         </template>    
                             <template #item.recomendation_invest="{item}">
-                            <v-icon small v-if="item.raw.recomendation_invest" >mdi-check-outline</v-icon>
+                            <v-icon small v-if="item.recomendation_invest" >mdi-check-outline</v-icon>
                         </template>                        
                             <template #item.investments_inside="{item}">
-                            <div v-for="o in item.raw.investments_inside" :key="o.name" @click="on_investments_inside_click(o)">{{ $t("[0]. Invested: [1]").format(o.name, currency_string(o.invested, prdata.product.currency)) }}<br></div>
+                            <div v-for="o in item.investments_inside" :key="o.name" @click="on_investments_inside_click(o)">{{ $t("[0]. Invested: [1]").format(o.name, currency_string(o.invested, prdata.product.currency)) }}<br></div>
                         </template>                      
                             <template #item.orders_inside="{item}">
-                            <div  v-for="o in item.raw.orders_inside" :key="o.name" @click="on_orders_inside_click(o)">{{ $t("[0]. Amount: [1]").format(o.name, currency_string(o.amount, prdata.product.currency)) }}<br></div>
+                            <div  v-for="o in item.orders_inside" :key="o.name" @click="on_orders_inside_click(o)">{{ $t("[0]. Amount: [1]").format(o.name, currency_string(o.amount, prdata.product.currency)) }}<br></div>
                         </template>
                             <template #item.actions="{item}">
-                            <v-icon small class="mr-2" @click="addOrder(item.raw)" :color="(item.raw.recomendation_invest) ? '' : 'red'">mdi-cart</v-icon>
+                            <v-icon small class="mr-2" @click="addOrder(item)" :color="(item.recomendation_invest) ? '' : 'red'">mdi-cart</v-icon>
                         </template>
                         <template #bottom ></template>   
                     </v-data-table>   

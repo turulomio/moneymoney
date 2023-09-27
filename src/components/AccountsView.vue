@@ -21,21 +21,21 @@
                     <v-data-table :headers="table_cc_headers" :items="table_cc"  class="elevation-1 cursorpointer"  :sort-by="[{key:'name',order:'asc'}]" density="compact" fixed-header max-height="400" :key="key" @click:row="viewCC"     :items-per-page="10000" >
 
                         <template #item.deferred="{item}">
-                            <div class="text-center"><v-icon small v-if="item.raw.deferred" >mdi-check-outline</v-icon></div>
+                            <div class="text-center"><v-icon small v-if="item.deferred" >mdi-check-outline</v-icon></div>
                         </template>  
 
                         <template #item.maximumbalance="{item}">
-                            <div v-html="currency_html(item.raw.maximumbalance, item.raw.account_currency )"></div>
+                            <div v-html="currency_html(item.maximumbalance, item.account_currency )"></div>
                         </template>  
 
                         <template #item.balance="{item}">
-                            <div v-html="currency_html(item.raw.balance, item.raw.account_currency )"></div>
+                            <div v-html="currency_html(item.balance, item.account_currency )"></div>
                         </template>     
 
                         <template #item.actions="{item}">
-                            <v-icon v-if="!item.raw.deferred" small class="mr-2" @click="CCONotDeferred(item)">mdi-plus</v-icon>
+                            <v-icon v-if="!item.deferred" small class="mr-2" @click="CCONotDeferred(item)">mdi-plus</v-icon>
                             <v-icon small class="mr-2" @click="editCC(item)">mdi-pencil</v-icon>
-                            <v-icon small @click="deleteCC(item)" v-if="item.raw.is_deletable">mdi-delete</v-icon>
+                            <v-icon small @click="deleteCC(item)" v-if="item.is_deletable">mdi-delete</v-icon>
                         </template>
                         <template #bottom ></template>   
                     </v-data-table>   
@@ -230,11 +230,11 @@
                 this.dialog_cc=true
             },
             viewCC(event,object){
-                if (object.item.raw.deferred==false){
+                if (object.item.deferred==false){
                     alert(this.$t("This is a debit credit card. Your operations are added to account directly"))
                     return
                 }
-                this.cc=object.item.raw
+                this.cc=object.item
                 this.key=this.key+1
                 this.dialog_ccview=true
             },

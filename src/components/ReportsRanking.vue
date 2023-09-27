@@ -9,22 +9,22 @@
             <v-data-table density="compact" :headers="headers" :search="search" :items="data" class="elevation-1" :loading="loading_table"    :items-per-page="10000" :sort-by="[{key:'ranking',order:'asc'}]" @click:row="viewInvestmentsMerged">
 
                 <template #item.ranking="{item}">
-                    {{ item.raw.ranking }}
+                    {{ item.ranking }}
                 </template>  
                 <template #item.name="{item}">
-                    {{ item.raw.name }}
+                    {{ item.name }}
                 </template>  
                 <template #item.current_net_gains="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.raw.current_net_gains )"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.current_net_gains )"></div>
                 </template>  
                 <template #item.historical_net_gains="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.raw.historical_net_gains )"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.historical_net_gains )"></div>
                 </template>  
                 <template #item.dividends="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.raw.dividends )"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.dividends )"></div>
                 </template>  
                 <template #item.total="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.raw.total )"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.total )"></div>
                 </template>  
                 <template #tbody v-if="data.length>0">
                     <tr class="totalrow" ref="lr" v-if="search==''">
@@ -85,7 +85,7 @@
         },
         methods: {
             viewInvestmentsMerged (event,object) {
-                this.ios_id=this.ios[object.item.raw.products_id]
+                this.ios_id=this.ios[object.item.products_id]
                 this.key=this.key+1
                 this.dialog_investments_merged_view=true
             },

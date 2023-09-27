@@ -15,16 +15,16 @@
                         <v-data-table density="compact" :headers="itemsHeaders" :items="itemsPositive"  class="elevation-1 cursorpointer" :loading="loading" height="300" @click:row="viewHistoricalReport" :sort-by="[{key:'percentage_total',order:'desc'}]"    :items-per-page="10000" >
 
                             <template #item.concept="{item}">
-                                <div v-html="store().concepts.get(item.raw.concept).localname"></div>
+                                <div v-html="store().concepts.get(item.concept).localname"></div>
                             </template> 
                             <template #item.total="{item}">
-                                <div v-html="localcurrency_html(item.raw.total)"></div>
+                                <div v-html="localcurrency_html(item.total)"></div>
                             </template>   
                             <template #item.median="{item}">
-                                <div v-html="localcurrency_html(item.raw.median)"></div>
+                                <div v-html="localcurrency_html(item.median)"></div>
                             </template>  
                             <template #item.percentage_total="{item}">
-                                <div v-html="percentage_html(item.raw.percentage_total)"></div>
+                                <div v-html="percentage_html(item.percentage_total)"></div>
                             </template>       
                             <template #tbody v-if="itemsPositive.length>0">
                                 <tr class="totalrow" ref="lr">
@@ -43,16 +43,16 @@
                         <v-data-table density="compact" :headers="itemsHeaders" :items="itemsNegative"  class="elevation-1 cursorpointer" hide-default-footer :loading="loading" @click:row="viewHistoricalReport"  :sort-by="[{key:'percentage_total',order:'desc'}]"     :items-per-page="10000" >
 
                             <template #item.concept="{item}">
-                                <div v-html="store().concepts.get(item.raw.concept).localname"></div>
+                                <div v-html="store().concepts.get(item.concept).localname"></div>
                             </template> 
                             <template #item.total="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.total)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.total)"></div>
                             </template>   
                             <template #item.median="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.raw.median)"></div>
+                                <div class="text-right" v-html="localcurrency_html(item.median)"></div>
                             </template>  
                             <template #item.percentage_total="{item}">
-                                <div class="text-right" v-html="percentage_html(item.raw.percentage_total)"></div>
+                                <div class="text-right" v-html="percentage_html(item.percentage_total)"></div>
                             </template>
                             <template #tbody v-if="itemsNegative.length>0">
                                 <tr class="totalrow" ref="lr">
@@ -119,7 +119,7 @@
             },
             viewHistoricalReport(event,object){
                 this.dialog_historical=true
-                this.concept=object.item.raw.concept
+                this.concept=object.item.concept
                 this.key=this.key+1
             }
         },

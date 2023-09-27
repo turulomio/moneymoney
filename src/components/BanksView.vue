@@ -9,10 +9,10 @@
             <v-card-title class="headline">{{$t('Accounts')}}</v-card-title>
             <v-data-table density="compact" :headers="accounts_headers" :items="accounts_items" :sort-by="[{key:'name',order:'asc'}]" class="elevation-1" :loading="loading_accounts" :key="key"     :items-per-page="10000" >
                 <template #item.active="{item}">
-                    <div class="text-center" ><v-icon small v-if="item.raw.active" >mdi-check-outline</v-icon></div>
+                    <div class="text-center" ><v-icon small v-if="item.active" >mdi-check-outline</v-icon></div>
                 </template>  
                 <template #item.balance_user="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.raw.balance_user )"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.balance_user )"></div>
                 </template>
                 <template #tbody>
                     <tr class="totalrow pa-6">
@@ -28,10 +28,10 @@
             <v-card-title class="headline">{{$t('Investments')}}</v-card-title>
             <v-data-table density="compact" :headers="investments_headers" :items="investments_items" :sort-by="[{key:'name',order:'asc'}]" class="elevation-1" :loading="loading_investments" :key="key"    :items-per-page="10000" >
                 <template #item.active="{item}">
-                    <div class="text-center" ><v-icon small v-if="item.raw.active" >mdi-check-outline</v-icon></div>
+                    <div class="text-center" ><v-icon small v-if="item.active" >mdi-check-outline</v-icon></div>
                 </template>  
                 <template #item.balance_user="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.raw.balance_user )"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.balance_user )"></div>
                 </template>
                 <template #tbody>
                     <tr class="totalrow pa-6">

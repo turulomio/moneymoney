@@ -11,23 +11,23 @@
         <div class="pa-6">
             <v-data-table density="compact" :headers="tableHeaders" :items="items" class="elevation-1" :sort-by="[{key:'percentage',order:'desc'}]"    :items-per-page="10000" >
                 <template #item.dps="{item}">
-                    <div class="text-right" v-html="currency_html(item.raw.dps,item.raw.currency )"></div>
+                    <div class="text-right" v-html="currency_html(item.dps,item.currency )"></div>
                 </template>    
                 <template #item.estimated="{item}">
-                    <div class="text-right" v-html="currency_html(item.raw.estimated,item.raw.currency )"></div>
+                    <div class="text-right" v-html="currency_html(item.estimated,item.currency )"></div>
                 </template>    
                 <template #item.current_price="{item}">
-                    <div class="text-right" v-html="currency_html(item.raw.current_price,item.raw.currency )"></div>
+                    <div class="text-right" v-html="currency_html(item.current_price,item.currency )"></div>
                 </template>    
                 <template #item.shares="{item}">
-                    <div class="text-right" v-html="item.raw.shares"></div>
+                    <div class="text-right" v-html="item.shares"></div>
                 </template>  
                 <template #item.percentage="{item}">
-                    <div class="text-right" v-html="percentage_html(item.raw.percentage )"></div>
+                    <div class="text-right" v-html="percentage_html(item.percentage )"></div>
                 </template>
                 <template #item.actions="{item}">
-                    <v-icon small class="mr-2" @click="addEstimation(item.raw)">mdi-pencil</v-icon>
-                    <v-icon small @click="addEstimation(item.raw)" v-if="showAlarm(item.raw)" color="#9933ff">mdi-alarm</v-icon>
+                    <v-icon small class="mr-2" @click="addEstimation(item)">mdi-pencil</v-icon>
+                    <v-icon small @click="addEstimation(item)" v-if="showAlarm(item)" color="#9933ff">mdi-alarm</v-icon>
                 </template> 
                 <template #bottom ></template>   
             </v-data-table>
