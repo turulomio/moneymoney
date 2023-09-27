@@ -48,7 +48,25 @@
             <template #item.total="{item}">
                 <div class="text-right" v-html="localcurrency_html(item.total)" @click="showConceptsHistoricalDetail(item)"></div>
             </template> 
-                <template #bottom ></template>   
+            <template #tbody v-if="tableData.length>0">
+                <tr class="totalrow">
+                    <td>{{ $t("Total") }}</td>
+                    <td class="text-right" v-html="localcurrency_html(listobjects_sum(tableData,'m1'))"></td>
+                    <td class="text-right" v-html="localcurrency_html(listobjects_sum(tableData,'m2'))"></td>
+                    <td class="text-right" v-html="localcurrency_html(listobjects_sum(tableData,'m3'))"></td>
+                    <td class="text-right" v-html="localcurrency_html(listobjects_sum(tableData,'m4'))"></td>
+                    <td class="text-right" v-html="localcurrency_html(listobjects_sum(tableData,'m5'))"></td>
+                    <td class="text-right" v-html="localcurrency_html(listobjects_sum(tableData,'m6'))"></td>
+                    <td class="text-right" v-html="localcurrency_html(listobjects_sum(tableData,'m7'))"></td>
+                    <td class="text-right" v-html="localcurrency_html(listobjects_sum(tableData,'m8'))"></td>
+                    <td class="text-right" v-html="localcurrency_html(listobjects_sum(tableData,'m9'))"></td>
+                    <td class="text-right" v-html="localcurrency_html(listobjects_sum(tableData,'m10'))"></td>
+                    <td class="text-right" v-html="localcurrency_html(listobjects_sum(tableData,'m11'))"></td>
+                    <td class="text-right" v-html="localcurrency_html(listobjects_sum(tableData,'m12'))"></td>
+                    <td class="text-right" v-html="localcurrency_html(listobjects_sum(tableData,'total'))"></td>
+                </tr>
+            </template>
+            <template #bottom ></template>   
         </v-data-table>
 
         <!-- VIEW HISTORICAL REPORT DETAIL dialog -->
