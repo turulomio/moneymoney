@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ $t("Concepts report") }}</h1>
-        <MyMonthPicker v-model="ym" @update:ModelValue="refreshTables()"/>
+        <MyMonthPicker v-model="ym"/>
 
 
         <div class="mx-4">
@@ -102,6 +102,11 @@
                 key: 0,
                 dialog_historical: false,
                 concept:null,
+            }
+        },
+        watch:{
+            ym(){
+                this.refreshTables()
             }
         },
         methods:{
