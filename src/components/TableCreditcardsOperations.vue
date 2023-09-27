@@ -174,9 +174,9 @@
                 // console.log("prev",previous,previous.childElementCount)
                 // console.log(this.items.length)
                 const last_tr=previous?.children.item(previous.childElementCount-1)
-                console.log("CCO", last_tr)
+                // console.log("CCO", last_tr)
                 if (last_tr){ 
-                    console.log("Going")
+                    // console.log("Going")
                     last_tr.scrollIntoView(false)
                 }
             },
