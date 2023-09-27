@@ -47,7 +47,7 @@
                 } else  if (this.mode=="C"){
                     return this.$t("Adding a new fast operations coverage")
                 } else  if (this.mode=="D"){
-                    return this.$t("Deleting a new fast operations coverage")
+                    return this.$t("Deleting a fast operations coverage")
                 }
             },
             button(){

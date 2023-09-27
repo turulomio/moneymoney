@@ -51,6 +51,11 @@ npm run dev
 
 ## Changelog
 
+### 1.1.0 (2023-09-27)
+- Added zero risk assets to annual chart
+- Added creditcard operation copy feature
+- Fixed many bugs
+
 ### 1.0.0 (2023-09-09)
 - MoneyMoney frontend migrated to vue3 and vuetify3
 - All features were added
