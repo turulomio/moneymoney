@@ -293,7 +293,7 @@
 
                     axios.get(`${this.store().apiroot}/api/products/search_with_quotes/?search=${this.search}`, this.myheaders())
                     .then((response) => {
-                            response.data.data.forEach(o=>{
+                            response.data.forEach(o=>{
                                 var p=this.store().products.get(o.product)
                                 p.last=o.last
                                 p.last_datetime=o.last_datetime

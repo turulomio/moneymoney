@@ -144,7 +144,6 @@
                 this.loading=true
                 axios.get(`${this.store().apiroot}/investments/classes/`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     this.data=response.data
                     this.loading=false
                     this.key=this.key+1
@@ -155,12 +154,11 @@
             check_unogenerator_server(){
                 axios.get(`${this.store().apiroot}/unogenerator/working/`, this.myheaders())
                 .then((response) => {
-                    this.unogenerator_working=response.data.success
-                    if (this.unogenerator_working){
-                        this.update_pies()
-                    }
+                    this.unogenerator_working=response.data
+                    this.update_pies()
                     this.key=this.key+1
                 }, (error) => {
+                    this.unogenerator_working=false
                     this.parseResponseError(error)
                 });
 
