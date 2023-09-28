@@ -196,7 +196,6 @@
             this.dialog_ao=true
         },
         editAO (item) {
-            console.log(item.is_editable)
             if (item.is_editable==false){// Account operation is not editable
                 if (item.comment.startsWith("10000,")){ //It's an investment operation 
                     var io_string= item.comment.split(",")[1]
@@ -238,7 +237,6 @@
             }
         },
         deleteAO (item) {
-            console.log(item)
             if (this.ao_to_find_transfer(item)){// Tries to find transfer to delete it
                 this.at=this.ao_to_find_transfer(item)
                 this.at_deleting=true

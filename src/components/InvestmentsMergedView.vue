@@ -251,7 +251,6 @@
                 this.loading=true
                 axios.all([ this.update_dividends()])
                 .then(([resDividends]) => {
-                    console.log("dividendso",resDividends.data)
                     this.on_chkShowAllIO_click()
 
                     this.dividends=resDividends.data
@@ -263,7 +262,6 @@
             }
         },
         created(){
-            console.log(this.ios_id)
             this.product=this.store().products.get(this.hyperlinked_url("products",this.ios_id.data.products_id))
             this.update_all()   
         }

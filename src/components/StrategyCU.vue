@@ -202,8 +202,6 @@
         },
         mounted(){
             this.updateUi()
-            console.log(this.store().recomendation_methods)
-            
         }
     }
 </script>

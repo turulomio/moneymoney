@@ -228,7 +228,6 @@
             },
         },
         mounted(){
-            console.log(this.items)
             this.gotoLastRow()
         },
     }

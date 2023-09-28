@@ -160,10 +160,8 @@
                 }
             },
             orderAtPercentage(item){
-                console.log(item)
                 this.order=this.empty_order()
                 this.order.price=this.my_round(item.data.last_price*(1+this.limit/100), item.decimals)
-                console.log(this.order_price)
                 this.order.investments=this.hyperlinked_url("investments",item.data.investments_id)
                 this.refreshKey=this.refreshKey+1
                 this.dialog_cu=true
@@ -179,7 +177,6 @@
                 this.loading=true
                 axios.get(`${this.store().apiroot}/reports/investments/lastoperation/?method=${this.method}` , this.myheaders())
                 .then( (response)=> {
-                    console.log(response.data)
                     this.tableData=[]
                     response.data.entries.forEach(e => {
                         this.tableData.push(response.data[e])

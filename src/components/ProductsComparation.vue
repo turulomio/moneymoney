@@ -205,7 +205,6 @@
                         code: function(){
                             this.product=this.store().products.get(this.product_a.url)
                             this.key=this.key+1
-                            console.log("AHORA",this.product)
                             this.dialog_productview=true
                         }.bind(this),
                         icon: "mdi-magnify",

@@ -40,7 +40,6 @@
             payment: function(){
                 axios.get(`${this.cc.url}operationswithbalance/?accountsoperations_id=${this.payment}`, this.myheaders())
                 .then((response) => {
-                    console.log("CCO",response.data)
                     this.items_cco=response.data
                 }, (error) => {
                     this.parseResponseError(error)

@@ -147,7 +147,6 @@
 
                 r.push({title:this.$t('From'), value: this.localtime(this.strategy.dt_from)})
                 r.push({title:this.$t('To'), value: this.localtime(this.strategy.dt_to)})
-                console.log(this.strategy.type)
                 r.push({title:this.$t('Type'), value: this.getMapObjectById("strategiestypes", this.strategy.type).name})
                 r.push({title:this.$t('Investments'), value: this.strategy.investments.length})                
                 if (this.strategy.additional1){//That means it has a product property
@@ -178,7 +177,6 @@
             }
         },
         created(){
-            console.log("Strategy",this.strategy)
             this.update_all()
         }
     }

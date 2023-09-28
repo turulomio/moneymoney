@@ -72,7 +72,6 @@
                 }
                 axios.post(`${this.store().apiroot}/quotes/massive_update/`, readed, this.myheaders())
                 .then((response) => {
-                        console.log(response.data)
                         this.items=response.data.data
                         this.loading=false
                 }, (error) => {

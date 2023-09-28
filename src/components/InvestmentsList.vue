@@ -223,7 +223,6 @@
                 this.update_table()
             },
             on_InvestmentsChangeSellingPrice_cruded(){
-                console.log("CRUDED?")
                 this.dialog_change_selling_price=false
                 this.update_table()
             },
@@ -257,7 +256,6 @@
                 this.loading=true
                 axios.get(`${this.store().apiroot}/api/investments/withbalance/?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     this.investments_items=response.data
                     this.update_foot()
                     this.loading=false

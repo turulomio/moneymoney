@@ -226,8 +226,6 @@
                                     this.investment.active=!this.investment.active
                                     axios.put(this.investment.url, this.investment,  this.myheaders())
                                     .then((response) => {
-                                        console.log(response.data)
-                                        
                                         this.store().investments.set(response.data.url, response.data)
                                         this.update_all()
                                         this.$emit("cruded")

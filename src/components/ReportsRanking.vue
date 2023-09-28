@@ -106,7 +106,6 @@
                             this.data.push(this.entry_to_data(e))
                         }
                     })
-                    console.log(this.data)
                     this.loading_table=false
                 }, (error) => {
                     this.parseResponseError(error)
