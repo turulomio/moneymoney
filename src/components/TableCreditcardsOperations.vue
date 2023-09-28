@@ -25,9 +25,10 @@
             <template #tbody v-if="showtotal && items.length>0">
                 <tr class="totalrow">
                     <td>{{ $t("Total ([0] registers)").format(items.length)}}</td>
+                    <td v-if="showcc"></td>
+                    <td></td>
                     <td></td>
                     <td class="text-right" v-html="currency_html(listobjects_sum(items,'amount'),total_currency)"></td>
-                    <td></td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -62,11 +63,6 @@
                 default: false,
             },
             showcc:{// Items must have accounts attribute
-                type: Boolean,
-                required:false,
-                default: false,
-            },
-            showbalance:{// Items must have balance attribute
                 type: Boolean,
                 required:false,
                 default: false,
@@ -153,13 +149,10 @@
                 r.push({ title: this.$t('Date and time'), key: 'datetime', sortable: true, width:"12%" })
                 if (this.showcc){
                     r.push({ title: this.$t('Credit card'), key: 'creditcard', sortable: true, width:"20%"})
-
                 }
                 r.push({ title: this.$t('Concept'), key: 'concepts', sortable: true, width:"20%"})
                 r.push({ title: this.$t('Amount'), key: 'amount', sortable: false, align:'end', width:"8%"})
-                if (this.showbalance){
-                    r.push({ title: this.$t('Balance'), key: 'balance', sortable: false, align:'end', width:"8%"})
-                }
+                r.push({ title: this.$t('Balance'), key: 'balance', sortable: false, align:'end', width:"8%"})
                 r.push({ title: this.$t('Comment'), key: 'comment', sortable: true})
                 if (this.hideactions==false){
                     r.push({ title: this.$t('Actions'), key: 'actions', sortable: false, width:"8%"})

@@ -2,7 +2,7 @@
     <v-card>   
         <v-select :items="payments" v-model="payment" :label="$t('Select an old payment')"  item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
 
-        <TableCreditcardsOperations showtotal showbalance :items="items_cco" height="400" class=" flex-grow-1 flex-shrink-0" :key="key" />
+        <TableCreditcardsOperations showtotal :items="items_cco" height="400" class=" flex-grow-1 flex-shrink-0" :key="key" />
 
         <v-card-actions>
             <v-spacer></v-spacer>
