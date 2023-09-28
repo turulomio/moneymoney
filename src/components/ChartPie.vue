@@ -35,7 +35,6 @@
 </template>
 
 <script>
-    import axios from 'axios'
     export default {
         props: {
             name: {
@@ -49,7 +48,7 @@
                 required: false,
                 default:600
             },
-            save_name:{
+            reference:{
                 required:false,
                 default:null,
             },
@@ -118,16 +117,7 @@
                 
             },
             on_finished(){
-                if (this.save_name!=null){
-                    var data=this.$refs.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff'})
-                    axios.post(`${this.store().apiroot}/storefile/`, {filename:this.save_name,data:data,}, this.myheaders())
-                    .then(() => {
-                        this.$emit("finished")
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    });
-                }
-                
+                this.$emit("finished",this.reference, this.$refs.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff'}))
             },
             styleheight: function(){
                 return `height: ${this.height}px`

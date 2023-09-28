@@ -2,7 +2,7 @@
 <template>
     <div>
         <h1>{{ $t("Evolution assets chart")}}</h1>
-        <div class="d-flex justify-center mb-4 mt-4" v-if="!save_name">
+        <div class="d-flex justify-center mb-4 mt-4" v-if="!reference">
             <v-card width="30%">
              <v-select class="pa-4" width="10%" density="compact" :label="$t('Select the year from which to display the report')" v-model="from" :items="years()" @change="change_year()"></v-select>       
              </v-card>
@@ -23,7 +23,7 @@
     import axios from 'axios'
     export default {
         props: {
-            save_name:{
+            reference:{
                 required:false,
                 default:null,
             },
@@ -171,18 +171,8 @@
                 });
             },
             on_finished(){
-                if (this.save_name!=null){
-                    var filename=this.save_name
-                    var data=this.$refs.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff', excludeComponents:['dataZoom']})
-                    axios.post(`${this.store().apiroot}/storefile/`, {filename:filename,data:data,}, this.myheaders())
-                    .then(() => {
-                        this.$emit("finished")
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    });
-                }
-                
-            }
+                this.$emit("finished", this.reference, this.$refs.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff', excludeComponents:['dataZoom']}))
+            },
         },
         mounted(){
             this.refreshChart()

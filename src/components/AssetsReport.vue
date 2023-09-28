@@ -9,19 +9,19 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn class="pa-4" :loading="loading" color="primary" :disabled="!can_launch()" @click="launch_report()">{{ $t("Generate report") }}</v-btn>
+                    <v-btn class="pa-4" :loading="loading" color="primary" :disabled="!can_launch" @click="launch_report">{{ $t("Generate report") }}</v-btn>
                     <v-spacer></v-spacer>
                 </v-card-actions>
 
             </v-card>
         </div>
         <div v-if="data">
-            <ChartEvolutionAssets v-if="unogenerator_working" save_name="assetsreport_evolution" @finished="finished_evolution_assets=true;" ></ChartEvolutionAssets>
-            <ChartPie name="Investments by product" :items="echart_products_items" save_name="assetsreport_classes_by_product" :heigth="height" :show_data="false" @finished="finished_by_product=true;" ></ChartPie>
-            <ChartPie name="Investments by pci" :items="echart_pci_items" save_name="assetsreport_classes_by_pci" :heigth="height" :show_data="false" @finished="finished_by_pci=true;"></ChartPie>
-            <ChartPie name="Investments by variable percentage" :items="echart_percentage_items" save_name="assetsreport_classes_by_percentage" :heigth="height" :show_data="false" @finished="finished_by_percentage=true;"></ChartPie>
-            <ChartPie name="Investments by product type" :items="echart_producttype_items" save_name="assetsreport_classes_by_producttype" :heigth="height" :show_data="false" @finished="finished_by_producttype=true;"></ChartPie>
-            <ChartPie name="Investments by leverage" :items="echart_leverage_items" save_name="assetsreport_classes_by_leverage" :heigth="height" :show_data="false" @finished="finished_by_leverage=true;"></ChartPie>
+            <ChartEvolutionAssets v-if="unogenerator_working" reference="chart_assets" @finished="on_chart_finished" />
+            <ChartPie name="Investments by product" :items="echart_products_items" reference="chart_pie_product" :heigth="height" :show_data="false" @finished="on_chart_finished" />
+            <ChartPie name="Investments by pci" :items="echart_pci_items" reference="chart_pie_pci" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
+            <ChartPie name="Investments by variable percentage" :items="echart_percentage_items" reference="chart_pie_percentage" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
+            <ChartPie name="Investments by product type" :items="echart_producttype_items" reference="chart_pie_producttype" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
+            <ChartPie name="Investments by leverage" :items="echart_leverage_items" reference="chart_pie_leverage" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
         </div>
     </div>
 </template>
@@ -42,18 +42,26 @@
                 key:0,
                 height:100,
 
-                finished_by_product:false,
-                finished_by_pci:false,
-                finished_by_percentage:false,
-                finished_by_producttype:false,
-                finished_by_leverage:false,
-                finished_evolution_assets:false,
-
                 format:"pdf",
                 unogenerator_working:false,
                 method:"Current",
+
+                payload:{
+                    format: "pdf",
+                    chart_pie_product: null,
+                    chart_pie_pci: null,
+                    chart_pie_percentage: null,
+                    chart_pie_producttype: null,
+                    chart_pie_leverage: null,
+                    chart_assets: null,
+                }
             }
-        },        
+        },       
+        watch:{
+            format(){
+                this.payload.format=this.format
+            }
+        },
         computed:{
             /// COPIED FROM REPORTSINVESTMENTSCLASSES
             echart_products_items: function(){
@@ -111,21 +119,20 @@
                 }
                 adapted=adapted.filter(o => o.value!=0)
                 return adapted
-            }
+            },
+            can_launch(){
+                console.log(this.payload)
+                for (let key in this.payload) {
+                    if (this.payload[key]==null) return false
+                }
+                return true
+            },
         },
         methods:{
-            can_launch(){
-                if (this.finished_by_product && 
-                this.finished_by_pci && 
-                this.finished_by_percentage && 
-                this.finished_by_producttype && 
-                this.finished_by_leverage &&
-                this.finished_evolution_assets) return true
-                return false
-            },
             launch_report(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/assets/report/?outputformat=${this.format}`, this.myheaders())
+
+                axios.post(`${this.store().apiroot}/assets/report/`, this.payload, this.myheaders())
                 .then((response) => {
                     this.loading=false      
                     var link = window.document.createElement('a');
@@ -155,17 +162,21 @@
                 axios.get(`${this.store().apiroot}/unogenerator/working/`, this.myheaders())
                 .then((response) => {
                     this.unogenerator_working=response.data
-                    this.update_pies()
                     this.key=this.key+1
                 }, (error) => {
                     this.unogenerator_working=false
                     this.parseResponseError(error)
                 });
 
-            }
+            },
+            on_chart_finished(reference,image){
+                this.payload[reference]=image
         },
-        created(){
-            this.check_unogenerator_server()
-        }
+    },
+    created(){
+        console.log("AHORA")
+        this.check_unogenerator_server()
+        this.update_pies()
     }
+}
 </script>
