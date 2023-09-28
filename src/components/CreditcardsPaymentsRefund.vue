@@ -2,7 +2,7 @@
     <v-card>   
         <v-select :items="payments" v-model="payment" :label="$t('Select an old payment')"  item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
 
-        <TableCreditcardsOperations  showcc showtotal showbalance :items="items_cco" height="400" class=" flex-grow-1 flex-shrink-0" :key="key" />
+        <TableCreditcardsOperations showtotal showbalance :items="items_cco" height="400" class=" flex-grow-1 flex-shrink-0" :key="key" />
 
         <v-card-actions>
             <v-spacer></v-spacer>
@@ -38,8 +38,9 @@
         },
         watch: {
             payment: function(){
-                axios.get(`${this.store().apiroot}/api/creditcardsoperations/?accountsoperations_id=${this.payment}`, this.myheaders())
+                axios.get(`${this.cc.url}operationswithbalance/?accountsoperations_id=${this.payment}`, this.myheaders())
                 .then((response) => {
+                    console.log("CCO",response.data)
                     this.items_cco=response.data
                 }, (error) => {
                     this.parseResponseError(error)
