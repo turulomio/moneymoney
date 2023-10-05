@@ -51,6 +51,11 @@ npm run dev
 
 ## Changelog
 
+### 1.2.0 (2023-10-05)
+- Added totals to historical concepts report
+- Added balance to creditcardoperations
+- Assets Report preparation now hides charts
+
 ### 1.1.0 (2023-09-27)
 - Added zero risk assets to annual chart
 - Added creditcard operation copy feature

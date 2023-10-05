@@ -765,5 +765,9 @@
   "Can't sum amounts due to they have different currencies": "No puedo sumar las cantidades debido a que tienen diferentes divisas",
   "Field can be empty or a number with [0] digits at most": "El campo puede estar vacío o ser un número con [0] digitos como mucho",
   "Field must be a number with at most [0] digits": "El campo puede ser un número con [0] digitos como mucho",
-  "Must be a number with [0] decimal places at most": "Debe ser un número con [0] decimales como mucho"
+  "Must be a number with [0] decimal places at most": "Debe ser un número con [0] decimales como mucho",
+  "Report is being prepared. Please be patient...": "El informe está siendo preparado. Se paciente...",
+  "If the red point is above the regression line, it means that last pair prices are performing better than its average.": "Si el punto rojo está sobre la línea de regresión, significa que el último par de precio se está comportando mejor que su media.",
+  "Product quotes percentage from first data: [0]": "Porcentaje de la cotización del producto desde el primer dato: [0]",
+  "Net gains + Div. + FO": "Gan. netas + Div. + OR"
 }
