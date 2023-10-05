@@ -1,6 +1,6 @@
 
 <template>
-    <div>
+    <div ref="div">
         <h1>{{ $t("Evolution assets chart")}}</h1>
         <div class="d-flex justify-center mb-4 mt-4" v-if="!reference">
             <v-card width="30%">
@@ -27,6 +27,11 @@
                 required:false,
                 default:null,
             },
+            hidden:{
+                type: Boolean,
+                required:false,
+                default:false,
+            }
         },
         data(){ 
             return{
@@ -175,6 +180,10 @@
             },
         },
         mounted(){
+            if (this.hidden){
+                console.log(`Chart ${this.reference} has been hidden`)
+                this.$refs.div.style.visibility="hidden"
+            } 
             this.refreshChart()
 
         }

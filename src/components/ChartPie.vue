@@ -1,5 +1,5 @@
 <template>
-    <div class="ma-4">
+    <div ref="div" class="ma-4">
         <p v-if="items.length==0">No data to show</p>
         <v-card v-if="items.length>0">
             <v-row :style="styleheight()">
@@ -48,7 +48,7 @@
                 required: false,
                 default:600
             },
-            reference:{
+            reference:{ //used to pass in on_finished signal
                 required:false,
                 default:null,
             },
@@ -57,6 +57,11 @@
                 required:false,
                 default:false,
             },
+            hidden:{ //Hide using visibility==hidden it will take up space
+                type: Boolean,
+                required:false,
+                default:false,
+            }
         },
         data: function () {
             return {
@@ -124,5 +129,11 @@
             },
 
         },
+        mounted(){
+            if (this.hidden){
+                console.log(`Chart ${this.reference} has been hidden`)
+                this.$refs.div.style.visibility="hidden"
+            } 
+        }
     }
 </script>

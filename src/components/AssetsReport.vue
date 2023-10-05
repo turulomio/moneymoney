@@ -9,19 +9,19 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn class="pa-4" :loading="loading" color="primary" :disabled="!can_launch" @click="launch_report">{{ $t("Generate report") }}</v-btn>
+                    <v-btn class="pa-4" :loading="loading" color="primary" :disabled="!can_launch" @click="launch_report">{{ (can_launch)?  $t("Generate report"): $t("Report is being prepared. Please be patient...") }}</v-btn>
                     <v-spacer></v-spacer>
                 </v-card-actions>
 
             </v-card>
         </div>
         <div v-if="data">
-            <ChartEvolutionAssets v-if="unogenerator_working" reference="chart_assets" @finished="on_chart_finished" />
-            <ChartPie name="Investments by product" :items="echart_products_items" reference="chart_pie_product" :heigth="height" :show_data="false" @finished="on_chart_finished" />
-            <ChartPie name="Investments by pci" :items="echart_pci_items" reference="chart_pie_pci" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
-            <ChartPie name="Investments by variable percentage" :items="echart_percentage_items" reference="chart_pie_percentage" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
-            <ChartPie name="Investments by product type" :items="echart_producttype_items" reference="chart_pie_producttype" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
-            <ChartPie name="Investments by leverage" :items="echart_leverage_items" reference="chart_pie_leverage" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
+            <ChartEvolutionAssets hidden v-if="unogenerator_working" reference="chart_assets" @finished="on_chart_finished" />
+            <ChartPie name="Investments by product" hidden :items="echart_products_items" reference="chart_pie_product" :heigth="height" :show_data="false" @finished="on_chart_finished" />
+            <ChartPie name="Investments by pci" hidden :items="echart_pci_items" reference="chart_pie_pci" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
+            <ChartPie name="Investments by variable percentage" hidden :items="echart_percentage_items" reference="chart_pie_percentage" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
+            <ChartPie name="Investments by product type" hidden :items="echart_producttype_items" reference="chart_pie_producttype" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
+            <ChartPie name="Investments by leverage" hidden :items="echart_leverage_items" reference="chart_pie_leverage" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
         </div>
     </div>
 </template>
@@ -121,7 +121,6 @@
                 return adapted
             },
             can_launch(){
-                console.log(this.payload)
                 for (let key in this.payload) {
                     if (this.payload[key]==null) return false
                 }
@@ -174,7 +173,7 @@
         },
     },
     created(){
-        console.log("AHORA")
+        this.loading=true
         this.check_unogenerator_server()
         this.update_pies()
     }
