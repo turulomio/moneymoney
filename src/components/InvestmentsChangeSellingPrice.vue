@@ -162,9 +162,7 @@
                         element.investments_inside.forEach(o => {
                             investments_string=investments_string+ o.name
                         })
-
-
-                        this.strategy_ranges.push({name:`${element.value} ${investments_string}`, key: element.value})
+                        this.strategy_ranges.push({name:`${element.value} ${investments_string}`, value: element.value})
                         
                     });
                 }, (error) => {
@@ -279,7 +277,6 @@
                 } else if (this.tab==3) {
                     this.selected_selling_price=this.strategy_range
                 }
-                    
                 var gai=(this.selected_selling_price-this.selected_average_price)*this.selected_shares*this.product.real_leveraged_multiplier
                 this.button_text=this.$t("Set selected investments selling price to [0] to gain [1]").format(
                     this.currency_string(this.selected_selling_price, this.product.currency, this.product.decimals),
