@@ -735,7 +735,7 @@
   "Deleting a DPS estimation": "Borrando una estimación DPA",
   "Updating an investment operation": "Actualizando una operación de inversión",
   "Deleting an investment operation": "Borrando una operación de inversión",
-  "Operation gross balance: [0]<br>Operation net balance: [1]": "",
+  "Operation gross balance: [0]<br>Operation net balance: [1]": "Saldo bruto de la operación: [0]<br>Saldo neto de la operacion: [1]",
   "Reinvest/Divest operation": "Operación de reinversión/desinversión",
   "Products options": "Opciones de productos",
   "Add a quote for '[0]'": "Añade una cotización para '[0]'",

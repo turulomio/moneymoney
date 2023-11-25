@@ -50,7 +50,7 @@
                 <template #bottom ></template>   
         </v-data-table>
         <!-- IO CU-->
-        <v-dialog v-model="dialog_io" width="65%">
+        <v-dialog v-model="dialog_io" width="40%">
             <v-card class="pa-3">
                 <InvestmentsoperationsCU :io="io" :mode="io_mode" :key="key"  @cruded="on_InvestmentsoperationsCU_cruded()" />
             </v-card>
