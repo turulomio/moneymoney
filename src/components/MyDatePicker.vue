@@ -11,7 +11,7 @@
         <div class="component_label">
         {{ $attrs.label }}
         </div>          
-            <!-- <v-date-picker v-model="dt" show-adjancent-months></v-date-picker>                            -->
+            <v-date-picker v-model="dt" show-adjancent-months  input-placeholder="yyyy-mm-dd"></v-date-picker>                           
             <VueDatePicker v-model="dt" auto-apply :disabled="readonly" :enable-time-picker="false" :label="$attrs.label" :format="format"  :clearable="clearable"  :zIndex="20000">
                 <template #input-icon>
                     <v-icon class="mx-2 pr-2" icon="mdi-calendar" @click.stop="dt=new Date()" ></v-icon>
