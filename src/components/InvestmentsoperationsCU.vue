@@ -1,21 +1,29 @@
 <template>
     <div>    
-        <h1 class="mb-4">{{ title() }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
-        </h1>           
         <v-card class="pa-6">
+            <h1 class="mb-4">{{ title() }}
+                <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            </h1>           
             <v-form ref="form" v-model="form_valid">
-                <v-autocomplete :readonly="mode=='D'" density="compact" :items="getArrayFromMap(store().investments)" v-model="new_io.investments" :label="$t('Select an investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <MyDateTimePicker :readonly="mode=='D'" v-model="new_io.datetime" :label="$t('Set investment operation date and time')" />
-                <v-autocomplete :readonly="mode=='D'" density="compact" :items="getOperationstypesForInvestmentsOperations()" v-model="new_io.operationstypes" :label="$t('Select an operation type')" item-title="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field :readonly="mode=='D'" density="compact" v-model.number="new_io.shares"  :label="$t('Set investment operation shares')" :placeholder="$t('Set investment operation shares')" :rules="RulesFloat(12,true,6)" counter="12"/>
-                <v-text-field :readonly="mode=='D'" density="compact" v-model.number="new_io.price"  :label="$t('Set investment operation price')" :placeholder="$t('Set investment operation price')" :rules="RulesFloatGEZ(12,true,product.decimals)" counter="12"/>
-                <v-text-field :readonly="mode=='D'" density="compact" v-model.number="new_io.taxes"  :label="$t('Set investment operation taxes')" :placeholder="$t('Set investment operation taxes')" :rules="RulesFloatGEZ(12,true,account.decimals)" counter="12"/>
-                <v-text-field :readonly="mode=='D'" density="compact" v-model.number="new_io.commission"  :label="$t('Set investment operation commission')" :placeholder="$t('Set investment operation commission')" :rules="RulesFloatGEZ(12,true, account.decimals)" counter="12"/>
-                <v-text-field :readonly="mode=='D'" density="compact" v-model="new_io.comment" type="text" :label="$t('Set investment operation comment')" :placeholder="$t('Set investment operation comment')" :rules="RulesString(255,false)" counter="255"/>
+                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().investments)" v-model="new_io.investments" :label="$t('Select an investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <div class="d-flex mx-auto">
+                    <MyDateTimePicker :readonly="mode=='D'" v-model="new_io.datetime" :label="$t('Set investment operation date and time')" />
+                </div>
+                <div class="d-flex mx-auto">
+                    <v-autocomplete :readonly="mode=='D'" :items="getOperationstypesForInvestmentsOperations()" v-model="new_io.operationstypes" :label="$t('Select an operation type')" item-title="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                </div>
+                <div class="d-flex flex-row">
+                    <v-text-field class="mr-5" :readonly="mode=='D'" v-model.number="new_io.shares"  :label="$t('Set investment operation shares')" :placeholder="$t('Set investment operation shares')" :rules="RulesFloat(12,true,6)" counter="12"/>
+                    <v-text-field :readonly="mode=='D'" v-model.number="new_io.price"  :label="$t('Set investment operation price')" :placeholder="$t('Set investment operation price')" :rules="RulesFloatGEZ(12,true,product.decimals)" counter="12"/>
+                </div>
+                <div class="d-flex flex-row">
+                    <v-text-field class="mr-5" :readonly="mode=='D'" v-model.number="new_io.taxes"  :label="$t('Set investment operation taxes')" :placeholder="$t('Set investment operation taxes')" :rules="RulesFloatGEZ(12,true,account.decimals)" counter="12"/>
+                    <v-text-field :readonly="mode=='D'" v-model.number="new_io.commission"  :label="$t('Set investment operation commission')" :placeholder="$t('Set investment operation commission')" :rules="RulesFloatGEZ(12,true, account.decimals)" counter="12"/>
+                </div>
+                <v-textarea :readonly="mode=='D'" v-model="new_io.comment" type="text" :label="$t('Set investment operation comment')" :placeholder="$t('Set investment operation comment')" :rules="RulesString(255,false)" counter="255"/>
                 <CurrencyFactor :readonly="mode=='D'" :label="$t('Set currency conversion factor')" v-model="new_io.currency_conversion" :currency_from="product.currency" :currency_to="account.currency"></CurrencyFactor>
             </v-form>
-            <div v-html="foot()" v-if="product"></div>
+            <div v-html="change_foot()"></div>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" @click="accept()" >{{ button() }}</v-btn>
@@ -74,7 +82,7 @@
             },
             investment: function(){
                 return this.store().investments.get(this.new_io.investments)
-            }
+            },
         },
         methods: {
             empty_investment_operation,
@@ -124,7 +132,10 @@
                     })
                 }
             },
-            foot(){
+            setShares(value){
+                this.new_io.shares=value
+            },
+            change_foot(){
                 var gross=this.new_io.shares*this.new_io.price
                 var net=0
                 if (this.new_io.shares>0){
@@ -133,14 +144,10 @@
                     net=gross-this.new_io.taxes-this.new_io.commission
                 }
                 return this.$t("Operation gross balance: [0]<br>Operation net balance: [1]").format(
-                    this.currency_html(gross, this.product.currency),
-                    this.currency_html(net, this.product.currency)
+                     this.currency_html(gross, this.product.currency),
+                     this.currency_html(net, this.product.currency)
                 )
             },
-            setShares(value){
-                this.new_io.shares=value
-            }
-
         },
         created(){
             this.new_io=Object.assign({},this.io) //Can come from plio or empty_investment_operation
@@ -148,8 +155,7 @@
                 this.new_io.investments=this.getMapObjectById("investments", this.new_io.investments_id).url
                 this.new_io.url=this.hyperlinked_url("investmentsoperations",this.new_io.id)
                 this.new_io.operationstypes=this.getMapObjectById("operationstypes", this.new_io.operationstypes_id).url
-            }
-            
+            }           
         }
     }
 </script>

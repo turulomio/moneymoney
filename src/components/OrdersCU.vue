@@ -22,7 +22,7 @@
         </v-card>
 
         <!-- Investments operation CU dialog -->
-        <v-dialog v-model="dialog_io_cu" max-width="550" v-if="io" >
+        <v-dialog v-model="dialog_io_cu" max-width="40%" v-if="io" >
             <v-card class="pa-4">
                 <InvestmentsoperationsCU :io="io" :mode="io_mode" @cruded="on_InvestmentsoperationsCU_cruded()" :key="key" />
             </v-card>
