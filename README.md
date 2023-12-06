@@ -1,7 +1,5 @@
 # MoneyMoney 
 
-This is the Vue 3 evolution of the branch vue2 of project https://github.com/turulomio/moneymoney/ and it's the frontend app of  https://github.com/turulomio/django_moneymoney backend.
-
 ## Installation
 
 ### Unogenerator installation
