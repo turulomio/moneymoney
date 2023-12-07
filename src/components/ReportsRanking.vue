@@ -1,13 +1,12 @@
 <template>
     <div>    
         <h1>{{ $t('Ranking investments report') }}</h1>
-        <v-card outlined class="ma-4 pa-4">
-            <v-row class="pa-4">
-                <v-text-field class="ml-10 mr-6" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"></v-text-field>
-                <v-checkbox density="compact" v-model="only_current_investments" :label="$t('Show only current investments?')" ></v-checkbox>
-            </v-row>
-            <v-data-table density="compact" :headers="headers" :search="search" :items="data" class="elevation-1" :loading="loading_table"    :items-per-page="10000" :sort-by="[{key:'ranking',order:'asc'}]" @click:row="viewInvestmentsMerged">
-
+        <v-card flat class="ma-4 pa-4">
+            <v-card flat class="d-flex flex-row mb-4 mx-auto">
+                <v-checkbox  v-model="only_current_investments" :label="$t('Show only current investments?')" />
+                <v-text-field  v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"></v-text-field>
+            </v-card>
+            <v-data-table density="compact" :headers="headers" :search="search" :items="data" class="elevation-1" :loading="loading_table" height="75vh" fixed-header :items-per-page="10000" :sort-by="[{key:'ranking',order:'asc'}]" @click:row="viewInvestmentsMerged">
                 <template #item.ranking="{item}">
                     {{ item.ranking }}
                 </template>  
@@ -80,7 +79,7 @@
         },
         watch: {
             only_current_investments(){
-                this.update_table()
+                this.filter_data()
             }
         },
         methods: {
@@ -95,21 +94,25 @@
                 axios.get(`${this.store().apiroot}/reports/ranking/`, this.myheaders())
                 .then((response) => {
                     this.ios=response.data
-                    this.data=[]
-                    response.data.entries.forEach(o=>{
-                        var e=this.ios[o]
-                        if (this.only_current_investments){
-                            if (e.total_io_current.gains_net_user!=0){
-                                this.data.push(this.entry_to_data(e))
-                            }
-                        } else {
-                            this.data.push(this.entry_to_data(e))
-                        }
-                    })
+                    this.filter_data()
                     this.loading_table=false
                 }, (error) => {
                     this.parseResponseError(error)
                 });
+            },
+            filter_data(){
+                this.data=[]
+                this.ios.entries.forEach(o=>{
+                    var e=this.ios[o]
+                    if (this.only_current_investments){
+                        if (e.total_io_current.gains_net_user!=0){
+                            this.data.push(this.entry_to_data(e))
+                        }
+                    } else {
+                        this.data.push(this.entry_to_data(e))
+                    }
+                })
+
             },
             entry_to_data(e){
                 return {
