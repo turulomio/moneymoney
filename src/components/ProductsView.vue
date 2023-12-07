@@ -67,7 +67,7 @@
             </v-window-item>
             <v-window-item key="ohcls">
                 <v-card class="pa-1 d-flex flex-column" outlined >                    
-                    <MyMonthPicker ref="ohcls_ym" v-model="ohcls_ym" @update:ModelValue="on_monthpicker_ohcls_change()"/>
+                    <MyMonthPicker ref="ohcls_ym" v-model="ohcls_ym"/>
                     <TableOHCLS :product="product" :items="ohcls_month" :key="key" :height="400" @cruded="on_TableQuotes_cruded()"></TableOHCLS>
                 </v-card>
             </v-window-item>
@@ -284,6 +284,11 @@
                 //QUOTES MASSIVE UPDATE
                 dialog_quotes_massive_update:false,
             }
+        },
+        watch: {
+            ohcls_ym(){
+                this.on_monthpicker_ohcls_change()
+            },
         },
         methods: {
             empty_dps,
