@@ -5,22 +5,24 @@
             
             <v-form ref="form" v-model="form_valid">             
                 <v-row class="pl-5 pr-5">
-                <AutocompleteProducts v-model="newpr.product" :rules="RulesSelection(true)"  />
-                <v-text-field class="mr-5" v-model="newpr.percentage_between_ranges"  :label="$t('Set percentage between ranges x1000')" :placeholder="$t('Set percentage between ranges x1000')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field class="mr-5" v-model="newpr.percentage_gains"  :label="$t('Set percentage gains x1000')" :placeholder="$t('Set percentage gains x1000')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field  v-model="newpr.amount_to_invest"  :label="$t('Set the amount to invest')" :placeholder="$t('Set the amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                <AutocompleteProducts class="mr-5" v-model="newpr.product" :rules="RulesSelection(true)"  />
+                <v-autocomplete class="mr-5" :items="this.getInvestmentsByProduct(newpr.product)" v-model="newpr.investments" :label="$t('Select investments to include')" item-title="fullname" item-value="id" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
+                <v-select class="mr-5" :items="getArrayFromMap(store().recomendation_methods)" v-model="newpr.recomendation_methods" :label="$t('Set recomendation method')"  item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
+                <v-btn class="mt-4" color="primary" @click="accept()" :disabled="!form_valid">{{ $t("Show ranges") }}</v-btn>
+
                 </v-row>
                 <v-row class="pl-5 pr-5">
-                <v-select class="mr-5" :items="getArrayFromMap(store().recomendation_methods)" v-model="newpr.recomendation_methods" :label="$t('Set recomendation method')"  item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
+                <v-text-field class="mr-5" v-model="newpr.percentage_between_ranges"  :label="$t('Set percentage between ranges x1000')" :placeholder="$t('Set percentage between ranges x1000')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field class="mr-5" v-model="newpr.percentage_gains"  :label="$t('Set percentage gains x1000')" :placeholder="$t('Set percentage gains x1000')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field class="mr-5" v-model="newpr.amount_to_invest"  :label="$t('Set the amount to invest')" :placeholder="$t('Set the amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+
                 <v-text-field class="mr-5" v-model.number="newpr.additional_ranges"  :label="$t('Additional ranges to show')" :placeholder="$t('Additional ranges to show')" :rules="RulesInteger(2,true)" counter="2"/>
-                <v-checkbox class="mr-5" v-model="newpr.totalized_operations" :label="$t('Show totalized investments operations?')" ></v-checkbox>
-                <v-autocomplete :items="this.getInvestmentsByProduct(newpr.product)" v-model="newpr.investments" :label="$t('Select investments to include')" item-title="fullname" item-value="id" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
-                <v-btn class="mt-4" color="primary" @click="accept()" :disabled="!form_valid">{{ $t("Show ranges") }}</v-btn>
+                <v-checkbox v-model="newpr.totalized_operations" :label="$t('Show totalized investments operations?')" ></v-checkbox>
                 </v-row>
             </v-form>
         </v-card>
 
-        <v-card class="ma-6 pa-6">
+        <v-card flat class="ma-4 pa-4">
             <v-tabs v-model="tab" grow bg-color="secondary">
                 <v-tab key="0">{{ $t('Product ranges table') }}</v-tab>
                 <v-tab key="1">{{ $t('Product ranges chart') }}</v-tab>
