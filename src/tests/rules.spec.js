@@ -10,6 +10,7 @@ import {
     RulesFloatGZ,
     RulesFloatGEZ,
     RulesFloatLEZ,
+    RulesDateIsoString,
 } from "@/rules"
 
 
@@ -187,4 +188,19 @@ test('RulesFloatLEZ',() =>{
     expect (validate_rules("-1231",  RulesFloatLEZ(6,false,2),   false)).toBe(false)
     expect (validate_rules(null,  RulesFloatLEZ(6,false,2),   false)).toBe(true)
     expect (validate_rules("",  RulesFloatLEZ(6,false,2),   false)).toBe(true)
+})
+
+
+
+test('RulesDateIsoString',() =>{
+    expect (validate_rules("2023-12-12",  RulesDateIsoString(true),   false)).toBe(true)
+    expect (validate_rules("2023",  RulesDateIsoString(true),   false)).toBe(false)
+    expect (validate_rules("2023-12",  RulesDateIsoString(true),   false)).toBe(false)
+    expect (validate_rules("2023-12-32",  RulesDateIsoString(true),   false)).toBe(false)
+    expect (validate_rules(2023,  RulesDateIsoString(true),   false)).toBe(false)
+    expect (validate_rules(2023.12,  RulesDateIsoString(true),   false)).toBe(false)
+    expect (validate_rules("",  RulesDateIsoString(true),   false)).toBe(false)
+    expect (validate_rules(null,  RulesDateIsoString(true),   false)).toBe(false)
+    expect (validate_rules(0,  RulesDateIsoString(true),   false)).toBe(false)
+    expect (validate_rules(new Date(),  RulesDateIsoString(true),   false)).toBe(false)
 })

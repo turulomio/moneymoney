@@ -6,7 +6,7 @@
 // TO improve readibility I will emule rules behavier
 // Rules returns [] when everything is ok, returns a ['comment'] to show error
 
-
+import moment from 'moment'
 
 
 export function isNullOrEmpty(n){
@@ -148,7 +148,22 @@ export function RulesFloatLEZ(maxdigits, required, maxdecimals){
     return r
 }
 
+// 2023-01-01
+export function RulesDateIsoString(required){
+    var r
+    if (required==true){
+        r= [
+            v => (!isNullOrEmpty(v) && typeof v=="string") && v.split("-").length==3|| translate("Field must be a string representig a date in iso format+"),
+            v => (!isNullOrEmpty(v) && moment(v, moment.ISO_8601).isValid()) || translate('You must select date and time'),
+        ]
+    } else {
+        r= [
+            v => (isNullOrEmpty(v) || moment(v, moment.ISO_8601).isValid()) || translate('You must select date and time'),
+        ]
+    }
 
+    return r
+}
 export function RulesDatetime(required){
     var r= [
         v => (!!v) || translate('You must select date and time'),
