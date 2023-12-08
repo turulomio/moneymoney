@@ -10,11 +10,11 @@
 
 
 export function isNullOrEmpty(n){
-        var r=false
-        if (n==null) return r=true
-        if (n=="") return r=true
-        return r
-    }
+    if (n==="") return true
+    if (n===0) return false
+    if (n===null) return true
+    return false
+}
 
 //Returns if it's a Number, with required attribute
 export function isNumber(n){
@@ -100,8 +100,8 @@ export function RulesFloatGZ (maxdigits, required, maxdecimals){
     if (required==false){
         r= [
             v => (isNullOrEmpty(v) || isNumberMaxDigitsWithRequired(v,required,maxdigits)) || translate('Field can be empty or a number with [0] digits at most').format(maxdigits),
-            v => (isNullOrEmpty(v) || isNumber(v) && v>0) || translate('Must be a number greater than zero'),
-            v => (isNullOrEmpty(v) || isNumber(v) && countDecimals(v)<=maxdecimals) || translate('Must be a number with [0] decimal places at most').format(maxdecimals),
+            v => (isNullOrEmpty(v) || (isNumber(v) && v>0)) || translate('Must be a number greater than zero'),
+            v => (isNullOrEmpty(v) || (isNumber(v) && countDecimals(v)<=maxdecimals)) || translate('Must be a number with [0] decimal places at most').format(maxdecimals),
         ]
     } else { // required==true
         r= [

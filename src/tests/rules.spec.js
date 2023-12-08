@@ -7,6 +7,9 @@ import {
     isNumberMaxDigitsWithRequired,
     RulesInteger,
     RulesFloat,
+    RulesFloatGZ,
+    RulesFloatGEZ,
+    RulesFloatLEZ,
 } from "@/rules"
 
 
@@ -27,6 +30,7 @@ test('isNullOrEmpty', () => {
     expect(isNullOrEmpty("")).toBe(true)
     expect(isNullOrEmpty(null)).toBe(true)
     expect(isNullOrEmpty(12)).toBe(false)
+    expect(isNullOrEmpty(0)).toBe(false)
 })
 
 test('isNumber', () => {
@@ -79,8 +83,8 @@ test('countDecimals', () => {
 function validate_rules(value, rules, log=false){
     var r=true
     rules.forEach(f => {
+        if (log) console.log(f(value))
         if  (f(value) != true){
-            if (log) console.log(f(value),true)
             r= false
         }
     });
@@ -117,4 +121,70 @@ test('RulesFloat',() =>{
     expect (validate_rules("1231",  RulesFloat(6,false,2),   false)).toBe(false)
     expect (validate_rules(null,  RulesFloat(6,false,2),   false)).toBe(true)
     expect (validate_rules("",  RulesFloat(6,false,2),   false)).toBe(true)
+})
+
+test('RulesFloatGZ',() =>{
+    expect (validate_rules(12346,  RulesFloatGZ(6,true,2),   false)).toBe(true)
+    expect (validate_rules(12.46,  RulesFloatGZ(6,true,2),   false)).toBe(true)
+    expect (validate_rules(12.463,  RulesFloatGZ(6,true,2),   false)).toBe(false)
+    expect (validate_rules(0,  RulesFloatGZ(6,true,2),   false)).toBe(false)
+    expect (validate_rules(-12.46,  RulesFloatGZ(6,true,2),   false)).toBe(false)
+    expect (validate_rules(1234611,  RulesFloatGZ(6,true,2),   false)).toBe(false)
+    expect (validate_rules("1231",  RulesFloatGZ(6,true,2),   false)).toBe(false)
+    expect (validate_rules(null,  RulesFloatGZ(6,true,2),   false)).toBe(false)
+    expect (validate_rules("",  RulesFloatGZ(6,true,2),   false)).toBe(false)
+
+    expect (validate_rules(12346,  RulesFloatGZ(6,false,2),   false)).toBe(true)
+    expect (validate_rules(12.46,  RulesFloatGZ(6,false,2),   false)).toBe(true)
+    expect (validate_rules(12.463,  RulesFloatGZ(6,false,2),   false)).toBe(false)
+    expect (validate_rules(0,  RulesFloatGZ(6,false,2),   false)).toBe(false)
+    expect (validate_rules(-12.46,  RulesFloatGZ(6,false,2),   false)).toBe(false)
+    expect (validate_rules(1234611,  RulesFloatGZ(6,false,2),   false)).toBe(false)
+    expect (validate_rules("1231",  RulesFloatGZ(6,false,2),   false)).toBe(false)
+    expect (validate_rules(null,  RulesFloatGZ(6,false,2),   false)).toBe(true)
+    expect (validate_rules("",  RulesFloatGZ(6,false,2),   false)).toBe(true)
+})
+
+test('RulesFloatGEZ',() =>{
+    expect (validate_rules(12346,  RulesFloatGEZ(6,true,2),   false)).toBe(true)
+    expect (validate_rules(12.46,  RulesFloatGEZ(6,true,2),   false)).toBe(true)
+    expect (validate_rules(12.463,  RulesFloatGEZ(6,true,2),   false)).toBe(false)
+    expect (validate_rules(0,  RulesFloatGEZ(6,true,2),   false)).toBe(true)
+    expect (validate_rules(-12.46,  RulesFloatGEZ(6,true,2),   false)).toBe(false)
+    expect (validate_rules(1234611,  RulesFloatGEZ(6,true,2),   false)).toBe(false)
+    expect (validate_rules("1231",  RulesFloatGEZ(6,true,2),   false)).toBe(false)
+    expect (validate_rules(null,  RulesFloatGEZ(6,true,2),   false)).toBe(false)
+    expect (validate_rules("",  RulesFloatGEZ(6,true,2),   false)).toBe(false)
+
+    expect (validate_rules(12346,  RulesFloatGEZ(6,false,2),   false)).toBe(true)
+    expect (validate_rules(12.46,  RulesFloatGEZ(6,false,2),   false)).toBe(true)
+    expect (validate_rules(12.463,  RulesFloatGEZ(6,false,2),   false)).toBe(false)
+    expect (validate_rules(0,  RulesFloatGEZ(6,false,2),   false)).toBe(true)
+    expect (validate_rules(-12.46,  RulesFloatGEZ(6,false,2),   false)).toBe(false)
+    expect (validate_rules(1234611,  RulesFloatGEZ(6,false,2),   false)).toBe(false)
+    expect (validate_rules("1231",  RulesFloatGEZ(6,false,2),   false)).toBe(false)
+    expect (validate_rules(null,  RulesFloatGEZ(6,false,2),   false)).toBe(true)
+    expect (validate_rules("",  RulesFloatGEZ(6,false,2),   false)).toBe(true)
+})
+
+test('RulesFloatLEZ',() =>{
+    expect (validate_rules(-12346,  RulesFloatLEZ(6,true,2),   false)).toBe(true)
+    expect (validate_rules(-12.46,  RulesFloatLEZ(6,true,2),   false)).toBe(true)
+    expect (validate_rules(-12.463,  RulesFloatLEZ(6,true,2),   false)).toBe(false)
+    expect (validate_rules(0,  RulesFloatLEZ(6,true,2),   false)).toBe(true)
+    expect (validate_rules(12.46,  RulesFloatLEZ(6,true,2),   false)).toBe(false)
+    expect (validate_rules(-1234611,  RulesFloatLEZ(6,true,2),   false)).toBe(false)
+    expect (validate_rules("-1231",  RulesFloatLEZ(6,true,2),   false)).toBe(false)
+    expect (validate_rules(null,  RulesFloatLEZ(6,true,2),   false)).toBe(false)
+    expect (validate_rules("",  RulesFloatLEZ(6,true,2),   false)).toBe(false)
+
+    expect (validate_rules(-12346,  RulesFloatLEZ(6,false,2),   false)).toBe(true)
+    expect (validate_rules(-12.46,  RulesFloatLEZ(6,false,2),   false)).toBe(true)
+    expect (validate_rules(-12.463,  RulesFloatLEZ(6,false,2),   false)).toBe(false)
+    expect (validate_rules(0,  RulesFloatLEZ(6,false,2),   false)).toBe(true)
+    expect (validate_rules(12.46,  RulesFloatLEZ(6,false,2),   false)).toBe(false)
+    expect (validate_rules(-1234611,  RulesFloatLEZ(6,false,2),   false)).toBe(false)
+    expect (validate_rules("-1231",  RulesFloatLEZ(6,false,2),   false)).toBe(false)
+    expect (validate_rules(null,  RulesFloatLEZ(6,false,2),   false)).toBe(true)
+    expect (validate_rules("",  RulesFloatLEZ(6,false,2),   false)).toBe(true)
 })
