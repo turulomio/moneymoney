@@ -6,6 +6,7 @@ import {
     isNumberWithRequired,
     isNumberMaxDigitsWithRequired,
     RulesInteger,
+    RulesFloat,
 } from "@/rules"
 
 
@@ -99,4 +100,21 @@ test('RulesInteger',() =>{
     expect (validate_rules("1231",  RulesInteger(6,false),   false)).toBe(false)
     expect (validate_rules(null,  RulesInteger(6,false),   false)).toBe(true)
     expect (validate_rules("",  RulesInteger(6,false),   false)).toBe(true)
+})
+
+
+test('RulesFloat',() =>{
+    expect (validate_rules(12346,  RulesFloat(6,true,2),   false)).toBe(true)
+    expect (validate_rules(12.46,  RulesFloat(6,true,2),   false)).toBe(true)
+    expect (validate_rules(1234611,  RulesFloat(6,true,2),   false)).toBe(false)
+    expect (validate_rules("1231",  RulesFloat(6,true,2),   false)).toBe(false)
+    expect (validate_rules(null,  RulesFloat(6,true,2),   false)).toBe(false)
+    expect (validate_rules("",  RulesFloat(6,true,2),   false)).toBe(false)
+
+    expect (validate_rules(12346,  RulesFloat(6,false,2),   false)).toBe(true)
+    expect (validate_rules(12.46,  RulesFloat(6,false,2),   false)).toBe(true)
+    expect (validate_rules(1234611,  RulesFloat(6,false,2),   false)).toBe(false)
+    expect (validate_rules("1231",  RulesFloat(6,false,2),   false)).toBe(false)
+    expect (validate_rules(null,  RulesFloat(6,false,2),   false)).toBe(true)
+    expect (validate_rules("",  RulesFloat(6,false,2),   false)).toBe(true)
 })
