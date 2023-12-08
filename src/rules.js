@@ -153,11 +153,12 @@ export function RulesDateIsoString(required){
     var r
     if (required==true){
         r= [
-            v => (!isNullOrEmpty(v) && typeof v=="string") && v.split("-").length==3|| translate("Field must be a string representig a date in iso format+"),
+            v => (!isNullOrEmpty(v) && typeof v=="string" && v.split("-").length==3)|| translate("Field must be a string representig a date in iso format+"),
             v => (!isNullOrEmpty(v) && moment(v, moment.ISO_8601).isValid()) || translate('You must select date and time'),
         ]
     } else {
         r= [
+            v => (isNullOrEmpty(v) || ( typeof v=="string" && v.split("-").length==3))|| translate("Field must be a string representig a date in iso format+"),
             v => (isNullOrEmpty(v) || moment(v, moment.ISO_8601).isValid()) || translate('You must select date and time'),
         ]
     }
