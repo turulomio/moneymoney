@@ -29,13 +29,14 @@
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
-    "vitest": "^1.0.2",
     "@vitejs/plugin-vue": "^4.5.1",
+    "@vitest/coverage-istanbul": "^1.0.2",
     "@vitest/coverage-v8": "^1.0.2",
     "eslint": "^8.55.0",
     "eslint-plugin-vue": "^9.19.2",
     "vite": "^4.5.0",
     "vite-plugin-eslint": "^1.8.1",
-    "vite-plugin-vuetify": "^1.0.2"
+    "vite-plugin-vuetify": "^1.0.2",
+    "vitest": "^1.0.2"
   }
 }
