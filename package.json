@@ -5,8 +5,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "translate": "./node_modules/.bin/vue-i18n-extract"
-
+    "translate": "./node_modules/.bin/vue-i18n-extract",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@mdi/font": "^7.3.67",
@@ -28,7 +29,9 @@
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
+    "vitest": "^1.0.2",
     "@vitejs/plugin-vue": "^4.5.1",
+    "@vitest/coverage-v8": "^1.0.2",
     "eslint": "^8.55.0",
     "eslint-plugin-vue": "^9.19.2",
     "vite": "^4.5.0",
