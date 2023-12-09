@@ -4,8 +4,8 @@
             <h1>{{ title() }}</h1>
             <v-form ref="form" v-model="form_valid" v-if='estimation!=null'>
                 <v-col>
-                    <v-text-field v-model="new_estimation.year" type="text" :counter="4" :label="$t('Year')" :placeholder="$t('Enter a year')" :rules="RulesInteger(4,true)"></v-text-field>
-                    <v-text-field v-model="new_estimation.estimation" type="text" :label="$t('Estimation')" :counter="10" :placeholder="$t('Enter a estimation')" autofocus @focus="$event.target.select()" :rules="RulesFloat(10, true, 6)"></v-text-field>
+                    <v-text-field v-model.number="new_estimation.year" :counter="4" :label="$t('Year')" :placeholder="$t('Enter a year')" :rules="RulesInteger(4,true)"></v-text-field>
+                    <v-text-field v-model.number="new_estimation.estimation" :label="$t('Estimation')" :counter="10" :placeholder="$t('Enter a estimation')" autofocus @focus="$event.target.select()" :rules="RulesFloat(10, true, 6)"></v-text-field>
                 </v-col>
                 <v-card-actions>
                     <v-spacer></v-spacer>

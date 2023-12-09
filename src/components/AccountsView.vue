@@ -33,9 +33,9 @@
                         </template>     
 
                         <template #item.actions="{item}">
-                            <v-icon v-if="!item.deferred" small class="mr-2" @click="CCONotDeferred(item)">mdi-plus</v-icon>
-                            <v-icon small class="mr-2" @click="editCC(item)">mdi-pencil</v-icon>
-                            <v-icon small @click="deleteCC(item)" v-if="item.is_deletable">mdi-delete</v-icon>
+                            <v-icon v-if="!item.deferred" small class="mr-2" @click.stop="CCONotDeferred(item)">mdi-plus</v-icon>
+                            <v-icon small class="mr-2" @click.stop="editCC(item)">mdi-pencil</v-icon>
+                            <v-icon small @click.stop="deleteCC(item)" v-if="item.is_deletable">mdi-delete</v-icon>
                         </template>
                         <template #bottom ></template>   
                     </v-data-table>   

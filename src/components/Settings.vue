@@ -23,17 +23,17 @@
                 <v-window-item key="amounts" >
                     <v-card class="mx-auto pa-6 mt-3">
                         <v-card-title>{{ $t('Amount to invest') }}</v-card-title>                    
-                        <v-text-field v-model="new_profile.invest_amount_1"  :label="$t('First amount to invest')" :placeholder="$t('First amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
-                        <v-text-field v-model="new_profile.invest_amount_2"  :label="$t('Second amount to invest')" :placeholder="$t('Second amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
-                        <v-text-field v-model="new_profile.invest_amount_3"  :label="$t('Third amount to invest')" :placeholder="$t('Third amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
-                        <v-text-field v-model="new_profile.invest_amount_4"  :label="$t('Fourth amount to invest')" :placeholder="$t('Fourth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
-                        <v-text-field v-model="new_profile.invest_amount_5"  :label="$t('Fifth amount to invest')" :placeholder="$t('Fifth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model.number="new_profile.invest_amount_1"  :label="$t('First amount to invest')" :placeholder="$t('First amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model.number="new_profile.invest_amount_2"  :label="$t('Second amount to invest')" :placeholder="$t('Second amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model.number="new_profile.invest_amount_3"  :label="$t('Third amount to invest')" :placeholder="$t('Third amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model.number="new_profile.invest_amount_4"  :label="$t('Fourth amount to invest')" :placeholder="$t('Fourth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model.number="new_profile.invest_amount_5"  :label="$t('Fifth amount to invest')" :placeholder="$t('Fifth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
 
 
                     </v-card>                        
 
                     <v-card class="mx-auto pa-6 mt-3">
-                            <v-text-field v-model="example_invested"  :step="1000" :label="$t('Example. Invested amount')" :placeholder="$t('Example. Invested amount')" :rules="RulesInteger(10,true)" counter="10"/>
+                            <v-text-field v-model.number="example_invested"  :step="1000" :label="$t('Example. Invested amount')" :placeholder="$t('Example. Invested amount')" :rules="RulesInteger(10,true)" counter="10"/>
                             <p>{{example_amount_to_invest}}</p>
                     </v-card>
                 </v-window-item>

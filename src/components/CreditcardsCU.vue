@@ -5,7 +5,7 @@
             <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().accounts).filter(v =>v.active==true)" v-model="new_cc.accounts" :label="$t('Select an account')" item-title="name" item-value="url"  :rules="RulesSelection(true)"></v-autocomplete>
             <v-text-field :readonly="mode=='D'" v-model="new_cc.name" type="text" :label="$t('Credit card name')" :placeholder="$t('Credit card name')" autofocus  counter="200" :rules="RulesString(200,true)"/>
             <v-text-field :readonly="mode=='D'" v-model="new_cc.number" type="text" :label="$t('Credit card number')"  :placeholder="$t('Credit card number')" counter="30" :rules="RulesString(30,false)"/>
-            <v-text-field :readonly="mode=='D'" v-model="new_cc.maximumbalance"  :label="$t('Credit card maximum balance')"  :placeholder="$t('Credit card maximum balance')" :rules="RulesInteger(10,true)" counter="10"/>
+            <v-text-field :readonly="mode=='D'" v-model.number="new_cc.maximumbalance"  :label="$t('Credit card maximum balance')"  :placeholder="$t('Credit card maximum balance')" :rules="RulesInteger(10,true)" counter="10"/>
             <v-checkbox :readonly="mode=='D'" v-model="new_cc.active" :label="$t('Is active?')"></v-checkbox>
             <v-checkbox :readonly="mode=='D'" v-model="new_cc.deferred" :label="$t('Has deferred payments?')"></v-checkbox>
         </v-form>

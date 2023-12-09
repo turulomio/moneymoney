@@ -9,7 +9,7 @@
             <v-form ref="form" v-model="form_valid" class="pa-4">
                 <v-row>                
                     <AutocompleteProducts class="mr-5" v-model="product" :rules="RulesSelection(true)"  />
-                    <v-text-field class="mr-5" v-model="newprice"  :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesFloatGEZ(10,true, product.decimals)" counter="10"/>
+                    <v-text-field class="mr-5" v-model.number="newprice"  :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesFloatGEZ(10,true, product.decimals)" counter="10"/>
                     <v-text-field v-model.number="newshares"  :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesFloat(14,true,6)" counter="14"/>
                 </v-row>
 

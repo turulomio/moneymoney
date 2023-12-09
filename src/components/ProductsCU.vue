@@ -12,7 +12,7 @@
                 <v-text-field density="compact" :readonly="mode=='D'" v-model="newproduct.address" :label="$t('Set product address')" :placeholder="$t('Set product address')" :rules="RulesString(200,false)" counter="200"/>
                 <v-text-field density="compact" :readonly="mode=='D'" v-model="newproduct.phone" :label="$t('Set product phone')" :placeholder="$t('Set product phone')" :rules="RulesString(200,false)" counter="200"/>                                                
                 <v-text-field density="compact" :readonly="mode=='D'" v-model="newproduct.mail" :label="$t('Set product mail')" :placeholder="$t('Set product mail')" :rules="RulesString(200,false)" counter="200"/>
-                <v-text-field density="compact" :readonly="mode=='D'" v-model="newproduct.percentage" :label="$t('Set product percentage')" :placeholder="$t('Set product percentage')" :rules="RulesInteger(3,true)" counter="3" />
+                <v-text-field density="compact" :readonly="mode=='D'" v-model.number="newproduct.percentage" :label="$t('Set product percentage')" :placeholder="$t('Set product percentage')" :rules="RulesInteger(3,true)" counter="3" />
                 <v-text-field density="compact" :readonly="mode=='D'" v-model="newproduct.pci"  :label="$t('Set product pci')" :placeholder="$t('Set product pci')" :rules="RulesString(true)" counter="200" />
 
                 <v-autocomplete :items="getArrayFromMap(store().leverages)" :readonly="mode=='D'" v-model="newproduct.leverages" :label="$t('Select a product leverage')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
@@ -20,7 +20,7 @@
 
                 <v-textarea :readonly="mode=='D'" density="compact" v-model="newproduct.comment" :label="$t('Set product comment')" :placeholder="$t('Set product comment')" :rules="RulesString(200,false)" counter="200"></v-textarea>
                 <v-checkbox v-model="newproduct.obsolete" :readonly="mode=='D'" :label="$t('Is obsolete?')" ></v-checkbox>
-                <v-text-field density="compact" :readonly="mode=='D'" v-model="newproduct.decimals"  :label="$t('Set product decimals')" :placeholder="$t('Set product decimals')" :rules="RulesInteger(1,true)" counter="1" />
+                <v-text-field density="compact" :readonly="mode=='D'" v-model.number="newproduct.decimals"  :label="$t('Set product decimals')" :placeholder="$t('Set product decimals')" :rules="RulesInteger(1,true)" counter="1" />
                 <v-text-field density="compact" :readonly="mode=='D'" v-model="newproduct.ticker_yahoo" :label="$t('Set Yahoo ticker')" :placeholder="$t('Set Yahoo ticker')" :rules="RulesString(200,false)" counter="200"/>
                 <v-text-field density="compact" :readonly="mode=='D'" v-model="newproduct.ticker_morningstar" :label="$t('Set Morningstar ticker')" :placeholder="$t('Set Morningstar ticker')" :rules="RulesString(200,false)" counter="200"/>
                 <v-text-field density="compact" :readonly="mode=='D'" v-model="newproduct.ticker_google" :label="$t('Set Google ticker')" :placeholder="$t('Set Google ticker')" :rules="RulesString(200,false)" counter="200"/>
