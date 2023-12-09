@@ -1,38 +1,43 @@
 {
-  "name": "vuetify-project",
+  "name": "Money Money",
   "version": "1.2.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "translate": "./node_modules/.bin/vue-i18n-extract"
-
+    "translate": "./node_modules/.bin/vue-i18n-extract",
+    "test": "vitest",
+    "coverage": "vitest --ui --coverage"
   },
   "dependencies": {
     "@mdi/font": "^7.3.67",
-    "@vuepic/vue-datepicker": "^7.3.0",
+    "@vuepic/vue-datepicker": "^7.4.0",
     "axios": "^1.6.2",
     "currency-list": "^1.0.8",
     "echarts-stat": "^1.2.0",
-    "flag-icons": "^7.0.2",
+    "flag-icons": "^7.0.3",
     "moment-timezone": "^0.5.43",
-    "npm-check-updates": "^16.14.11",
     "pinia": "^2.1.7",
     "roboto-fontface": "*",
-    "vue": "^3.3.10",
+    "vue": "^3.3.11",
     "vue-echarts": "^6.6.2",
     "vue-i18n": "^9.8.0",
     "vue-i18n-extract": "^2.0.7",
     "vue-router": "^4.2.5",
-    "vuetify": "^3.4.4",
+    "vuetify": "^3.4.6",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.5.1",
+    "@vitejs/plugin-vue": "^4.5.2",
+    "@vitest/coverage-v8": "^1.0.2",
+    "@vitest/ui": "^1.0.2",
+    "@vue/test-utils": "^2.4.3",
     "eslint": "^8.55.0",
     "eslint-plugin-vue": "^9.19.2",
-    "vite": "^4.5.0",
+    "npm-check-updates": "^16.14.11",
+    "vite": "^4.5.1",
     "vite-plugin-eslint": "^1.8.1",
-    "vite-plugin-vuetify": "^1.0.2"
+    "vite-plugin-vuetify": "^1.0.2",
+    "vitest": "^1.0.2"
   }
 }

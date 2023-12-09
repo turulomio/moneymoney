@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 // Plugins
 import vue from '@vitejs/plugin-vue'
 import vuetify from 'vite-plugin-vuetify'
@@ -8,13 +10,9 @@ import { fileURLToPath, URL } from 'node:url'
 import eslintPlugin from 'vite-plugin-eslint';
 
 
-
-
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
-    // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
     vuetify({
       autoImport: true,
     }),
@@ -43,5 +41,26 @@ export default defineConfig({
   },
   server: {
     port: 8006,
+  },  
+  test: {
+    alias: {
+      '@/': new URL('./src/', import.meta.url).pathname, 
+    },
+    globals:true,
+    coverage: {
+      provider: 'v8', // or 'v8'
+      reporter: ['text'],
+      exclude: [
+        '**/*.spec.js',
+      ],
+    },
+    // css:{
+    //   includes:/.+/
+    // },
+    // deps:{
+    //   web:{
+    //     transformCss: true,
+    //   }
+    // },
   },
 })
