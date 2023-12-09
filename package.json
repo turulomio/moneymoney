@@ -7,7 +7,7 @@
     "preview": "vite preview",
     "translate": "./node_modules/.bin/vue-i18n-extract",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest --ui --coverage"
   },
   "dependencies": {
     "@mdi/font": "^7.3.67",
@@ -30,6 +30,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",
     "@vitest/coverage-v8": "^1.0.2",
+    "@vitest/ui": "^1.0.2",
     "eslint": "^8.55.0",
     "eslint-plugin-vue": "^9.19.2",
     "npm-check-updates": "^16.14.11",
