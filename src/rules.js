@@ -204,6 +204,7 @@ export function RulesDatetimeAwareIsoString(required){
 
 
 export function RulesDatetime(required){
+    console.log("Deprecated, will remove in 2024-03-01: RulesDatetime should change to RulesDatetimeAwareIsoString")
     var r= [
         v => (!!v) || translate('You must select date and time'),
     ]
@@ -213,6 +214,7 @@ export function RulesDatetime(required){
     return r
 }
 export function RulesDate(required){
+    console.log("Deprecated, will remove in 2024-03-01: RulesDate should change to RulesDateIsoString")
     var r= [
             v => (!!v) || translate("You must select a date"),
         ]
@@ -222,18 +224,27 @@ export function RulesDate(required){
     return r
 }
 
+export function isStringWithMaxDigits(s,mindigits,maxdigits){
+    if (typeof s!="string") return false
+    if (s.length<mindigits || s.length>maxdigits) return false
+    return true
+}
+
 
 // Si required=true no puede ser ni null ni ""
 export function RulesString(maxdigits,required){
+    var error_required=translate("Field must be a string with at most [0] characters").format(maxdigits)
+    var error_not_required=translate("Field must be empty or a string with at most [0] characters").format(maxdigits)
     var r
-    if (required==false){
+
+    translate("String must be empty or at most [0] characters").format(maxdigits)
+    if (required==true){
         r= [
-            v => (v==null || v=="" || (v!=null && v.length>0 && v.length<= maxdigits)) ||  translate("String must be empty or at most [0] characters").format(maxdigits)
+            v => (!isNullOrEmpty(v) && isStringWithMaxDigits(v,1,maxdigits))|| error_required,
         ]
-    } else { // required==true
+    } else {
         r= [
-            v => (v!=null && v!="") || translate('String is required'),
-            v => (v!=null && v.length<= maxdigits) || translate("String must be at most [0] characters").format(maxdigits)
+            v => (isNullOrEmpty(v) || isStringWithMaxDigits(v,0,maxdigits))|| error_not_required,
         ]
     }
     return r
@@ -241,18 +252,18 @@ export function RulesString(maxdigits,required){
 
 // Si required=true no puede ser ni null ni ""
 export function RulesPassword(maxdigits,required){
+    var error_required=translate("Field must be a string between 8 and [0] characters").format(maxdigits)
+    var error_not_required=translate("Field must be empty or a string between 8 and [0] characters").format(maxdigits)
     var r
-    if (required==false){
+    if (required==true){
         r= [
-            v => (v==null || v=="" || (v!=null && v.length>=8 && v.length<= maxdigits)) || translate("String must have between 8 and [0] characters").format(maxdigits)
+            v => (!isNullOrEmpty(v) && isStringWithMaxDigits(v,8,maxdigits))|| error_required,
         ]
-    } else { // required==true
+    } else {
         r= [
-            v => (v!=null && v!="") || translate('String is required'),
-            v => (v!=null && v.length>=8 && v.length<= maxdigits) || translate("String must have between 8 and [0] characters").format(maxdigits)
+            v => (isNullOrEmpty(v) || isStringWithMaxDigits(v,8,maxdigits))|| error_not_required,
         ]
     }
-
     return r
 }
 

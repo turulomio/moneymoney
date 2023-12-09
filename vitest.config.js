@@ -7,7 +7,7 @@ export default defineConfig({
       '@/': new URL('./src/', import.meta.url).pathname, 
     },
     coverage: {
-      provider: 'istanbul', // or 'v8'
+      provider: 'v8', // or 'v8'
       reporter: ['text', 'json', 'html'],
       exclude: [
         'src/rules.spec.js',
