@@ -19,17 +19,24 @@ String.prototype.format = function() {
     return formatted;
 };
 
-
+// Rounds num or return null if can't do it
 export function my_round(num, decimals = 2) {
+    if (typeof num != "number" || isNaN(num)) return null
     return Math.round(num*Math.pow(10, decimals))/Math.pow(10, decimals)
 }
 
 
 // Value es un utc iso string with T and Z
 export function localtime(value){
+    if (typeof value!='string') return null
+    if ( moment(value,moment.ISO_8601).isValid()==false) return null
+    if (value.split("-").length!=3) return null
+    if (value.split(":").length!=3) return null
+    if (value.includes("T")==false) return null
+    if (value.endsWith("Z")==false) return null
     if (value){
         var dateFormat = 'YYYY-MM-DD HH:mm:ss';
-        var testDateUtc = moment.utc(value);
+        var testDateUtc = moment(value,moment.ISO_8601);
         var localDate = testDateUtc.tz(Intl.DateTimeFormat().resolvedOptions().timeZone)
         return (localDate.format(dateFormat)); // 2015-30-01 02:00:00
     }
