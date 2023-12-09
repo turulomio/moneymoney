@@ -7,7 +7,7 @@
             <AutocompleteProducts :readonly="mode=='D'" v-model="new_investment.products" :rules="RulesSelection(true)"  />
             <v-checkbox :readonly="mode=='D'" v-model="new_investment.active" :label="$t('Is active?')" ></v-checkbox>
             <v-checkbox :readonly="mode=='D'" v-model="new_investment.daily_adjustment" :label="$t('Has daily adjustment?')" ></v-checkbox>
-            <v-text-field :readonly="mode=='D'" v-model="new_investment.decimals"  :label="$t('Set shares decimals')" :placeholder="$t('Set shares decimals')" :rules="RulesInteger(1,true)" counter="1" />
+            <v-text-field :readonly="mode=='D'" v-model.number="new_investment.decimals" :label="$t('Set shares decimals')" :placeholder="$t('Set shares decimals')" :rules="RulesInteger(1,true)" counter="1" />
         </v-form>
         <v-card-actions>
             <v-spacer></v-spacer>

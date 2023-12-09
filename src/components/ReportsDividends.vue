@@ -4,7 +4,7 @@
         <v-container  style="width:40%" elevation="1">
             <v-card>
                 <v-col  justify="space-around">
-                    <v-text-field v-model="alertdays"  :label="$t('Max days to update dividends alert')" :placeholder="$t('Enter an integer number')"></v-text-field>
+                    <v-text-field v-model.number="alertdays"  :label="$t('Max days to update dividends alert')" :placeholder="$t('Enter an integer number')"></v-text-field>
                 </v-col>
             </v-card>
         </v-container>
