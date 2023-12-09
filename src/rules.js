@@ -148,23 +148,61 @@ export function RulesFloatLEZ(maxdigits, required, maxdecimals){
     return r
 }
 
-// 2023-01-01
+// Returns if string has this format 'YYYY-mm-DD'
+export function isDateIsoString(s){
+    if (typeof s!="string") return false
+    if (s.split("-").length!=3) return false
+    if ( moment(s, moment.ISO_8601).isValid()==false) return false 
+    return true
+
+}
+
 export function RulesDateIsoString(required){
+    var error=translate("Field must be a string representig a date in iso format")
     var r
     if (required==true){
         r= [
-            v => (!isNullOrEmpty(v) && typeof v=="string" && v.split("-").length==3)|| translate("Field must be a string representig a date in iso format+"),
-            v => (!isNullOrEmpty(v) && moment(v, moment.ISO_8601).isValid()) || translate('You must select date and time'),
+            v => (!isNullOrEmpty(v) && isDateIsoString(v))|| error,
         ]
     } else {
         r= [
-            v => (isNullOrEmpty(v) || ( typeof v=="string" && v.split("-").length==3))|| translate("Field must be a string representig a date in iso format+"),
-            v => (isNullOrEmpty(v) || moment(v, moment.ISO_8601).isValid()) || translate('You must select date and time'),
+            v => (isNullOrEmpty(v) || isDateIsoString(v))|| error,
         ]
     }
 
     return r
 }
+
+// Returns if string has this format '2016-10-10T15:35:52.764Z'
+export function isDatetimeAwareIsoString(s){
+    if (typeof s!="string") return false
+    if (s.split("-").length!=3) return false
+    if (s.split(":").length!=3) return false
+    if (s.includes("T")==false) return false
+    if (s.endsWith("Z")==false) return false
+    if ( moment(s, moment.ISO_8601).isValid()==false) return false 
+    return true
+
+}
+
+export function RulesDatetimeAwareIsoString(required){
+    var error=translate("Field must be a string representig a date time with timezone in iso format")
+    var r
+    if (required==true){
+        r= [
+            v => (!isNullOrEmpty(v) && isDatetimeAwareIsoString(v))|| error,
+        ]
+    } else {
+        r= [
+            v => (isNullOrEmpty(v) || isDatetimeAwareIsoString(v))|| error,
+        ]
+    }
+
+    return r
+}
+
+
+
 export function RulesDatetime(required){
     var r= [
         v => (!!v) || translate('You must select date and time'),

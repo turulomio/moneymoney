@@ -30,6 +30,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",
     "@vitest/coverage-istanbul": "^1.0.2",
+    "@vitest/coverage-v8": "^1.0.2",
     "eslint": "^8.55.0",
     "eslint-plugin-vue": "^9.19.2",
     "npm-check-updates": "^16.14.11",

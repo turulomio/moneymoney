@@ -11,6 +11,7 @@ import {
     RulesFloatGEZ,
     RulesFloatLEZ,
     RulesDateIsoString,
+    RulesDatetimeAwareIsoString,
 } from "@/rules"
 
 
@@ -214,4 +215,28 @@ test('RulesDateIsoString',() =>{
     expect (validate_rules(null,  RulesDateIsoString(false),   false)).toBe(true)
     expect (validate_rules(0,  RulesDateIsoString(false),   false)).toBe(false)
     expect (validate_rules(new Date(),  RulesDateIsoString(false),   false)).toBe(false)
+})
+
+test('RulesDatetimeAwareIsoString',() =>{
+    expect (validate_rules("2016-10-10T15:35:52.764Z",  RulesDatetimeAwareIsoString(true),   true)).toBe(true)
+    expect (validate_rules("2023",  RulesDatetimeAwareIsoString(true),   false)).toBe(false)
+    expect (validate_rules("2023-12",  RulesDatetimeAwareIsoString(true),   false)).toBe(false)
+    expect (validate_rules("2016-10-32T15:35:52.764Z",  RulesDatetimeAwareIsoString(true),   false)).toBe(false)
+    expect (validate_rules(2023,  RulesDatetimeAwareIsoString(true),   false)).toBe(false)
+    expect (validate_rules(2023.12,  RulesDatetimeAwareIsoString(true),   false)).toBe(false)
+    expect (validate_rules("",  RulesDatetimeAwareIsoString(true),   false)).toBe(false)
+    expect (validate_rules(null,  RulesDatetimeAwareIsoString(true),   false)).toBe(false)
+    expect (validate_rules(0,  RulesDatetimeAwareIsoString(true),   false)).toBe(false)
+    expect (validate_rules(new Date(),  RulesDatetimeAwareIsoString(true),   false)).toBe(false)
+
+    expect (validate_rules("2016-10-10T15:35:52.764Z",  RulesDatetimeAwareIsoString(false),   false)).toBe(true)
+    expect (validate_rules("2023",  RulesDatetimeAwareIsoString(false),   false)).toBe(false)
+    expect (validate_rules("2023-12",  RulesDatetimeAwareIsoString(false),   false)).toBe(false)
+    expect (validate_rules("2016-10-32T15:35:52.764Z",  RulesDatetimeAwareIsoString(false),   false)).toBe(false)
+    expect (validate_rules(2023,  RulesDatetimeAwareIsoString(false),   false)).toBe(false)
+    expect (validate_rules(2023.12,  RulesDatetimeAwareIsoString(false),   false)).toBe(false)
+    expect (validate_rules("",  RulesDatetimeAwareIsoString(false),   false)).toBe(true)
+    expect (validate_rules(null,  RulesDatetimeAwareIsoString(false),   false)).toBe(true)
+    expect (validate_rules(0,  RulesDatetimeAwareIsoString(false),   false)).toBe(false)
+    expect (validate_rules(new Date(),  RulesDatetimeAwareIsoString(false),   false)).toBe(false)
 })
