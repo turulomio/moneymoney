@@ -30,6 +30,7 @@
     import axios from 'axios'
     import ChartEvolutionAssets from './ChartEvolutionAssets.vue'
     import ChartPie from './ChartPie.vue'
+    import { my_round } from 'vuetify_rules'
     export default {
         components:{
             ChartPie,
@@ -128,6 +129,7 @@
             },
         },
         methods:{
+            my_round,
             launch_report(){
                 this.loading=true
 

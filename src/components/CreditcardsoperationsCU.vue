@@ -21,6 +21,7 @@
 <script>
 import axios from 'axios'
     import MyDateTimePicker from './MyDateTimePicker.vue'
+    import { RulesSelection, RulesFloat,RulesString } from 'vuetify_rules'
     export default {
         components:{
             MyDateTimePicker,
@@ -45,6 +46,9 @@ import axios from 'axios'
             }
         },
         methods: {
+            RulesSelection,
+            RulesFloat,
+            RulesString,
             button(){
                 if(this.editing==true){
                     return this.$t("Update")

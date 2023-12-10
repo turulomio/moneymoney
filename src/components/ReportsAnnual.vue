@@ -212,6 +212,7 @@
 <script>     
 
     import axios from 'axios'
+    import { localtime, RulesFloat } from 'vuetify_rules'
     import moment from 'moment'
     import ReportsAnnualIncomeDetail from './ReportsAnnualIncomeDetail.vue'
     export default {
@@ -306,6 +307,8 @@
             }
         },
         methods:{
+            localtime,
+            RulesFloat,
             years(){
                 var start=1990
                 var end=new Date().getFullYear()
@@ -435,7 +438,7 @@
                 ]).then(([resRA, resRAI, resRAG]) => {
                     this.last_year_balance=resRA.data.last_year_balance
                     this.last_year_balance_string=this.$t("Last year balance ([0]) is [1]").format(
-                        this.localtime(resRA.data.dtaware_last_year),
+                        localtime(resRA.data.dtaware_last_year),
                         this.localcurrency_html(resRA.data.last_year_balance)
                     )
                     this.total_annual=resRA.data.data

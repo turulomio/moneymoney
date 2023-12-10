@@ -49,6 +49,7 @@
 <script>     
     import CreditcardsoperationsCU from './CreditcardsoperationsCU.vue'
     import {empty_cco} from '../empty_objects.js'
+    import { localtime } from 'vuetify_rules'
     export default {
         components:{
             CreditcardsoperationsCU,
@@ -121,6 +122,7 @@
             }
         },
         methods: {
+            localtime,
             empty_cco,
             editCCO(item){
                 this.cco=item

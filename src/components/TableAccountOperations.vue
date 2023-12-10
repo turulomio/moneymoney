@@ -83,6 +83,7 @@
     import DividendsCU from './DividendsCU.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import ReportsConceptsHistorical from './ReportsConceptsHistorical.vue'
+    import { localtime } from 'vuetify_rules'
     export default {
         name: "TableAccountOperations",
         components:{
@@ -179,6 +180,7 @@
         }
     },
     methods: {
+        localtime,
         empty_account_transfer,
         empty_account_operation,
         copyAO (item) {

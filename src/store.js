@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import { myheaders, capitalizeFirstLetter, sortObjectsArray} from './my_commons.js'
+import { myheaders, sortObjectsArray} from './functions.js'
 import CurrencyList from 'currency-list'
+import { capitalizeFirstLetter } from 'vuetify_rules'
 
 import countries from 'flag-icons/country.json'
 

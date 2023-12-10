@@ -139,6 +139,7 @@
 <script>
     import axios from 'axios'
     import {empty_investment_operation,empty_dividend,empty_investments_chart,empty_investments_chart_limit_line,empty_ios} from '../empty_objects.js'
+    import { parseNumber } from 'vuetify_rules'
     import ChartInvestments from './ChartInvestments.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import DividendsCU from './DividendsCU.vue'
@@ -475,6 +476,7 @@
             },
         },
         methods: {
+            parseNumber,
             empty_investments_chart,
             empty_investments_chart_limit_line,
             empty_dividend,

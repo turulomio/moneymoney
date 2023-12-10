@@ -58,6 +58,7 @@
 <script>     
     import axios from 'axios'
     import {empty_product} from '../empty_objects.js'
+    import { localtime, RulesSelection } from 'vuetify_rules'
     import MyMenuInline from './MyMenuInline.vue'
     import ProductsView from './ProductsView.vue'
     import ProductsCU from './ProductsCU.vue'
@@ -125,6 +126,8 @@
             },
         },
         methods: {
+            RulesSelection,
+            localtime,
             menuinline_items()  {
                 var r=[
                     {

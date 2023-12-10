@@ -71,6 +71,7 @@
     import InvestmentsoperationsReinvest from './InvestmentsoperationsReinvest.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import {empty_order,empty_ios_simulation_operation,empty_ios} from '../empty_objects.js'
+    import { localtime } from 'vuetify_rules'
     export default {
         components:{
             MyMenuInline,
@@ -133,6 +134,7 @@
             },
         },
         methods: {
+            localtime,
             empty_order,
             empty_ios,
             empty_ios_simulation_operation,

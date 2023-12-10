@@ -75,6 +75,7 @@
     import axios from 'axios'
     import MyMenuInline from './MyMenuInline.vue'
     import {empty_order, empty_ios,empty_ios_simulation_operation,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
+    import { my_round, RulesSelection,RulesFloat,RulesFloatGEZ,parseNumber } from 'vuetify_rules'
     import ChartInvestments from './ChartInvestments.vue'
     import OrdersCU from './OrdersCU.vue'
     import AutocompleteProducts from './AutocompleteProducts.vue'
@@ -257,11 +258,16 @@
             },
         },
         methods: {
+            RulesFloat,
+            RulesFloatGEZ,
+            RulesSelection,
+            parseNumber,
             empty_order,
             empty_ios,
             empty_ios_simulation_operation,
             empty_investments_chart,
             empty_investments_chart_limit_line,
+            my_round,
             set_title(){
                 if (this.re_or_di==1){
                     this.title= this.$t("Reinvest dialog")

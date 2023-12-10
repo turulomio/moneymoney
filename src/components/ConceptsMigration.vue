@@ -14,7 +14,8 @@
     </div>
 </template>
 <script>
-import axios from 'axios'
+    import axios from 'axios'
+    import { RulesSelection } from 'vuetify_rules'
     export default {
         components: {
         },
@@ -32,6 +33,7 @@ import axios from 'axios'
             }
         },
         methods: {
+            RulesSelection,
             migrate(){
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()

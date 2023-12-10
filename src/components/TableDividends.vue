@@ -52,6 +52,7 @@
 <script>
     import DividendsCU from './DividendsCU.vue'
     import { empty_dividend } from '../empty_objects.js'
+    import { localtime } from 'vuetify_rules'
     export default {
         components:{
             DividendsCU,
@@ -93,6 +94,7 @@
             }
         },
         methods: {
+            localtime,
             copyDividend(item){
                 this.dividend=this.empty_dividend()
                 this.dividend.gross=item.gross

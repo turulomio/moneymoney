@@ -22,6 +22,7 @@
 
 <script>
 import axios from 'axios'
+import {RulesString} from "vuetify_rules"
 export default {
     data () {
         return {
@@ -34,6 +35,7 @@ export default {
         }
     },
     methods: {
+        RulesString,
         login(){
             var start=new Date()
                 if (this.form_valid!=true) {

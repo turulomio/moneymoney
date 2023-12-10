@@ -84,6 +84,7 @@
 
 <script>    
     import {empty_products_ranges, empty_order} from '../empty_objects.js'
+    import { RulesSelection, RulesInteger } from 'vuetify_rules'
     import axios from 'axios'
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import ChartProductsRanges from './ChartProductsRanges.vue'
@@ -136,6 +137,8 @@
             }   
         },
         methods:{
+            RulesSelection,
+            RulesInteger,
             accept(){
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()

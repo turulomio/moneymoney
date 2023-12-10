@@ -18,6 +18,7 @@
 
 <script>
     import axios from 'axios'
+    import { RulesFloat,RulesInteger } from 'vuetify_rules'
     export default {
         props: {
             estimation: {
@@ -35,6 +36,8 @@
             }
         },
         methods:{
+            RulesFloat,
+            RulesInteger,
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating a DPS estimation")

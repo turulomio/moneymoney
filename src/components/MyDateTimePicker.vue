@@ -25,6 +25,7 @@
     </div>
 </template>
 <script>
+import { localtime } from 'vuetify_rules'
 export default {    
     name: "MyDateTimePicker",
     props: {
@@ -64,9 +65,10 @@ export default {
         }
     },
     methods: {
+        localtime,
         format(){
             if (this.dt) {
-                return this.localtime(this.dt)
+                return localtime(this.dt)
             } else {
                 return ""
             }

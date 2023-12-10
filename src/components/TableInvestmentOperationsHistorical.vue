@@ -89,6 +89,7 @@
         </v-data-table>  
 </template>
 <script>    
+import { localtime } from 'vuetify_rules'
     export default {
         name: "TableInvestmentOperationsHistorical",
         props: {
@@ -133,6 +134,7 @@
         },
         methods: {
             // Currencies are part of the item
+            localtime,
             currency(item){
                 if (this.output=="account"){
                     return item.currency_account

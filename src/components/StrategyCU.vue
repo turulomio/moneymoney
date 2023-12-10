@@ -34,6 +34,7 @@
     import axios from 'axios'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import AutocompleteProducts from './AutocompleteProducts.vue'
+    import { RulesSelection, RulesInteger,RulesString } from 'vuetify_rules'
     export default {
         components: {
             MyDateTimePicker,
@@ -72,6 +73,9 @@
             },
         },
         methods: {
+            RulesSelection,
+            RulesInteger,
+            RulesString,
             title(){
                 if (this.deleting) {
                     return this.$t("Deleting strategy")

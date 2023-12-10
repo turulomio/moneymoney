@@ -51,6 +51,7 @@
     import TableInvestmentOperations from './TableInvestmentOperations.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
+    import { localtime } from 'vuetify_rules'
     export default {
         components:{
             DisplayValues,
@@ -136,6 +137,7 @@
             }
         },
         methods: {
+            localtime,
             empty_investments_chart,
             empty_investments_chart_limit_line,
             empty_strategy_simulation,

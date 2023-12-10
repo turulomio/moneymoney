@@ -87,6 +87,7 @@
     import StrategyCU from './StrategyCU.vue'
     import ProductsRanges from './ProductsRanges.vue'
     import {empty_products_ranges, empty_strategy} from '../empty_objects.js'
+    import { localtime } from 'vuetify_rules'
     export default {
         components:{
             MyMenuInline,
@@ -142,6 +143,7 @@
             }
         },
         methods: {
+            localtime,
             editItem (item) {
                 this.strategy=item
                 this.key=this.key+1

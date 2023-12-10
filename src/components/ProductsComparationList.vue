@@ -45,6 +45,7 @@
 <script>
     import axios from 'axios'
     import {empty_products_comparation} from '../empty_objects.js'
+    import { RulesSelection } from 'vuetify_rules'
     import MyMenuInline from './MyMenuInline.vue'
     import ProductsComparation from './ProductsComparation.vue'
     import ProductsComparationCU from './ProductsComparationCU.vue'
@@ -95,6 +96,7 @@
             }
         },
         methods:{
+            RulesSelection,
             deletePair(item){
                 this.pc=item
                 this.pc_mode="D"

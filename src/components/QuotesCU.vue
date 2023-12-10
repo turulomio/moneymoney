@@ -19,6 +19,7 @@
 <script>
     import axios from 'axios'
     import {empty_quote} from '../empty_objects.js'
+    import { RulesSelection,RulesFloatGEZ } from 'vuetify_rules'
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import moment from 'moment-timezone';
     import MyDateTimePicker from './MyDateTimePicker.vue'
@@ -89,6 +90,8 @@
             }
         },
         methods: {
+            RulesSelection,
+            RulesFloatGEZ,
             empty_quote,
             title(){
                 if (this.mode=="C") return this.$t("Add a quote")

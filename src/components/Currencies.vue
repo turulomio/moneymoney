@@ -31,6 +31,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { localtime, my_round } from 'vuetify_rules'
     import QuotesCU from './QuotesCU.vue'
     import {empty_quote} from '../empty_objects.js'
     export default {
@@ -56,6 +57,8 @@
             }
         },
         methods: {
+            localtime,
+            my_round,
             empty_quote,
             editItem (item) {
                 this.quote= {

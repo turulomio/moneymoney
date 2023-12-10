@@ -74,6 +74,7 @@
     import AccountsView from './AccountsView.vue'
     import AccountsTransfer from './AccountsTransfer.vue'
     import {empty_account,empty_account_transfer} from '../empty_objects.js'
+    import { localtime } from 'vuetify_rules'
     export default {
         name:"AccountsList",
         components:{
@@ -161,6 +162,7 @@
         methods: {
             empty_account,
             empty_account_transfer,
+            localtime,
             editItem (item) {
                 this.account=item
                 this.account_mode="U"

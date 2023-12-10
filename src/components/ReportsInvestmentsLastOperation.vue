@@ -83,6 +83,7 @@
 <script>
     import imgReinvest from '@/assets/reinvest.png'
     import axios from 'axios'
+    import { localtime, my_round } from 'vuetify_rules'
     import {empty_order} from '../empty_objects.js'
     import OrdersCU from './OrdersCU.vue'
     import InvestmentsView from './InvestmentsView.vue'
@@ -144,6 +145,8 @@
             }
         },
         methods:{
+            localtime,
+            my_round,
             empty_order,
             on_OrdersCU_cruded(){
                 this.dialog_cu=false

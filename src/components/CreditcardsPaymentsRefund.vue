@@ -12,6 +12,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { localtime, RulesSelection } from 'vuetify_rules'
     import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
     export default {
         components:{
@@ -47,6 +48,8 @@
             },
         },
         methods: {
+            localtime,
+            RulesSelection,
             refundPayment() {
                 axios.post(`${this.store().apiroot}/api/accountsoperations/${this.payment}/ccpaymentrefund/`, {}, this.myheaders())
                 .then(() => {
@@ -66,7 +69,7 @@
                     response.data.forEach(o=> {
                         this.payments.push({
                             id: o.accountsoperations_id,
-                            name:this.$t("[0] were paid [1] ([2] operations)").format(this.localtime(o.datetime), this.currency_string(o.amount, this.account.currency), o.count),
+                            name:this.$t("[0] were paid [1] ([2] operations)").format(localtime(o.datetime), this.currency_string(o.amount, this.account.currency), o.count),
                         })
                     });
                     this.loading=false
