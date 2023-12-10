@@ -28,7 +28,7 @@
                 </template>
                 <template #tbody>
                     <tr class="totalrow pa-6">
-                        <td>{{ $t("Total ([0] registers)").format(data.length) }}</td>
+                        <td>{{ f($t("Total ([0] registers)"), [data.length]) }}</td>
                         <td></td>
                         <td class="text-right" v-html="localcurrency_html(listobjects_sum(data,'balance_accounts'))"></td>
                         <td class="text-right" v-html="localcurrency_html(listobjects_sum(data,'balance_investments'))"></td>

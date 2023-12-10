@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>{{ $t("Account details of '[0]'").format(account.localname) }}
+        <h1>{{ f($t("Account details of '[0]'"), [account.localname]) }}
         <MyMenuInline :items="items"  :context="this"></MyMenuInline>  </h1>
         <DisplayValues :items="displayvalues"></DisplayValues>
 
@@ -82,6 +82,7 @@
     import CreditcardsView from './CreditcardsView.vue'
     import TableAccountOperations from './TableAccountOperations.vue'
     import {empty_account_operation,empty_credit_card,empty_account_transfer} from '../empty_objects.js'
+    import { f} from 'vuetify_rules'
     export default {
         name:"AccountsView",
         components:{
@@ -193,6 +194,7 @@
             },
         },
         methods: {
+            f,
             CCONotDeferred(item){
                 this.ao=this.empty_account_operation()
                 this.ao.accounts=this.account.url

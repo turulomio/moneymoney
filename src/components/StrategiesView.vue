@@ -51,7 +51,7 @@
     import TableInvestmentOperations from './TableInvestmentOperations.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
-    import { localtime } from 'vuetify_rules'
+    import { localtime ,f} from 'vuetify_rules'
     export default {
         components:{
             DisplayValues,
@@ -137,6 +137,7 @@
             }
         },
         methods: {
+            f,
             localtime,
             empty_investments_chart,
             empty_investments_chart_limit_line,
@@ -152,7 +153,7 @@
                 r.push({title:this.$t('Type'), value: this.getMapObjectById("strategiestypes", this.strategy.type).name})
                 r.push({title:this.$t('Investments'), value: this.strategy.investments.length})                
                 if (this.strategy.additional1){//That means it has a product property
-                    this.leverage_message= this.$t("[0] (Real: [1])").format(this.product.leverage_multiplier, this.product.leverage_real_multiplier )
+                    this.leverage_message= f(this.$t("[0] (Real: [1])"), [this.product.leverage_multiplier, this.product.leverage_real_multiplier ])
                     r.push({title:this.$t('Currency'), value: this.product.currency})
                     r.push({title:this.$t('Product'), value: this.product.name})
                     r.push({title:this.$t('Leverage'), value: this.leverage_message})

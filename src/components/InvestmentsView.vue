@@ -139,7 +139,7 @@
 <script>
     import axios from 'axios'
     import {empty_investment_operation,empty_dividend,empty_investments_chart,empty_investments_chart_limit_line,empty_ios} from '../empty_objects.js'
-    import { parseNumber } from 'vuetify_rules'
+    import { parseNumber,f } from 'vuetify_rules'
     import ChartInvestments from './ChartInvestments.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import DividendsCU from './DividendsCU.vue'
@@ -419,18 +419,18 @@
             },
             leverage_message (){
                 if (!this.ios_id) return ""
-                return this.$t("[0] (Real: [1])").format(
+                return f(this.$t("[0] (Real: [1])"), [
                         this.ios_id.data.multiplier,
                         this.ios_id.data.real_leverages
-                )
+                ])
             },
             selling_expiration_message(){
                 if (!this.product || !this.ios_id) return ""
                 var gains_at_selling_point_investment=(this.investment.selling_price-this.ios_id.total_io_current.average_price_investment)*this.ios_id.total_io_current.shares*this.ios_id.data.real_leverages
-                return this.$t("[0], to gain [1]").format(
+                return f(this.$t("[0], to gain [1]"), [
                         this.currency_string(this.investment.selling_price, this.product.currency),
                         this.currency_string(gains_at_selling_point_investment, this.product.currency)
-                )
+                ])
 
             },
             selling_point_message(){
@@ -476,6 +476,7 @@
             },
         },
         methods: {
+            f,
             parseNumber,
             empty_investments_chart,
             empty_investments_chart_limit_line,

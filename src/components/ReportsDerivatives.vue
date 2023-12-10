@@ -30,7 +30,7 @@
                 <template #bottom ></template>   
                         </v-data-table>   
                     </v-card>
-                    <p class="boldcenter my-4" v-html="$t('Total derivatives: [0]').format(localcurrency_html(listobjects_sum(items.derivatives,'total')))"></p>
+                    <p class="boldcenter my-4" v-html="f($t('Total derivatives: [0]'), [localcurrency_html(listobjects_sum(items.derivatives,'total'))])"></p>
                 </v-window-item>                
                 <v-window-item key="coverage">    
                     <MyMonthPicker v-model="ym" />
@@ -58,7 +58,7 @@
                 <template #bottom ></template>   
                         </v-data-table>   
                     </v-card>
-                    <p class="boldcenter my-4" v-html="$t('Total balance: [0]').format(localcurrency_html(listobjects_sum(items.balance,'total')))"></p>
+                    <p class="boldcenter my-4" v-html="f($t('Total balance: [0]'), [localcurrency_html(listobjects_sum(items.balance,'total'))])"></p>
                 </v-window-item>
             </v-window>     
         </div>
@@ -77,6 +77,7 @@
     import MyMonthPicker from './MyMonthPicker.vue'
     import TableFastOperationsCoverage from './TableFastOperationsCoverage.vue'
     import {empty_fast_operations_coverage} from '../empty_objects.js'
+    import {f} from 'vuetify_rules'
     export default {
         components:{
             MyMonthPicker,
@@ -139,6 +140,7 @@
         },
         methods:{
             empty_fast_operations_coverage,
+            f,
             refreshTables(){
                 this.loading=true
 

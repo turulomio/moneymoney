@@ -8,7 +8,7 @@
             <v-text-field density="compact" class=" mr-6" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" :placeholder="$t('Add a string to filter table')" />
 
             <v-btn color="primary" class="mr-4" @click="products_autoupdate()" :loading="products_updating">{{ $t("Products autoupdate")}}
-                <v-badge inline v-show="update_errors>0" color="error" class="ml-2" :content="$t('[0] errors').format(update_errors)"/>
+                <v-badge inline v-show="update_errors>0" color="error" class="ml-2" :content="f($t('[0] errors'), [update_errors])"/>
             </v-btn>
         </v-row>
         <v-data-table density="compact" :headers="investments_headers" :items="investments_items" class="elevation-1" :sort-by="table_sort_by()" fixed-header  :items-per-page="items_per_page" fixed-footer @click:row="viewItem" :loading="loading" :search="search">
@@ -59,7 +59,7 @@
          <template #bottom ></template>
             <template #tbody>
                 <tr class="totalrow" v-if="investments_items.length>0" >
-                    <td>{{ $t("Total ([0] registers)").format(investments_items.length)}}</td>
+                    <td>{{ f($t("Total ([0] registers)"), [investments_items.length])}}</td>
                     <td></td>
                     <td></td>
                     <td class="text-right" v-html="localcurrency_html(listobjects_sum(investments_items,'daily_difference'))"></td>
@@ -110,7 +110,7 @@
     import InvestmentsView from './InvestmentsView.vue'
     import QuotesCU from './QuotesCU.vue'
     import {empty_quote, empty_investment} from '../empty_objects.js'
-    import { localtime } from 'vuetify_rules'
+    import { localtime ,f} from 'vuetify_rules'
     export default {
         components:{
             MyMenuInline,
@@ -185,6 +185,7 @@
         },
         methods: { 
             localtime,
+            f,
             addQuote(item){
                 this.quote=this.empty_quote()
                 this.quote.products=item.products
@@ -232,11 +233,11 @@
                 this.update_table()
             },
             tooltip_selling_percentage(item){
-                return this.$t("Selling price: [0]. Selling point gains [1]. Order valid until [2].").format(
+                return f(this.$t("Selling price: [0]. Selling point gains [1]. Order valid until [2]."), [
                     this.currency_string(item.selling_price,item.currency),
                     this.currency_string(item.gains_at_selling_point_investment,item.currency),
                     item.selling_expiration
-                )
+                ])
             },
             setCheckboxLabel(){
                 if (this.showActive== true){
@@ -248,11 +249,11 @@
             update_foot(){
                 var positives=this.listobjects_sum(this.investments_items.filter((o) => o.gains_user >=0), "gains_user")
                 var negatives=this.listobjects_sum(this.investments_items.filter((o) => o.gains_user <0), "gains_user")
-                this.foot= "<p>" + this.$t("Positive gains - Negative gains = [0] [1] = [2]").format(
+                this.foot= "<p>" + f(this.$t("Positive gains - Negative gains = [0] [1] = [2]"), [
                     this.localcurrency_html(positives),
                     this.localcurrency_html(negatives),
                     this.localcurrency_html(positives+negatives)
-                ) + "</p>"
+                ]) + "</p>"
             },
             update_table(){
                 this.loading=true

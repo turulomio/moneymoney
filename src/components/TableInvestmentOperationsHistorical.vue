@@ -72,7 +72,7 @@
             </template>           
             <template #tbody>
                 <tr class="totalrow" v-if="items.length>0 && showtotal">
-                    <td>{{ $t("Total ([0] registers)").format(items.length)}}</td>
+                    <td>{{ f($t("Total ([0] registers)"), [items.length])}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -89,7 +89,7 @@
         </v-data-table>  
 </template>
 <script>    
-import { localtime } from 'vuetify_rules'
+    import { localtime, f } from 'vuetify_rules'
     export default {
         name: "TableInvestmentOperationsHistorical",
         props: {
@@ -134,6 +134,7 @@ import { localtime } from 'vuetify_rules'
         },
         methods: {
             // Currencies are part of the item
+            f,
             localtime,
             currency(item){
                 if (this.output=="account"){
