@@ -1,4 +1,5 @@
 import { useStore } from './store.js'
+import {my_round} from 'vuetify_rules'
 
 
 export function store(){
@@ -171,7 +172,7 @@ export function arrayobjects_to_array(l, key){
 
 export function percentage_generic_string(num, locale, decimals=2){
     if (num==null) return "- - - %"
-    return `${this.my_round(num*100,decimals).toLocaleString(locale,{ minimumFractionDigits: decimals,  })} %`
+    return `${my_round(num*100,decimals).toLocaleString(locale,{ minimumFractionDigits: decimals,  })} %`
 }
 
 export function percentage_generic_html(num, locale, decimals=2){
@@ -297,7 +298,7 @@ export function currency_generic_string(num, currency, locale, decimals=2){
     if (num ==null){
         return `- - - ${getCurrencyPropertyByCode(currency,"symbol_native")}`
     } else {
-        return `${this.my_round(num,decimals).toLocaleString(locale, { minimumFractionDigits: decimals,  })} ${getCurrencyPropertyByCode(currency,"symbol_native")}`
+        return `${my_round(num,decimals).toLocaleString(locale, { minimumFractionDigits: decimals,  })} ${getCurrencyPropertyByCode(currency,"symbol_native")}`
     }
 }
 export function currency_generic_html(num, currency, locale, decimals=2){

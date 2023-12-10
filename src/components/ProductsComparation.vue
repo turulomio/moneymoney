@@ -110,6 +110,7 @@
     import ProductsView from './ProductsView.vue'
     import QuotesCU from './QuotesCU.vue'
     import DisplayValues from './DisplayValues.vue'
+    import { localtime, my_round } from 'vuetify_rules'
     export default {
         components:{
             ChartPriceRatio,
@@ -238,6 +239,8 @@
         methods:{
             empty_chart_scatter_pair_prices,
             empty_quote,
+            localtime,
+            my_round,
             display_values(){
                 return [
                     {title:this.$t('Better product'), value: this.product_a.name},

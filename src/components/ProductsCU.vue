@@ -37,6 +37,7 @@
 <script>
     import axios from 'axios'
     import AutocompleteStockMarkets from './AutocompleteStockMarkets.vue'
+    import { RulesSelection } from 'vuetify_rules'
     export default {
         components: {
             AutocompleteStockMarkets
@@ -63,6 +64,7 @@
             }
         },
         methods: {
+            RulesSelection,
             title(){
                 if (this.system){
                     if (this.mode=="D") {

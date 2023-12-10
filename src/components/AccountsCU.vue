@@ -19,8 +19,8 @@
     </div>
 </template>
 <script>
-    
-import axios from 'axios'
+    import axios from 'axios'
+    import { RulesSelection } from 'vuetify_rules'
     export default {
         props: {
             // An account object
@@ -40,6 +40,7 @@ import axios from 'axios'
             }
         },
         methods: {
+            RulesSelection,
             title(){
                 if (this.mode=="C") return this.$t("Add an account")
                 if (this.mode=="U") return this.$t("Update an account")

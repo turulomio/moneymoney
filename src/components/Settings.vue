@@ -62,6 +62,7 @@
 
 <script>
     import axios from 'axios'
+    import { RulesSelection } from 'vuetify_rules'
     export default {
         name: 'Settings',
         data () {
@@ -84,6 +85,7 @@
         methods: {
 
 
+            RulesSelection,
             save_settings(){
                 if (this.new_profile.newp!=this.dupnewp){
                     alert(this.$t("Passwords must be equal"))

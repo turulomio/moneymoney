@@ -110,6 +110,7 @@
     import InvestmentsView from './InvestmentsView.vue'
     import QuotesCU from './QuotesCU.vue'
     import {empty_quote, empty_investment} from '../empty_objects.js'
+    import { localtime } from 'vuetify_rules'
     export default {
         components:{
             MyMenuInline,
@@ -183,6 +184,7 @@
             },
         },
         methods: { 
+            localtime,
             addQuote(item){
                 this.quote=this.empty_quote()
                 this.quote.products=item.products

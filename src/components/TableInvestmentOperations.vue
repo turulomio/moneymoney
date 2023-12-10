@@ -61,6 +61,7 @@
 <script>
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import { empty_investment_operation } from '@/empty_objects.js'
+    import { localtime } from 'vuetify_rules'
     export default {
         name:"TableInvestmentOperations",
         components:{
@@ -95,6 +96,7 @@
             }
         },
         methods: {
+            localtime,
             // Currencies are part of the item
             currency(item){
                 if (this.output=="account"){

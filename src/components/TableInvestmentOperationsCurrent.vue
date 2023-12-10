@@ -99,6 +99,7 @@
     </v-data-table>   
 </template>
 <script>    
+import { localtime } from 'vuetify_rules'
     export default {
         props: {
             items: {
@@ -166,6 +167,7 @@
             }
         },
         methods: {
+            localtime,
             // Currencies are part of the item
             currency(item){
                 if (this.output=="account"){

@@ -26,6 +26,7 @@
 </template>
 <script>
     import FastOperationsCoverageCU from './FastOperationsCoverageCU.vue'
+    import { localtime } from 'vuetify_rules'
     export default {
         components:{
             FastOperationsCoverageCU,
@@ -44,6 +45,7 @@
             }
         },
         methods: {
+            localtime,
             currency(value){
                 return this.currency_html(value, this.product.currency)
             },

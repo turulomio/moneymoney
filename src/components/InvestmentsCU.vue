@@ -19,6 +19,7 @@
 <script>
     import axios from 'axios'
     import AutocompleteProducts from './AutocompleteProducts.vue'
+    import { RulesSelection } from 'vuetify_rules'
     export default {
         components:{
             AutocompleteProducts,
@@ -39,6 +40,7 @@
         },
         methods:{
 
+            RulesSelection,
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating investment")

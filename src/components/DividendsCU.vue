@@ -24,6 +24,7 @@
 <script>
     import axios from 'axios'
     import MyDateTimePicker from './MyDateTimePicker.vue'
+    import { RulesSelection } from 'vuetify_rules'
     export default {
         components: {
             MyDateTimePicker,
@@ -43,6 +44,7 @@
             }
         },
         methods: {
+            RulesSelection,
             title(){
                 if (this.mode=="C") return this.$t("Add a dividend")
                 if (this.mode=="U") return this.$t("Update dividend")

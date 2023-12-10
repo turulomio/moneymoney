@@ -25,6 +25,7 @@
 </template>
 <script>    
     import axios from 'axios'
+    import { localtime } from 'vuetify_rules'
     export default {
         components:{
         },
@@ -42,6 +43,7 @@
             }
         },
         methods: {
+            localtime,
             deleteOHCL(item){
                var r = confirm(this.$t("Do you want to delete this OHCL quotes?"))
                if(r == false) {

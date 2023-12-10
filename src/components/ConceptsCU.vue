@@ -16,6 +16,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { RulesSelection } from 'vuetify_rules'
     export default {
         components: {
         },
@@ -37,6 +38,7 @@
             }
         },
         methods: {
+            RulesSelection,
             title(){
                 if (this.deleting==true){
                     return this.$t("Deleting concept")

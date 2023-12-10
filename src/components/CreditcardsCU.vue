@@ -18,7 +18,8 @@
 
 <script>    
     
-import axios from 'axios' 
+    import axios from 'axios' 
+    import { RulesSelection } from 'vuetify_rules'
     export default {
         props:{
             cc:{
@@ -35,6 +36,7 @@ import axios from 'axios'
             }
         },
         methods:{
+            RulesSelection,
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating a credit card")

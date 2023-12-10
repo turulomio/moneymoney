@@ -69,6 +69,7 @@
     import DisplayValues from './DisplayValues.vue'
     import MyDatePicker from './MyDatePicker.vue'
     import {empty_products_ranges,empty_ios} from '../empty_objects.js'
+    import { my_round,RulesSelection } from 'vuetify_rules'
 
     
     export default {
@@ -190,6 +191,8 @@
             }
         },
         methods:{
+            my_round,
+            RulesSelection,
             displayvalues(){
                 return [
                     {title:this.$t('Selected invested amount'), value: this.currency_string(this.selected_invested,this.product.currency)},

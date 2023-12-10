@@ -19,6 +19,7 @@
 <script>
     import axios from 'axios' 
     import MyDateTimePicker from './MyDateTimePicker.vue'
+    import { RulesSelection } from 'vuetify_rules'
     export default {
         components:{
             MyDateTimePicker,
@@ -40,6 +41,7 @@
             }
         },
         methods:{
+            RulesSelection,
             acceptDialogAO(){
                 //Validation
                 if (this.form_valid!=true) {

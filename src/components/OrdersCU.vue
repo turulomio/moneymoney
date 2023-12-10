@@ -36,6 +36,7 @@
     import MyMenuInline from './MyMenuInline.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import {empty_investment_operation} from '../empty_objects.js'
+    import { RulesSelection } from 'vuetify_rules'
     export default {
         components: {
             InvestmentsoperationsCU,
@@ -96,6 +97,7 @@
             },
         },
         methods: {
+            RulesSelection,
             empty_investment_operation,
             title(){
                 if (this.mode=="U"){
