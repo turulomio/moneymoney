@@ -49,6 +49,7 @@
     import moment from 'moment'
     import EstimationsDpsCU from './EstimationsDpsCU.vue'
     import {empty_estimation_dps} from '../empty_objects.js'
+    import {f} from 'vuetify_rules'
     export default {
         components:{
             EstimationsDpsCU,
@@ -78,6 +79,7 @@
             }
         },
         methods:{
+            f,
             showAlarm(item){
                 var today= moment()
                 var estimation= moment(item.date_estimation)
@@ -110,7 +112,7 @@
             },
             total(){
                 var total=this.items.reduce((accum,item) => accum + item.estimated, 0)
-                return this.$t("If I kept the investments for a year I would get [0]").format( this.localcurrency_string(total))
+                return f(this.$t("If I kept the investments for a year I would get [0]"), [ this.localcurrency_string(total)])
             }
             
         },

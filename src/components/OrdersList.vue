@@ -31,7 +31,7 @@
                 </template>          
                 <template #tbody v-if="data.length>0">
                     <tr class="totalrow pa-6">
-                        <td colspan="2">{{ $t("Total ([0] registers)").format(data.length) }}</td>
+                        <td colspan="2">{{ f($t("Total ([0] registers)"), [data.length]) }}</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -46,7 +46,7 @@
         </v-card>
         <div class="d-flex justify-center mb-4">
                 <v-btn color="primary" class="mr-4" @click="products_autoupdate" :loading="products_updating">{{ $t("Products autoupdate")}}
-                    <v-badge inline v-show="update_errors>0" color="error" class="ml-2" :content="$t('[0] errors').format(update_errors)"/>
+                    <v-badge inline v-show="update_errors>0" color="error" class="ml-2" :content="f($t('[0] errors'), [update_errors])"/>
                 </v-btn>
         </div>
         <!-- Order CU dialog -->
@@ -71,7 +71,7 @@
     import InvestmentsoperationsReinvest from './InvestmentsoperationsReinvest.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import {empty_order,empty_ios_simulation_operation,empty_ios} from '../empty_objects.js'
-    import { localtime } from 'vuetify_rules'
+    import { localtime, f } from 'vuetify_rules'
     export default {
         components:{
             MyMenuInline,
@@ -135,6 +135,7 @@
         },
         methods: {
             localtime,
+            f,
             empty_order,
             empty_ios,
             empty_ios_simulation_operation,

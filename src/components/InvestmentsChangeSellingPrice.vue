@@ -69,7 +69,7 @@
     import DisplayValues from './DisplayValues.vue'
     import MyDatePicker from './MyDatePicker.vue'
     import {empty_products_ranges,empty_ios} from '../empty_objects.js'
-    import { my_round,RulesSelection, RulesFloat } from 'vuetify_rules'
+    import { my_round,RulesSelection, RulesFloat,f } from 'vuetify_rules'
 
     
     export default {
@@ -191,6 +191,7 @@
             }
         },
         methods:{
+            f,
             my_round,
             RulesFloat,
             RulesSelection,
@@ -282,10 +283,10 @@
                     this.selected_selling_price=this.strategy_range
                 }
                 var gai=(this.selected_selling_price-this.selected_average_price)*this.selected_shares*this.product.real_leveraged_multiplier
-                this.button_text=this.$t("Set selected investments selling price to [0] to gain [1]").format(
+                this.button_text=f(this.$t("Set selected investments selling price to [0] to gain [1]"), [
                     this.currency_string(this.selected_selling_price, this.product.currency, this.product.decimals),
                     this.currency_string(gai,this.product.currency, 2)
-                )
+                ])
 
             },
             refreshInvestments(select_current){

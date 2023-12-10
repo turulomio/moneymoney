@@ -23,7 +23,7 @@
             </template>
             <template #tbody v-if="showtotal && items.length>0">
                 <tr class="totalrow">
-                    <td>{{ $t("Total ([0] registers)").format(items.length)}}</td>
+                    <td>{{ f($t("Total ([0] registers)"), [items.length])}}</td>
                     <td></td>
                     <td v-if="showaccount"></td>
                     <td v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items,'amount'),total_currency)"></td>
@@ -83,7 +83,7 @@
     import DividendsCU from './DividendsCU.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import ReportsConceptsHistorical from './ReportsConceptsHistorical.vue'
-    import { localtime } from 'vuetify_rules'
+    import { localtime, f } from 'vuetify_rules'
     export default {
         name: "TableAccountOperations",
         components:{
@@ -180,6 +180,7 @@
         }
     },
     methods: {
+        f,
         localtime,
         empty_account_transfer,
         empty_account_operation,

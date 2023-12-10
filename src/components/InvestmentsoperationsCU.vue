@@ -37,7 +37,7 @@
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import CurrencyFactor from './CurrencyFactor.vue'
-    import { RulesSelection,RulesFloat,RulesFloatGEZ,RulesString, parseNumber } from 'vuetify_rules'
+    import { RulesSelection,RulesFloat,RulesFloatGEZ,RulesString, parseNumber,f} from 'vuetify_rules'
     export default {
         name: "InvestmentsoperationsCU",
         components: {
@@ -91,6 +91,7 @@
             RulesFloatGEZ,
             RulesString,
             parseNumber,
+            f,
             empty_investment_operation,
             title(){
                 if (this.mode=="U"){
@@ -149,10 +150,10 @@
                 } else {
                     net=gross-this.new_io.taxes-this.new_io.commission
                 }
-                return this.$t("Operation gross balance: [0]<br>Operation net balance: [1]").format(
+                return f(this.$t("Operation gross balance: [0]<br>Operation net balance: [1]"), [
                      this.currency_html(gross, this.product.currency),
                      this.currency_html(net, this.product.currency)
-                )
+                ])
             },
         },
         created(){

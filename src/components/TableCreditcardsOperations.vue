@@ -24,7 +24,7 @@
             </template>
             <template #tbody v-if="showtotal && items.length>0">
                 <tr class="totalrow">
-                    <td>{{ $t("Total ([0] registers)").format(items.length)}}</td>
+                    <td>{{ f($t("Total ([0] registers)"), [items.length])}}</td>
                     <td v-if="showcc"></td>
                     <td></td>
                     <td></td>
@@ -49,7 +49,7 @@
 <script>     
     import CreditcardsoperationsCU from './CreditcardsoperationsCU.vue'
     import {empty_cco} from '../empty_objects.js'
-    import { localtime } from 'vuetify_rules'
+    import { localtime, f } from 'vuetify_rules'
     export default {
         components:{
             CreditcardsoperationsCU,
@@ -122,6 +122,7 @@
             }
         },
         methods: {
+            f,
             localtime,
             empty_cco,
             editCCO(item){

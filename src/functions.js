@@ -7,20 +7,6 @@ export function store(){
 }
 
 
-// Due to problems with translations I made this function to help i18n
-// Function to use "[0] [1]".format(a, b) style
-String.prototype.format = function() {
-    var formatted = this
-    for (var i = 0; i < arguments.length; i++) {
-        var search=`[${i}]`
-        var replace=`${arguments[i]}`
-        formatted = formatted.replace(search, replace );
-    }
-    return formatted;
-};
-
-
-
 export function myheaders(){
     return {
         headers:{

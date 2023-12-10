@@ -5,7 +5,7 @@
         <v-img :src="imgUrl" height="200px" contain ></v-img>
         <v-alert density="compact" class="mx-15 px-10 mb-2" outlined type="warning" v-if="time_message.length>0"> {{time_message}}</v-alert>   
         <v-alert class="mx-15 px-10 mb-2" type="error" :key="i" variant="outlined" v-if="alerts?.orders_expired.length>0"> 
-            <p>{{$t("Orders expired in last [0] days :").format(alerts.expired_days)}}</p>
+            <p>{{f($t("Orders expired in last [0] days :"), [alerts.expired_days])}}</p>
             <ul>    
                 <li v-for="(order,i) in alerts.orders_expired" :key="i">      - {{ order.expiration }}. {{ store().investments.get(order.investments).fullname}}</li>
             </ul>
@@ -30,6 +30,7 @@
 <script>
     import axios from 'axios'
     import imgUrl from '@/assets/moneymoney.png'
+    import {f} from 'vuetify_rules'
     export default {
         components:{
         },
@@ -40,12 +41,8 @@
                 diff_time:null
             }
         },
-        computed:{
-            time_message(){
-                return (this.diff_time>=Math.abs(1000)) ?  this.$t("There is a time difference between the browser and the server of [0] ms. Please contact server administrator.").format(this.diff_time): ""
-            },
-        },
         methods:{
+            f,
             get_alerts(){
                 if (!this.store().logged) return
                 axios.get(`${this.store().apiroot}/alerts/`, this.myheaders())
@@ -61,6 +58,10 @@
                 }, (error) => {
                     this.parseResponseError(error)
                 });
+            },
+
+            time_message(){
+                return (this.diff_time>=Math.abs(1000)) ? f(this.$t("There is a time difference between the browser and the server of [0] ms. Please contact server administrator."), [this.diff_time]) : ""
             },
         },
         created(){

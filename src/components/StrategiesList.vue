@@ -43,7 +43,7 @@
                 </template>                  
                 <template #tbody v-if="strategies_items.length>0">
                     <tr class="totalrow">
-                        <td>{{$t("Total ([0] strategies)").format(strategies_items.length) }}</td>
+                        <td>{{f($t("Total ([0] strategies)"), [strategies_items.length]) }}</td>
                         <td></td>
                         <td></td>
                         <td class="text-right" v-html="localcurrency_html(listobjects_sum(strategies_items,'invested'))"></td>
@@ -87,7 +87,7 @@
     import StrategyCU from './StrategyCU.vue'
     import ProductsRanges from './ProductsRanges.vue'
     import {empty_products_ranges, empty_strategy} from '../empty_objects.js'
-    import { localtime } from 'vuetify_rules'
+    import { localtime, f} from 'vuetify_rules'
     export default {
         components:{
             MyMenuInline,
@@ -144,6 +144,7 @@
         },
         methods: {
             localtime,
+            f,
             editItem (item) {
                 this.strategy=item
                 this.key=this.key+1

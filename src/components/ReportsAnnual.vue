@@ -212,7 +212,7 @@
 <script>     
 
     import axios from 'axios'
-    import { localtime, RulesFloat } from 'vuetify_rules'
+    import { localtime, RulesFloat,f } from 'vuetify_rules'
     import moment from 'moment'
     import ReportsAnnualIncomeDetail from './ReportsAnnualIncomeDetail.vue'
     export default {
@@ -307,6 +307,7 @@
             }
         },
         methods:{
+            f,
             localtime,
             RulesFloat,
             years(){
@@ -318,9 +319,9 @@
                 var gross_gains=this.listobjects_sum(this.total_annual_gainsbyproductstypes,'gains_gross')+this.listobjects_sum(this.total_annual_gainsbyproductstypes,'dividends_gross')
                 var net_gains=this.listobjects_sum(this.total_annual_gainsbyproductstypes,'gains_net')+this.listobjects_sum(this.total_annual_gainsbyproductstypes,'dividends_net')
                 return "<p class='mt-4'>"+
-                    this.$t("Gross gains + Gross dividends = [0].").format(this.localcurrency_html(gross_gains)) +
+                    f(this.$t("Gross gains + Gross dividends = [0]."), [this.localcurrency_html(gross_gains)]) +
                     "</p><p>" + 
-                    this.$t("Net gains + Net dividends = [0].").format(this.localcurrency_html(net_gains))+"</p>"
+                    f(this.$t("Net gains + Net dividends = [0]."), [this.localcurrency_html(net_gains)])+"</p>"
             },
             incomeDetails(event,object){
                 this.month=object.item.month_number
@@ -417,7 +418,7 @@
                         }
 
                         var current_percentage=cumulative_gains/this.last_year_balance
-                        this.current_assets_gains_percentage_message=this.$t("Currently, gains annual percentage is [0].").format(this.percentage_html(current_percentage))
+                        this.current_assets_gains_percentage_message=f(this.$t("Currently, gains annual percentage is [0]."), [this.percentage_html(current_percentage)])
                         this.loading_target=false
                     })
                 }, (error) => {
@@ -437,10 +438,10 @@
                     axios.get(`${this.store().apiroot}/reports/annual/gainsbyproductstypes/${this.year}/`, this.myheaders())
                 ]).then(([resRA, resRAI, resRAG]) => {
                     this.last_year_balance=resRA.data.last_year_balance
-                    this.last_year_balance_string=this.$t("Last year balance ([0]) is [1]").format(
+                    this.last_year_balance_string=f(this.$t("Last year balance ([0]) is [1]"), [
                         localtime(resRA.data.dtaware_last_year),
                         this.localcurrency_html(resRA.data.last_year_balance)
-                    )
+                    ])
                     this.total_annual=resRA.data.data
                     this.loading_annual=false
                     this.total_annual_incomes=resRAI.data

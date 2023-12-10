@@ -92,6 +92,7 @@
     import TableInvestmentOperations from './TableInvestmentOperations.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
+    import { f} from 'vuetify_rules'
     export default {
         components:{
             DisplayValues,
@@ -182,6 +183,7 @@
             }
         },
         methods: {
+            f,
             empty_investments_chart,
             empty_investments_chart_limit_line,
             empty_dividend,
@@ -191,10 +193,10 @@
             },
             displayvalues(){
                 var r= []       
-                this.leverage_message= this.$t("[0] (Real: [1])").format(
+                this.leverage_message= f(this.$t("[0] (Real: [1])"), [
                     this.store().leverages.get(this.product.leverages).multiplier,
                     this.product.real_leveraged_multiplier
-                    )
+                ])
                 r.push({title:this.$t('Currency'), value: this.product.currency})
                 r.push({title:this.$t('Product'), value: this.product.name})
                 r.push({title:this.$t('Leverage'), value: this.leverage_message})

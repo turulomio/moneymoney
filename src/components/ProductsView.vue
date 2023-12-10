@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>{{ $t("Product '[0]'").format(this.product.fullname)}}
+        <h1>{{ f($t("Product '[0]'"), [this.product.fullname])}}
             <MyMenuInline :items="items" :context="this"></MyMenuInline>
         </h1>
         <DisplayValues :items="displayvalues"></DisplayValues>
@@ -33,7 +33,7 @@
                         <template #item.total="{item}"><div class="text-right" v-html="percentage_html(item.total )"></div></template> 
                 <template #bottom ></template>    
                     </v-data-table>   
-                    <p class="boldcenter mt-4" v-html="$t('Product quotes percentage from first data: [0]').format(percentage_html(information.percentages[information.percentages.length-1].from_first_quote))"></p>
+                    <p class="boldcenter mt-4" v-html="f($t('Product quotes percentage from first data: [0]'), [percentage_html(information.percentages[information.percentages.length-1].from_first_quote)])"></p>
                 </v-card>
             </v-window-item>
             <v-window-item key="quotes_evolution">     
@@ -130,6 +130,7 @@
     import TableOHCLS from './TableOHCLS.vue'
     import TableQuotes from './TableQuotes.vue'
     import {empty_quote,empty_estimation_dps,empty_dps} from '../empty_objects.js'
+    import {f} from 'vuetify_rules'
     import DpsCRUD from './DpsCRUD.vue'
     export default {
         components:{
@@ -291,6 +292,7 @@
             },
         },
         methods: {
+            f,
             empty_dps,
             empty_quote,
             empty_estimation_dps,
