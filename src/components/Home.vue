@@ -7,7 +7,7 @@
         <v-alert class="mx-15 px-10 mb-2" type="error" :key="i" variant="outlined" v-if="alerts?.orders_expired.length>0"> 
             <p>{{$t("Orders expired in last [0] days :").format(alerts.expired_days)}}</p>
             <ul>    
-                <li v-for="(order,i) in alerts.orders_expired" :key="i">      - {{ localtime(order.expiration).slice(0,10) }}. {{ store().investments.get(order.investments).fullname}}</li>
+                <li v-for="(order,i) in alerts.orders_expired" :key="i">      - {{ order.expiration }}. {{ store().investments.get(order.investments).fullname}}</li>
             </ul>
         </v-alert>
         <v-alert class="mx-15 px-10 mb-2" type="error" :key="i" variant="outlined" v-if="alerts?.investments_inactive_with_balance.length>0"> 

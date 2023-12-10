@@ -130,7 +130,6 @@
 
 <script>
 
-
 import imgAccount from '@/assets/account.svg'
 import imgInvestment from '@/assets/investment.svg'
 import BtnLogIn from './components/BtnLogIn';
@@ -156,7 +155,6 @@ export default {
         }
     },
     mounted(){
-
     }
 };
 </script>
