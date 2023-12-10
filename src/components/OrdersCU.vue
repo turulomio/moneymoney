@@ -36,7 +36,7 @@
     import MyMenuInline from './MyMenuInline.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import {empty_investment_operation} from '../empty_objects.js'
-    import { RulesSelection } from 'vuetify_rules'
+    import { RulesSelection ,RulesFloatGEZ} from 'vuetify_rules'
     export default {
         components: {
             InvestmentsoperationsCU,
@@ -98,6 +98,7 @@
         },
         methods: {
             RulesSelection,
+            RulesFloatGEZ,
             empty_investment_operation,
             title(){
                 if (this.mode=="U"){

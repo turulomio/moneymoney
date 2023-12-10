@@ -21,7 +21,7 @@
 <script>
     import axios from 'axios'
     import MyDateTimePicker from './MyDateTimePicker.vue'
-    import { RulesSelection } from 'vuetify_rules'
+    import { RulesSelection ,RulesFloat, RulesString} from 'vuetify_rules'
     export default {
         components:{
             MyDateTimePicker,
@@ -43,6 +43,8 @@
         },
         methods:{
             RulesSelection,
+            RulesFloat,
+            RulesString,
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating a fast operations coverage")

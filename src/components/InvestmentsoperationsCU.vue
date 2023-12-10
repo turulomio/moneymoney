@@ -37,7 +37,7 @@
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import CurrencyFactor from './CurrencyFactor.vue'
-    import { RulesSelection } from 'vuetify_rules'
+    import { RulesSelection,RulesFloat,RulesFloatGEZ,RulesString } from 'vuetify_rules'
     export default {
         name: "InvestmentsoperationsCU",
         components: {
@@ -87,6 +87,9 @@
         },
         methods: {
             RulesSelection,
+            RulesFloat,
+            RulesFloatGEZ,
+            RulesString,
             empty_investment_operation,
             title(){
                 if (this.mode=="U"){

@@ -20,7 +20,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { RulesSelection } from 'vuetify_rules'
+    import { RulesSelection, RulesInteger, RulesString } from 'vuetify_rules'
     export default {
         props: {
             // An account object
@@ -41,6 +41,8 @@
         },
         methods: {
             RulesSelection,
+            RulesInteger,
+            RulesString,
             title(){
                 if (this.mode=="C") return this.$t("Add an account")
                 if (this.mode=="U") return this.$t("Update an account")

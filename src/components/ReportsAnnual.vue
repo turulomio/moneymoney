@@ -212,7 +212,7 @@
 <script>     
 
     import axios from 'axios'
-    import { localtime } from 'vuetify_rules'
+    import { localtime, RulesFloat } from 'vuetify_rules'
     import moment from 'moment'
     import ReportsAnnualIncomeDetail from './ReportsAnnualIncomeDetail.vue'
     export default {
@@ -308,6 +308,7 @@
         },
         methods:{
             localtime,
+            RulesFloat,
             years(){
                 var start=1990
                 var end=new Date().getFullYear()

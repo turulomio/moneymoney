@@ -20,6 +20,7 @@
 <script>
 import axios from 'axios'
 import MyDatePicker from './MyDatePicker.vue'
+import { RulesFloat } from 'vuetify_rules';
 export default {
     components:{
         MyDatePicker,
@@ -39,6 +40,7 @@ export default {
         };
     },
     methods: {
+        RulesFloat,
         title(){
             if (this.mode=="C") return this.$t("Add a DPS")
             if (this.mode=="U") return this.$t("Update DPS")

@@ -19,7 +19,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { RulesSelection } from 'vuetify_rules'
+    import { RulesSelection, RulesFloatGEZ, RulesFloatGZ } from 'vuetify_rules'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     export default {
         components: {
@@ -49,6 +49,8 @@
         },
         methods: {
             RulesSelection,
+            RulesFloatGEZ,
+            RulesFloatGZ,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')

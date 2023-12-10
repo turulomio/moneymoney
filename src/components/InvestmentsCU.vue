@@ -19,7 +19,7 @@
 <script>
     import axios from 'axios'
     import AutocompleteProducts from './AutocompleteProducts.vue'
-    import { RulesSelection } from 'vuetify_rules'
+    import { RulesSelection ,RulesInteger, RulesString } from 'vuetify_rules'
     export default {
         components:{
             AutocompleteProducts,
@@ -39,7 +39,8 @@
             }
         },
         methods:{
-
+            RulesInteger,
+            RulesString,
             RulesSelection,
             title(){
                 if (this.mode=="U"){
