@@ -44,7 +44,7 @@
                             <div v-for="o in item.investments_inside" :key="o.name" @click="on_investments_inside_click(o)">{{ f($t("[0]. Invested: [1]"), [o.name, currency_string(o.invested, prdata.product.currency)]) }}<br></div>
                         </template>                      
                             <template #item.orders_inside="{item}">
-                            <div  v-for="o in item.orders_inside" :key="o.name" @click="on_orders_inside_click(o)">{{ $f(t("[0]. Amount: [1]"), [o.name, currency_string(o.amount, prdata.product.currency)]) }}<br></div>
+                            <div  v-for="o in item.orders_inside" :key="o.name" @click="on_orders_inside_click(o)">{{ f($t("[0]. Amount: [1]"), [o.name, currency_string(o.amount, prdata.product.currency)]) }}<br></div>
                         </template>
                             <template #item.actions="{item}">
                             <v-icon small class="mr-2" @click="addOrder(item)" :color="(item.recomendation_invest) ? '' : 'red'">mdi-cart</v-icon>
