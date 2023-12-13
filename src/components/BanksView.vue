@@ -48,6 +48,7 @@
 <script>
     import axios from 'axios'
     import DisplayValues from './DisplayValues.vue'
+    import {f} from "vuetify_rules"
     export default {
         components: {
             DisplayValues,
@@ -77,7 +78,8 @@
                 key:0,
             }
         },
-        methods: {            
+        methods: {        
+            f,    
             displayvalues(){
                 return [
                     {title:this.$t('Active'), value: this.bank.active},

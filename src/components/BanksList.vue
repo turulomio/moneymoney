@@ -58,6 +58,7 @@
     import BanksCU from './BanksCU.vue'
     import BanksView from './BanksView.vue'
     import {empty_bank} from '../empty_objects.js'
+    import {f} from "vuetify_rules"
     export default {
         components:{
             MyMenuInline,
@@ -110,6 +111,7 @@
             },
         },
         methods: {
+            f,
             deleteItem (item) {
                 this.bank=item
                 this.bank_mode="D"
