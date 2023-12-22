@@ -54,13 +54,5 @@ export default defineConfig({
         '**/*.spec.js',
       ],
     },
-    // css:{
-    //   includes:/.+/
-    // },
-    // deps:{
-    //   web:{
-    //     transformCss: true,
-    //   }
-    // },
   },
 })

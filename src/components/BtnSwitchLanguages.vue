@@ -18,6 +18,7 @@
 </template>
 
 <script>
+    import { vuetify_rules_i18next_change_language } from 'vuetify_rules';
     var languages=[
                     { text: "Español", value: "es", flag:"es"},
                     { text: "English", value: "en", flag:"us"},
@@ -32,10 +33,14 @@
             }
         },  
         methods:{
+            vuetify_rules_i18next_change_language,
             switchLocale(item){
                 this.$i18n.locale=item.value;
                 this.current=item;
                 localStorage.locale=item.value;
+                console.log("vuetify_rules_i18next_change_language",item.value)
+                vuetify_rules_i18next_change_language(item.value)
+                console.log(this)
                 //console.log(this.$vuetify.locale.value)
                 //this.$vuetify.locale.current = item.value;
             },
