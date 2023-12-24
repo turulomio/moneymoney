@@ -84,7 +84,6 @@ type puede ser redirection or command
 
                 })
             });
-            console.log(this.new_items)
         }
     }
 </script>
