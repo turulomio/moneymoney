@@ -154,6 +154,8 @@
                                     this.dialog_products_cu=true
                                 }.bind(this),
                                 icon: "mdi-plus",
+                                color: (this.store().catalog_manager) ? "red": "black",
+                                disabled: (this.store().catalog_manager) ? false: true  
                             },
                         ]
                     },
