@@ -50,8 +50,8 @@
     import axios from 'axios'
     import TableAccountOperations from './TableAccountOperations.vue'
     import TableDividends from './TableDividends.vue'
-    
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
+    import {f} from 'vuetify_rules'
     export default {
         components:{
             TableAccountOperations,
@@ -81,6 +81,7 @@
         watch:{
         },
         methods: {
+            f,
             refreshTable(){
                 this.loading=true
                 axios.get(`${this.store().apiroot}/reports/annual/income/details/${this.year}/${this.month}/`, this.myheaders())

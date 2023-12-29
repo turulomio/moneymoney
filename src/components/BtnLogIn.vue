@@ -7,13 +7,13 @@
         <v-card  class="pa-6">
             <h1 class="mb-2">{{ $t("Enter your credentials") }}</h1>
             <v-form ref="form" v-model="form_valid">
-                <v-text-field v-model="user" :readonly="loading" type="text" :counter="75" :label="$t('User')" :placeholder="$t('Enter user')" autofocus :rules="RulesString(75,true)"/>
-                <v-text-field v-model="password" :readonly="loading" type="password" :label="$t('Password')" :counter="75" :placeholder="$t('Enter password')" :rules="RulesString(75,true)"/>
+                <v-text-field id="BtnLogIn_User" v-model="user" :readonly="loading" type="text" :counter="75" :label="$t('User')" :placeholder="$t('Enter user')" autofocus :rules="RulesString(75,true)"/>
+                <v-text-field id="BtnLogIn_Password" v-model="password" :readonly="loading" type="password" :label="$t('Password')" :counter="75" :placeholder="$t('Enter password')" :rules="RulesString(75,true)"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" :loading="loading" @click="login" :disabled="!form_valid">{{ $t("Log in") }}</v-btn>
-                <v-btn color="error" :disabled="loading" @click="cancel">{{ $t("Cancel") }}</v-btn>
+                <v-btn id="BtnLogIn_cmd" color="primary" :loading="loading" @click="login" :disabled="!form_valid">{{ $t("Log in") }}</v-btn>
+                <v-btn id="BtnLogIn_cmdCancel" color="error" :disabled="loading" @click="cancel">{{ $t("Cancel") }}</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
