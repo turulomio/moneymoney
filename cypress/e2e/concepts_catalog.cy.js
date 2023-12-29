@@ -13,11 +13,9 @@ describe('e2e Concepts Catalog', () => {
     cy.getDataTest('LateralAdministration').click()
     cy.getDataTest('LateralConceptsCatalog').click()
 
-    // Open MyInlineMenu and select add concept
+    // Open MyInlineMenu and add concept
     cy.getDataTest('MyMenuInline_Button').click()
     cy.getDataTest('MyMenuInline_Header0_Item0').click()
-
-    // Add a concept
     cy.getDataTest('ConceptsCU_Name').type("My first personal concept")
     cy.getDataTest('ConceptsCU_OperationsTypes').type("Expen{downArrow}{enter}")
     cy.getDataTest('ConceptsCU_Button').click()
@@ -25,6 +23,7 @@ describe('e2e Concepts Catalog', () => {
     var concepts_id
     cy.wait('@post_concept').then((interception)=>{
       concepts_id=interception.response.body.id
+      console.log("Concepts to edit and delete", concepts_id)
       // Edit concept
       cy.getDataTest(`ConceptsCatalog_Table_ButtonUpdate${concepts_id}`).click()
       cy.getDataTest('ConceptsCU_Name').type(" updated")
@@ -35,8 +34,7 @@ describe('e2e Concepts Catalog', () => {
       cy.getDataTest('ConceptsCU_Button').click()
     })
 
-    // Creates a new one
-    // Add other concept
+    // Creates a new one concept
     cy.getDataTest('MyMenuInline_Button').click()
     cy.getDataTest('MyMenuInline_Header0_Item0').click()
     cy.getDataTest('ConceptsCU_Name').type("Concept to be migrated")
@@ -44,7 +42,6 @@ describe('e2e Concepts Catalog', () => {
     cy.getDataTest('ConceptsCU_Button').click()
     cy.wait('@post_concept').then((interception)=>{
       concepts_id=interception.response.body.id
-
       console.log("Concepts to migrate", concepts_id)
 
       //Migrate concept
@@ -53,8 +50,6 @@ describe('e2e Concepts Catalog', () => {
       cy.getDataTest('ConceptsMigration_Button').click()
     })
 
-
-    console.log("PASSED")
 
 
   })  
