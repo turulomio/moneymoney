@@ -15,6 +15,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     export default {
         props: {
             bank: { // Bank object
@@ -31,6 +32,7 @@
             }
         },
         methods: {
+            useStore,
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating bank")
@@ -54,7 +56,7 @@
                 if (this.mode=='U'){               
                     axios.put(this.new_bank.url, this.new_bank, this.myheaders())
                     .then(() => {
-                        this.store().updateBanks()
+                        this.useStore().updateBanks()
                         .then(()=>{
                             this.$emit("cruded")
 
@@ -63,9 +65,9 @@
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/api/banks/`, this.new_bank,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/banks/`, this.new_bank,  this.myheaders())
                     .then(() => {
-                        this.store().updateBanks()
+                        this.useStore().updateBanks()
                         .then(()=>{
                             this.$emit("cruded")
 
@@ -80,7 +82,7 @@
                     } 
                     axios.delete(this.new_bank.url, this.myheaders())
                     .then(() => {
-                        this.store().updateBanks()
+                        this.useStore().updateBanks()
                         .then(()=>{
                             this.$emit("cruded")
 

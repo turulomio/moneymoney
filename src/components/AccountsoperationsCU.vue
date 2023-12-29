@@ -2,9 +2,9 @@
     <div>
         <h1>{{dialog_title_ao()}}</h1>
         <v-form ref="form" v-model="form_valid">
-            <v-autocomplete :readonly="mode=='D'" autoindex="5" :items="getArrayFromMap(store().accounts).filter(v =>v.active==true)" v-model="newao.accounts" :label="$t('Select an account')" item-title="localname" item-value="url" :rules="RulesSelection(true)" @change="on_account_change"></v-autocomplete>
+            <v-autocomplete :readonly="mode=='D'" autoindex="5" :items="getArrayFromMap(useStore().accounts).filter(v =>v.active==true)" v-model="newao.accounts" :label="$t('Select an account')" item-title="localname" item-value="url" :rules="RulesSelection(true)" @change="on_account_change"></v-autocomplete>
             <MyDateTimePicker :readonly="mode=='D'" autoindex="6" label="Select operation date and time" v-model="newao.datetime" />
-            <v-autocomplete :readonly="mode=='D'" autoindex="0" autofocus :items="getArrayFromMap(store().concepts)" v-model="newao.concepts" :label="$t('Select a concept')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+            <v-autocomplete :readonly="mode=='D'" autoindex="0" autofocus :items="getArrayFromMap(useStore().concepts)" v-model="newao.concepts" :label="$t('Select a concept')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
             <v-text-field :readonly="mode=='D'" autoindex="1" v-model.number="newao.amount"  :label="$t('Operation amount')" :placeholder="$t('Account number')" :rules="RulesFloat(30,true,this.account.decimals)" counter="30"/>
             <v-text-field :readonly="mode=='D'" autoindex="2" v-model="newao.comment" type="text" :label="$t('Operation comment')" :placeholder="$t('Operation comment')" counter="200"/>
         </v-form>
@@ -18,6 +18,7 @@
 
 <script>
     import axios from 'axios' 
+    import { useStore } from "@/store"
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection,RulesFloat } from 'vuetify_rules'
     export default {
@@ -41,6 +42,7 @@
             }
         },
         methods:{
+            useStore,
             RulesSelection,
             RulesFloat,
             acceptDialogAO(){
@@ -49,8 +51,8 @@
                     this.$refs.form.validate()
                     return
                 }
-                var concept=this.store().concepts.get(this.newao.concepts)
-                var operationtype=this.store().operationstypes.get(concept.operationstypes)
+                var concept=this.useStore().concepts.get(this.newao.concepts)
+                var operationtype=this.useStore().operationstypes.get(concept.operationstypes)
                 this.newao.operationstypes=operationtype.url
                 if (operationtype.id==1 && this.newao.amount>0){
                      alert(this.$t("Amount must be negative"))
@@ -70,7 +72,7 @@
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=='C'){ 
-                    axios.post(`${this.store().apiroot}/api/accountsoperations/`, this.newao,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/accountsoperations/`, this.newao,  this.myheaders())
                     .then(() => {             
                         if (this.following_ao==true){
                             var dt=this.zulu2date(this.newao.datetime)
@@ -116,7 +118,7 @@
                 }
             },
             on_account_change(){
-                this.account=this.store().accounts.get(this.newao.accounts)
+                this.account=this.useStore().accounts.get(this.newao.accounts)
 
             }
         },

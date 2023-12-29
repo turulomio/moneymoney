@@ -212,6 +212,7 @@
 <script>     
 
     import axios from 'axios'
+    import { useStore } from "@/store"
     import { localtime, RulesFloat,f } from 'vuetify_rules'
     import moment from 'moment'
     import ReportsAnnualIncomeDetail from './ReportsAnnualIncomeDetail.vue'
@@ -285,7 +286,7 @@
 
                 // TARGET
                 form_valid:false,
-                target: this.store().profile.annual_gains_target,
+                target: this.useStore().profile.annual_gains_target,
                 month_target: 0,
                 loading_target: false,
                 current_assets_gains_percentage_message:0,
@@ -307,6 +308,7 @@
             }
         },
         methods:{
+            useStore,
             f,
             localtime,
             RulesFloat,
@@ -392,11 +394,11 @@
                 }
                 this.loading_target=true
                 //Updates annual_gains_target in profile
-                var new_profile=Object.assign({},this.store().profile)
+                var new_profile=Object.assign({},this.useStore().profile)
                 new_profile.annual_gains_target=this.target
-                axios.put(`${this.store().apiroot}/profile/`, new_profile, this.myheaders())
+                axios.put(`${this.useStore().apiroot}/profile/`, new_profile, this.myheaders())
                 .then(() => {
-                    this.store().updateProfile().then(() =>{
+                    this.useStore().updateProfile().then(() =>{
                         this.total_target=[]
                         this.month_target=this.last_year_balance*(this.target/100)/12
                         var cumulative_target=0
@@ -433,9 +435,9 @@
 
 
                 axios.all([
-                    axios.get(`${this.store().apiroot}/reports/annual/${this.year}/`, this.myheaders()),
-                    axios.get(`${this.store().apiroot}/reports/annual/income/${this.year}/`, this.myheaders()),
-                    axios.get(`${this.store().apiroot}/reports/annual/gainsbyproductstypes/${this.year}/`, this.myheaders())
+                    axios.get(`${this.useStore().apiroot}/reports/annual/${this.year}/`, this.myheaders()),
+                    axios.get(`${this.useStore().apiroot}/reports/annual/income/${this.year}/`, this.myheaders()),
+                    axios.get(`${this.useStore().apiroot}/reports/annual/gainsbyproductstypes/${this.year}/`, this.myheaders())
                 ]).then(([resRA, resRAI, resRAG]) => {
                     this.last_year_balance=resRA.data.last_year_balance
                     this.last_year_balance_string=f(this.$t("Last year balance ([0]) is [1]"), [

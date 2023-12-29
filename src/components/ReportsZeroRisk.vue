@@ -32,6 +32,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import {f} from 'vuetify_rules'
     import InvestmentsView from './InvestmentsView.vue'
     export default {
@@ -60,6 +61,7 @@
             },
         },
         methods: { 
+            useStore,
             f,
             on_InvestmentView_cruded(){
                 this.key=this.key+1
@@ -67,7 +69,7 @@
             },
             update_table(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/reports/zerorisk/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/zerorisk/`, this.myheaders())
                 .then((response) => {
                     this.investments_items=response.data
                     this.loading=false

@@ -1,5 +1,5 @@
 <template>
-    <v-card v-show="this.store().logged" class="mx-auto px-5" width="50%" flat>
+    <v-card v-show="this.useStore().logged" class="mx-auto px-5" width="50%" flat>
             <h1 class="mb-4">{{ $t("Settings") }}</h1>
             
             <v-form ref="form" v-model="form_valid">
@@ -40,7 +40,7 @@
                 <v-window-item key="local_settings">
                     <v-card class="mx-auto pa-6">
                         <v-card-title>{{ $t('Personal preferences') }}</v-card-title>
-                        <v-autocomplete :items="store().currencies" v-model="new_profile.currency" :label="$t('Select your local currency')" item-title="fullname" item-value="code" :rules="RulesSelection(true)"></v-autocomplete>
+                        <v-autocomplete :items="useStore().currencies" v-model="new_profile.currency" :label="$t('Select your local currency')" item-title="fullname" item-value="code" :rules="RulesSelection(true)"></v-autocomplete>
                         <v-autocomplete :items="timezones" v-model="new_profile.zone" :label="$t('Select your localtime zone')" :rules="RulesSelection(true)"></v-autocomplete>
                     </v-card>
                 </v-window-item>
@@ -62,6 +62,7 @@
 
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import { RulesSelection, RulesEmail, RulesInteger,RulesPassword,RulesString} from 'vuetify_rules'
 import { f } from 'vuetify_rules'
     export default {
@@ -84,6 +85,7 @@ import { f } from 'vuetify_rules'
             }
         },
         methods: {
+            useStore,
 
             f,
             RulesEmail, 
@@ -101,11 +103,11 @@ import { f } from 'vuetify_rules'
                     this.$refs.form.validate()
                     return
                 }
-                axios.put(`${this.store().apiroot}/profile/`, this.new_profile, this.myheaders())
+                axios.put(`${this.useStore().apiroot}/profile/`, this.new_profile, this.myheaders())
                 .then(() => {
                     alert(this.$t("Settings saved"))
                     this.new_profile.newp=""
-                    this.store().updateProfile()
+                    this.useStore().updateProfile()
                     .then(() =>{
                         this.$router.push({name:"home"})
                     })
@@ -114,7 +116,7 @@ import { f } from 'vuetify_rules'
                 });
             },
             promise_load_timezones(){
-                return axios.get(`${this.store().apiroot}/timezones/`, this.myheaders())
+                return axios.get(`${this.useStore().apiroot}/timezones/`, this.myheaders())
             },
             make_all_axios(){
                 this.loading=true
@@ -127,7 +129,7 @@ import { f } from 'vuetify_rules'
         },
         created(){
             this.make_all_axios()
-            this.new_profile=Object.assign({},this.store().profile)
+            this.new_profile=Object.assign({},this.useStore().profile)
             this.new_profile.newp=""
 
         }

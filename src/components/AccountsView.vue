@@ -73,6 +73,7 @@
 </template>  
 <script>     
     import axios from 'axios' 
+    import { useStore } from "@/store"
     import AccountsoperationsCU from './AccountsoperationsCU.vue'
     import AccountsTransfer from './AccountsTransfer.vue'
     import DisplayValues from './DisplayValues.vue'
@@ -103,7 +104,7 @@
         data () {
             return {
                 displayvalues:[
-                    {title:this.$t('Bank'), value: this.store().banks.get(this.account.banks).name},
+                    {title:this.$t('Bank'), value: this.useStore().banks.get(this.account.banks).name},
                     {title:this.$t('Number'), value: this.account.number},
                     {title:this.$t('Currency'), value: this.account.currency},
                     {title:this.$t('Active'), value: this.account.active},
@@ -194,6 +195,7 @@
             },
         },
         methods: {
+            useStore,
             f,
             CCONotDeferred(item){
                 this.ao=this.empty_account_operation()
@@ -216,7 +218,7 @@
                 });
             },
             refreshTableCC(){
-                axios.get(`${this.store().apiroot}/api/creditcards/withbalance/?account=${this.account.id}&active=${this.showActiveCC}`, this.myheaders())                
+                axios.get(`${this.useStore().apiroot}/api/creditcards/withbalance/?account=${this.account.id}&active=${this.showActiveCC}`, this.myheaders())                
                 .then((response) => {
                     this.table_cc=response.data;
                 }) 

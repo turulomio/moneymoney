@@ -103,6 +103,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import {empty_chart_scatter_pair_prices,empty_quote} from '../empty_objects.js'
     import ChartPriceRatio from './ChartPriceRatio.vue'
     import ChartScatterPairPrices from './ChartScatterPairPrices.vue'
@@ -204,7 +205,7 @@
                     r[1].children.push({
                         name: f(this.$t("View '[0]'"), [this.product_a.name]),
                         code: function(){
-                            this.product=this.store().products.get(this.product_a.url)
+                            this.product=this.useStore().products.get(this.product_a.url)
                             this.key=this.key+1
                             this.dialog_productview=true
                         }.bind(this),
@@ -227,7 +228,7 @@
                         name: f(this.$t("View '[0]'"), [this.product_b.name]),
                         code: function(){
                             this.key=this.key+1
-                            this.product=this.store().products.get(this.product_b.url)
+                            this.product=this.useStore().products.get(this.product_b.url)
                             this.dialog_productview=true
                         }.bind(this),
                         icon: "mdi-magnify",
@@ -237,6 +238,7 @@
             },
         },
         methods:{
+            useStore,
             empty_chart_scatter_pair_prices,
             empty_quote,
             localtime,
@@ -257,7 +259,7 @@
 
             pairReport(){               
                 this.loading=true
-                axios.get(`${this.store().apiroot}/products/pairs/?a=${this.pc.a}&b=${this.pc.b}&interval_minutes=${this.interval_minutes}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/products/pairs/?a=${this.pc.a}&b=${this.pc.b}&interval_minutes=${this.interval_minutes}`, this.myheaders())
                 .then((response) => {
                     this.dbdata=response.data.data
                     this.product_a=response.data.product_a

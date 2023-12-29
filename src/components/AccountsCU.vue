@@ -3,11 +3,11 @@
         <h1>{{ title() }}</h1>    
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid">
-                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().banks).filter(v =>v.active==true)" v-model="new_account.banks" :label="$t('Select a bank')" item-title="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(useStore().banks).filter(v =>v.active==true)" v-model="new_account.banks" :label="$t('Select a bank')" item-title="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field v-model="new_account.name" :readonly="mode=='D'" type="text" :label="$t('Account name')" :placeholder="$t('Account name')" autofocus :rules="RulesString(200,true)" counter="200"/>
                 <v-checkbox v-model="new_account.active" :readonly="mode=='D'" :label="$t('Is active?')" ></v-checkbox>
                 <v-text-field v-model="new_account.number" :readonly="mode=='D'" type="text" :label="$t('Account number')" :placeholder="$t('Account number')" :rules="RulesString(30,false)" counter="30"/>
-                <v-autocomplete :items="store().currencies" :readonly="mode=='D'" v-model="new_account.currency" :label="$t('Select a currency')" item-title="fullname" item-value="code" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :items="useStore().currencies" :readonly="mode=='D'" v-model="new_account.currency" :label="$t('Select a currency')" item-title="fullname" item-value="code" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field v-model.number="new_account.decimals" :readonly="mode=='D'" :label="$t('Account decimals')" :placeholder="$t('Account decimals')" autofocus :rules="RulesInteger(1,true)" counter="1"/>
 
            </v-form>   
@@ -20,6 +20,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import { RulesSelection, RulesInteger, RulesString } from 'vuetify_rules'
     export default {
         props: {
@@ -40,6 +41,7 @@
             }
         },
         methods: {
+            useStore,
             RulesSelection,
             RulesInteger,
             RulesString,
@@ -61,15 +63,15 @@
                 if (this.mode=="U"){               
                     axios.put(this.new_account.url, this.new_account, this.myheaders())
                     .then((response) => {
-                        this.store().accounts.set(response.data.url, response.data)
+                        this.useStore().accounts.set(response.data.url, response.data)
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/api/accounts/`, this.new_account,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/accounts/`, this.new_account,  this.myheaders())
                     .then((response) => {
-                        this.store().accounts.set(response.data.url, response.data)
+                        this.useStore().accounts.set(response.data.url, response.data)
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -81,7 +83,7 @@
                     } 
                     axios.delete(this.new_account.url, this.myheaders())
                     .then(() => {
-                        this.store().accounts.delete(this.new_account.url)
+                        this.useStore().accounts.delete(this.new_account.url)
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)

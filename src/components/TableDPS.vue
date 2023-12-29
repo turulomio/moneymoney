@@ -20,6 +20,7 @@
 </template>
 <script>    
     import axios from 'axios'
+    import { useStore } from "@/store"
     import DpsCRUD from './DpsCRUD.vue'
     export default {
         components:{
@@ -47,6 +48,7 @@
             }
         },
         methods: {
+            useStore,
             editDPS(item){
                 this.dps=item
                 this.dps_crud_mode="U"
@@ -69,7 +71,7 @@
             },
             refresh(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/api/dps/?product=${this.product.url}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/dps/?product=${this.product.url}`, this.myheaders())
                 .then((response) => {
                     this.items=response.data
                     this.loading=false

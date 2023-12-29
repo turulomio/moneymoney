@@ -73,6 +73,7 @@
 </template>  
 <script>     
     import axios from 'axios'
+    import { useStore } from "@/store"
     import MyMenuInline from './MyMenuInline.vue'
     import {empty_order, empty_ios,empty_ios_simulation_operation,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
     import { my_round, RulesSelection,RulesFloat,RulesFloatGEZ,parseNumber,f } from 'vuetify_rules'
@@ -194,7 +195,7 @@
                             {
                                 name:this.$t('Add all active investments of the same product'),
                                 code: function(){
-                                    this.store().investments.forEach(o=>{
+                                    this.useStore().investments.forEach(o=>{
                                         if (this.product==o.products && o.active && !this.newinvestments.includes(o.url)){
                                             this.newinvestments.push(o.url)
                                         }
@@ -258,6 +259,7 @@
             },
         },
         methods: {
+            useStore,
             RulesFloat,
             RulesFloatGEZ,
             RulesSelection,
@@ -288,12 +290,12 @@
                 this.dialog_order_cu=false
             },
             refreshProductQuotes(){
-                return axios.get(`${this.store().apiroot}/products/quotes/ohcl?product=${this.product.url}`, this.myheaders())
+                return axios.get(`${this.useStore().apiroot}/products/quotes/ohcl?product=${this.product.url}`, this.myheaders())
             },
             simulateOrderAfter(){
                 var simulation=this.empty_ios()
                 simulation.investments.push(parseInt(this.ios_id.data.investments_id))
-                simulation.currency=this.store().profile.currency
+                simulation.currency=this.useStore().profile.currency
 
                 var operation=this.empty_ios_simulation_operation()
                 operation.shares=this.newshares
@@ -301,7 +303,7 @@
                 operation.comment="Simulation 1"
                 operation.investments_id=parseInt(this.ios_id.data.investments_id)
                 simulation.simulation.push(operation)
-                return axios.post(`${this.store().apiroot}/ios/`, simulation, this.myheaders())
+                return axios.post(`${this.useStore().apiroot}/ios/`, simulation, this.myheaders())
                 
             },
             make_all_axios_before(){

@@ -22,6 +22,7 @@
 
 <script>
 import axios from 'axios'
+import { useStore } from "@/store"
 import {RulesString} from "vuetify_rules"
 export default {
     data () {
@@ -35,6 +36,7 @@ export default {
         }
     },
     methods: {
+            useStore,
         RulesString,
         login(){
             var start=new Date()
@@ -44,12 +46,12 @@ export default {
                 }
             if (this.loading==true) return
             this.loading=true
-            axios.post(`${this.store().apiroot}/login/`, {username: this.user, password:this.password}, this.myheaders_noauth())
+            axios.post(`${this.useStore().apiroot}/login/`, {username: this.user, password:this.password}, this.myheaders_noauth())
             .then((response) => {
-                if (this.parseResponse(response,this.store())==true){
+                if (this.parseResponse(response,this.useStore())==true){
                     console.log("Authenticated");
-                    this.store().setToken(response.data)
-                    this.store().updateAll()
+                    this.useStore().setToken(response.data)
+                    this.useStore().updateAll()
                     .then(()=>{
                         this.$refs.form.reset()
                         this.loading=false

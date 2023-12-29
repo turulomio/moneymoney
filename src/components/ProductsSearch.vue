@@ -20,7 +20,7 @@
                     <v-icon :class="'mr-2 fi fib fi-'+item.flag" small :title="this.getCountryNameByCode(item.flag)"></v-icon><span :class="class_name(item)">{{item.name}}</span>
                 </template>  
             <template #item.type="{item}">
-                    {{ this.store().productstypes.get(item.productstypes).localname }}
+                    {{ this.useStore().productstypes.get(item.productstypes).localname }}
                 </template>                                    
             <template #item.last_datetime="{item}">
                     {{localtime(item.last_datetime)}}
@@ -32,11 +32,11 @@
                     <div class="text-right" v-html="percentage_html(item.percentage_last_year )"></div>
                 </template>
             <template #item.actions="{item}">
-                    <v-icon small @click.stop="toggleFavorite(item)" :color="(store().profile.favorites.includes(item.url))? 'orange': '' " class="mr-1">mdi-star-outline</v-icon>
+                    <v-icon small @click.stop="toggleFavorite(item)" :color="(useStore().profile.favorites.includes(item.url))? 'orange': '' " class="mr-1">mdi-star-outline</v-icon>
                     <v-icon class="mr-1" small @click.stop="editPersonalProduct(item)" v-if="item.id<=0">mdi-pencil</v-icon>
                     <v-icon class="mr-1" small @click.stop="deletePersonalProduct(item)" v-if="item.id<=0 && item.uses==0">mdi-delete</v-icon>
-                    <v-icon class="mr-1" small @click.stop="editSystemProduct(item)"  color="red" v-if="item.id>0 && store().catalog_manager">mdi-pencil</v-icon>
-                    <v-icon class="mr-1" small @click.stop="deleteSystemProduct(item)" color="red" v-if="item.id>0 && store().catalog_manager">mdi-delete</v-icon>
+                    <v-icon class="mr-1" small @click.stop="editSystemProduct(item)"  color="red" v-if="item.id>0 && useStore().catalog_manager">mdi-pencil</v-icon>
+                    <v-icon class="mr-1" small @click.stop="deleteSystemProduct(item)" color="red" v-if="item.id>0 && useStore().catalog_manager">mdi-delete</v-icon>
                 </template>
                 <template #bottom ></template>   
             </v-data-table>   
@@ -57,6 +57,7 @@
 </template>  
 <script>     
     import axios from 'axios'
+    import { useStore } from "@/store"
     import {empty_product} from '../empty_objects.js'
     import { localtime, RulesSelection } from 'vuetify_rules'
     import MyMenuInline from './MyMenuInline.vue'
@@ -126,6 +127,7 @@
             },
         },
         methods: {
+            useStore,
             RulesSelection,
             localtime,
             menuinline_items()  {
@@ -154,8 +156,8 @@
                                     this.dialog_products_cu=true
                                 }.bind(this),
                                 icon: "mdi-plus",
-                                color: (this.store().catalog_manager) ? "red": "black",
-                                disabled: (this.store().catalog_manager) ? false: true  
+                                color: (this.useStore().catalog_manager) ? "red": "black",
+                                disabled: (this.useStore().catalog_manager) ? false: true  
                             },
                         ]
                     },
@@ -242,7 +244,7 @@
                         ]
                     },
                 ]
-                if (this.store().catalog_manager==false){
+                if (this.useStore().catalog_manager==false){
                     r[0].children.splice(1, 1)
                 }
                 return r
@@ -296,10 +298,10 @@
                     this.loading=false
                 } else {
 
-                    axios.get(`${this.store().apiroot}/api/products/search_with_quotes/?search=${this.search}`, this.myheaders())
+                    axios.get(`${this.useStore().apiroot}/api/products/search_with_quotes/?search=${this.search}`, this.myheaders())
                     .then((response) => {
                             response.data.forEach(o=>{
-                                var p=this.store().products.get(o.product)
+                                var p=this.useStore().products.get(o.product)
                                 p.last=o.last
                                 p.last_datetime=o.last_datetime
                                 p.percentage_last_year=o.percentage_last_year
@@ -312,10 +314,10 @@
                 }
             },
             toggleFavorite(item){
-                this.store().profile.toggle_favorite=item.url //Adds toggle_favorite
-                return axios.put(`${this.store().apiroot}/profile/`, this.store().profile, this.myheaders())
+                this.useStore().profile.toggle_favorite=item.url //Adds toggle_favorite
+                return axios.put(`${this.useStore().apiroot}/profile/`, this.useStore().profile, this.myheaders())
                 .then(() => {
-                        this.store().updateProfile()
+                        this.useStore().updateProfile()
                         .then(() => {
                             this.refreshSearch()
                         })

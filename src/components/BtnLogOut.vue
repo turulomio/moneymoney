@@ -8,13 +8,15 @@
 
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     export default {
         methods: {
+            useStore,
             logout(){
-                axios.post(`${this.store().apiroot}/logout/`, {'key': this.store().token},this.myheaders())
+                axios.post(`${this.useStore().apiroot}/logout/`, {'key': this.useStore().token},this.myheaders())
                 .then(() => {
-                    this.store().token=null;
-                    this.store().logged=false;
+                    this.useStore().token=null;
+                    this.useStore().logged=false;
                     this.$router.push({name:'home'})
                 }, (error) => {
                     this.parseResponseError(error)

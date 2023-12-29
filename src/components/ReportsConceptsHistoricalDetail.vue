@@ -13,6 +13,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import { defineAsyncComponent } from 'vue'
     import {f} from 'vuetify_rules'
     import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
@@ -43,7 +44,7 @@
         },
         computed:{
             title: function(){
-                var concept_object=this.store().concepts.get(this.concept)
+                var concept_object=this.useStore().concepts.get(this.concept)
                 if (this.month==null){
                     return f(this.$t("'[0]' operations at year [1]"), [concept_object.localname,this.year])
                 } else {
@@ -57,6 +58,7 @@
             }
         },
         methods: {
+            useStore,
             f,
             on_TableAccountsoperations_cruded(){
                 this.update_table()

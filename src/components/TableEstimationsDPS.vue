@@ -24,6 +24,7 @@
 </template>
 <script>    
     import axios from 'axios'
+    import { useStore } from "@/store"
     import EstimationsDpsCU from './EstimationsDpsCU.vue'
     export default {
         components:{
@@ -44,6 +45,7 @@
             }
         },
         methods: {
+            useStore,
             currency(value){
                 return this.currency_html(value, this.product.currency)
             },
@@ -79,7 +81,7 @@
             },
             refresh(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/api/estimationsdps/?product=${this.product.url}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/estimationsdps/?product=${this.product.url}`, this.myheaders())
                 .then((response) => {
                     this.items=response.data
                     this.key=this.key+1

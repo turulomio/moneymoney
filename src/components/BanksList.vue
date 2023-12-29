@@ -54,6 +54,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import MyMenuInline from './MyMenuInline.vue'
     import BanksCU from './BanksCU.vue'
     import BanksView from './BanksView.vue'
@@ -111,6 +112,7 @@
             },
         },
         methods: {
+            useStore,
             f,
             deleteItem (item) {
                 this.bank=item
@@ -138,7 +140,7 @@
                 } else {
                     this.chkLabel=this.$t("Check to see active banks")
                 }
-                axios.get(`${this.store().apiroot}/api/banks/withbalance/?active=${this.showActive}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/banks/withbalance/?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
                     this.data=response.data
                     this.loading_table=false

@@ -15,7 +15,7 @@
                         <v-data-table density="compact" :headers="itemsHeaders" :items="itemsPositive"  class="elevation-1 cursorpointer" :loading="loading" height="300" @click:row="viewHistoricalReport" :sort-by="[{key:'percentage_total',order:'desc'}]"    :items-per-page="10000" >
 
                             <template #item.concept="{item}">
-                                <div v-html="store().concepts.get(item.concept).localname"></div>
+                                <div v-html="useStore().concepts.get(item.concept).localname"></div>
                             </template> 
                             <template #item.total="{item}">
                                 <div v-html="localcurrency_html(item.total)"></div>
@@ -43,7 +43,7 @@
                         <v-data-table density="compact" :headers="itemsHeaders" :items="itemsNegative"  class="elevation-1 cursorpointer" hide-default-footer :loading="loading" @click:row="viewHistoricalReport"  :sort-by="[{key:'percentage_total',order:'desc'}]"     :items-per-page="10000" >
 
                             <template #item.concept="{item}">
-                                <div v-html="store().concepts.get(item.concept).localname"></div>
+                                <div v-html="useStore().concepts.get(item.concept).localname"></div>
                             </template> 
                             <template #item.total="{item}">
                                 <div class="text-right" v-html="localcurrency_html(item.total)"></div>
@@ -78,6 +78,7 @@
 </template>
 <script>     
     import axios from 'axios'
+    import { useStore } from "@/store"
     import ReportsConceptsHistorical from './ReportsConceptsHistorical'
     import MyMonthPicker from './MyMonthPicker.vue'
 
@@ -110,9 +111,10 @@
             }
         },
         methods:{
+            useStore,
             refreshTables(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/reports/concepts/?year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/concepts/?year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())
                 .then((response) => {
                     this.itemsPositive=response.data.positive
                     this.itemsNegative=response.data.negative

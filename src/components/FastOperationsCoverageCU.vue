@@ -5,7 +5,7 @@
             <v-form ref="form" v-model="form_valid" v-if='foc!=null'>
                 <v-col>
                     <MyDateTimePicker :readonly="mode=='D'" :label="$t('Select date and time')" v-model="new_foc.datetime" />
-                    <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().investments)" v-model="new_foc.investments" :label="$t('Select an investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                    <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(useStore().investments)" v-model="new_foc.investments" :label="$t('Select an investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                     <v-text-field :readonly="mode=='D'" v-model.number="new_foc.amount" :label="$t('Enter an amount')" :placeholder="$t('Enter an amount')" :rules="RulesFloat(30,true,6)" />
                     <v-text-field v-model="new_foc.comment" type="text" :label="$t('Enter a comment')" :counter="200" :placeholder="$t('Enter a comment')" :rules="RulesString(200, false)" />
                 </v-col>
@@ -20,6 +20,7 @@
 
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection ,RulesFloat, RulesString} from 'vuetify_rules'
     export default {
@@ -42,6 +43,7 @@
             }
         },
         methods:{
+            useStore,
             RulesSelection,
             RulesFloat,
             RulesString,
@@ -69,7 +71,7 @@
                     return
                 }
                 if (this.mode=="C"){   
-                    axios.post(`${this.store().apiroot}/api/fastoperationscoverage/`, this.new_foc, this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/fastoperationscoverage/`, this.new_foc, this.myheaders())
                     .then(() => {
                         this.$emit("cruded")
                     }, (error) => {

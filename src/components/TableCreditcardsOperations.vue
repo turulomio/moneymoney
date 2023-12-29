@@ -12,10 +12,10 @@
                 <div class="text-right" v-html="currency_html(item.balance, item.currency)"></div>
             </template>   
             <template #item.creditcard="{item}">
-                <div v-html="store().creditcards.get(item.creditcards).name"></div>
+                <div v-html="useStore().creditcards.get(item.creditcards).name"></div>
             </template>  
             <template #item.concepts="{item}">
-                <div v-html="store().concepts.get(item.concepts).name"></div>
+                <div v-html="useStore().concepts.get(item.concepts).name"></div>
             </template>
             <template #item.actions="{item}">
                 <v-icon small class="mr-2" @click="copyCCO(item)">mdi-content-copy</v-icon>
@@ -48,6 +48,7 @@
 
 <script>     
     import CreditcardsoperationsCU from './CreditcardsoperationsCU.vue'
+    import { useStore } from "@/store"
     import {empty_cco} from '../empty_objects.js'
     import { localtime, f } from 'vuetify_rules'
     export default {
@@ -122,6 +123,7 @@
             }
         },
         methods: {
+            useStore,
             f,
             localtime,
             empty_cco,

@@ -5,10 +5,10 @@
                 <div>{{ localtime(item.datetime)}}</div>
             </template>         
             <template #item.concepts="{item}">
-               <div v-html="store().concepts.get(item.concepts).localname"></div>
+               <div v-html="useStore().concepts.get(item.concepts).localname"></div>
            </template>       
             <template #item.investments="{item}">
-               <div v-html="store().investments.get(item.investments).fullname"></div>
+               <div v-html="useStore().investments.get(item.investments).fullname"></div>
            </template> 
             <template #item.gross="{item}">
                 <div v-html="currency_html(item.gross,item.currency)"></div>
@@ -51,6 +51,7 @@
 </template>
 <script>
     import DividendsCU from './DividendsCU.vue'
+    import { useStore } from "@/store"
     import { empty_dividend } from '../empty_objects.js'
     import { localtime, f } from 'vuetify_rules'
     export default {
@@ -94,6 +95,7 @@
             }
         },
         methods: {
+            useStore,
             f,
             localtime,
             copyDividend(item){

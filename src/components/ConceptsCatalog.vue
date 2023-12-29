@@ -8,7 +8,7 @@
                 <v-icon small v-if="item.editable" >mdi-check-outline</v-icon>
             </template>             
             <template #item.operationstypes="{item}">
-               <div v-html="this.store().operationstypes.get(item.operationstypes).localname"></div>
+               <div v-html="this.useStore().operationstypes.get(item.operationstypes).localname"></div>
            </template>           
             <template #item.name="{item}">
                <div v-html="item.name" :class="(item.editable==true && item.id<1000) ? 'boldred' : ''"></div>
@@ -39,6 +39,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import MyMenuInline from './MyMenuInline.vue'
     import ConceptsCU from './ConceptsCU.vue'
     import ConceptsMigration from './ConceptsMigration.vue'
@@ -95,6 +96,7 @@
             }
         },
         methods: {
+            useStore,
             deleteItem (item) {
                 this.concept=item
                 this.key=this.key+1
@@ -123,7 +125,7 @@
             },
             update_table(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/api/concepts/used/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/concepts/used/`, this.myheaders())
                 .then((response) => {
                     this.concepts=response.data
                     this.loading=false

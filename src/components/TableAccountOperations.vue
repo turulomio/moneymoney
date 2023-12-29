@@ -11,10 +11,10 @@
                 <div class="text-right" v-html="currency_html(item.balance, item.currency)"></div>
             </template>   
             <template #item.accounts="{item}">
-                <div v-html="store().accounts.get(item.accounts).fullname"></div>
+                <div v-html="useStore().accounts.get(item.accounts).fullname"></div>
             </template> 
             <template #item.concepts="{item}">
-                <div class="cursorpointer" v-html="store().concepts.get(item.concepts).localname" @click="viewHistoricalConcept(item)"></div>
+                <div class="cursorpointer" v-html="useStore().concepts.get(item.concepts).localname" @click="viewHistoricalConcept(item)"></div>
             </template>
             <template #item.actions="{item}">
                 <v-icon small class="mr-2" @click="copyAO(item)">mdi-content-copy</v-icon>
@@ -77,6 +77,7 @@
 
 <script>     
     import axios from 'axios'
+    import { useStore } from "@/store"
     import {empty_account_transfer, empty_account_operation} from '../empty_objects.js'
     import AccountsoperationsCU from './AccountsoperationsCU.vue'
     import AccountsTransfer from './AccountsTransfer.vue'
@@ -180,6 +181,7 @@
         }
     },
     methods: {
+            useStore,
         f,
         localtime,
         empty_account_transfer,
@@ -203,7 +205,7 @@
                 if (item.comment.startsWith("10000,")){ //It's an investment operation 
                     var io_string= item.comment.split(",")[1]
                     //Gets
-                    axios.get(`${this.store().apiroot}/api/investmentsoperations/${io_string}/`, this.myheaders())
+                    axios.get(`${this.useStore().apiroot}/api/investmentsoperations/${io_string}/`, this.myheaders())
                     .then((response) => {
                         this.io=response.data
                         this.io_mode="U"
@@ -212,14 +214,14 @@
                     }, (error) => {
                         this.parseResponseError(error)
                     });
-                } else if ( this.ao_to_find_transfer(item) && item.operationstypes==`${this.store().apiroot}/api/operationstypes/3/`){ // Try to find account transfer to edit it and operratinon type =transfer
+                } else if ( this.ao_to_find_transfer(item) && item.operationstypes==`${this.useStore().apiroot}/api/operationstypes/3/`){ // Try to find account transfer to edit it and operratinon type =transfer
                     this.at=this.ao_to_find_transfer(item)
                     this.at_deleting=false
                     this.key=this.key+1
                     this.dialog_transfer=true
                 } else if ( item.comment.startsWith("10004,")){
                     var dividend_string=item.comment.split(",")[1]
-                    axios.get(`${this.store().apiroot}/api/dividends/${dividend_string}/`, this.myheaders())
+                    axios.get(`${this.useStore().apiroot}/api/dividends/${dividend_string}/`, this.myheaders())
                     .then((response) => {
                         this.dividend=response.data
                         this.dividends_cu_mode="U"
@@ -260,9 +262,9 @@
                 var arr=item.comment.split(",") // code, ao_origin, ao_destiny, ao_commission
                 var at=this.empty_account_transfer()
                 at.datetime=item.datetime
-                at.ao_origin=`${this.store().apiroot}/api/accountsoperations/${arr[1]}/`
-                at.ao_destiny=`${this.store().apiroot}/api/accountsoperations/${arr[2]}/`
-                if (arr[3]>0)at.ao_commission=`${this.store().apiroot}/api/accountsoperations/${arr[3]}/`
+                at.ao_origin=`${this.useStore().apiroot}/api/accountsoperations/${arr[1]}/`
+                at.ao_destiny=`${this.useStore().apiroot}/api/accountsoperations/${arr[2]}/`
+                if (arr[3]>0)at.ao_commission=`${this.useStore().apiroot}/api/accountsoperations/${arr[3]}/`
                 return at
             }
             return null
