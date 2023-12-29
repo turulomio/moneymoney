@@ -27,6 +27,7 @@
 <script>     
 
     import axios from 'axios'
+    import { useStore } from "@/store"
     export default {
         components:{
         },
@@ -45,11 +46,12 @@
             }
         },
         methods: {
+            useStore,
             submmit(){
                 this.loading=true
                 let data=new FormData()
                 data.append('csv_file1', this.filename)
-                axios.post(`${this.store().apiroot}/products/update/`, data, this.myheaders_formdata())
+                axios.post(`${this.useStore().apiroot}/products/update/`, data, this.myheaders_formdata())
                 .then((response) => {
                         this.items=response.data
                         this.filename=[]
@@ -60,7 +62,7 @@
             },
             submmit_auto(){
                 this.loading=true
-                axios.post(`${this.store().apiroot}/products/update/`, {auto:true,}, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/products/update/`, {auto:true,}, this.myheaders())
                 .then((response) => {
                         this.items=response.data
                         this.loading=false

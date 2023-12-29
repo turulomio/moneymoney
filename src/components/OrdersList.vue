@@ -67,6 +67,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import OrdersCU from './OrdersCU.vue'
     import InvestmentsoperationsReinvest from './InvestmentsoperationsReinvest.vue'
     import MyMenuInline from './MyMenuInline.vue'
@@ -134,6 +135,7 @@
             },
         },
         methods: {
+            useStore,
             localtime,
             f,
             empty_order,
@@ -160,8 +162,8 @@
                 var investments_id=this.id_from_hyperlinked_url(object.item.investments)
                 var simulation=this.empty_ios()
                 simulation.investments.push(investments_id)
-                simulation.currency=this.store().profile.currency
-                return axios.post(`${this.store().apiroot}/ios/`, simulation, this.myheaders())
+                simulation.currency=this.useStore().profile.currency
+                return axios.post(`${this.useStore().apiroot}/ios/`, simulation, this.myheaders())
                 .then((response)=>{
                     this.ios_id=response.data[investments_id]
                     this.key=this.key+1
@@ -191,11 +193,11 @@
                 this.loading_table=true
                 var url=""
                 if (this.state==0){//Active
-                    url=`${this.store().apiroot}/api/orders/?active=true`
+                    url=`${this.useStore().apiroot}/api/orders/?active=true`
                 } else if (this.state==1) { //expired
-                    url=`${this.store().apiroot}/api/orders/?expired=true`
+                    url=`${this.useStore().apiroot}/api/orders/?expired=true`
                 } else if (this.state==2) { //executed
-                    url=`${this.store().apiroot}/api/orders/?executed=true`
+                    url=`${this.useStore().apiroot}/api/orders/?executed=true`
                 }
 
 
@@ -217,7 +219,7 @@
 
             products_autoupdate(){
                 this.products_updating=true
-                axios.post(`${this.store().apiroot}/products/update/`, {auto:true,}, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/products/update/`, {auto:true,}, this.myheaders())
                 .then((response) => {
                         this.update_errors=0
                         response.data.forEach(o=>{

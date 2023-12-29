@@ -82,6 +82,7 @@
 
 <script>
     import imgReinvest from '@/assets/reinvest.png'
+    import { useStore } from "@/store"
     import axios from 'axios'
     import { localtime, my_round } from 'vuetify_rules'
     import {empty_order} from '../empty_objects.js'
@@ -145,6 +146,7 @@
             }
         },
         methods:{
+            useStore,
             localtime,
             my_round,
             empty_order,
@@ -178,7 +180,7 @@
             },
             refreshTable(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/reports/investments/lastoperation/?method=${this.method}` , this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/investments/lastoperation/?method=${this.method}` , this.myheaders())
                 .then( (response)=> {
                     this.tableData=[]
                     response.data.entries.forEach(e => {

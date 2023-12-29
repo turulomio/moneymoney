@@ -12,6 +12,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import TableAccountOperations from './TableAccountOperations.vue'
     export default {
         components:{
@@ -28,6 +29,7 @@
             }
         },
         methods: {
+            useStore,
 
             on_TableAccountOperations_cruded(){
                 this.update_table()
@@ -40,7 +42,7 @@
                     alert(this.$t("You must enter at least two characters"))
                     return
                 }
-                axios.get(`${this.store().apiroot}/api/accountsoperations/?search=${this.search}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/accountsoperations/?search=${this.search}`, this.myheaders())
                 .then((response) => {
                     this.items_ao=response.data
                     this.key=this.key+1

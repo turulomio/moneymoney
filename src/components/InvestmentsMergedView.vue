@@ -85,6 +85,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import {empty_investment_operation, empty_dividend,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
     import MyMenuInline from './MyMenuInline.vue'
     import DisplayValues from './DisplayValues.vue'
@@ -134,7 +135,7 @@
                                 name:this.$t('Investment chart'),
                                 icon: "mdi-chart-areaspline",
                                 code: function(){
-                                    axios.get(`${this.store().apiroot}/products/quotes/ohcl?product=${this.product.url}`, this.myheaders())
+                                    axios.get(`${this.useStore().apiroot}/products/quotes/ohcl?product=${this.product.url}`, this.myheaders())
                                     .then((response) => {
                                         this.chart_data=this.empty_investments_chart()
                                         this.chart_data.ohcls=response.data
@@ -183,6 +184,7 @@
             }
         },
         methods: {
+            useStore,
             f,
             empty_investments_chart,
             empty_investments_chart_limit_line,
@@ -194,7 +196,7 @@
             displayvalues(){
                 var r= []       
                 this.leverage_message= f(this.$t("[0] (Real: [1])"), [
-                    this.store().leverages.get(this.product.leverages).multiplier,
+                    this.useStore().leverages.get(this.product.leverages).multiplier,
                     this.product.real_leveraged_multiplier
                 ])
                 r.push({title:this.$t('Currency'), value: this.product.currency})
@@ -247,7 +249,7 @@
             update_dividends(){
                 //Convert this.investments to an array of ids
                 var headers={...this.myheaders(),params:{investments:this.ios_id.data.investments_id}}
-                return axios.get(`${this.store().apiroot}/api/dividends/`, headers)
+                return axios.get(`${this.useStore().apiroot}/api/dividends/`, headers)
             },
             update_all(){
                 this.loading=true
@@ -264,7 +266,7 @@
             }
         },
         created(){
-            this.product=this.store().products.get(this.hyperlinked_url("products",this.ios_id.data.products_id))
+            this.product=this.useStore().products.get(this.hyperlinked_url("products",this.ios_id.data.products_id))
             this.update_all()   
         }
     }

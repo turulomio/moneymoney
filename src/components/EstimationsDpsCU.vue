@@ -18,6 +18,7 @@
 
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import { RulesFloat,RulesInteger } from 'vuetify_rules'
     export default {
         props: {
@@ -36,6 +37,7 @@
             }
         },
         methods:{
+            useStore,
             RulesFloat,
             RulesInteger,
             title(){
@@ -62,7 +64,7 @@
                     return
                 }
                 if (this.mode=="C"){   
-                    axios.post(`${this.store().apiroot}/api/estimationsdps/`, this.new_estimation, this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/estimationsdps/`, this.new_estimation, this.myheaders())
                     .then(() => {
                         this.$emit("cruded")
                     }, (error) => {

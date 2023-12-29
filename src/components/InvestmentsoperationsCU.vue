@@ -5,7 +5,7 @@
                 <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
             </h1>           
             <v-form ref="form" v-model="form_valid">
-                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().investments)" v-model="new_io.investments" :label="$t('Select an investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(useStore().investments)" v-model="new_io.investments" :label="$t('Select an investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <div class="d-flex mx-auto">
                     <MyDateTimePicker :readonly="mode=='D'" v-model="new_io.datetime" :label="$t('Set investment operation date and time')" />
                 </div>
@@ -33,6 +33,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import {empty_investment_operation} from '../empty_objects.js'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import MyMenuInline from './MyMenuInline.vue'
@@ -76,16 +77,17 @@
         },
         computed:{
             product: function(){
-                return this.store().products.get(this.investment.products)
+                return this.useStore().products.get(this.investment.products)
             },
             account: function(){
-                return this.store().accounts.get(this.investment.accounts)
+                return this.useStore().accounts.get(this.investment.accounts)
             },
             investment: function(){
-                return this.store().investments.get(this.new_io.investments)
+                return this.useStore().investments.get(this.new_io.investments)
             },
         },
         methods: {
+            useStore,
             RulesSelection,
             RulesFloat,
             RulesFloatGEZ,
@@ -120,7 +122,7 @@
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=="C") {
-                    axios.post(`${this.store().apiroot}/api/investmentsoperations/`, this.new_io,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/investmentsoperations/`, this.new_io,  this.myheaders())
                     .then(() => {
                             this.$emit("cruded")
                     }, (error) => {

@@ -10,7 +10,7 @@
                     {{localtime(item.last_datetime)}}
                 </template>             
                 <template #item.banks="{item}">
-                    <div v-html="store().banks.get(item.banks).localname"></div>
+                    <div v-html="useStore().banks.get(item.banks).localname"></div>
                 </template>     
                 <template #item.balance_user="{item}">
                     <div class="text-right" v-html="localcurrency_html(item.balance_user)"></div>
@@ -68,6 +68,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import MyMenuInline from './MyMenuInline.vue'
     import AccountsoperationsSearch from './AccountsoperationsSearch.vue'
     import AccountsCU from './AccountsCU.vue'
@@ -160,6 +161,7 @@
             },
         },
         methods: {
+            useStore,
             empty_account,
             empty_account_transfer,
             f,
@@ -188,7 +190,7 @@
                     this.chkLabel=this.$t("Check to see active accounts")
                 }
                 this.loading_accounts=true
-                axios.get(`${this.store().apiroot}/api/accounts/withbalance/?active=${this.showActive}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/accounts/withbalance/?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
                     this.accounts_items=response.data
                     this.loading_accounts=false

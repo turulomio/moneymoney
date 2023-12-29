@@ -18,6 +18,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import {empty_quote} from '../empty_objects.js'
     import { RulesSelection,RulesFloatGEZ } from 'vuetify_rules'
     import AutocompleteProducts from './AutocompleteProducts.vue'
@@ -41,10 +42,10 @@
         computed:{
             product_object: function(){
 
-                return this.store().products.get(this.new_quote.products)
+                return this.useStore().products.get(this.new_quote.products)
             },
             product_stockmarket: function(){
-                return this.store().stockmarkets.get(this.product_object.stockmarkets)
+                return this.useStore().stockmarkets.get(this.product_object.stockmarkets)
             },
         },
         data(){ 
@@ -90,6 +91,7 @@
             }
         },
         methods: {
+            useStore,
             RulesSelection,
             RulesFloatGEZ,
             empty_quote,
@@ -116,7 +118,7 @@
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=="C") {
-                    axios.post(`${this.store().apiroot}/api/quotes/`, this.new_quote,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/quotes/`, this.new_quote,  this.myheaders())
                     .then(() => {
                             this.$emit("cruded")
                     }, (error) => {

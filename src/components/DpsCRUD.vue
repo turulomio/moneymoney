@@ -19,6 +19,7 @@
 
 <script>
 import axios from 'axios'
+import { useStore } from "@/store"
 import MyDatePicker from './MyDatePicker.vue'
 import { RulesFloat } from 'vuetify_rules';
 export default {
@@ -40,6 +41,7 @@ export default {
         };
     },
     methods: {
+            useStore,
         RulesFloat,
         title(){
             if (this.mode=="C") return this.$t("Add a DPS")
@@ -57,7 +59,7 @@ export default {
                     return
                 }
             if (this.mode == "C") {
-                axios.post(`${this.store().apiroot}/api/dps/`, this.newdps, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/api/dps/`, this.newdps, this.myheaders())
                     .then(() => {
                     this.$emit("cruded");
                 }, (error) => {

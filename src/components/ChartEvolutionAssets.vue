@@ -21,6 +21,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     export default {
         props: {
             reference:{
@@ -46,6 +47,7 @@
             }
         },
         methods: {
+            useStore,
             chart_option(){
                 // var =this
                 return {
@@ -155,7 +157,7 @@
             },
             refreshChart(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/reports/evolutionassets/chart/?from=${this.from}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/evolutionassets/chart/?from=${this.from}`, this.myheaders())
                 .then((response) => {
                     this.balance=[]
                     this.accounts=[]

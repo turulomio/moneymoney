@@ -138,6 +138,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import {empty_investment_operation,empty_dividend,empty_investments_chart,empty_investments_chart_limit_line,empty_ios} from '../empty_objects.js'
     import { parseNumber,f } from 'vuetify_rules'
     import ChartInvestments from './ChartInvestments.vue'
@@ -200,7 +201,7 @@
                                 name:this.$t('Investment chart'),
                                 icon: "mdi-chart-areaspline",
                                 code: function(){
-                                    axios.get(`${this.store().apiroot}/products/quotes/ohcl?product=${this.product.url}`, this.myheaders())
+                                    axios.get(`${this.useStore().apiroot}/products/quotes/ohcl?product=${this.product.url}`, this.myheaders())
                                     .then((response) => {
                                         this.chart_data=this.empty_investments_chart()
                                         this.chart_data.ohcls=response.data
@@ -227,7 +228,7 @@
                                     this.investment.active=!this.investment.active
                                     axios.put(this.investment.url, this.investment,  this.myheaders())
                                     .then((response) => {
-                                        this.store().investments.set(response.data.url, response.data)
+                                        this.useStore().investments.set(response.data.url, response.data)
                                         this.update_all()
                                         this.$emit("cruded")
                                     }, (error) => {
@@ -276,7 +277,7 @@
                             {
                                 name:this.$t('Delete last quote'),
                                 code: function(){
-                                    axios.post(`${this.store().apiroot}/api/products/${this.product.id}/delete_last_quote/`, [], this.myheaders())
+                                    axios.post(`${this.useStore().apiroot}/api/products/${this.product.id}/delete_last_quote/`, [], this.myheaders())
                                     .then(() => {
                                         this.key=this.key+1
                                         this.$emit("cruded") 
@@ -411,10 +412,10 @@
         },
         computed:{
             account: function(){
-                return this.store().accounts.get(this.investment.accounts)
+                return this.useStore().accounts.get(this.investment.accounts)
             },
             product: function(){
-                return this.store().products.get(this.investment.products)
+                return this.useStore().products.get(this.investment.products)
 
             },
             leverage_message (){
@@ -476,6 +477,7 @@
             },
         },
         methods: {
+            useStore,
             f,
             parseNumber,
             empty_investments_chart,
@@ -529,12 +531,12 @@
             update_ios(){
                 var simulation=this.empty_ios()
                 simulation.investments.push(parseInt(this.investment_id))
-                simulation.currency=this.store().profile.currency
-                return axios.post(`${this.store().apiroot}/ios/`, simulation, this.myheaders())
+                simulation.currency=this.useStore().profile.currency
+                return axios.post(`${this.useStore().apiroot}/ios/`, simulation, this.myheaders())
             },
             update_dividends(){
                 var headers={...this.myheaders(),params:{investments:[this.investment_id,]}}
-                return axios.get(`${this.store().apiroot}/api/dividends/`, headers)
+                return axios.get(`${this.useStore().apiroot}/api/dividends/`, headers)
             },
             update_all(){
                 this.loading=true

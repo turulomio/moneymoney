@@ -48,6 +48,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import TableAccountOperations from './TableAccountOperations.vue'
     import TableDividends from './TableDividends.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
@@ -81,10 +82,11 @@
         watch:{
         },
         methods: {
+            useStore,
             f,
             refreshTable(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/reports/annual/income/details/${this.year}/${this.month}/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/annual/income/details/${this.year}/${this.month}/`, this.myheaders())
                 .then((response) => {
                     this.expenses=response.data.expenses
                     this.gains=response.data.gains

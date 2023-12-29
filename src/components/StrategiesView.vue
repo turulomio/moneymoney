@@ -44,6 +44,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import {empty_strategy_simulation, empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
     import MyMenuInline from './MyMenuInline.vue'
     import DisplayValues from './DisplayValues.vue'
@@ -86,7 +87,7 @@
                                 name:this.$t('Investment chart'),
                                 icon: "mdi-chart-areaspline",
                                 code: function(){
-                                    axios.get(`${this.store().apiroot}/products/quotes/ohcl?product=${this.product.url}`, this.myheaders())
+                                    axios.get(`${this.useStore().apiroot}/products/quotes/ohcl?product=${this.product.url}`, this.myheaders())
                                     .then((response) => {
                                         this.chart_data=this.empty_investments_chart()
                                         this.chart_data.ohcls=response.data
@@ -137,6 +138,7 @@
             }
         },
         methods: {
+            useStore,
             f,
             localtime,
             empty_investments_chart,
@@ -165,7 +167,7 @@
             },
             update_dividends(){
                 var headers={...this.myheaders(),params:{investments:this.strategy.investments}}
-                return axios.get(`${this.store().apiroot}/api/dividends/`, headers)
+                return axios.get(`${this.useStore().apiroot}/api/dividends/`, headers)
             },
             update_all(){
                 this.loading=true

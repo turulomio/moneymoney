@@ -1,7 +1,7 @@
 <template>
     <div class="paragraph">
         <h1>{{ $t("About Money Money") }}</h1>
-        <h2>{{ `${store().version} (${store().versiondate.toISOString().slice(0,10)})` }}</h2>
+        <h2>{{ `${useStore().version} (${useStore().versiondate.toISOString().slice(0,10)})` }}</h2>
         <v-img :src="imgUrl" height="200px" contain @click="$router.push({name:'widgets'})"></v-img>
         
         <v-container  class="paragraph">
@@ -19,12 +19,18 @@
 
 <script>
     import imgUrl from '@/assets/moneymoney.png'
+    import { useStore } from "@/store"
+
     export default {
         name: 'About',
         data(){
             return {
                 imgUrl:imgUrl,
             }
+        },
+        methods:{
+
+            useStore,
         },
         mounted(){
             this.$refs.github.innerHTML=this.$t("Project main page is located in Github, where you can help me coding or translating to different languages.").replace("Github",'<a href="https://github.com/turulomio/moneymoney" target="_blank">Github</a>')
