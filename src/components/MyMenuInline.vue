@@ -1,5 +1,4 @@
-/*
-Yo need to put items and @selected method
+<!-- You need to put items and @selected method
 
 type puede ser redirection or command
 
@@ -26,8 +25,8 @@ type puede ser redirection or command
             MyMenuInlineSelection(item){
                 item.code(this)
             },
+ -->
 
-*/
 
 <template>
     <v-menu offset-y>

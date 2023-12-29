@@ -21,19 +21,19 @@ describe('e2e Banks', () => {
     // // Adds firt biometrics
     // cy.get('[inset=""] > :nth-child(2) > .v-list-item > .v-list-item__content > .v-list-item-title').click()
 
-    // cy.get('input[id="cmbActivities"]').click().type("{downArrow}{enter}") //Find by id
-    // cy.get('input[id="cmbWeightWishes"]').click().type("{downArrow}{enter}") //Find by id
-    // cy.get('input[id="txtHeight"]').click().clear().type("180") //Find by id
-    // cy.get('input[id="txtWeight"]').click().clear().type("90") //Find by id
-    // cy.get('button[id="cmd"]').click()
+    // cy.get('input[data-test="cmbActivities"]').click().type("{downArrow}{enter}") //Find by id
+    // cy.get('input[data-test="cmbWeightWishes"]').click().type("{downArrow}{enter}") //Find by id
+    // cy.get('input[data-test="txtHeight"]').click().clear().type("180") //Find by id
+    // cy.get('input[data-test="txtWeight"]').click().clear().type("90") //Find by id
+    // cy.get('button[data-test="cmd"]').click()
 
     // // Update biometrics
     // cy.get('.mdi-pencil').first().click()
-    // cy.get('button[id="cmd"]').click()
+    // cy.get('button[data-test="cmd"]').click()
 
     // // Delete biometrics
     // cy.get('.mdi-delete').first().click()
-    // cy.get('button[id="cmd"]').click()
+    // cy.get('button[data-test="cmd"]').click()
     
   })
 

@@ -13,7 +13,7 @@
                     <v-divider></v-divider>
 
 <!--                     BANKS -->
-                    <v-list-item id="lateral_banks" link router :to="{ name: 'banks_list'}" v-if="store().logged" prepend-icon="mdi-bank" :title="$t('Banks')" />
+                    <v-list-item data-test="lateral_banks" link router :to="{ name: 'banks_list'}" v-if="store().logged" prepend-icon="mdi-bank" :title="$t('Banks')" />
 <!--                     ACCOUNTS -->
                     <v-list-item link router :to="{ name: 'accounts_list'}" v-if="store().logged" prepend-icon="mdi-calculator" :title="$t('Accounts')" />
 <!--                     INVESTMENTS -->
@@ -88,7 +88,7 @@
                             <v-list-item-title>{{ $t("Products catalog update") }}</v-list-item-title>
                         </v-list-item>
                         <v-list-item link router :to="{ name: 'concepts_catalog'}">
-                            <v-list-item-title>{{ $t("Concepts catalog") }}</v-list-item-title>
+                            <v-list-item-title data-test="lateral_concepts_catalog">{{ $t("Concepts catalog") }}</v-list-item-title>
                         </v-list-item>
                         <v-list-item link router :to="{ name: 'maintenance_quotes'}">
                             <v-list-item-title>{{ $t("Quotes maintenance") }}</v-list-item-title>
@@ -110,7 +110,7 @@
         </v-navigation-drawer>
         
         <v-app-bar color="primary" dark  fixed fill-height app >
-            <v-app-bar-nav-icon id="lateral_icon" @click="drawer = !drawer"></v-app-bar-nav-icon>
+            <v-app-bar-nav-icon data-test="lateral_icon" @click="drawer = !drawer"></v-app-bar-nav-icon>
             <v-btn :to="{ name: 'home'}"><v-icon icon="mdi-home" dark></v-icon></v-btn>
             <v-btn :to="{ name: 'settings'}" v-if="store().logged"><v-icon icon="mdi-wrench" dark></v-icon></v-btn> 
             <v-btn :to="{ name: 'assetsreport'}" v-if="store().logged"><v-icon icon="mdi-book" dark></v-icon></v-btn>
