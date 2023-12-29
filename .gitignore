@@ -22,5 +22,4 @@ pnpm-debug.log*
 *.sln
 *.sw?
 coverage
-package-lock.json
 .nyc_output
