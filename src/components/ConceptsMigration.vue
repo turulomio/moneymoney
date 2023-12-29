@@ -4,11 +4,11 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid">
                 <v-autocomplete density="compact" v-model="from_url" readonly :items="getArrayFromMap(store().concepts)" :label="$t('Select a concept')" item-title="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-autocomplete density="compact" v-model="to" :items="getArrayFromMap(store().concepts)" :label="$t('Select a concept to migrate to')" item-title="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete data-test="ConceptsMigration_To" density="compact" v-model="to" :items="getArrayFromMap(store().concepts)" :label="$t('Select a concept to migrate to')" item-title="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="error" @click="migrate()">{{ $t("Migrate") }}</v-btn>
+                <v-btn data-test="ConceptsMigration_Button" color="error" @click="migrate()">{{ $t("Migrate") }}</v-btn>
             </v-card-actions>
         </v-card>
     </div>

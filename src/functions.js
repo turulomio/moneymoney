@@ -241,9 +241,6 @@ export function getInvestmentsByProduct(product) {
     return getArrayFromMap(store().investments).filter(o => o.products==product)
 }
 
-export function getOperationstypesForNewConcepts() { 
-    return getArrayFromMap(store().operationstypes).filter( o => [1,2].includes(o.id))
-}
 
 export function getOperationstypesForInvestmentsOperations() { 
     return getArrayFromMap(store().operationstypes).filter( o => [4,5,6,8,9,10].includes(o.id))

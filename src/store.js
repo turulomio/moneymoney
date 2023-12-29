@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import { myheaders, sortObjectsArray} from './functions.js'
+import { myheaders, sortObjectsArray, getArrayFromMap} from './functions.js'
 import CurrencyList from 'currency-list'
 import { capitalizeFirstLetter } from 'vuetify_rules'
 
@@ -34,7 +34,11 @@ export const useStore = defineStore('global', {
         recomendation_methods:new Map(),
     }
   },
-
+  getters:{
+    getOperationstypesForNewConcepts(state) { 
+      return getArrayFromMap(state.operationstypes).filter( o => [1,2].includes(o.id))
+    }
+  },
   actions: {
     increment() {
         this.count=this.count+1

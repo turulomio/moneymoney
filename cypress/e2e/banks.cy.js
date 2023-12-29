@@ -4,8 +4,8 @@ describe('e2e Banks', () => {
 
     login_test_User(cy)
     //Open lateral menu
-    cy.get('#lateral_icon').click()
-    cy.get('#lateral_banks').click()
+    cy.getDataTest('LateralIcon').click()
+    cy.getDataTest('LateralBanks').click()
 
     // //Select biometrics
     // cy.get('[href="/calories_tracker/biometrics/"] > .v-list-item__content > .v-list-item-title').click()
