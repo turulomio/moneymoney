@@ -1,7 +1,7 @@
 <template>
     <div>    
         <h1>{{ $t('Concepts catalog') }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items"></MyMenuInline>
         </h1>
         <v-data-table density="compact" :headers="investments_headers" :search="search" :items="concepts" :sort-by="[{key:'id',order:'asc'}]" class="elevation-1 ma-4" :loading="loading" :key="key"    :items-per-page="10000" >
             <template #item.editable="{item}">
@@ -17,16 +17,16 @@
                 <div v-html="localcurrency_html(item.balance_user )"></div>
             </template>          
             <template #item.actions="{item}">
-                <v-icon v-if="item.editable" small class="ml-1" @click.stop="editItem(item)">mdi-pencil</v-icon>
-                <v-icon v-if="item.editable && item.used==0" small class="ml-1" @click.stop="deleteItem(item)">mdi-delete</v-icon>
-                <v-icon v-if="item.migrable" small class="ml-1" @click.stop="migrateConcept(item)" color="#9933ff" style="font-weight:bold">mdi-folder-move-outline</v-icon>     
+                <v-icon :data-test="`ConceptsCatalog_Table_ButtonUpdate${item.id}`" v-if="item.editable" small class="ml-1" @click.stop="editItem(item)">mdi-pencil</v-icon>
+                <v-icon :data-test="`ConceptsCatalog_Table_ButtonDelete${item.id}`" v-if="item.editable && item.used==0" small class="ml-1" @click.stop="deleteItem(item)">mdi-delete</v-icon>
+                <v-icon :data-test="`ConceptsCatalog_Table_ButtonMigrate${item.id}`" v-if="item.migrable" small class="ml-1" @click.stop="migrateConcept(item)" color="#9933ff" style="font-weight:bold">mdi-folder-move-outline</v-icon>     
             </template> 
             <template #bottom ></template>                  
         </v-data-table>
         <!-- DIALOG CONCEPTS ADD/UPDATE -->
         <v-dialog v-model="dialog_concepts_cu" max-width="550">
             <v-card class="pa-8">
-                <ConceptsCU :concept="concept" :deleting="concept_deleting" :key="key" @cruded="on_ConceptsCU_cruded"></ConceptsCU>
+                <ConceptsCU :concept="concept" :mode="concept_mode" :key="key" @cruded="on_ConceptsCU_cruded"></ConceptsCU>
             </v-card>
         </v-dialog>
         <!-- DIALOG CONCEPTS MIGRATION -->
@@ -71,7 +71,7 @@
                                 code: function(){
                                     this.concept=this.empty_concept()
                                     this.key=this.key+1
-                                    this.concept_deleting=false
+                                    this.concept_mode="C"
                                     this.dialog_concepts_cu=true
                                 }.bind(this),
                             },
@@ -86,7 +86,7 @@
                 //Dialog ConceptsCU
                 dialog_concepts_cu:false,
                 concept:null,
-                concept_deleting:null,
+                concept_mode:null,
 
                 //Dialog ConceptsMigration
                 dialog_concepts_migration:false
@@ -98,13 +98,13 @@
             deleteItem (item) {
                 this.concept=item
                 this.key=this.key+1
-                this.concept_deleting=true
+                this.concept_mode="D"
                 this.dialog_concepts_cu=true
             },
             editItem (item) {
                 this.concept=item
                 this.key=this.key+1
-                this.concept_deleting=false
+                this.concept_mode="U"
                 this.dialog_concepts_cu=true
              },
             migrateConcept(item){

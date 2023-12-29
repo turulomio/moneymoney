@@ -1,5 +1,4 @@
-/*
-Yo need to put items and @selected method
+<!-- You need to put items and @selected method
 
 type puede ser redirection or command
 
@@ -26,13 +25,13 @@ type puede ser redirection or command
             MyMenuInlineSelection(item){
                 item.code(this)
             },
+ -->
 
-*/
 
 <template>
     <v-menu offset-y>
         <template  v-slot:activator="{ props }">
-            <v-btn text dark v-bind="props" style="color:darkgrey" class="elevation-0">
+            <v-btn data-test="MyMenuInline_Button" text dark v-bind="props" style="color:darkgrey" class="elevation-0">
                 <v-icon>mdi-menu</v-icon>
             </v-btn>
         </template>
@@ -40,7 +39,7 @@ type puede ser redirection or command
             <div v-for="(subheader,indexsubheader) in new_items" :key="indexsubheader" inset>
                 <v-list-subheader inset>{{ subheader.subheader }}</v-list-subheader>
                 <div v-for="(item, index) in subheader.children" :key="index" >
-                    <v-list-item @click="on_item_click(item)" :prepend-icon="item.icon" :title="item.name" :disabled="item.disabled" :base-color="item.color"/>
+                    <v-list-item :data-test="`MyMenuInline_Header${indexsubheader}_Item${index}`" @click="on_item_click(item)" :prepend-icon="item.icon" :title="item.name" :disabled="item.disabled" :base-color="item.color"/>
                 </div>
                 <v-divider></v-divider>
             </div>
@@ -57,9 +56,6 @@ type puede ser redirection or command
         },
         props: {
             items: {
-                required: true
-            },
-            context: {
                 required: true
             },
         },

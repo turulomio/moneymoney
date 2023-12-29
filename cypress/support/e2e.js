@@ -13,10 +13,9 @@
 // // https://on.cypress.io/configuration
 // // ***********************************************************
 
-// // Import commands.js using ES2015 syntax:
-// import './commands'
 import '@cypress/code-coverage/support';
-// console.log("SUPPORT E2e.js")
 
-// // Alternatively you can use CommonJS syntax:
-// // require('./commands')
+Cypress.Commands.add('getDataTest', (selector, ...args) =>{
+    return cy.get(`[data-test=${selector}]`, ...args)
+
+})
