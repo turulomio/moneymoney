@@ -1,7 +1,7 @@
 <template>
     <div>    
         <h1>{{ title() }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items"/>
         </h1>           
         <div class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid">                

@@ -1,7 +1,7 @@
 <template>
     <div>    
         <h1>{{ $t('Investments list') }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items"/>
         </h1>
         <v-row class="px-4 mt-2">
             <v-checkbox density="compact" class="ml-6 mr-2" v-model="showActive" :label="setCheckboxLabel()" />

@@ -1,7 +1,6 @@
 <template>
     <div>
-        <h1>{{ f($t("Account details of '[0]'"), [account.localname]) }}
-        <MyMenuInline :items="items"  :context="this"></MyMenuInline>  </h1>
+        <h1>{{ f($t("Account details of '[0]'"), [account.localname]) }}<MyMenuInline :items="items" />  </h1>
         <DisplayValues :items="displayvalues"></DisplayValues>
 
         <v-tabs v-model="tab" bg-color="secondary" grow>

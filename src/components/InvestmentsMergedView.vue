@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ ios_id.data.name }}
-            <MyMenuInline :items="items"  :context="this"></MyMenuInline>
+            <MyMenuInline :items="items" />
         </h1>
         <DisplayValues v-if="product" :items="displayvalues()" :key="key" :minimized_items="10"></DisplayValues>
 

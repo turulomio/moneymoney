@@ -2,7 +2,7 @@
 <template>
     <div>    
         <h1>{{ title() }}
-            <MyMenuInline v-if="snackbar_message==''" :items="items" :context="this"></MyMenuInline>
+            <MyMenuInline v-if="snackbar_message==''" :items="items"/>
         </h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" :readonly="mode=='D'" v-if="snackbar_message==''">

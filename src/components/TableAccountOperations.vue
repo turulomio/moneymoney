@@ -28,6 +28,7 @@
                     <td v-if="showaccount"></td>
                     <td v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items,'amount'),total_currency)"></td>
                     <td v-if="!all_items_has_same_currency" >{{ $t("Can't sum amounts due to they have different currencies") }}</td>
+                    <td v-if="showbalance"></td>
                     <td></td>
                     <td></td>
                 </tr>

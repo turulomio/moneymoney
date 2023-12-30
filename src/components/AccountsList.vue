@@ -1,30 +1,30 @@
 <template>
     <div>    
         <h1>{{ $t('Accounts list') }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items"/>
         </h1>
         <v-card outlined class="ma-4 pa-4">
             <v-checkbox v-model="showActive" :label="chkLabel" ></v-checkbox>
             <v-data-table :headers="accounts_headers" density="compact" :items="accounts_items" :sort-by="[{key:'datetime',order:'asc'}]" class="elevation-1 cursorpointer" fixed-header :loading="loading_accounts" :key="key" @click:row="viewItem" :items-per-page="1000000">
-                <template #item.last_datetime="{item}">
+                <template  #item.last_datetime="{item}">
                     {{localtime(item.last_datetime)}}
                 </template>             
                 <template #item.banks="{item}">
                     <div v-html="useStore().banks.get(item.banks).localname"></div>
                 </template>     
                 <template #item.balance_user="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.balance_user)"></div>
+                    <div :data-test="`AccountsList_Table_Row${item.id}`" class="text-right" v-html="localcurrency_html(item.balance_user)"></div>
                 </template>     
                 <template #item.balance_account="{item}">
                     <div class="text-right" v-html="currency_html(item.balance_account, item.currency )"></div>
-                </template>                   
+                </template>
                 <template #item.active="{item}">
                     <div class="text-center"><v-icon small v-if="item.active" >mdi-check-outline</v-icon></div>
-                </template>         
+                </template>
 
                 <template #item.actions="{item}">
-                    <v-icon small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon small @click.stop="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
+                    <v-icon :data-test="`AccountsList_Table_ButtonUpdate${item.id}`" small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
+                    <v-icon :data-test="`AccountsList_Table_ButtonDelete${item.id}`" small @click.stop="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
                 </template>   
                 <template #bottom ></template>        
                 <template #tbody>

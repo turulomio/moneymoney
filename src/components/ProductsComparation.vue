@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ $t("Products comparation") }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items"/>
         </h1>
         <DisplayValues :items="display_values()" width="90%" v-if="product_a"></DisplayValues>
         <v-card class="d-flex flex-row mx-auto pa-4" flat width="65%">

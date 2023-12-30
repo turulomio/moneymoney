@@ -1,7 +1,7 @@
 <template>
     <div>    
         <h1>{{ $t('Orders list') }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items"/>
         </h1>
         <div class="d-flex justify-center mb-4">
             <v-card width="20%" class="pa-5">

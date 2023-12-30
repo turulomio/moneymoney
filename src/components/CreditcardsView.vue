@@ -2,7 +2,7 @@
 <template>
     <div>    
         <h1 class="mb-4">{{ f($t("Credit card details of '[0]'"), [cc.name]) }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items"/>
 
         </h1>
 
