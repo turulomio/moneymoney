@@ -27,47 +27,40 @@
 
     </div>
 </template>
-<script>
-    import axios from 'axios'
-    import { useStore } from "@/store"
-    import imgUrl from '@/assets/moneymoney.png'
-    import {f} from 'vuetify_rules'
-    export default {
-        components:{
-        },
-        data(){
-            return {
-                imgUrl:imgUrl,
-                alerts:null,
-                diff_time:null
-            }
-        },
-        methods:{
-            useStore,
-            f,
-            get_alerts(){
-                if (!this.useStore().logged) return
-                axios.get(`${this.useStore().apiroot}/alerts/`, this.myheaders())
-                .then((response) => {
-                    this.alerts=response.data
-                    let local=new Date()
-                    let server= new Date(this.alerts.server_time)
-                    this.diff_time=local-server
 
-                    console.log(`Local time: ${local.toISOString()}`)
-                    console.log(`Server time: ${server.toISOString()}`)
-                    console.log(`Difference (ms): ${this.diff_time}`)
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
+<script setup>
+import axios from 'axios'
+import { useStore } from "@/store"
+import imgUrl from '@/assets/moneymoney.png'
+import {f} from 'vuetify_rules'
+import { ref,reactive } from 'vue'
+import { parseResponseError,myheaders } from '@/functions'
 
-            time_message(){
-                return (this.diff_time>=Math.abs(1000)) ? f(this.$t("There is a time difference between the browser and the server of [0] ms. Please contact server administrator."), [this.diff_time]) : ""
-            },
-        },
-        created(){
-            this.get_alerts()
-        }
-    }
+
+const diff_time=ref()
+const alerts
+
+function get_alerts(){
+    if (!useStore().logged) return
+    axios.get(`${useStore().apiroot}/alerts/`, myheaders())
+    .then((response) => {
+        alerts=reactive(response.data)
+        let local=new Date()
+        let server= new Date(alerts.server_time)
+        diff_time.value=local-server
+
+        console.log(`Local time: ${local.toISOString()}`)
+        console.log(`Server time: ${server.toISOString()}`)
+        console.log(`Difference (ms): ${diff_time.value}`)
+    }, (error) => {
+        parseResponseError(error)
+    });
+}
+
+function time_message(){
+    return (this.diff_time.value>=Math.abs(1000)) ? f(this.$t("There is a time difference between the browser and the server of [0] ms. Please contact server administrator."), [this.diff_time]) : ""
+}
+
+
+get_alerts()
 </script>
