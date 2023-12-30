@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ title }}
-            <MyMenuInline :items="items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="items"/>
         </h1>                
         <v-select class="mr-5" :items="re_or_di_items" v-model="re_or_di" :label="$t('Do you want to reinvest or divest?')"  item-title="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables"></v-select>  
 

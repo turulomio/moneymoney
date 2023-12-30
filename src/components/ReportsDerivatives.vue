@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ $t("Derivatives report") }}
-        <MyMenuInline :items="menuinline_items"  :context="this"></MyMenuInline>  </h1>
+        <MyMenuInline :items="menuinline_items" />  </h1>
 
         <div class="pa-6" v-if="items && coverage_items">
             <v-tabs  bg-color="secondary" dark v-model="tab" grow>

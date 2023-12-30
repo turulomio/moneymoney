@@ -1,7 +1,7 @@
 <template>
     <div>    
         <h1>{{ $t('Quotes maintenance') }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items"/>
         </h1>
         <h2>{{ get_option_name(option) }}</h2>
         <v-card outlined class="ma-4 pa-4">

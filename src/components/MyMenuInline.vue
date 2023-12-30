@@ -2,7 +2,7 @@
 
 type puede ser redirection or command
 
-            <MyMenuInline :items="menuinline_items"  :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items" />
 
 
                 menuinline_items: [

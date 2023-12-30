@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ investment.fullname }}
-            <MyMenuInline :items="items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="items"/>
         </h1>
         <DisplayValues v-if="ios_id" :items="displayvalues" :key="key" />
         <v-tabs  bg-color="secondary" dark v-model="tab" show-arrows>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ $t("Products comparation") }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>    
+            <MyMenuInline :items="menuinline_items"/>    
         </h1>
 
         <v-data-table density="compact" :headers="headers" :items="items" :sort-by="[{key:'name',order:'asc'}]" class="elevation-1 ma-4 cursorpointer" :loading="loading" :key="key"  @click:row="pairReportItem"    :items-per-page="10000" >

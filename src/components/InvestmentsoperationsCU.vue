@@ -2,7 +2,7 @@
     <div>    
         <v-card class="pa-6">
             <h1 class="mb-4">{{ title() }}
-                <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+                <MyMenuInline :items="menuinline_items"/>
             </h1>           
             <v-form ref="form" v-model="form_valid">
                 <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(useStore().investments)" v-model="new_io.investments" :label="$t('Select an investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
