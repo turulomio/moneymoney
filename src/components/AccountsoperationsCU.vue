@@ -7,6 +7,7 @@
             <v-autocomplete data-test="AccountsoperationsCU_Concepts" :readonly="mode=='D'" autoindex="0" autofocus :items="getArrayFromMap(useStore().concepts)" v-model="newao.concepts" :label="$t('Select a concept')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
             <v-text-field data-test="AccountsoperationsCU_Amount" :readonly="mode=='D'" autoindex="1" v-model.number="newao.amount"  :label="$t('Operation amount')" :placeholder="$t('Account number')" :rules="RulesFloat(30,true,this.account.decimals)" counter="30"/>
             <v-text-field data-test="AccountsoperationsCU_Comment" :readonly="mode=='D'" autoindex="2" v-model="newao.comment" type="text" :label="$t('Operation comment')" :placeholder="$t('Operation comment')" counter="200"/>
+
         </v-form>
         <v-card-actions>
             <v-spacer></v-spacer>

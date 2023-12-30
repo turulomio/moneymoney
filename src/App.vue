@@ -18,7 +18,6 @@
                     <v-list-item data-test="LateralAccounts" link router :to="{ name: 'accounts_list'}" v-if="useStore().logged" prepend-icon="mdi-calculator" :title="$t('Accounts')" />
 <!--                     INVESTMENTS -->
                     <v-list-item data-test="LateralInvestments" link router :to="{ name: 'investments_list'}" v-if="useStore().logged" prepend-icon="mdi-finance" :title="$t('Investments')" />
-
 <!--                     ORDERS -->
                     <v-list-item link router :to="{ name: 'orders_list'}" v-if="useStore().logged" prepend-icon="mdi-cart" :title="$t('Orders')" />
 
@@ -34,6 +33,7 @@
             
 <!--                     REPORTS -->
                     <v-list-group data-test="LateralReports" value="Reports" v-if="useStore().logged">
+
                         <template v-slot:activator="{ props }">
                             <v-list-item v-bind="props" prepend-icon="mdi-file-chart-outline" :title="$t('Reports')"></v-list-item>
                         </template>
@@ -78,6 +78,7 @@
             
 <!--                     STRATEGIES -->
                     <v-list-item  data-test="LateralStrategies" link router :to="{ name: 'strategies_list'}" v-if="useStore().logged" prepend-icon="mdi-strategy" :title="$t('Strategies')" />
+
 <!--                     ADMINISTRATION -->
                     <v-list-group data-test="LateralAdministration" value="Administration" v-if="useStore().logged">
                         <template v-slot:activator="{ props }">
@@ -121,6 +122,7 @@
             <BtnSwitchLanguages  data-test="LateralSwitchLanguages" />
             <BtnLogIn  data-test="LateralLogIn" v-show="!useStore().logged" class="mr-4"/>
             <BtnLogOut data-test="LateralLogOut" v-show="useStore().logged" class="mr-4"/>
+
 
         </v-app-bar>
         <v-main>   
