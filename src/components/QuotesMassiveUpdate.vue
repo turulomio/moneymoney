@@ -24,6 +24,7 @@
 <script>     
 
     import axios from 'axios'
+    import { useStore } from "@/store"
     import {f} from 'vuetify_rules'
     export default {
         components:{
@@ -46,6 +47,7 @@
             }
         },
         methods: {
+            useStore,
             f,        
             readDocument(file){
                 return new Promise((resolve, reject) => {
@@ -72,7 +74,7 @@
                     var readed= await this.readDocument(this.filename[0])
                     readed.product=this.product.url
                 }
-                axios.post(`${this.store().apiroot}/quotes/massive_update/`, readed, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/quotes/massive_update/`, readed, this.myheaders())
                 .then((response) => {
                         this.items=response.data
                         this.loading=false

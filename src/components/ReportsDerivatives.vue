@@ -72,6 +72,7 @@
 </template>
 <script>     
     import axios from 'axios'
+    import { useStore } from "@/store"
     import FastOperationsCoverageCU from './FastOperationsCoverageCU.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import MyMonthPicker from './MyMonthPicker.vue'
@@ -139,14 +140,15 @@
             },
         },
         methods:{
+            useStore,
             empty_fast_operations_coverage,
             f,
             refreshTables(){
                 this.loading=true
 
                 axios.all([
-                    axios.get(`${this.store().apiroot}/derivatives/`, this.myheaders()),
-                    axios.get(`${this.store().apiroot}/api/fastoperationscoverage/?year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())
+                    axios.get(`${this.useStore().apiroot}/derivatives/`, this.myheaders()),
+                    axios.get(`${this.useStore().apiroot}/api/fastoperationscoverage/?year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())
                 ])
                 .then(([resDerivatives, resFOC]) => {
                     this.items=resDerivatives.data

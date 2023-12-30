@@ -8,6 +8,7 @@
 
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
     export default {
         components:{
@@ -23,9 +24,10 @@
         watch:{
         },
         methods:{
+            useStore,
             refreshTable(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/reports/investmentsoperations/current/` , this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/investmentsoperations/current/` , this.myheaders())
                 .then( (response)=> {
                     this.list_io_current=response.data;
                     this.key=this.key+1;

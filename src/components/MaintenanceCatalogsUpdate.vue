@@ -15,6 +15,7 @@
 </template>  
 <script>     
     import axios from 'axios'
+    import { useStore } from "@/store"
     export default {
         data () {
             return {
@@ -23,15 +24,16 @@
             }
         },
         methods: {
+            useStore,
             submmit(internet){
                 if (internet && navigator.onLine==false){
                     alert(this.$t("There is some problem with Internet connection"))
                     return
                 }
                 this.loading=true
-                axios.post(`${this.store().apiroot}/maintenance/catalogs/update/`, {internet: internet}, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/maintenance/catalogs/update/`, {internet: internet}, this.myheaders())
                 .then(() => {
-                        this.store().updateProducts()
+                        this.useStore().updateProducts()
                         this.message=this.$t("Catalogs updated")
                         this.key=this.key+1
                         this.loading=false

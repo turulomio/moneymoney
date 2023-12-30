@@ -118,6 +118,7 @@
 </template>  
 <script>     
     import axios from 'axios'
+    import { useStore } from "@/store"
     import MyMenuInline from './MyMenuInline.vue'
     import QuotesCU from './QuotesCU.vue'
     import ChartProduct from './ChartProduct.vue'
@@ -156,7 +157,7 @@
         data () {
             return {
                 displayvalues:[
-                    {title:this.$t('Leverage'), value: this.store().leverages.get(this.product.leverages).localname},
+                    {title:this.$t('Leverage'), value: this.useStore().leverages.get(this.product.leverages).localname},
                     {title:this.$t('Currency'), value: this.product.currency},
                     {title:this.$t('Obsolete'), value: this.product.obsolete},
                     {title:this.$t('Id'), value: this.product.id},
@@ -292,6 +293,7 @@
             },
         },
         methods: {
+            useStore,
             f,
             empty_dps,
             empty_quote,
@@ -301,7 +303,7 @@
                 this.dialog_estimationdps=false
             },
             on_monthpicker_quotes_change(){
-                axios.get(`${this.store().apiroot}/api/quotes/?product=${this.product.url}&year=${this.quotes_ym.year}&month=${this.quotes_ym.month}`, this.myheaders())                
+                axios.get(`${this.useStore().apiroot}/api/quotes/?product=${this.product.url}&year=${this.quotes_ym.year}&month=${this.quotes_ym.month}`, this.myheaders())                
                 .then((response) => {
                     this.quotes_month=response.data
                 }) 
@@ -310,7 +312,7 @@
                 });
             },
             on_monthpicker_ohcls_change(){
-                axios.get(`${this.store().apiroot}/products/quotes/ohcl/?product=${this.product.url}&year=${this.ohcls_ym.year}&month=${this.ohcls_ym.month}`, this.myheaders())                
+                axios.get(`${this.useStore().apiroot}/products/quotes/ohcl/?product=${this.product.url}&year=${this.ohcls_ym.year}&month=${this.ohcls_ym.month}`, this.myheaders())                
                 .then((response) => {
                     this.ohcls_month=response.data
                 }) 
@@ -319,7 +321,7 @@
                 });
             },
             refreshProductOHCLDaily(){
-                return axios.get(`${this.store().apiroot}/products/quotes/ohcl/?product=${this.product.url}`, this.myheaders())
+                return axios.get(`${this.useStore().apiroot}/products/quotes/ohcl/?product=${this.product.url}`, this.myheaders())
             },
             refreshInformation(){
                 return axios.get(`${this.product.url}historical_information/`, this.myheaders())

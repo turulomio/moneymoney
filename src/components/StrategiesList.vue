@@ -82,6 +82,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import MyMenuInline from './MyMenuInline.vue'
     import StrategiesView from './StrategiesView.vue'
     import StrategyCU from './StrategyCU.vue'
@@ -143,6 +144,7 @@
             }
         },
         methods: {
+            useStore,
             localtime,
             f,
             editItem (item) {
@@ -166,7 +168,7 @@
             detailedviewItem (event,object) {
                 if (object.item.type==2){//RANGES
                     this.pr=this.empty_products_ranges()
-                    this.pr.product=`${this.store().apiroot}/api/products/${object.item.additional1}/`
+                    this.pr.product=`${this.useStore().apiroot}/api/products/${object.item.additional1}/`
                     this.pr.percentage_between_ranges=object.item.additional2
                     this.pr.percentage_gains=object.item.additional3
                     this.pr.amount_to_invest=object.item.additional4
@@ -181,7 +183,7 @@
             },
             update_table(){
                 this.loading_strategies=true
-                axios.get(`${this.store().apiroot}/api/strategies/withbalance/?active=${this.showActive}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/strategies/withbalance/?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
                     this.strategies_items=response.data
                     this.loading_strategies=false

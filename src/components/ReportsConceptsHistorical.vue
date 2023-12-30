@@ -4,7 +4,7 @@
  
         <v-layout style="justify-content: center;">
             <v-card  class="pa-6">
-                <v-select :label="$t('Select a concept')" v-model="selected_concept" :items="getArrayFromMap(store().concepts)" item-value="url" item-title="localname"></v-select>
+                <v-select :label="$t('Select a concept')" v-model="selected_concept" :items="getArrayFromMap(useStore().concepts)" item-value="url" item-title="localname"></v-select>
             </v-card>
         </v-layout>
         <p></p>
@@ -80,6 +80,7 @@
 
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import ReportsConceptsHistoricalDetail from './ReportsConceptsHistoricalDetail.vue'
     export default {
         name:"ReportsConceptsHistorical",
@@ -130,6 +131,7 @@
             }
         },
         methods:{
+            useStore,
             refreshTable(){
                 this.loading=true
                 axios.get(`${this.selected_concept}historical_report/`, this.myheaders())

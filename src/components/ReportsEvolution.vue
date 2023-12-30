@@ -108,6 +108,7 @@
 </template>
 <script>     
     import axios from 'axios'
+    import { useStore } from "@/store"
     import {f} from 'vuetify_rules'
     export default {
         components:{
@@ -146,6 +147,7 @@
             }
         },
         methods:{
+            useStore,
             f,
             years(){
                 var start=1990
@@ -182,7 +184,7 @@
             refreshTables(){
                 this.loading_assets=true
                 this.loading_invested=true
-                axios.get(`${this.store().apiroot}/reports/evolutionassets/${this.year}/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/evolutionassets/${this.year}/`, this.myheaders())
                 .then((response) => {
                     this.assetsData=response.data
                     this.loading_assets=false
@@ -190,7 +192,7 @@
                 }, (error) => {
                     this.parseResponseError(error)
                 });
-                axios.get(`${this.store().apiroot}/reports/evolutioninvested/${this.year}/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/evolutioninvested/${this.year}/`, this.myheaders())
                 .then((response) => {
                     this.investedData=response.data
                     this.loading_invested=false

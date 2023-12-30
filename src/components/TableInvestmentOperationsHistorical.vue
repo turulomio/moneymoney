@@ -9,7 +9,7 @@
             <div>{{ getMapObjectById("investments",item.investments_id).fullname }}</div>
         </template>                    
         <template #item.operationstypes="{item}">
-            <!-- <div v-html="store().operationstypes.get(item.operationstypes)"></div> -->
+            <!-- <div v-html="useStore().operationstypes.get(item.operationstypes)"></div> -->
             <div>{{ getMapObjectById("operationstypes",item.operationstypes_id).localname }}</div>
         </template>
             <template #item.gross_start_user="{item}">
@@ -90,6 +90,7 @@
 </template>
 <script>    
     import { localtime, f } from 'vuetify_rules'
+    import { useStore } from "@/store"
     export default {
         name: "TableInvestmentOperationsHistorical",
         props: {
@@ -133,6 +134,7 @@
             }
         },
         methods: {
+            useStore,
             // Currencies are part of the item
             f,
             localtime,

@@ -46,6 +46,7 @@
 
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import moment from 'moment'
     import EstimationsDpsCU from './EstimationsDpsCU.vue'
     import {empty_estimation_dps} from '../empty_objects.js'
@@ -79,6 +80,7 @@
             }
         },
         methods:{
+            useStore,
             f,
             showAlarm(item){
                 var today= moment()
@@ -102,7 +104,7 @@
             },
             refreshTable(){
                 this.loading_dividends=true
-                axios.get(`${this.store().apiroot}/reports/dividends/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/dividends/`, this.myheaders())
                 .then((response) => {
                     this.items=response.data
                     this.loading_dividends=false

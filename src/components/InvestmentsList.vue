@@ -104,6 +104,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import MyMenuInline from './MyMenuInline.vue'
     import InvestmentsCU from './InvestmentsCU.vue'
     import InvestmentsChangeSellingPrice from './InvestmentsChangeSellingPrice.vue'
@@ -184,6 +185,7 @@
             },
         },
         methods: { 
+            useStore,
             localtime,
             f,
             addQuote(item){
@@ -257,7 +259,7 @@
             },
             update_table(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/api/investments/withbalance/?active=${this.showActive}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/investments/withbalance/?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
                     this.investments_items=response.data
                     this.update_foot()
@@ -281,7 +283,7 @@
             },
             products_autoupdate(){
                 this.products_updating=true
-                axios.post(`${this.store().apiroot}/products/update/`, {auto:true,}, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/products/update/`, {auto:true,}, this.myheaders())
                 .then((response) => {
                         this.update_errors=0
                         response.data.forEach(o=>{

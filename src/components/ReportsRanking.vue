@@ -49,6 +49,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import InvestmentsMergedView from './InvestmentsMergedView.vue'
     export default {
         components:{
@@ -83,6 +84,7 @@
             }
         },
         methods: {
+            useStore,
             viewInvestmentsMerged (event,object) {
                 this.ios_id=this.ios[object.item.products_id]
                 this.key=this.key+1
@@ -91,7 +93,7 @@
             update_table(){
                 this.loading_table=true
 
-                axios.get(`${this.store().apiroot}/reports/ranking/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/ranking/`, this.myheaders())
                 .then((response) => {
                     this.ios=response.data
                     this.filter_data()

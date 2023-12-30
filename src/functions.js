@@ -2,15 +2,10 @@ import { useStore } from './store.js'
 import {my_round} from 'vuetify_rules'
 
 
-export function store(){
-    return useStore()    
-}
-
-
 export function myheaders(){
     return {
         headers:{
-            'Authorization': `Token ${store().token}`,
+            'Authorization': `Token ${useStore().token}`,
             'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
             'Content-Type':'application/json'
         }
@@ -30,7 +25,7 @@ export function myheaders_noauth(){
 export function myheaders_formdata(){
     return {
         headers:{
-            'Authorization': `Token ${store().token}`,
+            'Authorization': `Token ${useStore().token}`,
             'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
             'Content-Type': 'multipart/form-data'
         }
@@ -42,8 +37,8 @@ export function myheaders_formdata(){
 export function parseResponse(response){
     if (response.status==200){ //Good connection
         if (response.data == "Wrong credentials"){
-            this.store().token=null
-            this.store().logged=false
+            this.useStore().token=null
+            this.useStore().logged=false
             alert(this.$t("Wrong credentials"))
             return false
         }
@@ -65,12 +60,12 @@ export function parseResponseError(error){
 //       console.log(error.response.status);
 //       console.log(error.response.headers);
         if (error.response.status == 401){
-            if (this.store().token==null){ // Not logged yet
+            if (this.useStore().token==null){ // Not logged yet
                 alert(this.$t("Wrong credentials"))
             } else {
                 alert (this.$t("You aren't authorized to do this request"))
-                this.store().token=null;
-                this.store().logged=false;
+                this.useStore().token=null;
+                this.useStore().logged=false;
                 if (this.$router.currentRoute.name != "about") this.$router.push("about")
                 console.log(error.response)
             }
@@ -79,8 +74,8 @@ export function parseResponseError(error){
             console.log(error.response)
         } else if (error.response.status == 403){ // Used for developer or app errors
             alert (this.$t("You've done something forbidden"))
-            this.store().token=null;
-            this.store().logged=false;
+            this.useStore().token=null;
+            this.useStore().logged=false;
             if (this.$router.currentRoute.name != "about") this.$router.push("about")
             console.log(error.response)
         } else if (error.response.status == 500){
@@ -192,7 +187,7 @@ export function listobjects_average_ponderated(lo,key1, key2){
 
 // Generate a hyperlinked_url (DRF hyperlinked url) from model and id uses $sotre for apiroot
 export function hyperlinked_url(model,id){
-    return `${store().apiroot}/api/${model}/${id}/`
+    return `${useStore().apiroot}/api/${model}/${id}/`
 }
 
 //Gets id (integer) from an hyperlinked_url(DRF hyperlinked ul)
@@ -231,29 +226,26 @@ export function getBase64(file) {
 /// OLD GETTERS
 
 export function getConceptsForDividends() { 
-    return getArrayFromMap(store().concepts).filter( o => [39,50,59,62,63,65,66,68,70,72,75,76,77].includes(o.id))
+    return getArrayFromMap(useStore().concepts).filter( o => [39,50,59,62,63,65,66,68,70,72,75,76,77].includes(o.id))
 }
 
 export function getInvestmentsActive() { 
-    return getArrayFromMap(store().investments).filter(o => o.active==true)
+    return getArrayFromMap(useStore().investments).filter(o => o.active==true)
 }
 export function getInvestmentsByProduct(product) { 
-    return getArrayFromMap(store().investments).filter(o => o.products==product)
+    return getArrayFromMap(useStore().investments).filter(o => o.products==product)
 }
 
-export function getOperationstypesForNewConcepts() { 
-    return getArrayFromMap(store().operationstypes).filter( o => [1,2].includes(o.id))
-}
 
 export function getOperationstypesForInvestmentsOperations() { 
-    return getArrayFromMap(store().operationstypes).filter( o => [4,5,6,8,9,10].includes(o.id))
+    return getArrayFromMap(useStore().operationstypes).filter( o => [4,5,6,8,9,10].includes(o.id))
 }
 
 
 export function getMapObjectById(catalog,id) { 
     // If id doesn't exists return undefined
     var url=hyperlinked_url(catalog,id)
-    var r= store()[catalog].get(url)
+    var r= useStore()[catalog].get(url)
     return r
 }
 
@@ -264,7 +256,7 @@ export function getArrayFromMap(catalog){
 }
 
 export function getCurrencyByCode(code,default_=null) {
-    var r=store()['currencies'].find(o => o.code==code)
+    var r=useStore()['currencies'].find(o => o.code==code)
     if (r==null){
         return default_
     } else {
@@ -295,7 +287,7 @@ export function currency_generic_html(num, currency, locale, decimals=2){
     }
 }
 export function getCountryNameByCode(code) { 
-    var r=store()['countries'].find(o => o.code==code)
+    var r=useStore()['countries'].find(o => o.code==code)
     if (r==null){
         return ""
     } else {
@@ -316,10 +308,10 @@ export function percentage_html(num, decimals=2){
     return percentage_generic_html(num,localStorage.locale,decimals )
 }
 export function localcurrency_string(num, decimals=2){
-    return currency_generic_string(num, store().profile.currency, localStorage.locale,decimals )
+    return currency_generic_string(num, useStore().profile.currency, localStorage.locale,decimals )
 }
 export function localcurrency_html(num, decimals=2){
-    return currency_generic_html(num, store().profile.currency, localStorage.locale,decimals )
+    return currency_generic_html(num, useStore().profile.currency, localStorage.locale,decimals )
 }
 // Uses .local()
 export function zulu2date(value){
@@ -333,7 +325,7 @@ export function date2zulu(value){
 // invested is the amount to invest in local currency
 // Se aplica un margin del 10%  
 export function amount_to_invest( invested ){
-    let s=this.store().profile
+    let s=this.useStore().profile
 
     let sum_1=s.invest_amount_1
     let sum_2=(s.invest_amount_1+s.invest_amount_2)

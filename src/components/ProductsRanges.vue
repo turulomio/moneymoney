@@ -10,7 +10,7 @@
 
                 </v-row>
                 <v-row class="pl-5 pr-5">                
-                <v-select class="mr-5" :items="getArrayFromMap(store().recomendation_methods)" v-model="newpr.recomendation_methods" :label="$t('Set recomendation method')"  item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
+                <v-select class="mr-5" :items="getArrayFromMap(useStore().recomendation_methods)" v-model="newpr.recomendation_methods" :label="$t('Set recomendation method')"  item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
 
                 <v-text-field class="mr-5" v-model.number="newpr.percentage_between_ranges"  :label="$t('Set percentage between ranges x1000')" :placeholder="$t('Set percentage between ranges x1000')" :rules="RulesInteger(10,true)" counter="10"/>
                 <v-text-field class="mr-5" v-model.number="newpr.percentage_gains"  :label="$t('Set percentage gains x1000')" :placeholder="$t('Set percentage gains x1000')" :rules="RulesInteger(10,true)" counter="10"/>
@@ -84,6 +84,7 @@
 
 <script>    
     import {empty_products_ranges, empty_order} from '../empty_objects.js'
+    import { useStore } from "@/store"
     import { RulesSelection, RulesInteger, f } from 'vuetify_rules'
     import axios from 'axios'
     import AutocompleteProducts from './AutocompleteProducts.vue'
@@ -137,6 +138,7 @@
             }   
         },
         methods:{
+            useStore,
             RulesSelection,
             RulesInteger,
             f,
@@ -160,7 +162,7 @@
             refreshTable(){
                 this.loading=true
                 var headers={...this.myheaders(),params:this.newpr}
-                axios.get(`${this.store().apiroot}/products/ranges/`, headers)
+                axios.get(`${this.useStore().apiroot}/products/ranges/`, headers)
                 .then((response) => {
                     this.prdata=response.data
                     this.tableData=this.prdata.pr

@@ -4,7 +4,7 @@
         <div v-html="$t('Table with all investments with the same product as current investment:')"></div>
         <v-data-table ref="table" v-model="selected_ids" show-select :headers="tableHeaders" :items="data" class="elevation-1 mt-2" density="compact" height="300" fixed-header :items-per-page="10000" >
             <template #item.fullname="{item}">
-                {{ store().investments.get(item.url).fullname }}
+                {{ useStore().investments.get(item.url).fullname }}
             </template>            
             <template #item.selling_price="{item}">
                 <div class="text-right">{{ currency_string(item.selling_price, item.currency)}}</div>
@@ -66,6 +66,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import DisplayValues from './DisplayValues.vue'
     import MyDatePicker from './MyDatePicker.vue'
     import {empty_products_ranges,empty_ios} from '../empty_objects.js'
@@ -144,7 +145,7 @@
             },
             strategy: function(item){
                 var pr=this.empty_products_ranges()
-                pr.product=`${this.store().apiroot}/api/products/${item.additional1}/`
+                pr.product=`${this.useStore().apiroot}/api/products/${item.additional1}/`
                 pr.percentage_between_ranges=item.additional2
                 pr.percentage_gains=item.additional3
                 pr.amount_to_invest=item.additional4
@@ -152,7 +153,7 @@
                 pr.totalized_operations=item.additional6
                 pr.investments=[this.investment.id] // Is a string due tu uses api/strategies an in db is a string
                 var headers={...this.myheaders(),params:pr}
-                axios.get(`${this.store().apiroot}/products/ranges/`, headers)
+                axios.get(`${this.useStore().apiroot}/products/ranges/`, headers)
                 .then((response) => {
                     this.strategy_ranges=[]
 
@@ -182,7 +183,7 @@
             investments_same_product(){
                 //Returns an array of integers
                 var r=[]
-                this.store().investments.forEach(inv=>{
+                this.useStore().investments.forEach(inv=>{
                     if (inv.products==this.product.url && inv.active){
                         r.push(inv.id)
                     }
@@ -191,6 +192,7 @@
             }
         },
         methods:{
+            useStore,
             f,
             my_round,
             RulesFloat,
@@ -200,7 +202,7 @@
                     {title:this.$t('Selected invested amount'), value: this.currency_string(this.selected_invested,this.product.currency)},
                     {title:this.$t('Number of shares selected'), value: this.selected_shares},
                     {title:this.$t('Average price of selected shares'), value: this.currency_string(this.selected_average_price,this.product.currency)},
-                    {title:this.$t('Product leverage'), value: this.store().leverages.get(this.product.leverages).multiplier},
+                    {title:this.$t('Product leverage'), value: this.useStore().leverages.get(this.product.leverages).multiplier},
                     {title:this.$t('Product real leverage'), value: this.product.real_leveraged_multiplier},
                 ]
             },
@@ -239,10 +241,10 @@
                     investments: s,
                     selling_price: this.my_round(price,  this.product.decimals),
                 }
-                axios.post(`${this.store().apiroot}/investments/changesellingprice/`, p, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/investments/changesellingprice/`, p, this.myheaders())
                 .then((response) => {//api/investments serializer
                     response.data.forEach(o=>{
-                        this.store().investments.set(o.url,o)
+                        this.useStore().investments.set(o.url,o)
                     })
                     this.loading_ios=false
                     this.key=this.key+1
@@ -293,9 +295,9 @@
                 this.loading_ios=true
                 var simulation=this.empty_ios()
                 simulation.investments=this.investments_same_product
-                simulation.currency=this.store().profile.currency
+                simulation.currency=this.useStore().profile.currency
                 simulation.mode=2
-                return axios.post(`${this.store().apiroot}/ios/`, simulation, this.myheaders())
+                return axios.post(`${this.useStore().apiroot}/ios/`, simulation, this.myheaders())
                 .then((response) => {
                     this.plio=response.data
                     var o
@@ -332,7 +334,7 @@
                 });
             },
             refreshStrategies(){
-                axios.get(`${this.store().apiroot}/api/strategies/?investment=${this.investment.url}&active=true&type=2`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/strategies/?investment=${this.investment.url}&active=true&type=2`, this.myheaders())
                 .then((response) => {
                     this.strategies=response.data
                 }, (error) => {
@@ -341,7 +343,7 @@
             },
         },
         created(){
-            this.product=this.store().products.get(this.investment.products)
+            this.product=this.useStore().products.get(this.investment.products)
             this.selling_expiration=this.investment.selling_expiration
             this.price=this.investment.selling_price
             this.refreshStrategies()
