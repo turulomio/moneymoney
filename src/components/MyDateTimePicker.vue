@@ -41,6 +41,7 @@
     import moment from 'moment'
     import { RulesInteger } from 'vuetify_rules/src/rules'
     export default {    
+        name: "MyDateTimePicker",
         props: {
             modelValue:{ //v-model in vue3
                 required:true
