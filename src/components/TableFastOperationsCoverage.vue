@@ -5,7 +5,7 @@
                 {{ localtime(item.datetime) }}
             </template>                 
             <template #item.investments="{item}">
-                {{ store().investments.get(item.investments).fullname }}
+                {{ useStore().investments.get(item.investments).fullname }}
             </template>              
             <template #item.amount="{item}">
                 <div class="text-right" v-html="currency_html(item.amount,item.currency)"></div>
@@ -26,6 +26,8 @@
 </template>
 <script>
     import FastOperationsCoverageCU from './FastOperationsCoverageCU.vue'
+    import { useStore } from "@/store"
+    import { localtime } from 'vuetify_rules'
     export default {
         components:{
             FastOperationsCoverageCU,
@@ -44,6 +46,8 @@
             }
         },
         methods: {
+            useStore,
+            localtime,
             currency(value){
                 return this.currency_html(value, this.product.currency)
             },

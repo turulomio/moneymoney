@@ -5,8 +5,8 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid">
                 <MyDateTimePicker :readonly="deleting" v-model="newat.datetime" :label="$t('Set transfer date and time')" />
-                <v-autocomplete :readonly="deleting" :items="getArrayFromMap(store().accounts).filter(v =>v.active==true)" v-model="newat.account_origin" :label="$t('Select an origin account')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-autocomplete :readonly="deleting" :items="getArrayFromMap(store().accounts).filter(v =>v.active==true)" v-model="newat.account_destiny" :label="$t('Select a destiny account')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="deleting" :items="getArrayFromMap(useStore().accounts).filter(v =>v.active==true)" v-model="newat.account_origin" :label="$t('Select an origin account')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="deleting" :items="getArrayFromMap(useStore().accounts).filter(v =>v.active==true)" v-model="newat.account_destiny" :label="$t('Select a destiny account')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field :readonly="deleting" v-model.number="newat.amount"  :label="$t('Set transfer amount')" :placeholder="$t('Set transfer amount')" :rules="RulesFloatGZ(10,true,get_transfer_decimals())" counter="10"/>
                 <v-text-field :readonly="deleting" v-model.number="newat.commission"  :label="$t('Set transfer commission')" :placeholder="$t('Set transfer commission')" :rules="RulesFloatGEZ(10,true,get_transfer_decimals())" counter="10"/>
             </v-form>
@@ -19,6 +19,8 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
+    import { RulesSelection, RulesFloatGEZ, RulesFloatGZ } from 'vuetify_rules'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     export default {
         components: {
@@ -47,6 +49,10 @@
             }
         },
         methods: {
+            useStore,
+            RulesSelection,
+            RulesFloatGEZ,
+            RulesFloatGZ,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')
@@ -70,7 +76,7 @@
                 }
 
                 if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/accounts/transfer/`, this.newat,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/accounts/transfer/`, this.newat,  this.myheaders())
                     .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
@@ -78,7 +84,7 @@
                     })
                 }
                 if (this.mode=="U"){
-                    axios.put(`${this.store().apiroot}/accounts/transfer/`, this.newat,  this.myheaders())
+                    axios.put(`${this.useStore().apiroot}/accounts/transfer/`, this.newat,  this.myheaders())
                     .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
@@ -89,7 +95,7 @@
                     var r = confirm(this.$t("Do you want to delete this transfer?"))
                     if(r == true) {
                         var headers={...this.myheaders(),data:this.newat}
-                        axios.delete(`${this.store().apiroot}/accounts/transfer/`, headers)
+                        axios.delete(`${this.useStore().apiroot}/accounts/transfer/`, headers)
                         .then(() => {
                             this.$emit("cruded")
                         }, (error) => {
@@ -132,8 +138,8 @@
                 //Must be the lowest decimals from both accounts
                 var r
 
-                var ao=this.store().accounts.get(this.newat.account_origin)
-                var ad=this.store().accounts.get(this.newat.account_destiny)
+                var ao=this.useStore().accounts.get(this.newat.account_origin)
+                var ad=this.useStore().accounts.get(this.newat.account_destiny)
                 if (ad==null || ao==null){
                     r=6
                 } else {

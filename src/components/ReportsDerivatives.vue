@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ $t("Derivatives report") }}
-        <MyMenuInline :items="menuinline_items"  :context="this"></MyMenuInline>  </h1>
+        <MyMenuInline :items="menuinline_items" />  </h1>
 
         <div class="pa-6" v-if="items && coverage_items">
             <v-tabs  bg-color="secondary" dark v-model="tab" grow>
@@ -30,7 +30,7 @@
                 <template #bottom ></template>   
                         </v-data-table>   
                     </v-card>
-                    <p class="boldcenter my-4" v-html="$t('Total derivatives: [0]').format(localcurrency_html(listobjects_sum(items.derivatives,'total')))"></p>
+                    <p class="boldcenter my-4" v-html="f($t('Total derivatives: [0]'), [localcurrency_html(listobjects_sum(items.derivatives,'total'))])"></p>
                 </v-window-item>                
                 <v-window-item key="coverage">    
                     <MyMonthPicker v-model="ym" />
@@ -58,7 +58,7 @@
                 <template #bottom ></template>   
                         </v-data-table>   
                     </v-card>
-                    <p class="boldcenter my-4" v-html="$t('Total balance: [0]').format(localcurrency_html(listobjects_sum(items.balance,'total')))"></p>
+                    <p class="boldcenter my-4" v-html="f($t('Total balance: [0]'), [localcurrency_html(listobjects_sum(items.balance,'total'))])"></p>
                 </v-window-item>
             </v-window>     
         </div>
@@ -72,11 +72,13 @@
 </template>
 <script>     
     import axios from 'axios'
+    import { useStore } from "@/store"
     import FastOperationsCoverageCU from './FastOperationsCoverageCU.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import MyMonthPicker from './MyMonthPicker.vue'
     import TableFastOperationsCoverage from './TableFastOperationsCoverage.vue'
     import {empty_fast_operations_coverage} from '../empty_objects.js'
+    import {f} from 'vuetify_rules'
     export default {
         components:{
             MyMonthPicker,
@@ -138,13 +140,15 @@
             },
         },
         methods:{
+            useStore,
             empty_fast_operations_coverage,
+            f,
             refreshTables(){
                 this.loading=true
 
                 axios.all([
-                    axios.get(`${this.store().apiroot}/derivatives/`, this.myheaders()),
-                    axios.get(`${this.store().apiroot}/api/fastoperationscoverage/?year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())
+                    axios.get(`${this.useStore().apiroot}/derivatives/`, this.myheaders()),
+                    axios.get(`${this.useStore().apiroot}/api/fastoperationscoverage/?year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())
                 ])
                 .then(([resDerivatives, resFOC]) => {
                     this.items=resDerivatives.data

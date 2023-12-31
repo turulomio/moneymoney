@@ -1,16 +1,16 @@
 <template>
     <div>
         <h1>{{ $t("Products comparation") }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>    
+            <MyMenuInline :items="menuinline_items"/>    
         </h1>
 
         <v-data-table density="compact" :headers="headers" :items="items" :sort-by="[{key:'name',order:'asc'}]" class="elevation-1 ma-4 cursorpointer" :loading="loading" :key="key"  @click:row="pairReportItem"    :items-per-page="10000" >
         
             <template #item.a="{item}">
-                <div v-html="this.store().products.get(item.a).name"></div>
+                <div v-html="this.useStore().products.get(item.a).name"></div>
             </template> 
             <template #item.b="{item}">
-                <div v-html="this.store().products.get(item.b).name"></div>
+                <div v-html="this.useStore().products.get(item.b).name"></div>
             </template>     
             <template #item.actions="{item}">
                 <v-icon small class="mr-2" @click="editPair(item)">mdi-pencil</v-icon>
@@ -44,7 +44,9 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import {empty_products_comparation} from '../empty_objects.js'
+    import { RulesSelection } from 'vuetify_rules'
     import MyMenuInline from './MyMenuInline.vue'
     import ProductsComparation from './ProductsComparation.vue'
     import ProductsComparationCU from './ProductsComparationCU.vue'
@@ -95,6 +97,8 @@
             }
         },
         methods:{
+            useStore,
+            RulesSelection,
             deletePair(item){
                 this.pc=item
                 this.pc_mode="D"
@@ -126,7 +130,7 @@
             },
             refreshTable(){               
                 this.loading=true
-                axios.get(`${this.store().apiroot}/api/productspairs/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/productspairs/`, this.myheaders())
                 .then((response) => {
                     this.items=response.data
                     this.loading=false

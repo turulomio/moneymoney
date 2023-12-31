@@ -33,7 +33,9 @@
 </template>
 <script>      
     import axios from 'axios'
+    import { useStore } from "@/store"
     import ChartPie from './ChartPie.vue'
+    import { my_round } from 'vuetify_rules'
     export default {
         components:{
             ChartPie,
@@ -107,9 +109,11 @@
             }
         },
         methods:{
+            useStore,
+            my_round,
             update_table(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/investments/classes/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/investments/classes/`, this.myheaders())
                 .then((response) => {
                     this.data=response.data
                     this.loading=false

@@ -3,7 +3,7 @@
     <v-card class="px-6 pt-8 pb-4 d-flex justify-center" flat>
         <v-btn @click="substractYear()" class="mr-2">&#60;&#60;</v-btn>
         <v-btn @click="substractMonth()" class="mr-2">&#60;</v-btn>
-        <v-text-field v-model="new_value.year" density="compact" class="mr-2 " :label="$t('Select a year')" style="max-width: 200px;"/>
+        <v-text-field v-model.number="new_value.year" density="compact" class="mr-2 " :label="$t('Select a year')" style="max-width: 200px;"/>
         <v-select v-model="new_value.month" density="compact"  class="mr-2 " :items="months" :label="$t('Select a month')" style="max-width: 200px;"/>
         <v-btn @click="addMonth()" class="mr-2">&#62;</v-btn>
         <v-btn @click="addYear()" class="mr-2">&#62;&#62;</v-btn>

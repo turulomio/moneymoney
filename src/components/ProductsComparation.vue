@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ $t("Products comparation") }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items"/>
         </h1>
         <DisplayValues :items="display_values()" width="90%" v-if="product_a"></DisplayValues>
         <v-card class="d-flex flex-row mx-auto pa-4" flat width="65%">
@@ -103,6 +103,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import {empty_chart_scatter_pair_prices,empty_quote} from '../empty_objects.js'
     import ChartPriceRatio from './ChartPriceRatio.vue'
     import ChartScatterPairPrices from './ChartScatterPairPrices.vue'
@@ -110,6 +111,7 @@
     import ProductsView from './ProductsView.vue'
     import QuotesCU from './QuotesCU.vue'
     import DisplayValues from './DisplayValues.vue'
+    import { localtime, my_round,RulesFloat,RulesInteger,f} from 'vuetify_rules'
     export default {
         components:{
             ChartPriceRatio,
@@ -193,7 +195,7 @@
                 ]
                 if (this.product_a){
                     r[0].children.push({
-                        name: this.$t("Add a quote for '[0]'").format(this.product_a.name),
+                        name: f(this.$t("Add a quote for '[0]'"), [this.product_a.name]),
                                 code: function(){
                                     this.key=this.key+1
                                     this.dialog_productview=true
@@ -201,9 +203,9 @@
                                 icon: "mdi-magnify",
                     })
                     r[1].children.push({
-                        name: this.$t("View '[0]'").format(this.product_a.name),
+                        name: f(this.$t("View '[0]'"), [this.product_a.name]),
                         code: function(){
-                            this.product=this.store().products.get(this.product_a.url)
+                            this.product=this.useStore().products.get(this.product_a.url)
                             this.key=this.key+1
                             this.dialog_productview=true
                         }.bind(this),
@@ -212,7 +214,7 @@
                 }
                 if (this.product_b){
                     r[0].children.push({
-                        name: this.$t("Add a quote for '[0]'").format(this.product_b.name),
+                        name: f(this.$t("Add a quote for '[0]'"), [this.product_b.name]),
                         icon: "mdi-plus",
                         code: function(){
                             this.quote=this.empty_quote()
@@ -223,10 +225,10 @@
                         }.bind(this),
                     })
                     r[1].children.push({
-                        name: this.$t("View '[0]'").format(this.product_b.name),
+                        name: f(this.$t("View '[0]'"), [this.product_b.name]),
                         code: function(){
                             this.key=this.key+1
-                            this.product=this.store().products.get(this.product_b.url)
+                            this.product=this.useStore().products.get(this.product_b.url)
                             this.dialog_productview=true
                         }.bind(this),
                         icon: "mdi-magnify",
@@ -236,8 +238,14 @@
             },
         },
         methods:{
+            useStore,
             empty_chart_scatter_pair_prices,
             empty_quote,
+            localtime,
+            my_round,
+            RulesFloat,
+            RulesInteger,
+            f,
             display_values(){
                 return [
                     {title:this.$t('Better product'), value: this.product_a.name},
@@ -251,7 +259,7 @@
 
             pairReport(){               
                 this.loading=true
-                axios.get(`${this.store().apiroot}/products/pairs/?a=${this.pc.a}&b=${this.pc.b}&interval_minutes=${this.interval_minutes}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/products/pairs/?a=${this.pc.a}&b=${this.pc.b}&interval_minutes=${this.interval_minutes}`, this.myheaders())
                 .then((response) => {
                     this.dbdata=response.data.data
                     this.product_a=response.data.product_a

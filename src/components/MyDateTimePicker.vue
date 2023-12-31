@@ -25,6 +25,7 @@
     </div>
 </template>
 <script>
+import { localtime } from 'vuetify_rules'
 export default {    
     name: "MyDateTimePicker",
     props: {
@@ -60,29 +61,26 @@ export default {
             this.new_value = newValue
         },
         dt(newValue){
-            this.new_value=this.dt2string(newValue)
+            this.new_value=this.dt2iso(newValue)
         }
     },
     methods: {
+        localtime,
         format(){
-            if (this.dt) {
-                return this.localtime(this.dt)
-            } else {
-                return ""
-            }
+            return this.localtime(this.dt2iso(this.dt))
         },
-        string2dt(s){
+        iso2dt(s){
             if (!s) return null
             return new Date(s)
         },
-        dt2string(dt){
+        dt2iso(dt){
             if (!dt) return null
             return dt.toISOString()
         }
     },
     created(){
         this.new_value=this.modelValue
-        this.dt=this.string2dt(this.new_value)
+        this.dt=this.iso2dt(this.new_value)
     },
 }
 </script>

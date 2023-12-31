@@ -1,7 +1,7 @@
 <template>
     <div>    
         <h1>{{ $t('Quotes maintenance') }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items"/>
         </h1>
         <h2>{{ get_option_name(option) }}</h2>
         <v-card outlined class="ma-4 pa-4">
@@ -11,6 +11,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import MyMenuInline from './MyMenuInline.vue'
     import TableQuotes from './TableQuotes.vue'
     export default {
@@ -52,6 +53,7 @@
             }
         },
         methods: {
+            useStore,
             get_option_name(option){
                 if (option==0) return this.$t("Quotes in the future")
                 if (option==1) return this.$t("Last quotes")
@@ -60,7 +62,7 @@
                 this.quotes=[]
                 this.loading=true
                 this.option=0
-                axios.get(`${this.store().apiroot}/api/quotes/?future=true`,  this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/quotes/?future=true`,  this.myheaders())
                 .then((response) => {
                     this.quotes=response.data
                     this.loading=false
@@ -72,7 +74,7 @@
                 this.quotes=[]
                 this.loading=true
                 this.option=1
-                axios.get(`${this.store().apiroot}/api/quotes/?last=true`,  this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/quotes/?last=true`,  this.myheaders())
                 .then((response) => {
                     this.quotes=response.data
                     this.loading=false

@@ -75,7 +75,7 @@
 
         <template #tbody>
             <tr class="totalrow" v-if="items.length>0 && showtotal">
-                <td>{{ $t("Total ([0] registers)").format(items.length)}}</td>               
+                <td>{{ f($t("Total ([0] registers)"), [items.length])}}</td>               
                 <td v-if="showinvestment"></td>
 
                 <td></td>          
@@ -99,6 +99,7 @@
     </v-data-table>   
 </template>
 <script>    
+    import { localtime, f } from 'vuetify_rules'
     export default {
         props: {
             items: {
@@ -166,6 +167,8 @@
             }
         },
         methods: {
+            f,
+            localtime,
             // Currencies are part of the item
             currency(item){
                 if (this.output=="account"){

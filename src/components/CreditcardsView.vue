@@ -1,8 +1,8 @@
 
 <template>
     <div>    
-        <h1 class="mb-4">{{ $t("Credit card details of '[0]'").format(cc.name) }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+        <h1 class="mb-4">{{ f($t("Credit card details of '[0]'"), [cc.name]) }}
+            <MyMenuInline :items="menuinline_items"/>
 
         </h1>
 
@@ -46,6 +46,7 @@
     import CreditcardsoperationsCU from './CreditcardsoperationsCU.vue'
     import CreditcardsPaymentsRefund from './CreditcardsPaymentsRefund.vue'
     import {empty_cco} from '../empty_objects.js'
+    import {f} from 'vuetify_rules'
     export default {
         components:{
             MyMenuInline,
@@ -112,12 +113,13 @@
         },
         methods: {
             empty_cco,
+            f,
             changeSelected(selected_items){
                 this.selected_items=selected_items
-                this.paying_string=this.$t("Make a payment of [0] operations valued in [1]").format(
+                this.paying_string=f(this.$t("Make a payment of [0] operations valued in [1]"), [
                     selected_items.length,
                     this.currency_string(this.listobjects_sum(selected_items,"amount"), this.account.currency)
-                )
+                ])
             },
             update_table(refresh_key=true){
                 this.loading_cco=true

@@ -17,7 +17,9 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import AutocompleteProducts from './AutocompleteProducts.vue'
+    import { RulesSelection } from 'vuetify_rules'
     export default {
         components: {
             AutocompleteProducts,
@@ -37,6 +39,8 @@
             }
         },
         methods: {
+            useStore,
+            RulesSelection,
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating a products comparation")
@@ -64,7 +68,7 @@
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/api/productspairs/`, this.newpc,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/productspairs/`, this.newpc,  this.myheaders())
                     .then(() => {
                             this.$emit("cruded")
                     }, (error) => {

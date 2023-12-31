@@ -1,7 +1,7 @@
 <template>
     <div>    
         <h1>{{ title() }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items"/>
         </h1>           
         <div class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid">                
@@ -18,7 +18,9 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import {empty_quote} from '../empty_objects.js'
+    import { RulesSelection,RulesFloatGEZ } from 'vuetify_rules'
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import moment from 'moment-timezone';
     import MyDateTimePicker from './MyDateTimePicker.vue'
@@ -40,10 +42,10 @@
         computed:{
             product_object: function(){
 
-                return this.store().products.get(this.new_quote.products)
+                return this.useStore().products.get(this.new_quote.products)
             },
             product_stockmarket: function(){
-                return this.store().stockmarkets.get(this.product_object.stockmarkets)
+                return this.useStore().stockmarkets.get(this.product_object.stockmarkets)
             },
         },
         data(){ 
@@ -89,6 +91,9 @@
             }
         },
         methods: {
+            useStore,
+            RulesSelection,
+            RulesFloatGEZ,
             empty_quote,
             title(){
                 if (this.mode=="C") return this.$t("Add a quote")
@@ -113,7 +118,7 @@
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=="C") {
-                    axios.post(`${this.store().apiroot}/api/quotes/`, this.new_quote,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/quotes/`, this.new_quote,  this.myheaders())
                     .then(() => {
                             this.$emit("cruded")
                     }, (error) => {

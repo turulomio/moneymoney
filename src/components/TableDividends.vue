@@ -5,10 +5,10 @@
                 <div>{{ localtime(item.datetime)}}</div>
             </template>         
             <template #item.concepts="{item}">
-               <div v-html="store().concepts.get(item.concepts).localname"></div>
+               <div v-html="useStore().concepts.get(item.concepts).localname"></div>
            </template>       
             <template #item.investments="{item}">
-               <div v-html="store().investments.get(item.investments).fullname"></div>
+               <div v-html="useStore().investments.get(item.investments).fullname"></div>
            </template> 
             <template #item.gross="{item}">
                 <div v-html="currency_html(item.gross,item.currency)"></div>
@@ -29,7 +29,7 @@
             </template>
             <template #tbody>
                 <tr class="totalrow" v-if="items.length>0">
-                    <td>{{ $t("Total ([0] registers)").format(items.length)}}</td>
+                    <td>{{ f($t("Total ([0] registers)"), [items.length])}}</td>
                     <td></td>
                     <td v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items,'gross'),total_currency)"></td>
                     <td v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items,'net'), total_currency)"></td>
@@ -51,7 +51,9 @@
 </template>
 <script>
     import DividendsCU from './DividendsCU.vue'
+    import { useStore } from "@/store"
     import { empty_dividend } from '../empty_objects.js'
+    import { localtime, f } from 'vuetify_rules'
     export default {
         components:{
             DividendsCU,
@@ -93,6 +95,9 @@
             }
         },
         methods: {
+            useStore,
+            f,
+            localtime,
             copyDividend(item){
                 this.dividend=this.empty_dividend()
                 this.dividend.gross=item.gross

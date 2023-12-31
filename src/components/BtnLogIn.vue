@@ -7,13 +7,13 @@
         <v-card  class="pa-6">
             <h1 class="mb-2">{{ $t("Enter your credentials") }}</h1>
             <v-form ref="form" v-model="form_valid">
-                <v-text-field v-model="user" :readonly="loading" type="text" :counter="75" :label="$t('User')" :placeholder="$t('Enter user')" autofocus :rules="RulesString(75,true)"/>
-                <v-text-field v-model="password" :readonly="loading" type="password" :label="$t('Password')" :counter="75" :placeholder="$t('Enter password')" :rules="RulesString(75,true)"/>
+                <v-text-field data-test="BtnLogIn_User" v-model="user" :readonly="loading" type="text" :counter="75" :label="$t('User')" :placeholder="$t('Enter user')" autofocus :rules="RulesString(75,true)"/>
+                <v-text-field data-test="BtnLogIn_Password" v-model="password" :readonly="loading" type="password" :label="$t('Password')" :counter="75" :placeholder="$t('Enter password')" :rules="RulesString(75,true)"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" :loading="loading" @click="login" :disabled="!form_valid">{{ $t("Log in") }}</v-btn>
-                <v-btn color="error" :disabled="loading" @click="cancel">{{ $t("Cancel") }}</v-btn>
+                <v-btn data-test="BtnLogIn_cmd" color="primary" :loading="loading" @click="login" :disabled="!form_valid">{{ $t("Log in") }}</v-btn>
+                <v-btn data-test="BtnLogIn_cmdCancel" color="error" :disabled="loading" @click="cancel">{{ $t("Cancel") }}</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -22,6 +22,8 @@
 
 <script>
 import axios from 'axios'
+import { useStore } from "@/store"
+import {RulesString} from "vuetify_rules"
 export default {
     data () {
         return {
@@ -34,6 +36,8 @@ export default {
         }
     },
     methods: {
+            useStore,
+        RulesString,
         login(){
             var start=new Date()
                 if (this.form_valid!=true) {
@@ -42,12 +46,12 @@ export default {
                 }
             if (this.loading==true) return
             this.loading=true
-            axios.post(`${this.store().apiroot}/login/`, {username: this.user, password:this.password}, this.myheaders_noauth())
+            axios.post(`${this.useStore().apiroot}/login/`, {username: this.user, password:this.password}, this.myheaders_noauth())
             .then((response) => {
-                if (this.parseResponse(response,this.store())==true){
+                if (this.parseResponse(response,this.useStore())==true){
                     console.log("Authenticated");
-                    this.store().setToken(response.data)
-                    this.store().updateAll()
+                    this.useStore().setToken(response.data)
+                    this.useStore().updateAll()
                     .then(()=>{
                         this.$refs.form.reset()
                         this.loading=false

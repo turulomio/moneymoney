@@ -5,7 +5,7 @@
         <v-layout style="justify-content: center;">
             <v-card width="60%" class="d-flex flex-row" flat>
                 <v-select :label="$t('Select the way to show results')" v-model="method" :items="method_results" item-value="id" item-title="name"></v-select>
-                <v-text-field v-model="limit" class="ml-4" :label="$t('Percentage gains of the last operation to highlight')"  :placeholder="$t('Enter a number')"></v-text-field>
+                <v-text-field v-model.number="limit" class="ml-4" :label="$t('Percentage gains of the last operation to highlight')"  :placeholder="$t('Enter a number')"></v-text-field>
             </v-card>
         </v-layout>
         <p></p>
@@ -82,7 +82,9 @@
 
 <script>
     import imgReinvest from '@/assets/reinvest.png'
+    import { useStore } from "@/store"
     import axios from 'axios'
+    import { localtime, my_round } from 'vuetify_rules'
     import {empty_order} from '../empty_objects.js'
     import OrdersCU from './OrdersCU.vue'
     import InvestmentsView from './InvestmentsView.vue'
@@ -144,6 +146,9 @@
             }
         },
         methods:{
+            useStore,
+            localtime,
+            my_round,
             empty_order,
             on_OrdersCU_cruded(){
                 this.dialog_cu=false
@@ -175,7 +180,7 @@
             },
             refreshTable(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/reports/investments/lastoperation/?method=${this.method}` , this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/investments/lastoperation/?method=${this.method}` , this.myheaders())
                 .then( (response)=> {
                     this.tableData=[]
                     response.data.entries.forEach(e => {

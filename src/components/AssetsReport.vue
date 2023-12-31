@@ -28,8 +28,10 @@
 
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import ChartEvolutionAssets from './ChartEvolutionAssets.vue'
     import ChartPie from './ChartPie.vue'
+    import { my_round } from 'vuetify_rules'
     export default {
         components:{
             ChartPie,
@@ -128,10 +130,12 @@
             },
         },
         methods:{
+            useStore,
+            my_round,
             launch_report(){
                 this.loading=true
 
-                axios.post(`${this.store().apiroot}/assets/report/`, this.payload, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/assets/report/`, this.payload, this.myheaders())
                 .then((response) => {
                     this.loading=false      
                     var link = window.document.createElement('a');
@@ -148,7 +152,7 @@
 
             update_pies(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/investments/classes/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/investments/classes/`, this.myheaders())
                 .then((response) => {
                     this.data=response.data
                     this.loading=false
@@ -158,7 +162,7 @@
                 });
             },
             check_unogenerator_server(){
-                axios.get(`${this.store().apiroot}/unogenerator/working/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/unogenerator/working/`, this.myheaders())
                 .then((response) => {
                     this.unogenerator_working=response.data
                     this.key=this.key+1

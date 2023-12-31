@@ -2,7 +2,7 @@
 <template>
     <div>    
         <h1>{{ $t('Banks list') }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items"/>
         </h1>
         <v-card outlined class="ma-4 pa-4">
             <v-checkbox v-model="showActive" :label="chkLabel" />
@@ -28,7 +28,7 @@
                 </template>
                 <template #tbody>
                     <tr class="totalrow pa-6">
-                        <td>{{ $t("Total ([0] registers)").format(data.length) }}</td>
+                        <td>{{ f($t("Total ([0] registers)"), [data.length]) }}</td>
                         <td></td>
                         <td class="text-right" v-html="localcurrency_html(listobjects_sum(data,'balance_accounts'))"></td>
                         <td class="text-right" v-html="localcurrency_html(listobjects_sum(data,'balance_investments'))"></td>
@@ -54,10 +54,12 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import MyMenuInline from './MyMenuInline.vue'
     import BanksCU from './BanksCU.vue'
     import BanksView from './BanksView.vue'
     import {empty_bank} from '../empty_objects.js'
+    import {f} from "vuetify_rules"
     export default {
         components:{
             MyMenuInline,
@@ -110,6 +112,8 @@
             },
         },
         methods: {
+            useStore,
+            f,
             deleteItem (item) {
                 this.bank=item
                 this.bank_mode="D"
@@ -136,7 +140,7 @@
                 } else {
                     this.chkLabel=this.$t("Check to see active banks")
                 }
-                axios.get(`${this.store().apiroot}/api/banks/withbalance/?active=${this.showActive}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/banks/withbalance/?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
                     this.data=response.data
                     this.loading_table=false

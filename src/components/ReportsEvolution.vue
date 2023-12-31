@@ -108,6 +108,8 @@
 </template>
 <script>     
     import axios from 'axios'
+    import { useStore } from "@/store"
+    import {f} from 'vuetify_rules'
     export default {
         components:{
         },
@@ -145,6 +147,8 @@
             }
         },
         methods:{
+            useStore,
+            f,
             years(){
                 var start=1990
                 var end=new Date().getFullYear()
@@ -160,26 +164,19 @@
                 var sum_cc=this.listobjects_sum(this.investedData,'custody_commissions')
                 var sum_t=this.listobjects_sum(this.investedData,'taxes')
                 var s=""
-                s=s+"<br>"+this.$t("Difference between invested amount and current invesment balance is [0].").replace('[0]', this.localcurrency_html(diff) )
+                s=s+"<br>"+f(this.$t("Difference between invested amount and current invesment balance is [0]."), [this.localcurrency_html(diff)] )
                 s=s+"<br>"
-                s=s+"<br>"+this.$t("From [0] I've generated [1] gains (investment commisions are included).").replace('[0]', this.year)
-                    .replace('[1]',this.localcurrency_html(sum_gd))
+                s=s+"<br>"+f(this.$t("From [0] I've generated [1] gains (investment commisions are included)."), [this.year,this.localcurrency_html(sum_gd)])
                 s=s+"<br>"
-                s=s+"<br>"+this.$t("Sum of taxes and custody commissions is [0].")
-                    .replace('[0]', this.localcurrency_html(sum_cc+sum_t))
+                s=s+"<br>"+f(this.$t("Sum of taxes and custody commissions is [0]."), [this.localcurrency_html(sum_cc+sum_t)])
                 s=s+"<br>"
-                s=s+"<br>"+this.$t("So, I've generated [0] gains.")
-                    .replace('[0]', this.localcurrency_html(sum_gd+sum_cc+sum_t))
+                s=s+"<br>"+f(this.$t("So, I've generated [0] gains."), [this.localcurrency_html(sum_gd+sum_cc+sum_t)])
                 s=s+"<br>"
                 var balance=diff+sum_gd+sum_t+sum_cc
                 if (balance>0){
-                    s=s+"<br>"+this.$t("So I'm wining [0] which is [1] per year.")
-                        .replace('[0]', this.localcurrency_html(balance))
-                        .replace('[1]', this.localcurrency_html(balance/(new Date().getFullYear()-this.year+1)))
+                    s=s+"<br>"+f(this.$t("So I'm wining [0] which is [1] per year."), [this.localcurrency_html(balance), this.localcurrency_html(balance/(new Date().getFullYear()-this.year+1))])
                 } else {
-                    s=s+"<br>"+this.$t("So I'm losing [0] which is [1] per year.")
-                        .replace('[0]', this.localcurrency_html(balance))
-                        .replace('[1]', this.localcurrency_html(balance/(new Date().getFullYear()-this.year+1)))
+                    s=s+"<br>"+f(this.$t("So I'm losing [0] which is [1] per year."), [ this.localcurrency_html(balance), this.localcurrency_html(balance/(new Date().getFullYear()-this.year+1))])
                 }
                 return s
             },
@@ -187,7 +184,7 @@
             refreshTables(){
                 this.loading_assets=true
                 this.loading_invested=true
-                axios.get(`${this.store().apiroot}/reports/evolutionassets/${this.year}/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/evolutionassets/${this.year}/`, this.myheaders())
                 .then((response) => {
                     this.assetsData=response.data
                     this.loading_assets=false
@@ -195,7 +192,7 @@
                 }, (error) => {
                     this.parseResponseError(error)
                 });
-                axios.get(`${this.store().apiroot}/reports/evolutioninvested/${this.year}/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/evolutioninvested/${this.year}/`, this.myheaders())
                 .then((response) => {
                     this.investedData=response.data
                     this.loading_invested=false

@@ -4,7 +4,7 @@
         <v-container  style="width:40%" elevation="1">
             <v-card>
                 <v-col  justify="space-around">
-                    <v-text-field v-model="alertdays"  :label="$t('Max days to update dividends alert')" :placeholder="$t('Enter an integer number')"></v-text-field>
+                    <v-text-field v-model.number="alertdays"  :label="$t('Max days to update dividends alert')" :placeholder="$t('Enter an integer number')"></v-text-field>
                 </v-col>
             </v-card>
         </v-container>
@@ -46,9 +46,11 @@
 
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import moment from 'moment'
     import EstimationsDpsCU from './EstimationsDpsCU.vue'
     import {empty_estimation_dps} from '../empty_objects.js'
+    import {f} from 'vuetify_rules'
     export default {
         components:{
             EstimationsDpsCU,
@@ -78,6 +80,8 @@
             }
         },
         methods:{
+            useStore,
+            f,
             showAlarm(item){
                 var today= moment()
                 var estimation= moment(item.date_estimation)
@@ -100,7 +104,7 @@
             },
             refreshTable(){
                 this.loading_dividends=true
-                axios.get(`${this.store().apiroot}/reports/dividends/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/dividends/`, this.myheaders())
                 .then((response) => {
                     this.items=response.data
                     this.loading_dividends=false
@@ -110,7 +114,7 @@
             },
             total(){
                 var total=this.items.reduce((accum,item) => accum + item.estimated, 0)
-                return this.$t("If I kept the investments for a year I would get [0]").format( this.localcurrency_string(total))
+                return f(this.$t("If I kept the investments for a year I would get [0]"), [ this.localcurrency_string(total)])
             }
             
         },

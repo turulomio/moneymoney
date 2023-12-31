@@ -1,7 +1,7 @@
 
 <template>
     <div>    
-        <h1>{{ $t("Bank details of '[0]'").format(bank.name) }}</h1>
+        <h1>{{ f($t("Bank details of '[0]'"), [bank.name]) }}</h1>
 
         <DisplayValues :items="displayvalues()" :minimized_items="1"></DisplayValues>
 
@@ -47,7 +47,9 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import DisplayValues from './DisplayValues.vue'
+    import {f} from "vuetify_rules"
     export default {
         components: {
             DisplayValues,
@@ -77,7 +79,9 @@
                 key:0,
             }
         },
-        methods: {            
+        methods: {    
+            useStore,    
+            f,    
             displayvalues(){
                 return [
                     {title:this.$t('Active'), value: this.bank.active},
@@ -86,7 +90,7 @@
             },
             update_accounts(){
                 this.loading_accounts=true
-                axios.get(`${this.store().apiroot}/api/accounts/withbalance/?bank=${this.bank.id}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/accounts/withbalance/?bank=${this.bank.id}`, this.myheaders())
                 .then((response) => {
                     this.loading_accounts=false
                     this.accounts_items=response.data
@@ -97,7 +101,7 @@
             },
             update_investments(){
                 this.loading_investments=true
-                axios.get(`${this.store().apiroot}/api/investments/withbalance/?bank=${this.bank.id}&active=true`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/investments/withbalance/?bank=${this.bank.id}&active=true`, this.myheaders())
                 .then((response) => {
                     this.key=this.key+1
                     this.loading_investments=false

@@ -13,7 +13,9 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import { defineAsyncComponent } from 'vue'
+    import {f} from 'vuetify_rules'
     import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
     export default {
         name: "ReportsConceptsHistoricalDetail",
@@ -42,20 +44,22 @@
         },
         computed:{
             title: function(){
-                var concept_object=this.store().concepts.get(this.concept)
+                var concept_object=this.useStore().concepts.get(this.concept)
                 if (this.month==null){
-                    return this.$t("'[0]' operations at year [1]").format(concept_object.localname,this.year)
+                    return f(this.$t("'[0]' operations at year [1]"), [concept_object.localname,this.year])
                 } else {
-                    return this.$t("'[0]' operations at [1]-[2]").format(concept_object.localname,this.year,this.month)
+                    return f(this.$t("'[0]' operations at [1]-[2]"), [concept_object.localname,this.year,this.month])
                 }
 
             },
             total: function(){
-                if (this.data) return this.$t("Total: [0]").format(this.localcurrency_html(this.listobjects_sum(this.data.ao,"amount")+this.listobjects_sum(this.data.cco,"amount")))
+                if (this.data) return f(this.$t("Total: [0]"), [this.localcurrency_html(this.listobjects_sum(this.data.ao,"amount")+this.listobjects_sum(this.data.cco,"amount"))])
                 return ""
             }
         },
         methods: {
+            useStore,
+            f,
             on_TableAccountsoperations_cruded(){
                 this.update_table()
             },

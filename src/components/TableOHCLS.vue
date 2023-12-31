@@ -25,6 +25,8 @@
 </template>
 <script>    
     import axios from 'axios'
+    import { useStore } from "@/store"
+    import { localtime } from 'vuetify_rules'
     export default {
         components:{
         },
@@ -42,13 +44,15 @@
             }
         },
         methods: {
+            useStore,
+            localtime,
             deleteOHCL(item){
                var r = confirm(this.$t("Do you want to delete this OHCL quotes?"))
                if(r == false) {
                   return
                } 
                 var headers={...this.myheaders(),data:{product:this.product.url,date:item.date}}
-                axios.delete(`${this.store().apiroot}/products/quotes/ohcl/`, headers)
+                axios.delete(`${this.useStore().apiroot}/products/quotes/ohcl/`, headers)
                 .then(() => {
                     this.$emit("cruded")
                 }, (error) => {

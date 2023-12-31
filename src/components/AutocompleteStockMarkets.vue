@@ -1,5 +1,5 @@
 <template>
-    <v-autocomplete :readonly="readonly" :items="getArrayFromMap(store().stockmarkets)" v-model="new_value" :label="mylabel"  item-title="localname" :return-object="returnObject" item-value="url">
+    <v-autocomplete :readonly="readonly" :items="getArrayFromMap(useStore().stockmarkets)" v-model="new_value" :label="mylabel"  item-title="localname" :return-object="returnObject" item-value="url">
         <template v-slot:item="{ props, item }">
             <v-list-item v-bind="props" :prepend-icon="`mr-3 fi fib fi-${item.raw.country}`" :title="item.raw.localname" />
         </template>         
@@ -11,6 +11,7 @@
 
 <script>
 
+import { useStore } from "@/store"
 export default {
     name: "AutocompleteProducts",
     props:{
@@ -47,6 +48,10 @@ export default {
         new_value(newValue){
             this.$emit('update:modelValue', newValue)
         },
+    },
+    methods:{
+
+        useStore,
     },
     created(){
         this.new_value=this.modelValue

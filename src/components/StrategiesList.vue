@@ -1,7 +1,7 @@
 <template>
     <div>    
         <h1>{{ $t('Strategies list') }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items"/>
         </h1>
         <v-card outlined class="ma-4 pa-4">
             <v-checkbox v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" ></v-checkbox>
@@ -43,7 +43,7 @@
                 </template>                  
                 <template #tbody v-if="strategies_items.length>0">
                     <tr class="totalrow">
-                        <td>{{$t("Total ([0] strategies)").format(strategies_items.length) }}</td>
+                        <td>{{f($t("Total ([0] strategies)"), [strategies_items.length]) }}</td>
                         <td></td>
                         <td></td>
                         <td class="text-right" v-html="localcurrency_html(listobjects_sum(strategies_items,'invested'))"></td>
@@ -82,11 +82,13 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import MyMenuInline from './MyMenuInline.vue'
     import StrategiesView from './StrategiesView.vue'
     import StrategyCU from './StrategyCU.vue'
     import ProductsRanges from './ProductsRanges.vue'
     import {empty_products_ranges, empty_strategy} from '../empty_objects.js'
+    import { localtime, f} from 'vuetify_rules'
     export default {
         components:{
             MyMenuInline,
@@ -142,6 +144,9 @@
             }
         },
         methods: {
+            useStore,
+            localtime,
+            f,
             editItem (item) {
                 this.strategy=item
                 this.key=this.key+1
@@ -163,7 +168,7 @@
             detailedviewItem (event,object) {
                 if (object.item.type==2){//RANGES
                     this.pr=this.empty_products_ranges()
-                    this.pr.product=`${this.store().apiroot}/api/products/${object.item.additional1}/`
+                    this.pr.product=`${this.useStore().apiroot}/api/products/${object.item.additional1}/`
                     this.pr.percentage_between_ranges=object.item.additional2
                     this.pr.percentage_gains=object.item.additional3
                     this.pr.amount_to_invest=object.item.additional4
@@ -178,7 +183,7 @@
             },
             update_table(){
                 this.loading_strategies=true
-                axios.get(`${this.store().apiroot}/api/strategies/withbalance/?active=${this.showActive}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/strategies/withbalance/?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
                     this.strategies_items=response.data
                     this.loading_strategies=false

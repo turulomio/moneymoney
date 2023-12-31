@@ -2,13 +2,13 @@
 <template>
     <div>    
         <h1>{{ title() }}
-            <MyMenuInline v-if="snackbar_message==''" :items="items" :context="this"></MyMenuInline>
+            <MyMenuInline v-if="snackbar_message==''" :items="items"/>
         </h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" :readonly="mode=='D'" v-if="snackbar_message==''">
                 <MyDatePicker v-model="new_order.date"  :readonly="mode=='D'" :label="$t('Set order date')"/>
                 <MyDatePicker v-model="new_order.expiration" :readonly="mode=='D'" :label="$t('Set order expiration date')" :clearable="true"/>
-                <v-autocomplete :items="getArrayFromMap(store().investments)" :readonly="mode=='D'" v-model="new_order.investments" :label="$t('Select an investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :items="getArrayFromMap(useStore().investments)" :readonly="mode=='D'" v-model="new_order.investments" :label="$t('Select an investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker v-model="new_order.executed" :readonly="mode=='D'" v-if="mode=='U'" :label="$t('Set order execution date and time')" :clearable="true" />
                 <v-text-field v-model.number="new_order.shares" :readonly="mode=='D'" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesFloatGEZ(12,true,6)" counter="12"/>
                 <v-text-field v-model.number="new_order.price" :readonly="mode=='D'" :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesFloatGEZ(12,true,product_decimals)" counter="12"/>
@@ -31,11 +31,13 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import MyDatePicker from './MyDatePicker.vue'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import {empty_investment_operation} from '../empty_objects.js'
+    import { RulesSelection ,RulesFloatGEZ, parseNumber} from 'vuetify_rules'
     export default {
         components: {
             InvestmentsoperationsCU,
@@ -96,6 +98,10 @@
             },
         },
         methods: {
+            useStore,
+            RulesSelection,
+            RulesFloatGEZ,
+            parseNumber,
             empty_investment_operation,
             title(){
                 if (this.mode=="U"){
@@ -133,7 +139,7 @@
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/api/orders/`, this.new_order,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/orders/`, this.new_order,  this.myheaders())
                     .then(() => {
                             this.show_snackbar_message()
                     }, (error) => {
@@ -179,7 +185,7 @@
                 r=r + stw
                 r=r +"<ul>"
                 r=r+"<li>" + this.$t("Expiration") + `: ${this.new_order.expiration}</li>`
-                r=r+"<li>" + this.$t("Investment") + `: ${this.store().investments.get(this.new_order.investments).fullname}</li>`
+                r=r+"<li>" + this.$t("Investment") + `: ${this.useStore().investments.get(this.new_order.investments).fullname}</li>`
                 r=r+"<li>" + this.$t("Shares") + `: ${this.new_order.shares}</li>`
                 r=r+"<li>" + this.$t("Price") + `: ${this.new_order.price}</li>`
 
@@ -197,9 +203,9 @@
                 axios.put(this.new_order.url, this.new_order,  this.myheaders())
                 .then(() => {
                     //Backend changes investments status active, I set it here for frontend
-                    var investment=this.store().investments.get(this.new_order.investments)
+                    var investment=this.useStore().investments.get(this.new_order.investments)
                     investment.active=true
-                    this.store().investments.set(this.new_order.investments,investment)
+                    this.useStore().investments.set(this.new_order.investments,investment)
                     this.$emit("cruded")
                     this.dialog_io_cu=false
                 }, (error) => {

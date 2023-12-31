@@ -1,5 +1,5 @@
 <template>
-    <v-card v-show="this.store().logged" class="mx-auto px-5" width="50%" flat>
+    <v-card v-show="this.useStore().logged" class="mx-auto px-5" width="50%" flat>
             <h1 class="mb-4">{{ $t("Settings") }}</h1>
             
             <v-form ref="form" v-model="form_valid">
@@ -23,24 +23,24 @@
                 <v-window-item key="amounts" >
                     <v-card class="mx-auto pa-6 mt-3">
                         <v-card-title>{{ $t('Amount to invest') }}</v-card-title>                    
-                        <v-text-field v-model="new_profile.invest_amount_1"  :label="$t('First amount to invest')" :placeholder="$t('First amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
-                        <v-text-field v-model="new_profile.invest_amount_2"  :label="$t('Second amount to invest')" :placeholder="$t('Second amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
-                        <v-text-field v-model="new_profile.invest_amount_3"  :label="$t('Third amount to invest')" :placeholder="$t('Third amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
-                        <v-text-field v-model="new_profile.invest_amount_4"  :label="$t('Fourth amount to invest')" :placeholder="$t('Fourth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
-                        <v-text-field v-model="new_profile.invest_amount_5"  :label="$t('Fifth amount to invest')" :placeholder="$t('Fifth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model.number="new_profile.invest_amount_1"  :label="$t('First amount to invest')" :placeholder="$t('First amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model.number="new_profile.invest_amount_2"  :label="$t('Second amount to invest')" :placeholder="$t('Second amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model.number="new_profile.invest_amount_3"  :label="$t('Third amount to invest')" :placeholder="$t('Third amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model.number="new_profile.invest_amount_4"  :label="$t('Fourth amount to invest')" :placeholder="$t('Fourth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                        <v-text-field v-model.number="new_profile.invest_amount_5"  :label="$t('Fifth amount to invest')" :placeholder="$t('Fifth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
 
 
                     </v-card>                        
 
                     <v-card class="mx-auto pa-6 mt-3">
-                            <v-text-field v-model="example_invested"  :step="1000" :label="$t('Example. Invested amount')" :placeholder="$t('Example. Invested amount')" :rules="RulesInteger(10,true)" counter="10"/>
+                            <v-text-field v-model.number="example_invested"  :step="1000" :label="$t('Example. Invested amount')" :placeholder="$t('Example. Invested amount')" :rules="RulesInteger(10,true)" counter="10"/>
                             <p>{{example_amount_to_invest}}</p>
                     </v-card>
                 </v-window-item>
                 <v-window-item key="local_settings">
                     <v-card class="mx-auto pa-6">
                         <v-card-title>{{ $t('Personal preferences') }}</v-card-title>
-                        <v-autocomplete :items="store().currencies" v-model="new_profile.currency" :label="$t('Select your local currency')" item-title="fullname" item-value="code" :rules="RulesSelection(true)"></v-autocomplete>
+                        <v-autocomplete :items="useStore().currencies" v-model="new_profile.currency" :label="$t('Select your local currency')" item-title="fullname" item-value="code" :rules="RulesSelection(true)"></v-autocomplete>
                         <v-autocomplete :items="timezones" v-model="new_profile.zone" :label="$t('Select your localtime zone')" :rules="RulesSelection(true)"></v-autocomplete>
                     </v-card>
                 </v-window-item>
@@ -62,6 +62,9 @@
 
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
+    import { RulesSelection, RulesEmail, RulesInteger,RulesPassword,RulesString} from 'vuetify_rules'
+import { f } from 'vuetify_rules'
     export default {
         name: 'Settings',
         data () {
@@ -78,12 +81,18 @@
         },
         watch:{
             example_invested: function (){
-                this.example_amount_to_invest=this.$t("Recomended amount to invest: [0]").format(this.amount_to_invest(this.example_invested))
+                this.example_amount_to_invest=f(this.$t("Recomended amount to invest: [0]"), [this.amount_to_invest(this.example_invested)])
             }
         },
         methods: {
+            useStore,
 
-
+            f,
+            RulesEmail, 
+            RulesInteger,
+            RulesPassword,
+            RulesString,
+            RulesSelection,
             save_settings(){
                 if (this.new_profile.newp!=this.dupnewp){
                     alert(this.$t("Passwords must be equal"))
@@ -94,11 +103,11 @@
                     this.$refs.form.validate()
                     return
                 }
-                axios.put(`${this.store().apiroot}/profile/`, this.new_profile, this.myheaders())
+                axios.put(`${this.useStore().apiroot}/profile/`, this.new_profile, this.myheaders())
                 .then(() => {
                     alert(this.$t("Settings saved"))
                     this.new_profile.newp=""
-                    this.store().updateProfile()
+                    this.useStore().updateProfile()
                     .then(() =>{
                         this.$router.push({name:"home"})
                     })
@@ -107,7 +116,7 @@
                 });
             },
             promise_load_timezones(){
-                return axios.get(`${this.store().apiroot}/timezones/`, this.myheaders())
+                return axios.get(`${this.useStore().apiroot}/timezones/`, this.myheaders())
             },
             make_all_axios(){
                 this.loading=true
@@ -120,7 +129,7 @@
         },
         created(){
             this.make_all_axios()
-            this.new_profile=Object.assign({},this.store().profile)
+            this.new_profile=Object.assign({},this.useStore().profile)
             this.new_profile.newp=""
 
         }

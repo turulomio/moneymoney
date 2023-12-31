@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ investment.fullname }}
-            <MyMenuInline :items="items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="items"/>
         </h1>
         <DisplayValues v-if="ios_id" :items="displayvalues" :key="key" />
         <v-tabs  bg-color="secondary" dark v-model="tab" show-arrows>
@@ -138,7 +138,9 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import {empty_investment_operation,empty_dividend,empty_investments_chart,empty_investments_chart_limit_line,empty_ios} from '../empty_objects.js'
+    import { parseNumber,f } from 'vuetify_rules'
     import ChartInvestments from './ChartInvestments.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import DividendsCU from './DividendsCU.vue'
@@ -199,7 +201,7 @@
                                 name:this.$t('Investment chart'),
                                 icon: "mdi-chart-areaspline",
                                 code: function(){
-                                    axios.get(`${this.store().apiroot}/products/quotes/ohcl?product=${this.product.url}`, this.myheaders())
+                                    axios.get(`${this.useStore().apiroot}/products/quotes/ohcl?product=${this.product.url}`, this.myheaders())
                                     .then((response) => {
                                         this.chart_data=this.empty_investments_chart()
                                         this.chart_data.ohcls=response.data
@@ -226,7 +228,7 @@
                                     this.investment.active=!this.investment.active
                                     axios.put(this.investment.url, this.investment,  this.myheaders())
                                     .then((response) => {
-                                        this.store().investments.set(response.data.url, response.data)
+                                        this.useStore().investments.set(response.data.url, response.data)
                                         this.update_all()
                                         this.$emit("cruded")
                                     }, (error) => {
@@ -275,7 +277,7 @@
                             {
                                 name:this.$t('Delete last quote'),
                                 code: function(){
-                                    axios.post(`${this.store().apiroot}/api/products/${this.product.id}/delete_last_quote/`, [], this.myheaders())
+                                    axios.post(`${this.useStore().apiroot}/api/products/${this.product.id}/delete_last_quote/`, [], this.myheaders())
                                     .then(() => {
                                         this.key=this.key+1
                                         this.$emit("cruded") 
@@ -410,26 +412,26 @@
         },
         computed:{
             account: function(){
-                return this.store().accounts.get(this.investment.accounts)
+                return this.useStore().accounts.get(this.investment.accounts)
             },
             product: function(){
-                return this.store().products.get(this.investment.products)
+                return this.useStore().products.get(this.investment.products)
 
             },
             leverage_message (){
                 if (!this.ios_id) return ""
-                return this.$t("[0] (Real: [1])").format(
+                return f(this.$t("[0] (Real: [1])"), [
                         this.ios_id.data.multiplier,
                         this.ios_id.data.real_leverages
-                )
+                ])
             },
             selling_expiration_message(){
                 if (!this.product || !this.ios_id) return ""
                 var gains_at_selling_point_investment=(this.investment.selling_price-this.ios_id.total_io_current.average_price_investment)*this.ios_id.total_io_current.shares*this.ios_id.data.real_leverages
-                return this.$t("[0], to gain [1]").format(
+                return f(this.$t("[0], to gain [1]"), [
                         this.currency_string(this.investment.selling_price, this.product.currency),
                         this.currency_string(gains_at_selling_point_investment, this.product.currency)
-                )
+                ])
 
             },
             selling_point_message(){
@@ -475,6 +477,9 @@
             },
         },
         methods: {
+            useStore,
+            f,
+            parseNumber,
             empty_investments_chart,
             empty_investments_chart_limit_line,
             empty_dividend,
@@ -526,12 +531,12 @@
             update_ios(){
                 var simulation=this.empty_ios()
                 simulation.investments.push(parseInt(this.investment_id))
-                simulation.currency=this.store().profile.currency
-                return axios.post(`${this.store().apiroot}/ios/`, simulation, this.myheaders())
+                simulation.currency=this.useStore().profile.currency
+                return axios.post(`${this.useStore().apiroot}/ios/`, simulation, this.myheaders())
             },
             update_dividends(){
                 var headers={...this.myheaders(),params:{investments:[this.investment_id,]}}
-                return axios.get(`${this.store().apiroot}/api/dividends/`, headers)
+                return axios.get(`${this.useStore().apiroot}/api/dividends/`, headers)
             },
             update_all(){
                 this.loading=true

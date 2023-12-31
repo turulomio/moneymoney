@@ -1,6 +1,6 @@
 <template>
     <div class="pa-6">
-        <h1>{{ $t("Quotes massive update of '[0]''").format(this.product.fullname)}}</h1>
+        <h1>{{ f($t("Quotes massive update of '[0]''"), [this.product.fullname])}}</h1>
         <v-card class="pa-5">
             <v-form  method="post">
                     <v-file-input 
@@ -24,6 +24,8 @@
 <script>     
 
     import axios from 'axios'
+    import { useStore } from "@/store"
+    import {f} from 'vuetify_rules'
     export default {
         components:{
         },
@@ -44,7 +46,9 @@
                 ],
             }
         },
-        methods: {        
+        methods: {
+            useStore,
+            f,        
             readDocument(file){
                 return new Promise((resolve, reject) => {
                     var reader = new FileReader();
@@ -70,7 +74,7 @@
                     var readed= await this.readDocument(this.filename[0])
                     readed.product=this.product.url
                 }
-                axios.post(`${this.store().apiroot}/quotes/massive_update/`, readed, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/quotes/massive_update/`, readed, this.myheaders())
                 .then((response) => {
                         this.items=response.data
                         this.loading=false

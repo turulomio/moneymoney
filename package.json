@@ -1,38 +1,50 @@
 {
-  "name": "vuetify-project",
+  "name": "Money Money",
   "version": "1.2.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "translate": "./node_modules/.bin/vue-i18n-extract"
-
+    "translate": "./node_modules/.bin/vue-i18n-extract",
+    "test": "vitest",
+    "coverage": "vitest --ui --coverage",
+    "cypress": "cypress open",
+    "cypress_console": "cypress run"
   },
   "dependencies": {
-    "@mdi/font": "^7.3.67",
-    "@vuepic/vue-datepicker": "^7.2.2",
-    "axios": "^1.6.2",
+    "@mdi/font": "^7.4.47",
+    "@vuepic/vue-datepicker": "^7.4.0",
+    "axios": "^1.6.3",
     "currency-list": "^1.0.8",
     "echarts-stat": "^1.2.0",
-    "flag-icons": "^7.0.2",
+    "flag-icons": "^7.1.0",
     "moment-timezone": "^0.5.43",
-    "npm-check-updates": "^16.14.11",
     "pinia": "^2.1.7",
     "roboto-fontface": "*",
-    "vue": "^3.3.8",
-    "vue-echarts": "^6.6.1",
-    "vue-i18n": "^9.7.1",
+    "vue": "^3.4.0",
+    "vue-echarts": "^6.6.8",
+    "vue-i18n": "^9.8.0",
     "vue-i18n-extract": "^2.0.7",
     "vue-router": "^4.2.5",
-    "vuetify": "^3.4.3",
+    "vuetify": "^3.4.9",
+    "vuetify_rules": "^0.6.0",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.5.0",
-    "eslint": "^8.54.0",
-    "eslint-plugin-vue": "^9.18.1",
-    "vite": "^4.5.0",
+    "@cypress/code-coverage": "^3.12.15",
+    "@cypress/vite-dev-server": "^5.0.7",
+    "@vitejs/plugin-vue": "^5.0.0",
+    "@vitest/coverage-v8": "^1.1.0",
+    "@vitest/ui": "^1.1.0",
+    "@vue/test-utils": "^2.4.3",
+    "cypress": "^13.6.2",
+    "eslint": "^8.56.0",
+    "eslint-plugin-vue": "^9.19.2",
+    "npm-check-updates": "^16.14.12",
+    "vite": "^5.0.10",
     "vite-plugin-eslint": "^1.8.1",
-    "vite-plugin-vuetify": "^1.0.2"
+    "vite-plugin-istanbul": "^5.0.0",
+    "vite-plugin-vuetify": "^2.0.1",
+    "vitest": "^1.1.0"
   }
 }

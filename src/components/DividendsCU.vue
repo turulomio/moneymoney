@@ -4,7 +4,7 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid">
-                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().investments)" v-model="newdividend.investments" :label="$t('Select an investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(useStore().investments)" v-model="newdividend.investments" :label="$t('Select an investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker :readonly="mode=='D'" v-model="newdividend.datetime" :label="$t('Set investment execution date and time')" />
                 <v-autocomplete :readonly="mode=='D'" :items="this.getConceptsForDividends()" v-model="newdividend.concepts" :label="$t('Select a concept')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field :readonly="mode=='D'" v-model.number="newdividend.gross"  :label="$t('Set dividend gross balance')" :placeholder="$t('Set dividend gross balance')" :rules="RulesFloat(10,true,2)" counter="10"/>
@@ -23,7 +23,9 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import MyDateTimePicker from './MyDateTimePicker.vue'
+    import { RulesSelection,RulesFloat,RulesFloatGEZ } from 'vuetify_rules'
     export default {
         components: {
             MyDateTimePicker,
@@ -43,6 +45,10 @@
             }
         },
         methods: {
+            useStore,
+            RulesSelection,
+            RulesFloat,
+            RulesFloatGEZ,
             title(){
                 if (this.mode=="C") return this.$t("Add a dividend")
                 if (this.mode=="U") return this.$t("Update dividend")
@@ -58,8 +64,8 @@
                     this.$refs.form.validate()
                     return
                 }
-                var concept=this.store().concepts.get(this.newdividend.concepts)
-                var operationtype=this.store().operationstypes.get(concept.operationstypes)
+                var concept=this.useStore().concepts.get(this.newdividend.concepts)
+                var operationtype=this.useStore().operationstypes.get(concept.operationstypes)
                 if (operationtype.id==1 && (this.newdividend.gross>0 || this.newdividend.net >0)){
                      alert(this.$t("Gross and net must be negative"))
                      return
@@ -87,7 +93,7 @@
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/api/dividends/`, this.newdividend,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/dividends/`, this.newdividend,  this.myheaders())
                     .then(() => {
                             this.$emit("cruded")
                     }, (error) => {

@@ -9,7 +9,7 @@
             <div>{{ getMapObjectById("investments",item.investments_id).fullname }}</div>
         </template>                    
         <template #item.operationstypes="{item}">
-            <!-- <div v-html="store().operationstypes.get(item.operationstypes)"></div> -->
+            <!-- <div v-html="useStore().operationstypes.get(item.operationstypes)"></div> -->
             <div>{{ getMapObjectById("operationstypes",item.operationstypes_id).localname }}</div>
         </template>
             <template #item.gross_start_user="{item}">
@@ -72,7 +72,7 @@
             </template>           
             <template #tbody>
                 <tr class="totalrow" v-if="items.length>0 && showtotal">
-                    <td>{{ $t("Total ([0] registers)").format(items.length)}}</td>
+                    <td>{{ f($t("Total ([0] registers)"), [items.length])}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -89,6 +89,8 @@
         </v-data-table>  
 </template>
 <script>    
+    import { localtime, f } from 'vuetify_rules'
+    import { useStore } from "@/store"
     export default {
         name: "TableInvestmentOperationsHistorical",
         props: {
@@ -132,7 +134,10 @@
             }
         },
         methods: {
+            useStore,
             // Currencies are part of the item
+            f,
+            localtime,
             currency(item){
                 if (this.output=="account"){
                     return item.currency_account

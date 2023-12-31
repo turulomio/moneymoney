@@ -9,7 +9,7 @@
                 <div>{{ getMapObjectById("investments",item.investments_id).fullname }}</div>
             </template>                    
             <template #item.operationstypes="{item}">
-                <!-- <div v-html="store().operationstypes.get(item.operationstypes)"></div> -->
+                <!-- <div v-html="useStore().operationstypes.get(item.operationstypes)"></div> -->
                 <div>{{ getMapObjectById("operationstypes",item.operationstypes_id).localname }}</div>
             </template>
             <template #item.price="{item}">
@@ -60,7 +60,9 @@
 
 <script>
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
+    import { useStore } from "@/store"
     import { empty_investment_operation } from '@/empty_objects.js'
+    import { localtime } from 'vuetify_rules'
     export default {
         name:"TableInvestmentOperations",
         components:{
@@ -95,6 +97,8 @@
             }
         },
         methods: {
+            useStore,
+            localtime,
             // Currencies are part of the item
             currency(item){
                 if (this.output=="account"){

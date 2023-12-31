@@ -4,10 +4,10 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid">
                 <v-text-field density="compact" :readonly="deleting" v-model="newstrategy.name" :label="$t('Set strategy name')" :placeholder="$t('Set strategy name')" :rules="RulesString(200,true)" counter="200" autofocus/>
-                <v-autocomplete density="compact" :readonly="deleting" :items="getArrayFromMap(store().investments)" v-model="temporal_investments" :label="$t('Select strategy investments')" item-title="fullname" item-value="id" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
+                <v-autocomplete density="compact" :readonly="deleting" :items="getArrayFromMap(useStore().investments)" v-model="temporal_investments" :label="$t('Select strategy investments')" item-title="fullname" item-value="id" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
                 <MyDateTimePicker :readonly="deleting" v-model="newstrategy.dt_from" :label="$t('Date and time strategy start')" />                
                 <MyDateTimePicker :readonly="deleting" v-model="newstrategy.dt_to" :label="$t('Date and time strategy end')" :clearable="true" />
-                <v-select :readonly="deleting" density="compact" :items="getArrayFromMap(store().strategiestypes)" v-model="newstrategy.type" :label="$t('Select strategy type')" item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>
+                <v-select :readonly="deleting" density="compact" :items="getArrayFromMap(useStore().strategiestypes)" v-model="newstrategy.type" :label="$t('Select strategy type')" item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>
                 <v-textarea :readonly="deleting" density="compact" v-model="newstrategy.comment" :label="$t('Set strategy comment')" :placeholder="$t('Set strategy comment')" :rules="RulesString(200,false)" counter="200"></v-textarea>
                 <v-text-field :readonly="deleting" density="compact" v-model.number="newstrategy.additional1" v-if="additional_visibility[0]" :label="additional_labels[0]" :placeholder="additional_labels[0]" :rules="RulesInteger(10,false)" counter="10"/>
                 <AutocompleteProducts v-model="product" :rules="RulesSelection(true)" v-if="product_visibility" />  
@@ -15,7 +15,7 @@
                 <v-text-field :readonly="deleting" density="compact" v-model.number="newstrategy.additional3" v-if="additional_visibility[2]" :label="additional_labels[2]" :placeholder="additional_labels[2]" :rules="RulesInteger(10,false)" counter="10"/>
                 <v-text-field :readonly="deleting" density="compact" v-model.number="newstrategy.additional4" v-if="additional_visibility[3]" :label="additional_labels[3]" :placeholder="additional_labels[3]" :rules="RulesInteger(10,false)" counter="10"/>
                 <v-text-field :readonly="deleting" density="compact" v-model.number="newstrategy.additional5" v-if="additional_visibility[4]" :label="additional_labels[4]" :placeholder="additional_labels[4]" :rules="RulesInteger(10,false)" counter="10"/>
-                <v-select class="mr-5" :items="getArrayFromMap(store().recomendation_methods)" v-model="recomendation_method"  item-title="name" item-value="id" :rules="RulesSelection(true)" v-if="recomendation_method_visibility" :label="this.$t('Select a recomendation method')"></v-select>  
+                <v-select class="mr-5" :items="getArrayFromMap(useStore().recomendation_methods)" v-model="recomendation_method"  item-title="name" item-value="id" :rules="RulesSelection(true)" v-if="recomendation_method_visibility" :label="this.$t('Select a recomendation method')"></v-select>  
                 <v-text-field :readonly="deleting" density="compact" v-model.number="newstrategy.additional6" v-if="additional_visibility[5]" :label="additional_labels[5]" :placeholder="additional_labels[5]" :rules="RulesInteger(10,false)" counter="10"/>
                 <v-text-field :readonly="deleting" density="compact" v-model.number="newstrategy.additional7" v-if="additional_visibility[6]" :label="additional_labels[6]" :placeholder="additional_labels[6]" :rules="RulesInteger(10,false)" counter="10"/>
                 <v-text-field :readonly="deleting" density="compact" v-model.number="newstrategy.additional8" v-if="additional_visibility[7]" :label="additional_labels[7]" :placeholder="additional_labels[7]" :rules="RulesInteger(10,false)" counter="10"/>
@@ -32,8 +32,10 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import AutocompleteProducts from './AutocompleteProducts.vue'
+    import { RulesSelection, RulesInteger,RulesString } from 'vuetify_rules'
     export default {
         components: {
             MyDateTimePicker,
@@ -72,6 +74,10 @@
             },
         },
         methods: {
+            useStore,
+            RulesSelection,
+            RulesInteger,
+            RulesString,
             title(){
                 if (this.deleting) {
                     return this.$t("Deleting strategy")
@@ -115,7 +121,7 @@
                         this.parseResponseError(error)
                     })
                 } else{
-                    axios.post(`${this.store().apiroot}/api/strategies/`, this.newstrategy,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/strategies/`, this.newstrategy,  this.myheaders())
                     .then(() => {
                            this.$emit("cruded")
                     }, (error) => {

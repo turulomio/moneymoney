@@ -83,7 +83,7 @@ export function empty_estimation_dps(){
 export function empty_investment_operation(){
     return {
         datetime: new Date(),
-        operationstypes: `${this.store().apiroot}/api/operationstypes/4/`,
+        operationstypes: `${this.useStore().apiroot}/api/operationstypes/4/`,
         shares:0,
         taxes:0,
         commission:0,
@@ -121,7 +121,7 @@ export function empty_product(){
         phone:null,
         mail:null,
         pci:'c',
-        leverages:`${this.store().apiroot}/api/leverages/1/`,
+        leverages:`${this.useStore().apiroot}/api/leverages/1/`,
         percentage:100,
         stockmarkets: null,
         comment: null,

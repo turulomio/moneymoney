@@ -16,7 +16,7 @@
          <template #bottom ></template>
             <template #tbody>
                 <tr class="totalrow" v-if="investments_items.length>0" >
-                    <td>{{ $t("Total ([0] registers)").format(investments_items.length)}}</td>
+                    <td>{{ f($t("Total ([0] registers)"), [investments_items.length]) }}</td>
                     <td class="text-right" v-html="localcurrency_html(listobjects_sum(investments_items,'balance_user'))"></td>
                 </tr>
             </template>
@@ -32,6 +32,8 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
+    import {f} from 'vuetify_rules'
     import InvestmentsView from './InvestmentsView.vue'
     export default {
         components:{
@@ -59,13 +61,15 @@
             },
         },
         methods: { 
+            useStore,
+            f,
             on_InvestmentView_cruded(){
                 this.key=this.key+1
                 this.update_table()
             },
             update_table(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/reports/zerorisk/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/zerorisk/`, this.myheaders())
                 .then((response) => {
                     this.investments_items=response.data
                     this.loading=false

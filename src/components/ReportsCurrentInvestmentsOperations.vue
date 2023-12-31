@@ -1,13 +1,14 @@
 <template>
     <div class="pa-4">
         <h1 class="mb-3">{{ $t("Current investments operations list") }}</h1>
-        <TableInvestmentOperationsCurrent showinvestment showtotal :items="list_io_current" output="user" :key="key" />
+        <TableInvestmentOperationsCurrent showinvestment showtotal height="80vh" :items="list_io_current" output="user" :key="key" />
                            
     </div>
 </template>
 
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
     export default {
         components:{
@@ -23,9 +24,10 @@
         watch:{
         },
         methods:{
+            useStore,
             refreshTable(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/reports/investmentsoperations/current/` , this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/investmentsoperations/current/` , this.myheaders())
                 .then( (response)=> {
                     this.list_io_current=response.data;
                     this.key=this.key+1;

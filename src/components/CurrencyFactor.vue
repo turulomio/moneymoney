@@ -25,6 +25,7 @@
     </div>
 </template>
 <script>
+    import { my_round } from 'vuetify_rules'
     export default {    
         props: {
             modelValue: {
@@ -61,6 +62,7 @@
             },
         },
         methods: {
+            my_round,
             update_value(){
                 this.new_value=this.my_round(this.currency_to_value/this.currency_from_value, this.decimals)
 

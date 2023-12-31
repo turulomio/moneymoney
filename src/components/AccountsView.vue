@@ -1,7 +1,6 @@
 <template>
     <div>
-        <h1>{{ $t("Account details of '[0]'").format(account.localname) }}
-        <MyMenuInline :items="items"  :context="this"></MyMenuInline>  </h1>
+        <h1>{{ f($t("Account details of '[0]'"), [account.localname]) }}<MyMenuInline :items="items" />  </h1>
         <DisplayValues :items="displayvalues"></DisplayValues>
 
         <v-tabs v-model="tab" bg-color="secondary" grow>
@@ -33,9 +32,9 @@
                         </template>     
 
                         <template #item.actions="{item}">
-                            <v-icon v-if="!item.deferred" small class="mr-2" @click="CCONotDeferred(item)">mdi-plus</v-icon>
-                            <v-icon small class="mr-2" @click="editCC(item)">mdi-pencil</v-icon>
-                            <v-icon small @click="deleteCC(item)" v-if="item.is_deletable">mdi-delete</v-icon>
+                            <v-icon v-if="!item.deferred" small class="mr-2" @click.stop="CCONotDeferred(item)">mdi-plus</v-icon>
+                            <v-icon small class="mr-2" @click.stop="editCC(item)">mdi-pencil</v-icon>
+                            <v-icon small @click.stop="deleteCC(item)" v-if="item.is_deletable">mdi-delete</v-icon>
                         </template>
                         <template #bottom ></template>   
                     </v-data-table>   
@@ -73,6 +72,7 @@
 </template>  
 <script>     
     import axios from 'axios' 
+    import { useStore } from "@/store"
     import AccountsoperationsCU from './AccountsoperationsCU.vue'
     import AccountsTransfer from './AccountsTransfer.vue'
     import DisplayValues from './DisplayValues.vue'
@@ -82,6 +82,7 @@
     import CreditcardsView from './CreditcardsView.vue'
     import TableAccountOperations from './TableAccountOperations.vue'
     import {empty_account_operation,empty_credit_card,empty_account_transfer} from '../empty_objects.js'
+    import { f} from 'vuetify_rules'
     export default {
         name:"AccountsView",
         components:{
@@ -102,7 +103,7 @@
         data () {
             return {
                 displayvalues:[
-                    {title:this.$t('Bank'), value: this.store().banks.get(this.account.banks).name},
+                    {title:this.$t('Bank'), value: this.useStore().banks.get(this.account.banks).name},
                     {title:this.$t('Number'), value: this.account.number},
                     {title:this.$t('Currency'), value: this.account.currency},
                     {title:this.$t('Active'), value: this.account.active},
@@ -193,6 +194,8 @@
             },
         },
         methods: {
+            useStore,
+            f,
             CCONotDeferred(item){
                 this.ao=this.empty_account_operation()
                 this.ao.accounts=this.account.url
@@ -214,7 +217,7 @@
                 });
             },
             refreshTableCC(){
-                axios.get(`${this.store().apiroot}/api/creditcards/withbalance/?account=${this.account.id}&active=${this.showActiveCC}`, this.myheaders())                
+                axios.get(`${this.useStore().apiroot}/api/creditcards/withbalance/?account=${this.account.id}&active=${this.showActiveCC}`, this.myheaders())                
                 .then((response) => {
                     this.table_cc=response.data;
                 }) 

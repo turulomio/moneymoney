@@ -31,6 +31,8 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
+    import { localtime, my_round } from 'vuetify_rules'
     import QuotesCU from './QuotesCU.vue'
     import {empty_quote} from '../empty_objects.js'
     export default {
@@ -56,6 +58,9 @@
             }
         },
         methods: {
+            useStore,
+            localtime,
+            my_round,
             empty_quote,
             editItem (item) {
                 this.quote= {
@@ -91,7 +96,7 @@
                 this.dialog_quotescu=true
             },
             update_table(){
-                axios.get(`${this.store().apiroot}/currencies/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/currencies/`, this.myheaders())
                 .then((response) => {
                     this.items=response.data
                 }, (error) => {

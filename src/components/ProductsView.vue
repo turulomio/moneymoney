@@ -1,7 +1,7 @@
 <template>
     <div>
-        <h1>{{ $t("Product '[0]'").format(this.product.fullname)}}
-            <MyMenuInline :items="items" :context="this"></MyMenuInline>
+        <h1>{{ f($t("Product '[0]'"), [this.product.fullname])}}
+            <MyMenuInline :items="items"/>
         </h1>
         <DisplayValues :items="displayvalues"></DisplayValues>
     
@@ -33,7 +33,7 @@
                         <template #item.total="{item}"><div class="text-right" v-html="percentage_html(item.total )"></div></template> 
                 <template #bottom ></template>    
                     </v-data-table>   
-                    <p class="boldcenter mt-4" v-html="$t('Product quotes percentage from first data: [0]').format(percentage_html(information.percentages[information.percentages.length-1].from_first_quote))"></p>
+                    <p class="boldcenter mt-4" v-html="f($t('Product quotes percentage from first data: [0]'), [percentage_html(information.percentages[information.percentages.length-1].from_first_quote)])"></p>
                 </v-card>
             </v-window-item>
             <v-window-item key="quotes_evolution">     
@@ -67,7 +67,7 @@
             </v-window-item>
             <v-window-item key="ohcls">
                 <v-card class="pa-1 d-flex flex-column" outlined >                    
-                    <MyMonthPicker ref="ohcls_ym" v-model="ohcls_ym" @update:ModelValue="on_monthpicker_ohcls_change()"/>
+                    <MyMonthPicker ref="ohcls_ym" v-model="ohcls_ym"/>
                     <TableOHCLS :product="product" :items="ohcls_month" :key="key" :height="400" @cruded="on_TableQuotes_cruded()"></TableOHCLS>
                 </v-card>
             </v-window-item>
@@ -118,6 +118,7 @@
 </template>  
 <script>     
     import axios from 'axios'
+    import { useStore } from "@/store"
     import MyMenuInline from './MyMenuInline.vue'
     import QuotesCU from './QuotesCU.vue'
     import ChartProduct from './ChartProduct.vue'
@@ -130,6 +131,7 @@
     import TableOHCLS from './TableOHCLS.vue'
     import TableQuotes from './TableQuotes.vue'
     import {empty_quote,empty_estimation_dps,empty_dps} from '../empty_objects.js'
+    import {f} from 'vuetify_rules'
     import DpsCRUD from './DpsCRUD.vue'
     export default {
         components:{
@@ -155,7 +157,7 @@
         data () {
             return {
                 displayvalues:[
-                    {title:this.$t('Leverage'), value: this.store().leverages.get(this.product.leverages).localname},
+                    {title:this.$t('Leverage'), value: this.useStore().leverages.get(this.product.leverages).localname},
                     {title:this.$t('Currency'), value: this.product.currency},
                     {title:this.$t('Obsolete'), value: this.product.obsolete},
                     {title:this.$t('Id'), value: this.product.id},
@@ -285,7 +287,14 @@
                 dialog_quotes_massive_update:false,
             }
         },
+        watch: {
+            ohcls_ym(){
+                this.on_monthpicker_ohcls_change()
+            },
+        },
         methods: {
+            useStore,
+            f,
             empty_dps,
             empty_quote,
             empty_estimation_dps,
@@ -294,7 +303,7 @@
                 this.dialog_estimationdps=false
             },
             on_monthpicker_quotes_change(){
-                axios.get(`${this.store().apiroot}/api/quotes/?product=${this.product.url}&year=${this.quotes_ym.year}&month=${this.quotes_ym.month}`, this.myheaders())                
+                axios.get(`${this.useStore().apiroot}/api/quotes/?product=${this.product.url}&year=${this.quotes_ym.year}&month=${this.quotes_ym.month}`, this.myheaders())                
                 .then((response) => {
                     this.quotes_month=response.data
                 }) 
@@ -303,7 +312,7 @@
                 });
             },
             on_monthpicker_ohcls_change(){
-                axios.get(`${this.store().apiroot}/products/quotes/ohcl/?product=${this.product.url}&year=${this.ohcls_ym.year}&month=${this.ohcls_ym.month}`, this.myheaders())                
+                axios.get(`${this.useStore().apiroot}/products/quotes/ohcl/?product=${this.product.url}&year=${this.ohcls_ym.year}&month=${this.ohcls_ym.month}`, this.myheaders())                
                 .then((response) => {
                     this.ohcls_month=response.data
                 }) 
@@ -312,7 +321,7 @@
                 });
             },
             refreshProductOHCLDaily(){
-                return axios.get(`${this.store().apiroot}/products/quotes/ohcl/?product=${this.product.url}`, this.myheaders())
+                return axios.get(`${this.useStore().apiroot}/products/quotes/ohcl/?product=${this.product.url}`, this.myheaders())
             },
             refreshInformation(){
                 return axios.get(`${this.product.url}historical_information/`, this.myheaders())

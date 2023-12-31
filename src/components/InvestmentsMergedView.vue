@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ ios_id.data.name }}
-            <MyMenuInline :items="items"  :context="this"></MyMenuInline>
+            <MyMenuInline :items="items" />
         </h1>
         <DisplayValues v-if="product" :items="displayvalues()" :key="key" :minimized_items="10"></DisplayValues>
 
@@ -85,6 +85,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from "@/store"
     import {empty_investment_operation, empty_dividend,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
     import MyMenuInline from './MyMenuInline.vue'
     import DisplayValues from './DisplayValues.vue'
@@ -92,6 +93,7 @@
     import TableInvestmentOperations from './TableInvestmentOperations.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
+    import { f} from 'vuetify_rules'
     export default {
         components:{
             DisplayValues,
@@ -133,7 +135,7 @@
                                 name:this.$t('Investment chart'),
                                 icon: "mdi-chart-areaspline",
                                 code: function(){
-                                    axios.get(`${this.store().apiroot}/products/quotes/ohcl?product=${this.product.url}`, this.myheaders())
+                                    axios.get(`${this.useStore().apiroot}/products/quotes/ohcl?product=${this.product.url}`, this.myheaders())
                                     .then((response) => {
                                         this.chart_data=this.empty_investments_chart()
                                         this.chart_data.ohcls=response.data
@@ -182,6 +184,8 @@
             }
         },
         methods: {
+            useStore,
+            f,
             empty_investments_chart,
             empty_investments_chart_limit_line,
             empty_dividend,
@@ -191,10 +195,10 @@
             },
             displayvalues(){
                 var r= []       
-                this.leverage_message= this.$t("[0] (Real: [1])").format(
-                    this.store().leverages.get(this.product.leverages).multiplier,
+                this.leverage_message= f(this.$t("[0] (Real: [1])"), [
+                    this.useStore().leverages.get(this.product.leverages).multiplier,
                     this.product.real_leveraged_multiplier
-                    )
+                ])
                 r.push({title:this.$t('Currency'), value: this.product.currency})
                 r.push({title:this.$t('Product'), value: this.product.name})
                 r.push({title:this.$t('Leverage'), value: this.leverage_message})
@@ -245,7 +249,7 @@
             update_dividends(){
                 //Convert this.investments to an array of ids
                 var headers={...this.myheaders(),params:{investments:this.ios_id.data.investments_id}}
-                return axios.get(`${this.store().apiroot}/api/dividends/`, headers)
+                return axios.get(`${this.useStore().apiroot}/api/dividends/`, headers)
             },
             update_all(){
                 this.loading=true
@@ -262,7 +266,7 @@
             }
         },
         created(){
-            this.product=this.store().products.get(this.hyperlinked_url("products",this.ios_id.data.products_id))
+            this.product=this.useStore().products.get(this.hyperlinked_url("products",this.ios_id.data.products_id))
             this.update_all()   
         }
     }

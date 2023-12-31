@@ -24,6 +24,7 @@
 </template>
 <script>
     import QuotesCU from './QuotesCU.vue'
+    import { localtime } from 'vuetify_rules'
     export default {
         components:{
             QuotesCU,
@@ -52,6 +53,7 @@
             }
         },
         methods: {
+            localtime,
             editQuote(item){
                 this.quote=item
                 this.quote_mode="U"
