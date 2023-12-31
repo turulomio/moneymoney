@@ -18,7 +18,7 @@
         <v-menu v-model="menu"  :close-on-content-click="false">
         <template v-slot:activator="{ props }">
             <div class="d-flex flex-row">
-                <v-text-field v-model="representation" :label="label" v-bind="props" readonly :clearable="clearable" prepend-icon="mdi-calendar-clock" @click:prepend.stop="on_click_prepend_icon" />
+                <v-text-field v-model="representation" :label="label" v-bind="props" readonly :clearable="clearable" prepend-icon="mdi-calendar-clock" @click:prepend.stop="on_click_prepend_icon" @click:clear.stop="new_modelValue=null" />
             </div>
         </template>
         <v-card width="650" class="pa-4">
@@ -32,10 +32,6 @@
                     <v-text-field v-model="timezone" readonly :label=" $t('Time zone')" />
                 </v-col>
             </v-row>
-            <div class="d-flex flex-row">
-            <v-btn color="primary" @click="on_click">set</v-btn>
-            </div>
-            Output: {{ this.new_modelValue }}
         </v-card>
     </v-menu>    
     </div>
@@ -78,8 +74,20 @@
                 this.$emit('update:modelValue', newValue)
             },
             date(){
-                this.on_change()
-            }
+                this.on_change() //Exits
+            },
+            hours(){
+                this.new_modelValue=this.widget2string() //When writing doesn't exit
+            },
+            minutes(){
+                this.new_modelValue=this.widget2string()
+            },
+            seconds(){
+                this.new_modelValue=this.widget2string()
+            },
+            microseconds(){
+                this.new_modelValue=this.widget2string()
+            },
         },
         computed: {
             label(){
@@ -93,10 +101,6 @@
         methods: {
             localtime,
             RulesInteger,
-            on_click(){
-                this.new_modelValue=this.widget2string()
-                this.menu=false
-            },
             string2widget(s){
                 if (s==null){
                     return
@@ -107,22 +111,13 @@
                 this.minutes=d.getMinutes()
                 this.seconds=d.getSeconds()
                 this.microseconds=d.getMilliseconds()*1000
-                console.log(this.hours,this.minutes,this.seconds,this.microseconds)
 
             },
             widget2string(){
                 if (this.hours==null || this.hours.length==0) return null
                 let r=this.date
-                console.log(r)
                 r.setHours(this.hours,this.minutes,this.seconds,this.microseconds/1000)
-                console.log(r)
-                console.log("widget2string",r.toISOString())
                 return r.toISOString()
-            },
-            string2dt(s){
-                if (!s) return null
-                var r=new Date(s)
-                return r
             },
             dt2string(dt){
                 if (!dt) return null
@@ -133,9 +128,7 @@
                 this.string2widget(this.new_modelValue)
             },
             set_representation(){
-                console.log("REPRESETNATION", this.new_modelValue)
                 this.representation=(this.new_modelValue==null) ? "": this.localtime(this.new_modelValue)
-
             },
             on_change(){
                 this.new_modelValue=this.widget2string()
