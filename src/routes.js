@@ -30,7 +30,7 @@ import ReportsZeroRisk from './components/ReportsZeroRisk.vue'
 import Settings from './components/Settings'
 import Statistics from './components/Statistics'
 import StrategiesList from './components/StrategiesList'
-import Widgets from './components/Widgets'
+import WidgetsMyDatePicker from './components/WidgetsMyDatePicker'
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -65,6 +65,6 @@ export const router = createRouter({
     { path: `${import.meta.env.BASE_URL}/settings/`, name: 'settings', component: Settings },
     { path: `${import.meta.env.BASE_URL}/statistics/`, name: 'statistics', component: Statistics },
     { path: `${import.meta.env.BASE_URL}/strategies/list/`, name: 'strategies_list', component: StrategiesList },
-    { path: `${import.meta.env.BASE_URL}/widgets/`, name: 'widgets', component: Widgets },
+    { path: `${import.meta.env.BASE_URL}/widgets/mydatepicker/`, name: 'widgets_mydate_picker', component: WidgetsMyDatePicker },
   ]
 })
