@@ -1,6 +1,6 @@
-/*
+<!--
     You must set in main.js import 'flag-icons/css/flag-icons.min.css' to use "fi" classes
-*/
+ -->
 
 <template>
     <v-menu >

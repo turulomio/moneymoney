@@ -1,25 +1,25 @@
 <!--
     Value:
         Can be:
-            - A Date iso string  new Date().toISOString().split("T")[0] "2022-12-12"
+            - A Date iso string "2022-12-12"
             - null. Se grabaría como null
 -->
 
 
 <template>
-        <div class="d-flex flex-column mx-auto pa-4">     
-        <div class="component_label">
-        {{ $attrs.label }}
-        </div>          
-            <!-- <v-date-picker v-model="dt" show-adjancent-months></v-date-picker>                            -->
-            <VueDatePicker v-model="dt" auto-apply :disabled="readonly" :enable-time-picker="false" :label="$attrs.label" :format="format"  :clearable="clearable"  :zIndex="20000">
-                <template #input-icon>
-                    <v-icon class="mx-2 pr-2" icon="mdi-calendar" @click.stop="dt=new Date()" ></v-icon>
-                </template>
-            </VueDatePicker>
-        </div>
+    <div>
+        <v-menu v-model="menu"  :close-on-content-click="false">
+        <template v-slot:activator="{ props }">
+            <div class="d-flex flex-row">
+                <v-text-field v-model="new_value" :label="label" v-bind="props" readonly :clearable="clearable" prepend-icon="mdi-calendar-clock" @click:prepend.stop="on_click_prepend_icon" />
+            </div>
+        </template>
+        <v-date-picker density="compact" v-model="dt" show-adjancent-months hide-header :location="$i18n.locale" ></v-date-picker> 
+    </v-menu>    
+    </div>
 </template>
 <script>
+    //import { useDate } from 'vuetify'
     export default {    
         props: {
             modelValue:{ //v-model in vue3
@@ -28,10 +28,6 @@
             readonly: {
                 required: false,
                 default: false,
-            },
-            rules: {
-                type: Array,
-                required: false
             },
             clearable: { //Hides null icon
                 type: Boolean,
@@ -44,11 +40,13 @@
             return {
                 dt: null,
                 new_value: null,
+                menu:false,
             }
         },
         watch: {
             new_value (newValue) {
                 this.$emit('update:modelValue', newValue)
+                this.menu=false
             },
             value (newValue) {
                 this.new_value = newValue
@@ -57,22 +55,27 @@
                 this.new_value=this.dt2string(newValue)
             }
         },
-        methods: {
-            format(){
-                if (this.dt) {
-                    return this.dt2string(this.dt)
+        computed: {
+            label(){
+                if (this.$attrs.label){
+                    return this.$attrs.label
                 } else {
-                    return ""
+                    return this.$t("Select a date")
                 }
-            },
-
+            }
+        },
+        methods: {
             string2dt(s){
                 if (!s) return null
                 return new Date(s)
             },
             dt2string(dt){
                 if (!dt) return null
-                return dt.toISOString().slice(0,10)
+                return `${dt.getFullYear()}-${(dt.getMonth()+1).toString().padStart(2,"0")}-${dt.getDate().toString().padStart(2,"0")}`
+            },
+            on_click_prepend_icon(){
+                this.new_value=this.dt2string(new Date())
+
             }
         },
         created(){
@@ -81,9 +84,3 @@
         },
     }
 </script>
-<style scoped>
-.component_label{
-    font-size: 0.8em;
-    color: gray;
-}
-</style>

@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
-    "@vuepic/vue-datepicker": "^7.4.0",
     "axios": "^1.6.3",
     "currency-list": "^1.0.8",
     "echarts-stat": "^1.2.0",
