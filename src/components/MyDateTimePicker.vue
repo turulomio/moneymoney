@@ -32,8 +32,9 @@
                     <v-text-field v-model="timezone" readonly :label=" $t('Time zone')" />
                 </v-col>
             </v-row>
-            <v-btn @click="on_click_prepend_icon">now</v-btn>
-            <v-btn @click="on_click">set</v-btn>
+            <div class="d-flex flex-row">
+            <v-btn color="primary" @click="on_click">set</v-btn>
+            </div>
             Output: {{ this.new_modelValue }}
         </v-card>
     </v-menu>    
@@ -103,12 +104,16 @@
                 this.minutes=d.getMinutes()
                 this.seconds=d.getSeconds()
                 this.microseconds=d.getMilliseconds()*1000
+                console.log(this.hours,this.minutes,this.seconds,this.microseconds)
 
             },
             widget2string(){
                 if (this.hours==null || this.hours.length==0) return null
                 let r=this.date
-                r.setHours(this.hours,this.minutes,this.seconds,this.microseconds)
+                console.log(r)
+                r.setHours(this.hours,this.minutes,this.seconds,this.microseconds/1000)
+                console.log(r)
+                console.log("widget2string",r.toISOString())
                 return r.toISOString()
             },
             string2dt(s){
@@ -123,7 +128,6 @@
             on_click_prepend_icon(){
                 this.new_modelValue=new Date().toISOString()
                 this.string2widget(this.new_modelValue)
-                this.set_representation()
             },
             set_representation(){
                 console.log("REPRESETNATION", this.new_modelValue)
@@ -132,12 +136,10 @@
             }
         },
         created(){
-            // this.dt=this.string2dt(this.modelValue)
             if(this.clearable==false && this.modelValue==null) this.on_click_prepend_icon()
             this.timezone=moment.tz.guess()
             this.string2widget(this.modelValue)
             this.new_modelValue=this.modelValue
-            this.set_representation()
             
         },
     }
