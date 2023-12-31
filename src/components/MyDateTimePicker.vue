@@ -25,10 +25,10 @@
             <v-row>
                 <v-date-picker density="compact" v-model="date" show-adjancent-months hide-header :location="$i18n.locale" ></v-date-picker> 
                 <v-col class="ma-3">
-                    <v-text-field v-model.number="hours" :label="$t('Set hours')" :rules="RulesInteger(2,true)" />
-                    <v-text-field v-model.number="minutes" :label="$t('Set minutes')" :rules="RulesInteger(2,true)" />
-                    <v-text-field v-model.number="seconds" :label="$t('Set seconds')" :rules="RulesInteger(2,true)" />
-                    <v-text-field v-model.number="microseconds" :label="$t('Set microseconds')" :rules="RulesInteger(6,true)" />
+                    <v-text-field v-model.number="hours" :label="$t('Set hours')" :rules="RulesInteger(2,true)" @change="on_change" />
+                    <v-text-field v-model.number="minutes" :label="$t('Set minutes')" :rules="RulesInteger(2,true)" @change="on_change" />
+                    <v-text-field v-model.number="seconds" :label="$t('Set seconds')" :rules="RulesInteger(2,true)" @change="on_change" />
+                    <v-text-field v-model.number="microseconds" :label="$t('Set microseconds')" :rules="RulesInteger(6,true)" @change="on_change" />
                     <v-text-field v-model="timezone" readonly :label=" $t('Time zone')" />
                 </v-col>
             </v-row>
@@ -77,6 +77,9 @@
                 this.set_representation()
                 this.$emit('update:modelValue', newValue)
             },
+            date(){
+                this.on_change()
+            }
         },
         computed: {
             label(){
@@ -132,6 +135,11 @@
             set_representation(){
                 console.log("REPRESETNATION", this.new_modelValue)
                 this.representation=(this.new_modelValue==null) ? "": this.localtime(this.new_modelValue)
+
+            },
+            on_change(){
+                this.new_modelValue=this.widget2string()
+                this.menu=false
 
             }
         },
