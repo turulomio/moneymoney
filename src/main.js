@@ -11,11 +11,17 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 
 
+import { vuetify_rules_i18next } from 'vuetify_rules';
+console.log(vuetify_rules_i18next)
+vuetify_rules_i18next_init()
+await vuetify_rules_i18next.changeLanguage("es")
+console.log(vuetify_rules_i18next.t("Email is required"))
 
 import * as echarts from 'echarts';
 import ECharts from 'vue-echarts'
 
 import {transform} from 'echarts-stat'
+import { vuetify_rules_i18next_init } from 'vuetify_rules/src/i18next'
 echarts.registerTransform(transform.regression);
 
 document.title=import.meta.env.VITE_APP_TITLE
