@@ -9,9 +9,13 @@
 <script>
     import axios from 'axios'
     import { useStore } from "@/store"
+    import { myheaders, parseResponseError} from "@/functions"
+
     export default {
         methods: {
             useStore,
+            myheaders,
+            parseResponseError,
             logout(){
                 axios.post(`${this.useStore().apiroot}/logout/`, {'key': this.useStore().token},this.myheaders())
                 .then(() => {
