@@ -9,11 +9,11 @@
 
                 </v-tabs>
                 <v-window v-model="tab">
-                    <v-window-item key="product">
-                         <ChartPie ref="chart1" name="ChartPie" :items="items" :key="key"/>
+                    <v-window-item key="product" >
+                         <ChartPie v-if="show1" ref="chart1" name="ChartPie" :items="items"/>
                     </v-window-item>
-                    <v-window-item key="pci" style="height:600px;">
-                        <ChartPie ref="chart2" name="ChartPie" :items="items2" :key="key"/>
+                    <v-window-item key="pci">
+                        <ChartPie  v-if="show2" ref="chart2" name="ChartPie" :items="items2"/>
                     </v-window-item>
 
                 </v-window>
@@ -23,20 +23,20 @@
 
 <script>
     import ChartPie from './ChartPie.vue';
-    export default {
-        name: 'About',
+    export default { 
         components:{
             ChartPie
         },
         watch:{
-            tab(){
-                this.key+=1
-                // if (val==0) this.$refs.chart1.update()
-                // if (val==1) this.$refs.chart2.update()
-            }
+            tab(val){
+                if (val==0) setTimeout(() => {this.show1=true }, 300)
+                if (val==1) setTimeout(() => {this.show2=true }, 300)
+            },
         },
         data(){
             return {
+                show1:true,
+                show2:false,
                 key:0,
                 tab:0,
                 items:[

@@ -4,8 +4,8 @@
 
         <div class="d-flex flex-row" >
             <div ref="pieChart" :style="`width:100%; height:${height}px;`"></div>            
-            <div ref="table" v-if="new_show_data">
-                <v-data-table density="compact" :headers="tableHeaders"  :items="items" class="elevation-1" :sort-by="[{key:'value',order:'desc'}]" :items-per-page="10000">
+            <div ref="table" v-if="new_show_data" class="d-flex">
+                <v-data-table density="compact" :headers="tableHeaders"  :items="items"  :sort-by="[{key:'value',order:'desc'}]" :items-per-page="10000">
                     <template #item.percentage="{item}">
                         <div class="text-right">{{ getPercentage(item) }}</div>
                     </template>
@@ -110,28 +110,19 @@
                 return this.items.reduce((accum,item) => accum + item.value, 0)
             },
 
-            // styleheight: function(){
-            //     if (this.new_show_data){
-
-            //         return `height: ${this.height}px; width: 100%;`
-            //     } else {
-
-            //         return `height: ${this.height}px; width: 100%;`
-            //     }
-            // },
         },
         methods: {
             buttonClick(){
                 this.new_show_data=!this.new_show_data
                 if (this.new_show_data){
-                    this.$refs.pieChart.style.width="80%"
-                    if (this.$refs.table) this.$refs.table.style.width="80%"
+                    this.$refs.pieChart.style.width="70%"
+                    if (this.$refs.table) this.$refs.table.style.width="30%"
                 } else {
 
                     this.$refs.pieChart.style.width="100%"
                     if (this.$refs.table) this.$refs.table.style.width="0%"
                 }
-                this.update()
+                this.chart.resize()
             },
             getPercentage(item){
                 return `${(item.value/this.total*100).toFixed(2)} %`
@@ -140,27 +131,16 @@
             on_finished(){
                 this.$emit("finished",this.reference, this.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff'}))
             },
-            update(){
-                this.chart.resize()
-            }
-            // on_resize(){
-            //     console.log("RESIZIZNG")
-            //     if (this.chart!=null){
-            //     console.log(this.$refs.pieChart)
-            //     this.chart.resize()
-            //     }
-            // },
-
         },
         mounted(){
-            this.chart = echarts.init(this.$refs.pieChart);
-            this.chart.on('finished', this.on_finished);
-            // this.chart.on('resize', this.on_resize);
-            this.chart.setOption(this.options)
             if (this.hidden){
                 console.log(`Chart ${this.reference} has been hidden`)
                 this.$refs.div.style.visibility="hidden"
             } 
+            this.chart = echarts.init(this.$refs.pieChart);
+            this.chart.on('finished', this.on_finished);
+            this.chart.setOption(this.options)
+
         }
     }
 </script>
