@@ -245,7 +245,9 @@ export function getOperationstypesForInvestmentsOperations() {
 export function getMapObjectById(catalog,id) { 
     // If id doesn't exists return undefined
     var url=hyperlinked_url(catalog,id)
+    console.log(catalog,id,url)
     var r= useStore()[catalog].get(url)
+    console.log(r)
     return r
 }
 

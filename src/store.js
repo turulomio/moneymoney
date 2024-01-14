@@ -119,6 +119,7 @@ export const useStore = defineStore('global', {
         return axios.get(`${this.apiroot}/api/investments/`, myheaders())
         .then((response)=>{
           this.investments.clear()
+          console.log(response.data)
           response.data.forEach(o=>{
             this.investments.set(o.url, o)
           })  

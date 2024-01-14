@@ -542,6 +542,7 @@
             update_all(){
                 this.loading=true
                 this.investment=this.getMapObjectById("investments",this.investment_id)     
+                console.log(this.investment)
 
                 axios.all([this.update_ios(), this.update_dividends()])
                 .then(([resIO, resDividends]) => {
