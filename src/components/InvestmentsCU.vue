@@ -2,16 +2,16 @@
   <div>
         <h1 class="mb-2">{{title()}}</h1>
         <v-form ref="form" v-model="form_valid">
-            <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(useStore().accounts).filter(v =>v.active==true)" v-model="new_investment.accounts" :label="$t('Select an account')" item-title="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-            <v-text-field :readonly="mode=='D'" v-model="new_investment.name" type="text" :label="$t('Investment name')"  :placeholder="$t('Investment name')" autofocus :rules="RulesString(200,true)"/>
-            <AutocompleteProducts :readonly="mode=='D'" v-model="new_investment.products" :rules="RulesSelection(true)"  />
-            <v-checkbox :readonly="mode=='D'" v-model="new_investment.active" :label="$t('Is active?')" ></v-checkbox>
-            <v-checkbox :readonly="mode=='D'" v-model="new_investment.daily_adjustment" :label="$t('Has daily adjustment?')" ></v-checkbox>
-            <v-text-field :readonly="mode=='D'" v-model.number="new_investment.decimals" :label="$t('Set shares decimals')" :placeholder="$t('Set shares decimals')" :rules="RulesInteger(1,true)" counter="1" />
+            <v-autocomplete data-test="InvestmentsCU_Accounts" :readonly="mode=='D'" :items="getArrayFromMap(useStore().accounts).filter(v =>v.active==true)" v-model="new_investment.accounts" :label="$t('Select an account')" item-title="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+            <v-text-field data-test="InvestmentsCU_Name" :readonly="mode=='D'" v-model="new_investment.name" type="text" :label="$t('Investment name')"  :placeholder="$t('Investment name')" autofocus :rules="RulesString(200,true)"/>
+            <AutocompleteProducts data-test="InvestmentsCU_Products" :readonly="mode=='D'" v-model="new_investment.products" :rules="RulesSelection(true)"  />
+            <v-checkbox data-test="InvestmentsCU_Active" :readonly="mode=='D'" v-model="new_investment.active" :label="$t('Is active?')" ></v-checkbox>
+            <v-checkbox data-test="InvestmentsCU_DailyAdjustment" :readonly="mode=='D'" v-model="new_investment.daily_adjustment" :label="$t('Has daily adjustment?')" ></v-checkbox>
+            <v-text-field data-test="InvestmentsCU_Number" :readonly="mode=='D'" v-model.number="new_investment.decimals" :label="$t('Set shares decimals')" :placeholder="$t('Set shares decimals')" :rules="RulesInteger(1,true)" counter="1" />
         </v-form>
         <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" @click="acceptDialog()">{{ button() }}</v-btn>
+            <v-btn data-test="InvestmentsCU_Button" color="primary" @click="acceptDialog()">{{ button() }}</v-btn>
         </v-card-actions>
   </div>
 </template>

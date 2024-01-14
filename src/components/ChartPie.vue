@@ -1,40 +1,37 @@
 <template>
     <div ref="div" class="ma-4">
         <p v-if="items.length==0">No data to show</p>
-        <v-card v-if="items.length>0">
-            <v-row :style="styleheight()">
-                <v-col>
-                    <v-chart ref="chart" autoresize :option="options" :key="key" @finished="on_finished"/>
-                </v-col>
-                <v-col v-if="new_show_data" >
-                    <v-data-table density="compact" :headers="tableHeaders"  :items="items" class="elevation-1" :sort-by="[{key:'value',order:'desc'}]" :items-per-page="10000" >
-                        <template #item.percentage="{item}">
-                            <div class="text-right">{{ getPercentage(item) }}</div>
-                        </template>
-                        <template #item.value="{item}">
-                            <div class="text-right">{{ item.value }}</div>
-                        </template>
-                        <template #tbody>
-                            <tr class="totalrow">
-                                <td>{{ $t("Total") }}</td>
-                                <td class="text-right">{{total}}</td>
-                                <td class="text-right">100 %</td>
-                            </tr>
-                        </template>
-                        <template #bottom ></template>   
-                    </v-data-table>
-                </v-col>
-            </v-row>       
-            <v-row>
-                <v-col align="center">
-                    <v-btn  color="primary" @click="buttonClick">{{buttontext}}</v-btn>
-                </v-col>
-            </v-row>
-        </v-card>  
+
+        <div class="d-flex flex-row" >
+            <div ref="pieChart" :style="`width:100%; height:${height}px;`"></div>            
+            <div ref="table" v-if="new_show_data">
+                <v-data-table density="compact" :headers="tableHeaders"  :items="items" class="elevation-1" :sort-by="[{key:'value',order:'desc'}]" :items-per-page="10000">
+                    <template #item.percentage="{item}">
+                        <div class="text-right">{{ getPercentage(item) }}</div>
+                    </template>
+                    <template #item.value="{item}">
+                        <div class="text-right">{{ item.value }}</div>
+                    </template>
+                    <template #tbody>
+                        <tr class="totalrow">
+                            <td>{{ $t("Total") }}</td>
+                            <td class="text-right">{{total}}</td>
+                            <td class="text-right">100 %</td>
+                        </tr>
+                    </template>
+                    <template #bottom ></template>   
+                </v-data-table>
+            </div>
+        </div>
+        <div class="d-flex justify-center">
+            <v-btn  color="primary" @click="buttonClick">{{buttontext}}</v-btn>
+        </div>
+
     </div>
 </template>
 
 <script>
+    import * as echarts from 'echarts';
     export default {
         props: {
             name: {
@@ -65,6 +62,7 @@
         },
         data: function () {
             return {
+                chart:null,
                 new_show_data: this.show_data, //To avoid prop mutation
                 key:0,
                 tableHeaders: [
@@ -110,26 +108,55 @@
             },
             total: function(){
                 return this.items.reduce((accum,item) => accum + item.value, 0)
-            }
+            },
+
+            // styleheight: function(){
+            //     if (this.new_show_data){
+
+            //         return `height: ${this.height}px; width: 100%;`
+            //     } else {
+
+            //         return `height: ${this.height}px; width: 100%;`
+            //     }
+            // },
         },
         methods: {
             buttonClick(){
                 this.new_show_data=!this.new_show_data
-                this.key=this.key+1
+                if (this.new_show_data){
+                    this.$refs.pieChart.style.width="80%"
+                    if (this.$refs.table) this.$refs.table.style.width="80%"
+                } else {
+
+                    this.$refs.pieChart.style.width="100%"
+                    if (this.$refs.table) this.$refs.table.style.width="0%"
+                }
+                this.update()
             },
             getPercentage(item){
                 return `${(item.value/this.total*100).toFixed(2)} %`
                 
             },
             on_finished(){
-                this.$emit("finished",this.reference, this.$refs.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff'}))
+                this.$emit("finished",this.reference, this.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff'}))
             },
-            styleheight: function(){
-                return `height: ${this.height}px`
-            },
+            update(){
+                this.chart.resize()
+            }
+            // on_resize(){
+            //     console.log("RESIZIZNG")
+            //     if (this.chart!=null){
+            //     console.log(this.$refs.pieChart)
+            //     this.chart.resize()
+            //     }
+            // },
 
         },
         mounted(){
+            this.chart = echarts.init(this.$refs.pieChart);
+            this.chart.on('finished', this.on_finished);
+            // this.chart.on('resize', this.on_resize);
+            this.chart.setOption(this.options)
             if (this.hidden){
                 console.log(`Chart ${this.reference} has been hidden`)
                 this.$refs.div.style.visibility="hidden"

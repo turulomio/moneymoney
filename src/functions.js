@@ -152,7 +152,7 @@ export function arrayobjects_to_array(l, key){
 }
 
 export function percentage_generic_string(num, locale, decimals=2){
-    if (num==null) return "- - - %"
+    if (num==null || isNaN(num)) return "- - - %"
     return `${my_round(num*100,decimals).toLocaleString(locale,{ minimumFractionDigits: decimals,  })} %`
 }
 

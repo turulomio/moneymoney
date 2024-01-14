@@ -1,36 +1,8 @@
 import { expect, test } from 'vitest'
+import { percentage_generic_html } from '@/functions'
 
-test('adds 1 + 2 to equal 3', () => {
-  expect(1+2).toBe(3)
+
+test("percentage_generic_html",() =>{
+  expect( percentage_generic_html(NaN, "es", 2)).toBe("<span class='vuered'>- - - %</span>")
 })
 
-
-
-// import {
-//     elaboration_nutritional_information,
-// }  from '../src/functions.js';
-  
-// var elaboration={
-//   elaborations_products_in: [
-//     {
-//       products:  "mal"
-//     },
-//   ]
-
-// }
-
-  
-//   //Coverage of the test not of the module
-  
-//   import assert from "assert"
-  
-//   describe("Functions", () => {
-//     it('elaboration_nutritional_information', () => {
-//       console.log(elaboration)
-//       assert.equal(1,1)
-//       // assert.equal(elaboration_nutritional_information(elaboration, ""), true);
-//     });
-  
-  
-//   });
-  
