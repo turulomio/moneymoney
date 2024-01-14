@@ -24,6 +24,7 @@
 import axios from 'axios'
 import { useStore } from "@/store"
 import {RulesString} from "vuetify_rules"
+import {myheaders_noauth,parseResponse,parseResponseError} from "@/functions"
 export default {
     data () {
         return {
@@ -36,8 +37,11 @@ export default {
         }
     },
     methods: {
-            useStore,
+        useStore,
+        myheaders_noauth,
         RulesString,
+        parseResponse,
+        parseResponseError,
         login(){
             var start=new Date()
                 if (this.form_valid!=true) {
