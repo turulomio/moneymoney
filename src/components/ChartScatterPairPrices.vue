@@ -2,17 +2,18 @@
 <template>
     <div>
         <h1 v-if="!notitle">{{ $t("Pair price scatter chart")}}</h1>
-        <v-card outlined class="ma-4 pa-4" height="500">
-            <v-chart
-                :option="chart_option(data)"
-                autoresize
-                :loading="loading"
-            />
+
+        <v-card class="ma-4 pa-4">
+            <div ref="chart" style="width:100%;height:600px;"  ></div>
          </v-card>
     </div>
 
 </template>
 <script>
+    import * as echarts from 'echarts'
+    import {transform} from 'echarts-stat'
+    echarts.registerTransform(transform.regression);
+
     export default {
         name: "ChartScatterPairPrices",
         props:{
@@ -31,7 +32,7 @@
             }
         },
         methods: {
-            chart_option(mydata){
+            chart_option(){
                 return {   
                     dataset: [
                         {
@@ -78,17 +79,17 @@
                     series: [
                         {
                             symbolSize: 10,
-                            data: mydata.prices,
+                            data: this.data.prices,
                             type: 'scatter',
                             name: this.$t('Scatter'),
                             color: 'green',
                             itemStyle: {
                                 color: function(param) {
-                                    if (param.dataIndex>mydata.prices.length-2) return 'red'
-                                    if (param.dataIndex>mydata.prices.length-20) return 'orange'
+                                    if (param.dataIndex>this.data.prices.length-2) return 'red'
+                                    if (param.dataIndex>this.data.prices.length-20) return 'orange'
                                     return 'green'
  
-                                }
+                                }.bind(this)
                             },
                         },
                         {
@@ -107,6 +108,11 @@
                 };
             }
         },
+        mounted(){
+
+            this.chart = echarts.init(this.$refs.chart);
+            this.chart.setOption(this.chart_option())
+        }
     }
 
 

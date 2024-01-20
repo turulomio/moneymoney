@@ -1,7 +1,7 @@
 
 <template>
     <div>
-        <v-card class="ma-4 pa-4"  style="width:100%;">
+        <v-card class="ma-4 pa-4">
             <div ref="chart" style="width:100%;height:600px;"  ></div>
          </v-card>
     </div>

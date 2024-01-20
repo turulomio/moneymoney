@@ -46,13 +46,13 @@
             </v-window-item>
             <v-window-item key="price_ratio_chart">
                 <v-card outlined>
-                    <ChartPriceRatio notitle :product_a="product_a" :product_b="product_b" :data="data_price_ratio_chart"></ChartPriceRatio>
+                    <ChartPriceRatio v-if="showchart" notitle :product_a="product_a" :product_b="product_b" :data="data_price_ratio_chart"></ChartPriceRatio>
                     <p class="boldcenter">{{ $t("One product performs better than another if its price ratio increases") }}</p>
                 </v-card>
             </v-window-item>
             <v-window-item key="pairs_price_scatter">
                 <v-card outlined>
-                    <ChartScatterPairPrices notitle :data="cspp" />
+                    <ChartScatterPairPrices v-if="showchart" notitle :data="cspp" />
                     <p class="boldcenter">{{ $t("If the red point is above the regression line, it means that last pair prices are performing better than its average.") }}</p>
 
                 </v-card>
@@ -128,9 +128,10 @@
         },
         data(){ 
             return {
+                showchart:false,
 
 
-                tab:1,
+                tab:0,
                 interval_minutes:1,
                 product_a: null,
                 product_b: null,
@@ -235,6 +236,13 @@
                     })
                 }
                 return r
+            },
+        },
+
+        watch:{
+            tab(){
+                this.showchart=false
+                if (this.tab==1 || this.tab==2) setTimeout(() => {this.showchart=true }, 300)
             },
         },
         methods:{
