@@ -78,9 +78,9 @@
                     <TableQuotes :product="product" :items="quotes_month" :key="key" :height="400" @cruded="on_TableQuotes_cruded()"></TableQuotes>
                 </v-card>
             </v-window-item>
-            <v-window-item key="chart">     
+            <v-window-item key="chart"  >     
                 <v-card class="pa-4" outlined >
-                    <ChartProduct :ohcls="ohcls" :product="product" :key="key"></ChartProduct>
+                    <ChartProduct v-if="showchart" :ohcls="ohcls" :product="product" :key="key"></ChartProduct>
                 </v-card>
             </v-window-item>
         </v-window>
@@ -224,6 +224,7 @@
                 tab:0,
                 key:0,
                 loading:false,
+                showchart:false,
                 // Information
                 information: null,
 
@@ -290,6 +291,10 @@
         watch: {
             ohcls_ym(){
                 this.on_monthpicker_ohcls_change()
+            },
+            tab(){
+                this.showchart=false
+                if (this.tab==6) setTimeout(() => {this.showchart=true }, 300)
             },
         },
         methods: {
