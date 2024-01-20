@@ -1,18 +1,14 @@
 
 <template>
     <div>
-        <v-card outlined class="ma-4 pa-4" height="500" width="100%">
-            <v-chart
-                ref="chart"
-                :option="chart_option()"
-                autoresize
-                :loading="loading"
-            />
+        <v-card class="ma-4 pa-4" >
+            <div ref="chart" style="width:100%;height:600px;"  ></div>
          </v-card>
     </div>
 
 </template>
 <script>
+    import * as echarts from 'echarts'
     export default {
         props:{
             ohcls:{
@@ -121,6 +117,11 @@
         },
         created(){
             this.ohcls.forEach(o => this.tuple_closes.push([new Date(o.date),o.close]))
+        },
+        mounted(){
+
+            this.chart = echarts.init(this.$refs.chart);
+            this.chart.setOption(this.chart_option())
         }
     }
 
