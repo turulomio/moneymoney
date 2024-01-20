@@ -275,7 +275,7 @@ export function getCurrencyPropertyByCode(code,property,default_="???") {
     }
 }
 export function currency_generic_string(num, currency, locale, decimals=2){
-    if (num ==null){
+    if (num ==null || isNaN(num)){
         return `- - - ${getCurrencyPropertyByCode(currency,"symbol_native")}`
     } else {
         return `${my_round(num,decimals).toLocaleString(locale, { minimumFractionDigits: decimals,  })} ${getCurrencyPropertyByCode(currency,"symbol_native")}`

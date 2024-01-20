@@ -39,19 +39,29 @@ export function add_investmentoperation_from_Home(
     account_type="Cash{downArrow}{enter}", 
     investment="New investment", 
     product_type="Apalancado{downArrow}{enter}",
-    wait_name_investments_id="@waitInvestmentsId"
+    wait_name_investments_id="@waitInvestmentsId",
+    shares="100",
+    price="9"
 ){
     add_investment_from_Home(cy,account_type,investment,product_type)
 
     cy.get(wait_name_investments_id).then( (investments_id) => {
         cy.getDataTest(`Investments_Table_Row${investments_id}`).click()
-        cy.getDataTest('MyMenuInline_Button').last().click()
-        cy.getDataTest('MyMenuInline_Header2_Item0').click()
-        cy.getDataTest("InvestmentsoperationsCU_Shares").type("100")
-        cy.getDataTest("InvestmentsoperationsCU_Price").type("9")
-        cy.getDataTest("InvestmentsoperationsCU_Button").click()
+        add_investmentoperation_from_InvestmentView(cy,shares,price)
 
     })
+}
 
 
+export function add_investmentoperation_from_InvestmentView(
+    cy,
+    shares="100",
+    price="9"
+){
+
+    cy.getDataTest('MyMenuInline_Button').last().click()
+    cy.getDataTest('MyMenuInline_Header2_Item0').click()
+    cy.getDataTest("InvestmentsoperationsCU_Shares").type("{backspace}").type(shares)
+    cy.getDataTest("InvestmentsoperationsCU_Price").type(price)
+    cy.getDataTest("InvestmentsoperationsCU_Button").click()
 }
