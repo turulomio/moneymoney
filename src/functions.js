@@ -152,7 +152,7 @@ export function arrayobjects_to_array(l, key){
 }
 
 export function percentage_generic_string(num, locale, decimals=2){
-    if (num==null) return "- - - %"
+    if (num==null || isNaN(num)) return "- - - %"
     return `${my_round(num*100,decimals).toLocaleString(locale,{ minimumFractionDigits: decimals,  })} %`
 }
 
@@ -245,7 +245,9 @@ export function getOperationstypesForInvestmentsOperations() {
 export function getMapObjectById(catalog,id) { 
     // If id doesn't exists return undefined
     var url=hyperlinked_url(catalog,id)
+    console.log(catalog,id,url)
     var r= useStore()[catalog].get(url)
+    console.log(r)
     return r
 }
 
@@ -273,7 +275,7 @@ export function getCurrencyPropertyByCode(code,property,default_="???") {
     }
 }
 export function currency_generic_string(num, currency, locale, decimals=2){
-    if (num ==null){
+    if (num ==null || isNaN(num)){
         return `- - - ${getCurrencyPropertyByCode(currency,"symbol_native")}`
     } else {
         return `${my_round(num,decimals).toLocaleString(locale, { minimumFractionDigits: decimals,  })} ${getCurrencyPropertyByCode(currency,"symbol_native")}`

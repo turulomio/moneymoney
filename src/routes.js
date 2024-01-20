@@ -32,6 +32,7 @@ import Statistics from './components/Statistics'
 import StrategiesList from './components/StrategiesList'
 import WidgetsMyDatePicker from './components/WidgetsMyDatePicker'
 import WidgetsMyDateTimePicker from './components/WidgetsMyDateTimePicker'
+import WidgetsChartPie from '@/components/WidgetsChartPie'
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -66,6 +67,7 @@ export const router = createRouter({
     { path: `${import.meta.env.BASE_URL}/settings/`, name: 'settings', component: Settings },
     { path: `${import.meta.env.BASE_URL}/statistics/`, name: 'statistics', component: Statistics },
     { path: `${import.meta.env.BASE_URL}/strategies/list/`, name: 'strategies_list', component: StrategiesList },
+    { path: `${import.meta.env.BASE_URL}/widgets/chartpie/`, name: 'widgets_chartpie', component: WidgetsChartPie },
     { path: `${import.meta.env.BASE_URL}/widgets/mydatepicker/`, name: 'widgets_mydate_picker', component: WidgetsMyDatePicker },
     { path: `${import.meta.env.BASE_URL}/widgets/mydatetimepicker/`, name: 'widgets_mydatetime_picker', component: WidgetsMyDateTimePicker },
   ]

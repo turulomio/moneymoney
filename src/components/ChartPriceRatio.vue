@@ -2,18 +2,15 @@
 <template>
     <div>
         <h1 v-if="!notitle">{{ $t("Price ratio chart")}}</h1>
-        <v-card outlined class="ma-4 pa-4" height="500" v-if="data.length>0">
-            <v-chart
-                ref="chart"
-                :option="chart_option()"
-                autoresize
-                :loading="loading"
-            />
+
+            <v-card class="ma-4 pa-4">
+            <div ref="chart" style="width:100%;height:600px;"  ></div>
          </v-card>
     </div>
 
 </template>
 <script>
+import * as echarts from 'echarts'
     export default {
         props:{
             product_a:{
@@ -90,6 +87,8 @@
             },
         },
         mounted(){
+            this.chart = echarts.init(this.$refs.chart);
+            this.chart.setOption(this.chart_option())
         }
     }
 

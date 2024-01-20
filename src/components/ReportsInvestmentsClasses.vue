@@ -6,26 +6,26 @@
             <v-select label="Select a method to calculate charts" v-model="method" :items="method_products" @change="key=key+1"></v-select>
                 <v-tabs  bg-color="secondary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
                     <v-tab key="product">{{ $t("By investment product") }}</v-tab>
-                    <v-tab key="pci">{{ $t("By Put / Call / Inline") }}</v-tab>
+                    <v-tab data-test="ReportsInvestmentsClasses_TabPCI" key="pci">{{ $t("By Put / Call / Inline") }}</v-tab>
                     <v-tab key="percentage">{{ $t("By variable percentage") }}</v-tab>
                     <v-tab key="type">{{ $t("By investment type") }}</v-tab>
                     <v-tab key="leverage">{{ $t("By leverage") }}</v-tab>
                 </v-tabs>
                 <v-window v-model="tab" v-if="data!=null">
                     <v-window-item key="product">
-                        <ChartPie name="Investments by product" :items="echart_products_items" :key="key"></ChartPie>
+                        <ChartPie v-if="showpie" name="Investments by product" :items="echart_products_items" :key="key"></ChartPie>
                     </v-window-item>
                     <v-window-item key="pci">
-                        <ChartPie name="Investments by pci" :items="echart_pci_items" :key="key"></ChartPie>
+                        <ChartPie v-if="showpie" name="Investments by pci" :items="echart_pci_items" :key="key"></ChartPie>
                     </v-window-item>
-                    <v-window-item key="percentage">
-                        <ChartPie name="Investments by variable percentage" :items="echart_percentage_items" :key="key"></ChartPie>
+                    <v-window-item  key="percentage">
+                        <ChartPie v-if="showpie" name="Investments by variable percentage" :items="echart_percentage_items" :key="key"></ChartPie>
                     </v-window-item>
                     <v-window-item key="type">
-                        <ChartPie name="Investments by product type" :items="echart_producttype_items" :key="key"></ChartPie>
+                        <ChartPie v-if="showpie" name="Investments by product type" :items="echart_producttype_items" :key="key"></ChartPie>
                     </v-window-item>
                     <v-window-item key="leverage">
-                        <ChartPie name="Investments by leverage" :items="echart_leverage_items" :key="key"></ChartPie>
+                        <ChartPie v-if="showpie" name="Investments by leverage" :items="echart_leverage_items" :key="key"></ChartPie>
                     </v-window-item>
                 </v-window>
         </v-card>
@@ -42,6 +42,7 @@
         },
         data(){ 
             return {
+                showpie:true,
                 tab:null,
                 key:0,
                 method: "Current",
@@ -107,6 +108,12 @@
                 adapted=adapted.filter(o => o.value!=0)
                 return adapted
             }
+        },
+        watch:{
+            tab(){
+                this.showpie=false
+                setTimeout(() => {this.showpie=true }, 300)
+            },
         },
         methods:{
             useStore,

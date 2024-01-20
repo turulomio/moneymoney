@@ -55,7 +55,7 @@
                 </v-window-item>
                 <v-window-item key="1" >
                     <div style="height: 600px;">
-                        <ChartProductsRanges :prdata="prdata" autoresize />
+                        <ChartProductsRanges v-if="showchart" :prdata="prdata" autoresize />
                     </div>
                 </v-window-item>
             </v-window>
@@ -107,6 +107,7 @@
         },
         data(){ 
             return {
+                showchart:false,
                 tab: null,
                 chart: '',                
                 tableHeaders: [
@@ -136,6 +137,12 @@
                 dialog_investment_view:false,
                 investment:null,
             }   
+        },
+        watch: {
+            tab(){
+                this.showchart=false
+                if (this.tab==1) setTimeout(() => {this.showchart=true }, 300)
+            },
         },
         methods:{
             useStore,

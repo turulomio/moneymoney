@@ -19,7 +19,7 @@
                 {{item.fullname}}
             </template>                  
             <template #item.last_datetime="{item}">
-                <div v-html="(item.last_datetime) ? localtime(item.last_datetime) : $t('Update product quotes')" :class="(item.last_datetime) ? '' : 'boldred'"></div>
+                <div :data-test="`Investments_Table_Row${item.id}`" v-html="(item.last_datetime) ? localtime(item.last_datetime) : $t('Update product quotes')" :class="(item.last_datetime) ? '' : 'boldred'"></div>
             </template>  
             <template #item.last="{item}">
                 <div class="text-right" v-html="currency_html(item.last,item.currency )"></div>
@@ -50,7 +50,7 @@
                 </v-tooltip>   
             </template>              
             <template #item.actions="{item}">
-                <v-icon small class="ml-1" @click.stop="addQuote(item)">mdi-plus</v-icon>
+                <v-icon :data-test="`Investments_Table_ButtonAddQuote${item.id}`" small class="ml-1" @click.stop="addQuote(item)">mdi-plus</v-icon>
                 <v-icon small class="ml-1" @click.stop="editItem(item)">mdi-pencil</v-icon>
                 <v-icon small class="ml-1" @click.stop="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
                 <v-icon small class="ml-1" v-if="(new Date().setHours(0,0,0,0)>new Date(item.selling_expiration).setHours(0,0,0,0)) && item.selling_expiration!=null" @click.stop="changeSellingPrice(item)" color="#9933ff" style="font-weight:bold">mdi-alarm</v-icon>     
@@ -83,7 +83,7 @@
         <!-- DIALOG  VIEW INVESTMERNT -->
         <v-dialog v-model="dialog_view" v-if="investment">
             <v-card class="pa-4">
-                <InvestmentsView :investment_id="investment.id" :key="key" @cruded="on_InvestmentView_cruded"></InvestmentsView>
+                <InvestmentsView :investment_id="investment.id" :key="key" @cruded="on_InvestmentView_cruded" @close="dialog_view=false"></InvestmentsView>
             </v-card>
         </v-dialog>
         <!-- DIALOG  ADD QUOTE -->

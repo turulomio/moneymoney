@@ -7,11 +7,11 @@
             <v-form ref="form" v-model="form_valid">                
                 <MyDateTimePicker :readonly="mode=='D'" v-model="new_quote.datetime" :label="$t('Set quote date and time')" />
                 <AutocompleteProducts :readonly="mode=='D'" v-model="new_quote.products" :rules="RulesSelection(true)"  />
-                <v-text-field  :readonly="mode=='D'" v-model.number="new_quote.quote"  :label="$t('Set quote')" :placeholder="$t('Set quote')" :rules="RulesFloatGEZ(12,true,product_object.decimals)" counter="12" autofocus/>
+                <v-text-field data-test="QuotesCU_Quote"  :readonly="mode=='D'" v-model.number="new_quote.quote"  :label="$t('Set quote')" :placeholder="$t('Set quote')" :rules="RulesFloatGEZ(12,true,product_object.decimals)" counter="12" autofocus/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="accept()">{{ button() }}</v-btn>
+                <v-btn data-test="QuotesCU_Button" color="primary" @click="accept()">{{ button() }}</v-btn>
             </v-card-actions>
         </div>
     </div>

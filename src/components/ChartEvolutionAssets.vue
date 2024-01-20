@@ -2,19 +2,13 @@
 <template>
     <div ref="div">
         <h1>{{ $t("Evolution assets chart")}}</h1>
-        <div class="d-flex justify-center mb-4 mt-4" v-if="!reference">
+        <div class="d-flex justify-center mb-4 mt-4" >
             <v-card width="30%">
-             <v-select class="pa-4" width="10%" density="compact" :label="$t('Select the year from which to display the report')" v-model="from" :items="years()" @change="change_year()"></v-select>       
-             </v-card>
+                <v-select class="pa-4" width="10%" density="compact" :label="$t('Select the year from which to display the report')" v-model="from" :items="years()" @change="change_year()"></v-select>       
+            </v-card>
         </div>
-        <v-card outlined class="ma-4 pa-4" height="650">
-            <v-chart
-                ref="chart"
-                :option="chart_option()"
-                autoresize
-                :loading="loading"
-                @finished="on_finished"
-            />
+        <v-card class="ma-4 pa-4" >
+            <div ref="chart" style="width:100%;height:600px;"  ></div>
          </v-card>
     </div>
 
@@ -22,12 +16,9 @@
 <script>
     import axios from 'axios'
     import { useStore } from "@/store"
+    import * as echarts from 'echarts'
     export default {
         props: {
-            reference:{
-                required:false,
-                default:null,
-            },
             hidden:{
                 type: Boolean,
                 required:false,
@@ -172,20 +163,24 @@
                         this.zerorisk.push([o.datetime, o.zerorisk_user])
 
                     })
+                    if (this.hidden){
+                        this.$refs.div.style.visibility="hidden"
+                    } 
+
+                    this.chart = echarts.init(this.$refs.chart);
+                    this.chart.on('finished', this.on_finished);
+                    this.chart.setOption(this.chart_option())
                     this.loading=false
                 }, (error) => {
                     this.parseResponseError(error)
                 });
             },
             on_finished(){
-                this.$emit("finished", this.reference, this.$refs.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff', excludeComponents:['dataZoom']}))
+                this.$emit("finished", null, this.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff', excludeComponents:['dataZoom']}))
             },
         },
         mounted(){
-            if (this.hidden){
-                console.log(`Chart ${this.reference} has been hidden`)
-                this.$refs.div.style.visibility="hidden"
-            } 
+
             this.refreshChart()
 
         }

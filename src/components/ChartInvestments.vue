@@ -2,17 +2,14 @@
 <template>
     <div>
         <v-card outlined class="ma-4 pa-4" height="600">
-            <v-chart
-                ref="chart"
-                :option="chart_option()"
-                autoresize
-                :loading="loading"
-            />
+            <div ref="chart" style="width:100%;height:600px;" ></div>
          </v-card>
     </div>
 
 </template>
 <script>
+    import * as echarts from 'echarts'
+    import { getMapObjectById } from '@/functions'
     export default {
         props:{
             data:{ //empty_investments_chart
@@ -34,6 +31,7 @@
             }
         },
         methods: {
+            getMapObjectById,
             chart_option(){
                 var legends= [
                             this.product.fullname, 
@@ -192,6 +190,8 @@
                 }
              })
 
+            this.chart = echarts.init(this.$refs.chart);
+            this.chart.setOption(this.chart_option())
         }
     }
 

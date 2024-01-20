@@ -1,18 +1,17 @@
 <template>
     <div>    
         <h1>{{ f($t("'[0]' evolution"), [investment.name]) }}</h1>
-        <v-card outlined class="ma-4 pa-4" :style="styleheight()" v-if="loading==false">
-            <v-chart
-                :option="chart_option()"
-                autoresize
-                :loading="loading"
-            />
+        <v-card class="ma-4 pa-4" >
+            <div ref="chart" style="width:100%;height:600px;"  ></div>
          </v-card>
     </div>
 
 </template>
 <script>
+    import * as echarts from 'echarts'
     import axios from 'axios'
+    import {f} from 'vuetify_rules'
+    import { parseResponseError, myheaders} from '@/functions'
     export default {
         props:{
             investment:{ //Object must have id and name
@@ -37,6 +36,9 @@
             }
         },
         methods: {
+            f,
+            myheaders,
+            parseResponseError,
             chart_option(){
                 return  {
                     legend: {
@@ -111,6 +113,10 @@
                 this.gains=response.data.gains
                 this.invested=response.data.invested
                 this.balance=response.data.balance
+
+                this.chart = echarts.init(this.$refs.chart);
+                this.chart.on('finished', this.on_finished);
+                this.chart.setOption(this.chart_option())
                 this.loading=false
             }, (error) => {
                 this.parseResponseError(error)
