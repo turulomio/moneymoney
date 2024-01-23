@@ -18,12 +18,12 @@
         <v-menu v-model="menu"  :close-on-content-click="false">
         <template v-slot:activator="{ props }">
             <div class="d-flex flex-row">
-                <v-text-field v-model="representation" :label="label" v-bind="props" readonly :clearable="clearable" prepend-icon="mdi-calendar-clock" @click:prepend.stop="on_click_prepend_icon" @click:clear.stop="new_modelValue=null" />
+                <v-text-field v-model="representation"  style="min-width: 300px;" :label="label" v-bind="props" readonly :clearable="clearable" prepend-icon="mdi-calendar-clock" @click:prepend.stop="on_click_prepend_icon" @click:clear.stop="new_modelValue=null" />
             </div>
         </template>
         <v-card width="650" class="pa-4">
             <v-row>
-                <v-date-picker density="compact" v-model="date" show-adjancent-months hide-header :location="$i18n.locale" ></v-date-picker> 
+                <v-date-picker density="compact"  v-model="date" show-adjancent-months hide-header ></v-date-picker> 
                 <v-col class="ma-3">
                     <v-text-field v-model.number="hours" :label="$t('Set hours')" :rules="RulesInteger(2,true)" @change="on_change" />
                     <v-text-field v-model.number="minutes" :label="$t('Set minutes')" :rules="RulesInteger(2,true)" @change="on_change" />
