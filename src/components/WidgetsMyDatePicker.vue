@@ -8,13 +8,18 @@
         <MyDatePicker v-model="mydatepicker2" label="Select with my new label" clearable/>
         Current value: {{ mydatepicker2 }} Null:{{ mydatepicker2==null }}
         </div>
+        <v-row class="pl-8 my-3" justify="center">
+            <MyDatePicker v-model="mydatepicker3" label="My date" clearable></MyDatePicker>
+            <v-spacer></v-spacer>
+            <MyDatePicker v-model="mydatepicker4" label="Birth date"></MyDatePicker>
+            <v-spacer></v-spacer>           
+        </v-row>
     </div>
 </template>
 
 <script>
     import MyDatePicker from './MyDatePicker.vue'
     export default {
-        name: 'About',
         components:{
             MyDatePicker,
         },

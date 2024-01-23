@@ -11,10 +11,10 @@
         <v-menu v-model="menu"  :close-on-content-click="false">
         <template v-slot:activator="{ props }">
             <div class="d-flex flex-row">
-                <v-text-field v-model="new_value" :label="label" v-bind="props" readonly :clearable="clearable" prepend-icon="mdi-calendar-clock" @click:prepend.stop="on_click_prepend_icon" />
+                <v-text-field v-model="new_value" style="min-width: 200px;" :label="label" v-bind="props" readonly :clearable="clearable" prepend-icon="mdi-calendar-clock" @click:prepend.stop="on_click_prepend_icon" />
             </div>
         </template>
-        <v-date-picker density="compact" v-model="dt" show-adjancent-months hide-header :location="$i18n.locale" ></v-date-picker> 
+        <v-date-picker density="compact" v-model="dt" show-adjancent-months hide-header ></v-date-picker> 
     </v-menu>    
     </div>
 </template>
