@@ -176,7 +176,7 @@
                 });
             },
             on_finished(){
-                this.$emit("finished", null, this.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff', excludeComponents:['dataZoom']}))
+                this.$emit("finished", "chart_assets", this.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff', excludeComponents:['dataZoom']}))
             },
         },
         mounted(){
