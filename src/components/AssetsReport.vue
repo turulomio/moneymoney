@@ -9,7 +9,7 @@
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn class="pa-4" :loading="loading" color="primary" :disabled="!can_launch" @click="launch_report">{{ (can_launch)?  $t("Generate report"): $t("Report is being prepared. Please be patient...") }}</v-btn>
+                    <v-btn data-test="AssetsReport_ButtonGenerate" class="pa-4" :loading="loading" color="primary" :disabled="!can_launch" @click="launch_report">{{ (can_launch)?  $t("Generate report"): $t("Report is being prepared. Please be patient...") }}</v-btn>
                     <v-spacer></v-spacer>
                 </v-card-actions>
 
