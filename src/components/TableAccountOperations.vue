@@ -22,7 +22,7 @@
                 <v-icon small class="mr-2" @click="deleteAO(item)">mdi-delete</v-icon>
             </template>
             <template #tbody v-if="showtotal && items.length>0">
-                <tr class="totalrow">
+                <tr id="bottom" class="totalrow">
                     <td>{{ f($t("Total ([0] registers)"), [items.length])}}</td>
                     <td></td>
                     <td v-if="showaccount"></td>
@@ -32,7 +32,7 @@
                     <td></td>
                     <td></td>
                 </tr>
-                <div id="bottom"></div>
+                <!-- <div id="bottom"></div> -->
             </template>
             
          <template #bottom ></template>
@@ -86,6 +86,7 @@
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import ReportsConceptsHistorical from './ReportsConceptsHistorical.vue'
     import { localtime, f } from 'vuetify_rules'
+    import { useGoTo } from 'vuetify'
     export default {
         name: "TableAccountOperations",
         components:{
@@ -184,6 +185,7 @@
     methods: {
             useStore,
         f,
+        useGoTo,
         localtime,
         empty_account_transfer,
         empty_account_operation,
@@ -291,22 +293,48 @@
             return r
         },
         gotoLastRow(){ 
-            const element = document.getElementById("bottom")
-            //const element= this.$refs.table_ao
-            // console.log(element)
-            const previous=element?.previousElementSibling
-            // console.log("prev",previous,previous.childElementCount)
-            // console.log(this.items.length)
-            const last_tr=previous?.children.item(previous.childElementCount-1)
-            // console.log(last_tr)
-            if (last_tr){ 
-                // console.log("Going")
-                last_tr.scrollIntoView(false)
+            const bottom = document.getElementById("bottom")
+            console.log("Bottom", bottom)
+            // //const element= this.$refs.table_ao
+            // console.log("Element", element)
+            // const previous=element?.previousElementSibling
+            // // console.log("prev",previous,previous.childElementCount)
+            // // console.log(this.items.length)
+            // const last_tr=previous?.children.item(previous.childElementCount-1)
+            // console.log("last_tr",last_tr)
+            if (bottom){ 
+                console.log("Going")
+                bottom.scrollIntoView({ behavior: "auto", block: "end", inline: "nearest" })
+                bottom.scroll(0,1000)
             }
 
             
             
         },
+
+        // async gotoLastRow() {
+        //     // // Calcula la última página
+        //     // const totalItems = this.items.length;
+        //     // const lastPage = Math.ceil(totalItems / this.itemsPerPage);
+
+        //     // // Cambia a la última página
+        //     // this.page = lastPage;
+
+        //     // Espera a que el DOM se actualice
+        //     await this.$nextTick();
+
+        //     const goTo = useGoTo()
+        //     // Ahora usa $vuetify.goTo para moverse hacia el final de la tabla
+        //     // Puede que necesites ajustar este selector dependiendo de tu marcado
+        //     const dataTable = this.$refs.table_ao.$el.querySelector('.v-table__wrapper');
+        //     console.log("AHORA",dataTable)
+        //     const bottom = this.$refs.bottom
+        //     console.log("AHORA",bottom)
+        //     if (dataTable && bottom) {
+        //         // goTo(bottom, {container: dataTable, duration: 300, easing: 'easeInOutCubic', offset: 0 });
+        //         goTo(100000, {container: dataTable})
+        //     }
+        // },
         on_AccountTransfer_cruded(){
             this.dialog_transfer=false
             this.$emit("cruded")
