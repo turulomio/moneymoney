@@ -229,8 +229,6 @@ span.vuered{
     padding-right: 16px;
     padding-top: 6px;
     padding-bottom: 6px;
-
 }
-
 
 </style>
