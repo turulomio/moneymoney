@@ -32,7 +32,7 @@
                         </template>     
 
                         <template #item.actions="{item}">
-                            <v-icon v-if="!item.deferred" small class="mr-2" @click.stop="CCONotDeferred(item)">mdi-plus</v-icon>
+                            <v-icon :data-test="`AccountsView_Tablecc_ButtonAddDebitOperation${item.id}`" v-if="!item.deferred" small class="mr-2" @click.stop="CCONotDeferred(item)">mdi-plus</v-icon>
                             <v-icon :data-test="`AccountsView_Tablecc_ButtonEdit${item.id}`" small class="mr-2" @click.stop="editCC(item)">mdi-pencil</v-icon>
                             <v-icon :data-test="`AccountsView_Tablecc_ButtonDelete${item.id}`" small @click.stop="deleteCC(item)" v-if="item.is_deletable">mdi-delete</v-icon>
                         </template>
@@ -204,6 +204,7 @@
                 this.ao.accounts=this.account.url
                 this.ao.comment=item.name + ". "
                 this.key=this.key+1
+                this.ao_mode="C"
                 this.dialog_ao=true
             },
             empty_account_operation,
