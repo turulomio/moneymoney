@@ -34,6 +34,41 @@ export function add_investment_from_Home(
 }
 
 
+
+export function add_creditcard_from_AccountsView(
+    cy, 
+    wait_name="waitCcId",
+    name="Debit CC", 
+    number="0000 0000 0000 0000 0000", 
+    maximum_balance="1000", 
+    deferred=false,
+){
+
+    // Add a new debit credit card
+    cy.getDataTest('MyMenuInline_Button').last().click()
+    cy.getDataTest('MyMenuInline_Header2_Item0').click()
+    cy.getDataTest('CreditcardsCU_Name').type(name)
+    cy.getDataTest('CreditcardsCU_Number').type(number)
+    cy.getDataTest('CreditcardsCU_MaximumBalance').type(maximum_balance)
+    if (deferred) {
+        cy.getDataTest("CreditcardsCU_Deferred").find("input").click()
+    }
+    cy.intercept({ method:'POST', url:'http://127.0.0.1:8004/api/creditcards/', times:1,}).as("post_creditcards")
+    cy.getDataTest('CreditcardsCU_Button').click()
+    cy.wait('@post_creditcards').then((interception)=>{
+        var cc_id=interception.response.body.id
+        cy.wrap(cc_id).as(wait_name) // Stores the captured ID for later us
+    })
+}
+
+
+
+
+
+
+
+
+
 export function add_investmentoperation_from_Home(
     cy, 
     account_type="Cash{downArrow}{enter}", 
