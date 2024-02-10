@@ -16,25 +16,24 @@ describe('e2e Credit cards', () => {
     cy.getDataTest('AccountsView_TabCC').click()
 
 
-    // Add a new debit credit card
-    add_creditcard_from_AccountsView(cy,"cc_id")
+    // Add a new deferred credit card
+    add_creditcard_from_AccountsView( cy, "cc_id", "Deferred CC", "0000 0000 0000 0000 0000", "3000", true)
     
     // Making last cc inactive
     cy.get("@cc_id").then((cc_id)=>{
-      cy.getDataTest(`AccountsView_Tablecc_ButtonEdit${cc_id}`).click()
-      cy.getDataTest("CreditcardsCU_Active").find("input").click()
-      cy.getDataTest('CreditcardsCU_Button').click()
-      //Show inactives
-      cy.getDataTest("AccountsView_ShowActiveCC").find("input").click()
-      //Delete inactive
-      cy.getDataTest(`AccountsView_Tablecc_ButtonDelete${cc_id}`).click()
-      cy.getDataTest('CreditcardsCU_Button').click()
-      //Show actives
-      cy.getDataTest("AccountsView_ShowActiveCC").find("input").click()
+      cy.getDataTest(`AccountsView_Tablecc_Row${cc_id}`).click()
+      // cy.getDataTest("CreditcardsCU_Active").find("input").click()
+      // cy.getDataTest('CreditcardsCU_Button').click()
+      // //Show inactives
+      // cy.getDataTest("AccountsView_ShowActiveCC").find("input").click()
+      // //Delete inactive
+      // cy.getDataTest(`AccountsView_Tablecc_ButtonDelete${cc_id}`).click()
+      // cy.getDataTest('CreditcardsCU_Button').click()
+      // //Show actives
+      // cy.getDataTest("AccountsView_ShowActiveCC").find("input").click()
     })
 
     // Add a new deferred credit card
-    add_creditcard_from_AccountsView( cy, "cc_id", "Deferred CC", "0000 0000 0000 0000 0000", "3000", true)
   })
   
 })

@@ -20,7 +20,7 @@
                     <v-data-table :headers="table_cc_headers" :items="table_cc"  class="elevation-1 cursorpointer"  :sort-by="[{key:'name',order:'asc'}]" density="compact" fixed-header max-height="400" :key="key" @click:row="viewCC"     :items-per-page="10000" >
 
                         <template #item.deferred="{item}">
-                            <div class="text-center"><v-icon small v-if="item.deferred" >mdi-check-outline</v-icon></div>
+                            <div :data-test="`AccountsView_Tablecc_Row${item.id}`" class="text-center"><v-icon small v-if="item.deferred" >mdi-check-outline</v-icon></div>
                         </template>  
 
                         <template #item.maximumbalance="{item}">
