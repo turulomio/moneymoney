@@ -62,12 +62,28 @@ export function add_creditcard_from_AccountsView(
 }
 
 
+export function add_creditcardoperation_from_CreditCardView({
+    cy, 
+    wait_name="waitCcoId",
+    concepts="Super{downArrow}{enter}",
+    amount="-1000", 
+    comment="Comment"
+}={}
+){
 
-
-
-
-
-
+    // Add a new debit credit card
+    cy.getDataTest('MyMenuInline_Button').last().click()
+    cy.getDataTest('MyMenuInline_Header0_Item0').click()
+    cy.getDataTest('CreditcardsoperationsCU_Concepts').type(concepts)
+    cy.getDataTest('CreditcardsoperationsCU_Amount').clear().type(amount)
+    cy.getDataTest('CreditcardsoperationsCU_Comment').type(comment)
+    cy.intercept({ method:'POST', url:'http://127.0.0.1:8004/api/creditcardsoperations/', times:1,}).as("post_creditcardsoperations")
+    cy.getDataTest('CreditcardsoperationsCU_ButtonFollow').click()
+    cy.wait('@post_creditcardsoperations').then((interception)=>{
+        var cco_id=interception.response.body.id
+        cy.wrap(cco_id).as(wait_name) // Stores the captured ID for later us
+    })
+}
 
 export function add_investmentoperation_from_Home(
     cy, 

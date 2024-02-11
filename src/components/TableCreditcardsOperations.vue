@@ -23,7 +23,7 @@
                 <v-icon small class="mr-2" @click="deleteCCO(item)">mdi-delete</v-icon>
             </template>
             <template #tbody v-if="showtotal && items.length>0">
-                <tr class="totalrow">
+                <tr id="bottom" class=" v-data-table__tr totalrow">
                     <td>{{ f($t("Total ([0] registers)"), [items.length])}}</td>
                     <td v-if="showcc"></td>
                     <td></td>
@@ -32,7 +32,6 @@
                     <td></td>
                     <td></td>
                 </tr>
-                <div id="bottom"></div>
             </template>
          <template #bottom ></template>
         </v-data-table>
@@ -164,19 +163,12 @@
                 }
                 return r
             },        
-            gotoLastRow(){ 
-                const element = document.getElementById("bottom")
-                //const element= this.$refs.table_ao
-                // console.log(element)
-                const previous=element?.previousElementSibling
-                // console.log("prev",previous,previous.childElementCount)
-                // console.log(this.items.length)
-                const last_tr=previous?.children.item(previous.childElementCount-1)
-                // console.log("CCO", last_tr)
-                if (last_tr){ 
-                    // console.log("Going")
-                    last_tr.scrollIntoView(false)
-                }
+            async gotoLastRow(){ 
+                const bottom = document.getElementById("bottom")
+                await this.$nextTick();
+                if (bottom){ 
+                    bottom.scrollIntoView({ behavior: "auto", block: "end", inline: "nearest" })
+                }       
             },
             on_CreditcardsoperationsCU_cruded(){
                 this.$emit("cruded")

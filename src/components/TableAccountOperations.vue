@@ -32,7 +32,6 @@
                     <td></td>
                     <td></td>
                 </tr>
-                <!-- <div id="bottom"></div> -->
             </template>
             
          <template #bottom ></template>
