@@ -22,7 +22,7 @@ export function add_investment_from_Home(
     cy.getDataTest('InvestmentsCU_Accounts').type(account_type)
     cy.getDataTest('InvestmentsCU_Name').type(investment)
     cy.getDataTest('InvestmentsCU_Products').type(product_type)
-    cy.intercept('POST', 'http://127.0.0.1:8004/api/investments/').as("post_investment")
+    cy.intercept({ method:'POST', url:'http://127.0.0.1:8004/api/investments/', times:1,}).as("post_investment")
     cy.getDataTest('InvestmentsCU_Button').click()
     cy.wait('@post_investment').then((interception)=>{
         var investments_id=interception.response.body.id
