@@ -5,7 +5,7 @@
 
         <v-tabs v-model="tab" bg-color="secondary" grow>
             <v-tab key="ao">{{ $t("Account operations")}}</v-tab>
-            <v-tab key="cc">{{ $t("Credit cards")}}</v-tab>
+            <v-tab data-test="AccountsView_TabCC" key="cc">{{ $t("Credit cards")}}</v-tab>
         </v-tabs>  
         <v-window v-model="tab">
             <v-window-item key="ao">     
@@ -16,11 +16,11 @@
             </v-window-item>
             <v-window-item key="cc">
                 <v-card outlined>
-                    <v-checkbox v-model="showActiveCC" :label="setCheckboxLabelCC()" @click="on_chkActive_cc()" ></v-checkbox>
+                    <v-checkbox data-test="AccountsView_ShowActiveCC" v-model="showActiveCC" :label="setCheckboxLabelCC()"></v-checkbox>
                     <v-data-table :headers="table_cc_headers" :items="table_cc"  class="elevation-1 cursorpointer"  :sort-by="[{key:'name',order:'asc'}]" density="compact" fixed-header max-height="400" :key="key" @click:row="viewCC"     :items-per-page="10000" >
 
                         <template #item.deferred="{item}">
-                            <div class="text-center"><v-icon small v-if="item.deferred" >mdi-check-outline</v-icon></div>
+                            <div :data-test="`AccountsView_Tablecc_Row${item.id}`" class="text-center"><v-icon small v-if="item.deferred" >mdi-check-outline</v-icon></div>
                         </template>  
 
                         <template #item.maximumbalance="{item}">
@@ -32,9 +32,9 @@
                         </template>     
 
                         <template #item.actions="{item}">
-                            <v-icon v-if="!item.deferred" small class="mr-2" @click.stop="CCONotDeferred(item)">mdi-plus</v-icon>
-                            <v-icon small class="mr-2" @click.stop="editCC(item)">mdi-pencil</v-icon>
-                            <v-icon small @click.stop="deleteCC(item)" v-if="item.is_deletable">mdi-delete</v-icon>
+                            <v-icon :data-test="`AccountsView_Tablecc_ButtonAddDebitOperation${item.id}`" v-if="!item.deferred" small class="mr-2" @click.stop="CCONotDeferred(item)">mdi-plus</v-icon>
+                            <v-icon :data-test="`AccountsView_Tablecc_ButtonEdit${item.id}`" small class="mr-2" @click.stop="editCC(item)">mdi-pencil</v-icon>
+                            <v-icon :data-test="`AccountsView_Tablecc_ButtonDelete${item.id}`" small @click.stop="deleteCC(item)" v-if="item.is_deletable">mdi-delete</v-icon>
                         </template>
                         <template #bottom ></template>   
                     </v-data-table>   
@@ -192,6 +192,9 @@
             ym () {
                 this.refreshTable()
             },
+            showActiveCC(){
+                this.on_chkActive_cc() 
+            },
         },
         methods: {
             useStore,
@@ -201,6 +204,7 @@
                 this.ao.accounts=this.account.url
                 this.ao.comment=item.name + ". "
                 this.key=this.key+1
+                this.ao_mode="C"
                 this.dialog_ao=true
             },
             empty_account_operation,

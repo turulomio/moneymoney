@@ -5,15 +5,15 @@
             <v-form ref="form_cco" v-model="form_valid_cco">
                 <v-autocomplete :readonly="deleting" :items="getArrayFromMap(useStore().creditcards).filter(v =>v.active==true)" v-model="newcco.creditcards" :label="$t('Select a credit card')" item-title="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker :readonly="deleting" label="Select operation date and time" v-model="newcco.datetime" />
-                <v-autocomplete :readonly="deleting" autoindex="0" :items="getArrayFromMap(useStore().concepts)" v-model="newcco.concepts" :label="$t('Select a concept')" item-title="localname" item-value="url" :rules="RulesSelection(true)" autofocus></v-autocomplete>
-                <v-text-field :readonly="deleting" autoindex="1" v-model.number="newcco.amount"  :label="$t('Operation amount')" :placeholder="$t('Operation amount')" :rules="RulesFloat(15,true,get_account_decimals())" counter="15"/>
-                <v-text-field :readonly="deleting" autoindex="2" v-model="newcco.comment" type="text" :label="$t('Operation comment')" :placeholder="$t('Operation comment')" :rules="RulesString(200, false)" counter="200"/>
+                <v-autocomplete  data-test="CreditcardsoperationsCU_Concepts" :readonly="deleting" autoindex="0" :items="getArrayFromMap(useStore().concepts)" v-model="newcco.concepts" :label="$t('Select a concept')" item-title="localname" item-value="url" :rules="RulesSelection(true)" autofocus></v-autocomplete>
+                <v-text-field data-test="CreditcardsoperationsCU_Amount" :readonly="deleting" autoindex="1" v-model.number="newcco.amount"  :label="$t('Operation amount')" :placeholder="$t('Operation amount')" :rules="RulesFloat(15,true,get_account_decimals())" counter="15"/>
+                <v-text-field data-test="CreditcardsoperationsCU_Comment" :readonly="deleting" autoindex="2" v-model="newcco.comment" type="text" :label="$t('Operation comment')" :placeholder="$t('Operation comment')" :rules="RulesString(200, false)" counter="200"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn v-if="deleting" color="error" @click="deleteCCO()">{{ $t("Delete") }}</v-btn>
-                <v-btn v-if="!deleting" color="primary" @click="following_cco=false;acceptDialog()">{{ button() }}</v-btn>
-                <v-btn v-if="!deleting && !editing" color="primary" @click="following_cco=true;acceptDialog()">{{ $t("Add and follow") }}</v-btn>
+                <v-btn data-test="CreditcardsoperationsCU_Button" v-if="!deleting" color="primary" @click="following_cco=false;acceptDialog()">{{ button() }}</v-btn>
+                <v-btn data-test="CreditcardsoperationsCU_ButtonFollow" v-if="!deleting && !editing" color="primary" @click="following_cco=true;acceptDialog()">{{ $t("Add and follow") }}</v-btn>
             </v-card-actions>
         </v-card>
     </div>
@@ -97,7 +97,6 @@
                     alert(this.$t("Amount must be positive"))
                     return
                 }
-
                 //Accept
                 if (this.editing==true){               
                     axios.put(this.newcco.url, this.newcco, this.myheaders())
@@ -109,7 +108,8 @@
                     })
                 } else{
                     axios.post(`${this.useStore().apiroot}/api/creditcardsoperations/`, this.newcco,  this.myheaders())
-                    .then(() => {    
+                    .then((response) => {    
+                            console.log(response.data)
                         if (this.following_cco==true){
                             var dt=this.zulu2date(this.newcco.datetime)
                             var olddtseconds=this.zulu2date(this.newcco.datetime).getSeconds()
