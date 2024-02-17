@@ -7,7 +7,7 @@
             <v-text-field data-test="CreditcardsCU_Number" :readonly="mode=='D'" v-model="new_cc.number" type="text" :label="$t('Credit card number')"  :placeholder="$t('Credit card number')" counter="30" :rules="RulesString(30,false)"/>
             <v-text-field data-test="CreditcardsCU_MaximumBalance" :readonly="mode=='D'" v-model.number="new_cc.maximumbalance"  :label="$t('Credit card maximum balance')"  :placeholder="$t('Credit card maximum balance')" :rules="RulesInteger(10,true)" counter="10"/>
             <v-checkbox data-test="CreditcardsCU_Active" :readonly="mode=='D'" v-model="new_cc.active" :label="$t('Is active?')"></v-checkbox>
-            <v-checkbox data-test="CreditcardsCU_Deferred" :readonly="mode=='D'" v-model="new_cc.deferred" :label="$t('Has deferred payments?')"></v-checkbox>
+            <v-checkbox data-test="CreditcardsCU_Deferred" :readonly="mode=='D'" :disabled="mode=='U'" v-model="new_cc.deferred" :label="$t('Has deferred payments?')"></v-checkbox>
         </v-form>
         <v-card-actions>
             <v-spacer></v-spacer>
