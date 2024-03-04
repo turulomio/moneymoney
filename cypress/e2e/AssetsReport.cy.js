@@ -1,6 +1,6 @@
 import { login_test_User } from "./commons"
-describe('e2e Accounts List', () => {
-  it('Accounts List', () => {    
+describe('e2e Assets Report', () => {
+  it('Assets Report', () => {    
 
     login_test_User(cy)
     //Open lateral menu

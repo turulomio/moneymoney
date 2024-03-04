@@ -3,7 +3,7 @@
         <h1>{{ $t("Evolution report") }}</h1>
         <div class="d-flex justify-center mb-4">
             <v-card width="20%" class="pa-5">
-                <v-select density="compact" :label="$t('Select the year from which to display the report')" v-model="year" :items="years()" @change="change_year()"></v-select>
+                <v-select data-test="ReportsEvolution__CmbYears" density="compact" :label="$t('Select the year from which to display the report')" v-model="year" :items="years()"></v-select>
             </v-card>
         </div>
         <div class="ma-4">
@@ -146,6 +146,11 @@
                 key: 0,
             }
         },
+        watch:{
+            year(){
+                this.refreshTables()
+            },
+        },
         methods:{
             useStore,
             f,
@@ -153,9 +158,6 @@
                 var start=1990
                 var end=new Date().getFullYear()
                 return Array(end - start + 1).fill().map((_, idx) => start + idx)
-            },
-            change_year(){
-                this.refreshTables()
             },
             report(){
                 var last=this.investedData[this.investedData.length-1]
