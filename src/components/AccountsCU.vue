@@ -3,17 +3,17 @@
         <h1>{{ title() }}</h1>    
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid">
-                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(useStore().banks).filter(v =>v.active==true)" v-model="new_account.banks" :label="$t('Select a bank')" item-title="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field v-model="new_account.name" :readonly="mode=='D'" type="text" :label="$t('Account name')" :placeholder="$t('Account name')" autofocus :rules="RulesString(200,true)" counter="200"/>
+                <v-autocomplete data-test="AccountsCU_Bank" :readonly="mode=='D'" :items="getArrayFromMap(useStore().banks).filter(v =>v.active==true)" v-model="new_account.banks" :label="$t('Select a bank')" item-title="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-text-field data-test="AccountsCU_Name" v-model="new_account.name" :readonly="mode=='D'" type="text" :label="$t('Account name')" :placeholder="$t('Account name')" autofocus :rules="RulesString(200,true)" counter="200"/>
                 <v-checkbox v-model="new_account.active" :readonly="mode=='D'" :label="$t('Is active?')" ></v-checkbox>
-                <v-text-field v-model="new_account.number" :readonly="mode=='D'" type="text" :label="$t('Account number')" :placeholder="$t('Account number')" :rules="RulesString(30,false)" counter="30"/>
+                <v-text-field data-test="AccountsCU_Number" v-model="new_account.number" :readonly="mode=='D'" type="text" :label="$t('Account number')" :placeholder="$t('Account number')" :rules="RulesString(30,false)" counter="30"/>
                 <v-autocomplete :items="useStore().currencies" :readonly="mode=='D'" v-model="new_account.currency" :label="$t('Select a currency')" item-title="fullname" item-value="code" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field v-model.number="new_account.decimals" :readonly="mode=='D'" :label="$t('Account decimals')" :placeholder="$t('Account decimals')" autofocus :rules="RulesInteger(1,true)" counter="1"/>
 
            </v-form>   
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="acceptDialog">{{ button() }}</v-btn>
+                <v-btn  data-test="AccountsCU_Button" color="primary" @click="acceptDialog">{{ button() }}</v-btn>
             </v-card-actions>
         </v-card>
     </div>

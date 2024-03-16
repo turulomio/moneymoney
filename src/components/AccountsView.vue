@@ -64,7 +64,7 @@
         <!-- DIALOG ACCOUNT TRANSFER -->
         <v-dialog v-model="dialog_transfer" width="550">
             <v-card class="pa-6">
-                <AccountsTransfer :at="at" @cruded="on_AccountTransfer_cruded()" :key="key"></AccountsTransfer>
+                <AccountsTransfer :at="at" :mode="at_mode" @cruded="on_AccountTransfer_cruded()" :key="key"></AccountsTransfer>
             </v-card>
         </v-dialog>
 
@@ -120,6 +120,7 @@
                                 code: function(){
                                     this.key=this.key+1
                                     this.at=this.empty_account_transfer()
+                                    this.at_mode="C"
                                     this.at.account_origin=this.account.url
                                     this.dialog_transfer=true
                                 }.bind(this),
@@ -175,6 +176,7 @@
 
                 // DIALOG ACCOUNT TRANSFER
                 at: null,
+                at_mode:null,
 
                 // DIALOG CREDIT CARDS VIEW
                 dialog_ccview:false,
@@ -211,7 +213,7 @@
             empty_account_transfer,
             empty_credit_card,
             refreshTable(){
-                axios.get(`${this.account.url}monthoperations/?year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())                
+                axios.get(`${this.useStore().apiroot}/api/accountsoperations/?account=${this.account.url}&year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())                
                 .then((response) => {
                     this.items_ao=response.data;
                     if (this.$refs.tao) this.$refs.tao.gotoLastRow()

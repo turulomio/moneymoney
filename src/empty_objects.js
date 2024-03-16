@@ -25,8 +25,8 @@ export function empty_account_operation(){
 export function empty_account_transfer(){
     return {
         datetime: new Date().toISOString(),
-        account_origin: null,
-        account_destiny: null,
+        origin: null,
+        destiny: null,
         ao_origin:null,
         ao_destiny:null,
         ao_commission:null,

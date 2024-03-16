@@ -278,7 +278,7 @@
                 { title: this.$t('Concept'), key: 'concepts', sortable: true, width:"20%"},
                 { title: this.$t('Amount'), key: 'amount', sortable: true, align:'end', width:"8%"},
                 { title: this.$t('Balance'), key: 'balance', sortable: false, align:'end', width:"8%"},
-                { title: this.$t('Comment'), key: 'comment_decoded', sortable: true},
+                { title: this.$t('Comment'), key: 'nice_comment', sortable: true},
             ]
             if (this.hideactions==false){
                 r.push({ title: this.$t('Actions'), key: 'actions', sortable: false , width:"8%"})
@@ -324,7 +324,7 @@
 
         }
     },
-    mounted(){
+    created(){
         this.gotoLastRow()
     }
 }
