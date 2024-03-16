@@ -25,8 +25,10 @@
         },
         data(){
             return {
-                mydatepicker:null,
+                mydatepicker:"2022-02-02",
                 mydatepicker2:null,
+                mydatepicker3:null,
+                mydatepicker4:null,
             }
         },
     }
