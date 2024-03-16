@@ -54,7 +54,7 @@
         <!-- DIALOG ACCOUNT TRANSFER -->
         <v-dialog v-model="dialog_transfer" width="35%">
             <v-card class="pa-6">
-                <AccountsTransfer :at="at" :deleting="at_deleting" @cruded="on_AccountTransfer_cruded()" :key="key"></AccountsTransfer>
+                <AccountsTransfer :at="at" :mode="at_mode" @cruded="on_AccountTransfer_cruded()" :key="key" />
             </v-card>
         </v-dialog>
 
@@ -162,7 +162,7 @@
 
             // DIALOG ACCOUNT TRANSFER
             at:null,
-            at_deleting: null,
+            at_mode: null,
             dialog_transfer: false,
 
 
@@ -216,11 +216,16 @@
                     }, (error) => {
                         this.parseResponseError(error)
                     });
-                } else if ( this.ao_to_find_transfer(item) && item.operationstypes==`${this.useStore().apiroot}/api/operationstypes/3/`){ // Try to find account transfer to edit it and operratinon type =transfer
-                    this.at=this.ao_to_find_transfer(item)
-                    this.at_deleting=false
-                    this.key=this.key+1
-                    this.dialog_transfer=true
+                } else if ( item.associated_transfer){ // Try to find account transfer to edit it and operratinon type =transfer
+                    axios.get(item.associated_transfer, this.myheaders())
+                    .then((response) => {
+                        this.at=response.data
+                        this.at_mode="U"
+                        this.key=this.key+1
+                        this.dialog_transfer=true
+                    }, (error) => {
+                        this.parseResponseError(error)
+                    })
                 } else if ( item.comment.startsWith("10004,")){
                     var dividend_string=item.comment.split(",")[1]
                     axios.get(`${this.useStore().apiroot}/api/dividends/${dividend_string}/`, this.myheaders())
@@ -244,11 +249,16 @@
             }
         },
         deleteAO (item) {
-            if (this.ao_to_find_transfer(item)){// Tries to find transfer to delete it
-                this.at=this.ao_to_find_transfer(item)
-                this.at_deleting=true
-                this.key=this.key+1
-                this.dialog_transfer=true
+            if ( item.associated_transfer){// Tries to find transfer to delete it
+                axios.get(item.associated_transfer, this.myheaders())
+                .then((response) => {
+                    this.at=response.data
+                    this.at_mode="D"
+                    this.key=this.key+1
+                    this.dialog_transfer=true
+                }, (error) => {
+                    this.parseResponseError(error)
+                })
             } else if (item.is_editable==false){ //Rest of no editables
                 alert(this.$t("You can't delete this account operation"))
                 return
@@ -258,18 +268,6 @@
                 this.key=this.key+1
                 this.dialog_ao=true
             }
-        },
-        ao_to_find_transfer(item){ //Returns an at object to call transfer dialog or null
-            if (item.comment.startsWith("10001,") || item.comment.startsWith("10002,") || item.comment.startsWith("10003,") ){ //It's an account transfer
-                var arr=item.comment.split(",") // code, ao_origin, ao_destiny, ao_commission
-                var at=this.empty_account_transfer()
-                at.datetime=item.datetime
-                at.ao_origin=`${this.useStore().apiroot}/api/accountsoperations/${arr[1]}/`
-                at.ao_destiny=`${this.useStore().apiroot}/api/accountsoperations/${arr[2]}/`
-                if (arr[3]>0)at.ao_commission=`${this.useStore().apiroot}/api/accountsoperations/${arr[3]}/`
-                return at
-            }
-            return null
         },
         table_headers(){
             var r= [
