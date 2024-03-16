@@ -45,6 +45,7 @@
         },
         watch: {
             new_value (newValue) {
+                this.dt=this.string2dt(newValue)
                 this.$emit('update:modelValue', newValue)
                 this.menu=false
             },
@@ -75,7 +76,6 @@
             },
             on_click_prepend_icon(){
                 this.new_value=this.dt2string(new Date())
-
             }
         },
         created(){
