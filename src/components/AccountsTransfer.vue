@@ -4,15 +4,15 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid">
-                <MyDateTimePicker :readonly="deleting" v-model="newat.datetime" :label="$t('Set transfer date and time')" />
-                <v-autocomplete :readonly="deleting" :items="getArrayFromMap(useStore().accounts).filter(v =>v.active==true)" v-model="newat.account_origin" :label="$t('Select an origin account')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-autocomplete :readonly="deleting" :items="getArrayFromMap(useStore().accounts).filter(v =>v.active==true)" v-model="newat.account_destiny" :label="$t('Select a destiny account')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field :readonly="deleting" v-model.number="newat.amount"  :label="$t('Set transfer amount')" :placeholder="$t('Set transfer amount')" :rules="RulesFloatGZ(10,true,get_transfer_decimals())" counter="10"/>
-                <v-text-field :readonly="deleting" v-model.number="newat.commission"  :label="$t('Set transfer commission')" :placeholder="$t('Set transfer commission')" :rules="RulesFloatGEZ(10,true,get_transfer_decimals())" counter="10"/>
+                <MyDateTimePicker :readonly="mode=='D'" v-model="new_at.datetime" :label="$t('Set transfer date and time')" />
+                <v-autocomplete data-test="AccountsTransfer_Origin" :readonly="mode=='D'" :items="getArrayFromMap(useStore().accounts).filter(v =>v.active==true)" v-model="new_at.origin" :label="$t('Select an origin account')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete data-test="AccountsTransfer_Destiny" :readonly="mode=='D'" :items="getArrayFromMap(useStore().accounts).filter(v =>v.active==true)" v-model="new_at.destiny" :label="$t('Select a destiny account')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-text-field data-test="AccountsTransfer_Amount" :readonly="mode=='D'" v-model.number="new_at.amount"  :label="$t('Set transfer amount')" :placeholder="$t('Set transfer amount')" :rules="RulesFloatGZ(10,true,get_transfer_decimals())" counter="10"/>
+                <v-text-field data-test="AccountsTransfer_Commission" :readonly="mode=='D'" v-model.number="new_at.commission"  :label="$t('Set transfer commission')" :placeholder="$t('Set transfer commission')" :rules="RulesFloatGEZ(10,true,get_transfer_decimals())" counter="10"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="acceptTransfer()">{{ button() }}</v-btn>
+                <v-btn data-test="AccountsTransfer_Button" color="primary" @click="acceptTransfer()">{{ button() }}</v-btn>
             </v-card-actions>
         </v-card>
     </div>
@@ -31,16 +31,15 @@
             at: { // An account transfer object
                 required: true
             },
-            deleting: {
-                required: false,
-                default: false,
+            mode: {
+                type: String,
+                required: true,
             }
         },
         data(){ 
             return{
                 form_valid:false,
-                newat: null,
-                mode: "", // CRUD mode
+                new_at: null,
 
                 query_ao_origin: null,
                 query_ao_destiny: null,
@@ -68,15 +67,15 @@
                     this.$refs.form.validate()
                     return
                 }  
-                if (this.deleting==false){ // Due it has not all values
-                    if (this.newat.account_origin==this.newat.account_destiny){
+                if ( [ "C","U"].includes(this.mode)){ // Due it has not all values
+                    if (this.new_at.origin==this.new_at.destiny){
                         alert(this.$t("Transfer accounts can't be the same"))
                         return
                     } 
                 }
 
                 if (this.mode=="C"){
-                    axios.post(`${this.useStore().apiroot}/accounts/transfer/`, this.newat,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/accountstransfers/`, this.new_at,  this.myheaders())
                     .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
@@ -84,7 +83,7 @@
                     })
                 }
                 if (this.mode=="U"){
-                    axios.put(`${this.useStore().apiroot}/accounts/transfer/`, this.newat,  this.myheaders())
+                    axios.put(this.new_at.url, this.new_at,  this.myheaders())
                     .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
@@ -94,8 +93,7 @@
                 if (this.mode=="D"){             
                     var r = confirm(this.$t("Do you want to delete this transfer?"))
                     if(r == true) {
-                        var headers={...this.myheaders(),data:this.newat}
-                        axios.delete(`${this.useStore().apiroot}/accounts/transfer/`, headers)
+                        axios.delete(this.new_at.url, this.myheaders())
                         .then(() => {
                             this.$emit("cruded")
                         }, (error) => {
@@ -107,27 +105,27 @@
             },
             query_ao(){
                 this.loading=true
-                if (this.newat.ao_commission){ //With Commission 
+                if (this.new_at.ao_commission){ //With Commission 
                     axios.all([
-                        axios.get(this.newat.ao_origin, this.myheaders()), 
-                        axios.get(this.newat.ao_destiny, this.myheaders()), 
-                        axios.get(this.newat.ao_commission, this.myheaders())
+                        axios.get(this.new_at.ao_origin, this.myheaders()), 
+                        axios.get(this.new_at.ao_destiny, this.myheaders()), 
+                        axios.get(this.new_at.ao_commission, this.myheaders())
                     ]).then(([resAoOrigin, resAoDestiny, resAoCommission]) => {
-                        this.newat.account_origin=resAoOrigin.data.accounts
-                        this.newat.account_destiny=resAoDestiny.data.accounts
-                        this.newat.amount=resAoDestiny.data.amount
-                        this.newat.commission=Math.abs(resAoCommission.data.amount)
+                        this.new_at.origin=resAoOrigin.data.accounts
+                        this.new_at.destiny=resAoDestiny.data.accounts
+                        this.new_at.amount=resAoDestiny.data.amount
+                        this.new_at.commission=Math.abs(resAoCommission.data.amount)
                         this.loading=false
                         this.key=this.key+1
                     });
                 } else { //Without Commission
                     axios.all([
-                        axios.get(this.newat.ao_origin, this.myheaders()), 
-                        axios.get(this.newat.ao_destiny, this.myheaders())
+                        axios.get(this.new_at.ao_origin, this.myheaders()), 
+                        axios.get(this.new_at.ao_destiny, this.myheaders())
                     ]).then(([resAoOrigin, resAoDestiny]) => {
-                        this.newat.account_origin=resAoOrigin.data.accounts
-                        this.newat.account_destiny=resAoDestiny.data.accounts
-                        this.newat.amount=resAoDestiny.data.amount  
+                        this.new_at.origin=resAoOrigin.data.accounts
+                        this.new_at.destiny=resAoDestiny.data.accounts
+                        this.new_at.amount=resAoDestiny.data.amount  
                         this.loading=false
                         this.key=this.key+1
                     });
@@ -138,8 +136,8 @@
                 //Must be the lowest decimals from both accounts
                 var r
 
-                var ao=this.useStore().accounts.get(this.newat.account_origin)
-                var ad=this.useStore().accounts.get(this.newat.account_destiny)
+                var ao=this.useStore().accounts.get(this.new_at.origin)
+                var ad=this.useStore().accounts.get(this.new_at.destiny)
                 if (ad==null || ao==null){
                     r=6
                 } else {
@@ -155,17 +153,10 @@
         },
         created(){
             // Guess crud mode
-            this.newat=Object.assign({},this.at)
-            if ( this.at.ao_origin==null){ 
-                this.mode="C"
-            } else if (this.at.ao_origin!= null && this.deleting ==false) { 
-                this.mode="U"
-                this.query_ao()
-            } else if (this.at.ao_origin!= null && this.deleting ==true) { 
-                this.mode="D"
+            this.new_at=Object.assign({},this.at)
+            if (["U","D"].includes(this.mode)){
                 this.query_ao()
             }
-
         }
     }
 </script>

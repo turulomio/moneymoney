@@ -1,4 +1,4 @@
-import { login_test_User } from "./commons"
+import { login_test_User, add_account_from_AccountsList } from "./commons"
 describe('e2e Accounts List', () => {
   it('Accounts List', () => {    
 
@@ -6,6 +6,10 @@ describe('e2e Accounts List', () => {
     //Open lateral menu
     cy.getDataTest('LateralIcon').click()
     cy.getDataTest('LateralAccounts').click()
+
+
+    // Add account
+    add_account_from_AccountsList(cy)
 
 
     // Add search accountsoperations dialog

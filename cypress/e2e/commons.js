@@ -35,6 +35,28 @@ export function add_investment_from_Home(
 
 
 
+export function add_account_from_AccountsList(
+    cy, 
+    wait_name="waitAccountId",
+    name="New Account", 
+    bank="Personal{downArrow}{enter}",
+    number="ES1212129817298719827197", 
+){
+
+    // Add a new debit credit card
+    cy.getDataTest('MyMenuInline_Button').last().click()
+    cy.getDataTest('MyMenuInline_Header0_Item0').click()
+    cy.getDataTest('AccountsCU_Bank').type(bank)
+    cy.getDataTest('AccountsCU_Name').type(name)
+    cy.getDataTest('AccountsCU_Number').type(number)
+    cy.intercept({ method:'POST', url:'http://127.0.0.1:8004/api/accounts/', times:1,}).as("post_accounts")
+    cy.getDataTest('AccountsCU_Button').click()
+    cy.wait('@post_accounts').then((interception)=>{
+        cy.wrap(interception.response.body.id).as(wait_name) // Stores the captured ID for later us
+    })
+}
+
+
 export function add_creditcard_from_AccountsView(
     cy, 
     wait_name="waitCcId",

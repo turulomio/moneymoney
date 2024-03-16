@@ -61,7 +61,7 @@
         <!-- DIALOG ACCOUNT TRANSFER -->
         <v-dialog v-model="dialog_transfer" width="35%">
             <v-card class="pa-6">
-                <AccountsTransfer :at="at" @cruded="on_AccountTransfer_cruded" :key="key"></AccountsTransfer>
+                <AccountsTransfer :at="at" mode="C" @cruded="on_AccountTransfer_cruded" :key="key"></AccountsTransfer>
             </v-card>
         </v-dialog>
     </div>
