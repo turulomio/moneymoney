@@ -204,10 +204,9 @@
         },
         editAO (item) {
             if (item.is_editable==false){// Account operation is not editable
-                if (item.comment.startsWith("10000,")){ //It's an investment operation 
-                    var io_string= item.comment.split(",")[1]
+                if (item.associated_io){ //It's an investment operation 
                     //Gets
-                    axios.get(`${this.useStore().apiroot}/api/investmentsoperations/${io_string}/`, this.myheaders())
+                    axios.get(item.associated_io, this.myheaders())
                     .then((response) => {
                         this.io=response.data
                         this.io_mode="U"
@@ -226,9 +225,8 @@
                     }, (error) => {
                         this.parseResponseError(error)
                     })
-                } else if ( item.comment.startsWith("10004,")){
-                    var dividend_string=item.comment.split(",")[1]
-                    axios.get(`${this.useStore().apiroot}/api/dividends/${dividend_string}/`, this.myheaders())
+                } else if ( item.associated_dividend){
+                    axios.get(item.associated_dividend, this.myheaders())
                     .then((response) => {
                         this.dividend=response.data
                         this.dividends_cu_mode="U"
