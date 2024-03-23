@@ -348,12 +348,12 @@
                 this.loading_invest_or_work=true
                 this.total_invest_or_work=[]
                 
-                for (var i=0; i<12; i++){
-                    let month_gains= this.total_annual_incomes[i].gains + this.total_annual_incomes[i].dividends + this.total_annual_incomes[i].fast_operations
-                    let month_expenses=this.total_annual_incomes[i].expenses
+                this.total_annual_incomes.forEach(o=>{
+                    let month_gains= o.gains + o.dividends + o.fast_operations
+                    let month_expenses=o.expenses
                     let diff=month_gains+month_expenses
                     this.total_invest_or_work.push({
-                        month: this.$t(moment().month(i).format("MMMM")),
+                        month: this.$t(moment().month(o.month_number-1).format("MMMM")),
                         gains: month_gains,
                         expenses: month_expenses,
                         diff: diff,
@@ -361,7 +361,7 @@
                     })
 
 
-                }
+                })
                 this.loading_invest_or_work=false
 
             },
@@ -369,20 +369,16 @@
                 this.loading_make_ends_meet=true
                 this.total_make_ends_meet=[]
                 
-                for (var i=0; i<12; i++){
-                    let month_incomes= this.total_annual_incomes[i].incomes
-                    let month_expenses=this.total_annual_incomes[i].expenses
-                    let diff=month_incomes+month_expenses
+                this.total_annual_incomes.forEach(o=>{
+                    let diff=o.incomes+o.expenses
                     this.total_make_ends_meet.push({
-                        month: this.$t(moment().month(i).format("MMMM")),
-                        incomes: month_incomes,
-                        expenses: month_expenses,
+                        month: this.$t(moment().month(o.month_number-1).format("MMMM")),
+                        incomes: o.incomes,
+                        expenses: o.expenses,
                         diff: diff,
                         color_diff:(diff>0)? "boldgreen": "boldred",
                     })
-
-
-                }
+                })
                 this.loading_make_ends_meet=false
 
             },
@@ -403,11 +399,17 @@
                         this.month_target=this.last_year_balance*(this.target/100)/12
                         var cumulative_target=0
                         var cumulative_gains=0
+                        var month_gains
+
 
                         for (var i=0; i<12; i++){
-                            let month_gains= this.total_annual_incomes[i].gains + this.total_annual_incomes[i].dividends + this.total_annual_incomes[i].fast_operations
+                            if (i<this.total_annual_incomes.length){
+                                month_gains= this.total_annual_incomes[i].gains + this.total_annual_incomes[i].dividends + this.total_annual_incomes[i].fast_operations
+                                cumulative_gains=cumulative_gains+month_gains
+                            } else {
+                                month_gains=0
+                            }
                             cumulative_target=cumulative_target+this.month_target
-                            cumulative_gains=cumulative_gains+month_gains
                             this.total_target.push({
                                 month: this.$t(moment().month(i).format("MMMM")),
                                 month_target:this.month_target,
