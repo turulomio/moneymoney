@@ -15,7 +15,7 @@
                     </v-tooltip>
                 </template> -->  
                 <template #item.dt_from="{item}">
-                    <div v-html="localtime(item.dt_from )"></div>
+                    <div :data-test="`StrategiesList_Table_Row${item.id}`" v-html="localtime(item.dt_from )"></div>
                 </template>        
                 <template #item.dt_to="{item}">
                     <div v-html="localtime(item.dt_to )"></div>
@@ -37,7 +37,7 @@
                 </template>           
 
                 <template #item.actions="{item}">
-                    <v-icon small class="mr-2" @click.stop="viewItem(item)">mdi-eye</v-icon>
+                    <v-icon :data-test="`StrategiesList_Table_IconView${item.id}`" small class="mr-2" @click.stop="viewItem(item)">mdi-eye</v-icon>
                     <v-icon small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
                     <v-icon small @click.stop="deleteItem(item)">mdi-delete</v-icon>
                 </template>                  
