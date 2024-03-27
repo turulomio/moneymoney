@@ -32,12 +32,10 @@ describe('e2e Strateegies List', () => {
     })
 
     // Opens strategy view
-    
     cy.get("@strategy_id").then((strategy_id)  =>{
       cy.getDataTest(`StrategiesList_Table_IconView${strategy_id}`).click()
 
     })
-
 
     // Opens strategy product range
     cy.get("@strategy_id").then((strategy_id)  =>{
