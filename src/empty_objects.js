@@ -274,7 +274,7 @@ export function empty_strategy(){
     return {
         dt_from: new Date().toISOString(),
         dt_to: null,
-        investments: "",
+        investments: [],
         name: "",
         type: 3,
         comment: "",
