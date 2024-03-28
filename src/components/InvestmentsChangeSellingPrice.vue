@@ -151,7 +151,7 @@
                 pr.amount_to_invest=item.additional4
                 pr.recomendation_methods=item.additional5
                 pr.totalized_operations=item.additional6
-                pr.investments=[this.investment.id] // Is a string due tu uses api/strategies an in db is a string
+                pr.investments=item.investments // Is a string due tu uses api/strategies an in db is a string
                 var headers={...this.myheaders(),params:pr}
                 axios.get(`${this.useStore().apiroot}/products/ranges/`, headers)
                 .then((response) => {

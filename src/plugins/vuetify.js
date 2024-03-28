@@ -11,14 +11,16 @@ import 'vuetify/styles'
 
 // Composables
 import { createVuetify } from 'vuetify'
+import { es, en } from 'vuetify/locale'
 // Vuetify
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
+console.log(`Activating vuetify with ${localStorage.locale}`)
 const vuetify = createVuetify({
-
   locale: {
     locale: localStorage.locale,
     fallback: 'en',
+    messages: {es,en}
   },
   icons: {
     defaultSet: 'mdi',
