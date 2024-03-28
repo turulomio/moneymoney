@@ -2,6 +2,7 @@
     <div>
         <h1>{{ strategy.name }}
             <MyMenuInline :items="items" />
+            <v-btn data-test="StrategiesView_ButtonClose" small style="color:darkgrey" icon="mdi-close" class="elevation-0" @click="$emit('close')"/>
         </h1>
         <DisplayValues v-if="ios" :items="displayvalues()" :key="key" :minimized_items="10"></DisplayValues>
 

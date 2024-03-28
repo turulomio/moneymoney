@@ -31,18 +31,16 @@ describe('e2e Strateegies List', () => {
         cy.wrap(interception.response.body.id).as('strategy_id') // Stores the captured ID for later us
     })
 
-    // Opens strategy view
     cy.get("@strategy_id").then((strategy_id)  =>{
+      // Opens strategy view
       cy.getDataTest(`StrategiesList_Table_IconView${strategy_id}`).click()
 
-    })
+      // Closes strategy view
+      cy.getDataTest('StrategiesView_ButtonClose').click()
 
-    // Opens strategy product range
-    cy.get("@strategy_id").then((strategy_id)  =>{
+      // Opens strategy product range
       cy.getDataTest(`StrategiesList_Table_Row${strategy_id}`).click()
 
     })
-
-
   })  
 })
