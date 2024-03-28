@@ -4,7 +4,7 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid">
                 <v-text-field data-test="StrategyCU_Name" density="compact" :readonly="deleting" v-model="newstrategy.name" :label="$t('Set strategy name')" :placeholder="$t('Set strategy name')" :rules="RulesString(200,true)" counter="200" autofocus/>
-                <v-autocomplete data-test="StrategyCU_Investments" density="compact" :readonly="deleting" :items="getArrayFromMap(useStore().investments)" v-model="temporal_investments" :label="$t('Select strategy investments')" item-title="fullname" item-value="id" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
+                <v-autocomplete data-test="StrategyCU_Investments" density="compact" :readonly="deleting" :items="getArrayFromMap(useStore().investments)" v-model="newstrategy.investments" :label="$t('Select strategy investments')" item-title="fullname" item-value="url" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
                 <MyDateTimePicker :readonly="deleting" v-model="newstrategy.dt_from" :label="$t('Date and time strategy start')" />                
                 <MyDateTimePicker :readonly="deleting" v-model="newstrategy.dt_to" :label="$t('Date and time strategy end')" :clearable="true" />
                 <v-select data-test="StrategyCU_Type" :readonly="deleting" density="compact" :items="getArrayFromMap(useStore().strategiestypes)" v-model="newstrategy.type" :label="$t('Select strategy type')" item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>
@@ -56,7 +56,6 @@
                 form_valid:false,
                 newstrategy: null,
                 editing:false,
-                temporal_investments:[],
                 additional_labels:["1","2","3","4","5","6","7","8","9","10"],
                 additional_visibility:[true,true,true,true,true,true,true,true,true,true,],
 
@@ -99,11 +98,11 @@
                     this.$refs.form.validate()
                     return
                 }
-                if (this.temporal_investments.length==0) {
+                if (this.newstrategy.investments.length==0) {
                     alert(this.$t("You must select at least one investment."))
                     return
                 }
-                this.newstrategy.investments=this.arrayofintegers_to_stringofintegers(this.temporal_investments)
+                console.log(this.newstrategy.investments)
 
                 //Update additional components
                 if (this.newstrategy.type==3){//Generic
@@ -199,7 +198,6 @@
         },
         created(){
             if ( this.strategy.url!=null){ // EDITING TIENE IO URL
-                this.temporal_investments=this.strategy.investments
                 this.editing=true
             } else { // NEW IO BUT SETTING VALUES WITH URL=null
                 this.editing=false

@@ -15,27 +15,27 @@
             <v-window-item key="current">      
                 <div>
                     <v-card v-if="!loading">
-                        <TableInvestmentOperationsCurrent :items="ios_id.io_current" showinvestment showtotal output="user" height="400" :key="key" />
+                        <TableInvestmentOperationsCurrent :items="ios_id.io_current" showtotal output="user" height="400" :key="key" />
                     </v-card>
                 </div>
             </v-window-item>
             <v-window-item key="operations">          
                 <div>
                     <v-card v-if="!loading">
-                        <TableInvestmentOperations showinvestment :items="ios_id.io" height="400" :key="key" output="user" :showactions="false" />
+                        <TableInvestmentOperations :items="ios_id.io" height="400" :key="key" output="user" :showactions="false" />
                     </v-card>
                 </div>
             </v-window-item>
             <v-window-item key="historical">     
                 <div>            
                     <v-card v-if="!loading">
-                        <TableInvestmentOperationsHistorical :items="ios_id.io_historical" height="400" output="user" :key="key" showinvestment showtotal />
+                        <TableInvestmentOperationsHistorical :items="ios_id.io_historical" height="400" output="user" :key="key" showtotal />
                     </v-card>
                 </div>
             </v-window-item>
             <v-window-item key="dividends">     
                 <v-card v-if="!loading">
-                    <TableDividends :items="dividends_filtered" height="300" showinvestment :key="key" @cruded="on_TableDividends_cruded" />
+                    <TableDividends :items="dividends_filtered" height="300" :key="key" @cruded="on_TableDividends_cruded" />
                 </v-card>
             </v-window-item>
         </v-window> 
@@ -149,10 +149,9 @@
             },
             displayvalues(){
                 var r= []
-
                 r.push({title:this.$t('From'), value: this.localtime(this.strategy.dt_from)})
                 r.push({title:this.$t('To'), value: this.localtime(this.strategy.dt_to)})
-                r.push({title:this.$t('Type'), value: this.getMapObjectById("strategiestypes", this.strategy.type).name})
+                r.push({title:this.$t('Type'), value: this.useStore()["strategiestypes"].get(this.strategy.type).name})
                 r.push({title:this.$t('Investments'), value: this.strategy.investments.length})                
                 if (this.strategy.additional1){//That means it has a product property
                     this.leverage_message= f(this.$t("[0] (Real: [1])"), [this.product.leverage_multiplier, this.product.leverage_real_multiplier ])
@@ -163,7 +162,7 @@
                 return r
             },
             update_investmentsoperations(){
-                return axios.get(`${this.strategy.url}ios_id/`, this.myheaders())
+                return axios.get(`${this.strategy.url}ios/`, this.myheaders())
             },
             update_dividends(){
                 var headers={...this.myheaders(),params:{investments:this.strategy.investments}}
@@ -173,7 +172,9 @@
                 this.loading=true
                 axios.all([this.update_investmentsoperations(), this.update_dividends()])
                 .then(([resIO, resDividends]) => {
-                    this.ios_id=resIO.data
+                    this.ios=resIO.data
+                    this.ios_id=this.ios[this.ios.entries[0]]
+                    console.log("IOS_ID",this.ios_id)
                     this.dividends=resDividends.data
                     this.displayvalues()
                     this.loading=false
