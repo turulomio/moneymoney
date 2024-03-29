@@ -72,6 +72,12 @@ jobs:
         sudo pip install poethepoet
         sudo poe cypress_test_server &
 
+    - name: Monitor
+      run: |
+        netstat -nputa
+        ps aux
+
+
     - name: Launch Unogenerator
       run: |
         sudo unogenerator_start
