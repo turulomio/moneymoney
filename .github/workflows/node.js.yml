@@ -63,21 +63,19 @@ jobs:
       run: |
         sudo apt-get install libreoffice python3-uno
 
-    - name: Install python dependencies ${{ matrix.python-version }}
+    - name: Install python dependencies ${{ matrix.python-version }} and launch django_moneymoney cypress_test_server
       run: |
         cd ..
         git clone https://github.com/turulomio/django_moneymoney
         cd django_moneymoney
         sudo pip install .
+        sudo pip install poethepoet
+        sudo poe cypress_test_server &
 
     - name: Launch Unogenerator
       run: |
         sudo unogenerator_start
 
-    - name: Run Tests
-      run: |
-        sudo pip install poethepoet
-        sudo poe cypress_test_server &
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
