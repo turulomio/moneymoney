@@ -65,8 +65,11 @@ jobs:
 
     - name: Install python dependencies ${{ matrix.python-version }}
       run: |
+        cd ..
+        git clone https://github.com/turulomio/django_moneymoney
+        cd django_moneymoney
         sudo pip install .
-        
+
     - name: Launch Unogenerator
       run: |
         sudo unogenerator_start
