@@ -76,6 +76,7 @@ jobs:
 
     - name: Run Tests
       run: |
+        sudo pip install poethepoet
         sudo poe cypress_test_server &
 
     - name: Use Node.js ${{ matrix.node-version }}
