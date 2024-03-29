@@ -1,0 +1,88 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main", "367-add-github-test-action" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: github_actions
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: ["3.11"]
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install PL/Python in the PostgreSQL container (Old migrations)
+      run: |
+        # Version can change see in docker page wich is postgres:latest
+        docker exec ${{ job.services.postgres.id }} bash -c "apt-get update && apt-get install -y postgresql-plpython3-16"
+        docker exec ${{ job.services.postgres.id }} bash -c "PGPASSWORD=postgres psql -h localhost -U postgres -c 'CREATE EXTENSION plpython3u;'"
+        docker exec ${{ job.services.postgres.id }} bash -c "PGPASSWORD=postgres createdb -h localhost -U postgres xulpymoney"
+
+
+    - name: Wait for PostgreSQL
+      run: |
+        until pg_isready -h localhost -p 5432; do
+          echo "Waiting for PostgreSQL to become ready..."
+          sleep 2
+        done
+
+    - name: Install libreoffice 
+      run: |
+        sudo apt-get install libreoffice python3-uno
+
+    - name: Install python dependencies ${{ matrix.python-version }} and launch django_moneymoney cypress_test_server
+      run: |
+        cd ..
+        git clone https://github.com/turulomio/django_moneymoney
+        cd django_moneymoney
+        sudo pip install .
+        sudo pip install poethepoet
+        sudo poe cypress_test_server_for_github_actions &
+
+    - name: Launch Unogenerator
+      run: |
+        sudo unogenerator_start
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: Moneymoney install and test build
+      run: |
+        npm install
+        npm run build --if-present
+    - name: Moneymoney e2e test
+      run: |
+        npm run dev &
+        sleep 10
+        npm run cypress_console
