@@ -70,7 +70,7 @@ jobs:
         cd django_moneymoney
         sudo pip install .
         sudo pip install poethepoet
-        sudo poe cypress_test_server &
+        sudo poe cypress_test_server_for_github_actions &
 
     - name: Monitor
       run: |
