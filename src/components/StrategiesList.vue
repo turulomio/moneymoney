@@ -177,6 +177,7 @@
                     this.pr.investments=object.item.investments
                     this.key=this.key+1
                     this.dialog_detailedview=true
+                    console.log(this.pr)
                 } else {
                     alert(this.$t("Detailed view for this strategy type is not developed yet"))
                 }

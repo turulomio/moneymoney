@@ -6,7 +6,7 @@
             <v-form ref="form" v-model="form_valid">             
                 <v-row class="d-flex pl-5 pr-5 mx-auto">
                 <AutocompleteProducts class="mr-5" v-model="newpr.product" :rules="RulesSelection(true)"  />
-                <v-autocomplete class="mr-5" :items="this.getInvestmentsByProduct(newpr.product)" v-model="newpr.investments" :label="$t('Select investments to include')" item-title="fullname" item-value="id" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
+                <v-autocomplete class="mr-5" :items="this.getInvestmentsByProduct(newpr.product)" v-model="newpr.investments" :label="$t('Select investments to include')" item-title="fullname" item-value="url" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
 
                 </v-row>
                 <v-row class="pl-5 pr-5">                
