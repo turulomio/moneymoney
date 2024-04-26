@@ -133,11 +133,11 @@
             useStore,
             my_round,
             launch_report(){
-                this.loading=true
+                this.loading=true //False to debugging
 
                 axios.post(`${this.useStore().apiroot}/assets/report/`, this.payload, this.myheaders())
                 .then((response) => {
-                    this.loading=false      
+                    this.loading=false
                     var link = window.document.createElement('a');
 
                     link.href = `data:${response.data.mime};base64,${response.data.data}`
