@@ -30,7 +30,7 @@
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "^3.12.36",
+    "@cypress/code-coverage": "^3.12.37",
     "@cypress/vite-dev-server": "^5.0.7",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vitest/coverage-v8": "^1.5.2",
