@@ -72,6 +72,8 @@ jobs:
 
     - name: Launch Unogenerator
       run: |
+        sudo pwd
+        sudo ls -la .python3.11/bin/
         sudo .python3.11/bin/unogenerator_start
 
     - name: Use Node.js ${{ matrix.node-version }}
