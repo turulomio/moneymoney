@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "367-add-github-test-action" ]
+    branches: [ "main", "373-doesnt-work-actions" ]
   pull_request:
     branches: [ "main" ]
 
@@ -57,6 +57,7 @@ jobs:
 
     - name: Install libreoffice 
       run: |
+        sudo apt-get install python3.11 python3.11-venv
         sudo apt-get install libreoffice python3-uno
 
     - name: Install python dependencies ${{ matrix.python-version }} and launch django_moneymoney cypress_test_server
@@ -64,13 +65,14 @@ jobs:
         cd ..
         git clone https://github.com/turulomio/django_moneymoney
         cd django_moneymoney
-        sudo pip install .
-        sudo pip install poethepoet
-        sudo poe cypress_test_server_for_github_actions &
+        sudo python3.11 -m venv .python3.11 --system-site-packages
+        sudo .python3.11/bin/pip install .
+        sudo .python3.11/bin/pip install poethepoet
+        sudo .python3.11/bin/poe cypress_test_server_for_github_actions &
 
     - name: Launch Unogenerator
       run: |
-        sudo unogenerator_start
+        sudo .python3.11/bin/unogenerator_start
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
