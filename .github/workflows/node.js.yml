@@ -68,7 +68,7 @@ jobs:
         sudo python3.11 -m venv .python3.11 --system-site-packages
         sudo .python3.11/bin/pip install .
         sudo .python3.11/bin/pip install poethepoet
-        sudo .python3.11/bin/poe cypress_test_server_for_github_actions &
+        sudo .python3.11/bin/python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport 8004 &
 
     - name: Launch Unogenerator
       run: |
