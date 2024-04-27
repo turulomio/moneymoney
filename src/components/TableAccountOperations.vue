@@ -17,7 +17,7 @@
                 <div class="cursorpointer" v-html="useStore().concepts.get(item.concepts).localname" @click="viewHistoricalConcept(item)"></div>
             </template>
             <template #item.actions="{item}">
-                <v-icon small class="mr-2" @click="copyAO(item)">mdi-content-copy</v-icon>
+                <v-icon :data-test="`TableAccountOperations_ButtonCopy${item.id}`" small class="mr-2" @click="copyAO(item)">mdi-content-copy</v-icon>
                 <v-icon small class="mr-2" @click="editAO(item)">mdi-pencil</v-icon>
                 <v-icon small class="mr-2" @click="deleteAO(item)">mdi-delete</v-icon>
             </template>
@@ -299,8 +299,8 @@
             this.$emit("cruded")
             this.gotoLastRow()
         },
-        on_AccountsoperationsCU_cruded(){
-            this.dialog_ao=false
+        on_AccountsoperationsCU_cruded(following){
+            this.dialog_ao=following
             this.$emit("cruded")
         },
         on_DividendsCU_cruded(){
