@@ -13,7 +13,7 @@
                 <v-text-field density="compact" :readonly="mode=='D'" v-model="newproduct.phone" :label="$t('Set product phone')" :placeholder="$t('Set product phone')" :rules="RulesString(200,false)" counter="200"/>                                                
                 <v-text-field density="compact" :readonly="mode=='D'" v-model="newproduct.mail" :label="$t('Set product mail')" :placeholder="$t('Set product mail')" :rules="RulesString(200,false)" counter="200"/>
                 <v-text-field density="compact" :readonly="mode=='D'" v-model.number="newproduct.percentage" :label="$t('Set product percentage')" :placeholder="$t('Set product percentage')" :rules="RulesInteger(3,true)" counter="3" />
-                <v-text-field density="compact" :readonly="mode=='D'" v-model="newproduct.pci"  :label="$t('Set product pci')" :placeholder="$t('Set product pci')" :rules="RulesString(true)" counter="200" />
+                <v-autocomplete :items="useStore().productsstrategies" :readonly="mode=='D'" v-model="newproduct.productsstrategies" :label="$t('Select a product strategy')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
 
                 <v-autocomplete :items="getArrayFromMap(useStore().leverages)" :readonly="mode=='D'" v-model="newproduct.leverages" :label="$t('Select a product leverage')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <AutocompleteStockMarkets class="mr-5" v-model="newproduct.stockmarkets" :rules="RulesSelection(true)"  />

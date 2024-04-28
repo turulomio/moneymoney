@@ -27,6 +27,7 @@ export const useStore = defineStore('global', {
         leverages: new Map(),
         operationstypes: new Map(),
         products: new Map(),
+        productsstrategies: new Map(),
         productstypes: new Map(),
         profile: null,
         stockmarkets:new Map(),
@@ -119,7 +120,6 @@ export const useStore = defineStore('global', {
         return axios.get(`${this.apiroot}/api/investments/`, myheaders())
         .then((response)=>{
           this.investments.clear()
-          console.log(response.data)
           response.data.forEach(o=>{
             this.investments.set(o.url, o)
           })  
@@ -193,6 +193,19 @@ export const useStore = defineStore('global', {
           console.log(error)
       });
     },
+    updateProductsstrategies() {
+        var start=new Date()
+        return axios.get(`${this.apiroot}/api/productsstrategies/`, myheaders())
+        .then((response)=>{
+          this.productsstrategies.clear()
+          response.data.forEach(o=>{
+            this.productsstrategies.set(o.url, o)
+          })  
+          console.log(`Updated ${response.data.length} products strategies in ${new Date()-start} ms`)
+        }, (error) => {
+          console.log(error)
+      });
+    },
     updateRecomendationsMethos() {
         var start=new Date()
         return axios.get(`${this.apiroot}/recomendationmethods/`, myheaders())
@@ -250,6 +263,7 @@ export const useStore = defineStore('global', {
         this.updateOperationstypes(),
         this.updateProducts(),
         this.updateProductstypes(),
+        this.updateProductsstrategies(),
         this.updateRecomendationsMethos(),
         this.updateProfile(),
         this.updateStockmarkets(),
