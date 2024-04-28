@@ -18,7 +18,7 @@ describe('e2e Strateegies List', () => {
     cy.getDataTest('MyMenuInline_Header0_Item0').click()
     cy.getDataTest('StrategyCU_Name').type("Range strategy")
     cy.getDataTest('StrategyCU_Investments').type("Cash{downArrow}{enter}")
-    cy.getDataTest('StrategyCU_Type').click().type("{downArrow}{downArrow}{enter}")
+    cy.getDataTest('StrategyCU_Type').click().type("pr{downArrow}{enter}")
     cy.getDataTest('StrategyCU_Products').type("Apalanc{downArrow}{enter}")
     cy.getDataTest('StrategyCU_Additional2').type("10000")
     cy.getDataTest('StrategyCU_Additional3').type("10000")
