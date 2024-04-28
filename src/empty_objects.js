@@ -120,7 +120,7 @@ export function empty_product(){
         address:null,
         phone:null,
         mail:null,
-        pci:'c',
+        productsstrategies:`${this.useStore().apiroot}/api/productsstrategies/1/`,
         leverages:`${this.useStore().apiroot}/api/leverages/1/`,
         percentage:100,
         stockmarkets: null,
