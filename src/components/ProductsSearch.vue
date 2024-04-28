@@ -6,11 +6,11 @@
 
         <v-card width="65%" class="pa-8 ma-3 mx-auto">
                 <v-row>
-                    <v-text-field :disabled="loading" name="search" v-model="search" :label="$t('Search products')"  :placeholder="$t('Enter a string')" autofocus @keyup.enter="refreshSearch()" clearable></v-text-field>
+                    <v-text-field data-test="ProductsSearch_Search" :disabled="loading" name="search" v-model="search" :label="$t('Search products')"  :placeholder="$t('Enter a string')" autofocus @keyup.enter="refreshSearch()" clearable></v-text-field>
                     <div width="10px">
                         <v-select :items="obsolete_filter_items" v-model="obsolete_filter" class="ml-4" :disabled="loading" :label="$t('Filter by status')"  item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
                     </div>
-                    <v-btn :disabled="loading"  class="ml-4" color="error" @click="refreshSearch()">{{ $t("Search") }}</v-btn>
+                    <v-btn data-test="ProductsSearch_Button" :disabled="loading" class="ml-4" color="error" @click="refreshSearch()">{{ $t("Search") }}</v-btn>
                 </v-row>
         </v-card>
 

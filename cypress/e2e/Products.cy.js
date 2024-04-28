@@ -13,11 +13,27 @@ describe('e2e Products', () => {
     // Add a personal product
     cy.getDataTest('MyMenuInline_Button').last().click()
     cy.getDataTest('MyMenuInline_Header0_Item0').click()
-    cy.getDataTest('ProductsCU_Name').type("New personal product")
+    cy.getDataTest('ProductsCU_Name').type("New product personal")
     cy.getDataTest('ProductsCU_Currency').type("Eur{downArrow}{enter}")
     cy.getDataTest('ProductsCU_ProductsTypes').type("ETF{downArrow}{enter}")
     cy.getDataTest('ProductsCU_Stockmarkets').type("Madrid{downArrow}{enter}")
     cy.getDataTest('ProductsCU_Button').click()
+
+    // Add a system product
+    cy.getDataTest('MyMenuInline_Button').last().click()
+    cy.getDataTest('MyMenuInline_Header0_Item1').click()
+    cy.getDataTest('ProductsCU_Name').type("New product system")
+    cy.getDataTest('ProductsCU_Currency').type("Eur{downArrow}{enter}")
+    cy.getDataTest('ProductsCU_ProductsTypes').type("ETF{downArrow}{enter}")
+    cy.getDataTest('ProductsCU_Stockmarkets').type("Madrid{downArrow}{enter}")
+    cy.getDataTest('ProductsCU_Button').click()
+
+    // Search added products
+    cy.get('.v-field__clearable').click()
+    cy.getDataTest('ProductsSearch_Search').type("new product")
+    cy.getDataTest('ProductsSearch_Button').click()
+
+
 
   })  
 })
