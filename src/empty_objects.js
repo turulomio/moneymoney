@@ -187,6 +187,7 @@ export function empty_ios(){
         mode:1, 
         currency: "EUR", 
         simulation:[], //Array of empty_ios_simulation_operation
+        addition_current_year_gains:false,
     }
 }
 

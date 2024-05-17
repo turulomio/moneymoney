@@ -24,6 +24,7 @@ import ReportsDividends from './components/ReportsDividends'
 import ReportsEvolution from './components/ReportsEvolution'
 import ReportsInvestmentsClasses from './components/ReportsInvestmentsClasses'
 import ReportscurrentInvestmentsOperations from './components/ReportsCurrentInvestmentsOperations'
+import ReportsAnnualRevaluation from './components/ReportsAnnualRevaluation.vue'
 import ReportsInvestmentsLastOperation from './components/ReportsInvestmentsLastOperation'
 import ReportsRanking from './components/ReportsRanking'
 import ReportsZeroRisk from './components/ReportsZeroRisk.vue'
@@ -59,6 +60,7 @@ export const router = createRouter({
     { path: `${import.meta.env.BASE_URL}/reports/dividens/`, name: 'reports_dividends', component: ReportsDividends },
     { path: `${import.meta.env.BASE_URL}/reports/investmentsclasses/`, name: 'reports_investments_classes', component: ReportsInvestmentsClasses },
     { path: `${import.meta.env.BASE_URL}/reports/investments/lastoperation/`, name: 'reports_lastoperation', component: ReportsInvestmentsLastOperation },
+    { path: `${import.meta.env.BASE_URL}/reports/annualrevaluation/`, name: 'reports_annualrevaluation', component: ReportsAnnualRevaluation },
     { path: `${import.meta.env.BASE_URL}/reports/investmentsoperations/current/`, name: 'reports_investmentsoperations_current', component: ReportscurrentInvestmentsOperations },
     { path: `${import.meta.env.BASE_URL}/reports/ranking/`, name: 'reports_ranking', component: ReportsRanking },
     { path: `${import.meta.env.BASE_URL}/reports/evolution/`, name: 'reports_evolution', component: ReportsEvolution },
