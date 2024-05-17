@@ -1,7 +1,8 @@
 <template>
     <div class="pa-4">
         <h1 class="mb-3">{{ $t("Investments operations annual revaluation report") }}</h1>
-        <v-data-table density="compact"  :headers="headers" :items="list_io" class="elevation-1" :sort-by="[{key:'datetime',order:'asc'}]" fixed-header :height="$attrs.height" :loading="$attrs.loading" :items-per-page="10000" hide-default-footer >
+        <v-checkbox v-model="only_zero" :label="$t('Show only investments operations from zero risk investments')" />
+        <v-data-table density="compact"  :headers="headers" :items="list_io" class="elevation-1" :sort-by="[{key:'datetime',order:'asc'}]" fixed-header height="800" :loading="$attrs.loading" :items-per-page="10000" hide-default-footer :key="key">
         <template #item.datetime="{item}">
             <div>{{ localtime(item.datetime)}}</div>
         </template>                   
@@ -47,6 +48,7 @@
             return{
                 list_io: [],
                 key: 0,
+                only_zero:false,
                 loading:false,
                 headers: [
                     { title: this.$t('Date and time'), key: 'datetime',sortable: true },
@@ -61,6 +63,10 @@
             }
         },
         watch:{
+            only_zero(){
+                this.refreshTable()
+                console.log("AHORA")
+            }
         },
         methods:{
             useStore,
@@ -68,11 +74,12 @@
             localtime,
             refreshTable(){
                 this.loading=true
-                return axios.get(`${this.useStore().apiroot}/reports/annual/revaluation/`, this.myheaders())
+                var onlyzerostring=(this.only_zero)? "?only_zero=true": ""
+                return axios.get(`${this.useStore().apiroot}/reports/annual/revaluation/${onlyzerostring}`, this.myheaders())
                 .then((response) => {
                     this.list_io=response.data
-                    console.log(this.list_io)
                     this.loading=false
+                    this.key+=1
                 }, (error) => {
                     this.parseResponseError(error)
                 });
