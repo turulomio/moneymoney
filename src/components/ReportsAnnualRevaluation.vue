@@ -11,8 +11,8 @@
         <template #item.price_user="{item}">
             <div class="text-right" v-html="localcurrency_html(item.price_user)"></div>
         </template> 
-        <template #item.invested_user="{item}">
-            <div class="text-right" v-html="localcurrency_html(item.invested_user)"></div>
+        <template #item.balance_last_year_or_invested="{item}">
+            <div class="text-right" v-html="localcurrency_html(item.balance_last_year_or_invested)"></div>
         </template> 
         <template #item.current_year_gains_user="{item}">
             <div class="text-right" v-html="localcurrency_html(item.current_year_gains_user)"></div>
@@ -27,8 +27,9 @@
                 <td></td>   
                 <td></td>   
                 <td></td>
-                <td class="text-right" v-html="localcurrency_html(listobjects_sum(list_io,'invested_user'))"></td>
+                <td class="text-right" v-html="localcurrency_html(listobjects_sum(list_io,'balance_last_year_or_invested'))"></td>
                 <td class="text-right" v-html="localcurrency_html(listobjects_sum(list_io,'current_year_gains_user'))"></td>
+                <td class="text-right" v-html="percentage_html(listobjects_sum(list_io,'current_year_gains_user')/listobjects_sum(list_io,'balance_last_year_or_invested'))"></td>
             </tr>
         </template>
     </v-data-table>   
@@ -53,7 +54,7 @@
                     { title: this.$t('Operation'), key: 'operationstypes',sortable: true },
                     { title: this.$t('Shares'), key: 'shares',sortable: false, align:'end'},
                     { title: this.$t('Price'), key: 'price_user',sortable: false, align:'end'},
-                    { title: this.$t('Invested'), key: 'invested_user',sortable: false, align:'end'},
+                    { title: this.$t('Balance last year or invested'), key: 'balance_last_year_or_invested',sortable: false, align:'end'},
                     { title: this.$t('Annual gains'), key: 'current_year_gains_user',sortable: false, align:'end'},
                     { title: this.$t('% Annual'), key: 'percentage',sortable: false, align:'end'},
                 ],
