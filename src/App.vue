@@ -62,6 +62,9 @@
                         <v-list-item data-test="LateralReportsLastOperation" link router :to="{ name: 'reports_lastoperation'}">
                             <v-list-item-title>{{ $t("Investments last operation") }}</v-list-item-title>
                         </v-list-item>
+                        <v-list-item data-test="LateralReportsAnnualRevaluation" link router :to="{ name: 'reports_annualrevaluation'}">
+                            <v-list-item-title>{{ $t("Annual revaluation") }}</v-list-item-title>
+                        </v-list-item>
                         <v-list-item data-test="LateralProductsRanges" link router :to="{ name: 'products_ranges'}">
                             <v-list-item-title>{{ $t("Product ranges") }}</v-list-item-title>
                         </v-list-item>
