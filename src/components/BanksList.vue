@@ -8,7 +8,7 @@
             <v-checkbox v-model="showActive" :label="chkLabel" />
             <v-data-table density="compact" :headers="headers" :items="data" class="elevation-1 cursorpointer" :loading="loading_table" :sort-by="[{key:'localname',order:'asc'}]" @click:row="viewItem" :items-per-page="10000" >
                 <template #item.localname="{item}">
-                    {{ item.localname }}
+                    <div :data-test="`BanksList_Table_Row${item.id}`">{{ item.localname }}</div>
                 </template>
                 <template #item.active="{item}">
                     <v-icon small v-if="item.active" >mdi-check-outline</v-icon>
@@ -23,8 +23,8 @@
                     <div class="text-right" v-html="localcurrency_html(item.balance_total )"></div>
                 </template>  
                 <template #item.actions="{item}">
-                    <v-icon small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon small @click.stop="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
+                    <v-icon :data-test="`BanksList_Table_ButtonUpdate${item.id}`" small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
+                    <v-icon :data-test="`BanksList_Table_ButtonDelete${item.id}`" small @click.stop="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
                 </template>
                 <template #tbody>
                     <tr class="totalrow pa-6">

@@ -85,7 +85,7 @@
         <!-- EVOLUTION CHART -->
         <v-dialog v-model="dialog_evolution_chart">
             <v-card class="pa-4">
-                <ChartInvestmentsoperationsEvolution :investment="investment" :key="key" ></ChartInvestmentsoperationsEvolution>
+                <ChartInvestmentsoperationsEvolution :investment="investment" :key="key" @close="on_ChartInvestmentsoperationsEvolution_close" />
             </v-card>
         </v-dialog>
 
@@ -557,6 +557,9 @@
                     this.loading=false
                     this.key=this.key+1
                 });
+            },
+            on_ChartInvestmentsoperationsEvolution_close(){
+                this.dialog_evolution_chart=false
             }
         },
         created(){

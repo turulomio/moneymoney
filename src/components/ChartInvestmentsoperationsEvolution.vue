@@ -1,6 +1,8 @@
 <template>
     <div>    
-        <h1>{{ f($t("'[0]' evolution"), [investment.name]) }}</h1>
+        <h1>{{ f($t("'[0]' evolution"), [investment.name]) }}
+            <v-btn data-test="ChartInvestmentsoperationsEvolution_ButtonClose" small style="color:darkgrey" icon="mdi-close" class="elevation-0" @click="$emit('close')"/>
+        </h1>
         <v-card class="ma-4 pa-4" >
             <div ref="chart" style="width:100%;height:600px;"  ></div>
          </v-card>
