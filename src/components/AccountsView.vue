@@ -121,7 +121,7 @@
                                     this.key=this.key+1
                                     this.at=this.empty_account_transfer()
                                     this.at_mode="C"
-                                    this.at.account_origin=this.account.url
+                                    this.at.origin=this.account.url
                                     this.dialog_transfer=true
                                 }.bind(this),
                                 icon: "mdi-plus" 
