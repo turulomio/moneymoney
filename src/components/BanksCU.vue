@@ -3,12 +3,12 @@
         <h1>{{ title() }}</h1>    
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid">
-                <v-text-field :readonly="mode=='D'"  v-model="new_bank.name" type="text" :label="$t('Bank name')" :placeholder="$t('Bank name')" autofocus :rules="RulesString(100, true)"/>
-                <v-checkbox :readonly="mode=='D'"  v-model="new_bank.active" :label="$t('Is active?')" ></v-checkbox>
+                <v-text-field data-test="BanksCU_Name" :readonly="mode=='D'"  v-model="new_bank.name" type="text" :label="$t('Bank name')" :placeholder="$t('Bank name')" autofocus :rules="RulesString(100, true)"/>
+                <v-checkbox data-test="BanksCU_Active" :readonly="mode=='D'"  v-model="new_bank.active" :label="$t('Is active?')" ></v-checkbox>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="acceptDialog">{{ button() }}</v-btn>
+                <v-btn data-test="BanksCU_Button" color="primary" @click="acceptDialog">{{ button() }}</v-btn>
             </v-card-actions>
         </v-card>
     </div>
@@ -16,6 +16,7 @@
 <script>
     import axios from 'axios'
     import { useStore } from "@/store"
+    import { RulesString } from 'vuetify_rules'
     export default {
         props: {
             bank: { // Bank object
@@ -33,6 +34,7 @@
         },
         methods: {
             useStore,
+            RulesString,
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating bank")

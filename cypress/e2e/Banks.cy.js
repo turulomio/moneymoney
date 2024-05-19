@@ -7,34 +7,26 @@ describe('e2e Banks', () => {
     cy.getDataTest('LateralIcon').click()
     cy.getDataTest('LateralBanks').click()
 
-    // //Select biometrics
-    // cy.get('[href="/calories_tracker/biometrics/"] > .v-list-item__content > .v-list-item-title').click()
+    // Create a new bank
+    cy.intercept({ method:'POST', url:'http://127.0.0.1:8004/api/banks/', times:1,}).as("post_banks")
+    cy.getDataTest('MyMenuInline_Button').last().click()
+    cy.getDataTest('MyMenuInline_Header0_Item0').click()
+    cy.getDataTest('BanksCU_Name').type("New bank")
+    cy.getDataTest('BanksCU_Button').click()
+    cy.wait('@post_banks').then((interception)=>{
+        var banks_id=interception.response.body.id
+        // Update bank
+        cy.getDataTest(`BanksList_Table_ButtonUpdate${banks_id}`).click()
+        cy.getDataTest('BanksCU_Name').type(" updated")
+        cy.getDataTest('BanksCU_Button').click()
 
-    // // Move throw charts tabs
-    // cy.get('.v-slide-group__content > :nth-child(1) > .v-btn__content').click()
-    // cy.get('.v-slide-group__content > :nth-child(2) > .v-btn__content').click()
-    // cy.get('.v-slide-group__content > :nth-child(3) > .v-btn__content').click()
+        // Delete bank
+        cy.getDataTest(`BanksList_Table_ButtonDelete${banks_id}`).click()
+        cy.getDataTest('BanksCU_Button').click()
+    })
 
-    // // Open List views
-    // cy.get('h1 > .v-btn').click()
-
-    // // Adds firt biometrics
-    // cy.get('[inset=""] > :nth-child(2) > .v-list-item > .v-list-item__content > .v-list-item-title').click()
-
-    // cy.get('input[data-test="cmbActivities"]').click().type("{downArrow}{enter}") //Find by id
-    // cy.get('input[data-test="cmbWeightWishes"]').click().type("{downArrow}{enter}") //Find by id
-    // cy.get('input[data-test="txtHeight"]').click().clear().type("180") //Find by id
-    // cy.get('input[data-test="txtWeight"]').click().clear().type("90") //Find by id
-    // cy.get('button[data-test="cmd"]').click()
-
-    // // Update biometrics
-    // cy.get('.mdi-pencil').first().click()
-    // cy.get('button[data-test="cmd"]').click()
-
-    // // Delete biometrics
-    // cy.get('.mdi-delete').first().click()
-    // cy.get('button[data-test="cmd"]').click()
-    
+    // Shows personal management bank
+    cy.getDataTest(`BanksList_Table_Row3`).click()
   })
 
   
