@@ -21,7 +21,7 @@
 import './commands.js'
 import Cypress from 'cypress';
 import '@cypress/code-coverage/support';
-import { mount } from 'cypress/vue'
+import { mount } from '@cypress/vue'
 
 Cypress.Commands.add('mount', mount)
 

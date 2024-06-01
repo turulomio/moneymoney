@@ -1,4 +1,4 @@
-import { mount } from '@cypress/vue';
+// import { mount } from '@cypress/vue';
 import MyDatePicker from '../../src/components/MyDatePicker.vue'; // Adjust the path accordingly
 
 describe('MyDatePicker Component', () => {
