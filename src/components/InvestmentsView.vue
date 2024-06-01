@@ -117,9 +117,9 @@
             </v-card>
         </v-dialog>
         <!-- INVESTMENT CHART-->
-        <v-dialog v-model="dialog_investment_chart" v-if="ios_id">
+        <v-dialog v-model="dialog_investment_chart" v-if="ios_id" >
             <v-card class="pa-3">
-                <ChartInvestments :data="chart_data" :key="key"></ChartInvestments>
+                <ChartInvestments :data="chart_data" :key="key"  @close="on_ChartInvestments_close" />
             </v-card>
         </v-dialog>
         <!-- INVESTMENT change selling price-->
@@ -215,7 +215,6 @@
                                             ll.sell=this.investment.selling_price
                                             this.chart_data.limitlines.push(ll)
                                         }
-                                        this.ohcl=response.data 
                                         this.key=this.key+1
                                         this.dialog_investment_chart=true
                                     }, (error) => {
@@ -541,16 +540,13 @@
             },
             update_all(){
                 this.loading=true
-                this.investment=this.getMapObjectById("investments",this.investment_id)     
-                console.log(this.investment)
+                this.investment=this.getMapObjectById("investments",this.investment_id)
 
                 axios.all([this.update_ios(), this.update_dividends()])
                 .then(([resIO, resDividends]) => {
 
                     this.ios_id=resIO.data[this.investment_id]
-
                     this.on_chkShowAllIO_click()
-
 
                     this.dividends=resDividends.data
                     this.on_chkDividends()
@@ -560,6 +556,9 @@
             },
             on_ChartInvestmentsoperationsEvolution_close(){
                 this.dialog_evolution_chart=false
+            },
+            on_ChartInvestments_close(){
+                this.dialog_investment_chart=false
             }
         },
         created(){

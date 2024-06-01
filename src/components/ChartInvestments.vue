@@ -1,11 +1,13 @@
 
 <template>
     <div>
-        <v-card outlined class="ma-4 pa-4" height="600">
-            <div ref="chart" style="width:100%;height:600px;" ></div>
+        <h1>{{ data.ios_id.data.name }}
+            <v-btn data-test="ChartInvestments_ButtonClose" small style="color:darkgrey" icon="mdi-close" class="elevation-0" @click="$emit('close')"/>
+        </h1>
+        <v-card outlined class="ma-4 pa-4" height="850">
+            <div ref="chart" style="width:100%;height:800px;" ></div>
          </v-card>
     </div>
-
 </template>
 <script>
     import * as echarts from 'echarts'
@@ -164,9 +166,9 @@
                 return colors[num]
             },
         },
-        created(){
-             this.loading=false
-             this.data.ohcls.forEach(o=> {
+        mounted(){
+            this.loading=false
+            this.data.ohcls.forEach(o=> {
                 this.closes.push([new Date(o.date), o.close])
              })
             this.data.limitlines.forEach(ll=>{ //0 buy,1 average,2 sell
@@ -189,7 +191,6 @@
                     this.sells.push([o.datetime, o.price])
                 }
              })
-
             this.chart = echarts.init(this.$refs.chart);
             this.chart.setOption(this.chart_option())
         }
