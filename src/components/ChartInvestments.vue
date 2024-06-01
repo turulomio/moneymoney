@@ -1,7 +1,9 @@
 
 <template>
     <div>
-        <h1>{{ $t("Investment chart") + data.ios_id.data.name }}</h1>
+        <h1>{{ data.ios_id.data.name }}
+            <v-btn data-test="ChartInvestments_ButtonClose" small style="color:darkgrey" icon="mdi-close" class="elevation-0" @click="$emit('close')"/>
+        </h1>
         <v-card outlined class="ma-4 pa-4" height="850">
             <div ref="chart" style="width:100%;height:800px;" ></div>
          </v-card>

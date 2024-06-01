@@ -117,9 +117,9 @@
             </v-card>
         </v-dialog>
         <!-- INVESTMENT CHART-->
-        <v-dialog v-model="dialog_investment_chart" v-if="ios_id">
+        <v-dialog v-model="dialog_investment_chart" v-if="ios_id" >
             <v-card class="pa-3">
-                <ChartInvestments :data="chart_data" :key="key"></ChartInvestments>
+                <ChartInvestments :data="chart_data" :key="key"  @close="on_ChartInvestments_close" />
             </v-card>
         </v-dialog>
         <!-- INVESTMENT change selling price-->
@@ -556,6 +556,9 @@
             },
             on_ChartInvestmentsoperationsEvolution_close(){
                 this.dialog_evolution_chart=false
+            },
+            on_ChartInvestments_close(){
+                this.dialog_investment_chart=false
             }
         },
         created(){
