@@ -82,9 +82,8 @@
         },
         created(){
             this.new_clearable=this.clearable
-            if (this.readonly) this.new_clearable=false
+            if (this.readonly) this.new_clearable=false // If readonly can't be clearable
             this.new_value=this.modelValue
-            console.log("READONLY",this.readonly)
             this.dt=this.string2dt(this.new_value)
         },
     }
