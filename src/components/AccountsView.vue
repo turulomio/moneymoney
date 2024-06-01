@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div data-test="AccountsView">
         <h1>{{ f($t("Account details of '[0]'"), [account.localname]) }}<MyMenuInline :items="items" />  </h1>
         <DisplayValues :items="displayvalues"></DisplayValues>
 
@@ -42,7 +42,7 @@
             </v-window-item>
         </v-window>
         <!-- DIALOG ACCOUNTSOPERATIONS ADD/UPDATE -->
-        <v-dialog v-model="dialog_ao" max-width="700">
+        <v-dialog data-test="AccountsView_DialogAO" v-model="dialog_ao" max-width="700">
             <v-card class="pa-8">
                 <AccountsoperationsCU :ao="ao" :mode="ao_mode" :key="key" @cruded="on_AccountsoperationsCU_cruded"></AccountsoperationsCU>
             </v-card>

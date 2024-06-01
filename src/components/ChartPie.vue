@@ -1,8 +1,6 @@
 <template>
     <div ref="div" class="ma-4">
-        <p v-if="items.length==0">No data to show</p>
-
-        <div class="d-flex flex-row" >
+        <div class="d-flex flex-row">
             <div ref="pieChart" :style="`width:100%; height:${height}px;`"></div>            
             <div ref="table" v-if="new_show_data" class="d-flex">
                 <v-data-table density="compact" :headers="tableHeaders"  :items="items"  :sort-by="[{key:'value',order:'desc'}]" :items-per-page="10000">
@@ -26,7 +24,6 @@
         <div class="d-flex justify-center">
             <v-btn  color="primary" @click="buttonClick">{{buttontext}}</v-btn>
         </div>
-
     </div>
 </template>
 
@@ -37,7 +34,7 @@
             name: {
                 required: true,
             },
-            items: {
+            items: { // An array of objects [{name: "nombre", value: 1},...]
                 required: true
             },
             height: {
