@@ -17,5 +17,8 @@ export default defineConfig({
       bundler: "vite"
     },
     // supportFile:false,
+  "env": {
+    "cypress/globals": true
+  }
   },
 });
