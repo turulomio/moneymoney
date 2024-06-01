@@ -9,11 +9,12 @@ import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 import eslintPlugin from 'vite-plugin-eslint';
 import istanbul from 'vite-plugin-istanbul';
-
+import VueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig({
   plugins: [
     vue(),
+    VueDevTools(),
     vuetify({
       autoImport: true,
     }),
