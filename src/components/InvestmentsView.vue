@@ -215,7 +215,6 @@
                                             ll.sell=this.investment.selling_price
                                             this.chart_data.limitlines.push(ll)
                                         }
-                                        this.ohcl=response.data 
                                         this.key=this.key+1
                                         this.dialog_investment_chart=true
                                     }, (error) => {
@@ -541,16 +540,13 @@
             },
             update_all(){
                 this.loading=true
-                this.investment=this.getMapObjectById("investments",this.investment_id)     
-                console.log(this.investment)
+                this.investment=this.getMapObjectById("investments",this.investment_id)
 
                 axios.all([this.update_ios(), this.update_dividends()])
                 .then(([resIO, resDividends]) => {
 
                     this.ios_id=resIO.data[this.investment_id]
-
                     this.on_chkShowAllIO_click()
-
 
                     this.dividends=resDividends.data
                     this.on_chkDividends()

@@ -7,7 +7,13 @@ describe('e2e Investments', () => {
 
     // Add investments
     add_investmentoperation_from_Home(cy) // Is a promise
-    cy.getDataTest("InvestmentsView_ButtonClose").click()
+
+    // See investments chart
+    cy.wait(300)
+    cy.getDataTest('MyMenuInline_Button').last().click()
+    cy.getDataTest('MyMenuInline_Header0_Item0').click()
+
+    // cy.getDataTest("InvestmentsView_ButtonClose").click()
 
     
   })
