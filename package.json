@@ -13,6 +13,7 @@
     "cypress_console": "cypress run"
   },
   "dependencies": {
+    "@cypress/vue": "^6.0.0",
     "@mdi/font": "^7.4.47",
     "axios": "^1.7.2",
     "currency-list": "^1.0.8",

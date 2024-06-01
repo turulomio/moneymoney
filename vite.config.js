@@ -9,12 +9,12 @@ import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 import eslintPlugin from 'vite-plugin-eslint';
 import istanbul from 'vite-plugin-istanbul';
-import VueDevTools from 'vite-plugin-vue-devtools'
+// import VueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig({
   plugins: [
     vue(),
-    VueDevTools(),
+    // VueDevTools(),
     vuetify({
       autoImport: true,
     }),
@@ -66,5 +66,8 @@ export default defineConfig({
         '**/*.spec.js',
       ],
     }
-  }
+  },
+  build: {
+    sourcemap: true, // Options: true, 'inline', 'hidden'
+  },
 })

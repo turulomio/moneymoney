@@ -14,15 +14,20 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
+import './commands.js'
+import Cypress from 'cypress';
 import { mount } from 'cypress/vue'
 
 Cypress.Commands.add('mount', mount)
 
+Cypress.Commands.add('getDataTest', (selector, ...args) =>{
+    return cy.get(`[data-test=${selector}]`, ...args)
+
+})
 // Example use:
 // cy.mount(MyComponent)
 // Import global styles if any, for example Vuetify styles

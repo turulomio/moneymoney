@@ -13,6 +13,7 @@ export default [
       "vue/no-v-model-argument": "warn",
       "vue/valid-v-slot": "off",
       "vue/no-unused-vars": "warn",
+      "no-undef": "warn",
 
     }
   }
