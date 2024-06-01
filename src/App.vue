@@ -4,7 +4,7 @@
             <v-card class="mx-auto" >
                 <v-list>
                     <v-list-item>
-                            <v-list-item-title class="title">Money Money</v-list-item-title>
+                            <v-list-item-title class="title" >Money Money<div  data-test="OpenWidgets" @click="open_widgets"></div></v-list-item-title>
                             <v-list-item-subtitle>{{ useStore().version }} ({{ useStore().versiondate.toISOString().slice(0,10)}})</v-list-item-subtitle>
                             <v-list-item-subtitle class="boldred" v-if="useStore().catalog_manager"><span class="vuered">{{ $t("With catalog manager role") }}</span></v-list-item-subtitle>
                     </v-list-item>
@@ -162,10 +162,10 @@ export default {
     },
     methods:{
         useStore,
-
+        open_widgets(){
+            this.$router.push({name: "widgets"})
+        }   
     },
-    mounted(){
-    }
 };
 </script>
 <style >

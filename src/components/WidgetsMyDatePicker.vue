@@ -14,6 +14,10 @@
             <MyDatePicker v-model="mydatepicker4" label="Birth date"></MyDatePicker>
             <v-spacer></v-spacer>           
         </v-row>
+        <MyDatePicker v-model="mydatepicker" readonly label="Readonly"></MyDatePicker>
+        <v-spacer></v-spacer>   
+        <MyDatePicker v-model="mydatepicker4" readonly clearable label="Readonly clearable"></MyDatePicker>
+        <v-spacer></v-spacer>   
     </div>
 </template>
 
