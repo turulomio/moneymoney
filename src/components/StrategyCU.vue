@@ -6,9 +6,9 @@
                 <v-text-field data-test="StrategyCU_Name" density="compact" :readonly="deleting" v-model="newstrategy.name" :label="$t('Set strategy name')" :placeholder="$t('Set strategy name')" :rules="RulesString(200,true)" counter="200" autofocus/>
                 <v-autocomplete data-test="StrategyCU_Investments" density="compact" :readonly="deleting" :items="getArrayFromMap(useStore().investments)" v-model="newstrategy.investments" :label="$t('Select strategy investments')" item-title="fullname" item-value="url" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
                 <MyDateTimePicker :readonly="deleting" v-model="newstrategy.dt_from" :label="$t('Date and time strategy start')" />                
-                <MyDateTimePicker :readonly="deleting" v-model="newstrategy.dt_to" :label="$t('Date and time strategy end')" :clearable="true" />
+                <MyDateTimePicker data-test="StrategyCU_DtTo" :readonly="deleting" v-model="newstrategy.dt_to" :label="$t('Date and time strategy end')" :clearable="true" />
                 <v-select data-test="StrategyCU_Type" :readonly="deleting" density="compact" :items="getArrayFromMap(useStore().strategiestypes)" v-model="newstrategy.type" :label="$t('Select strategy type')" item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>
-                <v-textarea :readonly="deleting" density="compact" v-model="newstrategy.comment" :label="$t('Set strategy comment')" :placeholder="$t('Set strategy comment')" :rules="RulesString(200,false)" counter="200"></v-textarea>
+                <v-textarea data-test="StrategyCU_Comment" :readonly="deleting" density="compact" v-model="newstrategy.comment" :label="$t('Set strategy comment')" :placeholder="$t('Set strategy comment')" :rules="RulesString(200,false)" counter="200"></v-textarea>
                 <v-text-field  :readonly="deleting" density="compact" v-model.number="newstrategy.additional1" v-if="additional_visibility[0]" :label="additional_labels[0]" :placeholder="additional_labels[0]" :rules="RulesInteger(10,false)" counter="10"/>
                 <AutocompleteProducts  data-test="StrategyCU_Products" v-model="product" :rules="RulesSelection(true)" v-if="product_visibility" />  
                 <v-text-field data-test="StrategyCU_Additional2" :readonly="deleting" density="compact" v-model.number="newstrategy.additional2" v-if="additional_visibility[1]" :label="additional_labels[1]" :placeholder="additional_labels[1]" :rules="RulesInteger(10,false)" counter="10"/>
@@ -25,7 +25,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn data-test="StrategyCU_Button" v-if="!deleting" color="primary" @click="accept()">{{ button() }}</v-btn>
-                <v-btn v-if="deleting" color="error" @click="deleteStrategy()">{{ $t("Delete") }}</v-btn>
+                <v-btn data-test="StrategyCU_ButtonDelete" v-if="deleting" color="error" @click="deleteStrategy()">{{ $t("Delete") }}</v-btn>
             </v-card-actions>
         </v-card>
     </div>

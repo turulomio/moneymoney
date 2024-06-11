@@ -5,6 +5,7 @@ describe('e2e Strateegies List', () => {
     login_test_User(cy)
 
     // Add investments
+    cy.wait(300)
     add_investmentoperation_from_Home(cy) // Is a promise
     cy.getDataTest("InvestmentsView_ButtonClose").click()
 
@@ -20,6 +21,7 @@ describe('e2e Strateegies List', () => {
     cy.getDataTest('StrategyCU_Investments').type("Cash{downArrow}{enter}")
     cy.getDataTest('StrategyCU_Type').click().type("pr{downArrow}{enter}")
     cy.getDataTest('StrategyCU_Products').type("Apalanc{downArrow}{enter}")
+    cy.getDataTest('StrategyCU_Comment').type("My strategy comment")
     cy.getDataTest('StrategyCU_Additional2').type("10000")
     cy.getDataTest('StrategyCU_Additional3').type("10000")
     cy.getDataTest('StrategyCU_Additional4').type("10000")
@@ -40,6 +42,24 @@ describe('e2e Strateegies List', () => {
 
       // Opens strategy product range
       cy.getDataTest(`StrategiesList_Table_Row${strategy_id}`).click()
+
+      // Returns to strategy view buscando un typeable para hacer uno dos esc y vuelve a StrategyList
+      cy.getDataTest('ProductsRanges_Product').type("{esc}{esc}")
+
+      // Sets an strategy inactive (dt_end not null)
+      cy.getDataTest(`StrategiesList_Table_IconEdit${strategy_id}`).click()
+      cy.get('[data-test="StrategyCU_DtTo"] > .d-flex > .v-input > .v-input__prepend > .mdi-calendar-clock').click()
+      cy.getDataTest('StrategyCU_Button').click()  
+      cy.getDataTest(`StrategiesList_Table_IconEdit${strategy_id}`).should('not.exist');
+       // Select elements whose ID starts with 'checkbox'
+      cy.get('[id^="checkbox"]').first().click()
+      cy.getDataTest(`StrategiesList_Table_IconEdit${strategy_id}`).should('exist');
+      //Deletes it
+      cy.getDataTest(`StrategiesList_Table_IconDelete${strategy_id}`).click()
+      cy.getDataTest('StrategyCU_ButtonDelete').click()
+
+
+      
 
     })
   })  

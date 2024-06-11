@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div data-test="StrategiesView">
         <h1>{{ strategy.name }}
             <MyMenuInline :items="items" />
             <v-btn data-test="StrategiesView_ButtonClose" small style="color:darkgrey" icon="mdi-close" class="elevation-0" @click="$emit('close')"/>

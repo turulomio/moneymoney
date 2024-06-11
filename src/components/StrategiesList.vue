@@ -1,19 +1,19 @@
 <template>
-    <div>    
+    <div data-test="StrategiesList">    
         <h1>{{ $t('Strategies list') }}
             <MyMenuInline :items="menuinline_items"/>
         </h1>
         <v-card outlined class="ma-4 pa-4">
-            <v-checkbox v-model="showActive" :label="setCheckboxLabel()" @click="on_chkActive()" ></v-checkbox>
+            <v-checkbox data-test="StrategiesList_CheckActive" v-model="showActive" :label="setCheckboxLabel()" />
             <v-data-table density="compact" :headers="strategies_headers" :items="strategies_items" class="elevation-1 cursorpointer" :loading="loading_strategies" :key="key" @click:row="detailedviewItem" :items-per-page="10000" >
-                <!-- <template v-slot:[`item.name`]="{ item }">
-                    <v-tooltip right>
-                        <template v-slot:activator="{ on }">
-                            <div v-on="on">{{ item.name }}</div>
+                <template v-slot:[`item.name`]="{ item }">
+                    <v-tooltip :text="item.comment">
+                        <template v-slot:activator="{ props }">
+                            <div v-bind="props">{{ item.name }}</div>
                         </template>
                         <span>{{ item.comment }}</span>
                     </v-tooltip>
-                </template> -->  
+                </template>
                 <template #item.dt_from="{item}">
                     <div :data-test="`StrategiesList_Table_Row${item.id}`" v-html="localtime(item.dt_from )"></div>
                 </template>        
@@ -38,8 +38,8 @@
 
                 <template #item.actions="{item}">
                     <v-icon :data-test="`StrategiesList_Table_IconView${item.id}`" small class="mr-2" @click.stop="viewItem(item)">mdi-eye</v-icon>
-                    <v-icon small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon small @click.stop="deleteItem(item)">mdi-delete</v-icon>
+                    <v-icon :data-test="`StrategiesList_Table_IconEdit${item.id}`" small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
+                    <v-icon :data-test="`StrategiesList_Table_IconDelete${item.id}`" small @click.stop="deleteItem(item)">mdi-delete</v-icon>
                 </template>                  
                 <template #tbody v-if="strategies_items.length>0">
                     <tr class="totalrow">
@@ -143,6 +143,11 @@
                 pr: null,
             }
         },
+        watch:{
+            showActive(){
+                this.update_table()
+            }
+        },
         methods: {
             useStore,
             localtime,
@@ -191,9 +196,6 @@
                 }, (error) => {
                     this.parseResponseError(error)
                 });
-            },
-            on_chkActive(){
-                this.update_table()
             },
             on_StrategyCU_cruded(){
                 this.dialog_strategy_cu=false
