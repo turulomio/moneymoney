@@ -56,6 +56,22 @@ export function add_account_from_AccountsList(
     })
 }
 
+export function add_accountoperation_from_AccountsView(
+    cy,
+    wait_name="accountoperation_id"
+){
+    cy.getDataTest('MyMenuInline_Button').last().click()
+    cy.getDataTest('MyMenuInline_Header1_Item0').click()
+    cy.getDataTest('AccountsoperationsCU_Concepts').type("Super{downArrow}{enter}")
+    cy.getDataTest('AccountsoperationsCU_Amount').clear().type("-100")
+    cy.getDataTest('AccountsoperationsCU_Comment').type("This is a comment")
+    cy.intercept({ method:'POST', url:'/api/accountsoperations/', times:1,}).as("post_ao")
+    cy.getDataTest('AccountsoperationsCU_Button').click()
+    cy.wait('@post_ao').then((interception)=>{
+        cy.wrap(interception.response.body.id).as(wait_name)
+    })
+}
+
 
 export function add_creditcard_from_AccountsView(
     cy, 
