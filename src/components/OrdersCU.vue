@@ -6,18 +6,18 @@
         </h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" :readonly="mode=='D'" v-if="snackbar_message==''">
-                <MyDatePicker v-model="new_order.date"  :readonly="mode=='D'" :label="$t('Set order date')"/>
-                <MyDatePicker v-model="new_order.expiration" :readonly="mode=='D'" :label="$t('Set order expiration date')" :clearable="true"/>
-                <v-autocomplete :items="getArrayFromMap(useStore().investments)" :readonly="mode=='D'" v-model="new_order.investments" :label="$t('Select an investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <MyDateTimePicker v-model="new_order.executed" :readonly="mode=='D'" v-if="mode=='U'" :label="$t('Set order execution date and time')" :clearable="true" />
-                <v-text-field v-model.number="new_order.shares" :readonly="mode=='D'" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesFloatGEZ(12,true,6)" counter="12"/>
-                <v-text-field v-model.number="new_order.price" :readonly="mode=='D'" :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesFloatGEZ(12,true,product_decimals)" counter="12"/>
+                <MyDatePicker data-test="OrderCU_Date" v-model="new_order.date"  :readonly="mode=='D'" :label="$t('Set order date')"/>
+                <MyDatePicker data-test="OrderCU_Expiration" v-model="new_order.expiration" :readonly="mode=='D'" :label="$t('Set order expiration date')" :clearable="true"/>
+                <v-autocomplete data-test="OrderCU_Investments" :items="getArrayFromMap(useStore().investments)" :readonly="mode=='D'" v-model="new_order.investments" :label="$t('Select an investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <MyDateTimePicker data-test="OrderCU_Executed" v-model="new_order.executed" :readonly="mode=='D'" v-if="mode=='U'" :label="$t('Set order execution date and time')" :clearable="true" />
+                <v-text-field data-test="OrderCU_Shares" v-model.number="new_order.shares" :readonly="mode=='D'" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesFloatGEZ(12,true,6)" counter="12"/>
+                <v-text-field data-test="OrderCU_Price" v-model.number="new_order.price" :readonly="mode=='D'" :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesFloatGEZ(12,true,product_decimals)" counter="12"/>
             </v-form>
             <div v-html="snackbar_message"></div>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" v-if="snackbar_message==''" @click="accept()" >{{ button() }}</v-btn>
-                <v-btn color="error" v-if="!snackbar_message==''" @click="on_message_close()">{{ $t("Close message")}}</v-btn>
+                <v-btn data-test="OrderCU_Button" color="primary" v-if="snackbar_message==''" @click="accept()" >{{ button() }}</v-btn>
+                <v-btn data-test="OrderCU_ButtonCloseMessage" color="error" v-if="!snackbar_message==''" @click="on_message_close()">{{ $t("Close message")}}</v-btn>
             </v-card-actions>
         </v-card>
 

@@ -13,6 +13,17 @@ export function myheaders(){
 }
 
 
+export function yesterday_in_isostring(){
+    // Get the current date
+    let currentDate = new Date();
+
+    // Subtract one day (86400000 milliseconds = 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
+    let previousDate = new Date(currentDate.getTime() - 86400000);
+
+    // Convert to ISO string
+    return previousDate.toISOString().split('T')[0];
+}
+
 export function myheaders_noauth(){
     return {
         headers:{

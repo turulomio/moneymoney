@@ -19,7 +19,7 @@
 <!--                     INVESTMENTS -->
                     <v-list-item data-test="LateralInvestments" link router :to="{ name: 'investments_list'}" v-if="useStore().logged" prepend-icon="mdi-finance" :title="$t('Investments')" />
 <!--                     ORDERS -->
-                    <v-list-item link router :to="{ name: 'orders_list'}" v-if="useStore().logged" prepend-icon="mdi-cart" :title="$t('Orders')" />
+                    <v-list-item data-test="LateralOrders" link router :to="{ name: 'orders_list'}" v-if="useStore().logged" prepend-icon="mdi-cart" :title="$t('Orders')" />
 
 <!--                     PRODUCTS -->
                     <v-list-group data-test="LateralProducts" value="Products" v-if="useStore().logged">
