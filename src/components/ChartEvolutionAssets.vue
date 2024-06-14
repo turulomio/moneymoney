@@ -3,8 +3,8 @@
     <div ref="div">
         <h1>{{ $t("Evolution assets chart")}}</h1>
         <div class="d-flex justify-center mb-4 mt-4" >
-            <v-card width="30%">
-                <v-select class="pa-4" width="10%" density="compact" :label="$t('Select the year from which to display the report')" v-model="from" :items="years()" @change="change_year()"></v-select>       
+            <v-card width="30%" variant="flat">
+                <v-select class="pa-4" density="compact" :label="$t('Select the year from which to display the report')" v-model="from" :items="years()" @change="change_year()"></v-select>       
             </v-card>
         </div>
         <v-card class="ma-4 pa-4" >
