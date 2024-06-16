@@ -4,7 +4,7 @@
         <h2>MyMonthPicker</h2>
         <div class="ma-5">
         <MyMonthPicker v-model="MyMonthPicker" />
-        Current value: {{ MyMonthPicker }} Null:{{ MyMonthPicker==null }}
+        Current value: {{ MyMonthPicker }}
         </div>
     </div>
 </template>
@@ -17,7 +17,7 @@
         },
         data(){
             return {
-                MyMonthPicker:"2022-02",
+                MyMonthPicker: null,
             }
         },
     }
