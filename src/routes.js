@@ -34,6 +34,7 @@ import StrategiesList from './components/StrategiesList'
 import Widgets from '@/components/Widgets'
 import WidgetsMyDatePicker from './components/WidgetsMyDatePicker'
 import WidgetsMyDateTimePicker from './components/WidgetsMyDateTimePicker'
+import WidgetsMyMonthPicker from './components/WidgetsMyMonthPicker'
 import WidgetsChartPie from '@/components/WidgetsChartPie'
 
 export const router = createRouter({
@@ -74,5 +75,6 @@ export const router = createRouter({
     { path: `${import.meta.env.BASE_URL}/widgets/chartpie/`, name: 'widgets_chartpie', component: WidgetsChartPie },
     { path: `${import.meta.env.BASE_URL}/widgets/mydatepicker/`, name: 'widgets_mydatepicker', component: WidgetsMyDatePicker },
     { path: `${import.meta.env.BASE_URL}/widgets/mydatetimepicker/`, name: 'widgets_mydatetimepicker', component: WidgetsMyDateTimePicker },
+    { path: `${import.meta.env.BASE_URL}/widgets/mymonthpicker/`, name: 'widgets_mymonthpicker', component: WidgetsMyMonthPicker },
   ]
 })
