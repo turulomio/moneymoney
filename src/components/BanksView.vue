@@ -8,6 +8,9 @@
         <v-card outlined class="ma-4 pa-4">
             <v-card-title class="headline">{{$t('Accounts')}}</v-card-title>
             <v-data-table density="compact" :headers="accounts_headers" :items="accounts_items" :sort-by="[{key:'name',order:'asc'}]" class="elevation-1" :loading="loading_accounts" :key="key"     :items-per-page="10000" >
+                <template #item.name="{item}">
+                    {{ useStore().accounts.get(item.url).fullname }}
+                </template>  
                 <template #item.active="{item}">
                     <div class="text-center" ><v-icon small v-if="item.active" >mdi-check-outline</v-icon></div>
                 </template>  
@@ -68,7 +71,7 @@
                     { title: this.$t('Balance'), key: 'balance_user', align:'end',  width: "12%"},
                 ],
                 investments_headers: [
-                    { title: this.$t('Name'), sortable: true, key: 'name'},
+                    { title: this.$t('Name'), sortable: true, key: 'fullname'},
                     { title: this.$t('Active'), key: 'active',  width: "12%"},
                     { title: this.$t('Balance'), key: 'balance_user', align:'end',  width: "12%"},
                 ],
