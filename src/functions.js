@@ -179,9 +179,25 @@ export function percentage_generic_html(num, locale, decimals=2){
     }
 }
 
-export function listobjects_sum(lo,key){
+
+// Find the maximum number of decimal places
+export function listobjects_maxdecimals(lo, key){
+    let maxDecimals = 0;
+    lo.forEach(o => {
+        const decimalPart = o[key].toString().split('.')[1];
+        if (decimalPart) {
+        maxDecimals = Math.max(maxDecimals, decimalPart.length);
+        }
+    });
+    return maxDecimals
+
+}
+
+// Sums values in a lo respecting the max number of decimals
+export function listobjects_sum(lo,key,decimals=null){
     if (lo.length==0) return 0
-    return lo.reduce((accum,item) => accum + item[key], 0)
+    if (decimals==null) decimals=listobjects_maxdecimals(lo,key)
+    return my_round(lo.reduce((accum,item) => accum + item[key], 0), decimals)
 }
 
 export function listobjects_average_ponderated(lo,key1, key2){
