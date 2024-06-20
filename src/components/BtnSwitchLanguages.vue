@@ -37,9 +37,6 @@
                 this.current=item;
                 localStorage.locale=item.value;
                 this.singleton.setLanguage(item.value)
-
-                //console.log(this.$vuetify.locale.value)
-                //this.$vuetify.locale.current = item.value;
             },
             getStoredCurrent() {
                 if (!localStorage.locale || localStorage.locale==null) {
@@ -51,7 +48,6 @@
             }
         },
         created(){
-            console.log(this.languages)
             this.current=this.getStoredCurrent()
         }
     }
