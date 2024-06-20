@@ -7,6 +7,8 @@ import i18n from './i18n'
 import { createPinia } from 'pinia';
 import {router} from './routes.js'
 import mixin from '@/mixin'
+
+
 document.title=import.meta.env.VITE_APP_TITLE
 
 loadFonts()
