@@ -10,7 +10,7 @@
             </v-btn>
         </template>
         <v-list>
-            <v-list-item v-for="(item,index) in locales" :key="index" @click="switchLocale(item)">
+            <v-list-item v-for="(item,index) in languages" :key="index" @click="switchLocale(item)">
                 <v-list-item-title><v-icon :class="'mr-2 fi fib fi-'+item.flag" big></v-icon>{{ item.text }}</v-list-item-title>
             </v-list-item>
         </v-list>
@@ -18,17 +18,17 @@
 </template>
 
 <script>
-    var languages=[
-                    { text: "Español", value: "es", flag:"es"},
-                    { text: "English", value: "en", flag:"us"},
-                  ];
-
+    import  {singleton} from 'vuetify_rules'
     export default {
         name: 'BtnSwitchLanguages',
         data(){
             return {
-                locales: languages,
-                current: this.getStoredCurrent()
+                singleton,
+                languages: [
+                    { text: "Español", value: "es", flag:"es"},
+                    { text: "English", value: "en", flag:"us"},
+                ],
+                current: null,
             }
         },  
         methods:{
@@ -36,17 +36,19 @@
                 this.$i18n.locale=item.value;
                 this.current=item;
                 localStorage.locale=item.value;
-                //console.log(this.$vuetify.locale.value)
-                //this.$vuetify.locale.current = item.value;
+                this.singleton.setLanguage(item.value)
             },
             getStoredCurrent() {
                 if (!localStorage.locale || localStorage.locale==null) {
-                 localStorage.locale="en"
+                    localStorage.locale="en"
                 }
-                var item=languages.find(x => x.value === localStorage.locale)
+                var item=this.languages.find(x => x.value === localStorage.locale)
                 this.switchLocale(item);
                 return item;
             }
         },
+        created(){
+            this.current=this.getStoredCurrent()
+        }
     }
 </script>

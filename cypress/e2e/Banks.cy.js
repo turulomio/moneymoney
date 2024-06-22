@@ -1,9 +1,15 @@
-import { login_test_User } from "./commons"
+import { 
+  add_investment_from_Home,
+  login_test_User,
+} from "./commons"
 describe('e2e Banks', () => {
-  it('Banks', () => {    
-
+  it('Banks', () => {
     login_test_User(cy)
-    //Open lateral menu
+
+    // Create an investment
+    add_investment_from_Home(cy)
+
+    //Open lateral bank menu
     cy.getDataTest('LateralIcon').click()
     cy.getDataTest('LateralBanks').click()
 

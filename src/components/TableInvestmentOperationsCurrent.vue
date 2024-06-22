@@ -79,7 +79,7 @@
                 <td v-if="showinvestment"></td>
 
                 <td></td>          
-                <td v-if="all_items_have_same_product" class="text-right" v-html="items.reduce((accum,item) => accum + item.shares, 0)"></td>
+                <td v-if="all_items_have_same_product" class="text-right" v-html="listobjects_sum(items, 'shares')"></td>
                 <td v-if="!all_items_have_same_product"></td>          
                 <td v-if="all_items_have_same_product" class="text-right" v-html="currency_html(listobjects_average_ponderated(items,'price_' + output, 'shares'), total_currency)"></td>
                 <td v-if="!all_items_have_same_product"></td>
@@ -99,6 +99,7 @@
     </v-data-table>   
 </template>
 <script>    
+    import { listobjects_sum } from '@/functions'
     import { localtime, f } from 'vuetify_rules'
     export default {
         props: {
@@ -169,6 +170,7 @@
         methods: {
             f,
             localtime,
+            listobjects_sum,
             // Currencies are part of the item
             currency(item){
                 if (this.output=="account"){
