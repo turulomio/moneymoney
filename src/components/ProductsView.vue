@@ -6,13 +6,13 @@
         <DisplayValues :items="displayvalues"></DisplayValues>
     
         <v-tabs v-model="tab"  bg-color="secondary" dark>
-            <v-tab key="percentage_evolution">{{ $t("Percentage evolution")}}</v-tab>
-            <v-tab key="quotes_evolution">{{ $t("Quotes evolution")}}</v-tab>
-            <v-tab key="dps_estimations">{{ $t("DPS estimations")}}</v-tab>
-            <v-tab key="dps">{{ $t("DPS")}}</v-tab>
-            <v-tab key="ohcls">{{ $t("Daily OHCL")}}</v-tab>
-            <v-tab key="quotes">{{ $t("Quotes")}}</v-tab>
-            <v-tab key="chart">{{ $t("Chart")}}</v-tab>
+            <v-tab data-test="ProductsView_TabPercentageEvolution" key="percentage_evolution">{{ $t("Percentage evolution")}}</v-tab>
+            <v-tab data-test="ProductsView_TabQuotesEvolution" key="quotes_evolution">{{ $t("Quotes evolution")}}</v-tab>
+            <v-tab data-test="ProductsView_TabDpsEstimations" key="dps_estimations">{{ $t("DPS estimations")}}</v-tab>
+            <v-tab data-test="ProductsView_TabDps" key="dps">{{ $t("DPS")}}</v-tab>
+            <v-tab data-test="ProductsView_TabOHCLS" key="ohcls">{{ $t("Daily OHCL")}}</v-tab>
+            <v-tab data-test="ProductsView_TabQuotes" key="quotes">{{ $t("Quotes")}}</v-tab>
+            <v-tab data-test="ProductsView_TabChart" key="chart">{{ $t("Chart")}}</v-tab>
         </v-tabs>
         <v-window v-model="tab">
             <v-window-item key="percentage_evolution">     
