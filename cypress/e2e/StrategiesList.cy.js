@@ -20,6 +20,7 @@ describe('e2e Strateegies List', () => {
     cy.getDataTest('StrategyCU_Name').type("Range strategy")
     cy.getDataTest('StrategyCU_Investments').type("Cash{downArrow}{enter}")
     cy.getDataTest('StrategyCU_Type').click().type("pr{downArrow}{enter}")
+    cy.wait(1000) // A lot of products, needed more time
     cy.getDataTest('StrategyCU_Products').type("Apalanc{downArrow}{enter}")
     cy.getDataTest('StrategyCU_Comment').type("My strategy comment")
     cy.getDataTest('StrategyCU_Additional2').type("10000")
