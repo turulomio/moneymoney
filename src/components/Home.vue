@@ -15,7 +15,7 @@
                 <p>{{$t("Inactive investments with balance:")}}</p>
                 <ul>    
                     <li v-for="(investment,i) in alerts.investments_inactive_with_balance" :key="i">      - {{ 
-                        useStore().investments.get(hyperlinked_url("investments",investment.data.investments_id)).fullname }}. {{ currency_generic_html(investment.total_io_current.balance_investment,investment.data.currency_product)}}</li>
+                        useStore().investments.get(hyperlinked_url("investments",investment.data.investments_id))?.fullname }}. {{ currency_generic_html(investment.total_io_current.balance_investment,investment.data.currency_product)}}</li>
                 </ul>
             </v-alert>    
             <v-alert class="mx-15 px-10 mb-2" type="error" :key="i" variant="outlined" v-if="alerts.accounts_inactive_with_balance.length>0"> 
