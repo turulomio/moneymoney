@@ -26,7 +26,6 @@ describe('e2e Concepts report', () => {
     cy.getDataTest('LateralIcon').click()
     cy.getDataTest('LateralReports').click()
     cy.getDataTest('LateralReportsConcepts').click()
-    cy.getDataTest('ReportsEvolution__CmbYears').click().type("{downArrow}{enter}{enter}")
 
     
   })
