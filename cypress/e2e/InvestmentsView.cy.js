@@ -9,7 +9,6 @@ describe('e2e Investments', () => {
     add_investmentoperation_from_Home(cy) // Is a promise
 
     // See investments chart
-    cy.wait(300) //Some times doesn load Mymenuinline
     cy.getDataTest('MyMenuInline_Button').last().click()
     cy.getDataTest('MyMenuInline_Header0_Item0').click()
     cy.getDataTest('ChartInvestments_ButtonClose').click()
@@ -17,15 +16,12 @@ describe('e2e Investments', () => {
     // cy.getDataTest("InvestmentsView_ButtonClose").click()
 
     // Change investment active status twice
-    cy.wait(300)
     cy.getDataTest('MyMenuInline_Button').last().click()
     cy.getDataTest('MyMenuInline_Header0_Item1').last().click()
-    cy.wait(300)
     cy.getDataTest('MyMenuInline_Button').last().click()
     cy.getDataTest('MyMenuInline_Header0_Item1').last().click()
 
     // Evolution chart
-    cy.wait(300)
     cy.getDataTest('MyMenuInline_Button').last().click()
     cy.getDataTest('MyMenuInline_Header0_Item2').last().click()
     cy.getDataTest('ChartInvestmentsoperationsEvolution_ButtonClose').click()

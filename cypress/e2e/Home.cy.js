@@ -9,10 +9,6 @@ describe('e2e Home', () => {
   it('Home', () => {    
 
     login_test_User(cy)
-    cy.wait(300)
-
-
-
 
     // Test inactive account with balance
     cy.getDataTest('LateralIcon').click()
@@ -22,7 +18,6 @@ describe('e2e Home', () => {
     cy.get("@waitAccountId").then((account_id) =>{
       //Add ao to set a non zero balance
       console.log(`AccountsList_Table_Row${account_id}`)
-      cy.wait(300)
       cy.getDataTest(`AccountsList_Table_Row${account_id}`).click()
       add_accountoperation_from_AccountsView(cy)
       cy.getDataTest("AccountsView").type("{esc}")

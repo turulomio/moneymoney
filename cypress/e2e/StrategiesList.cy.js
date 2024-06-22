@@ -5,7 +5,6 @@ describe('e2e Strateegies List', () => {
     login_test_User(cy)
 
     // Add investments
-    cy.wait(300)
     add_investmentoperation_from_Home(cy) // Is a promise
     cy.getDataTest("InvestmentsView_ButtonClose").click()
 
