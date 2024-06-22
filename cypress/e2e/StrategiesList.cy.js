@@ -10,6 +10,7 @@ describe('e2e Strateegies List', () => {
 
 
     //Open strategies lateral menu
+    cy.wait(1000)
     cy.getDataTest('LateralIcon').click()
     cy.getDataTest('LateralStrategies').click()
 
@@ -35,6 +36,7 @@ describe('e2e Strateegies List', () => {
     cy.get("@strategy_id").then((strategy_id)  =>{
       // Opens strategy view
       cy.getDataTest(`StrategiesList_Table_IconView${strategy_id}`).click()
+      cy.wait(1000)
 
       // Closes strategy view
       cy.getDataTest('StrategiesView_ButtonClose').click()
