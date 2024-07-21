@@ -374,3 +374,4 @@ export function amount_to_invest( invested ){
     if (limit_34<=invested && invested < limit_45) return s.invest_amount_5
 
 }
+
