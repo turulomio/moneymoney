@@ -387,7 +387,6 @@ export const convertImageToDataURL = (url) => {
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0);
         const dataURL = canvas.toDataURL('image/png');
-        console.log(url, dataURL)
         resolve(dataURL);
       };
       img.onerror = (err) => {
