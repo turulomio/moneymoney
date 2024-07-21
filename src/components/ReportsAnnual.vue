@@ -426,7 +426,7 @@
                         var current_percentage=cumulative_gains/this.last_year_balance
                         var current_percentage_with_revaluation=(cumulative_gains+this.total_zero_risk_revaluation)/this.last_year_balance
                         this.current_assets_gains_percentage_message=f(this.$t("Currently, gains annual percentage is [0]."), [this.percentage_html(current_percentage)])+ "<br>" +
-                        f(this.$t("Considering the profits from risk-free investments ([0]), the annual percentage of profits would be [1]."), [this.localcurrency_html(this.total_zero_risk_revaluation),this.percentage_html(current_percentage_with_revaluation)])
+                        f(this.$t("Considering gains from risk-free investments ([0]), the annual percentage of gains would be [1]."), [this.localcurrency_html(this.total_zero_risk_revaluation),this.percentage_html(current_percentage_with_revaluation)])
 
 
                         this.loading_target=false
