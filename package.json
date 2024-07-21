@@ -20,7 +20,6 @@
     "echarts": "^5.5.1",
     "echarts-stat": "^1.2.0",
     "flag-icons": "^7.2.3",
-    "html2canvas": "^1.4.1",
     "lodash-es": "^4.17.21",
     "moment-timezone": "^0.5.45",
     "pdfmake": "^0.2.10",
