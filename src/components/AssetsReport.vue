@@ -200,6 +200,18 @@
                         ...this.report_assets_current_year_gainsbyproductstypes(),
                         ...this.report_accounts(),
                         ...this.report_investments(),
+
+
+                        { text: this.$t('Investments group by variable percentage'), id:'investments_by_variable_percentage', style: 'header2', tocItem: true , pageBreak:"before"},
+                        { image: this.payload["chart_pie_percentage"], width: 1200, alignment: 'center' },
+                        { text: this.$t('Investments group by type'), id:'investments_by_type', style: 'header2', tocItem: true ,pageBreak:"before"},
+                        { image: this.payload["chart_pie_producttype"], width: 1200, alignment: 'center' },
+                        { text: this.$t('Investments group by leverage'), id:'investments_by_leverage', style: 'header2', tocItem: true ,pageBreak:"before"},
+                        { image: this.payload["chart_pie_leverage"], width: 1200, alignment: 'center' },
+                        { text: this.$t('Investments group by product'), id:'investments_by_product', style: 'header2', tocItem: true ,pageBreak:"before"},
+                        { image: this.payload["chart_pie_product"], width: 1200, alignment: 'center' },
+                        { text: this.$t('Investments group by pci'), id:'investments_by_pci', style: 'header2', tocItem: true ,pageBreak:"before"},
+                        { image: this.payload["chart_pie_pci"], width: 1200, alignment: 'center' },
                     ],
                     styles: {
                         header1: { fontSize: 16, bold: true },
