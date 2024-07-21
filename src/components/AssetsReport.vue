@@ -18,13 +18,13 @@
 
             </v-card>
         </div>
-        <div ref="chart_assets" v-if="data">
-            <!-- <ChartEvolutionAssets ref="chart_assets"  v-if="unogenerator_working" reference="chart_assets" @finished="on_chart_finished" /> -->
+        <div v-if="data">
+            <ChartEvolutionAssets hidden v-if="unogenerator_working" reference="chart_assets" @finished="on_chart_finished" />
             <ChartPie name="Investments by product" hidden :items="echart_products_items" reference="chart_pie_product" :heigth="height" :show_data="false" @finished="on_chart_finished" />
-            <!-- <ChartPie name="Investments by pci" hidden :items="echart_pci_items" reference="chart_pie_pci" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
+            <ChartPie name="Investments by pci" hidden :items="echart_pci_items" reference="chart_pie_pci" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
             <ChartPie name="Investments by variable percentage" hidden :items="echart_percentage_items" reference="chart_pie_percentage" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
             <ChartPie name="Investments by product type" hidden :items="echart_producttype_items" reference="chart_pie_producttype" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
-            <ChartPie name="Investments by leverage" hidden :items="echart_leverage_items" reference="chart_pie_leverage" :heigth="height" :show_data="false" @finished="on_chart_finished"/> -->
+            <ChartPie name="Investments by leverage" hidden :items="echart_leverage_items" reference="chart_pie_leverage" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
         </div>
     </div>
 </template>
@@ -32,7 +32,7 @@
 <script>
     import axios from 'axios'
     import { useStore } from "@/store"
-    // import ChartEvolutionAssets from './ChartEvolutionAssets.vue'
+    import ChartEvolutionAssets from './ChartEvolutionAssets.vue'
     import ChartPie from './ChartPie.vue'
     import { my_round, f } from 'vuetify_rules'
     import {sumBy} from "lodash-es"
@@ -48,7 +48,7 @@
     export default {
         components:{
             ChartPie,
-            // ChartEvolutionAssets,
+            ChartEvolutionAssets,
         },
         data(){
             return {
@@ -141,11 +141,10 @@
                 return adapted
             },
             can_launch(){
+                for (let key in this.payload) {
+                    if (this.payload[key]==null) return false
+                }
                 return true
-                // for (let key in this.payload) {
-                //     if (this.payload[key]==null) return false
-                // }
-                // return true
             },
         },
         methods:{
@@ -177,10 +176,6 @@
             async launch_report_alternative(){
                 this.loading=true //False to debugging
 
-
-                // const canvas = await html2canvas(this.$refs.chart_assets);
-                // const imgAssetsReport = canvas.toDataURL('image/png');
-
                 const docDefinition = {
                     content: [    
                         { image: await pdfmake_convertImageToDataURL(imgMoneymoney), width: 200, alignment: 'center', margin: [0, 125, 0, 0] },
@@ -197,16 +192,14 @@
                         ...this.report_assets(),
                         ...this.report_assets_by_bank(),
                         ...this.report_current_year_evolution(),
-                        ...this.report_assets_current_year_detail(),
+                        ...this.report_assets_current_year_detail(),       
 
-                        { text: 'Report Title', style: 'header1' },
-                        { text: 'This is a detailed report generated in JavaScript.', style: 'body', 
-                        linkToDestination: 'Personal_settings', },        
-                        {
-                            image: this.payload["chart_pie_product"],
-                            width: 500,
-                            alignment: 'center'
-                        },
+                        { text: this.$t('Assets graphical evolution'), id:'assets_graphical_evolution', style: 'header2', tocItem: true },
+                        { image: this.payload["chart_assets"], width: 500, alignment: 'center' },
+
+                        ...this.report_assets_current_year_gainsbyproductstypes(),
+                        ...this.report_accounts(),
+                        ...this.report_investments(),
                     ],
                     styles: {
                         header1: { fontSize: 16, bold: true },
@@ -345,6 +338,73 @@
 
                 return r
             },
+            report_assets_current_year_gainsbyproductstypes(){
+                var r=[]
+                r.push({ text: this.$t('Current year investments gains group by product type'), id:'assets_current_year_gains_product_type', style: 'header2', tocItem: true })
+                var headers=this.pdfmake_loo_to_table_guess_headers(this.results.annual_gainsbyproductstypes, ["name","gains_gross","dividends_gross","gains_net","dividends_net"])
+
+                headers[0].title=this.$t("Product type")
+                headers[1].title=this.$t("Gross gains")
+                headers[2].title=this.$t("Gross dividends")
+                headers[3].title=this.$t("Net gains")
+                headers[4].title=this.$t("Net dividends")
+                headers[1].currency=this.useStore().profile.currency
+                headers[2].currency=this.useStore().profile.currency
+                headers[3].currency=this.useStore().profile.currency
+                headers[4].currency=this.useStore().profile.currency
+                headers[0].total=this.$t("Total")
+                headers[1].total="#SUM"
+                headers[2].total="#SUM"
+                headers[3].total="#SUM"
+                headers[4].total="#SUM"
+                r.push(this.pdfmake_loo_to_table(this.results.annual_gainsbyproductstypes, headers, "table8"))
+                
+                r.push({ text: f(this.$t('Gross gains + Gross dividends = [0].'), [this.results.dividends_gross,]), style: 'body' }) 
+                r.push({ text: f(this.$t('Net gains + Net dividends = [0].'), [this.results.dividends_net,]), style: 'body' }) 
+                return r
+            },
+            report_accounts(){
+                var r=[]
+                r.push({ text: this.$t('Current accounts'), id:'current_accounts', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before" })
+                var headers=this.pdfmake_loo_to_table_guess_headers(this.results.accounts, ["name","number","balance_account","balance_user"])
+
+                headers[0].title=this.$t("Account name")
+                headers[1].title=this.$t("Number")
+                headers[2].title=this.$t("Balance")
+                headers[3].title=this.$t("User currency balance")
+                headers[1].currency=this.useStore().profile.currency
+                headers[2].currency=this.useStore().profile.currency
+                headers[3].currency="u"
+                headers[0].total=this.$t("Total")
+                headers[3].total="#SUM"
+                r.push(this.pdfmake_loo_to_table(this.results.accounts, headers, "table8"))
+                return r
+            },
+            report_investments(){
+                var r=[]
+                r.push({ text: this.$t('Current investments'), id:'current_investments', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+                r.push({ text: this.$t('Next list is sorted by the distance in percent to the selling point.'), style: 'body' }) 
+
+                var headers=this.pdfmake_loo_to_table_guess_headers(this.results.investments, ["fullname","invested_user","balance_user","gains_user", "percentage_invested", "percentage_selling_point"])
+
+                headers[0].title=this.$t("Investment name")
+                headers[1].title=this.$t("Invested")
+                headers[2].title=this.$t("Balance")
+                headers[3].title=this.$t("Gains")
+                headers[4].title=this.$t("% invested")
+                headers[5].title=this.$t("% selling point")
+                headers[1].currency=this.useStore().profile.currency
+                headers[2].currency=this.useStore().profile.currency
+                headers[3].currency=this.useStore().profile.currency
+                headers[4].currency="%"
+                headers[5].currency="%"
+                headers[0].total=this.$t("Total")
+                headers[1].total="#SUM"
+                headers[2].total="#SUM"
+                headers[3].total="#SUM"
+                r.push(this.pdfmake_loo_to_table(this.results.investments, headers, "table8"))
+                return r
+            },
             get_report_data(){
                 const year=new Date().getFullYear()
                 axios.all([
@@ -353,17 +413,20 @@
                     axios.get(`${this.useStore().apiroot}/reports/annual/income/${year}/`, this.myheaders()),//resRAI
                     axios.get(`${this.useStore().apiroot}/reports/annual/gainsbyproductstypes/${year}/`, this.myheaders()),//resRAG
                     axios.get(`${this.useStore().apiroot}/reports/annual/revaluation/?only_zero=true`, this.myheaders()),//resRAR
-                ]).then(([resBWB, resRA, resRAI, resRAG, resRAR]) => {
+                    axios.get(`${this.useStore().apiroot}/api/accounts/withbalance/?active=true`, this.myheaders()),//resAWB
+                    axios.get(`${this.useStore().apiroot}/api/investments/withbalance/?active=true`, this.myheaders()),//resIWB
+                ]).then(([resBWB, resRA, resRAI, resRAG, resRAR, resAWB, resIWB]) => {
                     this.results.last_year_balance=resRA.data.last_year_balance
                     this.results.annual=resRA.data.data
                     this.results.balance=this.results.annual[this.results.annual.length-1].total
                     this.results.annual_incomes=resRAI.data
                     this.results.annual_gainsbyproductstypes=resRAG.data
                     this.results.dividends_net=this.sumBy(this.annual_gainsbyproductstypes,"dividends_net")
-                    console.log(this.results.dividends_net,"DIVIDENS_NDS")
                     this.results.dividends_gross=this.sumBy(this.annual_gainsbyproductstypes,"dividends_gross")
                     this.results.annual_revaluation=resRAR.data
                     this.results.assets_by_bank=resBWB.data
+                    this.results.accounts=resAWB.data
+                    this.results.investments=resIWB.data
 
                     console.log(this.results)
                 }, (error) => {
