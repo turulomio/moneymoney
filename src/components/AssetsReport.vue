@@ -10,18 +10,21 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn data-test="AssetsReport_ButtonGenerate" class="pa-4" :loading="loading" color="primary" :disabled="!can_launch" @click="launch_report">{{ (can_launch)?  $t("Generate report"): $t("Report is being prepared. Please be patient...") }}</v-btn>
+
                     <v-spacer></v-spacer>
+
                 </v-card-actions>
+                    <v-btn data-test="AssetsReport_ButtonGenerateAlternative" class="pa-4" :loading="loading" color="primary" :disabled="!can_launch" @click="launch_report_alternative">{{ (can_launch)?  $t("Generate report alternative"): $t("Report is being prepared. Please be patient...") }}</v-btn>
 
             </v-card>
         </div>
-        <div v-if="data">
-            <ChartEvolutionAssets hidden v-if="unogenerator_working" reference="chart_assets" @finished="on_chart_finished" />
+        <div ref="chart_assets" v-if="data">
+            <!-- <ChartEvolutionAssets ref="chart_assets"  v-if="unogenerator_working" reference="chart_assets" @finished="on_chart_finished" /> -->
             <ChartPie name="Investments by product" hidden :items="echart_products_items" reference="chart_pie_product" :heigth="height" :show_data="false" @finished="on_chart_finished" />
-            <ChartPie name="Investments by pci" hidden :items="echart_pci_items" reference="chart_pie_pci" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
+            <!-- <ChartPie name="Investments by pci" hidden :items="echart_pci_items" reference="chart_pie_pci" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
             <ChartPie name="Investments by variable percentage" hidden :items="echart_percentage_items" reference="chart_pie_percentage" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
             <ChartPie name="Investments by product type" hidden :items="echart_producttype_items" reference="chart_pie_producttype" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
-            <ChartPie name="Investments by leverage" hidden :items="echart_leverage_items" reference="chart_pie_leverage" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
+            <ChartPie name="Investments by leverage" hidden :items="echart_leverage_items" reference="chart_pie_leverage" :heigth="height" :show_data="false" @finished="on_chart_finished"/> -->
         </div>
     </div>
 </template>
@@ -29,13 +32,19 @@
 <script>
     import axios from 'axios'
     import { useStore } from "@/store"
-    import ChartEvolutionAssets from './ChartEvolutionAssets.vue'
+    // import ChartEvolutionAssets from './ChartEvolutionAssets.vue'
     import ChartPie from './ChartPie.vue'
     import { my_round } from 'vuetify_rules'
+
+    // import html2canvas from 'html2canvas';
+    import pdfMake from "pdfmake/build/pdfmake";
+    import pdfFonts from "pdfmake/build/vfs_fonts";
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
     export default {
         components:{
             ChartPie,
-            ChartEvolutionAssets,
+            // ChartEvolutionAssets,
         },
         data(){
             return {
@@ -123,10 +132,11 @@
                 return adapted
             },
             can_launch(){
-                for (let key in this.payload) {
-                    if (this.payload[key]==null) return false
-                }
                 return true
+                // for (let key in this.payload) {
+                //     if (this.payload[key]==null) return false
+                // }
+                // return true
             },
         },
         methods:{
@@ -148,6 +158,42 @@
                 }, (error) => {
                     this.parseResponseError(error)
                 });
+            },
+            async launch_report_alternative(){
+                this.loading=true //False to debugging
+
+
+                // const canvas = await html2canvas(this.$refs.chart_assets);
+                // const imgAssetsReport = canvas.toDataURL('image/png');
+
+                const docDefinition = {
+                    content: [
+                    { text: 'Report Title', style: 'header' },
+                    { text: 'This is a detailed report generated in JavaScript.', style: 'body' },        
+                    {
+                        image: this.payload["chart_pie_product"],
+                        width: 500,
+                        alignment: 'center'
+                    },
+                    {
+                        table: {
+                        headerRows: 1,
+                        widths: ['*', 'auto', 100, '*'],
+                        body: [
+                            ['First', 'Second', 'Third', 'The last one'],
+                            ['Value 1', 'Value 2', 'Value 3', 'Value 4'],
+                            [{ text: 'Bold value', bold: true }, 'Val 2', 'Val 3', 'Val 4']
+                        ]
+                        }
+                    }
+                    ],
+                    styles: {
+                    header: { fontSize: 18, bold: true },
+                    body: { fontSize: 12 }
+                    }
+                };
+                pdfMake.createPdf(docDefinition).download('report.pdf');
+                this.loading=false
             },
 
             update_pies(){
