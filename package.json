@@ -20,6 +20,7 @@
     "echarts": "^5.5.1",
     "echarts-stat": "^1.2.0",
     "flag-icons": "^7.2.3",
+    "lodash-es": "^4.17.21",
     "moment-timezone": "^0.5.45",
     "pinia": "^2.1.7",
     "roboto-fontface": "*",

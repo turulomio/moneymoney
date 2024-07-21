@@ -213,6 +213,7 @@
 
     import axios from 'axios'
     import { useStore } from "@/store"
+    import { sumBy } from 'lodash-es';
     import { localtime, RulesFloat,f } from 'vuetify_rules'
     import moment from 'moment'
     import ReportsAnnualIncomeDetail from './ReportsAnnualIncomeDetail.vue'
@@ -278,6 +279,7 @@
                 loading_annual:true,
                 loading_annual_incomes:true,
                 loading_annual_gainsbyproductstypes:true,
+                total_zero_risk_revaluation:0,
 
                 // REPORTS ANNUAL INCOME DETAILS
                 dialog_income_details:false,
@@ -422,7 +424,11 @@
                         }
 
                         var current_percentage=cumulative_gains/this.last_year_balance
-                        this.current_assets_gains_percentage_message=f(this.$t("Currently, gains annual percentage is [0]."), [this.percentage_html(current_percentage)])
+                        var current_percentage_with_revaluation=(cumulative_gains+this.total_zero_risk_revaluation)/this.last_year_balance
+                        this.current_assets_gains_percentage_message=f(this.$t("Currently, gains annual percentage is [0]."), [this.percentage_html(current_percentage)])+ "<br>" +
+                        f(this.$t("Considering the profits from risk-free investments ([0]), the annual percentage of profits would be [1]."), [this.localcurrency_html(this.total_zero_risk_revaluation),this.percentage_html(current_percentage_with_revaluation)])
+
+
                         this.loading_target=false
                     })
                 }, (error) => {
@@ -439,8 +445,9 @@
                 axios.all([
                     axios.get(`${this.useStore().apiroot}/reports/annual/${this.year}/`, this.myheaders()),
                     axios.get(`${this.useStore().apiroot}/reports/annual/income/${this.year}/`, this.myheaders()),
-                    axios.get(`${this.useStore().apiroot}/reports/annual/gainsbyproductstypes/${this.year}/`, this.myheaders())
-                ]).then(([resRA, resRAI, resRAG]) => {
+                    axios.get(`${this.useStore().apiroot}/reports/annual/gainsbyproductstypes/${this.year}/`, this.myheaders()),
+                    axios.get(`${this.useStore().apiroot}/reports/annual/revaluation/?only_zero=true`, this.myheaders())
+                ]).then(([resRA, resRAI, resRAG, resRAR]) => {
                     this.last_year_balance=resRA.data.last_year_balance
                     this.last_year_balance_string=f(this.$t("Last year balance ([0]) is [1]"), [
                         localtime(resRA.data.dtaware_last_year),
@@ -452,6 +459,7 @@
                     this.loading_annual_incomes=false
                     this.total_annual_gainsbyproductstypes=resRAG.data
                     this.loading_annual_gainsbyproductstypes=false
+                    this.total_zero_risk_revaluation=sumBy(resRAR.data,"current_year_gains_user")
                     this.refreshTotalTarget()
                     this.refreshInvestOrWork()
                     this.refreshMakeEndsMeet()
