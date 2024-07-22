@@ -38,7 +38,7 @@
     import {sumBy} from "lodash-es"
 
     import pdfMake from "pdfmake/build/pdfmake";
-    import pdfFonts from "pdfmake/build/vfs_fonts";
+    import * as pdfFonts from "pdfmake/build/vfs_fonts";
     import {pdfmake_convertImageToDataURL, pdfmake_percentage_string, pdfmake_loo_to_table, pdfmake_loo_to_table_guess_headers} from "@/pdfmake_helpers"
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
 

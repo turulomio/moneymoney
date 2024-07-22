@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node --max-old-space-size=8192 node_modules/.bin/vite build",
     "preview": "vite preview",
     "translate": "./node_modules/.bin/vue-i18n-extract",
     "test": "vitest",
