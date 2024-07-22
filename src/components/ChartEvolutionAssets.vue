@@ -1,6 +1,5 @@
-
 <template>
-    <div ref="div">
+    <div ref="div" :style="hidden? 'visibility: hidden': ''">
         <h1>{{ $t("Evolution assets chart")}}</h1>
         <div class="d-flex justify-center mb-4 mt-4" >
             <v-card width="30%" variant="flat">
@@ -163,9 +162,6 @@
                         this.zerorisk.push([o.datetime, o.zerorisk_user])
 
                     })
-                    if (this.hidden){
-                        this.$refs.div.style.visibility="hidden"
-                    } 
 
                     this.chart = echarts.init(this.$refs.chart);
                     this.chart.on('finished', this.on_finished);

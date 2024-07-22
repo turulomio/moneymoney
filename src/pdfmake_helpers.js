@@ -40,7 +40,9 @@ export function pdfmake_convertImageToDataURL(url){
     var headers=[]
     keys_array.forEach( key => {
         let alignment="left"
-        if (isNumber(loo[0][key])){
+        if (key.currency_column=="%"){
+            alignment="right"
+        } else if (isNumber(loo[0][key])){
             alignment="right"
         }
 

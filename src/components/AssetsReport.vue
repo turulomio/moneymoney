@@ -1,25 +1,21 @@
 <template>
     <div>
         <h1>{{ $t("Assets Report") }}</h1>
-        <div class="d-flex justify-center mb-4" width="20%">                
-            <v-card width="20%" class="pa-4">      
-    
-                <v-select class="pa-4" density="compact" label="Select a format" v-model="format" :items="['pdf','odt','docx']"></v-select>       
-                <v-alert density="compact" class=" px-10" outlined :type="(unogenerator_working) ? 'success':'error'"> {{ (unogenerator_working) ? $t("UnoGenerator is ready"): $t("UnoGenerator is not working. Please contact system administrator")}}</v-alert>
-
+        <div class="d-flex justify-center mb-4" width="40%">
+            <v-card width="40%" class="pa-4">      
+                <v-text-field v-model="password" type="password" :label="$t('Set pdf password if necessary')"></v-text-field>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn data-test="AssetsReport_ButtonGenerate" class="pa-4" :loading="loading" color="primary" :disabled="!can_launch" @click="launch_report">{{ (can_launch)?  $t("Generate report"): $t("Report is being prepared. Please be patient...") }}</v-btn>
+                    <v-btn data-test="AssetsReport_ButtonGenerate" class="pa-4" :loading="loading" color="primary" :disabled="loading" @click="launch_report">{{ (!loading)?  $t("Generate report"): $t("Report is being prepared. Please be patient...") }}</v-btn>
 
                     <v-spacer></v-spacer>
 
                 </v-card-actions>
-                    <v-btn data-test="AssetsReport_ButtonGenerateAlternative" class="pa-4" :loading="loading" color="primary" :disabled="!can_launch" @click="launch_report_alternative">{{ (can_launch)?  $t("Generate report alternative"): $t("Report is being prepared. Please be patient...") }}</v-btn>
 
             </v-card>
         </div>
-        <div v-if="data">
-            <ChartEvolutionAssets hidden v-if="unogenerator_working" reference="chart_assets" @finished="on_chart_finished" />
+        <div v-if="!loading">
+            <ChartEvolutionAssets hidden reference="chart_assets" @finished="on_chart_finished" />
             <ChartPie name="Investments by product" hidden :items="echart_products_items" reference="chart_pie_product" :heigth="height" :show_data="false" @finished="on_chart_finished" />
             <ChartPie name="Investments by pci" hidden :items="echart_pci_items" reference="chart_pie_pci" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
             <ChartPie name="Investments by variable percentage" hidden :items="echart_percentage_items" reference="chart_pie_percentage" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
@@ -55,39 +51,21 @@
         data(){
             return {
                 loading:false,
-                data:null,
                 key:0,
                 height:100,
 
                 imgMoneymoney,
+                password:"",
 
-                format:"pdf",
-                unogenerator_working:false,
                 method:"Current",
-
-                payload:{
-                    format: "pdf",
-                    chart_pie_product: null,
-                    chart_pie_pci: null,
-                    chart_pie_percentage: null,
-                    chart_pie_producttype: null,
-                    chart_pie_leverage: null,
-                    chart_assets: null,
-                },
-
                 results:{},
 
-            }
-        },       
-        watch:{
-            format(){
-                this.payload.format=this.format
             }
         },
         computed:{
             /// COPIED FROM REPORTSINVESTMENTSCLASSES
             echart_products_items: function(){
-                var products= this.data.by_product
+                var products= this.results.pies.by_product
                 var adapted
                 if (this.method=="Current"){
                     adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
@@ -98,7 +76,7 @@
                 return adapted
             },
             echart_pci_items: function(){
-                var products= this.data.by_pci
+                var products= this.results.pies.by_pci
                 var adapted
                 if (this.method=="Current"){
                     adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
@@ -109,7 +87,7 @@
                 return adapted
             },
             echart_percentage_items: function(){
-                var products= this.data.by_percentage
+                var products= this.results.pies.by_percentage
                 var adapted
 
                 if (this.method=="Current"){
@@ -121,7 +99,7 @@
                 return adapted
             },
             echart_producttype_items: function(){
-                var products= this.data.by_producttype
+                var products= this.results.pies.by_producttype
                 var adapted
                 if (this.method=="Current"){
                     adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
@@ -132,7 +110,7 @@
                 return adapted
             },
             echart_leverage_items: function(){
-                var products= this.data.by_leverage
+                var products= this.results.pies.by_leverage
                 var adapted
                 if (this.method=="Current"){
                     adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
@@ -141,12 +119,6 @@
                 }
                 adapted=adapted.filter(o => o.value!=0)
                 return adapted
-            },
-            can_launch(){
-                for (let key in this.payload) {
-                    if (this.payload[key]==null) return false
-                }
-                return true
             },
         },
         methods:{
@@ -159,24 +131,7 @@
             pdfmake_loo_to_table,
             pdfmake_loo_to_table_guess_headers,
             pdfmake_percentage_string,
-            launch_report(){
-                this.loading=true //False to debugging
-
-                axios.post(`${this.useStore().apiroot}/assets/report/`, this.payload, this.myheaders())
-                .then((response) => {
-                    this.loading=false
-                    var link = window.document.createElement('a');
-
-                    link.href = `data:${response.data.mime};base64,${response.data.data}`
-                    link.download = response.data.filename
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
-            async launch_report_alternative(){
+            async launch_report(){
                 this.loading=true //False to debugging
 
                 const docDefinition = {
@@ -204,7 +159,7 @@
                         ...this.report_assets_current_year_detail(),       
 
                         { text: this.$t('2.4. Assets graphical evolution'), id:'assets_graphical_evolution', style: 'header2', tocItem: true, pageBreak:"before", pageOrientation:"landscape" },
-                        { image: this.payload["chart_assets"], width: 810, height:490, alignment: 'left' },
+                        { image: this.results.pies_payload["chart_assets"], width: 810, height:490, alignment: 'left' },
 
                         ...this.report_assets_current_year_gainsbyproductstypes(),
                         ...this.report_accounts(),
@@ -213,15 +168,15 @@
 
 
                         { text: this.$t('4.3. Investments group by variable percentage'), id:'investments_by_variable_percentage', style: 'header2', tocItem: true , pageBreak:"before"},
-                        { image: this.payload["chart_pie_percentage"], width: 1200, alignment: 'center' },
+                        { image: this.results.pies_payload["chart_pie_percentage"], width: 1200, alignment: 'center' },
                         { text: this.$t('4.4. Investments group by type'), id:'investments_by_type', style: 'header2', tocItem: true ,pageBreak:"before"},
-                        { image: this.payload["chart_pie_producttype"], width: 1200, alignment: 'center' },
+                        { image: this.results.pies_payload["chart_pie_producttype"], width: 1200, alignment: 'center' },
                         { text: this.$t('4.5. Investments group by leverage'), id:'investments_by_leverage', style: 'header2', tocItem: true ,pageBreak:"before"},
-                        { image: this.payload["chart_pie_leverage"], width: 1200, alignment: 'center' },
+                        { image: this.results.pies_payload["chart_pie_leverage"], width: 1200, alignment: 'center' },
                         { text: this.$t('4.6. Investments group by product'), id:'investments_by_product', style: 'header2', tocItem: true ,pageBreak:"before"},
-                        { image: this.payload["chart_pie_product"], width: 1200, alignment: 'center' },
+                        { image: this.results.pies_payload["chart_pie_product"], width: 1200, alignment: 'center' },
                         { text: this.$t('4.7. Investments group by pci'), id:'investments_by_pci', style: 'header2', tocItem: true ,pageBreak:"before"},
-                        { image: this.payload["chart_pie_pci"], width: 1200, alignment: 'center' },
+                        { image: this.results.pies_payload["chart_pie_pci"], width: 1200, alignment: 'center' },
                         
                         ...this.report_orders(),
                         ...this.report_dividends(),
@@ -246,31 +201,6 @@
                 this.loading=false
             },
 
-            update_pies(){
-                this.loading=true
-                axios.get(`${this.useStore().apiroot}/investments/classes/`, this.myheaders())
-                .then((response) => {
-                    this.data=response.data
-                    this.loading=false
-                    this.key=this.key+1
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
-            check_unogenerator_server(){
-                axios.get(`${this.useStore().apiroot}/unogenerator/working/`, this.myheaders())
-                .then((response) => {
-                    this.unogenerator_working=response.data
-                    this.key=this.key+1
-                }, (error) => {
-                    this.unogenerator_working=false
-                    this.parseResponseError(error)
-                });
-
-            },
-            on_chart_finished(reference,image){
-                this.payload[reference]=image
-            },
             report_assets(){
                 var r=[]
                 r.push({ text: this.$t('2. Assets'), id:'assets', style: 'header1', tocItem: true })
@@ -417,6 +347,8 @@
                 r.push({ text: this.$t('4.1. Investments list'), id:'investments_list', style: 'header2', tocItem: true }) 
                 r.push({ text: this.$t('Next list is sorted by the distance in percent to the selling point.'), style: 'body' }) 
 
+
+                this.results.investments=this.orderBy(this.results.investments,[function(o) { return o["percentage_selling_point"] === null ? -Infinity : o["percentage_selling_point"]; }], ['asc'])
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.investments, ["fullname","invested_user","balance_user","gains_user", "percentage_invested", "percentage_selling_point"])
 
                 headers[0].title=this.$t("Investment name")
@@ -434,6 +366,13 @@
                 headers[1].total="#SUM"
                 headers[2].total="#SUM"
                 headers[3].total="#SUM"
+                headers[0].width="50%"
+                headers[1].width="10%"
+                headers[2].width="10%"
+                headers[3].width="10%"
+                headers[4].width="10%"
+                headers[5].width="10%"
+                headers[5].alignment="right"
                 r.push(this.pdfmake_loo_to_table(this.results.investments, headers, "table8"))
 
                 if (this.results.invested_user!=0){
@@ -552,8 +491,10 @@
                 return r
             },  
             get_report_data(){
+                this.loading=true
                 const year=new Date().getFullYear()
                 axios.all([
+                    axios.get(`${this.useStore().apiroot}/investments/classes/`, this.myheaders()),//resPies
                     axios.get(`${this.useStore().apiroot}/api/banks/withbalance/?active=true`, this.myheaders()),//resBWB
                     axios.get(`${this.useStore().apiroot}/reports/annual/${year}/`, this.myheaders()),//resRA
                     axios.get(`${this.useStore().apiroot}/reports/annual/income/${year}/`, this.myheaders()),//resRAI
@@ -565,7 +506,17 @@
                     axios.get(`${this.useStore().apiroot}/api/orders/?active=true`, this.myheaders()),//resOrders
                     axios.get(`${this.useStore().apiroot}/reports/dividends/`, this.myheaders()), //resDividends
                     axios.get(`${this.useStore().apiroot}/reports/ranking/`, this.myheaders()), //resRanking
-                ]).then(([resBWB, resRA, resRAI, resRAG, resRAR, resAWB, resIWB,resIOC,resOrders,resDividends, resRanking]) => {
+                ]).then(([resPies, resBWB, resRA, resRAI, resRAG, resRAR, resAWB, resIWB,resIOC,resOrders,resDividends, resRanking]) => {
+                    this.results.pies=resPies.data
+                    console.log(this.results.pies)
+                    this.results.pies_payload={
+                        chart_pie_product: null,
+                        chart_pie_pci: null,
+                        chart_pie_percentage: null,
+                        chart_pie_producttype: null,
+                        chart_pie_leverage: null,
+                        chart_assets: null,
+                    },
                     this.results.last_year_balance=resRA.data.last_year_balance
                     this.results.annual=resRA.data.data
                     this.results.balance=this.results.annual[this.results.annual.length-1].total
@@ -588,9 +539,13 @@
                     this.results.ranking=this.ranking_filter_data(resRanking.data)
 
                     console.log(this.results)
+                    this.loading=false
                 }, (error) => {
                     this.parseResponseError(error)
                 })
+            },
+            on_chart_finished(reference,image){
+                this.results.pies_payload[reference]=image
             },
             ranking_filter_data(ios){
                 var r=[]
@@ -613,9 +568,6 @@
 
         },
         created(){
-            this.loading=true
-            this.check_unogenerator_server()
-            this.update_pies()
             this.get_report_data()
         }
     }
