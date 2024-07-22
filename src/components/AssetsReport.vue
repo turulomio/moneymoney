@@ -180,6 +180,12 @@
                 this.loading=true //False to debugging
 
                 const docDefinition = {
+                    info: {
+                        title: this.$t("Money money assets report"),
+                        author: `Money Money v${this.useStore().version}`,
+                        subject: this.$t("Money money assets report"),
+                        keywords: 'assets report',
+                    },
                     content: [    
                         { image: await pdfmake_convertImageToDataURL(imgMoneymoney), width: 200, alignment: 'center', margin: [0, 125, 0, 0] },
                         { text: 'Assets report', style: 'header1', alignment:'center' },
@@ -220,15 +226,15 @@
                         ...this.report_orders(),
                         ...this.report_dividends(),
                         ...this.report_ranking(),
-                        { text: this.$t('About Money Money'), id:'about', style: 'header1', tocItem: true ,pageBreak:"before"},
+                        { text: this.$t('About Money Money'), id:'about', style: 'header1', tocItem: true ,pageBreak:"before",pageOrientation:"portrait"},
                         { text: this.$t("Money Money is a opensource software to manage your personal finances."), style: 'body' },
                     ],
                     styles: {
-                        header1: { fontSize: 16, bold: true },
-                        header2: { fontSize: 14, bold: true , margin: [0, 0, 0, 30]},
-                        body: { fontSize: 11 },
-                        table8: {fontSize:8},
-                        table12: {fontSize:12},
+                        header1: { fontSize: 16, bold: true , margin: [0, 6, 0, 6]},
+                        header2: { fontSize: 14, bold: true , margin: [6, 4, 0, 4]},
+                        body: { fontSize: 11 ,margin:[0,2,0,2]},
+                        table8: {fontSize:8,margin:[0,4,0,4]},
+                        table12: {fontSize:12,margin:[0,4,0,4]},
                     },
 
                     footer: function(currentPage, pageCount) {
