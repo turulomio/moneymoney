@@ -6,7 +6,7 @@
                 <v-text-field v-model="password" type="password" :label="$t('Set pdf password if necessary')"></v-text-field>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn data-test="AssetsReport_ButtonGenerate" class="pa-4" :loading="loading" color="primary" :disabled="loading" @click="launch_report">{{ (!loading)?  $t("Generate report"): $t("Report is being prepared. Please be patient...") }}</v-btn>
+                    <v-btn data-test="AssetsReport_ButtonGenerate" class="pa-4" :loading="creating" color="primary" :disabled="loading" @click="launch_report">{{ (!loading)?  $t("Generate report"): $t("Data is being retrieving. Please be patient...") }}</v-btn>
 
                     <v-spacer></v-spacer>
 
@@ -15,12 +15,12 @@
             </v-card>
         </div>
         <div v-if="!loading">
-            <ChartEvolutionAssets hidden reference="chart_assets" @finished="on_chart_finished" />
-            <ChartPie name="Investments by product" hidden :items="echart_products_items" reference="chart_pie_product" :heigth="height" :show_data="false" @finished="on_chart_finished" />
-            <ChartPie name="Investments by pci" hidden :items="echart_pci_items" reference="chart_pie_pci" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
-            <ChartPie name="Investments by variable percentage" hidden :items="echart_percentage_items" reference="chart_pie_percentage" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
-            <ChartPie name="Investments by product type" hidden :items="echart_producttype_items" reference="chart_pie_producttype" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
-            <ChartPie name="Investments by leverage" hidden :items="echart_leverage_items" reference="chart_pie_leverage" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
+            <ChartEvolutionAssets hidden ref="chart_assets" />
+            <ChartPie name="Investments by product" hidden :items="echart_products_items" ref="chart_pie_product" :heigth="height" :show_data="false"/>
+            <ChartPie name="Investments by pci" hidden :items="echart_pci_items" ref="chart_pie_pci" :heigth="height" :show_data="false"/>
+            <ChartPie name="Investments by variable percentage" hidden :items="echart_percentage_items" ref="chart_pie_percentage" :heigth="height" :show_data="false"/>
+            <ChartPie name="Investments by product type" hidden :items="echart_producttype_items" ref="chart_pie_producttype" :heigth="height" :show_data="false"/>
+            <ChartPie name="Investments by leverage" hidden :items="echart_leverage_items" ref="chart_pie_leverage" :heigth="height" :show_data="false"/>
         </div>
     </div>
 </template>
@@ -50,7 +50,8 @@
         },
         data(){
             return {
-                loading:false,
+                loading:true,
+                creating:false,
                 key:0,
                 height:100,
 
@@ -132,8 +133,8 @@
             pdfmake_loo_to_table_guess_headers,
             pdfmake_percentage_string,
             async launch_report(){
-                this.loading=true //False to debugging
 
+                this.creating=true
                 const docDefinition = {
                     info: {
                         title: this.$t("Money money assets report"),
@@ -159,7 +160,7 @@
                         ...this.report_assets_current_year_detail(),       
 
                         { text: this.$t('2.4. Assets graphical evolution'), id:'assets_graphical_evolution', style: 'header2', tocItem: true, pageBreak:"before", pageOrientation:"landscape" },
-                        { image: this.results.pies_payload["chart_assets"], width: 810, height:490, alignment: 'left' },
+                         { image:  await this.$refs.chart_assets.downloadChart(), width: 810, height:490, alignment: 'left' },
 
                         ...this.report_assets_current_year_gainsbyproductstypes(),
                         ...this.report_accounts(),
@@ -168,15 +169,15 @@
 
 
                         { text: this.$t('4.3. Investments group by variable percentage'), id:'investments_by_variable_percentage', style: 'header2', tocItem: true , pageBreak:"before"},
-                        { image: this.results.pies_payload["chart_pie_percentage"], width: 1200, alignment: 'center' },
+                        { image: await this.$refs.chart_pie_percentage.downloadChart(), width: 1200, alignment: 'center' },
                         { text: this.$t('4.4. Investments group by type'), id:'investments_by_type', style: 'header2', tocItem: true ,pageBreak:"before"},
-                        { image: this.results.pies_payload["chart_pie_producttype"], width: 1200, alignment: 'center' },
+                        { image: await this.$refs.chart_pie_producttype.downloadChart(), width: 1200, alignment: 'center' },
                         { text: this.$t('4.5. Investments group by leverage'), id:'investments_by_leverage', style: 'header2', tocItem: true ,pageBreak:"before"},
-                        { image: this.results.pies_payload["chart_pie_leverage"], width: 1200, alignment: 'center' },
+                        { image: await this.$refs.chart_pie_leverage.downloadChart(), width: 1200, alignment: 'center' },
                         { text: this.$t('4.6. Investments group by product'), id:'investments_by_product', style: 'header2', tocItem: true ,pageBreak:"before"},
-                        { image: this.results.pies_payload["chart_pie_product"], width: 1200, alignment: 'center' },
+                        { image: await this.$refs.chart_pie_product.downloadChart(), width: 1200, alignment: 'center' },
                         { text: this.$t('4.7. Investments group by pci'), id:'investments_by_pci', style: 'header2', tocItem: true ,pageBreak:"before"},
-                        { image: this.results.pies_payload["chart_pie_pci"], width: 1200, alignment: 'center' },
+                        { image: await this.$refs.chart_pie_pci.downloadChart(), width: 1200, alignment: 'center' },
                         
                         ...this.report_orders(),
                         ...this.report_dividends(),
@@ -197,8 +198,8 @@
                     }.bind(this)
                 };
                 console.log(docDefinition)
-                pdfMake.createPdf(docDefinition,{tagged:true}).open()//.download('report.pdf');
-                this.loading=false
+                await pdfMake.createPdf(docDefinition,{tagged:true}).download('report.pdf');
+                this.creating=false
             },
 
             report_assets(){
@@ -491,7 +492,6 @@
                 return r
             },  
             get_report_data(){
-                this.loading=true
                 const year=new Date().getFullYear()
                 axios.all([
                     axios.get(`${this.useStore().apiroot}/investments/classes/`, this.myheaders()),//resPies
@@ -508,15 +508,6 @@
                     axios.get(`${this.useStore().apiroot}/reports/ranking/`, this.myheaders()), //resRanking
                 ]).then(([resPies, resBWB, resRA, resRAI, resRAG, resRAR, resAWB, resIWB,resIOC,resOrders,resDividends, resRanking]) => {
                     this.results.pies=resPies.data
-                    console.log(this.results.pies)
-                    this.results.pies_payload={
-                        chart_pie_product: null,
-                        chart_pie_pci: null,
-                        chart_pie_percentage: null,
-                        chart_pie_producttype: null,
-                        chart_pie_leverage: null,
-                        chart_assets: null,
-                    },
                     this.results.last_year_balance=resRA.data.last_year_balance
                     this.results.annual=resRA.data.data
                     this.results.balance=this.results.annual[this.results.annual.length-1].total
@@ -543,9 +534,6 @@
                 }, (error) => {
                     this.parseResponseError(error)
                 })
-            },
-            on_chart_finished(reference,image){
-                this.results.pies_payload[reference]=image
             },
             ranking_filter_data(ios){
                 var r=[]

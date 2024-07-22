@@ -27,6 +27,7 @@
         data(){ 
             return{
                 loading:false,
+                finished:false,
                 balance:[],
                 accounts:[],
                 investments:[],
@@ -172,7 +173,15 @@
                 });
             },
             on_finished(){
-                this.$emit("finished", "chart_assets", this.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff', excludeComponents:['dataZoom']}))
+                this.finished=true
+                console.log(`Chart ${this.name} has finished`)
+            },
+
+            async downloadChart() {
+                while (!this.finished) {
+                    await new Promise(resolve => setTimeout(resolve, 100)); // Check every 100ms
+                }
+                return this.chart.getDataURL({ pixelRatio: 6, backgroundColor: '#fff' });
             },
         },
         mounted(){

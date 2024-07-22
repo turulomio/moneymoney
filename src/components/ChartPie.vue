@@ -42,10 +42,6 @@
                 required: false,
                 default:600
             },
-            reference:{ //used to pass in on_finished signal
-                required:false,
-                default:null,
-            },
             show_data:{
                 type: Boolean,
                 required:false,
@@ -62,6 +58,7 @@
                 chart:null,
                 new_show_data: this.show_data, //To avoid prop mutation
                 key:0,
+                finished:false,
                 tableHeaders: [
                     { title: 'Name', key: 'name',sortable: true },
                     { title: 'Value', key: 'value',sortable: true, align: 'end'},
@@ -126,12 +123,20 @@
                 
             },
             on_finished(){
-                this.$emit("finished",this.reference, this.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff'}))
+                this.finished=true
+                console.log(`Chart ${this.name} has finished`)
+            },
+
+            async downloadChart() {
+                while (!this.finished) {
+                    await new Promise(resolve => setTimeout(resolve, 100)); // Check every 100ms
+                }
+                return this.chart.getDataURL({ pixelRatio: 6, backgroundColor: '#fff' });
             },
         },
         mounted(){
             if (this.hidden){
-                console.log(`Chart ${this.reference} has been hidden`)
+                console.log(`Chart ${this.name} has been hidden`)
                 this.$refs.div.style.visibility="hidden"
             } 
             this.chart = echarts.init(this.$refs.pieChart);
