@@ -194,7 +194,7 @@
 
                         { toc: { title: { text: 'Table of Contents', style: 'header1', numberStyle: 'normal'}}, pageBreak:"after"},
 
-                        { text: this.$t('Personal settings'), id:'Personal_settings', style: 'header1', tocItem: true },
+                        { text: this.$t('1. Personal settings'), id:'Personal_settings', style: 'header1', tocItem: true },
                         { text: f(this.$t("Your user currency is set to [0]."),[this.useStore().profile.currency,]), style: 'body' },
                         { text: f(this.$t("Your local time zone is set to [0]."),[this.useStore().profile.zone,]), style: 'body' ,pageBreak:"after"},
 
@@ -203,8 +203,8 @@
                         ...this.report_current_year_evolution(),
                         ...this.report_assets_current_year_detail(),       
 
-                        { text: this.$t('Assets graphical evolution'), id:'assets_graphical_evolution', style: 'header2', tocItem: true },
-                        { image: this.payload["chart_assets"], width: 500, alignment: 'center' },
+                        { text: this.$t('2.4. Assets graphical evolution'), id:'assets_graphical_evolution', style: 'header2', tocItem: true, pageBreak:"before", pageOrientation:"landscape" },
+                        { image: this.payload["chart_assets"], width: 810, height:490, alignment: 'left' },
 
                         ...this.report_assets_current_year_gainsbyproductstypes(),
                         ...this.report_accounts(),
@@ -212,21 +212,21 @@
                         ...this.report_investmentsoperations(),
 
 
-                        { text: this.$t('Investments group by variable percentage'), id:'investments_by_variable_percentage', style: 'header2', tocItem: true , pageBreak:"before"},
+                        { text: this.$t('4.3. Investments group by variable percentage'), id:'investments_by_variable_percentage', style: 'header2', tocItem: true , pageBreak:"before"},
                         { image: this.payload["chart_pie_percentage"], width: 1200, alignment: 'center' },
-                        { text: this.$t('Investments group by type'), id:'investments_by_type', style: 'header2', tocItem: true ,pageBreak:"before"},
+                        { text: this.$t('4.4. Investments group by type'), id:'investments_by_type', style: 'header2', tocItem: true ,pageBreak:"before"},
                         { image: this.payload["chart_pie_producttype"], width: 1200, alignment: 'center' },
-                        { text: this.$t('Investments group by leverage'), id:'investments_by_leverage', style: 'header2', tocItem: true ,pageBreak:"before"},
+                        { text: this.$t('4.5. Investments group by leverage'), id:'investments_by_leverage', style: 'header2', tocItem: true ,pageBreak:"before"},
                         { image: this.payload["chart_pie_leverage"], width: 1200, alignment: 'center' },
-                        { text: this.$t('Investments group by product'), id:'investments_by_product', style: 'header2', tocItem: true ,pageBreak:"before"},
+                        { text: this.$t('4.6. Investments group by product'), id:'investments_by_product', style: 'header2', tocItem: true ,pageBreak:"before"},
                         { image: this.payload["chart_pie_product"], width: 1200, alignment: 'center' },
-                        { text: this.$t('Investments group by pci'), id:'investments_by_pci', style: 'header2', tocItem: true ,pageBreak:"before"},
+                        { text: this.$t('4.7. Investments group by pci'), id:'investments_by_pci', style: 'header2', tocItem: true ,pageBreak:"before"},
                         { image: this.payload["chart_pie_pci"], width: 1200, alignment: 'center' },
                         
                         ...this.report_orders(),
                         ...this.report_dividends(),
                         ...this.report_ranking(),
-                        { text: this.$t('About Money Money'), id:'about', style: 'header1', tocItem: true ,pageBreak:"before",pageOrientation:"portrait"},
+                        { text: this.$t('8. About Money Money'), id:'about', style: 'header1', tocItem: true ,pageBreak:"before",pageOrientation:"portrait"},
                         { text: this.$t("Money Money is a opensource software to manage your personal finances."), style: 'body' },
                     ],
                     styles: {
@@ -273,7 +273,7 @@
             },
             report_assets(){
                 var r=[]
-                r.push({ text: this.$t('Assets'), id:'assets', style: 'header1', tocItem: true })
+                r.push({ text: this.$t('2. Assets'), id:'assets', style: 'header1', tocItem: true })
                 if (this.results.balance-this.results.last_year_balance>=0){
                     r.push({text: f(this.$t("At the end of last year, you had [0]. Currently, you have [1], which meas you have gained [2]."), [
                         this.localcurrency_html(this.results.last_year_balance),
@@ -293,7 +293,7 @@
             },
             report_assets_by_bank(){
                 var r=[]
-                r.push({ text: this.$t('Assets by bank'), id:'assets_by_bank', style: 'header2', tocItem: true })
+                r.push({ text: this.$t('2.1. Assets by bank'), id:'assets_by_bank', style: 'header2', tocItem: true })
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.assets_by_bank, ["name","balance_accounts","balance_investments","balance_total"])
                 headers[1].title=this.$t("Accounts balance")
                 headers[2].title=this.$t("Investments balance")
@@ -314,7 +314,7 @@
             },
             report_current_year_evolution(){
                 var r=[]
-                r.push({ text: this.$t('Assets current year evolution'), id:'assets_current_year_evolution', style: 'header2', tocItem: true })
+                r.push({ text: this.$t('2.2. Assets current year evolution'), id:'assets_current_year_evolution', style: 'header2', tocItem: true })
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.annual, ["month","account_balance","investment_balance","total","percentage_year","diff_lastmonth"])
 
                 headers[0].title=this.$t("Month")
@@ -335,7 +335,7 @@
             },
             report_assets_current_year_detail(){
                 var r=[]
-                r.push({ text: this.$t('Assets current year detail'), id:'assets_current_year_detail', style: 'header2', tocItem: true })
+                r.push({ text: this.$t('2.3. Assets current year detail'), id:'assets_current_year_detail', style: 'header2', tocItem: true })
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.annual_incomes, ["month","incomes","expenses","gains","dividends","total"])
 
                 headers[0].title=this.$t("Month")
@@ -368,7 +368,7 @@
             },
             report_assets_current_year_gainsbyproductstypes(){
                 var r=[]
-                r.push({ text: this.$t('Current year investments gains group by product type'), id:'assets_current_year_gains_product_type', style: 'header2', tocItem: true })
+                r.push({ text: this.$t('2.5. Current year investments gains group by product type'), id:'assets_current_year_gains_product_type', style: 'header2', tocItem: true, pageBreak:"before", pageOrientation:"portrait" })
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.annual_gainsbyproductstypes, ["name","gains_gross","dividends_gross","gains_net","dividends_net"])
 
                 headers[0].title=this.$t("Product type")
@@ -397,7 +397,7 @@
             },
             report_accounts(){
                 var r=[]
-                r.push({ text: this.$t('Current accounts'), id:'current_accounts', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before" })
+                r.push({ text: this.$t('3. Current accounts'), id:'current_accounts', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before" })
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.accounts, ["name","number","balance_account","balance_user"])
 
                 headers[0].title=this.$t("Account name")
@@ -413,8 +413,8 @@
             },
             report_investments(){
                 var r=[]
-                r.push({ text: this.$t('Current investments'), id:'current_investments', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
-                r.push({ text: this.$t('Investments list'), id:'investments_list', style: 'header2', tocItem: true }) 
+                r.push({ text: this.$t('4. Current investments'), id:'current_investments', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+                r.push({ text: this.$t('4.1. Investments list'), id:'investments_list', style: 'header2', tocItem: true }) 
                 r.push({ text: this.$t('Next list is sorted by the distance in percent to the selling point.'), style: 'body' }) 
 
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.investments, ["fullname","invested_user","balance_user","gains_user", "percentage_invested", "percentage_selling_point"])
@@ -448,7 +448,7 @@
             },            
             report_investmentsoperations(){
                 var r=[]
-                r.push({ text: this.$t('Current investments operations'), id:'current_investments_operations', style: 'header2', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+                r.push({ text: this.$t('4.2. Current investments operations'), id:'current_investments_operations', style: 'header2', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
 
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.current_investments_operations, ["datetime","name","operationstype","shares", "price_user", "invested_user","balance_user","gains_gross_user"])
 
@@ -482,7 +482,7 @@
             },
             report_orders(){
                 var r=[]
-                r.push({ text: this.$t('Investments orders'), id:'investments_orders', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+                r.push({ text: this.$t('5. Investments orders'), id:'investments_orders', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
 
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.orders, ["date","expiration","investmentsname","shares", "price", "amount","percentage_from_price"])
                 headers[0].title=this.$t("Date")
@@ -505,7 +505,7 @@
             },
             report_dividends(){
                 var r=[]
-                r.push({ text: this.$t('Dividend estimations report'), id:'dividend_estimations_report', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+                r.push({ text: this.$t('6. Dividend estimations report'), id:'dividend_estimations_report', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
 
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.dividends, ["name","current_price","dps","shares", "estimated", "percentage"])
 
@@ -529,7 +529,7 @@
             },              
             report_ranking(){
                 var r=[]
-                r.push({ text: this.$t('Historical investment ranking'), id:'historical_investment_ranking', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+                r.push({ text: this.$t('7. Historical investment ranking'), id:'historical_investment_ranking', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
 
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.ranking, ["ranking","name","current_net_gains","historical_net_gains", "dividends", "total"])
 
