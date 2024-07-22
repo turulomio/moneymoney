@@ -1,30 +1,26 @@
 <template>
     <div>
         <h1>{{ $t("Assets Report") }}</h1>
-        <div class="d-flex justify-center mb-4" width="20%">                
-            <v-card width="20%" class="pa-4">      
-    
-                <v-select class="pa-4" density="compact" label="Select a format" v-model="format" :items="['pdf','odt','docx']"></v-select>       
-                <v-alert density="compact" class=" px-10" outlined :type="(unogenerator_working) ? 'success':'error'"> {{ (unogenerator_working) ? $t("UnoGenerator is ready"): $t("UnoGenerator is not working. Please contact system administrator")}}</v-alert>
-
+        <div class="d-flex justify-center mb-4" width="40%">
+            <v-card width="40%" class="pa-4">      
+                <v-text-field v-model="password" type="password" :label="$t('Set pdf password if necessary')"></v-text-field>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn data-test="AssetsReport_ButtonGenerate" class="pa-4" :loading="loading" color="primary" :disabled="!can_launch" @click="launch_report">{{ (can_launch)?  $t("Generate report"): $t("Report is being prepared. Please be patient...") }}</v-btn>
+                    <v-btn data-test="AssetsReport_ButtonGenerate" class="pa-4" :loading="creating" color="primary" :disabled="loading" @click="launch_report">{{ (!loading)?  $t("Generate report"): $t("Data is being retrieving. Please be patient...") }}</v-btn>
 
                     <v-spacer></v-spacer>
 
                 </v-card-actions>
-                    <v-btn data-test="AssetsReport_ButtonGenerateAlternative" class="pa-4" :loading="loading" color="primary" :disabled="!can_launch" @click="launch_report_alternative">{{ (can_launch)?  $t("Generate report alternative"): $t("Report is being prepared. Please be patient...") }}</v-btn>
 
             </v-card>
         </div>
-        <div v-if="data">
-            <ChartEvolutionAssets hidden v-if="unogenerator_working" reference="chart_assets" @finished="on_chart_finished" />
-            <ChartPie name="Investments by product" hidden :items="echart_products_items" reference="chart_pie_product" :heigth="height" :show_data="false" @finished="on_chart_finished" />
-            <ChartPie name="Investments by pci" hidden :items="echart_pci_items" reference="chart_pie_pci" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
-            <ChartPie name="Investments by variable percentage" hidden :items="echart_percentage_items" reference="chart_pie_percentage" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
-            <ChartPie name="Investments by product type" hidden :items="echart_producttype_items" reference="chart_pie_producttype" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
-            <ChartPie name="Investments by leverage" hidden :items="echart_leverage_items" reference="chart_pie_leverage" :heigth="height" :show_data="false" @finished="on_chart_finished"/>
+        <div v-if="!loading">
+            <ChartEvolutionAssets hidden ref="chart_assets" />
+            <ChartPie name="Investments by product" hidden :items="echart_products_items" ref="chart_pie_product" :heigth="height" :show_data="false"/>
+            <ChartPie name="Investments by pci" hidden :items="echart_pci_items" ref="chart_pie_pci" :heigth="height" :show_data="false"/>
+            <ChartPie name="Investments by variable percentage" hidden :items="echart_percentage_items" ref="chart_pie_percentage" :heigth="height" :show_data="false"/>
+            <ChartPie name="Investments by product type" hidden :items="echart_producttype_items" ref="chart_pie_producttype" :heigth="height" :show_data="false"/>
+            <ChartPie name="Investments by leverage" hidden :items="echart_leverage_items" ref="chart_pie_leverage" :heigth="height" :show_data="false"/>
         </div>
     </div>
 </template>
@@ -54,40 +50,23 @@
         },
         data(){
             return {
-                loading:false,
-                data:null,
+                loading:true,
+                creating:false,
                 key:0,
                 height:100,
 
                 imgMoneymoney,
+                password:"",
 
-                format:"pdf",
-                unogenerator_working:false,
                 method:"Current",
-
-                payload:{
-                    format: "pdf",
-                    chart_pie_product: null,
-                    chart_pie_pci: null,
-                    chart_pie_percentage: null,
-                    chart_pie_producttype: null,
-                    chart_pie_leverage: null,
-                    chart_assets: null,
-                },
-
                 results:{},
 
-            }
-        },       
-        watch:{
-            format(){
-                this.payload.format=this.format
             }
         },
         computed:{
             /// COPIED FROM REPORTSINVESTMENTSCLASSES
             echart_products_items: function(){
-                var products= this.data.by_product
+                var products= this.results.pies.by_product
                 var adapted
                 if (this.method=="Current"){
                     adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
@@ -98,7 +77,7 @@
                 return adapted
             },
             echart_pci_items: function(){
-                var products= this.data.by_pci
+                var products= this.results.pies.by_pci
                 var adapted
                 if (this.method=="Current"){
                     adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
@@ -109,7 +88,7 @@
                 return adapted
             },
             echart_percentage_items: function(){
-                var products= this.data.by_percentage
+                var products= this.results.pies.by_percentage
                 var adapted
 
                 if (this.method=="Current"){
@@ -121,7 +100,7 @@
                 return adapted
             },
             echart_producttype_items: function(){
-                var products= this.data.by_producttype
+                var products= this.results.pies.by_producttype
                 var adapted
                 if (this.method=="Current"){
                     adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
@@ -132,7 +111,7 @@
                 return adapted
             },
             echart_leverage_items: function(){
-                var products= this.data.by_leverage
+                var products= this.results.pies.by_leverage
                 var adapted
                 if (this.method=="Current"){
                     adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
@@ -141,12 +120,6 @@
                 }
                 adapted=adapted.filter(o => o.value!=0)
                 return adapted
-            },
-            can_launch(){
-                for (let key in this.payload) {
-                    if (this.payload[key]==null) return false
-                }
-                return true
             },
         },
         methods:{
@@ -159,26 +132,9 @@
             pdfmake_loo_to_table,
             pdfmake_loo_to_table_guess_headers,
             pdfmake_percentage_string,
-            launch_report(){
-                this.loading=true //False to debugging
+            async launch_report(){
 
-                axios.post(`${this.useStore().apiroot}/assets/report/`, this.payload, this.myheaders())
-                .then((response) => {
-                    this.loading=false
-                    var link = window.document.createElement('a');
-
-                    link.href = `data:${response.data.mime};base64,${response.data.data}`
-                    link.download = response.data.filename
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
-            async launch_report_alternative(){
-                this.loading=true //False to debugging
-
+                this.creating=true
                 const docDefinition = {
                     info: {
                         title: this.$t("Money money assets report"),
@@ -204,7 +160,7 @@
                         ...this.report_assets_current_year_detail(),       
 
                         { text: this.$t('2.4. Assets graphical evolution'), id:'assets_graphical_evolution', style: 'header2', tocItem: true, pageBreak:"before", pageOrientation:"landscape" },
-                        { image: this.payload["chart_assets"], width: 810, height:490, alignment: 'left' },
+                         { image:  await this.$refs.chart_assets.downloadChart(), width: 810, height:490, alignment: 'left' },
 
                         ...this.report_assets_current_year_gainsbyproductstypes(),
                         ...this.report_accounts(),
@@ -213,15 +169,15 @@
 
 
                         { text: this.$t('4.3. Investments group by variable percentage'), id:'investments_by_variable_percentage', style: 'header2', tocItem: true , pageBreak:"before"},
-                        { image: this.payload["chart_pie_percentage"], width: 1200, alignment: 'center' },
+                        { image: await this.$refs.chart_pie_percentage.downloadChart(), width: 1200, alignment: 'center' },
                         { text: this.$t('4.4. Investments group by type'), id:'investments_by_type', style: 'header2', tocItem: true ,pageBreak:"before"},
-                        { image: this.payload["chart_pie_producttype"], width: 1200, alignment: 'center' },
+                        { image: await this.$refs.chart_pie_producttype.downloadChart(), width: 1200, alignment: 'center' },
                         { text: this.$t('4.5. Investments group by leverage'), id:'investments_by_leverage', style: 'header2', tocItem: true ,pageBreak:"before"},
-                        { image: this.payload["chart_pie_leverage"], width: 1200, alignment: 'center' },
+                        { image: await this.$refs.chart_pie_leverage.downloadChart(), width: 1200, alignment: 'center' },
                         { text: this.$t('4.6. Investments group by product'), id:'investments_by_product', style: 'header2', tocItem: true ,pageBreak:"before"},
-                        { image: this.payload["chart_pie_product"], width: 1200, alignment: 'center' },
+                        { image: await this.$refs.chart_pie_product.downloadChart(), width: 1200, alignment: 'center' },
                         { text: this.$t('4.7. Investments group by pci'), id:'investments_by_pci', style: 'header2', tocItem: true ,pageBreak:"before"},
-                        { image: this.payload["chart_pie_pci"], width: 1200, alignment: 'center' },
+                        { image: await this.$refs.chart_pie_pci.downloadChart(), width: 1200, alignment: 'center' },
                         
                         ...this.report_orders(),
                         ...this.report_dividends(),
@@ -242,35 +198,10 @@
                     }.bind(this)
                 };
                 console.log(docDefinition)
-                pdfMake.createPdf(docDefinition,{tagged:true}).open()//.download('report.pdf');
-                this.loading=false
+                await pdfMake.createPdf(docDefinition,{tagged:true}).download('report.pdf');
+                this.creating=false
             },
 
-            update_pies(){
-                this.loading=true
-                axios.get(`${this.useStore().apiroot}/investments/classes/`, this.myheaders())
-                .then((response) => {
-                    this.data=response.data
-                    this.loading=false
-                    this.key=this.key+1
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
-            check_unogenerator_server(){
-                axios.get(`${this.useStore().apiroot}/unogenerator/working/`, this.myheaders())
-                .then((response) => {
-                    this.unogenerator_working=response.data
-                    this.key=this.key+1
-                }, (error) => {
-                    this.unogenerator_working=false
-                    this.parseResponseError(error)
-                });
-
-            },
-            on_chart_finished(reference,image){
-                this.payload[reference]=image
-            },
             report_assets(){
                 var r=[]
                 r.push({ text: this.$t('2. Assets'), id:'assets', style: 'header1', tocItem: true })
@@ -298,9 +229,9 @@
                 headers[1].title=this.$t("Accounts balance")
                 headers[2].title=this.$t("Investments balance")
                 headers[3].title=this.$t("Total balance")
-                headers[1].currency=this.useStore().profile.currency
-                headers[2].currency=this.useStore().profile.currency
-                headers[3].currency=this.useStore().profile.currency
+                headers[1].currency_column=this.useStore().profile.currency
+                headers[2].currency_column=this.useStore().profile.currency
+                headers[3].currency_column=this.useStore().profile.currency
                 headers[0].total=this.$t("Total")
                 headers[1].total="#SUM"
                 headers[2].total="#SUM"
@@ -323,11 +254,11 @@
                 headers[3].title=this.$t("Total balance")
                 headers[4].title=this.$t("Annual percentage")
                 headers[5].title=this.$t("Last month difference")
-                headers[1].currency=this.useStore().profile.currency
-                headers[2].currency=this.useStore().profile.currency
-                headers[3].currency=this.useStore().profile.currency
-                headers[4].currency="%"
-                headers[5].currency=this.useStore().profile.currency
+                headers[1].currency_column=this.useStore().profile.currency
+                headers[2].currency_column=this.useStore().profile.currency
+                headers[3].currency_column=this.useStore().profile.currency
+                headers[4].currency_column="%"
+                headers[5].currency_column=this.useStore().profile.currency
                 headers[0].total=this.$t("Total")
                 headers[5].total="#SUM"
                 r.push(this.pdfmake_loo_to_table(this.results.annual, headers, "table8"))
@@ -344,11 +275,11 @@
                 headers[3].title=this.$t("Gains")
                 headers[4].title=this.$t("Dividends")
                 headers[5].title=this.$t("Total")
-                headers[1].currency=this.useStore().profile.currency
-                headers[2].currency=this.useStore().profile.currency
-                headers[3].currency=this.useStore().profile.currency
-                headers[4].currency=this.useStore().profile.currency
-                headers[5].currency=this.useStore().profile.currency
+                headers[1].currency_column=this.useStore().profile.currency
+                headers[2].currency_column=this.useStore().profile.currency
+                headers[3].currency_column=this.useStore().profile.currency
+                headers[4].currency_column=this.useStore().profile.currency
+                headers[5].currency_column=this.useStore().profile.currency
                 headers[0].total=this.$t("Total")
                 headers[1].total="#SUM"
                 headers[2].total="#SUM"
@@ -376,10 +307,10 @@
                 headers[2].title=this.$t("Gross dividends")
                 headers[3].title=this.$t("Net gains")
                 headers[4].title=this.$t("Net dividends")
-                headers[1].currency=this.useStore().profile.currency
-                headers[2].currency=this.useStore().profile.currency
-                headers[3].currency=this.useStore().profile.currency
-                headers[4].currency=this.useStore().profile.currency
+                headers[1].currency_column=this.useStore().profile.currency
+                headers[2].currency_column=this.useStore().profile.currency
+                headers[3].currency_column=this.useStore().profile.currency
+                headers[4].currency_column=this.useStore().profile.currency
                 headers[0].total=this.$t("Total")
                 headers[1].total="#SUM"
                 headers[2].total="#SUM"
@@ -397,15 +328,15 @@
             },
             report_accounts(){
                 var r=[]
-                r.push({ text: this.$t('3. Current accounts'), id:'current_accounts', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before" })
+                r.push({ text: this.$t('3. Current accounts'), id:'current_accounts', style: 'header1', tocItem: true ,pageOrientation: 'portrait', pageBreak:"before" })
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.accounts, ["name","number","balance_account","balance_user"])
 
                 headers[0].title=this.$t("Account name")
                 headers[1].title=this.$t("Number")
                 headers[2].title=this.$t("Balance")
                 headers[3].title=this.$t("User currency balance")
-                headers[2].currency="u"
-                headers[3].currency=this.useStore().profile.currency
+                headers[2].currency_row_key="currency"
+                headers[3].currency_column=this.useStore().profile.currency
                 headers[0].total=this.$t("Total")
                 headers[3].total="#SUM"
                 r.push(this.pdfmake_loo_to_table(this.results.accounts, headers, "table8"))
@@ -417,6 +348,8 @@
                 r.push({ text: this.$t('4.1. Investments list'), id:'investments_list', style: 'header2', tocItem: true }) 
                 r.push({ text: this.$t('Next list is sorted by the distance in percent to the selling point.'), style: 'body' }) 
 
+
+                this.results.investments=this.orderBy(this.results.investments,[function(o) { return o["percentage_selling_point"] === null ? -Infinity : o["percentage_selling_point"]; }], ['asc'])
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.investments, ["fullname","invested_user","balance_user","gains_user", "percentage_invested", "percentage_selling_point"])
 
                 headers[0].title=this.$t("Investment name")
@@ -425,15 +358,22 @@
                 headers[3].title=this.$t("Gains")
                 headers[4].title=this.$t("% invested")
                 headers[5].title=this.$t("% selling point")
-                headers[1].currency=this.useStore().profile.currency
-                headers[2].currency=this.useStore().profile.currency
-                headers[3].currency=this.useStore().profile.currency
-                headers[4].currency="%"
-                headers[5].currency="%"
+                headers[1].currency_column=this.useStore().profile.currency
+                headers[2].currency_column=this.useStore().profile.currency
+                headers[3].currency_column=this.useStore().profile.currency
+                headers[4].currency_column="%"
+                headers[5].currency_column="%"
                 headers[0].total=this.$t("Total")
                 headers[1].total="#SUM"
                 headers[2].total="#SUM"
                 headers[3].total="#SUM"
+                headers[0].width="50%"
+                headers[1].width="10%"
+                headers[2].width="10%"
+                headers[3].width="10%"
+                headers[4].width="10%"
+                headers[5].width="10%"
+                headers[5].alignment="right"
                 r.push(this.pdfmake_loo_to_table(this.results.investments, headers, "table8"))
 
                 if (this.results.invested_user!=0){
@@ -460,11 +400,11 @@
                 headers[5].title=this.$t("Invested")
                 headers[6].title=this.$t("Balance")
                 headers[7].title=this.$t("Gains")
-                // headers[1].currency=this.useStore().profile.currency
-                // headers[2].currency=this.useStore().profile.currency
-                // headers[3].currency=this.useStore().profile.currency
-                // headers[4].currency="%"
-                // headers[5].currency="%"
+                // headers[1].currency_column=this.useStore().profile.currency
+                // headers[2].currency_column=this.useStore().profile.currency
+                // headers[3].currency_column=this.useStore().profile.currency
+                // headers[4].currency_column="%"
+                // headers[5].currency_column="%"
                 headers[0].width="15%"
                 headers[1].width="20%"
                 headers[2].width="15%"
@@ -492,7 +432,7 @@
                 headers[4].title=this.$t("Price")
                 headers[5].title=this.$t("Amount")
                 headers[6].title=this.$t("% from price")
-                headers[6].currency="%"
+                headers[6].currency_column="%"
                 headers[0].width="10%"
                 headers[1].width="10%"
                 headers[2].width="40%"
@@ -515,7 +455,7 @@
                 headers[3].title=this.$t("Shares")
                 headers[4].title=this.$t("Estimated")
                 headers[5].title=this.$t("%")
-                headers[5].currency="%"
+                headers[5].currency_column="%"
                 headers[0].total=this.$t("Total")
                 headers[4].total="#SUM"
                 r.push(this.pdfmake_loo_to_table(this.results.dividends, headers, "table8"))
@@ -539,10 +479,10 @@
                 headers[3].title=this.$t("Historical net gains")
                 headers[4].title=this.$t("Dividends")
                 headers[5].title=this.$t("Total")
-                headers[2].currency=this.useStore().profile.currency
-                headers[3].currency=this.useStore().profile.currency
-                headers[4].currency=this.useStore().profile.currency
-                headers[5].currency=this.useStore().profile.currency
+                headers[2].currency_column=this.useStore().profile.currency
+                headers[3].currency_column=this.useStore().profile.currency
+                headers[4].currency_column=this.useStore().profile.currency
+                headers[5].currency_column=this.useStore().profile.currency
                 headers[0].total=this.$t("Total")
                 headers[2].total="#SUM"
                 headers[3].total="#SUM"
@@ -554,6 +494,7 @@
             get_report_data(){
                 const year=new Date().getFullYear()
                 axios.all([
+                    axios.get(`${this.useStore().apiroot}/investments/classes/`, this.myheaders()),//resPies
                     axios.get(`${this.useStore().apiroot}/api/banks/withbalance/?active=true`, this.myheaders()),//resBWB
                     axios.get(`${this.useStore().apiroot}/reports/annual/${year}/`, this.myheaders()),//resRA
                     axios.get(`${this.useStore().apiroot}/reports/annual/income/${year}/`, this.myheaders()),//resRAI
@@ -565,7 +506,8 @@
                     axios.get(`${this.useStore().apiroot}/api/orders/?active=true`, this.myheaders()),//resOrders
                     axios.get(`${this.useStore().apiroot}/reports/dividends/`, this.myheaders()), //resDividends
                     axios.get(`${this.useStore().apiroot}/reports/ranking/`, this.myheaders()), //resRanking
-                ]).then(([resBWB, resRA, resRAI, resRAG, resRAR, resAWB, resIWB,resIOC,resOrders,resDividends, resRanking]) => {
+                ]).then(([resPies, resBWB, resRA, resRAI, resRAG, resRAR, resAWB, resIWB,resIOC,resOrders,resDividends, resRanking]) => {
+                    this.results.pies=resPies.data
                     this.results.last_year_balance=resRA.data.last_year_balance
                     this.results.annual=resRA.data.data
                     this.results.balance=this.results.annual[this.results.annual.length-1].total
@@ -588,6 +530,7 @@
                     this.results.ranking=this.ranking_filter_data(resRanking.data)
 
                     console.log(this.results)
+                    this.loading=false
                 }, (error) => {
                     this.parseResponseError(error)
                 })
@@ -613,9 +556,6 @@
 
         },
         created(){
-            this.loading=true
-            this.check_unogenerator_server()
-            this.update_pies()
             this.get_report_data()
         }
     }

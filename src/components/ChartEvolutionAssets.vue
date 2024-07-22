@@ -1,6 +1,5 @@
-
 <template>
-    <div ref="div">
+    <div ref="div" :style="hidden? 'visibility: hidden': ''">
         <h1>{{ $t("Evolution assets chart")}}</h1>
         <div class="d-flex justify-center mb-4 mt-4" >
             <v-card width="30%" variant="flat">
@@ -28,6 +27,7 @@
         data(){ 
             return{
                 loading:false,
+                finished:false,
                 balance:[],
                 accounts:[],
                 investments:[],
@@ -163,9 +163,6 @@
                         this.zerorisk.push([o.datetime, o.zerorisk_user])
 
                     })
-                    if (this.hidden){
-                        this.$refs.div.style.visibility="hidden"
-                    } 
 
                     this.chart = echarts.init(this.$refs.chart);
                     this.chart.on('finished', this.on_finished);
@@ -176,7 +173,15 @@
                 });
             },
             on_finished(){
-                this.$emit("finished", "chart_assets", this.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff', excludeComponents:['dataZoom']}))
+                this.finished=true
+                console.log(`Chart ${this.name} has finished`)
+            },
+
+            async downloadChart() {
+                while (!this.finished) {
+                    await new Promise(resolve => setTimeout(resolve, 100)); // Check every 100ms
+                }
+                return this.chart.getDataURL({ pixelRatio: 6, backgroundColor: '#fff' });
             },
         },
         mounted(){
