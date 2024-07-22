@@ -35,7 +35,7 @@
     import ChartEvolutionAssets from './ChartEvolutionAssets.vue'
     import ChartPie from './ChartPie.vue'
     import { my_round, f } from 'vuetify_rules'
-    import {sumBy} from "lodash-es"
+    import {sumBy, orderBy} from "lodash-es"
 
     import pdfMake from "pdfmake/build/pdfmake";
     import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -153,6 +153,7 @@
             useStore,
             my_round,
             f,
+            orderBy,
             sumBy,
             pdfmake_convertImageToDataURL,
             pdfmake_loo_to_table,
@@ -215,10 +216,16 @@
                         { image: this.payload["chart_pie_product"], width: 1200, alignment: 'center' },
                         { text: this.$t('Investments group by pci'), id:'investments_by_pci', style: 'header2', tocItem: true ,pageBreak:"before"},
                         { image: this.payload["chart_pie_pci"], width: 1200, alignment: 'center' },
+                        
+                        ...this.report_orders(),
+                        ...this.report_dividends(),
+                        ...this.report_ranking(),
+                        { text: this.$t('About Money Money'), id:'about', style: 'header1', tocItem: true ,pageBreak:"before"},
+                        { text: this.$t("Money Money is a opensource software to manage your personal finances."), style: 'body' },
                     ],
                     styles: {
                         header1: { fontSize: 16, bold: true },
-                        header2: { fontSize: 14, bold: true },
+                        header2: { fontSize: 14, bold: true , margin: [0, 0, 0, 30]},
                         body: { fontSize: 11 },
                         table8: {fontSize:8},
                         table12: {fontSize:12},
@@ -229,7 +236,7 @@
                     }.bind(this)
                 };
                 console.log(docDefinition)
-                pdfMake.createPdf(docDefinition).download('report.pdf');
+                pdfMake.createPdf(docDefinition,{tagged:true}).open()//.download('report.pdf');
                 this.loading=false
             },
 
@@ -467,6 +474,77 @@
                 r.push(this.pdfmake_loo_to_table(this.results.current_investments_operations, headers, "table8"))
                 return r
             },
+            report_orders(){
+                var r=[]
+                r.push({ text: this.$t('Investments orders'), id:'investments_orders', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+
+                var headers=this.pdfmake_loo_to_table_guess_headers(this.results.orders, ["date","expiration","investmentsname","shares", "price", "amount","percentage_from_price"])
+                headers[0].title=this.$t("Date")
+                headers[1].title=this.$t("Expiration")
+                headers[2].title=this.$t("Investment name")
+                headers[3].title=this.$t("Shares")
+                headers[4].title=this.$t("Price")
+                headers[5].title=this.$t("Amount")
+                headers[6].title=this.$t("% from price")
+                headers[6].currency="%"
+                headers[0].width="10%"
+                headers[1].width="10%"
+                headers[2].width="40%"
+                headers[3].width="10%"
+                headers[4].width="10%"
+                headers[5].width="10%"
+                headers[6].width="10%"
+                r.push(this.pdfmake_loo_to_table(this.results.orders, headers, "table8"))
+                return r
+            },
+            report_dividends(){
+                var r=[]
+                r.push({ text: this.$t('Dividend estimations report'), id:'dividend_estimations_report', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+
+                var headers=this.pdfmake_loo_to_table_guess_headers(this.results.dividends, ["name","current_price","dps","shares", "estimated", "percentage"])
+
+                headers[0].title=this.$t("Investment name")
+                headers[1].title=this.$t("Current price")
+                headers[2].title=this.$t("DPS")
+                headers[3].title=this.$t("Shares")
+                headers[4].title=this.$t("Estimated")
+                headers[5].title=this.$t("%")
+                headers[5].currency="%"
+                headers[0].total=this.$t("Total")
+                headers[4].total="#SUM"
+                r.push(this.pdfmake_loo_to_table(this.results.dividends, headers, "table8"))
+
+                if (this.results.invested_user!=0){
+                    r.push({ text: f(this.$t("If I keep this investment during a year, I'll get [0]"),[
+                        this.localcurrency_string(this.sumBy(this.results.dividends,"estimated")), 
+                    ]), style: 'body' }) 
+                } 
+                return r
+            },              
+            report_ranking(){
+                var r=[]
+                r.push({ text: this.$t('Historical investment ranking'), id:'historical_investment_ranking', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+
+                var headers=this.pdfmake_loo_to_table_guess_headers(this.results.ranking, ["ranking","name","current_net_gains","historical_net_gains", "dividends", "total"])
+
+                headers[0].title=this.$t("Ranking")
+                headers[1].title=this.$t("Name")
+                headers[2].title=this.$t("Current net gains")
+                headers[3].title=this.$t("Historical net gains")
+                headers[4].title=this.$t("Dividends")
+                headers[5].title=this.$t("Total")
+                headers[2].currency=this.useStore().profile.currency
+                headers[3].currency=this.useStore().profile.currency
+                headers[4].currency=this.useStore().profile.currency
+                headers[5].currency=this.useStore().profile.currency
+                headers[0].total=this.$t("Total")
+                headers[2].total="#SUM"
+                headers[3].total="#SUM"
+                headers[4].total="#SUM"
+                headers[5].total="#SUM"
+                r.push(this.pdfmake_loo_to_table(this.results.ranking, headers, "table8"))
+                return r
+            },  
             get_report_data(){
                 const year=new Date().getFullYear()
                 axios.all([
@@ -477,8 +555,11 @@
                     axios.get(`${this.useStore().apiroot}/reports/annual/revaluation/?only_zero=true`, this.myheaders()),//resRAR
                     axios.get(`${this.useStore().apiroot}/api/accounts/withbalance/?active=true`, this.myheaders()),//resAWB
                     axios.get(`${this.useStore().apiroot}/api/investments/withbalance/?active=true`, this.myheaders()),//resIWB
-                    axios.get(`${this.useStore().apiroot}/reports/investmentsoperations/current/` , this.myheaders())// resIOC
-                ]).then(([resBWB, resRA, resRAI, resRAG, resRAR, resAWB, resIWB,resIOC]) => {
+                    axios.get(`${this.useStore().apiroot}/reports/investmentsoperations/current/` , this.myheaders()),// resIOC
+                    axios.get(`${this.useStore().apiroot}/api/orders/?active=true`, this.myheaders()),//resOrders
+                    axios.get(`${this.useStore().apiroot}/reports/dividends/`, this.myheaders()), //resDividends
+                    axios.get(`${this.useStore().apiroot}/reports/ranking/`, this.myheaders()), //resRanking
+                ]).then(([resBWB, resRA, resRAI, resRAG, resRAR, resAWB, resIWB,resIOC,resOrders,resDividends, resRanking]) => {
                     this.results.last_year_balance=resRA.data.last_year_balance
                     this.results.annual=resRA.data.data
                     this.results.balance=this.results.annual[this.results.annual.length-1].total
@@ -496,11 +577,32 @@
                     this.results.investments_gains_positives=this.sumBy(this.results.investments, (item) => {return item.gains_user >= 0 ? item.gains_user : 0})
                     this.results.investments_gains_negatives=this.sumBy(this.results.investments, (item) => {return item.gains_user < 0 ? item.gains_user : 0})
                     this.results.current_investments_operations=resIOC.data
+                    this.results.orders=resOrders.data
+                    this.results.dividends=resDividends.data
+                    this.results.ranking=this.ranking_filter_data(resRanking.data)
 
                     console.log(this.results)
                 }, (error) => {
                     this.parseResponseError(error)
                 })
+            },
+            ranking_filter_data(ios){
+                var r=[]
+                ios.entries.forEach(o=>{
+                    var e=ios[o]
+                    r.push({
+                        ranking: e.data.ranking,
+                        name: e.data.name,
+                        current_net_gains:e.total_io_current.gains_net_user,
+                        historical_net_gains: e.total_io_historical.gains_net_user,
+                        dividends: e.data.dividends,
+                        total: e.total_io_current.gains_net_user+ e.total_io_historical.gains_net_user + e.data.dividends,
+                        products_id: e.data.products_id,
+                    })
+                })
+                r=orderBy(r,["ranking"], ["asc"])
+                return r
+
             },
 
         },
