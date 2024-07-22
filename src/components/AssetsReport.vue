@@ -202,6 +202,7 @@
                         ...this.report_assets_current_year_gainsbyproductstypes(),
                         ...this.report_accounts(),
                         ...this.report_investments(),
+                        ...this.report_investmentsoperations(),
 
 
                         { text: this.$t('Investments group by variable percentage'), id:'investments_by_variable_percentage', style: 'header2', tocItem: true , pageBreak:"before"},
@@ -345,8 +346,8 @@
 
 
                 r.push({ text: f(this.$t("Up to date you have got [0] (net gains + net dividends) what represents a [1] of the total assets at the end of the last year."), [
-                        this.localcurrency_html(this.results.dividends_net), 
-                        this.percentage_string(this.results.dividends_net/this.results.last_year_balance)
+                        this.localcurrency_html(this.results.dividends_net+this.results.gains_net), 
+                        this.percentage_string((this.results.dividends_net+this.results.gains_net)/this.results.last_year_balance)
                     ]), style:"body"})
         
 
@@ -373,8 +374,12 @@
                 headers[4].total="#SUM"
                 r.push(this.pdfmake_loo_to_table(this.results.annual_gainsbyproductstypes, headers, "table8"))
                 
-                r.push({ text: f(this.$t('Gross gains + Gross dividends = [0].'), [this.results.dividends_gross,]), style: 'body' }) 
-                r.push({ text: f(this.$t('Net gains + Net dividends = [0].'), [this.results.dividends_net,]), style: 'body' }) 
+                r.push({ text: f(this.$t('Gross gains + Gross dividends = [0].'), [
+                    this.localcurrency_string(this.results.dividends_gross+this.results.gains_gross),
+                ]), style: 'body' }) 
+                r.push({ text: f(this.$t('Net gains + Net dividends = [0].'), [
+                    this.localcurrency_string(this.results.dividends_net+this.results.gains_net),
+                ]), style: 'body' }) 
                 return r
             },
             report_accounts(){
@@ -386,9 +391,8 @@
                 headers[1].title=this.$t("Number")
                 headers[2].title=this.$t("Balance")
                 headers[3].title=this.$t("User currency balance")
-                headers[1].currency=this.useStore().profile.currency
-                headers[2].currency=this.useStore().profile.currency
-                headers[3].currency="u"
+                headers[2].currency="u"
+                headers[3].currency=this.useStore().profile.currency
                 headers[0].total=this.$t("Total")
                 headers[3].total="#SUM"
                 r.push(this.pdfmake_loo_to_table(this.results.accounts, headers, "table8"))
@@ -397,6 +401,7 @@
             report_investments(){
                 var r=[]
                 r.push({ text: this.$t('Current investments'), id:'current_investments', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+                r.push({ text: this.$t('Investments list'), id:'investments_list', style: 'header2', tocItem: true }) 
                 r.push({ text: this.$t('Next list is sorted by the distance in percent to the selling point.'), style: 'body' }) 
 
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.investments, ["fullname","invested_user","balance_user","gains_user", "percentage_invested", "percentage_selling_point"])
@@ -417,6 +422,49 @@
                 headers[2].total="#SUM"
                 headers[3].total="#SUM"
                 r.push(this.pdfmake_loo_to_table(this.results.investments, headers, "table8"))
+
+                if (this.results.invested_user!=0){
+                    r.push({ text: f(this.$t('Investment gains (positive minus negative results): [0] - [1] are [2].'),[
+                        this.localcurrency_string(this.results.investments_gains_positives), 
+                        this.localcurrency_string(-this.results.investments_gains_negatives),
+                        this.localcurrency_string(this.results.investments_gains_positives+this.results.investments_gains_negatives)
+                    ]), style: 'body' }) 
+
+                } 
+                return r
+            },            
+            report_investmentsoperations(){
+                var r=[]
+                r.push({ text: this.$t('Current investments operations'), id:'current_investments_operations', style: 'header2', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+
+                var headers=this.pdfmake_loo_to_table_guess_headers(this.results.current_investments_operations, ["datetime","name","operationstype","shares", "price_user", "invested_user","balance_user","gains_gross_user"])
+
+                headers[0].title=this.$t("Date and time")
+                headers[1].title=this.$t("Name")
+                headers[2].title=this.$t("Operation type")
+                headers[3].title=this.$t("Shares")
+                headers[4].title=this.$t("Price")
+                headers[5].title=this.$t("Invested")
+                headers[6].title=this.$t("Balance")
+                headers[7].title=this.$t("Gains")
+                // headers[1].currency=this.useStore().profile.currency
+                // headers[2].currency=this.useStore().profile.currency
+                // headers[3].currency=this.useStore().profile.currency
+                // headers[4].currency="%"
+                // headers[5].currency="%"
+                headers[0].width="15%"
+                headers[1].width="20%"
+                headers[2].width="15%"
+                headers[3].width="10%"
+                headers[4].width="10%"
+                headers[5].width="10%"
+                headers[6].width="10%"
+                headers[7].width="10%"
+                headers[0].total=this.$t("Total")
+                headers[5].total="#SUM"
+                headers[6].total="#SUM"
+                headers[7].total="#SUM"
+                r.push(this.pdfmake_loo_to_table(this.results.current_investments_operations, headers, "table8"))
                 return r
             },
             get_report_data(){
@@ -429,18 +477,25 @@
                     axios.get(`${this.useStore().apiroot}/reports/annual/revaluation/?only_zero=true`, this.myheaders()),//resRAR
                     axios.get(`${this.useStore().apiroot}/api/accounts/withbalance/?active=true`, this.myheaders()),//resAWB
                     axios.get(`${this.useStore().apiroot}/api/investments/withbalance/?active=true`, this.myheaders()),//resIWB
-                ]).then(([resBWB, resRA, resRAI, resRAG, resRAR, resAWB, resIWB]) => {
+                    axios.get(`${this.useStore().apiroot}/reports/investmentsoperations/current/` , this.myheaders())// resIOC
+                ]).then(([resBWB, resRA, resRAI, resRAG, resRAR, resAWB, resIWB,resIOC]) => {
                     this.results.last_year_balance=resRA.data.last_year_balance
                     this.results.annual=resRA.data.data
                     this.results.balance=this.results.annual[this.results.annual.length-1].total
                     this.results.annual_incomes=resRAI.data
                     this.results.annual_gainsbyproductstypes=resRAG.data
-                    this.results.dividends_net=this.sumBy(this.annual_gainsbyproductstypes,"dividends_net")
-                    this.results.dividends_gross=this.sumBy(this.annual_gainsbyproductstypes,"dividends_gross")
+                    this.results.gains_net=this.sumBy(this.results.annual_gainsbyproductstypes, "gains_net")
+                    this.results.gains_gross=this.sumBy(this.results.annual_gainsbyproductstypes, "gains_gross")
+                    this.results.dividends_net=this.sumBy(this.results.annual_gainsbyproductstypes,"dividends_net")
+                    this.results.dividends_gross=this.sumBy(this.results.annual_gainsbyproductstypes,"dividends_gross")
                     this.results.annual_revaluation=resRAR.data
                     this.results.assets_by_bank=resBWB.data
                     this.results.accounts=resAWB.data
                     this.results.investments=resIWB.data
+                    this.results.investements_invested_user=this.sumBy(this.results.investments,"invested_user")
+                    this.results.investments_gains_positives=this.sumBy(this.results.investments, (item) => {return item.gains_user >= 0 ? item.gains_user : 0})
+                    this.results.investments_gains_negatives=this.sumBy(this.results.investments, (item) => {return item.gains_user < 0 ? item.gains_user : 0})
+                    this.results.current_investments_operations=resIOC.data
 
                     console.log(this.results)
                 }, (error) => {
