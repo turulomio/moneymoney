@@ -298,9 +298,9 @@
                 headers[1].title=this.$t("Accounts balance")
                 headers[2].title=this.$t("Investments balance")
                 headers[3].title=this.$t("Total balance")
-                headers[1].currency=this.useStore().profile.currency
-                headers[2].currency=this.useStore().profile.currency
-                headers[3].currency=this.useStore().profile.currency
+                headers[1].currency_column=this.useStore().profile.currency
+                headers[2].currency_column=this.useStore().profile.currency
+                headers[3].currency_column=this.useStore().profile.currency
                 headers[0].total=this.$t("Total")
                 headers[1].total="#SUM"
                 headers[2].total="#SUM"
@@ -323,11 +323,11 @@
                 headers[3].title=this.$t("Total balance")
                 headers[4].title=this.$t("Annual percentage")
                 headers[5].title=this.$t("Last month difference")
-                headers[1].currency=this.useStore().profile.currency
-                headers[2].currency=this.useStore().profile.currency
-                headers[3].currency=this.useStore().profile.currency
-                headers[4].currency="%"
-                headers[5].currency=this.useStore().profile.currency
+                headers[1].currency_column=this.useStore().profile.currency
+                headers[2].currency_column=this.useStore().profile.currency
+                headers[3].currency_column=this.useStore().profile.currency
+                headers[4].currency_column="%"
+                headers[5].currency_column=this.useStore().profile.currency
                 headers[0].total=this.$t("Total")
                 headers[5].total="#SUM"
                 r.push(this.pdfmake_loo_to_table(this.results.annual, headers, "table8"))
@@ -344,11 +344,11 @@
                 headers[3].title=this.$t("Gains")
                 headers[4].title=this.$t("Dividends")
                 headers[5].title=this.$t("Total")
-                headers[1].currency=this.useStore().profile.currency
-                headers[2].currency=this.useStore().profile.currency
-                headers[3].currency=this.useStore().profile.currency
-                headers[4].currency=this.useStore().profile.currency
-                headers[5].currency=this.useStore().profile.currency
+                headers[1].currency_column=this.useStore().profile.currency
+                headers[2].currency_column=this.useStore().profile.currency
+                headers[3].currency_column=this.useStore().profile.currency
+                headers[4].currency_column=this.useStore().profile.currency
+                headers[5].currency_column=this.useStore().profile.currency
                 headers[0].total=this.$t("Total")
                 headers[1].total="#SUM"
                 headers[2].total="#SUM"
@@ -376,10 +376,10 @@
                 headers[2].title=this.$t("Gross dividends")
                 headers[3].title=this.$t("Net gains")
                 headers[4].title=this.$t("Net dividends")
-                headers[1].currency=this.useStore().profile.currency
-                headers[2].currency=this.useStore().profile.currency
-                headers[3].currency=this.useStore().profile.currency
-                headers[4].currency=this.useStore().profile.currency
+                headers[1].currency_column=this.useStore().profile.currency
+                headers[2].currency_column=this.useStore().profile.currency
+                headers[3].currency_column=this.useStore().profile.currency
+                headers[4].currency_column=this.useStore().profile.currency
                 headers[0].total=this.$t("Total")
                 headers[1].total="#SUM"
                 headers[2].total="#SUM"
@@ -397,15 +397,15 @@
             },
             report_accounts(){
                 var r=[]
-                r.push({ text: this.$t('3. Current accounts'), id:'current_accounts', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before" })
+                r.push({ text: this.$t('3. Current accounts'), id:'current_accounts', style: 'header1', tocItem: true ,pageOrientation: 'portrait', pageBreak:"before" })
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.accounts, ["name","number","balance_account","balance_user"])
 
                 headers[0].title=this.$t("Account name")
                 headers[1].title=this.$t("Number")
                 headers[2].title=this.$t("Balance")
                 headers[3].title=this.$t("User currency balance")
-                headers[2].currency="u"
-                headers[3].currency=this.useStore().profile.currency
+                headers[2].currency_row_key="currency"
+                headers[3].currency_column=this.useStore().profile.currency
                 headers[0].total=this.$t("Total")
                 headers[3].total="#SUM"
                 r.push(this.pdfmake_loo_to_table(this.results.accounts, headers, "table8"))
@@ -425,11 +425,11 @@
                 headers[3].title=this.$t("Gains")
                 headers[4].title=this.$t("% invested")
                 headers[5].title=this.$t("% selling point")
-                headers[1].currency=this.useStore().profile.currency
-                headers[2].currency=this.useStore().profile.currency
-                headers[3].currency=this.useStore().profile.currency
-                headers[4].currency="%"
-                headers[5].currency="%"
+                headers[1].currency_column=this.useStore().profile.currency
+                headers[2].currency_column=this.useStore().profile.currency
+                headers[3].currency_column=this.useStore().profile.currency
+                headers[4].currency_column="%"
+                headers[5].currency_column="%"
                 headers[0].total=this.$t("Total")
                 headers[1].total="#SUM"
                 headers[2].total="#SUM"
@@ -460,11 +460,11 @@
                 headers[5].title=this.$t("Invested")
                 headers[6].title=this.$t("Balance")
                 headers[7].title=this.$t("Gains")
-                // headers[1].currency=this.useStore().profile.currency
-                // headers[2].currency=this.useStore().profile.currency
-                // headers[3].currency=this.useStore().profile.currency
-                // headers[4].currency="%"
-                // headers[5].currency="%"
+                // headers[1].currency_column=this.useStore().profile.currency
+                // headers[2].currency_column=this.useStore().profile.currency
+                // headers[3].currency_column=this.useStore().profile.currency
+                // headers[4].currency_column="%"
+                // headers[5].currency_column="%"
                 headers[0].width="15%"
                 headers[1].width="20%"
                 headers[2].width="15%"
@@ -492,7 +492,7 @@
                 headers[4].title=this.$t("Price")
                 headers[5].title=this.$t("Amount")
                 headers[6].title=this.$t("% from price")
-                headers[6].currency="%"
+                headers[6].currency_column="%"
                 headers[0].width="10%"
                 headers[1].width="10%"
                 headers[2].width="40%"
@@ -515,7 +515,7 @@
                 headers[3].title=this.$t("Shares")
                 headers[4].title=this.$t("Estimated")
                 headers[5].title=this.$t("%")
-                headers[5].currency="%"
+                headers[5].currency_column="%"
                 headers[0].total=this.$t("Total")
                 headers[4].total="#SUM"
                 r.push(this.pdfmake_loo_to_table(this.results.dividends, headers, "table8"))
@@ -539,10 +539,10 @@
                 headers[3].title=this.$t("Historical net gains")
                 headers[4].title=this.$t("Dividends")
                 headers[5].title=this.$t("Total")
-                headers[2].currency=this.useStore().profile.currency
-                headers[3].currency=this.useStore().profile.currency
-                headers[4].currency=this.useStore().profile.currency
-                headers[5].currency=this.useStore().profile.currency
+                headers[2].currency_column=this.useStore().profile.currency
+                headers[3].currency_column=this.useStore().profile.currency
+                headers[4].currency_column=this.useStore().profile.currency
+                headers[5].currency_column=this.useStore().profile.currency
                 headers[0].total=this.$t("Total")
                 headers[2].total="#SUM"
                 headers[3].total="#SUM"

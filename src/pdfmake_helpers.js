@@ -30,7 +30,8 @@ export function pdfmake_convertImageToDataURL(url){
      *      name
      *      decimals
      *      alignment
-     *      currency
+     *      currency_column  EUR %, USD...
+     *      currency_row_key  key in row where must get curtrency value
      *      total
      *      width
      * }
@@ -47,7 +48,8 @@ export function pdfmake_convertImageToDataURL(url){
             key:key,
             title: upperFirst(key),
             decimals: 2,
-            currency: null,
+            currency_column: null,
+            currency_row_key:null,
             alignment: alignment,
             total: null,
             width: "*"
@@ -67,6 +69,7 @@ export function pdfmake_loo_to_table(loo,headers,style){
     
     var widths=[]
 
+
     headers.forEach(header=>{
         row.push({text:header.title,fillColor:'#888888', bold:true, alignment:"center"})
         widths.push(header.width)
@@ -81,11 +84,14 @@ export function pdfmake_loo_to_table(loo,headers,style){
                 if (o[header.key]<0){
                     color="red"
                 }
-                if( header.currency && header.currency=="%"){
+                if( header.currency_column && header.currency_column=="%"){
                     value=percentage_string(o[header.key],header.decimals)
+                } else  if( header.currency_column){
+                    value=currency_string(o[header.key],header.currency_column,header.decimals)
+                } else  if( header.currency_row_key){
+                    value=currency_string(o[header.key], o[header.currency_row_key],header.decimals)
                 } else {
-                    value=currency_string(o[header.key],header.currency,header.decimals)
-
+                    value=round(o[header.key], header.decimals)
                 }
             }
             row.push({ text:value, alignment: header.alignment, color:color}) 
@@ -107,8 +113,8 @@ export function pdfmake_loo_to_table(loo,headers,style){
         headers.forEach(header =>{
             if (header.total==null){
                 row.push({text:"", fillColor:"#CCCCCC"})
-            } else if (header.total=="#SUM" && header.currency){
-                row.push({text:currency_string(sumBy(loo,header.key), header.currency,header.decimals), fillColor:"#CCCCCC", alignment:header.alignment})
+            } else if (header.total=="#SUM" && header.currency_column){
+                row.push({text:currency_string(sumBy(loo,header.key), header.currency_column,header.decimals), fillColor:"#CCCCCC", alignment:header.alignment})
             } else {
                 row.push({text: header.total, fillColor:"#CCCCCC"})
             }
