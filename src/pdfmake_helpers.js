@@ -42,7 +42,7 @@ export function pdfmake_convertImageToDataURL(url){
         let alignment="left"
         if (key.currency_column=="%"){
             alignment="right"
-        } else if (isNumber(loo[0][key])){
+        } else if (loo.length>0 && isNumber(loo[0][key])){
             alignment="right"
         }
 
