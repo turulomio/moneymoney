@@ -1,8 +1,8 @@
 <template>
     <div>
         <h1>{{ $t("Assets Report") }}</h1>
-        <div class="d-flex justify-center mb-4" width="40%">
-            <v-card width="40%" class="pa-4">      
+        <div class="d-flex justify-center mb-4" width="20%">
+            <v-card width="20%" class="pa-4">      
                 <v-text-field v-model="password" type="password" :label="$t('Set pdf password if necessary')"></v-text-field>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -30,7 +30,7 @@
     import { useStore } from "@/store"
     import ChartEvolutionAssets from './ChartEvolutionAssets.vue'
     import ChartPie from './ChartPie.vue'
-    import { my_round, f } from 'vuetify_rules'
+    import { my_round, f, localtime } from 'vuetify_rules'
     import {sumBy, orderBy} from "lodash-es"
 
     import pdfMake from "pdfmake/build/pdfmake";
@@ -124,6 +124,7 @@
         },
         methods:{
             useStore,
+            localtime,
             my_round,
             f,
             orderBy,
@@ -202,10 +203,10 @@
                     docDefinition["userPassword"]=this.password,
                     docDefinition["permissions"]={
                         printing: 'highResolution', // Allow printing
-                        modifying: false,           // Disallow modifying
+                        modifying: true,           // Disallow modifying
                         copying: true,             // Disallow copying
                         annotating: true,          // Disallow annotating
-                        fillingForms: false,        // Disallow filling forms
+                        fillingForms: true,        // Disallow filling forms
                         contentAccessibility: true,// Disallow content accessibility
                         documentAssembly: true,    // Disallow document assembly
                     }
@@ -404,7 +405,16 @@
                 var r=[]
                 r.push({ text: this.$t('4.2. Current investments operations'), id:'current_investments_operations', style: 'header2', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
 
-                var headers=this.pdfmake_loo_to_table_guess_headers(this.results.current_investments_operations, ["datetime","name","operationstype","shares", "price_user", "invested_user","balance_user","gains_gross_user"])
+                this.results.current_investments_operations.forEach(o=>{
+                    console.log(o)
+                    o["datetime"]=this.localtime(o["datetime"])
+                    // o["operationstypes"]=this.useStore().operationstypes.get(o["operationstypes_id"]).localname
+                    console.log(o)
+                })
+
+                var headers=this.pdfmake_loo_to_table_guess_headers(this.results.current_investments_operations, ["datetime","name","operationstypes_id","shares", "price_user", "invested_user","balance_user","gains_gross_user"])
+
+
 
                 headers[0].title=this.$t("Date and time")
                 headers[1].title=this.$t("Name")
@@ -568,8 +578,6 @@
                     this.parseResponseError(error)
                 })
             },
-
-
         },
         created(){
             this.get_report_data()

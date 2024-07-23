@@ -133,7 +133,6 @@ export function pdfmake_loo_to_table(loo,headers,style){
             },
             style: style,
         }
-    console.log(r)
     return r
 }
 
