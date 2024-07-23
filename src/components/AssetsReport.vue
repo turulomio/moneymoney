@@ -1,8 +1,8 @@
 <template>
     <div>
         <h1>{{ $t("Assets Report") }}</h1>
-        <div class="d-flex justify-center mb-4" width="40%">
-            <v-card width="40%" class="pa-4">      
+        <div class="d-flex justify-center mb-4" width="20%">
+            <v-card width="20%" class="pa-4">      
                 <v-text-field v-model="password" type="password" :label="$t('Set pdf password if necessary')"></v-text-field>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -30,7 +30,7 @@
     import { useStore } from "@/store"
     import ChartEvolutionAssets from './ChartEvolutionAssets.vue'
     import ChartPie from './ChartPie.vue'
-    import { my_round, f } from 'vuetify_rules'
+    import { my_round, f, localtime } from 'vuetify_rules'
     import {sumBy, orderBy} from "lodash-es"
 
     import pdfMake from "pdfmake/build/pdfmake";
@@ -124,6 +124,7 @@
         },
         methods:{
             useStore,
+            localtime,
             my_round,
             f,
             orderBy,
@@ -197,6 +198,20 @@
                         return (currentPage>2)? { text: currentPage.toString() + this.$t(' of ') + pageCount, alignment: 'center' }:""
                     }.bind(this)
                 };
+                if (this.password.length>0){
+                    docDefinition["ownerPassword"]=this.password,
+                    docDefinition["userPassword"]=this.password,
+                    docDefinition["permissions"]={
+                        printing: 'highResolution', // Allow printing
+                        modifying: true,           // Disallow modifying
+                        copying: true,             // Disallow copying
+                        annotating: true,          // Disallow annotating
+                        fillingForms: true,        // Disallow filling forms
+                        contentAccessibility: true,// Disallow content accessibility
+                        documentAssembly: true,    // Disallow document assembly
+                    }
+                }
+
                 console.log(docDefinition)
                 await pdfMake.createPdf(docDefinition,{tagged:true}).download('report.pdf');
                 this.creating=false
@@ -390,7 +405,16 @@
                 var r=[]
                 r.push({ text: this.$t('4.2. Current investments operations'), id:'current_investments_operations', style: 'header2', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
 
-                var headers=this.pdfmake_loo_to_table_guess_headers(this.results.current_investments_operations, ["datetime","name","operationstype","shares", "price_user", "invested_user","balance_user","gains_gross_user"])
+                this.results.current_investments_operations.forEach(o=>{
+                    console.log(o)
+                    o["datetime"]=this.localtime(o["datetime"])
+                    // o["operationstypes"]=this.useStore().operationstypes.get(o["operationstypes_id"]).localname
+                    console.log(o)
+                })
+
+                var headers=this.pdfmake_loo_to_table_guess_headers(this.results.current_investments_operations, ["datetime","name","operationstypes_id","shares", "price_user", "invested_user","balance_user","gains_gross_user"])
+
+
 
                 headers[0].title=this.$t("Date and time")
                 headers[1].title=this.$t("Name")
@@ -492,6 +516,25 @@
                 return r
             },  
             get_report_data(){
+                const ranking_filter_data=(ios)=>{
+                    var r=[]
+                    ios.entries.forEach(o=>{
+                        var e=ios[o]
+                        r.push({
+                            ranking: e.data.ranking,
+                            name: e.data.name,
+                            current_net_gains:e.total_io_current.gains_net_user,
+                            historical_net_gains: e.total_io_historical.gains_net_user,
+                            dividends: e.data.dividends,
+                            total: e.total_io_current.gains_net_user+ e.total_io_historical.gains_net_user + e.data.dividends,
+                            products_id: e.data.products_id,
+                        })
+                    })
+                    r=orderBy(r,["ranking"], ["asc"])
+                    return r
+                }
+
+
                 const year=new Date().getFullYear()
                 axios.all([
                     axios.get(`${this.useStore().apiroot}/investments/classes/`, this.myheaders()),//resPies
@@ -527,7 +570,7 @@
                     this.results.current_investments_operations=resIOC.data
                     this.results.orders=resOrders.data
                     this.results.dividends=resDividends.data
-                    this.results.ranking=this.ranking_filter_data(resRanking.data)
+                    this.results.ranking=ranking_filter_data(resRanking.data)
 
                     console.log(this.results)
                     this.loading=false
@@ -535,25 +578,6 @@
                     this.parseResponseError(error)
                 })
             },
-            ranking_filter_data(ios){
-                var r=[]
-                ios.entries.forEach(o=>{
-                    var e=ios[o]
-                    r.push({
-                        ranking: e.data.ranking,
-                        name: e.data.name,
-                        current_net_gains:e.total_io_current.gains_net_user,
-                        historical_net_gains: e.total_io_historical.gains_net_user,
-                        dividends: e.data.dividends,
-                        total: e.total_io_current.gains_net_user+ e.total_io_historical.gains_net_user + e.data.dividends,
-                        products_id: e.data.products_id,
-                    })
-                })
-                r=orderBy(r,["ranking"], ["asc"])
-                return r
-
-            },
-
         },
         created(){
             this.get_report_data()
