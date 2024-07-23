@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "node --max-old-space-size=8192 node_modules/.bin/vite build",
     "preview": "vite preview",
-    "translate": "./node_modules/.bin/vue-i18n-extract",
+    "translate": "vue-i18n-extract --vueFiles './src/**/*.?(js|vue)' --languageFiles './src/locales/**/*.?(json|yaml|yml|js)' --add true --remove true --separator '###' --noEmptyTranslation '*' ",
     "test": "vitest",
     "coverage": "vitest --ui --coverage",
     "cypress": "cypress open",
@@ -34,12 +34,12 @@
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "^3.12.42",
+    "@cypress/code-coverage": "^3.12.44",
     "@cypress/vite-dev-server": "^5.1.1",
     "@eslint/js": "^9.7.0",
     "@vitejs/plugin-vue": "^5.0.5",
-    "@vitest/coverage-v8": "^2.0.3",
-    "@vitest/ui": "^2.0.3",
+    "@vitest/coverage-v8": "^2.0.4",
+    "@vitest/ui": "^2.0.4",
     "@vue/test-utils": "^2.4.6",
     "cypress": "^13.13.1",
     "eslint": "^9.7.0",
@@ -52,6 +52,6 @@
     "vite-plugin-istanbul": "^6.0.2",
     "vite-plugin-vue-devtools": "^7.3.6",
     "vite-plugin-vuetify": "^2.0.3",
-    "vitest": "^2.0.3"
+    "vitest": "^2.0.4"
   }
 }
