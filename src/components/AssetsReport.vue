@@ -138,9 +138,9 @@
                 this.creating=true
                 const docDefinition = {
                     info: {
-                        title: this.$t("Money money assets report"),
+                        title: this.$t("Money Money assets report"),
                         author: `Money Money v${this.useStore().version}`,
-                        subject: this.$t("Money money assets report"),
+                        subject: this.$t("Money Money assets report"),
                         keywords: 'assets report',
                     },
                     content: [    
