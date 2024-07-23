@@ -58,23 +58,15 @@ jobs:
     - name: Install libreoffice 
       run: |
         sudo apt-get install python3.11 python3.11-venv
-        sudo apt-get install libreoffice python3-uno
 
     - name: Install python dependencies ${{ matrix.python-version }} and launch django_moneymoney cypress_test_server
       run: |
         cd ..
         git clone https://github.com/turulomio/django_moneymoney
         cd django_moneymoney
-        sudo python3.11 -m venv .python3.11 --system-site-packages
+        sudo python3.11 -m venv .python3.11
         sudo .python3.11/bin/pip install .
-        sudo .python3.11/bin/pip install poethepoet
         sudo .python3.11/bin/python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport 8004 &
-
-    - name: Launch Unogenerator
-      run: |
-        sudo pwd
-        sudo ls -la 
-        sudo ../django_moneymoney/.python3.11/bin/unogenerator_start
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
