@@ -175,6 +175,7 @@
             on_finished(){
                 this.finished=true
                 console.log("Chart assets has finished")
+
             },
 
             async downloadChart() {
