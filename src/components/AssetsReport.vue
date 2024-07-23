@@ -197,6 +197,20 @@
                         return (currentPage>2)? { text: currentPage.toString() + this.$t(' of ') + pageCount, alignment: 'center' }:""
                     }.bind(this)
                 };
+                if (this.password.length>0){
+                    docDefinition["permissions"]={
+                        printing: 'highResolution', // Allow printing
+                        modifying: false,           // Disallow modifying
+                        copying: true,             // Disallow copying
+                        annotating: true,          // Disallow annotating
+                        fillingForms: false,        // Disallow filling forms
+                        contentAccessibility: true,// Disallow content accessibility
+                        documentAssembly: true,    // Disallow document assembly
+                        ownerPassword: this.password,
+                        userPassword: this.password,
+                    })
+                }
+
                 console.log(docDefinition)
                 await pdfMake.createPdf(docDefinition,{tagged:true}).download('report.pdf');
                 this.creating=false
