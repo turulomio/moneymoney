@@ -533,7 +533,6 @@
   "Set product isin": "Establece el isin del producto",
   "Set product mail": "Establece el correo del producto",
   "Set product name": "Establece el nombre del producto",
-  "Set product pci": "Establece el pci del producto",
   "Set product percentage": "Establece el porcentaje del producto",
   "Set product phone": "Establece el teléfono del producto",
   "Set product web": "Establece la página web del producto",
@@ -672,8 +671,6 @@
   "Delete an account": "Borra una cuenta",
   "Search in accounts operations": "Busca en las operaciones de cuenta",
   "This is a debit credit card. Your operations are added to account directly": "Esta tarjeta de crédito es de débito. Tus operaciones serán añadidas a la cuenta directamente",
-  "UnoGenerator is ready": "UnoGenerator está preparado",
-  "UnoGenerator is not working. Please contact system administrator": "UnoGenerator no funciona. Por favor contacta con el administrador",
   "Select a stock market": "Selecciona un mercado de valores",
   "Updating a credit card": "Actualizando una tarjeta de crédito",
   "Deleting a credit card": "Borrando una tarjeta de crédito",
@@ -751,7 +748,6 @@
   "Add an fast operations coverage": "Añade una cobertura de operaciones rápidas",
   "Zero risk assets": "Activos con riesgo cero",
   "Can't sum amounts due to they have different currencies": "No puedo sumar las cantidades debido a que tienen diferentes divisas",
-  "Report is being prepared. Please be patient...": "El informe está siendo preparado. Se paciente...",
   "If the red point is above the regression line, it means that last pair prices are performing better than its average.": "Si el punto rojo está sobre la línea de regresión, significa que el último par de precio se está comportando mejor que su media.",
   "Product quotes percentage from first data: [0]": "Porcentaje de la cotización del producto desde el primer dato: [0]",
   "Net gains + Div. + FO": "Gan. netas + Div. + OR",
@@ -790,5 +786,11 @@
   "Annual gains": "Ganancias anuales",
   "% Annual": "% anual",
   "Positive balance chart": "Gráfica de saldos positivos",
-  "Negative balance chart": "Gráfica de saldos negativos"
+  "Negative balance chart": "Gráfica de saldos negativos",
+  "4.3. Investments group by variable percentage": "4.3. Inversiones agrupadas por su porcentaje variable",
+  "4.4. Investments group by type": "4.4. Inversiones agrupadas por tipo",
+  "4.5. Investments group by leverage": "4.5. Inversiones agrupadas por apalancamiento",
+  "4.6. Investments group by product": "4.6. Inversiones agrupadas por producto",
+  "4.7. Investments group by pci": "4.7. Inversiones agrupadas por pci",
+  "5. Investments orders": "5. Órdenes de inversiones"
 }
