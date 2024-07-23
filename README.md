@@ -4,18 +4,6 @@
 
 ## Installation
 
-### Unogenerator installation
-You must configure unogenerator.
-
-If you want to install it in Gentoo you can use my ebuild at myportage.
-
-In other Linux distributions you must run
-
-```bash
-    pip install unogenerator
-    unogenator_start
-```
-
 ### Django_moneymoney installation
 
  You need to create a new database. I recommend postgresql.

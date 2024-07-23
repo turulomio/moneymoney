@@ -138,9 +138,9 @@
                 this.creating=true
                 const docDefinition = {
                     info: {
-                        title: this.$t("Money money assets report"),
+                        title: this.$t("Money Money assets report"),
                         author: `Money Money v${this.useStore().version}`,
-                        subject: this.$t("Money money assets report"),
+                        subject: this.$t("Money Money assets report"),
                         keywords: 'assets report',
                     },
                     content: [    
@@ -190,6 +190,7 @@
                         header1: { fontSize: 16, bold: true , margin: [0, 6, 0, 6]},
                         header2: { fontSize: 14, bold: true , margin: [6, 4, 0, 4]},
                         body: { fontSize: 11 ,margin:[0,2,0,2]},
+                        table5: {fontSize:5,margin:[0,4,0,4]},
                         table8: {fontSize:8,margin:[0,4,0,4]},
                         table12: {fontSize:12,margin:[0,4,0,4]},
                     },
@@ -212,7 +213,7 @@
                     }
                 }
 
-                console.log(docDefinition)
+                console.log("PDFMAKE", docDefinition)
                 await pdfMake.createPdf(docDefinition,{tagged:true}).download('report.pdf');
                 this.creating=false
             },
@@ -354,6 +355,10 @@
                 headers[3].currency_column=this.useStore().profile.currency
                 headers[0].total=this.$t("Total")
                 headers[3].total="#SUM"
+                headers[0].width="56%"
+                headers[1].width="20%"
+                headers[2].width="12%"
+                headers[3].width="12%"
                 r.push(this.pdfmake_loo_to_table(this.results.accounts, headers, "table8"))
                 return r
             },
@@ -406,15 +411,11 @@
                 r.push({ text: this.$t('4.2. Current investments operations'), id:'current_investments_operations', style: 'header2', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
 
                 this.results.current_investments_operations.forEach(o=>{
-                    console.log(o)
                     o["datetime"]=this.localtime(o["datetime"])
-                    // o["operationstypes"]=this.useStore().operationstypes.get(o["operationstypes_id"]).localname
-                    console.log(o)
+                    o["operationstypes"]=this.getMapObjectById("operationstypes",5).localname
                 })
 
-                var headers=this.pdfmake_loo_to_table_guess_headers(this.results.current_investments_operations, ["datetime","name","operationstypes_id","shares", "price_user", "invested_user","balance_user","gains_gross_user"])
-
-
+                var headers=this.pdfmake_loo_to_table_guess_headers(this.results.current_investments_operations, ["datetime","name","operationstypes","shares", "price_user", "invested_user","balance_user","gains_gross_user"])
 
                 headers[0].title=this.$t("Date and time")
                 headers[1].title=this.$t("Name")
@@ -424,19 +425,18 @@
                 headers[5].title=this.$t("Invested")
                 headers[6].title=this.$t("Balance")
                 headers[7].title=this.$t("Gains")
-                // headers[1].currency_column=this.useStore().profile.currency
-                // headers[2].currency_column=this.useStore().profile.currency
-                // headers[3].currency_column=this.useStore().profile.currency
-                // headers[4].currency_column="%"
-                // headers[5].currency_column="%"
-                headers[0].width="15%"
-                headers[1].width="20%"
-                headers[2].width="15%"
-                headers[3].width="10%"
-                headers[4].width="10%"
-                headers[5].width="10%"
-                headers[6].width="10%"
-                headers[7].width="10%"
+                headers[4].currency_row_key="currency_product"
+                headers[5].currency_column=this.useStore().profile.currency
+                headers[6].currency_column=this.useStore().profile.currency
+                headers[7].currency_column=this.useStore().profile.currency
+                headers[0].width="11%"
+                headers[1].width="34%"
+                headers[2].width="10%"
+                headers[3].width="9%"
+                headers[4].width="9%"
+                headers[5].width="9%"
+                headers[6].width="9%"
+                headers[7].width="9%"
                 headers[0].total=this.$t("Total")
                 headers[5].total="#SUM"
                 headers[6].total="#SUM"
@@ -456,10 +456,12 @@
                 headers[4].title=this.$t("Price")
                 headers[5].title=this.$t("Amount")
                 headers[6].title=this.$t("% from price")
+                headers[4].currency_row_key="currency"
+                headers[5].currency_row_key="currency"
                 headers[6].currency_column="%"
-                headers[0].width="10%"
-                headers[1].width="10%"
-                headers[2].width="40%"
+                headers[0].width="8%"
+                headers[1].width="8%"
+                headers[2].width="44%"
                 headers[3].width="10%"
                 headers[4].width="10%"
                 headers[5].width="10%"
@@ -479,7 +481,16 @@
                 headers[3].title=this.$t("Shares")
                 headers[4].title=this.$t("Estimated")
                 headers[5].title=this.$t("%")
+                headers[1].currency_row_key="currency"
+                headers[2].currency_row_key="currency"
+                headers[4].currency_column=this.useStore().profile.currency
                 headers[5].currency_column="%"
+                headers[0].width="50%"
+                headers[1].width="10%"
+                headers[2].width="10%"
+                headers[3].width="10%"
+                headers[4].width="10%"
+                headers[5].width="10%"
                 headers[0].total=this.$t("Total")
                 headers[4].total="#SUM"
                 r.push(this.pdfmake_loo_to_table(this.results.dividends, headers, "table8"))
@@ -493,7 +504,7 @@
             },              
             report_ranking(){
                 var r=[]
-                r.push({ text: this.$t('7. Historical investment ranking'), id:'historical_investment_ranking', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+                r.push({ text: this.$t('7. Historical investment ranking'), id:'historical_investment_ranking', style: 'header1', tocItem: true ,pageOrientation: 'portrait', pageBreak:"before",}) // Set this page to landscape})
 
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.ranking, ["ranking","name","current_net_gains","historical_net_gains", "dividends", "total"])
 
@@ -512,7 +523,13 @@
                 headers[3].total="#SUM"
                 headers[4].total="#SUM"
                 headers[5].total="#SUM"
-                r.push(this.pdfmake_loo_to_table(this.results.ranking, headers, "table8"))
+                headers[0].width="5%"
+                headers[1].width="63%"
+                headers[2].width="8%"
+                headers[3].width="8%"
+                headers[4].width="8%"
+                headers[5].width="8%"
+                r.push(this.pdfmake_loo_to_table(this.results.ranking, headers, "table5"))
                 return r
             },  
             get_report_data(){
@@ -572,7 +589,7 @@
                     this.results.dividends=resDividends.data
                     this.results.ranking=ranking_filter_data(resRanking.data)
 
-                    console.log(this.results)
+                    console.log("RESULTS", this.results)
                     this.loading=false
                 }, (error) => {
                     this.parseResponseError(error)
@@ -580,6 +597,7 @@
             },
         },
         created(){
+            console.log()
             this.get_report_data()
         }
     }
