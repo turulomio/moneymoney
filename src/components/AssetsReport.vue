@@ -198,6 +198,8 @@
                     }.bind(this)
                 };
                 if (this.password.length>0){
+                    docDefinition["ownerPassword"]=this.password,
+                    docDefinition["userPassword"]=this.password,
                     docDefinition["permissions"]={
                         printing: 'highResolution', // Allow printing
                         modifying: false,           // Disallow modifying
@@ -206,9 +208,7 @@
                         fillingForms: false,        // Disallow filling forms
                         contentAccessibility: true,// Disallow content accessibility
                         documentAssembly: true,    // Disallow document assembly
-                        ownerPassword: this.password,
-                        userPassword: this.password,
-                    })
+                    }
                 }
 
                 console.log(docDefinition)
