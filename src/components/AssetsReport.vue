@@ -492,6 +492,25 @@
                 return r
             },  
             get_report_data(){
+                const ranking_filter_data=(ios)=>{
+                    var r=[]
+                    ios.entries.forEach(o=>{
+                        var e=ios[o]
+                        r.push({
+                            ranking: e.data.ranking,
+                            name: e.data.name,
+                            current_net_gains:e.total_io_current.gains_net_user,
+                            historical_net_gains: e.total_io_historical.gains_net_user,
+                            dividends: e.data.dividends,
+                            total: e.total_io_current.gains_net_user+ e.total_io_historical.gains_net_user + e.data.dividends,
+                            products_id: e.data.products_id,
+                        })
+                    })
+                    r=orderBy(r,["ranking"], ["asc"])
+                    return r
+                }
+
+
                 const year=new Date().getFullYear()
                 axios.all([
                     axios.get(`${this.useStore().apiroot}/investments/classes/`, this.myheaders()),//resPies
@@ -527,7 +546,7 @@
                     this.results.current_investments_operations=resIOC.data
                     this.results.orders=resOrders.data
                     this.results.dividends=resDividends.data
-                    this.results.ranking=this.ranking_filter_data(resRanking.data)
+                    this.results.ranking=ranking_filter_data(resRanking.data)
 
                     console.log(this.results)
                     this.loading=false
@@ -535,24 +554,7 @@
                     this.parseResponseError(error)
                 })
             },
-            ranking_filter_data(ios){
-                var r=[]
-                ios.entries.forEach(o=>{
-                    var e=ios[o]
-                    r.push({
-                        ranking: e.data.ranking,
-                        name: e.data.name,
-                        current_net_gains:e.total_io_current.gains_net_user,
-                        historical_net_gains: e.total_io_historical.gains_net_user,
-                        dividends: e.data.dividends,
-                        total: e.total_io_current.gains_net_user+ e.total_io_historical.gains_net_user + e.data.dividends,
-                        products_id: e.data.products_id,
-                    })
-                })
-                r=orderBy(r,["ranking"], ["asc"])
-                return r
 
-            },
 
         },
         created(){
