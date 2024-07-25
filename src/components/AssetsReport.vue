@@ -167,17 +167,18 @@
                         ...this.report_accounts(),
                         ...this.report_investments(),
                         ...this.report_investmentsoperations(),
+                        ...this.report_investements_freerisk_revaluation(),
 
 
-                        { text: this.$t('4.3. Investments group by variable percentage'), id:'investments_by_variable_percentage', style: 'header2', tocItem: true , pageBreak:"before"},
+                        { text: this.$t('4.4. Investments group by variable percentage'), id:'investments_by_variable_percentage', style: 'header2', tocItem: true , pageBreak:"before"},
                         { image: await this.$refs.chart_pie_percentage.downloadChart(), width: 1200, alignment: 'center' },
-                        { text: this.$t('4.4. Investments group by type'), id:'investments_by_type', style: 'header2', tocItem: true ,pageBreak:"before"},
+                        { text: this.$t('4.5. Investments group by type'), id:'investments_by_type', style: 'header2', tocItem: true ,pageBreak:"before"},
                         { image: await this.$refs.chart_pie_producttype.downloadChart(), width: 1200, alignment: 'center' },
-                        { text: this.$t('4.5. Investments group by leverage'), id:'investments_by_leverage', style: 'header2', tocItem: true ,pageBreak:"before"},
+                        { text: this.$t('4.6. Investments group by leverage'), id:'investments_by_leverage', style: 'header2', tocItem: true ,pageBreak:"before"},
                         { image: await this.$refs.chart_pie_leverage.downloadChart(), width: 1200, alignment: 'center' },
-                        { text: this.$t('4.6. Investments group by product'), id:'investments_by_product', style: 'header2', tocItem: true ,pageBreak:"before"},
+                        { text: this.$t('4.7. Investments group by product'), id:'investments_by_product', style: 'header2', tocItem: true ,pageBreak:"before"},
                         { image: await this.$refs.chart_pie_product.downloadChart(), width: 1200, alignment: 'center' },
-                        { text: this.$t('4.7. Investments group by pci'), id:'investments_by_pci', style: 'header2', tocItem: true ,pageBreak:"before"},
+                        { text: this.$t('4.8. Investments group by pci'), id:'investments_by_pci', style: 'header2', tocItem: true ,pageBreak:"before"},
                         { image: await this.$refs.chart_pie_pci.downloadChart(), width: 1200, alignment: 'center' },
                         
                         ...this.report_orders(),
@@ -189,7 +190,7 @@
                     styles: {
                         header1: { fontSize: 16, bold: true , margin: [0, 6, 0, 6]},
                         header2: { fontSize: 14, bold: true , margin: [6, 4, 0, 4]},
-                        body: { fontSize: 11 ,margin:[0,2,0,2]},
+                        body: { fontSize: 11 ,margin:[0,2,0,2], alignment:"justify"},
                         table5: {fontSize:5,margin:[0,4,0,4]},
                         table8: {fontSize:8,margin:[0,4,0,4]},
                         table12: {fontSize:12,margin:[0,4,0,4]},
@@ -304,13 +305,6 @@
                 headers[5].total="#SUM"
                 r.push(this.pdfmake_loo_to_table(this.results.annual_incomes, headers, "table8"))
 
-
-                r.push({ text: f(this.$t("Up to date you have got [0] (net gains + net dividends) what represents a [1] of the total assets at the end of the last year."), [
-                        this.localcurrency_html(this.results.dividends_net+this.results.gains_net), 
-                        this.percentage_string((this.results.dividends_net+this.results.gains_net)/this.results.last_year_balance)
-                    ]), style:"body"})
-        
-
                 return r
             },
             report_assets_current_year_gainsbyproductstypes(){
@@ -340,6 +334,15 @@
                 r.push({ text: f(this.$t('Net gains + Net dividends = [0].'), [
                     this.localcurrency_string(this.results.dividends_net+this.results.gains_net),
                 ]), style: 'body' }) 
+
+                r.push({ text: f(this.$t("Up to date you have got [0] (net gains + net dividends) what represents a [1] of the total assets at the end of the last year."), [
+                        this.localcurrency_html(this.results.dividends_net+this.results.gains_net), 
+                        this.percentage_string((this.results.dividends_net+this.results.gains_net)/this.results.last_year_balance)
+                    ]), style:"body"})
+
+                var current_percentage_with_revaluation=(this.results.dividends_net+this.results.gains_net+this.results.revaluation_free_risk_total)/this.results.last_year_balance
+                r.push({ text: f(this.$t("Considering gains from risk-free investments ([0]), the annual percentage of gains would be [1]."), [this.localcurrency_string(this.results.revaluation_free_risk_total),this.percentage_string(current_percentage_with_revaluation)]), style:"body"})
+
                 return r
             },
             report_accounts(){
@@ -412,7 +415,7 @@
 
                 this.results.current_investments_operations.forEach(o=>{
                     o["datetime"]=this.localtime(o["datetime"])
-                    o["operationstypes"]=this.getMapObjectById("operationstypes",5).localname
+                    o["operationstypes"]=this.getMapObjectById("operationstypes",o["operationstypes_id"]).localname
                 })
 
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.current_investments_operations, ["datetime","name","operationstypes","shares", "price_user", "invested_user","balance_user","gains_gross_user"])
@@ -442,6 +445,43 @@
                 headers[6].total="#SUM"
                 headers[7].total="#SUM"
                 r.push(this.pdfmake_loo_to_table(this.results.current_investments_operations, headers, "table8"))
+                return r
+            },
+            report_investements_freerisk_revaluation(){
+                var r=[]
+                r.push({ text: this.$t('4.3. Current free-risk investments revaluation'), id:'current_investments_freerisk_revaluation', style: 'header2', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+                this.results.revaluation_free_risk.forEach(o=>{
+                    o["localdatetime"]=this.localtime(o["datetime"])
+                    o["operationstypes"]=this.getMapObjectById("operationstypes", o["operationstypes_id"]).localname
+                    o["percentage_last_year_revaluation"]=o.current_year_gains_user/o.invested_user
+                })
+
+                var headers=this.pdfmake_loo_to_table_guess_headers(this.results.revaluation_free_risk, ["localdatetime","name","operationstypes","shares", "price_user", "balance_last_year_or_invested","current_year_gains_user","percentage_last_year_revaluation"])
+
+                headers[0].title=this.$t("Date and time")
+                headers[1].title=this.$t("Investments")
+                headers[2].title=this.$t("Operation type")
+                headers[3].title=this.$t("Shares")
+                headers[4].title=this.$t("Price")
+                headers[5].title=this.$t("Last year balance or invested")
+                headers[6].title=this.$t("Annual gains")
+                headers[7].title=this.$t("% Annual")
+                headers[4].currency_row_key="currency_product"
+                headers[5].currency_column=this.useStore().profile.currency
+                headers[6].currency_column=this.useStore().profile.currency
+                headers[7].currency_column="%"
+                headers[0].width="11%"
+                headers[1].width="32%"
+                headers[2].width="12%"
+                headers[3].width="9%"
+                headers[4].width="9%"
+                headers[5].width="9%"
+                headers[6].width="9%"
+                headers[7].width="9%"
+                headers[0].total=this.$t("Total")
+                headers[5].total="#SUM"
+                headers[6].total="#SUM"
+                r.push(this.pdfmake_loo_to_table(this.results.revaluation_free_risk, headers, "table5"))
                 return r
             },
             report_orders(){
@@ -577,7 +617,8 @@
                     this.results.gains_gross=this.sumBy(this.results.annual_gainsbyproductstypes, "gains_gross")
                     this.results.dividends_net=this.sumBy(this.results.annual_gainsbyproductstypes,"dividends_net")
                     this.results.dividends_gross=this.sumBy(this.results.annual_gainsbyproductstypes,"dividends_gross")
-                    this.results.annual_revaluation=resRAR.data
+                    this.results.revaluation_free_risk=resRAR.data
+                    this.results.revaluation_free_risk_total=this.sumBy(this.results.revaluation_free_risk, "current_year_gains_user")
                     this.results.assets_by_bank=resBWB.data
                     this.results.accounts=resAWB.data
                     this.results.investments=resIWB.data
