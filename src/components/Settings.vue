@@ -13,8 +13,8 @@
                 <v-window-item key="profile" >
                     <v-card class="mx-auto pa-6 mt-3">
                         <v-card-title>{{ $t('Profile settings') }}</v-card-title>                    
-                        <v-text-field v-model="new_profile.first_name" :label="$t('Set your name')" :placeholder="$t('Set your name')" :rules="RulesString(200,true)" counter="200"/>
-                        <v-text-field v-model="new_profile.last_name" :label="$t('Set your last name')" :placeholder="$t('Set your last name')" :rules="RulesString(200,true)" counter="200"/>
+                        <v-text-field data-test="Settings_FirstName" v-model="new_profile.first_name" :label="$t('Set your name')" :placeholder="$t('Set your name')" :rules="RulesString(200,true)" counter="200"/>
+                        <v-text-field data-test="Settings_LastName" v-model="new_profile.last_name" :label="$t('Set your last name')" :placeholder="$t('Set your last name')" :rules="RulesString(200,true)" counter="200"/>
                         <v-text-field v-model="new_profile.email" :label="$t('Set your email')" :placeholder="$t('Set your email')" :rules="RulesEmail(true)" counter="200"/>
                         <v-text-field type="password" v-model="new_profile.newp" :label="$t(`Set your new password. Leave empty if you don't want to change it`)" :placeholder="$t('Set your password')" :rules="RulesPassword(40,false)" counter="40"/>
                         <v-text-field type="password" v-model="dupnewp" :label="$t(`Set your new password. Leave empty if you don't want to change it`)" :placeholder="$t('Set your password')" :rules="RulesPassword(40,false)" counter="40"/>
@@ -54,7 +54,7 @@
                 </v-window-item>
             </v-window>
             <div class="mx-auto pa-5" align="center">
-                <v-btn color="error" @click="save_settings()">{{ $t("Save settings")}}</v-btn>
+                <v-btn data-test="Settings_ButtonSave" color="error" @click="save_settings()">{{ $t("Save settings")}}</v-btn>
             </div>
         </v-form>
     </v-card>

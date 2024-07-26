@@ -38,6 +38,19 @@ export const useStore = defineStore('global', {
   getters:{
     getOperationstypesForNewConcepts(state) { 
       return getArrayFromMap(state.operationstypes).filter( o => [1,2].includes(o.id))
+    },
+    getProfileUppercaseChars(state) {
+      // Helper function to get uppercase characters from a string
+      function getUppercaseChars(str) {
+          return str.replace(/[^A-Z]/g, '');
+      }
+  
+      // Get the uppercase characters of each string
+      const upperChars1 = getUppercaseChars(state.profile.first_name);
+      const upperChars2 = getUppercaseChars(state.profile.last_name);
+  
+      // Join the uppercase characters together
+      return upperChars1 + upperChars2
     }
   },
   actions: {
