@@ -4,6 +4,11 @@ describe('e2e Assets Report', () => {
 
     login_test_User(cy)
     //Open lateral menu
+    cy.getDataTest('LateralSettings').click()
+    cy.getDataTest('Settings_FirstName').clear().type("Paco")
+    cy.getDataTest('Settings_LastName').clear().type("Pérez Pérez")
+    cy.getDataTest('Settings_ButtonSave').click()
+
     cy.getDataTest('LateralAssetsReport').click()
     cy.getDataTest('AssetsReport_ButtonGenerate').click()
     cy.wait(30000)
