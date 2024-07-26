@@ -47,7 +47,7 @@
     "eslint-plugin-vue": "^9.27.0",
     "globals": "^15.8.0",
     "npm-check-updates": "^16.14.20",
-    "vite": "^5.3.4",
+    "vite": "^5.3.5",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-istanbul": "^6.0.2",
     "vite-plugin-vue-devtools": "^7.3.7",
