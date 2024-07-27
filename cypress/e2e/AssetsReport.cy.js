@@ -11,7 +11,7 @@ describe('e2e Assets Report', () => {
 
     cy.getDataTest('LateralAssetsReport').click()
     cy.getDataTest('AssetsReport_ButtonGenerate').click()
-    cy.wait(30000)
+    // cy.wait(30000)
     
   })
 

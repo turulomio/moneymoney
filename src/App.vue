@@ -117,6 +117,7 @@
             <v-app-bar-nav-icon data-test="LateralIcon" @click="drawer = !drawer"></v-app-bar-nav-icon>
             <v-btn data-test="LateralHome" :to="{ name: 'home'}"><v-icon icon="mdi-home" dark></v-icon></v-btn>
             <v-btn data-test="LateralSettings" :to="{ name: 'settings'}" v-if="useStore().logged"><v-icon icon="mdi-wrench" dark></v-icon></v-btn> 
+            <v-btn data-test="LateralPrint"  v-if="useStore().logged" @click="print"><v-icon icon="mdi-printer" dark></v-icon></v-btn>
             <v-btn data-test="LateralAssetsReport" :to="{ name: 'assetsreport'}" v-if="useStore().logged"><v-icon icon="mdi-book" dark></v-icon></v-btn>
             <v-spacer />
             <h1 class="font-weight-black text-no-wrap text-truncate" >{{ $t("Money Money. Another way to manage your finances") }}</h1>
@@ -129,7 +130,7 @@
 
         </v-app-bar>
         <v-main>   
-            <router-view></router-view>
+            <router-view id="element-to-print"></router-view>
         </v-main>
     </v-app>
 </template>
@@ -141,6 +142,7 @@ import imgInvestment from '@/assets/investment.svg'
 import BtnLogIn from './components/BtnLogIn';
 import BtnLogOut from './components/BtnLogOut';
 import BtnSwitchLanguages from './components/BtnSwitchLanguages.vue';
+import html2pdf from "html2pdf.js"
 export default {
     name: 'App',
     components: {
@@ -164,7 +166,23 @@ export default {
         useStore,
         open_widgets(){
             this.$router.push({name: "widgets"})
-        }   
+        },
+        print(){
+            var element = document.getElementById('element-to-print');
+            var opt = {
+                margin:       0.5,
+                image:        { type: 'jpeg', quality: 0.99 },
+                html2canvas:  { scale: 0.5 },
+                jsPDF:        { unit: 'cm', format: 'a4', orientation: 'landscape' },
+            };
+
+            // New Promise-based usage:
+            html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+                window.open(pdf.output('bloburl'), '_blank');
+            });
+
+
+        }
     },
 };
 </script>
