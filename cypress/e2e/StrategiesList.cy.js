@@ -27,7 +27,7 @@ describe('e2e Strateegies List', () => {
     cy.getDataTest('StrategyCU_Additional3').type("10000")
     cy.getDataTest('StrategyCU_Additional4').type("10000")
     cy.getDataTest('StrategyCU_RecomendationMethod').type("All{downArrow}{enter}")
-    cy.getDataTest('StrategyCU_Additional6').type("0")
+    cy.getDataTest('StrategyCU_Additional6').type("1")
     cy.intercept({ method:'POST', url:'http://127.0.0.1:8004/api/strategies/', times:1,}).as("post_strategies")
     cy.getDataTest('StrategyCU_Button').click()
     cy.wait('@post_strategies').then((interception)=>{
