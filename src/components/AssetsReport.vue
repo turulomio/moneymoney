@@ -224,14 +224,14 @@
                 var r=[]
                 r.push({ text: this.$t('2. Assets'), id:'assets', style: 'header1', tocItem: true })
                 if (this.results.balance-this.results.last_year_balance>=0){
-                    r.push({text: f(this.$t("At the end of last year, you had [0]. Currently, you have [1], which meas you have gained [2]."), [
+                    r.push({text: f(this.$t("At the end of last year, you had [0]. Currently, you have [1], which means you have gained [2]."), [
                         this.localcurrency_html(this.results.last_year_balance),
                         this.localcurrency_html(this.results.balance),
                         this.percentage_string((this.results.balance-this.results.last_year_balance)/this.results.last_year_balance)
                     ]) , style:"body"})
                     
                 }  else {
-                    r.push({text: f(this.$t("At the end of last year, you had [0]. Currently, you have [1], which meas you have lost [2]."), [
+                    r.push({text: f(this.$t("At the end of last year, you had [0]. Currently, you have [1], which means you have lost [2]."), [
                         this.localcurrency_html(this.results.last_year_balance),
                         this.localcurrency_html(this.results.balance),
                         this.percentage_string((this.results.balance-this.results.last_year_balance)/this.results.last_year_balance)
@@ -401,7 +401,7 @@
                 r.push(this.pdfmake_loo_to_table(this.results.investments, headers, "table8"))
 
                 if (this.results.invested_user!=0){
-                    r.push({ text: f(this.$t('Investment gains (positive minus negative results): [0] - [1] are [2].'),[
+                    r.push({ text: f(this.$t('Investments gains (positive minus negative results): [0] - [1] are [2].'),[
                         this.localcurrency_string(this.results.investments_gains_positives), 
                         this.localcurrency_string(-this.results.investments_gains_negatives),
                         this.localcurrency_string(this.results.investments_gains_positives+this.results.investments_gains_negatives)
