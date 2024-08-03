@@ -1,6 +1,15 @@
 import { useStore } from './store.js'
 import {my_round} from 'vuetify_rules'
+import moment from "moment-timezone"
 
+
+export function string_with_localized_now(tz){
+    /**
+     * Return a string in YYYYMMDD HHmmSS with localized_now
+     */
+    let nowInMadrid = moment().tz(tz);
+    return nowInMadrid.format('YYYYMMDD HHmmSS');
+}
 
 export function myheaders(){
     return {
@@ -11,7 +20,6 @@ export function myheaders(){
         }
     }
 }
-
 
 export function yesterday_in_isostring(){
     // Get the current date
