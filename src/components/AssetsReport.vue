@@ -6,7 +6,7 @@
                 <v-text-field v-model="password" type="password" :label="$t('Set pdf password if necessary')"></v-text-field>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn data-test="AssetsReport_ButtonGenerate" class="pa-4" :loading="creating" color="primary" :disabled="loading" @click="launch_report">{{ (!loading)?  $t("Generate report"): $t("Data is being retrieving. Please be patient...") }}</v-btn>
+                    <v-btn data-test="AssetsReport_ButtonGenerate" class="pa-4" :loading="creating" color="primary" :disabled="loading || creating" @click="launch_report">{{ (!loading)?  $t("Generate report"): $t("Data is being retrieving. Please be patient...") }}</v-btn>
 
                     <v-spacer></v-spacer>
 
@@ -132,7 +132,6 @@
             pdfmake_percentage_string,
             string_with_localized_now,
             async launch_report(){
-
                 this.creating=true
                 const docDefinition = {
                     info: {
