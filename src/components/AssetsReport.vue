@@ -32,16 +32,12 @@
     import ChartPie from './ChartPie.vue'
     import { my_round, f, localtime } from 'vuetify_rules'
     import {sumBy, orderBy} from "lodash-es"
-
     import pdfMake from "pdfmake/build/pdfmake";
     import pdfFonts from "pdfmake/build/vfs_fonts";
     pdfMake.addVirtualFileSystem(pdfFonts);
-
-    
     import {pdfmake_convertImageToDataURL, pdfmake_percentage_string, pdfmake_loo_to_table, pdfmake_loo_to_table_guess_headers} from "@/pdfmake_helpers"
-
-
     import imgMoneymoney from '../assets/moneymoney.png'
+    import { string_with_localized_now } from '@/functions'
 
     export default {
         components:{
@@ -134,6 +130,7 @@
             pdfmake_loo_to_table,
             pdfmake_loo_to_table_guess_headers,
             pdfmake_percentage_string,
+            string_with_localized_now,
             async launch_report(){
 
                 this.creating=true
@@ -218,7 +215,7 @@
                 console.log("PDFMAKE", docDefinition)
 
 
-                var datestring=this.reportdate.toISOString().split(".")[0].replaceAll("-","").replace("T"," ").replaceAll(":","")
+                var datestring=this.string_with_localized_now(this.useStore().profile.zone)
                 var filename=`${datestring} AssetsReport ${ this.useStore().getProfileUppercaseChars}.pdf`
                 await pdfMake.createPdf(docDefinition,{tagged:true}).download(filename);
                 this.creating=false

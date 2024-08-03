@@ -210,7 +210,6 @@
     </div>
 </template>
 <script>     
-
     import axios from 'axios'
     import { useStore } from "@/store"
     import { sumBy } from 'lodash-es';
