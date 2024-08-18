@@ -6,6 +6,7 @@
     "dev": "vite",
     "build": "node --max-old-space-size=8192 node_modules/.bin/vite build",
     "preview": "vite preview",
+    "release": "node src/scripts/release.js",
     "translate": "vue-i18n-extract --vueFiles './src/**/*.?(js|vue)' --languageFiles './src/locales/**/*.?(json|yaml|yml|js)' --add true --remove true --separator '###'  --missingTranslationString 'MISSING'",
     "test": "vitest",
     "coverage": "vitest --ui --coverage",
