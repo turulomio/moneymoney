@@ -39,6 +39,7 @@
     import MyMenuInline from './MyMenuInline.vue'
     import CurrencyFactor from './CurrencyFactor.vue'
     import { RulesSelection,RulesFloat,RulesFloatGEZ,RulesString, parseNumber,f} from 'vuetify_rules'
+    import { round } from "lodash-es"
     export default {
         name: "InvestmentsoperationsCU",
         components: {
@@ -65,7 +66,7 @@
                                 icon: "mdi-plus",
                                 code: function(){
                                     var amount=this.parseNumber(prompt( this.$t("Set total balance of this investment operation") ));
-                                    this.new_io.commission=Math.abs(Math.abs(amount)-Math.abs(this.new_io.shares*this.new_io.price))
+                                    this.new_io.commission=this.round(Math.abs(Math.abs(amount)-Math.abs(this.new_io.shares*this.new_io.price)),this.account.decimals)
                                 }.bind(this),
                             },
                         ]
@@ -93,6 +94,7 @@
             RulesFloatGEZ,
             RulesString,
             parseNumber,
+            round,
             f,
             empty_investment_operation,
             title(){
