@@ -13,8 +13,8 @@
                     <v-autocomplete :readonly="mode=='D'" :items="getOperationstypesForInvestmentsOperations()" v-model="new_io.operationstypes" :label="$t('Select an operation type')" item-title="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 </div>
                 <div class="d-flex flex-row">
-                    <v-text-field data-test="InvestmentsoperationsCU_Shares" class="mr-5" :readonly="mode=='D'" v-model.number="new_io.shares"  :label="$t('Set investment operation shares')" :placeholder="$t('Set investment operation shares')" :rules="RulesFloat(12,true,6)" counter="12"/>
-                    <v-text-field data-test="InvestmentsoperationsCU_Price" :readonly="mode=='D'" v-model.number="new_io.price"  :label="$t('Set investment operation price')" :placeholder="$t('Set investment operation price')" :rules="RulesFloatGEZ(12,true,product.decimals)" counter="12"/>
+                    <v-text-field data-test="InvestmentsoperationsCU_Shares" class="mr-5" :readonly="mode=='D'" v-model.number="new_io.shares"  :label="$t('Set investment operation shares')" :placeholder="$t('Set investment operation shares')" :rules="RulesFloat(15,true,6)" counter="15"/>
+                    <v-text-field data-test="InvestmentsoperationsCU_Price" :readonly="mode=='D'" v-model.number="new_io.price"  :label="$t('Set investment operation price')" :placeholder="$t('Set investment operation price')" :rules="RulesFloatGEZ(15,true,product.decimals)" counter="15"/>
                 </div>
                 <div class="d-flex flex-row">
                     <v-text-field class="mr-5" :readonly="mode=='D'" v-model.number="new_io.taxes"  :label="$t('Set investment operation taxes')" :placeholder="$t('Set investment operation taxes')" :rules="RulesFloatGEZ(12,true,account.decimals)" counter="12"/>
