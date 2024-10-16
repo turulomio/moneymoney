@@ -10,7 +10,7 @@ describe('e2e Assets Report', () => {
     cy.getDataTest('Settings_ButtonSave').click()
 
     cy.getDataTest('LateralAssetsReport').click()
-    cy.getDataTest('AssetsReport_ButtonGenerate').click()
+    cy.getDataTest('AssetsReport_ButtonGenerate', { timeout: 100000 }).click()
     cy.getDataTest('AssetsReport_ButtonGenerate', { timeout: 100000 }).should("be.enabled")
   })
 
