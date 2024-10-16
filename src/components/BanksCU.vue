@@ -57,23 +57,17 @@
                 if (this.$refs.form.validate()==false) return
                 if (this.mode=='U'){               
                     axios.put(this.new_bank.url, this.new_bank, this.myheaders())
-                    .then(() => {
-                        this.useStore().updateBanks()
-                        .then(()=>{
-                            this.$emit("cruded")
-
-                        })
+                    .then((response) => {
+                        this.useStore().banks.set(response.data.url, response.data)
+                        this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=="C"){
                     axios.post(`${this.useStore().apiroot}/api/banks/`, this.new_bank,  this.myheaders())
-                    .then(() => {
-                        this.useStore().updateBanks()
-                        .then(()=>{
-                            this.$emit("cruded")
-
-                        })
+                    .then((response) => {
+                        this.useStore().banks.set(response.data.url, response.data)
+                        this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
@@ -84,11 +78,8 @@
                     } 
                     axios.delete(this.new_bank.url, this.myheaders())
                     .then(() => {
-                        this.useStore().updateBanks()
-                        .then(()=>{
-                            this.$emit("cruded")
-
-                        })
+                        this.useStore().banks.delete(this.new_bank.url)
+                        this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     });
