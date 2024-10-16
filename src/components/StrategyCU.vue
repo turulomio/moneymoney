@@ -4,7 +4,7 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid">
                 <v-text-field data-test="StrategyCU_Name" density="compact" :readonly="deleting" v-model="newstrategy.name" :label="$t('Set strategy name')" :placeholder="$t('Set strategy name')" :rules="RulesString(200,true)" counter="200" autofocus/>
-                <v-autocomplete data-test="StrategyCU_Investments" density="compact" :readonly="deleting" :items="getArrayFromMap(useStore().investments)" v-model="newstrategy.investments" :label="$t('Select strategy investments')" item-title="fullname" item-value="url" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
+                <v-autocomplete data-test="StrategyCU_Investments" density="compact" :readonly="deleting" :items="getArrayFromMap(useStore().investments)" v-model="newstrategy.investments" :label="$t('Select strategy investments')" item-title="fullname" item-value="url" multiple chips />
                 <v-row class="d-flex flex-row mx-auto" justify="center">
                     <MyDateTimePicker class="mr-4" :readonly="deleting" v-model="newstrategy.dt_from" :label="$t('Date and time strategy start')" />                
                     <MyDateTimePicker data-test="StrategyCU_DtTo" :readonly="deleting" v-model="newstrategy.dt_to" :label="$t('Date and time strategy end')" :clearable="true" />
@@ -42,6 +42,7 @@
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import { RulesSelection, RulesInteger,RulesString } from 'vuetify_rules'
+    import { getArrayFromMap } from '@/functions'
     export default {
         components: {
             MyDateTimePicker,
@@ -80,6 +81,7 @@
         },
         methods: {
             useStore,
+            getArrayFromMap,
             RulesSelection,
             RulesInteger,
             RulesString,
