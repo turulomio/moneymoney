@@ -154,3 +154,19 @@ export function add_investmentoperation_from_InvestmentView(
     cy.getDataTest("InvestmentsoperationsCU_Price").type(price)
     cy.getDataTest("InvestmentsoperationsCU_Button").click()
 }
+
+export function add_dividend_from_InvestmentView(
+    cy,
+    gross="10",
+    net="9",
+    taxes="1"
+){
+
+    cy.getDataTest('MyMenuInline_Button').last().click()
+    cy.getDataTest('MyMenuInline_Header3_Item0').click()
+    cy.getDataTest("DividendsCU_Concepts").type("{downArrow}{enter}")
+    cy.getDataTest("DividendsCU_Gross").type(gross)
+    cy.getDataTest("DividendsCU_Net").type(net)
+    cy.getDataTest("DividendsCU_Taxes").type(taxes)
+    cy.getDataTest("DividendsCU_Button").click()
+}

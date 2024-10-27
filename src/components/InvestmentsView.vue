@@ -77,10 +77,11 @@
             <v-window-item key="dividends">     
                 <v-card v-if="!loading">
                     <v-checkbox v-model="chkShowAllDividends" :label="chkShowAllDividends_label"></v-checkbox>
-                    <TableDividends :items="dividends_filtered" height="500" :key="key" @cruded="on_TableDividends_cruded" />
+                    <TableDividends ref="tableDividends" :items="dividends_filtered" height="500" :key="key" @cruded="on_TableDividends_cruded" />
                 </v-card>
             </v-window-item>
         </v-window>
+        <p v-if="ios_id && dividends">{{ gains_with_dividends_message() }}</p>
 
         <!-- EVOLUTION CHART -->
         <v-dialog v-model="dialog_evolution_chart">
@@ -142,6 +143,7 @@
     import { useStore } from "@/store"
     import {empty_investment_operation,empty_dividend,empty_investments_chart,empty_investments_chart_limit_line,empty_ios} from '../empty_objects.js'
     import { parseNumber,f } from 'vuetify_rules'
+    import { percentage_string } from '@/functions.js'
     import ChartInvestments from './ChartInvestments.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import DividendsCU from './DividendsCU.vue'
@@ -480,6 +482,7 @@
             useStore,
             f,
             parseNumber,
+            percentage_string,
             empty_investments_chart,
             empty_investments_chart_limit_line,
             empty_dividend,
@@ -559,7 +562,23 @@
             },
             on_ChartInvestments_close(){
                 this.dialog_investment_chart=false
-            }
+            },
+            gains_with_dividends_message(){
+                let gains=this.ios_id.total_io_current.gains_gross_user
+                let dividends_account=this.listobjects_sum(this.dividends,'gross') //Should be _user
+                let total=gains+dividends_account 
+                let invested=this.ios_id.total_io_current.invested_user
+                let invested_percentage=total/invested
+                return f(this.$t("Gross gains: [0]. Gross dividends: [1]. Gross total: [2]. Invested: [3]. Invested percentage: [4]."),
+                    [  
+                        this.localcurrency_string(gains), 
+                        this.localcurrency_string(dividends_account),
+                        this.localcurrency_string(total),
+                        this.localcurrency_string(invested),
+                        this.percentage_string(invested_percentage)
+                    ]
+                )
+            },
         },
         created(){
             this.update_all()
