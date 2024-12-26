@@ -50,7 +50,7 @@
                 this.$emit('update:modelValue', newValue)
                 this.menu=false
             },
-            value (newValue) {
+            modelValue (newValue) {
                 this.new_value = newValue
             },
             dt(newValue){
