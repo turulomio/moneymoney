@@ -3,7 +3,7 @@
         <h1>{{ $t("Evolution assets chart")}}</h1>
         <div class="d-flex justify-center mb-4 mt-4" >
             <v-card width="30%" variant="flat">
-                <v-select class="pa-4" density="compact" :label="$t('Select the year from which to display the report')" v-model="from" :items="years()" @change="change_year()"></v-select>       
+                <v-select class="pa-4" :disabled="loading" :loading="loading" :label="$t('Select the year from which to display the report')" v-model="from" :items="years()" />
             </v-card>
         </div>
         <v-card class="ma-4 pa-4" >
@@ -36,6 +36,11 @@
                 from: new Date().getFullYear()-3,
 
             }
+        },        
+        watch:{
+            from() {
+                this.refreshChart()
+            },
         },
         methods: {
             useStore,
@@ -148,13 +153,14 @@
             },
             refreshChart(){
                 this.loading=true
+                this.finished=false
                 axios.get(`${this.useStore().apiroot}/reports/evolutionassets/chart/?from=${this.from}`, this.myheaders())
                 .then((response) => {
                     this.balance=[]
                     this.accounts=[]
                     this.investments=[]
                     this.invested=[]
-                    this.zerorisk
+                    this.zerorisk=[]
                     response.data.forEach(o => {
                         this.balance.push([o.datetime, o.total_user])
                         this.accounts.push([o.datetime, o.accounts_user])
@@ -173,8 +179,10 @@
                 });
             },
             on_finished(){
-                this.finished=true
-                console.log("Chart assets has finished")
+                if (this.finished==true) {
+                    this.finished=true
+                    console.log("Chart assets has finished")
+                }
 
             },
 
