@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "373-doesnt-work-actions" ]
+    branches: [ "main", "463-test-action-fails" ]
   pull_request:
     branches: [ "main" ]
 
@@ -16,7 +16,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:latest
+        image: postgres:16.4
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -26,24 +26,21 @@ jobs:
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: ["3.11"]
-        node-version: [18.x]
-
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: 3.12
 
     - name: Install PL/Python in the PostgreSQL container (Old migrations)
       run: |
         # Version can change see in docker page wich is postgres:latest
         docker exec ${{ job.services.postgres.id }} bash -c "apt-get update && apt-get install -y postgresql-plpython3-16"
+
+    - name: Create PL/Python extension
+      run: |
         docker exec ${{ job.services.postgres.id }} bash -c "PGPASSWORD=postgres psql -h localhost -U postgres -c 'CREATE EXTENSION plpython3u;'"
         docker exec ${{ job.services.postgres.id }} bash -c "PGPASSWORD=postgres createdb -h localhost -U postgres xulpymoney"
 
@@ -55,18 +52,16 @@ jobs:
           sleep 2
         done
 
-    - name: Install libreoffice 
-      run: |
-        sudo apt-get install python3.11 python3.11-venv
 
-    - name: Install python dependencies ${{ matrix.python-version }} and launch django_moneymoney cypress_test_server
+    - name: Install python dependencies for 3.12 and launch django_moneymoney cypress_test_server
       run: |
+        sudo apt-get install python3.12 python3.12-venv
         cd ..
         git clone https://github.com/turulomio/django_moneymoney
         cd django_moneymoney
-        sudo python3.11 -m venv .python3.11
-        sudo .python3.11/bin/pip install .
-        sudo .python3.11/bin/python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport 8004 &
+        sudo python3.12 -m venv .python3.12
+        sudo .python3.12/bin/pip install .
+        sudo .python3.12/bin/python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport 8004 &
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
