@@ -10,7 +10,7 @@
     "translate": "vue-i18n-extract --vueFiles './src/**/*.?(js|vue)' --languageFiles './src/locales/**/*.?(json|yaml|yml|js)' --add true --remove true --separator '###'  --missingTranslationString 'MISSING'",
     "test": "vitest",
     "coverage": "vitest --ui --coverage",
-    "cypress": "cypress open",
+    "cypress": "DISABLE_COVERAGE=true  cypress open",
     "cypress_console": "DISABLE_COVERAGE=true  cypress run",
     "cypress_coverage": "cypress run"
   },
