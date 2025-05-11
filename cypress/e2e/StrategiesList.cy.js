@@ -11,7 +11,7 @@ describe('e2e Strateegies List', () => {
 
     //Open strategies lateral menu
     cy.wait(1000)
-    cy.getDataTest('LateralIcon').click()
+    cy.getDataTest('LateralIcon').should('be.visible').click()
     cy.getDataTest('LateralStrategies').click()
 
     // Add a new strategy ranged
@@ -31,6 +31,7 @@ describe('e2e Strateegies List', () => {
     cy.intercept({ method:'POST', url:'http://127.0.0.1:8004/api/strategies/', times:1,}).as("post_strategies")
     cy.getDataTest('StrategyCU_Button').click()
     cy.wait('@post_strategies').then((interception)=>{
+        console.log("AHORA", interception.response.body.id)
         cy.wrap(interception.response.body.id).as('strategy_id') // Stores the captured ID for later us
     })
 
