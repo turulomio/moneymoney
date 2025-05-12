@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ investment.fullname }}
-            <MyMenuInline :items="items"/>
+            <MyMenuInline data-test="InvestmentsView_MyMenuInline" :items="items" />
             <v-btn data-test="InvestmentsView_ButtonClose" small style="color:darkgrey" icon="mdi-close" class="elevation-0" @click="$emit('close')"/>
         </h1>
         <DisplayValues v-if="ios_id" :items="displayvalues" :key="key" />

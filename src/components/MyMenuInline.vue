@@ -29,25 +29,26 @@ type puede ser redirection or command
 
 
 <template>
-    <v-menu offset-y>
-        <template  v-slot:activator="{ props }">
-            <v-btn data-test="MyMenuInline_Button" text dark v-bind="props" style="color:darkgrey" class="elevation-0">
-                <v-icon>mdi-menu</v-icon>
-            </v-btn>
-        </template>
-        <v-list density="compact" subheader >
-            <div v-for="(subheader,indexsubheader) in new_items" :key="indexsubheader" inset>
-                <v-list-subheader inset>{{ subheader.subheader }}</v-list-subheader>
-                <div v-for="(item, index) in subheader.children" :key="index" >
-                    <v-list-item :data-test="`MyMenuInline_Header${indexsubheader}_Item${index}`" @click="on_item_click(item)" :prepend-icon="item.icon" :title="item.name" :disabled="item.disabled" :base-color="item.color"/>
+    <div  style="display: inline-block;">
+        <v-menu offset-y>
+            <template  v-slot:activator="{ props }">
+                <v-btn data-test="MyMenuInline_Button" text dark v-bind="props" style="color:darkgrey" class="elevation-0">
+                    <v-icon>mdi-menu</v-icon>
+                </v-btn>
+            </template>
+            <v-list density="compact" subheader >
+                <div v-for="(subheader,indexsubheader) in new_items" :key="indexsubheader" inset>
+                    <v-list-subheader inset>{{ subheader.subheader }}</v-list-subheader>
+                    <div v-for="(item, index) in subheader.children" :key="index" >
+                        <v-list-item :data-test="`MyMenuInline_Header${indexsubheader}_Item${index}`" @click="on_item_click(item)" :prepend-icon="item.icon" :title="item.name" :disabled="item.disabled" :base-color="item.color"/>
+                    </div>
+                    <v-divider></v-divider>
                 </div>
-                <v-divider></v-divider>
-            </div>
-        </v-list>
-    </v-menu>
+            </v-list>
+        </v-menu>
+    </div>
 </template>
 <script>
-// import { toRaw } from 'vue';
     export default {
         data: function(){
             return {

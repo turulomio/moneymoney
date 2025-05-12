@@ -28,13 +28,18 @@ describe('e2e Investments', () => {
     cy.wait(1000) //Loading ios
     cy.getDataTest('MyMenuInline_Button').last().click()
     cy.getDataTest('MyMenuInline_Header0_Item2').last().click()
-    cy.getDataTest('ChartInvestmentsoperationsEvolution_ButtonClose').click()
+    cy.getDataTest('ChartInvestmentsoperationsEvolution_ButtonClose').should("be.visible").click()
+
 
     // Open show evolution chart
-    cy.wait(1000) //Loading ios
-    cy.getDataTest('MyMenuInline_Button').last().click()
-    cy.getDataTest('MyMenuInline_Header0_Item3').click()
-    
+    cy.wait(3000) //Loading ios
+    cy.getDataTest('InvestmentsView_ButtonClose').should("be.visible")
+    cy.getDataTest('InvestmentsView_MyMenuInline').should("be.visible")
+    cy.getDataTest('InvestmentsView_MyMenuInline').within(() => {
+      cy.getDataTest('MyMenuInline_Button').click()
+      cy.wait(1000)
+      cy.getDataTest('MyMenuInline_Header0_Item3').click()
+    })    
   })
 
   
