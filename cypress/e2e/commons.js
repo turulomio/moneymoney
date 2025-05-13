@@ -17,8 +17,8 @@ export function add_investment_from_Home(
 ){
     cy.getDataTest('LateralIcon').click()
     cy.getDataTest('LateralInvestments').click()
-    cy.getDataTest('MyMenuInline_Button').last().click()
-    cy.getDataTest('MyMenuInline_Header0_Item0').click()
+    cy.getDataTest('InvestmentsList_MyMenuInline_Button').last().click()
+    cy.getDataTest('InvestmentsList_MyMenuInline_Header0_Item0').click()
     cy.getDataTest('InvestmentsCU_Accounts').type(account_type)
     cy.getDataTest('InvestmentsCU_Name').type(investment)
     cy.getDataTest('InvestmentsCU_Products').type(product_type)
@@ -148,8 +148,8 @@ export function add_investmentoperation_from_InvestmentView(
     price="9"
 ){
 
-    cy.getDataTest('MyMenuInline_Button').last().click()
-    cy.getDataTest('MyMenuInline_Header2_Item0').click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').last().click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Header2_Item0').click()
     cy.getDataTest("InvestmentsoperationsCU_Shares").type("{backspace}").type(shares)
     cy.getDataTest("InvestmentsoperationsCU_Price").type(price)
     cy.getDataTest("InvestmentsoperationsCU_Button").click()
@@ -162,8 +162,8 @@ export function add_dividend_from_InvestmentView(
     taxes="1"
 ){
 
-    cy.getDataTest('MyMenuInline_Button').last().click()
-    cy.getDataTest('MyMenuInline_Header3_Item0').click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').last().click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Header3_Item0').click()
     cy.getDataTest("DividendsCU_Concepts").type("{downArrow}{enter}")
     cy.getDataTest("DividendsCU_Gross").type(gross)
     cy.getDataTest("DividendsCU_Net").type(net)
