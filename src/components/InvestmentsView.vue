@@ -226,20 +226,16 @@
                             },
                             {
                                 name:this.$t('Change active status'),
-                                code: async function(){
-                                    try {
-                                        this.investment.active=!this.investment.active
-                                        const response = await axios.put(this.investment.url, this.investment,  this.myheaders())
-
+                                code: function(){
+                                    this.investment.active=!this.investment.active
+                                    axios.put(this.investment.url, this.investment,  this.myheaders())
+                                    .then((response) => {
                                         this.useStore().investments.set(response.data.url, response.data)
                                         this.update_all()
                                         this.$emit("cruded")
-                                    } catch (error) {
-                                        this.parseResponseError(error);
-                                    }
-
-
-
+                                    }, (error) => {
+                                        this.parseResponseError(error)
+                                    })
                                 }.bind(this),
                                 icon: "mdi-pencil",
                             },
