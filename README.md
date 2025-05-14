@@ -36,6 +36,9 @@ cd moneymoney
 npm run dev
 ```
 
+### e2e specific test with cypress
+
+`npm run cypress_console -- --spec cypress/e2e/AssetsReport.cy.js`
 
 ## Changelog
 

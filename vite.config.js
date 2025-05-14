@@ -11,20 +11,28 @@ import eslintPlugin from 'vite-plugin-eslint';
 import istanbul from 'vite-plugin-istanbul';
 // import VueDevTools from 'vite-plugin-vue-devtools'
 
-export default defineConfig({
-  plugins: [
-    vue(),
-    // VueDevTools(),
-    vuetify({
-      autoImport: true,
-    }),
-    eslintPlugin(),
+const plugins = [
+  vue(),
+  // VueDevTools(),
+  vuetify({
+    autoImport: true,
+  }),
+  eslintPlugin(),
+];
+
+// Condicionalmente agrega el plugin istanbul
+if (process.env.DISABLE_COVERAGE !== 'true') {
+  plugins.push(
     istanbul({
       include: 'src/*', // specify the files you want to instrument
       exclude: ['node_modules', 'test/*'],
       extension: ['.js', '.vue'], // include your file extensions
     })
-  ],
+  );
+}
+
+export default defineConfig({
+  plugins,
   define: { 
     'process.env': {},
     __VUE_I18N_FULL_INSTALL__: true,

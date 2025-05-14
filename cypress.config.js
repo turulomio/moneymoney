@@ -9,7 +9,10 @@ export default defineConfig({
   e2e: {
     baseUrl:"http://127.0.0.1:8006/moneymoney",
     setupNodeEvents(on, config) {
-      codeCoverageTask(on, config);
+      // Solo registra la tarea de cobertura si DISABLE_COVERAGE no es 'true'
+      if (process.env.DISABLE_COVERAGE !== 'true') {
+        codeCoverageTask(on, config);
+      }
       return config
     },
   },

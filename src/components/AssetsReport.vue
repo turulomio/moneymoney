@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>{{ $t("Assets Report") }}</h1>
+        <h1 data-test="AssetsReport_Title">{{ $t("Assets Report") }}</h1>
         <div class="d-flex justify-center mb-4" width="20%">
             <v-card width="20%" class="pa-4">      
                 <v-text-field v-model="password" type="password" :label="$t('Set pdf password if necessary')"></v-text-field>

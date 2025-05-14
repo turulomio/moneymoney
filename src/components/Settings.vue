@@ -64,7 +64,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import { RulesSelection, RulesEmail, RulesInteger,RulesPassword,RulesString} from 'vuetify_rules'
-import { f } from 'vuetify_rules'
+    import { f } from 'vuetify_rules'
     export default {
         name: 'Settings',
         data () {
@@ -81,7 +81,7 @@ import { f } from 'vuetify_rules'
         },
         watch:{
             example_invested: function (){
-                this.example_amount_to_invest=f(this.$t("Recomended amount to invest: [0]"), [this.amount_to_invest(this.example_invested)])
+                this.example_amount_to_invest=f("Recomended amount to invest: [0]", [this.amount_to_invest(this.example_invested)])
             }
         },
         methods: {
@@ -103,9 +103,11 @@ import { f } from 'vuetify_rules'
                     this.$refs.form.validate()
                     return
                 }
+                let succesmessage=this.$t("Settings saved")
+
                 axios.put(`${this.useStore().apiroot}/profile/`, this.new_profile, this.myheaders())
                 .then(() => {
-                    alert(this.$t("Settings saved"))
+                    alert(succesmessage)
                     this.new_profile.newp=""
                     this.useStore().updateProfile()
                     .then(() =>{

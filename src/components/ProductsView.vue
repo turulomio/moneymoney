@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ f($t("Product '[0]'"), [this.product.fullname])}}
-            <MyMenuInline :items="items"/>
+            <MyMenuInline data-test="ProductsView_MyMenuInline" :items="items"/>
         </h1>
         <DisplayValues :items="displayvalues"></DisplayValues>
     
