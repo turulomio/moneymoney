@@ -7,6 +7,8 @@ describe('e2e Investments', () => {
     // Add investments
     add_investmentoperation_from_Home(cy)
 
+    cy.wait(5000)
+
     // Add dividend
     add_dividend_from_InvestmentView(cy)
 
@@ -17,16 +19,19 @@ describe('e2e Investments', () => {
     cy.getDataTest('ChartInvestments_ButtonClose').click()
 
     // Change investment active status twice
+    cy.wait(5000)
     mymenuinlinebutton_pointable("InvestmentsView_MyMenuInline_Button")
     cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
     cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item1').click()
-    cy.getDataTest('InvestmentsView_MyMenuInline_Button').should('have.css', 'cursor', 'pointer'); // Is pointable o clickable
-    // cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
-    // cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item1').click()
-    // cy.getDataTest('InvestmentsView_MyMenuInline_Button').should('have.css', 'cursor', 'pointer'); // Is pointable o clickable
-    // cy.getDataTest('InvestmentsView_MyMenuInline_Button').should("be.visible")
+
+
+    cy.wait(5000)
+    mymenuinlinebutton_pointable("InvestmentsView_MyMenuInline_Button")
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item1').click()
 
     // Evolution chart
+    cy.wait(5000)
     mymenuinlinebutton_pointable("InvestmentsView_MyMenuInline_Button")
     cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
     cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item2').click()
