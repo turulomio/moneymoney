@@ -154,7 +154,7 @@ export function add_investmentoperation_from_InvestmentView(
     cy.getDataTest("InvestmentsoperationsCU_Shares").type("{backspace}").type(shares)
     cy.getDataTest("InvestmentsoperationsCU_Price").type(price)
     cy.getDataTest("InvestmentsoperationsCU_Button").click()
-    cy.getDataTest("InvestmentsoperationsCU_Button").should("not.be.visible")
+    cy.getDataTest("InvestmentsoperationsCU_Button").should("not.exist")
 }
 
 export function add_dividend_from_InvestmentView(
@@ -172,5 +172,5 @@ export function add_dividend_from_InvestmentView(
     cy.getDataTest("DividendsCU_Net").type(net)
     cy.getDataTest("DividendsCU_Taxes").type(taxes)
     cy.getDataTest("DividendsCU_Button").click()
-    cy.getDataTest("DividendsCU_Button").should("not.be.visible")
+    cy.getDataTest("DividendsCU_Button").should("not.exist")
 }
