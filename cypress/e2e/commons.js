@@ -17,7 +17,7 @@ export function add_investment_from_Home(
 ){
     cy.getDataTest('LateralIcon').click()
     cy.getDataTest('LateralInvestments').click()
-    cy.getDataTest('InvestmentsList_MyMenuInline_Button').last().click()
+    cy.getDataTest('InvestmentsList_MyMenuInline_Button').should("be.visible").click()
     cy.getDataTest('InvestmentsList_MyMenuInline_Header0_Item0').click()
     cy.getDataTest('InvestmentsCU_Accounts').type(account_type)
     cy.getDataTest('InvestmentsCU_Name').type(investment)
@@ -148,11 +148,13 @@ export function add_investmentoperation_from_InvestmentView(
     price="9"
 ){
 
-    cy.getDataTest('InvestmentsView_MyMenuInline_Button').last().click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').should("be.visible")
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
     cy.getDataTest('InvestmentsView_MyMenuInline_Header2_Item0').click()
     cy.getDataTest("InvestmentsoperationsCU_Shares").type("{backspace}").type(shares)
     cy.getDataTest("InvestmentsoperationsCU_Price").type(price)
     cy.getDataTest("InvestmentsoperationsCU_Button").click()
+    cy.getDataTest("InvestmentsoperationsCU_Button").should("not.be.visible")
 }
 
 export function add_dividend_from_InvestmentView(
@@ -162,11 +164,13 @@ export function add_dividend_from_InvestmentView(
     taxes="1"
 ){
 
-    cy.getDataTest('InvestmentsView_MyMenuInline_Button').last().click()
-    cy.getDataTest('InvestmentsView_MyMenuInline_Header3_Item0').click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').should("be.visible")
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Header3_Item0').should("be.visible").click()
     cy.getDataTest("DividendsCU_Concepts").type("{downArrow}{enter}")
     cy.getDataTest("DividendsCU_Gross").type(gross)
     cy.getDataTest("DividendsCU_Net").type(net)
     cy.getDataTest("DividendsCU_Taxes").type(taxes)
     cy.getDataTest("DividendsCU_Button").click()
+    cy.getDataTest("DividendsCU_Button").should("not.be.visible")
 }

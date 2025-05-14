@@ -31,7 +31,7 @@ describe('e2e Investments', () => {
 
 
     // Open show evolution chart
-    cy.wait(1000) //Loading ios
+    cy.wait(3000) //Loading ios
     cy.getDataTest('InvestmentsView_MyMenuInline_Button').should("be.visible")
     cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
     cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item3').click()
