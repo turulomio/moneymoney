@@ -13,7 +13,9 @@ describe('e2e Strategies List', () => {
     cy.wait(1000)
     cy.getDataTest('LateralIcon').should('be.visible').click()
     cy.getDataTest('LateralStrategies').click()
+  })
 
+  it('Strategies products range', () => {
     // Add a new strategy ranged
     mymenuinlinebutton_pointable('StrategiesList_MyMenuInline_Button')
     cy.getDataTest('StrategiesList_MyMenuInline_Button').click()
