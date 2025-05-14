@@ -27,14 +27,15 @@
         data(){ 
             return{
                 loading:false,
-                finished:false,
+                chart: null, // ECharts instance
+                chartReadyPromise: null, // Promise for chart initialization
+                finished:false, // Flag for rendering completion
                 balance:[],
                 accounts:[],
                 investments:[],
                 invested:[],
                 zerorisk:[],
                 from: new Date().getFullYear()-3,
-
             }
         },        
         watch:{
@@ -151,44 +152,89 @@
             change_year(){
                 this.refreshChart()
             },
-            refreshChart(){
-                this.loading=true
-                this.finished=false
-                axios.get(`${this.useStore().apiroot}/reports/evolutionassets/chart/?from=${this.from}`, this.myheaders())
-                .then((response) => {
-                    this.balance=[]
-                    this.accounts=[]
-                    this.investments=[]
-                    this.invested=[]
-                    this.zerorisk=[]
-                    response.data.forEach(o => {
-                        this.balance.push([o.datetime, o.total_user])
-                        this.accounts.push([o.datetime, o.accounts_user])
-                        this.investments.push([o.datetime, o.investments_user])
-                        this.invested.push([o.datetime, o.invested_user])
-                        this.zerorisk.push([o.datetime, o.zerorisk_user])
+            refreshChart() {
+                this.loading = true;
+                this.finished = false; // Reset finished flag for new rendering
 
-                    })
-
-                    this.chart = echarts.init(this.$refs.chart);
-                    this.chart.on('finished', this.on_finished);
-                    this.chart.setOption(this.chart_option())
-                    this.loading=false
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
-            on_finished(){
-                if (this.finished==true) {
-                    this.finished=true
-                    console.log("Chart assets has finished")
+                // Dispose previous chart instance if it exists
+                if (this.chart) {
+                    this.chart.dispose();
+                    this.chart = null;
                 }
 
+                this.chartReadyPromise = new Promise((resolve, reject) => {
+                    axios.get(`${this.useStore().apiroot}/reports/evolutionassets/chart/?from=${this.from}`, this.myheaders())
+                    .then((response) => {
+                        this.balance = [];
+                        this.accounts = [];
+                        this.investments = [];
+                        this.invested = [];
+                        this.zerorisk = [];
+                        response.data.forEach(o => {
+                            this.balance.push([o.datetime, o.total_user]);
+                            this.accounts.push([o.datetime, o.accounts_user]);
+                            this.investments.push([o.datetime, o.investments_user]);
+                            this.invested.push([o.datetime, o.invested_user]);
+                            this.zerorisk.push([o.datetime, o.zerorisk_user]);
+                        });
+
+                        if (!this.$refs.chart) {
+                            console.error("Chart DOM element not found during refresh.");
+                            this.loading = false;
+                            reject(new Error("Chart DOM element not found"));
+                            return;
+                        }
+                        
+                        this.chart = echarts.init(this.$refs.chart);
+                        this.chart.on('finished', this.on_finished);
+                        this.chart.setOption(this.chart_option());
+                        
+                        this.loading = false;
+                        console.log("Chart refreshed and options set. Instance:", this.chart);
+                        resolve(this.chart);
+                    }, (error) => {
+                        this.parseResponseError(error);
+                        this.loading = false;
+                        reject(error);
+                    });
+                });
+                return this.chartReadyPromise;
+            },
+            on_finished(){
+                this.finished = true;
+                console.log("ECharts 'finished' event fired. this.finished set to true.");
             },
 
             async downloadChart() {
-                while (!this.finished) {
-                    await new Promise(resolve => setTimeout(resolve, 100)); // Check every 100ms
+                if (!this.chart && this.chartReadyPromise) {
+                    try {
+                        console.log("downloadChart: Chart not ready, awaiting chartReadyPromise...");
+                        await this.chartReadyPromise;
+                    } catch (error) {
+                        console.error("downloadChart: Chart initialization failed.", error);
+                        return null; // Or throw error
+                    }
+                }
+                if (!this.chart) {
+                    console.error("downloadChart: Chart instance is not available.");
+                    return null; // Or throw error
+                }
+
+                if (!this.finished) {
+                    console.log("downloadChart: Chart rendering not finished, waiting...");
+                    let attempts = 0;
+                    const maxAttempts = 300; // Wait up to 30 seconds (300 * 100ms)
+                    while (!this.finished && attempts < maxAttempts) {
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                        attempts++;
+                    }
+                    if (!this.finished) {
+                        console.warn("downloadChart: Timeout waiting for chart to finish rendering. Capturing current state.");
+                    } else {
+                        console.log("downloadChart: Chart finished rendering.");
+                    }
+                } else {
+                    console.log("downloadChart: Chart already reported as finished.");
                 }
                 return this.chart.getDataURL({ pixelRatio: 6, backgroundColor: '#fff' });
             },
@@ -202,4 +248,3 @@
 
 
 </script>
-

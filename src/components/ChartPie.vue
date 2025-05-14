@@ -128,9 +128,9 @@
             },
 
             async downloadChart() {
-                while (!this.finished) {
-                    await new Promise(resolve => setTimeout(resolve, 100)); // Check every 100ms
-                }
+                // while (!this.finished) {
+                //     await new Promise(resolve => setTimeout(resolve, 100)); // Check every 100ms
+                // }
                 return this.chart.getDataURL({ pixelRatio: 6, backgroundColor: '#fff' });
             },
         },

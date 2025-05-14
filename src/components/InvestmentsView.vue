@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ investment.fullname }}
-            <MyMenuInline :items="items"/>
+            <MyMenuInline data-test="InvestmentsView_MyMenuInline" :items="items" />
             <v-btn data-test="InvestmentsView_ButtonClose" small style="color:darkgrey" icon="mdi-close" class="elevation-0" @click="$emit('close')"/>
         </h1>
         <DisplayValues v-if="ios_id" :items="displayvalues" :key="key" />
@@ -489,22 +489,22 @@
             empty_ios,
             empty_investment_operation,
             on_DividendsCU_cruded(){
-                this.dividends_cu_dialog=false
                 this.update_all()
+                this.dividends_cu_dialog=false
             },
             on_TableDividends_cruded(){
                 this.update_all()
             },
             on_InvestmentsoperationsCU_cruded(){
-                this.dialog_io=false
                 this.update_all()
                 this.$emit("cruded") //Translated to InvestmentsList
+                this.dialog_io=false
             },
             on_InvestmentsChangeSellingPrice_cruded(){
-                this.dialog_io_sameproduct=false
                 this.key=this.key+1
                 this.update_all()
                 this.$emit("cruded")
+                this.dialog_io_sameproduct=false
             },
             on_TableInvestmentsOperations_cruded(){//Emited deleting IO
                 this.on_InvestmentsoperationsCU_cruded()

@@ -36,26 +36,7 @@ cd moneymoney
 npm run dev
 ```
 
+### e2e specific test with cypress
 
-## Changelog
-
-### 1.2.0 (2023-10-05)
-- Added totals to historical concepts report
-- Added balance to creditcardoperations
-- Assets Report preparation now hides charts
-
-### 1.1.0 (2023-09-27)
-- Added zero risk assets to annual chart
-- Added creditcard operation copy feature
-- Fixed many bugs
-
-### 1.0.0 (2023-09-09)
-- MoneyMoney frontend migrated to vue3 and vuetify3
-- All features were added
-
-### 0.3.0 (2022-07-03)
-- Adding missing features
-
-### 0.2.0 (2022-02-20)
-- First version with almost all features migrated from xulpymoney project
+`npm run cypress_console -- --spec cypress/e2e/AssetsReport.cy.js`
 

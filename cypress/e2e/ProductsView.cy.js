@@ -10,8 +10,8 @@ describe('e2e Product view', () => {
 
     // Open product view
     cy.wait(1000)
-    cy.getDataTest('MyMenuInline_Button').last().click()
-    cy.getDataTest('MyMenuInline_Header1_Item0').click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').last().click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Header1_Item0').click()
 
     cy.getDataTest("ProductsView_TabPercentageEvolution").click()
     cy.getDataTest("ProductsView_TabQuotesEvolution").click()

@@ -1,7 +1,7 @@
 <template>
     <div data-test="StrategiesList">    
         <h1>{{ $t('Strategies list') }}
-            <MyMenuInline :items="menuinline_items"/>
+            <MyMenuInline :items="menuinline_items" data-test="StrategiesList_MyMenuInline"/>
         </h1>
         <v-card outlined class="ma-4 pa-4">
             <v-checkbox data-test="StrategiesList_CheckActive" v-model="showActive" :label="setCheckboxLabel()" />

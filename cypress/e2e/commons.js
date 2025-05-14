@@ -17,8 +17,8 @@ export function add_investment_from_Home(
 ){
     cy.getDataTest('LateralIcon').click()
     cy.getDataTest('LateralInvestments').click()
-    cy.getDataTest('MyMenuInline_Button').last().click()
-    cy.getDataTest('MyMenuInline_Header0_Item0').click()
+    cy.getDataTest('InvestmentsList_MyMenuInline_Button').should("be.visible").click()
+    cy.getDataTest('InvestmentsList_MyMenuInline_Header0_Item0').click()
     cy.getDataTest('InvestmentsCU_Accounts').type(account_type)
     cy.getDataTest('InvestmentsCU_Name').type(investment)
     cy.getDataTest('InvestmentsCU_Products').type(product_type)
@@ -148,11 +148,14 @@ export function add_investmentoperation_from_InvestmentView(
     price="9"
 ){
 
-    cy.getDataTest('MyMenuInline_Button').last().click()
-    cy.getDataTest('MyMenuInline_Header2_Item0').click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').should("be.visible")
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Header2_Item0').click()
     cy.getDataTest("InvestmentsoperationsCU_Shares").type("{backspace}").type(shares)
     cy.getDataTest("InvestmentsoperationsCU_Price").type(price)
     cy.getDataTest("InvestmentsoperationsCU_Button").click()
+    cy.getDataTest("InvestmentsoperationsCU_Button").should("not.exist")
+    mymenuinlinebutton_pointable("InvestmentsView_MyMenuInline_Button")
 }
 
 export function add_dividend_from_InvestmentView(
@@ -161,12 +164,21 @@ export function add_dividend_from_InvestmentView(
     net="9",
     taxes="1"
 ){
-
-    cy.getDataTest('MyMenuInline_Button').last().click()
-    cy.getDataTest('MyMenuInline_Header3_Item0').click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Header3_Item0').should("exist").click()
     cy.getDataTest("DividendsCU_Concepts").type("{downArrow}{enter}")
     cy.getDataTest("DividendsCU_Gross").type(gross)
     cy.getDataTest("DividendsCU_Net").type(net)
     cy.getDataTest("DividendsCU_Taxes").type(taxes)
     cy.getDataTest("DividendsCU_Button").click()
+    cy.getDataTest("DividendsCU_Button").should("not.exist")
+    mymenuinlinebutton_pointable("InvestmentsView_MyMenuInline_Button")
+}
+
+export function mymenuinlinebutton_pointable(name){
+    cy.getDataTest(name)
+        .should('have.css', 'cursor', 'pointer')
+        .should('be.visible')
+        .should('exist')
+        .should('be.enabled')
 }
