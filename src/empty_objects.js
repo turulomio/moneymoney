@@ -276,6 +276,7 @@ export function empty_strategy(){
         dt_from: new Date().toISOString(),
         dt_to: null,
         investments: [],
+        accounts: [],
         name: "",
         type: 3,
         comment: "",

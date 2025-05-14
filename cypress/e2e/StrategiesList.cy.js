@@ -4,37 +4,30 @@ describe('e2e Strategies List', () => {
   it('Strategies list', () => {
     login_test_User(cy)
 
-    // Add investments
-    add_investmentoperation_from_Home(cy) // Is a promise
-    cy.getDataTest("InvestmentsView_ButtonClose").click()
-
-
     //Open strategies lateral menu
-    cy.wait(1000)
     cy.getDataTest('LateralIcon').should('be.visible').click()
     cy.getDataTest('LateralStrategies').click()
-  })
 
-  it('Strategies products range', () => {
     // Add a new strategy ranged
     mymenuinlinebutton_pointable('StrategiesList_MyMenuInline_Button')
     cy.getDataTest('StrategiesList_MyMenuInline_Button').click()
     cy.getDataTest('StrategiesList_MyMenuInline_Header0_Item0').click()
     cy.getDataTest('StrategyCU_Name').type("Range strategy")
-    cy.getDataTest('StrategyCU_Investments').type("Cash{downArrow}{enter}")
+
+    cy.getDataTest('StrategyCU_Investments').type("Perm{downArrow}{enter}")
     cy.getDataTest('StrategyCU_Type').type("{downArrow}{downArrow}{enter}")
+
     cy.wait(1000) // A lot of products, needed more time
     cy.getDataTest('StrategyCU_Products').type("Apalanc{downArrow}{enter}")
     cy.getDataTest('StrategyCU_Comment').type("My strategy comment")
     cy.getDataTest('StrategyCU_Additional2').type("10000")
     cy.getDataTest('StrategyCU_Additional3').type("10000")
     cy.getDataTest('StrategyCU_Additional4').type("10000")
-    cy.getDataTest('StrategyCU_RecomendationMethod').type("{downArrow}{enter}")
+    cy.getDataTest('StrategyCU_RecomendationMethod').type("{downArrow}{downArrow}{enter}")
     cy.getDataTest('StrategyCU_Additional6').type("1")
     cy.intercept({ method:'POST', url:'http://127.0.0.1:8004/api/strategies/', times:1,}).as("post_strategies")
     cy.getDataTest('StrategyCU_Button').click()
     cy.wait('@post_strategies').then((interception)=>{
-        console.log("AHORA", interception.response.body.id)
         cy.wrap(interception.response.body.id).as('strategy_id') // Stores the captured ID for later us
     })
 
