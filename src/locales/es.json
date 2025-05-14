@@ -815,5 +815,11 @@
   "Select a product strategy": "Selecciona una estrategia de producto",
   "Investments operations annual revaluation report": "Informe de la revalorización anual de las operaciones de las inversiones",
   "Show only investments operations from zero risk investments": "Mostrar sólo las operaciones de inversiones sin riesgo",
-  "Balance last year or invested": "Saldo del año pasado o invertido"
+  "Balance last year or invested": "Saldo del año pasado o invertido",
+  "You can't use an inactive bank": "No puedes usar un banco inactivo",
+  "Fill commissions from total balance": "Rellena las comisiones desde el saldo total",
+  "Fill price from shares and amount": "Rellena el precio desde las acciones y la cantidad",
+  "Set gross amount operation": "Establece la cantidad bruta de la operación",
+  "Set shares operation": "Establece las acciones de la operación",
+  "Gross gains: [0]. Gross dividends: [1]. Gross total: [2]. Invested: [3]. Invested percentage: [4].": "Ganancias brutas: [0]. Dividendos brutos: [1]. Bruto total: [2]. Invertido: [3]. Porcentaje invertido: [4]."
 }
