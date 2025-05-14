@@ -62,11 +62,21 @@
                         subheader: this.$t("Investment operation options"),
                         children: [
                             {
-                                name:"Fill commissions from total balance",
+                                name: this.$t("Fill commissions from total balance"),
                                 icon: "mdi-plus",
                                 code: function(){
                                     var amount=this.parseNumber(prompt( this.$t("Set total balance of this investment operation") ));
                                     this.new_io.commission=this.round(Math.abs(Math.abs(amount)-Math.abs(this.new_io.shares*this.new_io.price)),this.account.decimals)
+                                }.bind(this),
+                            },
+                            {
+                                name: this.$t("Fill price from shares and amount"),
+                                icon: "mdi-plus",
+                                code: function(){
+                                    var amount=this.round(this.parseNumber(prompt( this.$t("Set gross amount operation") )), this.account.decimals)
+                                    var shares=this.round(this.parseNumber(prompt( this.$t("Set shares operation") )), this.product.decimals)
+                                    this.new_io.shares=shares
+                                    this.new_io.price=this.round(amount/this.new_io.shares,this.product.decimals)
                                 }.bind(this),
                             },
                         ]
