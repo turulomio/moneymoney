@@ -25,6 +25,9 @@ type puede ser redirection or command
             MyMenuInlineSelection(item){
                 item.code(this)
             },
+
+
+cypress testing: Todas las funciones deberán de ser sincronas, ya que hasta que no se ejecute el código el botón estará disabled
  -->
 
 
@@ -32,7 +35,7 @@ type puede ser redirection or command
     <div style="display: inline-block;">
         <v-menu offset-y>
             <template  v-slot:activator="{ props }">
-                <v-btn :data-test="`${dataTest}_Button`" text dark v-bind="props" style="color:darkgrey" class="elevation-0">
+                <v-btn :data-test="`${dataTest}_Button`" :disabled="!button_enabled" text dark v-bind="props" style="color:darkgrey" class="elevation-0">
                     <v-icon>mdi-menu</v-icon>
                 </v-btn>
             </template>
@@ -59,6 +62,7 @@ type puede ser redirection or command
     export default {
         data: function(){
             return {
+                button_enabled:true,
                 new_items:null,
             }
         },
@@ -73,7 +77,9 @@ type puede ser redirection or command
         },
         methods: {
             on_item_click(item){
+                this.button_enabled=false
                 item.code()
+                this.button_enabled=true
             },
         },
         created() {

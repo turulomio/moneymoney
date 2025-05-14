@@ -14,26 +14,25 @@ describe('e2e Investments', () => {
     cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
     cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item0').click()
     cy.getDataTest('ChartInvestments_ButtonClose').click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').should("be.enabled")
 
     // Change investment active status twice
-    cy.getDataTest('InvestmentsView_MyMenuInline_Button').should("be.visible")
     cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
     cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item1').click()
-    cy.wait(1000)
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').should("be.enabled")
     cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
     cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item1').click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').should("be.enabled")
 
     // Evolution chart
-    cy.getDataTest('InvestmentsView_MyMenuInline_Button').should("be.visible")
     cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
     cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item2').click()
-    cy.getDataTest('ChartInvestmentsoperationsEvolution_ButtonClose').should("be.visible").click()
+    cy.getDataTest('ChartInvestmentsoperationsEvolution_ButtonClose').should("be.enabled").click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').should("be.enabled")
 
 
     // Open show evolution chart
-    cy.wait(3000) //Loading ios
-    cy.getDataTest('InvestmentsView_MyMenuInline_Button').should("be.visible")
-    cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').should("be.enabled").click()
     cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item3').click()
   })
 

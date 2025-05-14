@@ -155,6 +155,7 @@ export function add_investmentoperation_from_InvestmentView(
     cy.getDataTest("InvestmentsoperationsCU_Price").type(price)
     cy.getDataTest("InvestmentsoperationsCU_Button").click()
     cy.getDataTest("InvestmentsoperationsCU_Button").should("not.exist")
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').should('be.enabled'); // Is disabled until code ejecution
 }
 
 export function add_dividend_from_InvestmentView(
@@ -163,14 +164,13 @@ export function add_dividend_from_InvestmentView(
     net="9",
     taxes="1"
 ){
-
-    cy.getDataTest('InvestmentsView_MyMenuInline_Button').should("be.visible")
     cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
-    cy.getDataTest('InvestmentsView_MyMenuInline_Header3_Item0').should("be.visible").click()
+    cy.getDataTest('InvestmentsView_MyMenuInline_Header3_Item0').should("exist").click()
     cy.getDataTest("DividendsCU_Concepts").type("{downArrow}{enter}")
     cy.getDataTest("DividendsCU_Gross").type(gross)
     cy.getDataTest("DividendsCU_Net").type(net)
     cy.getDataTest("DividendsCU_Taxes").type(taxes)
     cy.getDataTest("DividendsCU_Button").click()
     cy.getDataTest("DividendsCU_Button").should("not.exist")
+    cy.getDataTest('InvestmentsView_MyMenuInline_Button').should('be.enabled'); // Is disabled until code ejecution
 }
