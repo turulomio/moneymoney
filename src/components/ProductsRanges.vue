@@ -63,7 +63,7 @@
         <!-- Order CU dialog -->
         <v-dialog v-model="dialog_ordercu" max-width="40%">
             <v-card class="pa-4">
-                <OrdersCU :order="order" mode="C" @cruded="on_OrdersCU_cruded" :key="key"></OrdersCU>
+                <OrdersCU :order="order" mode="C" @cruded="on_OrdersCU_cruded" :key="key"  :investments="investments_for_orders" />
             </v-card>
         </v-dialog>
         <!-- Orders LIST -->
@@ -143,6 +143,16 @@
                 this.showchart=false
                 if (this.tab==1) setTimeout(() => {this.showchart=true }, 300)
             },
+        },
+        computed:{
+            investments_for_orders(){
+                //Show only investments in this product range
+                var r=[]
+                this.pr.investments.forEach(o=>{
+                    r.push(this.useStore().investments.get(o))
+                })
+                return r
+            }
         },
         methods:{
             useStore,

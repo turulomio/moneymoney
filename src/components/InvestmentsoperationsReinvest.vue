@@ -66,7 +66,7 @@
         <!-- Order CU dialog -->
         <v-dialog v-model="dialog_order_cu" max-width="550">
             <v-card class="pa-4">
-                <OrdersCU :order="order" mode="C" :key="key" @cruded="on_OrdersCU_cruded"></OrdersCU>
+                <OrdersCU :order="order" mode="C" :key="key" @cruded="on_OrdersCU_cruded" :investments="getArrayFromMap(useStore().investments)"></OrdersCU>
             </v-card>
         </v-dialog>
     </div>
