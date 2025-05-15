@@ -233,6 +233,7 @@
             this.newstrategy=Object.assign({},this.strategy)
         },
         mounted(){
+            console.warn(this.getArrayFromMap(this.useStore().recomendation_methods))
             this.updateUi()
         }
     }
