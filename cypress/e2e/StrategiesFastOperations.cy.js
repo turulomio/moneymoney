@@ -28,5 +28,21 @@ describe('e2e Strategies List', () => {
         cy.log(strategy_id)
 
     })
+
+    // Creates one fast operation
+    cy.getDataTest('LateralIcon').should('be.visible').click()
+    cy.getDataTest('LateralAccounts').click()
+    cy.getDataTest('AccountsList_Table_Row4').click()
+    cy.getDataTest('MyMenuInline_Button').last().click()
+    cy.getDataTest('MyMenuInline_Header1_Item0').click()
+    cy.getDataTest('AccountsoperationsCU_Concepts').type("Fast{downArrow}{enter}")
+    cy.getDataTest('AccountsoperationsCU_Amount').clear().type("-100")
+    cy.getDataTest('AccountsoperationsCU_Button').click()
+    cy.getDataTest('AccountsView_ButtonClose').click()
+
+
+    //Open strategies lateral menu
+    cy.getDataTest('LateralIcon').should('be.visible').click()
+    cy.getDataTest('LateralStrategies').click()
   })  
 })

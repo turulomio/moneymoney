@@ -206,9 +206,9 @@
                     this.product_visibility=false                
                 } else if (this.newstrategy.type==4){//Fast operations
                     this.additional_labels=[
-                        this.$t("Worse product"),
-                        this.$t("Best product"),
-                        this.$t("Account"),
+                        "",
+                        "",
+                        "",
                         "",
                         "",
                         "",
@@ -233,7 +233,6 @@
             this.newstrategy=Object.assign({},this.strategy)
         },
         mounted(){
-            console.warn(this.getArrayFromMap(this.useStore().recomendation_methods))
             this.updateUi()
         }
     }
