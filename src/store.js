@@ -261,6 +261,7 @@ export const useStore = defineStore('global', {
         this.strategiestypes.set(1, {id:1, name: "Pairs in same account"})
         this.strategiestypes.set(2, {id:2, name: "Product ranges"})
         this.strategiestypes.set(3,{id:3, name: "Generic"})
+        this.strategiestypes.set(4,{id:4, name: "Fast operations"})
         console.log(`Updated ${this.strategiestypes.size} strategies types in ${new Date()-start} ms`)
     },
     updateAll(){

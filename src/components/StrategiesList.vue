@@ -37,7 +37,7 @@
                 </template>           
 
                 <template #item.actions="{item}">
-                    <v-icon :data-test="`StrategiesList_Table_IconView${item.id}`" small class="mr-2" @click.stop="viewItem(item)">mdi-eye</v-icon>
+                    <v-icon :data-test="`StrategiesList_Table_IconView${item.id}`" v-if="[1,2,3].includes(item.type)" small class="mr-2" @click.stop="viewItem(item)">mdi-eye</v-icon>
                     <v-icon :data-test="`StrategiesList_Table_IconEdit${item.id}`" small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
                     <v-icon :data-test="`StrategiesList_Table_IconDelete${item.id}`" small @click.stop="deleteItem(item)">mdi-delete</v-icon>
                 </template>                  
@@ -78,6 +78,15 @@
                 <ProductsRanges :pr="pr" :key="key"></ProductsRanges>
             </v-card>
         </v-dialog>
+
+        <!-- Detailed view strategy for fast operations-->
+        <v-dialog v-model="dialog_detailedview_fo">
+            <v-card class="pa-4">
+                <h1>{{ $t("Fast operations of this strategy") }}</h1>
+                <TableAccountOperations showaccount showtotal :items="detailed_fo" height="400" class="flex-grow-1 flex-shrink-0" :key="key" @cruded="on_TableAccountsoperations_cruded"/>
+            </v-card>
+        </v-dialog>
+
     </div>
 </template>
 <script>
@@ -87,6 +96,7 @@
     import StrategiesView from './StrategiesView.vue'
     import StrategyCU from './StrategyCU.vue'
     import ProductsRanges from './ProductsRanges.vue'
+    import TableAccountOperations from './TableAccountOperations.vue'
     import {empty_products_ranges, empty_strategy} from '../empty_objects.js'
     import { localtime, f} from 'vuetify_rules'
     export default {
@@ -95,6 +105,7 @@
             StrategiesView,
             StrategyCU,
             ProductsRanges,
+            TableAccountOperations,
         },
         data(){ 
             return{
@@ -141,6 +152,10 @@
                 //Detailed view
                 dialog_detailedview: false,
                 pr: null,
+
+                // Detailed view for fast operations strategy
+                dialog_detailedview_fo:false,
+                detailed_fo: null,
             }
         },
         watch:{
@@ -182,7 +197,15 @@
                     this.pr.investments=object.item.investments
                     this.key=this.key+1
                     this.dialog_detailedview=true
-                    console.log(this.pr)
+                } else if (object.item.type==4){//FAST OPERATIONS
+                    axios.get(`${object.item.url}detailed_fastoperations/`, this.myheaders())
+                    .then((response) => {
+                        this.detailed_fo=response.data
+                        this.key=this.key+1
+                        this.dialog_detailedview_fo=true
+                    }, (error) => {
+                        this.parseResponseError(error)
+                    });
                 } else {
                     alert(this.$t("Detailed view for this strategy type is not developed yet"))
                 }
@@ -209,6 +232,10 @@
                     return this.$t("Check to see active strategies")
                 }
             },
+
+            on_TableAccountsoperations_cruded(){
+                this.update_table()
+            }
         },
         mounted(){
             this.update_table()

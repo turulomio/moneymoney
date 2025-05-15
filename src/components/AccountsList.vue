@@ -1,5 +1,5 @@
 <template>
-    <div>    
+    <div data-test="AccountsList">    
         <h1>{{ $t('Accounts list') }}
             <MyMenuInline :items="menuinline_items"/>
         </h1>
@@ -48,7 +48,7 @@
         </v-dialog>
         <v-dialog v-model="dialog_view">
             <v-card class="pa-4">
-                <AccountsView :account="account" :key="key" @cruded="on_AccountsView_cruded"></AccountsView>
+                <AccountsView :account="account" :key="key" @cruded="on_AccountsView_cruded" @close="dialog_view=false" />
             </v-card>
         </v-dialog>
         <!-- ACCOUNTS OPERATIONS SEARCH -->

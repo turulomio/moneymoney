@@ -4,7 +4,8 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid">
                 <v-text-field data-test="StrategyCU_Name" density="compact" :readonly="deleting" v-model="newstrategy.name" :label="$t('Set strategy name')" :placeholder="$t('Set strategy name')" :rules="RulesString(200,true)" counter="200" autofocus/>
-                <v-autocomplete data-test="StrategyCU_Investments" density="compact" :readonly="deleting" :items="getArrayFromMap(useStore().investments)" v-model="newstrategy.investments" :label="$t('Select strategy investments')" item-title="fullname" item-value="url" multiple chips />
+                <v-autocomplete data-test="StrategyCU_Investments" v-if="[2].includes(newstrategy.type)" density="compact" :readonly="deleting" :items="getArrayFromMap(useStore().investments)" v-model="newstrategy.investments" :label="$t('Select strategy investments')" item-title="fullname" item-value="url" multiple chips />
+                <v-autocomplete data-test="StrategyCU_Accounts" v-if="[4].includes(newstrategy.type)" :readonly="deleting" density="compact" :items="getArrayFromMap(useStore().accounts)" v-model="newstrategy.accounts" :label="$t('Select strategy accounts')" item-title="fullname" item-value="url" multiple chips />
                 <v-row class="d-flex flex-row mx-auto" justify="center">
                     <MyDateTimePicker class="mr-4" :readonly="deleting" v-model="newstrategy.dt_from" :label="$t('Date and time strategy start')" />                
                     <MyDateTimePicker data-test="StrategyCU_DtTo" :readonly="deleting" v-model="newstrategy.dt_to" :label="$t('Date and time strategy end')" :clearable="true" />
@@ -106,20 +107,23 @@
                     this.$refs.form.validate()
                     return
                 }
-                if (this.newstrategy.investments.length==0) {
+                if ([1,2,3].includes(this.newstrategy.type) && this.newstrategy.investments.length==0) {
                     alert(this.$t("You must select at least one investment."))
                     return
                 }
-                console.log(this.newstrategy.investments)
+                if ([4].includes(this.newstrategy.type) && this.newstrategy.accounts.length==0) {
+                    alert(this.$t("You must select at least one account."))
+                    return
+                }
 
                 //Update additional components
                 if (this.newstrategy.type==3){//Generic
+
                 } else if (this.newstrategy.type==2){//Product ranges
                     this.newstrategy.additional5=this.recomendation_method
                     this.newstrategy.additional1=this.id_from_hyperlinked_url(this.product)
                 } else if (this.newstrategy.type==1){//Product pairs
                 }
-
                 if (this.editing==true){
                     axios.put(this.newstrategy.url, this.newstrategy,  this.myheaders())
                     .then(() => {
@@ -198,6 +202,22 @@
                         "",
                     ]
                     this.additional_visibility=[true,true,true,false,false,false,false,false,false,false,]
+                    this.recomendation_method_visibility=false
+                    this.product_visibility=false                
+                } else if (this.newstrategy.type==4){//Fast operations
+                    this.additional_labels=[
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    ]
+                    this.additional_visibility=[false,false,false,false,false,false,false,false,false,false,]
                     this.recomendation_method_visibility=false
                     this.product_visibility=false
 
