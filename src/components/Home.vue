@@ -11,21 +11,25 @@
                     <li v-for="(order,i) in alerts.orders_expired" :key="i">      - {{ order.expiration }}. {{ order.investmentsname}}</li>
                 </ul>
             </v-alert>
-            <v-alert class="mx-15 px-10 mb-2" type="error" variant="outlined" v-if="alerts.investments_inactive_with_balance.length>0"> 
-                <p>{{$t("Inactive investments with balance:")}}</p>
+            <v-alert class="mx-15 px-10 mb-2" type="error" variant="outlined" v-if="alerts.banks_inactive_with_balance.length>0"> 
+                <p>{{$t("Inactive banks with balance:")}}</p>
                 <ul>    
-                    <li v-for="(investment,i) in alerts.investments_inactive_with_balance" :key="i">      - {{ 
-                        useStore().investments.get(hyperlinked_url("investments",investment.data.investments_id))?.fullname }}. {{ currency_generic_html(investment.total_io_current.balance_investment,investment.data.currency_product)}}</li>
+                    <li v-for="(bank,i) in alerts.banks_inactive_with_balance" :key="i">      - {{ f($t(`Bank '[0]' has a total balance of [1]`), [bank.localname, currency_string(bank.balance_total, useStore().profile.currency)]) }}.  </li>
                 </ul>
-            </v-alert>    
+            </v-alert>
             <v-alert class="mx-15 px-10 mb-2" type="error" variant="outlined" v-if="alerts.accounts_inactive_with_balance.length>0"> 
                 <p>{{$t("Inactive accounts with balance:")}}</p>
                 <ul>    
-                    <li v-for="(account,i) in alerts.accounts_inactive_with_balance" :key="i">      -  {{ 
-                        useStore().accounts.get(account.url).fullname }}. {{ currency_generic_html(account.balance_user, useStore().profile.currency)}}</li>
+                    <li v-for="(account,i) in alerts.accounts_inactive_with_balance" :key="i">    - {{ f($t(`Account '[0]' has a total balance of [1]`), [account.localname, currency_string(account.balance_user, useStore().profile.currency)]) }}.  </li>
                 </ul>
-            </v-alert> 
-            <v-alert class="mx-15 px-10 mb-2" type="success" variant="outlined" v-if="(alerts.investments_inactive_with_balance.length + alerts.orders_expired.length + alerts.accounts_inactive_with_balance.length)==0"> 
+            </v-alert>
+            <v-alert class="mx-15 px-10 mb-2" type="error" variant="outlined" v-if="alerts.investments_inactive_with_balance.length>0"> 
+                <p>{{$t("Inactive investments with balance:")}}</p>
+                <ul>    
+                    <li v-for="(investment,i) in alerts.investments_inactive_with_balance" :key="i">    - {{ f($t(`Investment '[0]' has a total balance of [1]`), [investment.data.name, currency_string(investment.total_io_current.balance_user, useStore().profile.currency)]) }}.  </li> 
+                </ul>
+            </v-alert>
+            <v-alert class="mx-15 px-10 mb-2" type="success" variant="outlined" v-if="(alerts.banks_inactive_with_balance.length + alerts.investments_inactive_with_balance.length + alerts.orders_expired.length + alerts.accounts_inactive_with_balance.length)==0"> 
                 <p>{{$t("You haven't alerts, everything is fine")}}</p>
             </v-alert>
         </div>
@@ -36,7 +40,7 @@
 import axios from 'axios'
 import { useStore } from "@/store"
 import imgUrl from '@/assets/moneymoney.png'
-import { parseResponseError,myheaders } from '@/functions'
+import { parseResponseError,myheaders, currency_string } from '@/functions'
 import {f} from 'vuetify_rules'
 
 
@@ -59,6 +63,7 @@ export default {
         parseResponseError,
         myheaders,
         f,
+        currency_string,  
 
         get_alerts(){
             if (!this.useStore().logged) return
