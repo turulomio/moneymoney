@@ -54,7 +54,7 @@
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
     import { localtime ,f} from 'vuetify_rules'
-    import { parseResponseError, myheaders } from '@/functions.js'
+    import { parseResponseError, myheaders, getMapObjectById} from '@/functions.js'
     export default {
         components:{
             DisplayValues,
@@ -148,6 +148,7 @@
             empty_investments_chart,
             empty_investments_chart_limit_line,
             empty_strategy_simulation,
+            getMapObjectById,
             on_TableDividends_cruded(){
                 this.update_all()
             },

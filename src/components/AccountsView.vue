@@ -84,7 +84,7 @@
     import CreditcardsCU from './CreditcardsCU.vue'
     import CreditcardsView from './CreditcardsView.vue'
     import TableAccountOperations from './TableAccountOperations.vue'
-    import {empty_account_operation,empty_credit_card} from '../empty_objects.js'
+    import {empty_account_operation,empty_credit_card, empty_account_transfer} from '../empty_objects.js'
     import { f} from 'vuetify_rules'
     import { parseResponseError, myheaders, currency_html } from '@/functions'
     export default {
@@ -208,6 +208,9 @@
             parseResponseError,
             myheaders,
             currency_html,
+            empty_account_operation,
+            empty_credit_card,
+            empty_account_transfer,
             CCONotDeferred(item){
                 this.ao=this.empty_account_operation()
                 this.ao.accounts=this.account.url
@@ -216,8 +219,6 @@
                 this.ao_mode="C"
                 this.dialog_ao=true
             },
-            empty_account_operation,
-            empty_credit_card,
             refreshTable(){
                 axios.get(`${this.useStore().apiroot}/api/accountsoperations/?account=${this.account.url}&year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())                
                 .then((response) => {

@@ -99,7 +99,7 @@
     </v-data-table>   
 </template>
 <script>    
-    import { listobjects_sum,listobjects_average_ponderated } from '@/functions'
+    import { listobjects_sum,listobjects_average_ponderated, getMapObjectById, currency_html, percentage_html } from '@/functions'
     import { localtime, f } from 'vuetify_rules'
     export default {
         props: {
@@ -172,6 +172,9 @@
             localtime,
             listobjects_sum,
             listobjects_average_ponderated,
+            getMapObjectById,
+            currency_html,
+            percentage_html,
             // Currencies are part of the item
             currency(item){
                 if (this.output=="account"){

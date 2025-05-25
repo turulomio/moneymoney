@@ -143,7 +143,7 @@
     import { useStore } from "@/store"
     import {empty_investment_operation,empty_dividend,empty_investments_chart,empty_investments_chart_limit_line,empty_ios} from '../empty_objects.js'
     import { parseNumber,f } from 'vuetify_rules'
-    import { percentage_string,listobjects_average_ponderated, parseResponseError, currency_string, localcurrency_string, listobjects_sum, myheaders } from '@/functions.js'
+    import { percentage_string,listobjects_average_ponderated, parseResponseError, currency_string, localcurrency_string, listobjects_sum, myheaders, getMapObjectById } from '@/functions.js'
     import ChartInvestments from './ChartInvestments.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import DividendsCU from './DividendsCU.vue'
@@ -489,6 +489,7 @@
             empty_dividend,
             empty_ios,
             empty_investment_operation,
+            getMapObjectById,
             parseResponseError,
             currency_string,
             localcurrency_string,

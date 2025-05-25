@@ -37,7 +37,7 @@
     pdfMake.addVirtualFileSystem(pdfFonts);
     import {pdfmake_convertImageToDataURL, pdfmake_percentage_string, pdfmake_loo_to_table, pdfmake_loo_to_table_guess_headers} from "@/pdfmake_helpers"
     import imgMoneymoney from '../assets/moneymoney.png'
-    import { parseResponseError, string_with_localized_now, myheaders, getMapObjectById } from '@/functions'
+    import { parseResponseError, string_with_localized_now, myheaders, getMapObjectById,localcurrency_html, localcurrency_string, percentage_string} from '@/functions'
 
     export default {
         components:{
@@ -127,6 +127,8 @@
             orderBy,
             sumBy,
             myheaders,
+            localcurrency_html,
+            localcurrency_string,
             getMapObjectById,
             parseResponseError,
             pdfmake_convertImageToDataURL,
@@ -134,6 +136,7 @@
             pdfmake_loo_to_table_guess_headers,
             pdfmake_percentage_string,
             string_with_localized_now,
+            percentage_string,
             async launch_report(){
                 this.creating=true
                 const docDefinition = {

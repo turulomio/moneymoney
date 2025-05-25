@@ -91,7 +91,7 @@
 <script>    
     import { localtime, f } from 'vuetify_rules'
     import { useStore } from "@/store"
-    import {listobjects_sum, currency_html} from "@/functions"
+    import {listobjects_sum, currency_html, getMapObjectById} from "@/functions"
     export default {
         name: "TableInvestmentOperationsHistorical",
         props: {
@@ -141,6 +141,7 @@
             localtime,
             listobjects_sum,
             currency_html,
+            getMapObjectById,
             currency(item){
                 if (this.output=="account"){
                     return item.currency_account

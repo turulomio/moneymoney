@@ -51,7 +51,7 @@
     import EstimationsDpsCU from './EstimationsDpsCU.vue'
     import {empty_estimation_dps} from '../empty_objects.js'
     import {f} from 'vuetify_rules'
-    import { parseResponseError, myheaders } from '@/functions'
+    import { parseResponseError, myheaders, currency_html, percentage_html, localcurrency_string } from '@/functions'
     export default {
         components:{
             EstimationsDpsCU,
@@ -85,7 +85,9 @@
             f,
             parseResponseError,
             myheaders,
-
+            currency_html,
+            percentage_html,
+            localcurrency_string,
             showAlarm(item){
                 var today= moment()
                 var estimation= moment(item.date_estimation)

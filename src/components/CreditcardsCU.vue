@@ -21,7 +21,7 @@
     import axios from 'axios' 
     import { useStore } from "@/store"
     import { RulesSelection,RulesInteger,RulesString } from 'vuetify_rules'
-    import { parseResponseError, myheaders } from '@/functions'
+    import { parseResponseError, myheaders, getArrayFromMap } from '@/functions'
     export default {
         props:{
             cc:{
@@ -44,6 +44,7 @@
             RulesInteger,
             RulesString,
             myheaders,
+            getArrayFromMap,
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating a credit card")

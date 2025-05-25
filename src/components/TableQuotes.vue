@@ -25,6 +25,7 @@
 <script>
     import QuotesCU from './QuotesCU.vue'
     import { localtime } from 'vuetify_rules'
+    import { currency_html } from '@/functions'
     export default {
         components:{
             QuotesCU,
@@ -54,6 +55,7 @@
         },
         methods: {
             localtime,
+            currency_html,
             editQuote(item){
                 this.quote=item
                 this.quote_mode="U"
