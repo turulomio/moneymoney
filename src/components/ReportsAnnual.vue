@@ -216,7 +216,7 @@
     import { localtime, RulesFloat,f } from 'vuetify_rules'
     import moment from 'moment'
     import ReportsAnnualIncomeDetail from './ReportsAnnualIncomeDetail.vue'
-import { parseResponseError, localcurrency_html, localcurrency_string, percentage_html, listobjects_sum } from '@/functions';
+    import { parseResponseError, localcurrency_html, localcurrency_string, percentage_html, listobjects_sum, myheaders } from '@/functions';
     export default {
         components:{
             ReportsAnnualIncomeDetail,
@@ -319,6 +319,7 @@ import { parseResponseError, localcurrency_html, localcurrency_string, percentag
             localcurrency_html,
             localcurrency_string,
             percentage_html,
+            myheaders,
             years(){
                 var start=1990
                 var end=new Date().getFullYear()

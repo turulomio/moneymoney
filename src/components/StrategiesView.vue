@@ -54,7 +54,7 @@
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
     import { localtime ,f} from 'vuetify_rules'
-import { parseResponseError } from '@/functions.js'
+    import { parseResponseError, myheaders } from '@/functions.js'
     export default {
         components:{
             DisplayValues,
@@ -144,6 +144,7 @@ import { parseResponseError } from '@/functions.js'
             f,
             localtime,
             parseResponseError,
+            myheaders,
             empty_investments_chart,
             empty_investments_chart_limit_line,
             empty_strategy_simulation,

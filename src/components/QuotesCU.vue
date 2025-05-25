@@ -25,7 +25,7 @@
     import moment from 'moment-timezone';
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import MyMenuInline from './MyMenuInline.vue'
-import { parseResponseError } from '@/functions.js'
+    import { myheaders, parseResponseError } from '@/functions.js'
     export default {
         components: {
             MyDateTimePicker,
@@ -97,6 +97,7 @@ import { parseResponseError } from '@/functions.js'
             RulesFloatGEZ,
             empty_quote,
             parseResponseError,
+            myheaders,
             title(){
                 if (this.mode=="C") return this.$t("Add a quote")
                 if (this.mode=="U") return this.$t("Update quote")

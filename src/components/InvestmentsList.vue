@@ -112,7 +112,7 @@
     import QuotesCU from './QuotesCU.vue'
     import {empty_quote, empty_investment} from '../empty_objects.js'
     import { localtime ,f} from 'vuetify_rules'
-    import { getCountryNameByCode, parseResponseError, listobjects_sum, currency_string, currency_html, localcurrency_html, percentage_html } from '@/functions'
+    import { getCountryNameByCode, parseResponseError, listobjects_sum, currency_string, currency_html, localcurrency_html, percentage_html, myheaders } from '@/functions'
     export default {
         components:{
             MyMenuInline,
@@ -196,6 +196,7 @@
             currency_html,
             localcurrency_html,
             percentage_html,
+            myheaders,
             empty_investment,
             empty_quote,
             addQuote(item){

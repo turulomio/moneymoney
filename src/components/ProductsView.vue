@@ -133,7 +133,7 @@
     import {empty_quote,empty_estimation_dps,empty_dps} from '../empty_objects.js'
     import {f} from 'vuetify_rules'
     import DpsCRUD from './DpsCRUD.vue'
-import { parseResponseError, percentage_html, currency_html } from '@/functions'
+    import { parseResponseError, percentage_html, currency_html, myheaders } from '@/functions'
     export default {
         components:{
             ChartProduct,
@@ -307,7 +307,7 @@ import { parseResponseError, percentage_html, currency_html } from '@/functions'
             parseResponseError,
             percentage_html,
             currency_html,
-
+            myheaders,
             on_EstimationsDpsCU_cruded(){
                 this.key=this.key+1
                 this.dialog_estimationdps=false

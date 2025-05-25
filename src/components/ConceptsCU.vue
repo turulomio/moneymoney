@@ -17,7 +17,7 @@
     import axios from 'axios'
     import { useStore } from '@/store'
     import { RulesSelection, RulesString } from 'vuetify_rules'
-import { parseResponseError } from '@/functions'
+    import { parseResponseError, myheaders } from '@/functions'
     export default {
         components: {
         },
@@ -42,6 +42,7 @@ import { parseResponseError } from '@/functions'
             RulesSelection,
             RulesString,
             useStore,
+            myheaders,
             title(){
                 if (this.mode=="D"){
                     return this.$t("Deleting concept")

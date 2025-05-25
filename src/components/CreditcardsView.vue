@@ -47,7 +47,7 @@
     import CreditcardsPaymentsRefund from './CreditcardsPaymentsRefund.vue'
     import {empty_cco} from '../empty_objects.js'
     import {f} from 'vuetify_rules'
-    import { parseResponseError, listobjects_sum, currency_string } from '@/functions'
+    import { parseResponseError, listobjects_sum, currency_string, myheaders } from '@/functions'
     export default {
         components:{
             MyMenuInline,
@@ -114,6 +114,7 @@
         },
         methods: {
             empty_cco,
+            myheaders,
             f,
             listobjects_sum,
             currency_string,

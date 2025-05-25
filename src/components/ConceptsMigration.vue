@@ -17,7 +17,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import { RulesSelection } from 'vuetify_rules'
-import { parseResponseError } from '@/functions'
+    import { parseResponseError, myheaders } from '@/functions'
     export default {
         components: {
         },
@@ -38,6 +38,8 @@ import { parseResponseError } from '@/functions'
             parseResponseError,
             useStore,
             RulesSelection,
+            myheaders,
+
             migrate(){
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()

@@ -22,7 +22,7 @@
     import { useStore } from "@/store"
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection, RulesFloat } from 'vuetify_rules'
-    import { date2zulu , parseResponseError, zulu2date} from '@/functions'
+    import { date2zulu , parseResponseError, zulu2date, myheaders} from '@/functions'
     export default {
         components:{
             MyDateTimePicker,
@@ -50,6 +50,7 @@
             useStore,
             RulesSelection,
             RulesFloat,
+            myheaders,
             acceptDialogAO(){
                 //Validation
                 if (this.form_valid!=true) {

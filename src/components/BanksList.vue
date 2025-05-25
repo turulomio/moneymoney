@@ -60,7 +60,7 @@
     import BanksView from './BanksView.vue'
     import {empty_bank} from '../empty_objects.js'
     import {f} from "vuetify_rules"
-    import { parseResponseError, listobjects_sum, localcurrency_html } from '@/functions'
+    import { parseResponseError, listobjects_sum, localcurrency_html, myheaders} from '@/functions'
     export default {
         components:{
             MyMenuInline,
@@ -117,6 +117,7 @@
             f,
             parseResponseError,
             empty_bank, 
+            myheaders,
             listobjects_sum,
             localcurrency_html,
             deleteItem (item) {

@@ -17,7 +17,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import { RulesString } from 'vuetify_rules'
-import { parseResponseError } from '@/functions'
+import { parseResponseError, myheaders } from '@/functions'
     export default {
         props: {
             bank: { // Bank object
@@ -36,6 +36,7 @@ import { parseResponseError } from '@/functions'
         methods: {
             useStore,
             RulesString,
+            myheaders, 
             parseResponseError,
             title(){
                 if (this.mode=="U"){

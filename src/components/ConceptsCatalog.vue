@@ -44,7 +44,7 @@
     import ConceptsCU from './ConceptsCU.vue'
     import ConceptsMigration from './ConceptsMigration.vue'
     import {empty_concept} from '../empty_objects.js'
-import { parseResponseError } from '@/functions'
+    import { parseResponseError, myheaders, localcurrency_html } from '@/functions'
     export default {
         components:{
             MyMenuInline,
@@ -98,6 +98,8 @@ import { parseResponseError } from '@/functions'
         },
         methods: {
             useStore,
+            myheaders,
+            localcurrency_html, 
             parseResponseError,
             deleteItem (item) {
                 this.concept=item

@@ -40,7 +40,7 @@
     import CurrencyFactor from './CurrencyFactor.vue'
     import { RulesSelection,RulesFloat,RulesFloatGEZ,RulesString, parseNumber,f} from 'vuetify_rules'
     import { round } from "lodash-es"
-    import { hyperlinked_url, parseResponseError } from '@/functions.js'
+    import { hyperlinked_url, parseResponseError, myheaders } from '@/functions.js'
     export default {
         name: "InvestmentsoperationsCU",
         components: {
@@ -107,6 +107,8 @@
             hyperlinked_url,
             parseNumber,
             parseResponseError,
+            myheaders,
+            
             round,
             f,
             empty_investment_operation,

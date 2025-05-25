@@ -23,6 +23,7 @@
     import { useStore } from "@/store"
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection ,RulesFloat, RulesString} from 'vuetify_rules'
+    import {myheaders, parseResponseError, getArrayFromMap } from '@/functions'
     export default {
         components:{
             MyDateTimePicker,
@@ -47,6 +48,9 @@
             RulesSelection,
             RulesFloat,
             RulesString,
+            myheaders,
+            parseResponseError,
+            getArrayFromMap,
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating a fast operations coverage")

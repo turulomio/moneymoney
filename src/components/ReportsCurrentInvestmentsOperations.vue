@@ -10,7 +10,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
-import { parseResponseError } from '@/functions'
+    import { parseResponseError, myheaders } from '@/functions'
     export default {
         components:{
             TableInvestmentOperationsCurrent,
@@ -25,6 +25,7 @@ import { parseResponseError } from '@/functions'
         methods:{
             useStore,
             parseResponseError,
+            myheaders,
             refreshTable(){
                 this.loading=true
                 axios.get(`${this.useStore().apiroot}/reports/investmentsoperations/current/` , this.myheaders())

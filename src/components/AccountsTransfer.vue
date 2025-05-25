@@ -22,7 +22,7 @@
     import { useStore } from "@/store"
     import { RulesSelection, RulesFloatGEZ, RulesFloatGZ } from 'vuetify_rules'
     import MyDateTimePicker from './MyDateTimePicker.vue'
-import { parseResponseError } from '@/functions'
+    import { parseResponseError, myheaders, getArrayFromMap } from '@/functions'
     export default {
         components: {
             MyDateTimePicker,
@@ -54,6 +54,8 @@ import { parseResponseError } from '@/functions'
             RulesSelection,
             RulesFloatGEZ,
             RulesFloatGZ,
+            myheaders,
+            getArrayFromMap,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')

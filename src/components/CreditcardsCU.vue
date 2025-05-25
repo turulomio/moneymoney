@@ -21,7 +21,7 @@
     import axios from 'axios' 
     import { useStore } from "@/store"
     import { RulesSelection,RulesInteger,RulesString } from 'vuetify_rules'
-import { parseResponseError } from '@/functions'
+    import { parseResponseError, myheaders } from '@/functions'
     export default {
         props:{
             cc:{
@@ -43,6 +43,7 @@ import { parseResponseError } from '@/functions'
             RulesSelection,
             RulesInteger,
             RulesString,
+            myheaders,
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating a credit card")

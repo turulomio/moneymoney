@@ -20,7 +20,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import { RulesFloat,RulesInteger } from 'vuetify_rules'
-    import { parseResponseError } from '@/functions'
+    import { parseResponseError, myheaders } from '@/functions'
     export default {
         props: {
             estimation: {
@@ -42,6 +42,7 @@
             RulesFloat,
             RulesInteger,
             parseResponseError,
+            myheaders,  
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating a DPS estimation")

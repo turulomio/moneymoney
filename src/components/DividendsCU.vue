@@ -26,7 +26,7 @@
     import { useStore } from "@/store"
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection,RulesFloat,RulesFloatGEZ } from 'vuetify_rules'
-import { parseResponseError } from '@/functions'
+    import { parseResponseError, myheaders,getArrayFromMap } from '@/functions'
     export default {
         components: {
             MyDateTimePicker,
@@ -51,6 +51,8 @@ import { parseResponseError } from '@/functions'
             RulesSelection,
             RulesFloat,
             RulesFloatGEZ,
+            myheaders,
+            getArrayFromMap,
             title(){
                 if (this.mode=="C") return this.$t("Add a dividend")
                 if (this.mode=="U") return this.$t("Update dividend")

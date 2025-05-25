@@ -89,7 +89,7 @@
     import ReportsConceptsHistorical from './ReportsConceptsHistorical'
     import MyMonthPicker from './MyMonthPicker.vue'
     import ChartPie from './ChartPie.vue'
-    import { parseResponseError, listobjects_sum, percentage_html, localcurrency_html } from '@/functions'
+    import { parseResponseError, listobjects_sum, percentage_html, localcurrency_html, myheaders } from '@/functions'
 
     export default {
         components:{
@@ -132,6 +132,7 @@
             parseResponseError,
             listobjects_sum,
             percentage_html,
+            myheaders,
             localcurrency_html,
             refreshTables(){
                 this.loading=true

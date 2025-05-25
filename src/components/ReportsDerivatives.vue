@@ -79,7 +79,7 @@
     import TableFastOperationsCoverage from './TableFastOperationsCoverage.vue'
     import {empty_fast_operations_coverage} from '../empty_objects.js'
     import {f} from 'vuetify_rules'
-import { listobjects_sum } from '@/functions'
+    import { listobjects_sum, myheaders, localcurrency_html } from '@/functions'
     export default {
         components:{
             MyMonthPicker,
@@ -145,6 +145,8 @@ import { listobjects_sum } from '@/functions'
             empty_fast_operations_coverage,
             f,
             listobjects_sum,
+            myheaders,
+            localcurrency_html,
             refreshTables(){
                 this.loading=true
 

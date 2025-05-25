@@ -110,10 +110,8 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import {f} from 'vuetify_rules'
-    import { parseResponseError, listobjects_sum, localcurrency_html, percentage_html } from '@/functions'
+    import { parseResponseError, listobjects_sum, localcurrency_html, percentage_html, myheaders } from '@/functions'
     export default {
-        components:{
-        },
         data(){
             return {
                 tab:1,
@@ -159,6 +157,7 @@
             listobjects_sum,
             localcurrency_html,
             percentage_html,
+            myheaders,
             years(){
                 var start=1990
                 var end=new Date().getFullYear()

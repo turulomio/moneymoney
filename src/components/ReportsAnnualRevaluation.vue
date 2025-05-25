@@ -41,7 +41,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import { localtime,f } from 'vuetify_rules'
-import {parseResponseError, localcurrency_html, percentage_html, listobjects_sum } from '@/functions'
+    import {parseResponseError, localcurrency_html, percentage_html, listobjects_sum, myheaders } from '@/functions'
     export default {
         components:{
         },
@@ -74,6 +74,7 @@ import {parseResponseError, localcurrency_html, percentage_html, listobjects_sum
             localtime,
             parseResponseError,
             localcurrency_html,
+            myheaders,
             percentage_html,
             listobjects_sum,
             refreshTable(){

@@ -86,7 +86,7 @@
     import ReportsConceptsHistorical from './ReportsConceptsHistorical.vue'
     import { localtime, f } from 'vuetify_rules'
     import { useGoTo } from 'vuetify'
-    import { parseResponseError, listobjects_sum, currency_html } from '@/functions.js'
+    import { parseResponseError, listobjects_sum, currency_html, myheaders } from '@/functions.js'
     export default {
         name: "TableAccountOperations",
         components:{
@@ -191,6 +191,7 @@
         localtime,
         parseResponseError,
         empty_account_transfer,
+        myheaders,
         empty_account_operation,
         copyAO (item) {
             if(item.is_editable==false){

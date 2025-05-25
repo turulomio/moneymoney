@@ -82,7 +82,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import ReportsConceptsHistoricalDetail from './ReportsConceptsHistoricalDetail.vue'
-    import { parseResponseError, listobjects_sum, localcurrency_html } from '@/functions'
+    import { parseResponseError, listobjects_sum, localcurrency_html, myheaders,getArrayFromMap } from '@/functions'
     export default {
         name:"ReportsConceptsHistorical",
         components:{
@@ -136,6 +136,8 @@
             parseResponseError,
             listobjects_sum,
             localcurrency_html,
+            myheaders,
+            getArrayFromMap,
 
             refreshTable(){
                 this.loading=true

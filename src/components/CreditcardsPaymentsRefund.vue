@@ -15,7 +15,7 @@
     import { useStore } from "@/store"
     import { localtime, RulesSelection, f } from 'vuetify_rules'
     import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
-import { parseResponseError } from '@/functions'
+    import { parseResponseError, myheaders } from '@/functions'
     export default {
         components:{
             TableCreditcardsOperations,
@@ -53,6 +53,7 @@ import { parseResponseError } from '@/functions'
             useStore,
             localtime,
             f,
+            myheaders,
             parseResponseError,
             RulesSelection,
             refundPayment() {

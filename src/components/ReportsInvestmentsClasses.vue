@@ -36,7 +36,7 @@
     import { useStore } from "@/store"
     import ChartPie from './ChartPie.vue'
     import { my_round } from 'vuetify_rules'
-import { parseResponseError } from '@/functions'
+    import { parseResponseError, myheaders } from '@/functions'
     export default {
         components:{
             ChartPie,
@@ -119,6 +119,7 @@ import { parseResponseError } from '@/functions'
         methods:{
             useStore,
             my_round,
+            myheaders,
             parseResponseError,
             update_table(){
                 this.loading=true

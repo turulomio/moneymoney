@@ -20,7 +20,7 @@
     import { useStore } from "@/store"
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import { RulesSelection, RulesString } from 'vuetify_rules'
-    import { parseResponseError } from '@/functions'
+    import { parseResponseError, myheaders } from '@/functions'
     export default {
         components: {
             AutocompleteProducts,
@@ -44,6 +44,7 @@
             RulesSelection,
             RulesString,
             parseResponseError,
+            myheaders,
 
             title(){
                 if (this.mode=="U"){
