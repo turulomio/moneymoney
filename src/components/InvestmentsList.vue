@@ -112,6 +112,7 @@
     import QuotesCU from './QuotesCU.vue'
     import {empty_quote, empty_investment} from '../empty_objects.js'
     import { localtime ,f} from 'vuetify_rules'
+import { getCountryNameByCode } from '@/functions'
     export default {
         components:{
             MyMenuInline,
@@ -186,7 +187,9 @@
         },
         methods: { 
             useStore,
+            
             localtime,
+            getCountryNameByCode,
             f,
             addQuote(item){
                 this.quote=this.empty_quote()

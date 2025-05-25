@@ -63,6 +63,7 @@
     import MyMenuInline from './MyMenuInline.vue'
     import ProductsView from './ProductsView.vue'
     import ProductsCU from './ProductsCU.vue'
+import { getCountryNameByCode } from '@/functions.js'
     export default {
         components:{
             MyMenuInline,
@@ -130,6 +131,7 @@
             useStore,
             RulesSelection,
             localtime,
+            getCountryNameByCode,
             menuinline_items()  {
                 var r=[
                     {
