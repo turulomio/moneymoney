@@ -22,7 +22,7 @@
     import { useStore } from "@/store"
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection, RulesFloat } from 'vuetify_rules'
-    import { date2zulu } from '@/functions'
+    import { date2zulu , zulu2date} from '@/functions'
     export default {
         components:{
             MyDateTimePicker,
@@ -45,6 +45,7 @@
         },
         methods:{
             date2zulu,
+            zulu2date,
             useStore,
             RulesSelection,
             RulesFloat,

@@ -4,7 +4,6 @@ import {
     parseResponse,
     parseResponseError,
     listobjects_sum,
-    listobjects_average_ponderated,
     myheaders_formdata,
     getConceptsForDividends,
     getInvestmentsActive,
@@ -25,7 +24,6 @@ import {
     localcurrency_html,
     getMapObjectById,
     getArrayFromMap,
-    zulu2date,
 } from './functions.js'
 
 
@@ -41,8 +39,6 @@ const mixin = {
         myheaders_formdata,
         parseResponse,
         parseResponseError,
-        zulu2date,
-        listobjects_average_ponderated,
         listobjects_sum,
         currency_generic_string,
         currency_generic_html,
@@ -61,39 +57,8 @@ const mixin = {
         percentage_html,
         localcurrency_string,
         localcurrency_html,
-
         getMapObjectById,
         getArrayFromMap,
- 
- 
-        // isNullOrEmpty,
-        // localtime,
-        // capitalizeFirstLetter,
-        // parseNumber,
-        // ifnullempty,
-        // isNumber,
-        // isNumberWithRequired,
-        // isNumberMaxDigitsWithRequired,
-        // countDecimals,
-        // translate,
-        // isDateIsoString,
-        // isDatetimeAwareIsoString,
-        // isStringWithMaxDigits,
-        // f,
-        // my_round,
-        // RulesDate,
-        // RulesDateIsoString,
-        // RulesDatetime,
-        // RulesDatetimeAwareIsoString,
-        // RulesEmail,
-        // RulesFloat,
-        // RulesFloatGEZ,
-        // RulesFloatGZ,
-        // RulesFloatLEZ,
-        // RulesInteger,
-        // RulesPassword,
-        // RulesSelection,
-        // RulesString,
     }
   }
 
