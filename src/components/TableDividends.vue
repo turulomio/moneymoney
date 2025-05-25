@@ -54,6 +54,7 @@
     import { useStore } from "@/store"
     import { empty_dividend } from '../empty_objects.js'
     import { localtime, f } from 'vuetify_rules'
+    import { listobjects_sum, currency_html } from '@/functions'
     export default {
         components:{
             DividendsCU,
@@ -98,6 +99,8 @@
             useStore,
             f,
             localtime,
+            listobjects_sum,
+            currency_html,
             copyDividend(item){
                 this.dividend=this.empty_dividend()
                 this.dividend.gross=item.gross

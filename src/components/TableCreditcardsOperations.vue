@@ -50,6 +50,7 @@
     import { useStore } from "@/store"
     import {empty_cco} from '../empty_objects.js'
     import { localtime, f } from 'vuetify_rules'
+    import {listobjects_sum, currency_html} from '@/functions'
     export default {
         components:{
             CreditcardsoperationsCU,
@@ -125,6 +126,8 @@
             useStore,
             f,
             localtime,
+            listobjects_sum,
+            currency_html,
             empty_cco,
             editCCO(item){
                 this.cco=item

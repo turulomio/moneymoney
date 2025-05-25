@@ -17,7 +17,7 @@
     import { defineAsyncComponent } from 'vue'
     import {f} from 'vuetify_rules'
     import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
-import { parseResponseError } from '@/functions'
+    import { parseResponseError, listobjects_sum, localcurrency_html, myheaders } from '@/functions'
     export default {
         name: "ReportsConceptsHistoricalDetail",
         components:{
@@ -62,6 +62,9 @@ import { parseResponseError } from '@/functions'
             useStore,
             f,
             parseResponseError,
+            listobjects_sum,
+            localcurrency_html,
+            myheaders,
             on_TableAccountsoperations_cruded(){
                 this.update_table()
             },

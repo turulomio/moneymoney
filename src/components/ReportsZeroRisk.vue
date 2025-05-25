@@ -35,7 +35,7 @@
     import { useStore } from "@/store"
     import {f} from 'vuetify_rules'
     import InvestmentsView from './InvestmentsView.vue'
-    import { getCountryNameByCode, parseResponseError, localcurrency_html } from '@/functions'
+    import { getCountryNameByCode, parseResponseError, localcurrency_html, listobjects_sum, myheaders } from '@/functions'
     export default {
         components:{
             InvestmentsView,
@@ -66,6 +66,8 @@
             f,
             getCountryNameByCode,
             parseResponseError,
+            listobjects_sum,
+            myheaders,
             localcurrency_html,
             on_InvestmentView_cruded(){
                 this.key=this.key+1

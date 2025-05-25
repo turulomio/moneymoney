@@ -47,7 +47,7 @@
     import CreditcardsPaymentsRefund from './CreditcardsPaymentsRefund.vue'
     import {empty_cco} from '../empty_objects.js'
     import {f} from 'vuetify_rules'
-import { parseResponseError } from '@/functions'
+    import { parseResponseError, listobjects_sum, currency_string } from '@/functions'
     export default {
         components:{
             MyMenuInline,
@@ -115,6 +115,8 @@ import { parseResponseError } from '@/functions'
         methods: {
             empty_cco,
             f,
+            listobjects_sum,
+            currency_string,
             parseResponseError,
             changeSelected(selected_items){
                 this.selected_items=selected_items

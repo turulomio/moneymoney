@@ -1,6 +1,5 @@
 import {
     myheaders,
-    listobjects_sum,
     getConceptsForDividends,
     getInvestmentsActive,
     getInvestmentsByProduct,
@@ -30,7 +29,6 @@ const mixin = {
     },
     methods: {
         myheaders,
-        listobjects_sum,
         currency_generic_string,
         currency_generic_html,
         getConceptsForDividends,

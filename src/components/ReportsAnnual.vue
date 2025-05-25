@@ -216,7 +216,7 @@
     import { localtime, RulesFloat,f } from 'vuetify_rules'
     import moment from 'moment'
     import ReportsAnnualIncomeDetail from './ReportsAnnualIncomeDetail.vue'
-import { parseResponseError, localcurrency_html, localcurrency_string, percentage_html } from '@/functions';
+import { parseResponseError, localcurrency_html, localcurrency_string, percentage_html, listobjects_sum } from '@/functions';
     export default {
         components:{
             ReportsAnnualIncomeDetail,
@@ -315,6 +315,7 @@ import { parseResponseError, localcurrency_html, localcurrency_string, percentag
             localtime,
             RulesFloat,
             parseResponseError,
+            listobjects_sum,
             localcurrency_html,
             localcurrency_string,
             percentage_html,

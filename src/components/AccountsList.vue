@@ -76,7 +76,7 @@
     import AccountsTransfer from './AccountsTransfer.vue'
     import {empty_account,empty_account_transfer} from '../empty_objects.js'
     import { localtime,f } from 'vuetify_rules'
-import { parseResponseError } from '@/functions'
+    import { parseResponseError, listobjects_sum, currency_html, localcurrency_html } from '@/functions'
     export default {
         name:"AccountsList",
         components:{
@@ -165,6 +165,9 @@ import { parseResponseError } from '@/functions'
             useStore,
             empty_account,
             empty_account_transfer,
+            listobjects_sum,
+            currency_html,
+            localcurrency_html,
             f,
             localtime,
             parseResponseError,

@@ -86,7 +86,7 @@
     import ReportsConceptsHistorical from './ReportsConceptsHistorical.vue'
     import { localtime, f } from 'vuetify_rules'
     import { useGoTo } from 'vuetify'
-import { parseResponseError } from '@/functions.js'
+    import { parseResponseError, listobjects_sum, currency_html } from '@/functions.js'
     export default {
         name: "TableAccountOperations",
         components:{
@@ -186,6 +186,8 @@ import { parseResponseError } from '@/functions.js'
             useStore,
         f,
         useGoTo,
+        listobjects_sum,
+        currency_html,
         localtime,
         parseResponseError,
         empty_account_transfer,

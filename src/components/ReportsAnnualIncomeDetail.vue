@@ -53,7 +53,7 @@
     import TableDividends from './TableDividends.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import {f} from 'vuetify_rules'
-import { parseResponseError, localcurrency_html,myheaders } from '@/functions'
+    import { parseResponseError, localcurrency_html,myheaders, listobjects_sum } from '@/functions'
     export default {
         components:{
             TableAccountOperations,
@@ -87,6 +87,7 @@ import { parseResponseError, localcurrency_html,myheaders } from '@/functions'
             f,
             parseResponseError,
             localcurrency_html,
+            listobjects_sum,   
             myheaders,
             refreshTable(){
                 this.loading=true

@@ -53,7 +53,7 @@
     import { useStore } from "@/store"
     import DisplayValues from './DisplayValues.vue'
     import {f} from "vuetify_rules"
-import { parseResponseError } from '@/functions'
+    import { parseResponseError, listobjects_sum, localcurrency_html } from '@/functions'
     export default {
         components: {
             DisplayValues,
@@ -87,6 +87,8 @@ import { parseResponseError } from '@/functions'
             useStore,    
             f,  
             parseResponseError,  
+            listobjects_sum,  
+            localcurrency_html,  
             displayvalues(){
                 return [
                     {title:this.$t('Active'), value: this.bank.active},

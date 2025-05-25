@@ -51,7 +51,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import InvestmentsMergedView from './InvestmentsMergedView.vue'
-import { parseResponseError } from '@/functions'
+    import { parseResponseError, listobjects_sum, localcurrency_html } from '@/functions'
     export default {
         components:{
             InvestmentsMergedView,
@@ -87,6 +87,8 @@ import { parseResponseError } from '@/functions'
         methods: {
             useStore,
             parseResponseError,
+            listobjects_sum,
+            localcurrency_html,
             viewInvestmentsMerged (event,object) {
                 this.ios_id=this.ios[object.item.products_id]
                 this.key=this.key+1

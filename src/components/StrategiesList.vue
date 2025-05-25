@@ -99,7 +99,7 @@
     import TableAccountOperations from './TableAccountOperations.vue'
     import {empty_products_ranges, empty_strategy} from '../empty_objects.js'
     import { localtime, f} from 'vuetify_rules'
-import { parseResponseError } from '@/functions'
+    import { parseResponseError, listobjects_sum, localcurrency_html } from '@/functions'
     export default {
         components:{
             MyMenuInline,
@@ -168,6 +168,8 @@ import { parseResponseError } from '@/functions'
             useStore,
             localtime,
             parseResponseError,
+            listobjects_sum,
+            localcurrency_html,
             f,
             editItem (item) {
                 this.strategy=item
