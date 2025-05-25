@@ -71,7 +71,7 @@
     import MyDatePicker from './MyDatePicker.vue'
     import {empty_products_ranges,empty_ios} from '../empty_objects.js'
     import { my_round,RulesSelection, RulesFloat,f } from 'vuetify_rules'
-    import { hyperlinked_url} from '@/functions.js'
+    import { hyperlinked_url, parseResponseError, currency_string, myheaders } from '@/functions.js'
 
     
     export default {
@@ -196,6 +196,9 @@
             useStore,
             f,
             my_round,
+            currency_string,
+            myheaders,
+            parseResponseError,
             RulesFloat,
             RulesSelection,
             displayvalues(){

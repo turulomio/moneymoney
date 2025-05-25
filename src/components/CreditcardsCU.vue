@@ -21,6 +21,7 @@
     import axios from 'axios' 
     import { useStore } from "@/store"
     import { RulesSelection,RulesInteger,RulesString } from 'vuetify_rules'
+import { parseResponseError } from '@/functions'
     export default {
         props:{
             cc:{
@@ -38,6 +39,7 @@
         },
         methods:{
             useStore,
+            parseResponseError,
             RulesSelection,
             RulesInteger,
             RulesString,

@@ -21,6 +21,7 @@
     import { useStore } from "@/store"
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import { RulesSelection ,RulesInteger, RulesString } from 'vuetify_rules'
+    import {parseResponseError, myheaders} from '@/functions.js'
     export default {
         components:{
             AutocompleteProducts,
@@ -41,6 +42,8 @@
         },
         methods:{
             useStore,
+            myheaders,
+            parseResponseError,
             RulesInteger,
             RulesString,
             RulesSelection,

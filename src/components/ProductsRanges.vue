@@ -92,6 +92,7 @@
     import InvestmentsView from './InvestmentsView.vue'
     import OrdersList from './OrdersList.vue'
     import OrdersCU from './OrdersCU.vue'
+import { parseResponseError, currency_string, myheaders } from '@/functions.js'
     export default {
         components: {
             ChartProductsRanges,
@@ -159,6 +160,9 @@
             RulesSelection,
             RulesInteger,
             f,
+            parseResponseError,
+            currency_string,
+            myheaders,
             accept(){
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()

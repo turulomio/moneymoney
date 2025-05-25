@@ -94,7 +94,7 @@
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
     import { f} from 'vuetify_rules'
-    import { hyperlinked_url } from '@/functions.js'
+    import { hyperlinked_url, parseResponseError, myheaders } from '@/functions.js'
     export default {
         components:{
             DisplayValues,
@@ -191,7 +191,9 @@
             empty_investments_chart_limit_line,
             empty_dividend,
             empty_investment_operation,
+            parseResponseError,
             hyperlinked_url,
+            myheaders,
             on_TableDividends_cruded(){
                 this.update_all()
             },

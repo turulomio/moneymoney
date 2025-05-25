@@ -36,6 +36,7 @@
     import { useStore } from "@/store"
     import ChartPie from './ChartPie.vue'
     import { my_round } from 'vuetify_rules'
+import { parseResponseError } from '@/functions'
     export default {
         components:{
             ChartPie,
@@ -118,6 +119,7 @@
         methods:{
             useStore,
             my_round,
+            parseResponseError,
             update_table(){
                 this.loading=true
                 axios.get(`${this.useStore().apiroot}/investments/classes/`, this.myheaders())

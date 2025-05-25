@@ -99,6 +99,7 @@
     import TableAccountOperations from './TableAccountOperations.vue'
     import {empty_products_ranges, empty_strategy} from '../empty_objects.js'
     import { localtime, f} from 'vuetify_rules'
+import { parseResponseError } from '@/functions'
     export default {
         components:{
             MyMenuInline,
@@ -166,6 +167,7 @@
         methods: {
             useStore,
             localtime,
+            parseResponseError,
             f,
             editItem (item) {
                 this.strategy=item

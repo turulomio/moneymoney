@@ -17,6 +17,7 @@
     import axios from 'axios'
     import { useStore } from '@/store'
     import { RulesSelection, RulesString } from 'vuetify_rules'
+import { parseResponseError } from '@/functions'
     export default {
         components: {
         },
@@ -37,6 +38,7 @@
             }
         },
         methods: {
+            parseResponseError,
             RulesSelection,
             RulesString,
             useStore,

@@ -64,7 +64,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import { RulesSelection, RulesEmail, RulesInteger,RulesPassword,RulesString, f} from 'vuetify_rules'
-    import { amount_to_invest } from '@/functions'
+    import { amount_to_invest, parseResponseError, myheaders     } from '@/functions'
     export default {
         name: 'Settings',
         data () {
@@ -87,6 +87,9 @@
         methods: {
             useStore,
             amount_to_invest,
+
+            parseResponseError,
+            myheaders,  
             f,
             RulesEmail, 
             RulesInteger,

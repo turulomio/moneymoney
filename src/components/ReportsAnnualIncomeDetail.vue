@@ -53,6 +53,7 @@
     import TableDividends from './TableDividends.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import {f} from 'vuetify_rules'
+import { parseResponseError, localcurrency_html,myheaders } from '@/functions'
     export default {
         components:{
             TableAccountOperations,
@@ -84,6 +85,9 @@
         methods: {
             useStore,
             f,
+            parseResponseError,
+            localcurrency_html,
+            myheaders,
             refreshTable(){
                 this.loading=true
                 axios.get(`${this.useStore().apiroot}/reports/annual/income/details/${this.year}/${this.month}/`, this.myheaders())

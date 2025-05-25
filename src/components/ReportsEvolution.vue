@@ -110,6 +110,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import {f} from 'vuetify_rules'
+import { parseResponseError } from '@/functions'
     export default {
         components:{
         },
@@ -154,6 +155,7 @@
         methods:{
             useStore,
             f,
+            parseResponseError,
             years(){
                 var start=1990
                 var end=new Date().getFullYear()

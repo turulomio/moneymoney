@@ -14,6 +14,7 @@
     import { useStore } from "@/store"
     import MyMenuInline from './MyMenuInline.vue'
     import TableQuotes from './TableQuotes.vue'
+import { parseResponseError } from '@/functions'
     export default {
         components:{
             MyMenuInline,
@@ -54,6 +55,7 @@
         },
         methods: {
             useStore,
+            parseResponseError,
             get_option_name(option){
                 if (option==0) return this.$t("Quotes in the future")
                 if (option==1) return this.$t("Last quotes")

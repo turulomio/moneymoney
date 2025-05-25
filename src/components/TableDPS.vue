@@ -22,6 +22,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import DpsCRUD from './DpsCRUD.vue'
+import {  parseResponseError } from '@/functions'
     export default {
         components:{
             DpsCRUD,
@@ -49,6 +50,7 @@
         },
         methods: {
             useStore,
+            parseResponseError,
             editDPS(item){
                 this.dps=item
                 this.dps_crud_mode="U"

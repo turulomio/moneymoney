@@ -17,6 +17,7 @@
     import { defineAsyncComponent } from 'vue'
     import {f} from 'vuetify_rules'
     import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
+import { parseResponseError } from '@/functions'
     export default {
         name: "ReportsConceptsHistoricalDetail",
         components:{
@@ -60,6 +61,7 @@
         methods: {
             useStore,
             f,
+            parseResponseError,
             on_TableAccountsoperations_cruded(){
                 this.update_table()
             },

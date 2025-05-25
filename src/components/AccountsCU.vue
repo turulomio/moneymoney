@@ -21,6 +21,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import { RulesSelection, RulesInteger, RulesString } from 'vuetify_rules'
+import { myheaders, parseResponseError } from '@/functions'
     export default {
         props: {
             // An account object
@@ -41,6 +42,8 @@
         },
         methods: {
             useStore,
+            myheaders,
+            parseResponseError,
             RulesSelection,
             RulesInteger,
             RulesString,

@@ -16,6 +16,7 @@
 <script>     
     import axios from 'axios'
     import { useStore } from "@/store"
+import { parseResponseError } from '@/functions'
     export default {
         data () {
             return {
@@ -25,6 +26,7 @@
         },
         methods: {
             useStore,
+            parseResponseError,
             submmit(internet){
                 if (internet && navigator.onLine==false){
                     alert(this.$t("There is some problem with Internet connection"))

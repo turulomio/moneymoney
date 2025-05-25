@@ -82,6 +82,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import ReportsConceptsHistoricalDetail from './ReportsConceptsHistoricalDetail.vue'
+import { parseResponseError } from '@/functions'
     export default {
         name:"ReportsConceptsHistorical",
         components:{
@@ -132,6 +133,7 @@
         },
         methods:{
             useStore,
+            parseResponseError,
             refreshTable(){
                 this.loading=true
                 axios.get(`${this.selected_concept}historical_report/`, this.myheaders())

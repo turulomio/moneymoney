@@ -60,6 +60,7 @@
     import BanksView from './BanksView.vue'
     import {empty_bank} from '../empty_objects.js'
     import {f} from "vuetify_rules"
+import { parseResponseError } from '@/functions'
     export default {
         components:{
             MyMenuInline,
@@ -114,13 +115,14 @@
         methods: {
             useStore,
             f,
+            parseResponseError,
+            empty_bank, 
             deleteItem (item) {
                 this.bank=item
                 this.bank_mode="D"
                 this.key=this.key+1
                 this.dialog=true
             },
-            empty_bank,
             editItem (item) {
                 this.bank=item
                 this.bank_mode="U"

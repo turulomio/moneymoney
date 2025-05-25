@@ -53,6 +53,7 @@
     import { useStore } from "@/store"
     import DisplayValues from './DisplayValues.vue'
     import {f} from "vuetify_rules"
+import { parseResponseError } from '@/functions'
     export default {
         components: {
             DisplayValues,
@@ -84,7 +85,8 @@
         },
         methods: {    
             useStore,    
-            f,    
+            f,  
+            parseResponseError,  
             displayvalues(){
                 return [
                     {title:this.$t('Active'), value: this.bank.active},

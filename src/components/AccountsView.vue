@@ -86,6 +86,7 @@
     import TableAccountOperations from './TableAccountOperations.vue'
     import {empty_account_operation,empty_credit_card,empty_account_transfer} from '../empty_objects.js'
     import { f} from 'vuetify_rules'
+import { parseResponseError } from '@/functions'
     export default {
         name:"AccountsView",
         components:{
@@ -204,6 +205,7 @@
         methods: {
             useStore,
             f,
+            parseResponseError,
             CCONotDeferred(item){
                 this.ao=this.empty_account_operation()
                 this.ao.accounts=this.account.url

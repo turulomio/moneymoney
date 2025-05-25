@@ -26,6 +26,7 @@
     import { useStore } from "@/store"
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection,RulesFloat,RulesFloatGEZ } from 'vuetify_rules'
+import { parseResponseError } from '@/functions'
     export default {
         components: {
             MyDateTimePicker,
@@ -46,6 +47,7 @@
         },
         methods: {
             useStore,
+            parseResponseError,
             RulesSelection,
             RulesFloat,
             RulesFloatGEZ,

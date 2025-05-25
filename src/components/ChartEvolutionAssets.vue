@@ -16,6 +16,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import * as echarts from 'echarts'
+import { parseResponseError } from '@/functions'
     export default {
         props: {
             hidden:{
@@ -45,6 +46,7 @@
         },
         methods: {
             useStore,
+            parseResponseError,
             chart_option(){
                 // var =this
                 return {

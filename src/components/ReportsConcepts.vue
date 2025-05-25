@@ -89,6 +89,7 @@
     import ReportsConceptsHistorical from './ReportsConceptsHistorical'
     import MyMonthPicker from './MyMonthPicker.vue'
     import ChartPie from './ChartPie.vue'
+import { parseResponseError } from '@/functions'
 
     export default {
         components:{
@@ -128,6 +129,7 @@
         },
         methods:{
             useStore,
+            parseResponseError,
             refreshTables(){
                 this.loading=true
                 axios.get(`${this.useStore().apiroot}/reports/concepts/?year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())

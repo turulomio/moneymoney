@@ -26,6 +26,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import {f} from 'vuetify_rules'
+import { parseResponseError, myheaders } from '@/functions'
     export default {
         components:{
         },
@@ -48,7 +49,9 @@
         },
         methods: {
             useStore,
-            f,        
+            f,      
+            parseResponseError,
+            myheaders,
             readDocument(file){
                 return new Promise((resolve, reject) => {
                     var reader = new FileReader();

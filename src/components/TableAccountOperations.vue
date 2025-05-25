@@ -86,6 +86,7 @@
     import ReportsConceptsHistorical from './ReportsConceptsHistorical.vue'
     import { localtime, f } from 'vuetify_rules'
     import { useGoTo } from 'vuetify'
+import { parseResponseError } from '@/functions.js'
     export default {
         name: "TableAccountOperations",
         components:{
@@ -186,6 +187,7 @@
         f,
         useGoTo,
         localtime,
+        parseResponseError,
         empty_account_transfer,
         empty_account_operation,
         copyAO (item) {

@@ -73,7 +73,7 @@
     import MyMenuInline from './MyMenuInline.vue'
     import {empty_order,empty_ios_simulation_operation,empty_ios} from '../empty_objects.js'
     import { localtime, f } from 'vuetify_rules'
-    import { id_from_hyperlinked_url } from '@/functions'
+    import { id_from_hyperlinked_url , parseResponseError, currency_html, percentage_html, getArrayFromMap } from '@/functions'
     export default {
         components:{
             MyMenuInline,
@@ -143,6 +143,11 @@
             empty_order,
             empty_ios,
             empty_ios_simulation_operation,
+            parseResponseError,
+            currency_html,
+            percentage_html,
+            getArrayFromMap,
+                
             on_OrdersCU_cruded(){
                 this.dialog_cu=false
                 this.update_table()

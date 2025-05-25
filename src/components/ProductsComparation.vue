@@ -112,6 +112,7 @@
     import QuotesCU from './QuotesCU.vue'
     import DisplayValues from './DisplayValues.vue'
     import { localtime, my_round,RulesFloat,RulesInteger,f} from 'vuetify_rules'
+import { parseResponseError } from '@/functions.js'
     export default {
         components:{
             ChartPriceRatio,
@@ -254,6 +255,7 @@
             RulesFloat,
             RulesInteger,
             f,
+            parseResponseError,
             display_values(){
                 return [
                     {title:this.$t('Better product'), value: this.product_a.name},

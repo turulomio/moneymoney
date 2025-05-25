@@ -17,6 +17,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import { RulesString } from 'vuetify_rules'
+import { parseResponseError } from '@/functions'
     export default {
         props: {
             bank: { // Bank object
@@ -35,6 +36,7 @@
         methods: {
             useStore,
             RulesString,
+            parseResponseError,
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating bank")

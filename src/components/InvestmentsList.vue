@@ -112,7 +112,7 @@
     import QuotesCU from './QuotesCU.vue'
     import {empty_quote, empty_investment} from '../empty_objects.js'
     import { localtime ,f} from 'vuetify_rules'
-import { getCountryNameByCode } from '@/functions'
+    import { getCountryNameByCode, parseResponseError } from '@/functions'
     export default {
         components:{
             MyMenuInline,
@@ -187,7 +187,7 @@ import { getCountryNameByCode } from '@/functions'
         },
         methods: { 
             useStore,
-            
+            parseResponseError,
             localtime,
             getCountryNameByCode,
             f,

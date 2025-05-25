@@ -35,7 +35,7 @@
     import { useStore } from "@/store"
     import {f} from 'vuetify_rules'
     import InvestmentsView from './InvestmentsView.vue'
-    import { getCountryNameByCode } from '@/functions'
+    import { getCountryNameByCode, parseResponseError, localcurrency_html } from '@/functions'
     export default {
         components:{
             InvestmentsView,
@@ -65,6 +65,8 @@
             useStore,
             f,
             getCountryNameByCode,
+            parseResponseError,
+            localcurrency_html,
             on_InvestmentView_cruded(){
                 this.key=this.key+1
                 this.update_table()
