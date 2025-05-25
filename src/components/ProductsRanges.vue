@@ -92,6 +92,7 @@
     import InvestmentsView from './InvestmentsView.vue'
     import OrdersList from './OrdersList.vue'
     import OrdersCU from './OrdersCU.vue'
+    import { parseResponseError, currency_string, myheaders, getArrayFromMap, getInvestmentsByProduct } from '@/functions.js'
     export default {
         components: {
             ChartProductsRanges,
@@ -159,6 +160,14 @@
             RulesSelection,
             RulesInteger,
             f,
+            parseResponseError,
+            currency_string,
+            myheaders,
+            getArrayFromMap,
+            getInvestmentsByProduct,
+            empty_order,
+            empty_products_ranges,
+        
             accept(){
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
@@ -174,8 +183,6 @@
                 this.key=this.key+1
                 this.dialog_ordercu=true
             },
-            empty_order,
-            empty_products_ranges,
             refreshTable(){
                 this.loading=true
                 var headers={...this.myheaders(),params:this.newpr}

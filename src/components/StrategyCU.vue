@@ -43,7 +43,7 @@
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import { RulesSelection, RulesInteger,RulesString } from 'vuetify_rules'
-    import { getArrayFromMap } from '@/functions'
+    import { getArrayFromMap, hyperlinked_url, id_from_hyperlinked_url, parseResponseError, myheaders } from '@/functions'
     export default {
         components: {
             MyDateTimePicker,
@@ -86,6 +86,10 @@
             RulesSelection,
             RulesInteger,
             RulesString,
+            id_from_hyperlinked_url,
+            hyperlinked_url,
+            parseResponseError,
+            myheaders,
             title(){
                 if (this.deleting) {
                     return this.$t("Deleting strategy")

@@ -22,6 +22,7 @@ import axios from 'axios'
 import { useStore } from "@/store"
 import MyDatePicker from './MyDatePicker.vue'
 import { RulesFloat } from 'vuetify_rules';
+import {parseResponseError, myheaders} from '@/functions'
 export default {
     components:{
         MyDatePicker,
@@ -41,8 +42,10 @@ export default {
         };
     },
     methods: {
-            useStore,
+        useStore,
+        parseResponseError,
         RulesFloat,
+        myheaders,
         title(){
             if (this.mode=="C") return this.$t("Add a DPS")
             if (this.mode=="U") return this.$t("Update DPS")

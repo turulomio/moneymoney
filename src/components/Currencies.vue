@@ -35,6 +35,7 @@
     import { localtime, my_round } from 'vuetify_rules'
     import QuotesCU from './QuotesCU.vue'
     import {empty_quote} from '../empty_objects.js'
+    import { parseResponseError, myheaders } from '@/functions'
     export default {
         name:"Currencies",
         components:{
@@ -61,7 +62,9 @@
             useStore,
             localtime,
             my_round,
+            parseResponseError,
             empty_quote,
+            myheaders,
             editItem (item) {
                 this.quote= {
                     url: item.quote_url,

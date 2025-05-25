@@ -28,6 +28,7 @@
 
     import axios from 'axios'
     import { useStore } from "@/store"
+import { parseResponseError, myheaders, myheaders_formdata } from '@/functions'
     export default {
         components:{
         },
@@ -47,6 +48,9 @@
         },
         methods: {
             useStore,
+            parseResponseError,
+            myheaders,
+            myheaders_formdata,
             submmit(){
                 this.loading=true
                 let data=new FormData()

@@ -71,6 +71,7 @@
     import MyDatePicker from './MyDatePicker.vue'
     import {empty_products_ranges,empty_ios} from '../empty_objects.js'
     import { my_round,RulesSelection, RulesFloat,f } from 'vuetify_rules'
+    import { hyperlinked_url, parseResponseError, currency_string, myheaders, getMapObjectById } from '@/functions.js'
 
     
     export default {
@@ -195,6 +196,10 @@
             useStore,
             f,
             my_round,
+            currency_string,
+            myheaders,
+            getMapObjectById,
+            parseResponseError,
             RulesFloat,
             RulesSelection,
             displayvalues(){
@@ -208,6 +213,7 @@
             },
             empty_ios,
             empty_products_ranges,
+            hyperlinked_url,
             selling_price_to_gain_money(money){
                 var PF=0
                 if (this.selected_shares>0){

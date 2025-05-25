@@ -41,6 +41,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import { localtime,f } from 'vuetify_rules'
+    import {parseResponseError, localcurrency_html, percentage_html, listobjects_sum, myheaders, getMapObjectById } from '@/functions'
     export default {
         components:{
         },
@@ -65,13 +66,18 @@
         watch:{
             only_zero(){
                 this.refreshTable()
-                console.log("AHORA")
             }
         },
         methods:{
             useStore,
             f,
             localtime,
+            parseResponseError,
+            localcurrency_html,
+            myheaders,
+            percentage_html,
+            listobjects_sum,
+            getMapObjectById,
             refreshTable(){
                 this.loading=true
                 var onlyzerostring=(this.only_zero)? "?only_zero=true": ""

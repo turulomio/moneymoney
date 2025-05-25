@@ -63,6 +63,7 @@
     import { useStore } from "@/store"
     import { empty_investment_operation } from '@/empty_objects.js'
     import { localtime } from 'vuetify_rules'
+    import { hyperlinked_url, getMapObjectById, currency_string } from '@/functions'
     export default {
         name:"TableInvestmentOperations",
         components:{
@@ -97,8 +98,11 @@
             }
         },
         methods: {
+            hyperlinked_url,
             useStore,
             localtime,
+            getMapObjectById,
+            currency_string,
             // Currencies are part of the item
             currency(item){
                 if (this.output=="account"){

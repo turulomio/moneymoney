@@ -14,6 +14,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import TableAccountOperations from './TableAccountOperations.vue'
+    import { parseResponseError, myheaders } from '@/functions'
     export default {
         components:{
             TableAccountOperations,
@@ -30,7 +31,8 @@
         },
         methods: {
             useStore,
-
+            parseResponseError,
+            myheaders,
             on_TableAccountOperations_cruded(){
                 this.update_table()
             },

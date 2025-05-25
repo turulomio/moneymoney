@@ -39,6 +39,7 @@
     import { useStore } from "@/store"
     import AutocompleteStockMarkets from './AutocompleteStockMarkets.vue'
     import { RulesSelection, RulesInteger, RulesString} from 'vuetify_rules'
+    import {parseResponseError, getArrayFromMap, myheaders } from '@/functions'
     export default {
         components: {
             AutocompleteStockMarkets
@@ -69,6 +70,9 @@
             RulesSelection,
             RulesInteger,
             RulesString,
+            parseResponseError,
+            getArrayFromMap,
+            myheaders,
             title(){
                 if (this.system){
                     if (this.mode=="D") {

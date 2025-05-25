@@ -47,6 +47,7 @@
     import CreditcardsPaymentsRefund from './CreditcardsPaymentsRefund.vue'
     import {empty_cco} from '../empty_objects.js'
     import {f} from 'vuetify_rules'
+    import { parseResponseError, listobjects_sum, currency_string, myheaders } from '@/functions'
     export default {
         components:{
             MyMenuInline,
@@ -113,7 +114,11 @@
         },
         methods: {
             empty_cco,
+            myheaders,
             f,
+            listobjects_sum,
+            currency_string,
+            parseResponseError,
             changeSelected(selected_items){
                 this.selected_items=selected_items
                 this.paying_string=f(this.$t("Make a payment of [0] operations valued in [1]"), [

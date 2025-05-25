@@ -12,6 +12,8 @@
 <script>
 
 import { useStore } from "@/store"
+import {getArrayFromMap} from "@/functions"
+
 export default {
     name: "AutocompleteProducts",
     props:{
@@ -50,7 +52,7 @@ export default {
         },
     },
     methods:{
-
+        getArrayFromMap,
         useStore,
     },
     created(){

@@ -19,7 +19,8 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import AutocompleteProducts from './AutocompleteProducts.vue'
-    import { RulesSelection } from 'vuetify_rules'
+    import { RulesSelection, RulesString } from 'vuetify_rules'
+    import { parseResponseError, myheaders } from '@/functions'
     export default {
         components: {
             AutocompleteProducts,
@@ -41,6 +42,10 @@
         methods: {
             useStore,
             RulesSelection,
+            RulesString,
+            parseResponseError,
+            myheaders,
+
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating a products comparation")

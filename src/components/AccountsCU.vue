@@ -21,6 +21,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import { RulesSelection, RulesInteger, RulesString } from 'vuetify_rules'
+    import { myheaders, parseResponseError, getArrayFromMap } from '@/functions'
     export default {
         props: {
             // An account object
@@ -41,9 +42,12 @@
         },
         methods: {
             useStore,
+            myheaders,
+            parseResponseError,
             RulesSelection,
             RulesInteger,
             RulesString,
+            getArrayFromMap,
             title(){
                 if (this.mode=="C") return this.$t("Add an account")
                 if (this.mode=="U") return this.$t("Update an account")

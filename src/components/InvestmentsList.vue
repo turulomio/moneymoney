@@ -112,6 +112,7 @@
     import QuotesCU from './QuotesCU.vue'
     import {empty_quote, empty_investment} from '../empty_objects.js'
     import { localtime ,f} from 'vuetify_rules'
+    import { getCountryNameByCode, parseResponseError, listobjects_sum, currency_string, currency_html, localcurrency_html, percentage_html, myheaders } from '@/functions'
     export default {
         components:{
             MyMenuInline,
@@ -186,8 +187,18 @@
         },
         methods: { 
             useStore,
+            parseResponseError,
             localtime,
+            getCountryNameByCode,
             f,
+            listobjects_sum,
+            currency_string,
+            currency_html,
+            localcurrency_html,
+            percentage_html,
+            myheaders,
+            empty_investment,
+            empty_quote,
             addQuote(item){
                 this.quote=this.empty_quote()
                 this.quote.products=item.products
@@ -213,8 +224,6 @@
                 this.key=this.key+1
                 this.dialog_change_selling_price=true
             },
-            empty_investment,
-            empty_quote,
             on_InvestmentView_cruded(){
                 this.key=this.key+1
                 this.update_table()

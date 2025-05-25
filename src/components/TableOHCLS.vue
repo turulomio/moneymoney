@@ -27,9 +27,8 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import { localtime } from 'vuetify_rules'
+    import { parseResponseError, currency_html, myheaders } from '@/functions'
     export default {
-        components:{
-        },
         props: {
             items: {
                 required: true
@@ -46,6 +45,9 @@
         methods: {
             useStore,
             localtime,
+            parseResponseError,
+            currency_html,
+            myheaders,
             deleteOHCL(item){
                var r = confirm(this.$t("Do you want to delete this OHCL quotes?"))
                if(r == false) {

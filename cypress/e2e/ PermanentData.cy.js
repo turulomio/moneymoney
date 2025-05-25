@@ -28,8 +28,8 @@ describe('e2e Permanent data', () => {
     // Returns to investments  list
     cy.getDataTest("InvestmentsView_ButtonClose").click()
 
-    
-  })
+    // Logs out
+    cy.getDataTest("BtnLogOut_Button").click()
 
-  
+  })  
 })

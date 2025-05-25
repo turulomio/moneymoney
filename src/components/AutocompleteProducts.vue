@@ -12,6 +12,9 @@
 <script>
 
 import { useStore } from "@/store"
+import {getArrayFromMap} from "@/functions"
+
+
 export default {
     name: "AutocompleteProducts",
     props:{
@@ -57,6 +60,7 @@ export default {
     },
     methods:{
             useStore,
+        getArrayFromMap,
         // on_custom_filter(a,b,c){
         //     if(this.new_value.length<1) {
         //         return

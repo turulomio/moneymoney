@@ -26,6 +26,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import EstimationsDpsCU from './EstimationsDpsCU.vue'
+    import { parseResponseError, myheaders, currency_html } from '@/functions'
     export default {
         components:{
             EstimationsDpsCU,
@@ -46,6 +47,9 @@
         },
         methods: {
             useStore,
+            parseResponseError,
+            myheaders,
+            currency_html,
             currency(value){
                 return this.currency_html(value, this.product.currency)
             },

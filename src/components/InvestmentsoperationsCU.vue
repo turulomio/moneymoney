@@ -40,6 +40,7 @@
     import CurrencyFactor from './CurrencyFactor.vue'
     import { RulesSelection,RulesFloat,RulesFloatGEZ,RulesString, parseNumber,f} from 'vuetify_rules'
     import { round } from "lodash-es"
+    import { hyperlinked_url, parseResponseError, myheaders, getMapObjectById, getArrayFromMap, currency_html, getOperationstypesForInvestmentsOperations } from '@/functions.js'
     export default {
         name: "InvestmentsoperationsCU",
         components: {
@@ -103,10 +104,17 @@
             RulesFloat,
             RulesFloatGEZ,
             RulesString,
+            hyperlinked_url,
+            currency_html,
             parseNumber,
+            parseResponseError,
+            myheaders,
+            getMapObjectById,
+            getArrayFromMap,
             round,
             f,
             empty_investment_operation,
+            getOperationstypesForInvestmentsOperations,
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating an investment operation")

@@ -83,6 +83,7 @@
     import TableInvestmentOperations from './TableInvestmentOperations.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
+    import { myheaders, getMapObjectById, getArrayFromMap } from '@/functions'
 
     export default {
         components:{
@@ -270,6 +271,9 @@
             empty_investments_chart,
             empty_investments_chart_limit_line,
             my_round,
+            myheaders,
+            getMapObjectById,
+            getArrayFromMap,
             f,
             set_title(){
                 if (this.re_or_di==1){

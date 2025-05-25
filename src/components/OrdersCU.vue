@@ -38,6 +38,7 @@
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import {empty_investment_operation} from '../empty_objects.js'
     import { RulesSelection ,RulesFloatGEZ, parseNumber} from 'vuetify_rules'
+    import {parseResponseError, myheaders} from '@/functions.js'
     export default {
         components: {
             InvestmentsoperationsCU,
@@ -107,6 +108,8 @@
             RulesFloatGEZ,
             parseNumber,
             empty_investment_operation,
+            parseResponseError,
+            myheaders,
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating order")

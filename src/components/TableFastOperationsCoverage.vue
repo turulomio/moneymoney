@@ -28,6 +28,8 @@
     import FastOperationsCoverageCU from './FastOperationsCoverageCU.vue'
     import { useStore } from "@/store"
     import { localtime } from 'vuetify_rules'
+    import { currency_html} from '@/functions'
+
     export default {
         components:{
             FastOperationsCoverageCU,
@@ -48,6 +50,7 @@
         methods: {
             useStore,
             localtime,
+            currency_html,
             currency(value){
                 return this.currency_html(value, this.product.currency)
             },

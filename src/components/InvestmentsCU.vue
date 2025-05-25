@@ -21,6 +21,7 @@
     import { useStore } from "@/store"
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import { RulesSelection ,RulesInteger, RulesString } from 'vuetify_rules'
+    import {parseResponseError, myheaders, getArrayFromMap} from '@/functions.js'
     export default {
         components:{
             AutocompleteProducts,
@@ -41,9 +42,12 @@
         },
         methods:{
             useStore,
+            myheaders,
+            parseResponseError,
             RulesInteger,
             RulesString,
             RulesSelection,
+            getArrayFromMap,
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating investment")

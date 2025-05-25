@@ -51,6 +51,7 @@
     import ProductsComparation from './ProductsComparation.vue'
     import ProductsComparationCU from './ProductsComparationCU.vue'
     import AutocompleteProducts from './AutocompleteProducts.vue'
+import { parseResponseError, myheaders } from '@/functions.js'
     export default {
         components:{
             MyMenuInline,
@@ -99,6 +100,8 @@
         methods:{
             useStore,
             RulesSelection,
+            parseResponseError,
+            myheaders,
             deletePair(item){
                 this.pc=item
                 this.pc_mode="D"

@@ -15,6 +15,7 @@
     import { useStore } from "@/store"
     import { localtime, RulesSelection, f } from 'vuetify_rules'
     import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
+    import { parseResponseError, myheaders } from '@/functions'
     export default {
         components:{
             TableCreditcardsOperations,
@@ -52,6 +53,8 @@
             useStore,
             localtime,
             f,
+            myheaders,
+            parseResponseError,
             RulesSelection,
             refundPayment() {
                 axios.post(`${this.useStore().apiroot}/api/accountsoperations/${this.payment}/ccpaymentrefund/`, {}, this.myheaders())
