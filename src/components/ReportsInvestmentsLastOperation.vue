@@ -90,7 +90,7 @@
     import InvestmentsView from './InvestmentsView.vue'
     import InvestmentsMergedView from './InvestmentsMergedView.vue'
     import InvestmentsoperationsReinvest from './InvestmentsoperationsReinvest.vue'
-    import { hyperlinked_url, parseResponseError, percentage_html, localcurrency_html, myheaders, getArrayFromMap, my_round  } from '@/functions.js'
+    import { hyperlinked_url, parseResponseError, percentage_html, localcurrency_html, myheaders, getArrayFromMap  } from '@/functions.js'
     export default {
         components:{
             OrdersCU,

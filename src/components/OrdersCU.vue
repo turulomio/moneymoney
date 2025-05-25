@@ -38,7 +38,7 @@
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import {empty_investment_operation} from '../empty_objects.js'
     import { RulesSelection ,RulesFloatGEZ, parseNumber} from 'vuetify_rules'
-    import {parseResponseError, myheaders} from '@/functions.js '
+    import {parseResponseError, myheaders} from '@/functions.js'
     export default {
         components: {
             InvestmentsoperationsCU,
