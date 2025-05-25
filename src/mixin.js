@@ -26,7 +26,6 @@ import {
     getMapObjectById,
     getArrayFromMap,
     zulu2date,
-    date2zulu,
 } from './functions.js'
 
 
@@ -43,7 +42,6 @@ const mixin = {
         parseResponse,
         parseResponseError,
         zulu2date,
-        date2zulu,
         listobjects_average_ponderated,
         listobjects_sum,
         currency_generic_string,
