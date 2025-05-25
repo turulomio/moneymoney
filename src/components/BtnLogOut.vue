@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-btn @click="logout()"  prepend-icon="mdi-logout" >
+        <v-btn @click="logout()" data-test="BtnLogOut_Button"  prepend-icon="mdi-logout" >
             <span class="mr-2  text-no-wrap text-truncate">{{ $t("Log out") }}</span>
         </v-btn>   
     </div>

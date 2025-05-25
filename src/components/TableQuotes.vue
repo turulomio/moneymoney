@@ -55,7 +55,7 @@
         },
         methods: {
             localtime,
-            currency_html,
+            currency_html, 
             editQuote(item){
                 this.quote=item
                 this.quote_mode="U"

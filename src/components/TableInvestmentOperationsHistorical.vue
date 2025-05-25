@@ -141,7 +141,7 @@
             localtime,
             listobjects_sum,
             currency_html,
-            getMapObjectById,
+            getMapObjectById, 
             currency(item){
                 if (this.output=="account"){
                     return item.currency_account
