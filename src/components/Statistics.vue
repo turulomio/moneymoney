@@ -9,7 +9,7 @@
     import ChartPie from './ChartPie.vue'
     import axios from "axios"
     import { useStore } from "@/store"
-import { parseResponseError, myheaders } from '@/functions'
+import { parseResponse, parseResponseError, myheaders } from '@/functions'
     export default {
         components: {
             ChartPie,
@@ -22,6 +22,7 @@ import { parseResponseError, myheaders } from '@/functions'
         },
         methods: {
             useStore,
+            parseResponse,
             parseResponseError,
             myheaders,
             getStatistics(){

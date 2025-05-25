@@ -1,9 +1,6 @@
 import {
     myheaders,
-    myheaders_noauth,
-    parseResponse,
     listobjects_sum,
-    myheaders_formdata,
     getConceptsForDividends,
     getInvestmentsActive,
     getInvestmentsByProduct,
@@ -33,9 +30,6 @@ const mixin = {
     },
     methods: {
         myheaders,
-        myheaders_noauth,
-        myheaders_formdata,
-        parseResponse,
         listobjects_sum,
         currency_generic_string,
         currency_generic_html,
