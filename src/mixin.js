@@ -1,6 +1,4 @@
 import {
-    id_from_hyperlinked_url,
-    hyperlinked_url,
     myheaders,
     myheaders_noauth,
     parseResponse,
@@ -39,8 +37,6 @@ const mixin = {
         }
     },
     methods: {
-        id_from_hyperlinked_url,
-        hyperlinked_url,
         myheaders,
         myheaders_noauth,
         myheaders_formdata,

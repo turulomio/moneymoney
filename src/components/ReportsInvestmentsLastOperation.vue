@@ -90,6 +90,7 @@
     import InvestmentsView from './InvestmentsView.vue'
     import InvestmentsMergedView from './InvestmentsMergedView.vue'
     import InvestmentsoperationsReinvest from './InvestmentsoperationsReinvest.vue'
+    import { hyperlinked_url } from '@/functions.js'
     export default {
         components:{
             OrdersCU,
@@ -150,6 +151,7 @@
             localtime,
             my_round,
             empty_order,
+            hyperlinked_url,
             on_OrdersCU_cruded(){
                 this.dialog_cu=false
             },
