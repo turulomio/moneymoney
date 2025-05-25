@@ -63,8 +63,8 @@
 <script>
     import axios from 'axios'
     import { useStore } from "@/store"
-    import { RulesSelection, RulesEmail, RulesInteger,RulesPassword,RulesString} from 'vuetify_rules'
-    import { f } from 'vuetify_rules'
+    import { RulesSelection, RulesEmail, RulesInteger,RulesPassword,RulesString, f} from 'vuetify_rules'
+    import { amount_to_invest } from '@/functions'
     export default {
         name: 'Settings',
         data () {
@@ -86,7 +86,7 @@
         },
         methods: {
             useStore,
-
+            amount_to_invest,
             f,
             RulesEmail, 
             RulesInteger,

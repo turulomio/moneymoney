@@ -1,34 +1,3 @@
-
-// import {
-//     isNullOrEmpty,
-//     localtime,
-//     capitalizeFirstLetter,
-//     parseNumber,
-//     ifnullempty,
-//     isNumber,
-//     isNumberWithRequired,
-//     isNumberMaxDigitsWithRequired,
-//     countDecimals,
-//     translate,
-//     isDateIsoString,
-//     isDatetimeAwareIsoString,
-//     isStringWithMaxDigits,
-//     f,
-//     my_round,
-//     RulesDate,
-//     RulesDateIsoString,
-//     RulesDatetime,
-//     RulesDatetimeAwareIsoString,
-//     RulesEmail,
-//     RulesFloat,
-//     RulesFloatGEZ,
-//     RulesFloatGZ,
-//     RulesFloatLEZ,
-//     RulesInteger,
-//     RulesPassword,
-//     RulesSelection,
-//     RulesString
-// } from "vuetify_rules"
 import {
     arrayofintegers_to_stringofintegers,
     arrayobjects_to_array,
@@ -62,7 +31,6 @@ import {
     getArrayFromMap,
     zulu2date,
     date2zulu,
-    amount_to_invest,
 } from './functions.js'
 
 
@@ -73,7 +41,6 @@ const mixin = {
         }
     },
     methods: {
-        amount_to_invest,
         arrayofintegers_to_stringofintegers,
         arrayobjects_to_array,
         id_from_hyperlinked_url,
