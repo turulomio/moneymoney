@@ -1,6 +1,4 @@
 import {
-    arrayofintegers_to_stringofintegers,
-    arrayobjects_to_array,
     id_from_hyperlinked_url,
     hyperlinked_url,
     myheaders,
@@ -41,8 +39,6 @@ const mixin = {
         }
     },
     methods: {
-        arrayofintegers_to_stringofintegers,
-        arrayobjects_to_array,
         id_from_hyperlinked_url,
         hyperlinked_url,
         myheaders,

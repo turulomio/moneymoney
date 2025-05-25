@@ -9,7 +9,9 @@
 
 </template>
 <script>
-import * as echarts from 'echarts'
+    import * as echarts from 'echarts'
+    import { arrayobjects_to_array } from '@/functions' 
+
     export default {
         props:{
             prdata:{
@@ -23,6 +25,7 @@ import * as echarts from 'echarts'
             }
         },
         methods: {
+            arrayobjects_to_array,
             chart_option(){
                 return {
                     legend: {
