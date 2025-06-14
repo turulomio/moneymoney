@@ -62,9 +62,9 @@
         </v-card>
 
         <!-- Strategy CU -->
-        <v-dialog v-model="dialog_strategy_cu" max-width="70%">
+        <v-dialog v-model="dialog_strategy_fast_operations_cu" max-width="70%">
             <v-card class="pa-4">
-                <StrategyCU :strategy="strategy" :deleting="strategy_deleting" :key="key" @cruded="on_StrategyCU_cruded" />
+                <StrategyFastOperationsCU :strategy="strategy" :mode="strategy_mode" :key="key" @cruded="on_StrategyCU_cruded" />
             </v-card>
         </v-dialog>
 
@@ -97,17 +97,18 @@
     import { useStore } from "@/store"
     import MyMenuInline from './MyMenuInline.vue'
     import StrategiesView from './StrategiesView.vue'
-    import StrategyCU from './StrategyCU.vue'
+    import StrategyFastOperationsCU from './StrategyFastOperationsCU.vue'
     import ProductsRanges from './ProductsRanges.vue'
     import TableAccountOperations from './TableAccountOperations.vue'
-    import {empty_products_ranges, empty_strategy} from '../empty_objects.js'
+    import {empty_products_ranges, empty_strategy_fast_operations} from '../empty_objects.js'
     import { localtime, f} from 'vuetify_rules'
     import { parseResponseError, listobjects_sum, localcurrency_html, myheaders } from '@/functions'
+    import {StrategiesTypes} from '@/types.js'
     export default {
         components:{
             MyMenuInline,
             StrategiesView,
-            StrategyCU,
+            StrategyFastOperationsCU,
             ProductsRanges,
             TableAccountOperations,
         },
@@ -132,23 +133,23 @@
                         subheader: this.$t("Strategy options"),
                         children: [
                             {
-                                name: this.$t("Add a new strategy"),
+                                name: this.$t("Add a new fast operations strategy"),
                                 icon: "mdi-pencil",
                                 code: function(){
-                                    this.strategy=this.empty_strategy()
+                                    this.strategy=this.empty_strategy_fast_operations()
+                                    this.strategy.type=StrategiesTypes.FastOperations
+                                    this.strategy_mode="C"
                                     this.key=this.key+1
-                                    this.dialog_strategy_cu=true
+                                    this.dialog_strategy_fast_operations_cu=true
                                 }.bind(this),
                             },
                         ]
                     },
                 ],
                 // STRATEGY CU
-                dialog_strategy_cu:false,
+                dialog_strategy_fast_operations_cu:false,
                 strategy: null,
-                strategy_deleting: false,
-
-
+                strategy_mode: null,
 
                 loading_strategies:false,
                 dialog_view:false,
@@ -176,18 +177,19 @@
             localcurrency_html,
             myheaders,
             f,
+            empty_products_ranges,
+            empty_strategy_fast_operations,
             editItem (item) {
                 this.strategy=item
+                this.strategy_mode="U"
                 this.key=this.key+1
-                this.dialog_strategy_cu=true
+                this.dialog_strategy_fast_operations_cu=true
             },
-            empty_products_ranges,
-            empty_strategy,
             deleteItem(item){
                 this.strategy=item
-                this.strategy_deleting=true
+                this.strategy_mode="D"
                 this.key=this.key+1
-                this.dialog_strategy_cu=true
+                this.dialog_strategy_fast_operations_cu=true
             },
             viewItem (item) {
                 this.strategy=item
@@ -232,8 +234,7 @@
                 });
             },
             on_StrategyCU_cruded(){
-                this.dialog_strategy_cu=false
-                this.strategy_deleting=false
+                this.dialog_strategy_fast_operations_cu=false
                 this.update_table()
             },
             setCheckboxLabel(){

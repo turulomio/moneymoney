@@ -1,3 +1,6 @@
+import {StrategiesTypes} from '@/types.js'
+
+
 export function empty_account(){
     return {
         name: "",
@@ -271,25 +274,16 @@ export function empty_investment(){
     }
 }
 
-export function empty_strategy(){
+export function empty_strategy_fast_operations(){
     return {
-        dt_from: new Date().toISOString(),
-        dt_to: null,
-        investments: [],
+        strategy: {
+            dt_from: new Date().toISOString(),
+            dt_to: null,
+            name: "",
+            type: StrategiesTypes.FastOperations,
+            comment: "",
+        },
         accounts: [],
-        name: "",
-        type: 3,
-        comment: "",
-        additional1: null,
-        additional2: null,
-        additional3: null,
-        additional4: null,
-        additional5: null,
-        additional6: null,
-        additional7: null,
-        additional8: null,
-        additional9: null,
-        additional10: null,
     }
 }
 
