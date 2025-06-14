@@ -195,19 +195,20 @@
                 this.dialog_view=true
             },
             detailedviewItem (event,object) {
-                if (object.item.type==2){//RANGES
+                console.log(object.item)
+                if (object.item.strategy.type==2){//RANGES
                     this.pr=this.empty_products_ranges()
-                    this.pr.product=`${this.useStore().apiroot}/api/products/${object.item.additional1}/`
-                    this.pr.percentage_between_ranges=object.item.additional2
-                    this.pr.percentage_gains=object.item.additional3
-                    this.pr.amount_to_invest=object.item.additional4
-                    this.pr.recomendation_methods=object.item.additional5
-                    this.pr.totalized_operations=object.item.additional6
+                    this.pr.product=object.item.product
+                    this.pr.percentage_between_ranges=object.item.percentage_between_ranges
+                    this.pr.percentage_gains=object.item.percentage_gains
+                    this.pr.amount_to_invest=object.item.amount
+                    this.pr.recomendation_methods=object.item.recomendation_method
+                    this.pr.totalized_operations=object.item.only_first
                     this.pr.investments=object.item.investments
                     this.key=this.key+1
                     this.dialog_detailedview=true
-                } else if (object.item.type==4){//FAST OPERATIONS
-                    axios.get(`${object.item.url}detailed_fastoperations/`, this.myheaders())
+                } else if (object.item.strategy.type==4){//FAST OPERATIONS
+                    axios.get(`${object.item.url}detailed/`, this.myheaders())
                     .then((response) => {
                         this.detailed_fo=response.data
                         this.key=this.key+1
