@@ -62,7 +62,7 @@
         </v-card>
 
         <!-- Strategy CU -->
-        <v-dialog v-model="dialog_strategy_fast_operations_cu" max-width="70%">
+        <v-dialog v-model="dialog_strategy_fast_operations_cu" max-width="40%">
             <v-card class="pa-4">
                 <StrategyFastOperationsCU :strategy="strategy" :mode="strategy_mode" :key="key" @cruded="on_StrategyCU_cruded" />
             </v-card>
