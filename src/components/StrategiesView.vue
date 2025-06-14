@@ -133,8 +133,8 @@
         },
         computed:{
             product: function (){
-                if (this.strategy.additional1!=null){
-                    return this.getMapObjectById("products", this.strategy.additional1)
+                if (this.strategy.product!=null){
+                    return this.useStore().products.get(this.strategy.product)
                 }
                 return null
             }
@@ -154,11 +154,11 @@
             },
             displayvalues(){
                 var r= []
-                r.push({title:this.$t('From'), value: this.localtime(this.strategy.dt_from)})
-                r.push({title:this.$t('To'), value: this.localtime(this.strategy.dt_to)})
-                r.push({title:this.$t('Type'), value: this.useStore()["strategiestypes"].get(this.strategy.type).name})
+                r.push({title:this.$t('From'), value: this.localtime(this.strategy.strategy.dt_from)})
+                r.push({title:this.$t('To'), value: this.localtime(this.strategy.strategy.dt_to)})
+                r.push({title:this.$t('Type'), value: this.useStore()["strategiestypes"].get(this.strategy.strategy.type).name})
                 r.push({title:this.$t('Investments'), value: this.strategy.investments.length})                
-                if (this.strategy.additional1){//That means it has a product property
+                if (this.strategy.product){//That means it has a product property
                     this.leverage_message= f(this.$t("[0] (Real: [1])"), [this.product.leverage_multiplier, this.product.leverage_real_multiplier ])
                     r.push({title:this.$t('Currency'), value: this.product.currency})
                     r.push({title:this.$t('Product'), value: this.product.name})
@@ -167,7 +167,7 @@
                 return r
             },
             update_investmentsoperations(){
-                return axios.get(`${this.strategy.url}ios/`, this.myheaders())
+                return axios.get(`${this.strategy.url}detailed/`, this.myheaders())
             },
             update_dividends(){
                 var headers={...this.myheaders(),params:{investments:this.strategy.investments}}
@@ -187,8 +187,10 @@
                 });
             }
         },
-        created(){
+        mounted(){
             this.update_all()
+            console.log(this.strategy.product)
+            console.log(this.product)
         }
     }
 </script>
