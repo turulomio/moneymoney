@@ -7,41 +7,44 @@
             <v-checkbox data-test="StrategiesList_CheckActive" v-model="showActive" :label="setCheckboxLabel()" />
             <v-data-table density="compact" :headers="strategies_headers" :items="strategies_items" class="elevation-1 cursorpointer" :loading="loading_strategies" :key="key" @click:row="detailedviewItem" :items-per-page="10000" >
                 <template v-slot:[`item.name`]="{ item }">
-                    <v-tooltip :text="item.comment">
+                    <v-tooltip :text="item.strategy.comment">
                         <template v-slot:activator="{ props }">
-                            <div v-bind="props">{{ item.name }}</div>
+                            <div v-bind="props">{{ item.strategy.name }}</div>
                         </template>
-                        <span>{{ item.comment }}</span>
+                        <span>{{ item.strategy.comment }}</span>
                     </v-tooltip>
                 </template>
                 <template #item.dt_from="{item}">
-                    <div :data-test="`StrategiesList_Table_Row${item.id}`" v-html="localtime(item.dt_from )"></div>
+                    <div :data-test="`StrategiesList_Table_Row${item.id}`" v-html="localtime(item.strategy.dt_from )"></div>
                 </template>        
                 <template #item.dt_to="{item}">
-                    <div v-html="localtime(item.dt_to )"></div>
+                    <div v-html="localtime(item.strategy.dt_to )"></div>
+                </template>     
+                <template #item.type="{item}">
+                    {{ useStore().strategiestypes.get(item.strategy.type).name }}
                 </template>   
                 <template #item.invested="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.invested)"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.balance.invested)"></div>
                 </template>    
                 <template #item.gains_current_net_user="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.gains_current_net_user)"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.balance.gains_current_net_user)"></div>
                 </template>    
                 <template #item.gains_historical_net_user="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.gains_historical_net_user)"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.balance.gains_historical_net_user)"></div>
                 </template>    
                 <template #item.dividends_net_user="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.dividends_net_user)"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.balance.dividends_net_user)"></div>
                 </template>    
                 <template #item.total_net_user="{item}">
-                    <div class="text-right" v-html="localcurrency_html(item.total_net_user)"></div>
+                    <div class="text-right" v-html="localcurrency_html(item.balance.total_net_user)"></div>
                 </template>           
 
                 <template #item.actions="{item}">
-                    <v-icon :data-test="`StrategiesList_Table_IconView${item.id}`" v-if="[1,2,3].includes(item.type)" small class="mr-2" @click.stop="viewItem(item)">mdi-eye</v-icon>
-                    <v-icon :data-test="`StrategiesList_Table_IconEdit${item.id}`" small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon :data-test="`StrategiesList_Table_IconDelete${item.id}`" small @click.stop="deleteItem(item)">mdi-delete</v-icon>
+                    <v-icon :data-test="`StrategiesList_Table_IconView${item.strategy.id}`" v-if="[1,2,3].includes(item.strategy.type)" small class="mr-2" @click.stop="viewItem(item)">mdi-eye</v-icon>
+                    <v-icon :data-test="`StrategiesList_Table_IconEdit${item.strategy.id}`" small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
+                    <v-icon :data-test="`StrategiesList_Table_IconDelete${item.strategy.id}`" small @click.stop="deleteItem(item)">mdi-delete</v-icon>
                 </template>                  
-                <template #tbody v-if="strategies_items.length>0">
+                <!-- <template #tbody v-if="strategies_items.length>0">
                     <tr class="totalrow">
                         <td>{{f($t("Total ([0] strategies)"), [strategies_items.length]) }}</td>
                         <td></td>
@@ -53,7 +56,7 @@
                         <td class="text-right" v-html="localcurrency_html(listobjects_sum(strategies_items,'total_net_user'))"></td>
                         <td></td>
                     </tr>
-                </template>
+                </template> -->
                 <template #bottom ></template>   
             </v-data-table>
         </v-card>
@@ -115,6 +118,7 @@
                     { title: this.$t('Name'), sortable: true, key: 'name'},
                     { title: this.$t('Date and time from'), sortable: true, key: 'dt_from',  width: "10%"},
                     { title: this.$t('Date and time to'), key: 'dt_to',  width: "10%"},
+                    { title: this.$t('Type'), key: 'type',  width: "7%"},
                     { title: this.$t('Invested'), key: 'invested',  width: "7%", align:'end'},
                     { title: this.$t('Current net gains'), key: 'gains_current_net_user',  width: "7%", align:'end'},
                     { title: this.$t('Historical net gains'), key: 'gains_historical_net_user',  width: "7%", align:'end'},
@@ -191,19 +195,20 @@
                 this.dialog_view=true
             },
             detailedviewItem (event,object) {
-                if (object.item.type==2){//RANGES
+                console.log(object.item)
+                if (object.item.strategy.type==2){//RANGES
                     this.pr=this.empty_products_ranges()
-                    this.pr.product=`${this.useStore().apiroot}/api/products/${object.item.additional1}/`
-                    this.pr.percentage_between_ranges=object.item.additional2
-                    this.pr.percentage_gains=object.item.additional3
-                    this.pr.amount_to_invest=object.item.additional4
-                    this.pr.recomendation_methods=object.item.additional5
-                    this.pr.totalized_operations=object.item.additional6
+                    this.pr.product=object.item.product
+                    this.pr.percentage_between_ranges=object.item.percentage_between_ranges
+                    this.pr.percentage_gains=object.item.percentage_gains
+                    this.pr.amount_to_invest=object.item.amount
+                    this.pr.recomendation_methods=object.item.recomendation_method
+                    this.pr.totalized_operations=object.item.only_first
                     this.pr.investments=object.item.investments
                     this.key=this.key+1
                     this.dialog_detailedview=true
-                } else if (object.item.type==4){//FAST OPERATIONS
-                    axios.get(`${object.item.url}detailed_fastoperations/`, this.myheaders())
+                } else if (object.item.strategy.type==4){//FAST OPERATIONS
+                    axios.get(`${object.item.url}detailed/`, this.myheaders())
                     .then((response) => {
                         this.detailed_fo=response.data
                         this.key=this.key+1
@@ -220,6 +225,7 @@
                 axios.get(`${this.useStore().apiroot}/api/strategies/withbalance/?active=${this.showActive}`, this.myheaders())
                 .then((response) => {
                     this.strategies_items=response.data
+                    console.log(this.strategies_items)
                     this.loading_strategies=false
                 }, (error) => {
                     this.parseResponseError(error)

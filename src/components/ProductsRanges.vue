@@ -12,9 +12,9 @@
                 <v-row class="pl-5 pr-5">                
                 <v-select class="mr-5" :items="getArrayFromMap(useStore().recomendation_methods)" v-model="newpr.recomendation_methods" :label="$t('Set recomendation method')"  item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
 
-                <v-text-field class="mr-5" v-model.number="newpr.percentage_between_ranges"  :label="$t('Set percentage between ranges x1000')" :placeholder="$t('Set percentage between ranges x1000')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field class="mr-5" v-model.number="newpr.percentage_gains"  :label="$t('Set percentage gains x1000')" :placeholder="$t('Set percentage gains x1000')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field class="mr-5" v-model.number="newpr.amount_to_invest"  :label="$t('Set the amount to invest')" :placeholder="$t('Set the amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field class="mr-5" v-model.number="newpr.percentage_between_ranges"  :label="$t('Set percentage between ranges')" :placeholder="$t('Set percentage between ranges')" :rules="RulesFloat(10,true,6)" counter="10"/>
+                <v-text-field class="mr-5" v-model.number="newpr.percentage_gains"  :label="$t('Set percentage gains')" :placeholder="$t('Set percentage gains')" :rules="RulesFloat(10,true,6)" counter="10"/>
+                <v-text-field class="mr-5" v-model.number="newpr.amount_to_invest"  :label="$t('Set the amount to invest')" :placeholder="$t('Set the amount to invest')" :rules="RulesFloat(10,true,6)" counter="10"/>
 
                 <v-text-field class="mr-5" v-model.number="newpr.additional_ranges"  :label="$t('Additional ranges to show')" :placeholder="$t('Additional ranges to show')" :rules="RulesInteger(2,true)" counter="2"/>
                 <v-checkbox v-model="newpr.totalized_operations" :label="$t('Show totalized investments operations?')" ></v-checkbox>
@@ -85,7 +85,7 @@
 <script>    
     import {empty_products_ranges, empty_order} from '../empty_objects.js'
     import { useStore } from "@/store"
-    import { RulesSelection, RulesInteger, f } from 'vuetify_rules'
+    import { RulesSelection, RulesInteger, RulesFloat, f } from 'vuetify_rules'
     import axios from 'axios'
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import ChartProductsRanges from './ChartProductsRanges.vue'
@@ -159,6 +159,7 @@
             useStore,
             RulesSelection,
             RulesInteger,
+            RulesFloat,
             f,
             parseResponseError,
             currency_string,
