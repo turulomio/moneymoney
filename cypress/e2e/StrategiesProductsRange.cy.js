@@ -43,8 +43,8 @@ describe('e2e Strategies List', () => {
       // Sets an strategy inactive (dt_end not null)
       cy.getDataTest(`StrategiesList_Table_IconEdit${strategy_id}`).click()
 
-      component_pointable('StrategyProductsRangeCU_DtTo_Icon')
-      cy.getDataTest('StrategyProductsRangeCU_DtTo_Icon').click()
+      // component_pointable('StrategyProductsRangeCU_DtTo_Icon')
+      cy.getDataTest('StrategyProductsRangeCU_DtTo_Icon').should('have.css', 'cursor', 'pointer').click()
       // cy.get('[data-test="StrategyProductsRangeCU_DtTo"] > .d-flex > .v-input > .v-input__prepend > .mdi-calendar-clock').click()
       cy.getDataTest('StrategyProductsRangeCU_Button').click()  
       cy.getDataTest(`StrategiesList_Table_IconEdit${strategy_id}`).should('not.exist');

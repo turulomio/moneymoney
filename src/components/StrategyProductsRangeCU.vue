@@ -7,7 +7,7 @@
                     v-model="new_strategy.strategy.name" :label="$t('Set strategy name')"
                     :placeholder="$t('Set strategy name')" :rules="RulesString(200, true)" counter="200" autofocus />
                 <v-row class="d-flex flex-row mx-auto mt-2" justify="center">
-                    <MyDateTimePicker class="mr-4" :readonly="mode == 'D'" v-model="new_strategy.strategy.dt_from"
+                    <MyDateTimePicker data-test="StrategyProductsRangeCU_DtFrom" class="mr-4" :readonly="mode == 'D'" v-model="new_strategy.strategy.dt_from"
                         :label="$t('Date and time strategy start')" />
                     <MyDateTimePicker data-test="StrategyProductsRangeCU_DtTo" :readonly="mode == 'D'"
                         v-model="new_strategy.strategy.dt_to" :label="$t('Date and time strategy end')"
