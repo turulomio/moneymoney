@@ -1,4 +1,4 @@
-import { login_test_User, mymenuinlinebutton_pointable } from "./commons"
+import { login_test_User, component_pointable } from "./commons"
 
 describe('e2e Strategies List', () => {
   it('Strategies list', () => {
@@ -9,7 +9,7 @@ describe('e2e Strategies List', () => {
     cy.getDataTest('LateralStrategies').click()
 
     // Add a new strategy ranged
-    mymenuinlinebutton_pointable('StrategiesList_MyMenuInline_Button')
+    component_pointable('StrategiesList_MyMenuInline_Button')
     cy.getDataTest('StrategiesList_MyMenuInline_Button').click()
     cy.getDataTest('StrategiesList_MyMenuInline_Header0_Item0').click()
     cy.getDataTest('StrategyFastOperationsCU_Name').type("Fast operations strategy")

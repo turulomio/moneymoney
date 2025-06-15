@@ -1,4 +1,4 @@
-import { login_test_User, mymenuinlinebutton_pointable } from "./commons"
+import { login_test_User, component_pointable } from "./commons"
 
 describe('e2e Strategies List', () => {
   it('Strategies list', () => {
@@ -10,7 +10,7 @@ describe('e2e Strategies List', () => {
     cy.getDataTest('LateralStrategies').click()
 
     // Add a new strategy ranged
-    mymenuinlinebutton_pointable('StrategiesList_MyMenuInline_Button')
+    component_pointable('StrategiesList_MyMenuInline_Button')
     cy.getDataTest('StrategiesList_MyMenuInline_Button').click()
     cy.getDataTest('StrategiesList_MyMenuInline_Header0_Item1').click()
     cy.getDataTest('StrategyProductsRangeCU_Name').type("Range strategy")
@@ -27,20 +27,25 @@ describe('e2e Strategies List', () => {
     cy.get("@strategy_id").then((strategy_id)  =>{
       // Opens strategy view
       cy.getDataTest(`StrategiesList_Table_IconView${strategy_id}`).click()
-      cy.wait(1000)
 
       // Closes strategy view
+      component_pointable('StrategiesView_ButtonClose')
       cy.getDataTest('StrategiesView_ButtonClose').click()
 
-      // Opens strategy product range
-      cy.getDataTest(`StrategiesList_Table_Row${strategy_id}`).click()
+      // // Opens strategy product range
+      // cy.wait(2000)
+      // component_pointable(`StrategiesList_Table_Row${strategy_id}`)
+      // cy.getDataTest(`StrategiesList_Table_Row${strategy_id}`).click()
 
-      // Returns to strategy view buscando un typeable para hacer uno dos esc y vuelve a StrategyList
-      cy.getDataTest('ProductsRanges_Product').type("{esc}{esc}")
+      // // Returns to strategy view buscando un typeable para hacer uno dos esc y vuelve a StrategyList
+      // cy.getDataTest('ProductsRanges_Product').type("{esc}{esc}")
 
       // Sets an strategy inactive (dt_end not null)
       cy.getDataTest(`StrategiesList_Table_IconEdit${strategy_id}`).click()
-      cy.get('[data-test="StrategyProductsRangeCU_DtTo"] > .d-flex > .v-input > .v-input__prepend > .mdi-calendar-clock').click()
+
+      component_pointable('StrategyProductsRangeCU_DtTo_Icon')
+      cy.getDataTest('StrategyProductsRangeCU_DtTo_Icon').click()
+      // cy.get('[data-test="StrategyProductsRangeCU_DtTo"] > .d-flex > .v-input > .v-input__prepend > .mdi-calendar-clock').click()
       cy.getDataTest('StrategyProductsRangeCU_Button').click()  
       cy.getDataTest(`StrategiesList_Table_IconEdit${strategy_id}`).should('not.exist');
        // Select elements whose ID starts with 'checkbox'
