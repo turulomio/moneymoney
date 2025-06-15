@@ -10,12 +10,10 @@
                 </v-row>
                 <v-select data-test="StrategyFastOperationsCU_Type" readonly :items="getArrayFromMap(useStore().strategiestypes)" v-model="new_strategy.strategy.type" :label="$t('Select strategy type')" item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>
                 <v-textarea data-test="StrategyFastOperationsCU_Comment" :readonly="mode=='D'" v-model="new_strategy.strategy.comment" :label="$t('Set strategy comment')" :placeholder="$t('Set strategy comment')" :rules="RulesString(200,false)" counter="200"></v-textarea>
-
-                <v-autocomplete data-test="StrategyFastOperationsCU_Account" :readonly="mode=='D'" :items="getArrayFromMap(useStore().accounts)" v-model="new_strategy.accounts" multiple :label="$t('Select strategy accounts')" item-title="name" item-value="url" :rules="RulesSelection(true)" />
-
+                <AutocompleteAccounts data-test="StrategyFastOperationsCU_Accounts" :readonly="mode=='D'" v-model="new_strategy.accounts" multiple />
             </v-form>
             <v-card-actions>
-                <v-spacer></v-spacer>
+                <v-spacer />
                 <v-btn data-test="StrategyFastOperationsCU_Button" color="primary" @click="accept()">{{ button() }}</v-btn>
             </v-card-actions>
         </v-card>
@@ -24,17 +22,19 @@
 <script>
     import axios from 'axios'
     import { useStore } from "@/store"
-    import MyDateTimePicker from './MyDateTimePicker.vue'
+    import MyDateTimePicker from '@/components/MyDateTimePicker.vue'
     import { RulesSelection, RulesInteger,RulesString } from 'vuetify_rules'
     import { getArrayFromMap, parseResponseError, myheaders } from '@/functions'
+    import AutocompleteAccounts from '@/components/AutocompleteAccounts.vue'
+    
     export default {
         components: {
             MyDateTimePicker,
+            AutocompleteAccounts,
         },
         props: {
-            // An account object
             strategy: {
-                required: true // Null to create, io object to update
+                required: true,
             },
             mode: { // CDRU
                 required: true,
@@ -77,6 +77,8 @@
                     this.$refs.form.validate()
                     return
                 }
+                console.log(this.new_strategy)
+
                 if (this.mode=="U"){
                     axios.put(this.new_strategy.url, this.new_strategy,  this.myheaders())
                     .then(() => {
