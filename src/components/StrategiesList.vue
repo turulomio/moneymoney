@@ -110,7 +110,6 @@
     import {empty_products_ranges, empty_strategy_fast_operations, empty_strategy_products_range} from '../empty_objects.js'
     import { localtime, f} from 'vuetify_rules'
     import { parseResponseError, listobjects_sum, localcurrency_html, myheaders } from '@/functions'
-    import {StrategiesTypes} from '@/types.js'
     export default {
         components:{
             MyMenuInline,
@@ -145,7 +144,6 @@
                                 icon: "mdi-pencil",
                                 code: function(){
                                     this.strategy=this.empty_strategy_fast_operations()
-                                    this.strategy.strategy.type=StrategiesTypes.FastOperations
                                     this.strategy_mode="C"
                                     this.key=this.key+1
                                     this.dialog_strategy_fast_operations_cu=true
@@ -156,7 +154,6 @@
                                 icon: "mdi-pencil",
                                 code: function(){
                                     this.strategy=this.empty_strategy_products_range()
-                                    this.strategy.strategy.type=StrategiesTypes.Range
                                     this.strategy_mode="C"
                                     this.key=this.key+1
                                     this.dialog_strategy_products_range_cu=true
