@@ -3,6 +3,7 @@ import { expect } from '@playwright/test';
 
 
 export async function v_autocomplete_selection(page, name){
+  await page.getByTestId(name).click()
   await page.getByTestId(name).getByRole("textbox").fill("Personal Management")
   await page.keyboard.press("ArrowDown")
   await page.keyboard.press("Enter")
