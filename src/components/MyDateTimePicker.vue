@@ -10,26 +10,27 @@
     Tuple is in local
 
 -->
-
-
-
 <template>
     <div>
-        <v-menu v-model="menu"  :close-on-content-click="false">
+        <v-menu v-model="menu" :close-on-content-click="false">
         <template v-slot:activator="{ props }">
             <div class="d-flex flex-row">
-                <v-text-field v-model="representation"  style="min-width: 300px;" :label="label" v-bind="props" readonly :clearable="clearable" prepend-icon="mdi-calendar-clock" @click:prepend.stop="on_click_prepend_icon" @click:clear.stop="new_modelValue=null" />
+                <v-text-field :data-test="`${dataTest}_Menu`" v-model="representation"  style="min-width: 300px;" :label="label" v-bind="props" readonly :clearable="clearable" @click:clear.stop="new_modelValue=null" >
+                    <template v-slot:prepend>
+                        <v-icon :data-test="`${dataTest}_Icon`" @click.stop="on_click_prepend_icon">mdi-calendar-clock</v-icon>
+                    </template>
+                </v-text-field>
             </div>
         </template>
         <v-card width="650" class="pa-4">
             <v-row>
                 <v-date-picker density="compact"  v-model="date" show-adjancent-months hide-header ></v-date-picker> 
                 <v-col class="ma-3">
-                    <v-text-field v-model.number="hours" :label="$t('Set hours')" :rules="RulesInteger(2,true)" @change="on_change" />
-                    <v-text-field v-model.number="minutes" :label="$t('Set minutes')" :rules="RulesInteger(2,true)" @change="on_change" />
-                    <v-text-field v-model.number="seconds" :label="$t('Set seconds')" :rules="RulesInteger(2,true)" @change="on_change" />
-                    <v-text-field v-model.number="microseconds" :label="$t('Set microseconds')" :rules="RulesInteger(6,true)" @change="on_change" />
-                    <v-text-field v-model="timezone" readonly :label=" $t('Time zone')" />
+                    <v-text-field :data-test="`${dataTest}_Hours`" v-model.number="hours" :label="$t('Set hours')" :rules="RulesInteger(2,true)" @change="on_change" />
+                    <v-text-field :data-test="`${dataTest}_Minutes`" v-model.number="minutes" :label="$t('Set minutes')" :rules="RulesInteger(2,true)" @change="on_change" />
+                    <v-text-field :data-test="`${dataTest}_Seconds`" v-model.number="seconds" :label="$t('Set seconds')" :rules="RulesInteger(2,true)" @change="on_change" />
+                    <v-text-field :data-test="`${dataTest}_Microseconds`" v-model.number="microseconds" :label="$t('Set microseconds')" :rules="RulesInteger(6,true)" @change="on_change" />
+                    <v-text-field :data-test="`${dataTest}_Timezone`" v-model="timezone" readonly :label=" $t('Time zone')" />
                 </v-col>
             </v-row>
         </v-card>
@@ -54,6 +55,10 @@
                 type: Boolean,
                 required: false,
                 default: false,
+            },
+            dataTest: {
+                type: String,
+                default: 'MyDateTimePicker'
             }
         },
         emits: ['update:modelValue'],

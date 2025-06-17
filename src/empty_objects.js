@@ -1,4 +1,4 @@
-import {StrategiesTypes} from '@/types.js'
+import {RecomendationMethods, StrategiesTypes} from '@/types.js'
 
 
 export function empty_account(){
@@ -284,6 +284,25 @@ export function empty_strategy_fast_operations(){
             comment: "",
         },
         accounts: [],
+    }
+}
+
+export function empty_strategy_products_range(){
+    return {
+        strategy: {
+            dt_from: new Date().toISOString(),
+            dt_to: null,
+            name: "",
+            type: StrategiesTypes.Ranges,
+            comment: "",
+        },
+        product: null,
+        investments: [],
+        percentage_between_ranges: 0.5,
+        percentage_gains: 0.10,
+        amount: 10000,
+        recomendation_method: RecomendationMethods.All,
+        only_first: false,
     }
 }
 
