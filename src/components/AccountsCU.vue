@@ -1,6 +1,6 @@
 <template>
     <div>    
-        <h1>{{ title() }}</h1>    
+        <h1 data-test="AccountsCU_H1">{{ title() }}</h1>    
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid">
                 <v-autocomplete data-test="AccountsCU_Bank" :readonly="mode=='D'" :items="getArrayFromMap(useStore().banks)" v-model="new_account.banks" :label="$t('Select a bank')" item-title="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
