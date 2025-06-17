@@ -8,13 +8,10 @@ test('Add account', async ({ page }) => {
   await page.getByTestId('MyMenuInline_Button').click();
   await page.getByTestId('MyMenuInline_Header0_Item0').click();
   
-  await page.getByTestId('AccountsCU_Name').getByRole("textbox").fill("Permanent Account");
   v_text_input_settext(page, "AccountsCU_Name", "Permanent Account")
   v_autocomplete_selection(page, "AccountsCU_Bank")
   await page.getByTestId('AccountsCU_Button').click()
   await page.getByTestId('AccountsCU_Button').isHidden()
-
-
 
 });
 
