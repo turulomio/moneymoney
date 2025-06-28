@@ -44,19 +44,20 @@
                     <v-icon :data-test="`StrategiesList_Table_IconEdit${item.strategy.id}`" small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
                     <v-icon :data-test="`StrategiesList_Table_IconDelete${item.strategy.id}`" small @click.stop="deleteItem(item)">mdi-delete</v-icon>
                 </template>                  
-                <!-- <template #tbody v-if="strategies_items.length>0">
+                <template #tbody v-if="strategies_items.length>0">
                     <tr class="totalrow">
                         <td>{{f($t("Total ([0] strategies)"), [strategies_items.length]) }}</td>
                         <td></td>
                         <td></td>
-                        <td class="text-right" v-html="localcurrency_html(listobjects_sum(strategies_items,'invested'))"></td>
-                        <td class="text-right" v-html="localcurrency_html(listobjects_sum(strategies_items,'gains_current_net_user'))"></td>
-                        <td class="text-right" v-html="localcurrency_html(listobjects_sum(strategies_items,'gains_historical_net_user'))"></td>
-                        <td class="text-right" v-html="localcurrency_html(listobjects_sum(strategies_items,'dividends_net_user'))"></td>
-                        <td class="text-right" v-html="localcurrency_html(listobjects_sum(strategies_items,'total_net_user'))"></td>
+                        <td></td>
+                        <td class="text-right" v-html="localcurrency_html(sumBy(strategies_items, 'balance.invested'))"></td>
+                        <td class="text-right" v-html="localcurrency_html(sumBy(strategies_items, 'balance.gains_current_net_user'))"></td>
+                        <td class="text-right" v-html="localcurrency_html(sumBy(strategies_items, 'balance.gains_historical_net_user'))"></td>
+                        <td class="text-right" v-html="localcurrency_html(sumBy(strategies_items, 'balance.dividends_net_user'))"></td>
+                        <td class="text-right" v-html="localcurrency_html(sumBy(strategies_items, 'balance.total_net_user'))"></td>
                         <td></td>
                     </tr>
-                </template> -->
+                </template>
                 <template #bottom ></template>   
             </v-data-table>
         </v-card>
@@ -109,7 +110,8 @@
     import TableAccountOperations from './TableAccountOperations.vue'
     import {empty_products_ranges, empty_strategy_fast_operations, empty_strategy_products_range} from '../empty_objects.js'
     import { localtime, f} from 'vuetify_rules'
-    import { parseResponseError, listobjects_sum, localcurrency_html, myheaders } from '@/functions'
+    import { parseResponseError, localcurrency_html, myheaders } from '@/functions'
+    import {sumBy} from "lodash-es"
     export default {
         components:{
             MyMenuInline,
@@ -190,13 +192,13 @@
             useStore,
             localtime,
             parseResponseError,
-            listobjects_sum,
             localcurrency_html,
             myheaders,
             f,
             empty_products_ranges,
             empty_strategy_fast_operations,
             empty_strategy_products_range,
+            sumBy,
             editItem (item) {
                 this.strategy=item
                 this.strategy_mode="U"
@@ -273,4 +275,3 @@
         }
     }
 </script>
-
