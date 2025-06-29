@@ -1,8 +1,7 @@
 <template>
     <v-card>   
-        <v-select :items="payments" v-model="payment" :label="$t('Select an old payment')"  item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
-
-        <TableCreditcardsOperations showtotal :items="items_cco" height="400" class=" flex-grow-1 flex-shrink-0" :key="key" />
+        <v-select :items="payments" v-model="payment" :label="$t('Select an old payment')"  item-title="name" item-value="id" :rules="RulesSelection(true)" />
+        <TableCreditcardsOperations showtotal hideactions :items="items_cco" height="400" class=" flex-grow-1 flex-shrink-0" :key="key" />
 
         <v-card-actions>
             <v-spacer></v-spacer>
@@ -15,7 +14,7 @@
     import { useStore } from "@/store"
     import { localtime, RulesSelection, f } from 'vuetify_rules'
     import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
-    import { parseResponseError, myheaders } from '@/functions'
+    import { parseResponseError, myheaders, currency_string } from '@/functions'
     export default {
         components:{
             TableCreditcardsOperations,
@@ -51,6 +50,7 @@
         },
         methods: {
             useStore,
+            currency_string,
             localtime,
             f,
             myheaders,
