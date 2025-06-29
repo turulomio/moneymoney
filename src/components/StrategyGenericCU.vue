@@ -13,6 +13,7 @@
                 <AutocompleteInvestments data-test="StrategyGenericCU_Investments" v-model="new_strategy.investments" multiple />
             </v-form>
             <v-card-actions>
+                <v-spacer></v-spacer>
                 <v-btn data-test="StrategyGenericCU_Button" color="primary" @click="accept()">{{ button() }}</v-btn>
             </v-card-actions>
         </v-card>

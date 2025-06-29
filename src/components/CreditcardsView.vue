@@ -3,9 +3,7 @@
     <div>    
         <h1 class="mb-4">{{ f($t("Credit card details of '[0]'"), [cc.name]) }}
             <MyMenuInline :items="menuinline_items"/>
-
         </h1>
-
         <v-tabs  bg-color="secondary" dark v-model="tab" grow>
             <v-tab key="cco">{{ $t('Current credit card operations') }}</v-tab>
             <v-tab key="oldpayments">{{ $t('Old payments') }}</v-tab>
@@ -108,8 +106,6 @@
                 dialog:false,
                 cco:null,
                 cco_deleting:false,
-            
-
             }
         },
         methods: {
@@ -137,9 +133,7 @@
                     this.parseResponseError(error)
                 });
             },
-            acceptPayment(){
-                //Validation
-                //Accept              
+            acceptPayment(){  
                 var ids=[]
                 this.selected_items.forEach(item => ids.push(item.id))
 
@@ -155,7 +149,6 @@
                 }, (error) => {
                     this.parseResponseError(error)
                 })
-
             },
             on_TableCreditcardsOperations_cruded(){
                 this.$emit("cruded")
