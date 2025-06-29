@@ -40,7 +40,7 @@
                 </template>           
 
                 <template #item.actions="{item}">
-                    <v-icon :data-test="`StrategiesList_Table_IconView${item.strategy.id}`" v-if="[1,2,3].includes(item.strategy.type)" small class="mr-2" @click.stop="viewItem(item)">mdi-eye</v-icon>
+                    <v-icon :data-test="`StrategiesList_Table_IconView${item.strategy.id}`" v-if="[StrategiesTypes.Ranges, StrategiesTypes.Generic].includes(item.strategy.type)" small class="mr-2" @click.stop="viewItem(item)">mdi-eye</v-icon>
                     <v-icon :data-test="`StrategiesList_Table_IconEdit${item.strategy.id}`" small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
                     <v-icon :data-test="`StrategiesList_Table_IconDelete${item.strategy.id}`" small @click.stop="deleteItem(item)">mdi-delete</v-icon>
                 </template>                  
@@ -80,6 +80,12 @@
                 <StrategyProductsRangeCU :strategy="strategy" :mode="strategy_mode" :key="key" @cruded="on_StrategyCU_cruded" />
             </v-card>
         </v-dialog>
+        <!-- Strategy Pairs CU -->
+        <v-dialog v-model="dialog_strategy_pairs_cu" max-width="40%">
+            <v-card class="pa-4">
+                <StrategyPairsCU :strategy="strategy" :mode="strategy_mode" :key="key" @cruded="on_StrategyCU_cruded" />
+            </v-card>
+        </v-dialog>
 
         <!-- View strategy -->
         <v-dialog v-model="dialog_view">
@@ -113,25 +119,28 @@
     import StrategyFastOperationsCU from './StrategyFastOperationsCU.vue'
     import StrategyGenericCU from './StrategyGenericCU.vue'
     import StrategyProductsRangeCU from './StrategyProductsRangeCU.vue'
+    import StrategyPairsCU from './StrategyPairsCU.vue'
     import ProductsRanges from './ProductsRanges.vue'
     import TableAccountOperations from './TableAccountOperations.vue'
-    import {empty_products_ranges, empty_strategy_fast_operations, empty_strategy_products_range, empty_strategy_generic    } from '../empty_objects.js'
+    import {empty_products_ranges, empty_strategy_fast_operations, empty_strategy_products_range, empty_strategy_generic, empty_strategy_pairs} from '../empty_objects.js'
     import { localtime, f} from 'vuetify_rules'
     import { parseResponseError, localcurrency_html, myheaders } from '@/functions'
     import {sumBy} from "lodash-es"
-import { StrategiesTypes } from '../types.js'
+    import { StrategiesTypes } from '../types.js'
     export default {
         components:{
             MyMenuInline,
             StrategiesView,
             StrategyFastOperationsCU,
             StrategyGenericCU,
+            StrategyPairsCU,
             StrategyProductsRangeCU,
             ProductsRanges,
             TableAccountOperations,
         },
         data(){ 
             return{
+                StrategiesTypes,
                 showActive:true,
                 strategies_headers: [
                     { title: this.$t('Name'), sortable: true, key: 'name'},
@@ -143,7 +152,7 @@ import { StrategiesTypes } from '../types.js'
                     { title: this.$t('Historical net gains'), key: 'gains_historical_net_user',  width: "7%", align:'end'},
                     { title: this.$t('Net dividends'), key: 'dividends_net_user',  width: "7%", align:'end'},
                     { title: this.$t('Total'), key: 'total_net_user',  width: "7%", align:'end'},
-                    { title: this.$t('Actions'), key: 'actions', sortable: false , width: "7%"},
+                    { title: this.$t('Actions'), key: 'actions', sortable: false , width: "7%", align:'end'},
                 ],
                 strategies_items:[],
                 menuinline_items: [
@@ -171,6 +180,16 @@ import { StrategiesTypes } from '../types.js'
                                 }.bind(this),
                             },
                             {
+                                name: this.$t("Add a new pairs in same account strategy"),
+                                icon: "mdi-plus",
+                                code: function(){
+                                    this.strategy=this.empty_strategy_pairs()
+                                    this.strategy_mode="C"
+                                    this.key=this.key+1
+                                    this.dialog_strategy_pairs_cu=true
+                                }.bind(this),
+                            },
+                            {
                                 name: this.$t("Add a new generic strategy"),
                                 icon: "mdi-plus",
                                 code: function(){
@@ -187,6 +206,7 @@ import { StrategiesTypes } from '../types.js'
                 dialog_strategy_fast_operations_cu:false,
                 dialog_strategy_products_range_cu:false,
                 dialog_strategy_generic_cu:false,
+                dialog_strategy_pairs_cu:false,
                 strategy: null,
                 strategy_mode: null,
 
@@ -219,6 +239,7 @@ import { StrategiesTypes } from '../types.js'
             empty_strategy_fast_operations,
             empty_strategy_generic,
             empty_strategy_products_range,
+            empty_strategy_pairs,
             sumBy,
             editItem (item) {
                 this.strategy=item
@@ -230,6 +251,8 @@ import { StrategiesTypes } from '../types.js'
                     this.dialog_strategy_products_range_cu=true
                 } else if (this.strategy.strategy.type==StrategiesTypes.Generic){//GENERIC
                     this.dialog_strategy_generic_cu=true
+                } else if (this.strategy.strategy.type==StrategiesTypes.PairsInSameAccount){
+                    this.dialog_strategy_pairs_cu=true
                 }
             },
             deleteItem(item){
@@ -242,6 +265,8 @@ import { StrategiesTypes } from '../types.js'
                     this.dialog_strategy_products_range_cu=true
                 } else if (this.strategy.strategy.type==StrategiesTypes.Generic){//GENERIC
                     this.dialog_strategy_generic_cu=true
+                } else if (this.strategy.strategy.type==StrategiesTypes.PairsInSameAccount){
+                    this.dialog_strategy_pairs_cu=true
                 }
             },
             viewItem (item) {
@@ -251,7 +276,7 @@ import { StrategiesTypes } from '../types.js'
             },
             detailedviewItem (event,object) {
                 console.log(object.item)
-                if (object.item.strategy.type==2){//RANGES
+                if (object.item.strategy.type==StrategiesTypes.Ranges){//RANGES
                     this.pr=this.empty_products_ranges()
                     this.pr.product=object.item.product
                     this.pr.percentage_between_ranges=object.item.percentage_between_ranges
@@ -262,7 +287,7 @@ import { StrategiesTypes } from '../types.js'
                     this.pr.investments=object.item.investments
                     this.key=this.key+1
                     this.dialog_detailedview=true
-                } else if (object.item.strategy.type==4){//FAST OPERATIONS
+                } else if (object.item.strategy.type==StrategiesTypes.FastOperations){//FAST OPERATIONS
                     axios.get(`${object.item.url}detailed/`, this.myheaders())
                     .then((response) => {
                         this.detailed_fo=response.data
@@ -290,6 +315,7 @@ import { StrategiesTypes } from '../types.js'
                 this.dialog_strategy_fast_operations_cu=false
                 this.dialog_strategy_products_range_cu=false
                 this.dialog_strategy_generic_cu=false
+                this.dialog_strategy_pairs_cu=false
                 this.update_table()
             },
             setCheckboxLabel(){

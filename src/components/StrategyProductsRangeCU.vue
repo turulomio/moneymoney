@@ -52,6 +52,7 @@
                 </v-row>
             </v-form>
             <v-card-actions>
+                <v-spacer></v-spacer>
                 <v-btn data-test="StrategyProductsRangeCU_Button" color="primary" @click="accept()">{{ button()
                     }}</v-btn>
             </v-card-actions>
