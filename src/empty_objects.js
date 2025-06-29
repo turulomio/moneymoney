@@ -310,6 +310,21 @@ export function empty_strategy_generic(){
     }
 }
 
+export function empty_strategy_pairs(){
+    return {
+        strategy: {
+            dt_from: new Date().toISOString(),
+            dt_to: null,
+            name: "",
+            type: StrategiesTypes.PairsInSameAccount,
+            comment: "",
+        },
+        worse_product: null,
+        better_product: null,
+        account: null,
+    }
+}
+
 
 export function empty_chart_scatter_pair_prices(){
     return{
