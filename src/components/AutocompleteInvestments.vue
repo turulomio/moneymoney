@@ -1,7 +1,7 @@
 <template>
     <v-autocomplete :readonly="readonly" :items="new_investments" v-model="new_value" :label="mylabel"  item-title="fullname" :return-object="returnObject" item-value="url" :multiple="multiple">
       <template v-slot:item="{ props, item }">
-            <v-list-item v-bind="props" :prepend-icon="`mr-3 fi fib fi-${item.raw.flag}`" :title="item.raw.fullname" :class="(item.active)? 'text-decoration-line-through': ''" />
+            <v-list-item v-bind="props" :prepend-icon="`mr-3 fi fib fi-${store.products.get(item.raw.products).flag}`" :title="item.raw.fullname" :class="item.raw.active ? '':'text-grey'" />
         </template>         
         <template v-slot:selection="{ props, item }">
             <v-list-item v-bind="props" :prepend-icon="`pl-6 mr-3 fi fib fi-${item.raw.flag}`" :title="item.raw.fullname" />
@@ -9,13 +9,14 @@
     </v-autocomplete>
 </template>
 
-<script>
-import { useStore } from "@/store"
-import {getArrayFromMap} from "@/functions"
+<script setup>
+    import { computed, useAttrs } from 'vue'
+    import { useStore } from "@/store"
+    import { useI18n } from 'vue-i18n'
+    import { getArrayFromMap } from "@/functions"
 
-export default {
-    props:{
-        modelValue: { 
+    const props = defineProps({
+        modelValue: {
             required: true,
         },
         returnObject:{
@@ -31,46 +32,37 @@ export default {
         investments: {
             type: Array,
             required:false,
-            default: new Array(),
+            default: () => [],
         },
         multiple: {
             type: Boolean,
             required: false,
             default: false,
         }
-    },
-    emits: ['update:modelValue'],
-    computed:{
-        mylabel(){
-            if ('label' in this.$attrs) return this.$attrs.label
-            return (this.multiple)? this.$t('Select an investment'): this.$t('Select investments')
+    })
+
+    const emit = defineEmits(['update:modelValue'])
+
+    const store = useStore()
+    const { t } = useI18n()
+    const attrs = useAttrs()
+
+    const new_value = computed({
+        get: () => props.modelValue,
+        set: (value) => emit('update:modelValue', value)
+    })
+
+    const new_investments = computed(() => {
+        if (props.investments.length > 0) {
+            return props.investments
         }
-    },
-    data(){ 
-        return {
-            new_value:null,
-            new_investments: null,
+        return getArrayFromMap(store.investments)
+    })
+
+    const mylabel = computed(() => {
+        if (attrs.label) {
+            return attrs.label
         }
-    },
-    watch:{
-        value(newValue){
-            this.new_value=newValue
-        },
-        new_value(newValue){
-            this.$emit('update:modelValue', newValue)
-        },
-    },
-    methods:{
-        useStore,
-        getArrayFromMap,
-    },
-    created(){
-        this.new_value=this.modelValue
-        if (this.investments.length==0){//Default value
-            this.new_investments=this.getArrayFromMap(this.useStore().investments)
-        } else {
-            this.new_investments=this.investments
-        }
-    }
-}
+        return props.multiple ? t('Select investments') : t('Select an investment')
+    })
 </script>

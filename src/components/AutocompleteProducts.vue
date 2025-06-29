@@ -1,7 +1,7 @@
 <template>
-    <v-autocomplete :readonly="readonly" :items="new_products" v-model="new_value" :label="mylabel"  item-title="fullname" :return-object="returnObject" item-value="url">
+    <v-autocomplete :readonly="readonly" :items="new_products" v-model="new_value" :label="mylabel"  item-title="fullname" :return-object="returnObject" item-value="url" :multiple="multiple">
       <template v-slot:item="{ props, item }">
-            <v-list-item v-bind="props" :prepend-icon="`mr-3 fi fib fi-${item.raw.flag}`" :title="item.raw.fullname" />
+            <v-list-item v-bind="props" :prepend-icon="`mr-3 fi fib fi-${item.raw.flag}`" :title="item.raw.fullname" :class="item.raw.obsolete ? 'text-grey' : ''" />
         </template>         
         <template v-slot:selection="{ props, item }">
             <v-list-item v-bind="props" :prepend-icon="`pl-6 mr-3 fi fib fi-${item.raw.flag}`" :title="item.raw.fullname" />
@@ -9,15 +9,13 @@
     </v-autocomplete>
 </template>
 
-<script>
+<script setup>
+    import { computed, useAttrs } from 'vue'
+    import { useStore } from "@/store"
+    import { useI18n } from 'vue-i18n'
+    import { getArrayFromMap } from "@/functions"
 
-import { useStore } from "@/store"
-import {getArrayFromMap} from "@/functions"
-
-
-export default {
-    name: "AutocompleteProducts",
-    props:{
+    const props = defineProps({
         modelValue: { 
             required: true,
         },
@@ -34,57 +32,37 @@ export default {
         products: {
             type: Array,
             required:false,
-            default: new Array(),
-        }
-    },
-    emits: ['update:modelValue'],
-    computed:{
-        mylabel(){
-            if ('label' in this.$attrs) return this.$attrs.label
-            return this.$t('Select a product')
-        }
-    },
-    data(){ 
-        return {
-            new_value:null,
-            new_products: null,
-        }
-    },
-    watch:{
-        value(newValue){
-            this.new_value=newValue
+            default: () => [],
         },
-        new_value(newValue){
-            this.$emit('update:modelValue', newValue)
-        },
-    },
-    methods:{
-            useStore,
-        getArrayFromMap,
-        // on_custom_filter(a,b,c){
-        //     if(this.new_value.length<1) {
-        //         return
-        //     } 
-        //     console.log(a,b,c)
-        // },
-        // on_update_modelValue(){
-        //     console.log("AOHOARA")
-        //     if(this.new_value.length<1) {
-        //         this.products_filtered=[]
-        //     } else {
-        //         this.products_filtered=this.new_products.filter(o => o.includes(this.new_value))
-        //     }
-        //     console.log(this.products_filtered.length)
-        //     // this.$emit("update:modelValue", this.new_value)
-        // },
-    },
-    created(){
-        this.new_value=this.modelValue
-        if (this.products.length==0){//Default value
-            this.new_products=this.getArrayFromMap(this.useStore().products)
-        } else {
-            this.new_products=this.products
+        multiple: {
+            type: Boolean,
+            required: false,
+            default: false,
         }
-    }
-}
+    })
+
+    const emit = defineEmits(['update:modelValue'])
+
+    const store = useStore()
+    const { t } = useI18n()
+    const attrs = useAttrs()
+
+    const new_value = computed({
+        get: () => props.modelValue,
+        set: (value) => emit('update:modelValue', value)
+    })
+
+    const new_products = computed(() => {
+        if (props.products.length > 0) {
+            return props.products
+        }
+        return getArrayFromMap(store.products)
+    })
+
+    const mylabel = computed(() => {
+        if (attrs.label) {
+            return attrs.label
+        }
+        return props.multiple ? t('Select products') : t('Select a product')
+    })
 </script>
