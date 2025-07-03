@@ -6,7 +6,8 @@
         <DisplayValues :items="display_values()" width="90%" v-if="product_a"></DisplayValues>
         <v-card class="d-flex flex-row mx-auto pa-4" flat width="65%">
             <v-text-field density="compact" class="mr-4"  v-model.number="seconds_apart" :label="$t('Time interval in seconds allowed to compare the prices of both products')" :placeholder="$t('Time interval in seconds allowed to compare the prices of both products')" :rules="RulesInteger(4,true)" counter="4"/>
-            <v-btn @click="filter_data">{{ $t("Compare") }}</v-btn>
+            <v-btn class="mr-6" @click="filter_data">{{ $t("Select pairs") }}</v-btn>
+            <p>{{ $t(`${dbdata.length} pairs of quotes were compared. ${dbdata_filtered.length} pairs were selected.`) }}</p>
         </v-card>
 
         <v-tabs v-model="tab"  bg-color="secondary" dark>
@@ -18,12 +19,10 @@
         <v-window v-model="tab">
             <v-window-item key="price_ratio">     
                 <v-card class="pa-4 d-flex justify-center flex-column" outlined >
-                    <p>{{ $t(`Found ${dbdata_filtered.length} pairs of products`) }}</p>
                     <v-data-table-virtual density="compact" :headers="data_price_ratio_headers" :items="dbdata_filtered" :sort-by="[{key:'datetime',order:'desc'}]" class="elevation-1 ma-4" :loading="loading" :key="key" height="500" fixed-header     :items-per-page="10000" > 
                         <template #item.datetime="{item}">
                             {{localtime(item.datetime)}}
                         </template>  
-
                         <template #item.price_better="{item}">
                             <div class="text-right" v-html="currency_html(item.price_better, product_a.currency)"></div>
                         </template>  
@@ -31,7 +30,7 @@
                             <div class="text-right" v-html="currency_html(item.price_worse, product_b.currency)"></div>
                         </template>  
                         <template #item.price_ratio_percentage_from_start="{item}">
-                            <div class="text-right" v-html="percentage_html(item.price_ratio_percentage_from_start )"></div>
+                            <div v-if="dbdata_filtered.length>0" class="text-right" v-html="percentage_html((item.price_ratio-dbdata_filtered[0].price_ratio)/dbdata_filtered[0].price_ratio )"></div>
                         </template>
                         <template #item.price_ratio="{item}">
                             <div class="text-right" v-text="item.price_ratio"></div>
@@ -58,8 +57,8 @@
             <v-window-item key="pairs_comparation_by_quote">
                 <v-card outlined>
                     <v-row class="pa-8 mx-8">
-                        <v-text-field  v-model.number="quote_better_from"  :label="$t('Quote better from (current price by default)')" :placeholder="$t('Quote better from')" autofocus :rules="RulesFloat(15,true,6)" counter="15"/>
-                        <v-text-field class="ml-4" v-model.number="quote_better_to"  :label="$t('Quote better to (increases 0.1% by default)')" :placeholder="$t('Quote better to')" :rules="RulesFloat(15,true,6)" counter="15"/>
+                        <v-text-field  v-model.number="quote_better_from"  :label="$t('Quote better from (last pair by default minus 1%)')" :placeholder="$t('Quote better from')" autofocus :rules="RulesFloat(15,true,6)" counter="15"/>
+                        <v-text-field class="ml-4" v-model.number="quote_better_to"  :label="$t('Quote better to (increases 1% by default)')" :placeholder="$t('Quote better to')" :rules="RulesFloat(15,true,6)" counter="15"/>
                         <v-btn class="ml-4" vcolor="primary" @click="compare_by_quote()">{{ $t("Comparation by quote") }}</v-btn>
                     </v-row>
                     <v-data-table density="compact" :headers="data_price_ratio_headers" :items="comparation_by_quote" :sort-by="[{key:'datetime',order:'desc'}]" class="elevation-1 ma-4" :loading="loading" :key="key" height="500" fixed-header    :items-per-page="10000" > 
@@ -76,7 +75,7 @@
                             <div class="text-right" v-text="item.price_ratio"></div>
                         </template>
                         <template #item.price_ratio_percentage_from_start="{item}">
-                            <div class="text-right" v-html="percentage_html(item.price_ratio_percentage_from_start )"></div>
+                            <div v-if="dbdata_filtered.length>0" class="text-right" v-html="percentage_html((item.price_ratio-dbdata_filtered[0].price_ratio)/dbdata_filtered[0].price_ratio )"></div>
                         </template>
                         <template #bottom ></template>   
                     </v-data-table>
@@ -269,8 +268,6 @@
                 axios.get(`${this.useStore().apiroot}/products/pairs/?a=${this.pc.a}&b=${this.pc.b}`, this.myheaders())
                 .then((response) => {
                     this.dbdata=response.data.data
-                    this.product_a=response.data.product_a
-                    this.product_b=response.data.product_b
                     this.filter_data()
                 }, (error) => {
                     this.parseResponseError(error)
@@ -296,13 +293,16 @@
                 this.dbdata_filtered.forEach((o,index) => {
                     this.cspp.prices.push([this.dbdata[index].price_better,this.dbdata[index].price_worse])
                 })
-                this.quote_better_from=this.product_a.current_price
-                this.quote_better_to=this.my_round(this.quote_better_from*1.01,3)
+                this.quote_better_from=this.my_round(this.dbdata[this.dbdata.length-1].price_better*0.99,this.product_a.decimals)
+                this.quote_better_to=this.my_round(this.quote_better_from*1.01,3, this.product_a.decimals)
+                this.compare_by_quote()
                 this.loading=false
                 this.key=this.key+1
             }
         },
         created(){
+            this.product_a=this.useStore().products.get(this.pc.a)
+            this.product_b=this.useStore().products.get(this.pc.b)
             this.pairReport()
         }
     }
