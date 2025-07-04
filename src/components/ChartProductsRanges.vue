@@ -29,7 +29,7 @@
             chart_option(){
                 return {
                     legend: {
-                        data: this.sma_series_legend(),
+                        data: this.legends,
                         inactiveColor: '#777',
                     },
                     tooltip: {
@@ -67,75 +67,45 @@
             },
             series(){
                 var r=[]
-                // r.push({
-                //     type: 'line',
-                //     name: this.prdata.product.name,
-                //     data: this.prdata.ohcl,
-                // })
-
-
-
-                Object.keys(this.prdata.dataframe[0]).filter(key => !["date", "open", "high", "low", "products_id"].includes(key)).forEach(indicator=>r.push({
+                this.indicators.forEach(indicator=>r.push({
                         type:"line",
-                        name: indicator,
+                        name: (indicator=="close")? this.prdata.product.name : indicator,
                         data: this.prdata.dataframe.map(o=>[o.date,o[indicator]]), 
                         smooth:true,
                         showSymbol:false, 
                         lineStyle:{
                             width:3
                         }
-                        })
+                    })
                 )
-                // //SMAS SERIES
-                // this.prdata.smas.forEach(sma=> r.push({
-                //         type:"line",
-                //         name:sma.name,
-                //         data: sma.data, 
-                //         smooth:true,
-                //         showSymbol:false, 
-                //         lineStyle:{
-                //             width:3
-                //         }
-                //     })
-                // )
-                // RANGE LINES
-                // var dates=[] // TO SPEED UP
-                // for (var n = 0; n < this.prdata.ohcl.length; n++) {
-                //     if (n %10==0){
-                //         dates.push(this.prdata.ohcl[n][0])
-                //     }
-                // }
-                // var num=this.prdata.ohcl.length
-                // dates.push(this.prdata.ohcl[num-1][0])
 
-
-
-                // for (var i = 0; i < this.prdata.pr.length; i++) {
-                //     // Create line with same values
-                //     var dat=[]
-                //     var value=this.prdata.pr[i].value
-                //     dates.forEach(d => dat.push([d,value]))
-                //     r.push({
-                //         type:"line",
-                //         data: dat,
-                //         tooltip: {
-                //             show:false,
-                //         },
-                //         showSymbol:false, 
-                //         itemStyle: (this.prdata.pr[i].recomendation_invest==true) ? {color: 'rgba(255, 213, 213, 0.4)'} :  {color: 'rgba(217, 217, 217, 0.4)'},
-                //     })
-                // }
+                for (var i = 0; i < this.prdata.pr.length; i++) {
+                    // Create line with same values
+                    var dat=[]
+                    var value=this.prdata.pr[i].value
+                    this.prdata.dataframe.forEach(d => dat.push([d.date, value]))
+                    r.push({
+                        type:"line",
+                        data: dat,
+                        tooltip: {
+                            show:false,
+                        },
+                        showSymbol:false, 
+                        itemStyle: (this.prdata.pr[i].recomendation_invest==true) ? {color: 'rgba(255, 213, 213, 0.4)'} :  {color: 'rgba(217, 217, 217, 0.4)'},
+                    })
+                }
                 return r
             },
-            sma_series_legend(){
-                return Object.keys(this.prdata.dataframe[0]).filter(key => !["date", "open", "high", "low", "products_id"].includes(key))
-
-            }
         },
         mounted(){
+            this.indicators=Object.keys(this.prdata.dataframe[0]).filter(key => !["date", "open", "high", "low", "products_id"].includes(key))
+            this.legends=Object.keys(this.prdata.dataframe[0]).filter(key => !["date", "open", "high", "low", "products_id"].includes(key))
+            console.log(this.indicators)
+            this.legends[0]=this.prdata.product.name
+            console.log(this.legends)
             this.chart = echarts.init(this.$refs.chart);
             this.chart.setOption(this.chart_option())
-             this.loading=false
+            this.loading=false
         }
     }
 
