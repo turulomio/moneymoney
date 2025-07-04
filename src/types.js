@@ -20,4 +20,5 @@ export const RecomendationMethods = Object.freeze({
   None: 7,
   SMA_10: 8,
   SMA_5: 9,
+  HMA_10: 10,
 });
