@@ -67,54 +67,68 @@
             },
             series(){
                 var r=[]
-                r.push({
-                    type: 'line',
-                    name: this.prdata.product.name,
-                    data: this.prdata.ohcl,
-                })
-                //SMAS SERIES
-                this.prdata.smas.forEach(sma=> r.push({
+                // r.push({
+                //     type: 'line',
+                //     name: this.prdata.product.name,
+                //     data: this.prdata.ohcl,
+                // })
+
+
+
+                Object.keys(this.prdata.dataframe[0]).filter(key => !["date", "open", "high", "low", "products_id"].includes(key)).forEach(indicator=>r.push({
                         type:"line",
-                        name:sma.name,
-                        data: sma.data, 
+                        name: indicator,
+                        data: this.prdata.dataframe.map(o=>[o.date,o[indicator]]), 
                         smooth:true,
                         showSymbol:false, 
                         lineStyle:{
                             width:3
                         }
-                    })
+                        })
                 )
+                // //SMAS SERIES
+                // this.prdata.smas.forEach(sma=> r.push({
+                //         type:"line",
+                //         name:sma.name,
+                //         data: sma.data, 
+                //         smooth:true,
+                //         showSymbol:false, 
+                //         lineStyle:{
+                //             width:3
+                //         }
+                //     })
+                // )
                 // RANGE LINES
-                var dates=[] // TO SPEED UP
-                for (var n = 0; n < this.prdata.ohcl.length; n++) {
-                    if (n %10==0){
-                        dates.push(this.prdata.ohcl[n][0])
-                    }
-                }
-                var num=this.prdata.ohcl.length
-                dates.push(this.prdata.ohcl[num-1][0])
+                // var dates=[] // TO SPEED UP
+                // for (var n = 0; n < this.prdata.ohcl.length; n++) {
+                //     if (n %10==0){
+                //         dates.push(this.prdata.ohcl[n][0])
+                //     }
+                // }
+                // var num=this.prdata.ohcl.length
+                // dates.push(this.prdata.ohcl[num-1][0])
 
 
 
-                for (var i = 0; i < this.prdata.pr.length; i++) {
-                    // Create line with same values
-                    var dat=[]
-                    var value=this.prdata.pr[i].value
-                    dates.forEach(d => dat.push([d,value]))
-                    r.push({
-                        type:"line",
-                        data: dat,
-                        tooltip: {
-                            show:false,
-                        },
-                        showSymbol:false, 
-                        itemStyle: (this.prdata.pr[i].recomendation_invest==true) ? {color: 'rgba(255, 213, 213, 0.4)'} :  {color: 'rgba(217, 217, 217, 0.4)'},
-                    })
-                }
+                // for (var i = 0; i < this.prdata.pr.length; i++) {
+                //     // Create line with same values
+                //     var dat=[]
+                //     var value=this.prdata.pr[i].value
+                //     dates.forEach(d => dat.push([d,value]))
+                //     r.push({
+                //         type:"line",
+                //         data: dat,
+                //         tooltip: {
+                //             show:false,
+                //         },
+                //         showSymbol:false, 
+                //         itemStyle: (this.prdata.pr[i].recomendation_invest==true) ? {color: 'rgba(255, 213, 213, 0.4)'} :  {color: 'rgba(217, 217, 217, 0.4)'},
+                //     })
+                // }
                 return r
             },
             sma_series_legend(){
-                return this.arrayobjects_to_array(this.prdata.smas,"name")
+                return Object.keys(this.prdata.dataframe[0]).filter(key => !["date", "open", "high", "low", "products_id"].includes(key))
 
             }
         },

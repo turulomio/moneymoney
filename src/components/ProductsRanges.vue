@@ -23,6 +23,7 @@
                 </v-row>
             </v-form>
         </v-card>
+                    <p >{{ currentpricelabel }}</p>
 
         <v-card flat class="ma-4 pa-4">
             <v-tabs v-model="tab" grow bg-color="secondary">
@@ -32,7 +33,6 @@
             <v-window v-model="tab">
             <v-window-item key="0">
                 <v-card flat>
-                    <p >{{ currentpricelabel }}</p>
                     <v-data-table density="compact" :headers="tableHeaders" :items="tableData" class="elevation-1" :sort-by="['value']" :sort-type="['desc']" fixed-header height="360"     :items-per-page="10000" >
                         <template #item.value="{item}">
                             <div  @click="showLimits(item)" :class="item.current_in_range ? 'boldgreen' : ''">{{currency_string(item.value, prdata.product.currency) }}</div>
@@ -175,7 +175,6 @@
                     return
                 }
                 this.refreshTable()
-
             },
             addOrder(item){
                 this.order=this.empty_order()
@@ -189,9 +188,13 @@
                 var headers={...this.myheaders(),params:this.newpr}
                 axios.get(`${this.useStore().apiroot}/products/ranges/`, headers)
                 .then((response) => {
+                    console.log("Products ranges", response.data)
                     this.prdata=response.data
                     this.tableData=this.prdata.pr
-                    this.currentpricelabel= f(this.$t("Current price: [0]"), [this.currency_string(this.prdata.product.last, this.prdata.product.currency)])
+                    this.currentpricelabel= f(this.$t("Current price: [0]"), [this.currency_string(this.prdata.product.last, this.prdata.product.currency)]) + ". "
+                    Object.keys(this.prdata.dataframe[0]).filter(key => !["date", "open", "high", "low", "close", "products_id"].includes(key)).forEach(indicator=> {
+                        this.currentpricelabel+= ` ${indicator}: ${this.currency_string(this.prdata.dataframe[this.prdata.dataframe.length-1][indicator], this.prdata.product.currency)}`
+                    })
                     this.loading=false
                 }, (error) => {
                     this.parseResponseError(error)
@@ -199,8 +202,6 @@
             },
             showLimits(item){
                 let s=f(this.$t("Range center: [0]"), [this.currency_string(item.value, this.prdata.product.currency)])
-                
-                
                 alert(`${s}\n${item.limits}`)
             },
             on_OrdersCU_cruded(){
