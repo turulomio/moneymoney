@@ -17,8 +17,8 @@
                 <v-text-field class="mr-5" v-model.number="newpr.amount_to_invest"  :label="$t('Set the amount to invest')" :placeholder="$t('Set the amount to invest')" :rules="RulesFloat(10,true,6)" counter="10"/>
 
                 <v-text-field class="mr-5" v-model.number="newpr.additional_ranges"  :label="$t('Additional ranges to show')" :placeholder="$t('Additional ranges to show')" :rules="RulesInteger(2,true)" counter="2"/>
-                <v-checkbox v-model="newpr.totalized_operations" :label="$t('Show totalized investments operations?')" ></v-checkbox>
-                <v-btn class="mt-4" color="primary" @click="accept()" :disabled="!form_valid">{{ $t("Show ranges") }}</v-btn>
+                <v-checkbox class="mr-5" v-model="newpr.totalized_operations" :label="$t('Show totalized investments operations?')" ></v-checkbox>
+                <v-btn class="mt-2" color="primary" @click="accept()" :disabled="!form_valid">{{ $t("Show ranges") }}</v-btn>
 
                 </v-row>
             </v-form>
