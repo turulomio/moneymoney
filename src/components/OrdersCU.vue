@@ -11,11 +11,12 @@
                 <v-autocomplete data-test="OrderCU_Investments" :items="investments" :readonly="mode=='D'" v-model="new_order.investments" :label="$t('Select an investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <MyDateTimePicker data-test="OrderCU_Executed" v-model="new_order.executed" :readonly="mode=='D'" v-if="mode=='U'" :label="$t('Set order execution date and time')" :clearable="true" />
                 <v-text-field data-test="OrderCU_Shares" v-model.number="new_order.shares" :readonly="mode=='D'" :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesFloatGEZ(12,true,6)" counter="12"/>
-                <v-text-field data-test="OrderCU_Price" v-model.number="new_order.price" :readonly="mode=='D'" :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesFloatGEZ(12,true,product_decimals)" counter="12"/>
+                <v-text-field data-test="OrderCU_Price" v-model.number="new_order.price" :readonly="mode=='D'" :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesFloatGEZ(12,true, 6)" counter="12"/>
             </v-form>
             <div v-html="snackbar_message"></div>
             <v-card-actions>
                 <v-spacer></v-spacer>
+                <p >{{ f($t(`Amount to invest: [0]`), [this.order_currency])}}</p>
                 <v-btn data-test="OrderCU_Button" color="primary" v-if="snackbar_message==''" @click="accept()" >{{ button() }}</v-btn>
                 <v-btn data-test="OrderCU_ButtonCloseMessage" color="error" v-if="!snackbar_message==''" @click="on_message_close()">{{ $t("Close message")}}</v-btn>
             </v-card-actions>
@@ -37,8 +38,8 @@
     import MyMenuInline from './MyMenuInline.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import {empty_investment_operation} from '../empty_objects.js'
-    import { RulesSelection ,RulesFloatGEZ, parseNumber} from 'vuetify_rules'
-    import {parseResponseError, myheaders} from '@/functions.js'
+    import { RulesSelection ,RulesFloatGEZ, parseNumber, f} from 'vuetify_rules'
+    import {parseResponseError, myheaders,currency_string} from '@/functions.js'
     export default {
         components: {
             InvestmentsoperationsCU,
@@ -63,7 +64,6 @@
             return {
                 form_valid:false,
                 new_order:null,
-
                 items: [
                     {
                         subheader:this.$t('Options to set shares'),
@@ -98,9 +98,20 @@
             }
         },        
         computed:{
-            product_decimals: function(){
-                return 6
+            investment: function(){
+                if (this.new_order.investments==null) return null
+                var r=this.useStore().investments.get(this.new_order.investments)
+                return r
             },
+            product: function(){
+                if (this.investment==null) return null
+                var r=this.useStore().products.get(this.investment.products)
+                return r
+            },
+            order_currency: function(){
+                if (this.new_order.shares==null || this.new_order.price==null || this.product==null) return "---"
+                return this.currency_string(this.new_order.shares*this.new_order.price, this.product.currency)
+            }
         },
         methods: {
             useStore,
@@ -110,6 +121,8 @@
             empty_investment_operation,
             parseResponseError,
             myheaders,
+            currency_string,
+            f,
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating order")
