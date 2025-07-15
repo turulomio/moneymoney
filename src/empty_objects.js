@@ -108,6 +108,7 @@ export function empty_order(){
         price: 0,
         shares: 0,
         url: null,
+        current_price: null, // Needed to alert from stoploss
     }
 }
 

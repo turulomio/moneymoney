@@ -93,6 +93,7 @@
     import OrdersList from './OrdersList.vue'
     import OrdersCU from './OrdersCU.vue'
     import { parseResponseError, currency_string, myheaders, getArrayFromMap, getInvestmentsByProduct } from '@/functions.js'
+
     export default {
         components: {
             ChartProductsRanges,
@@ -168,7 +169,6 @@
             getInvestmentsByProduct,
             empty_order,
             empty_products_ranges,
-        
             accept(){
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
@@ -180,6 +180,8 @@
                 this.order=this.empty_order()
                 this.order.price=item.value
                 this.order.current_price=this.prdata.product.last
+                this.order.shares=Math.floor(this.newpr.amount_to_invest/this.order.price)
+                console.log(this.order)
                 this.key=this.key+1
                 this.dialog_ordercu=true
             },
