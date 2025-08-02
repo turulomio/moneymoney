@@ -13,7 +13,7 @@ import { defineConfig, devices } from '@playwright/test';
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  testDir: './tests',
+  testDir: './playwright',
   /* Run tests in files in parallel */
   fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -51,7 +51,7 @@ export default defineConfig({
     {
       name: 'e2e-tests',
       // Run all other tests
-      testMatch: /.*\.spec\.js/,
+      testMatch: /tests\/.*\.spec\.js/,
       // Make this project wait for the 'setup' project to complete
       dependencies: ['setup'],
     },
