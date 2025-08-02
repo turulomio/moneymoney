@@ -25,7 +25,6 @@ coverage
 .nyc_output
 cypress/downloads/
 cypress/screenshots/
-
 # Playwright
 /test-results/
 /playwright-report/

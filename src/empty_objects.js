@@ -108,6 +108,7 @@ export function empty_order(){
         price: 0,
         shares: 0,
         url: null,
+        current_price: null, // Needed to alert from stoploss
     }
 }
 
@@ -194,8 +195,6 @@ export function empty_ios(){
     }
 }
 
-
-
 export function empty_ios_simulation_operation(){
     return {
         datetime: new Date(),
@@ -210,13 +209,6 @@ export function empty_ios_simulation_operation(){
         id: -1
     }
 }
-
-
-
-
-
-
-
 
 
 export function empty_strategy_simulation(){
@@ -303,6 +295,34 @@ export function empty_strategy_products_range(){
         amount: 10000,
         recomendation_method: RecomendationMethods.All,
         only_first: false,
+    }
+}
+
+export function empty_strategy_generic(){
+    return {
+        strategy: {
+            dt_from: new Date().toISOString(),
+            dt_to: null,
+            name: "",
+            type: StrategiesTypes.Generic,
+            comment: "",
+        },
+        investments: [],
+    }
+}
+
+export function empty_strategy_pairs(){
+    return {
+        strategy: {
+            dt_from: new Date().toISOString(),
+            dt_to: null,
+            name: "",
+            type: StrategiesTypes.PairsInSameAccount,
+            comment: "",
+        },
+        worse_product: null,
+        better_product: null,
+        account: null,
     }
 }
 

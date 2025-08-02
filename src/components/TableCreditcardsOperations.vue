@@ -1,7 +1,6 @@
 <template>
     <div>        
         <v-data-table  ref="table" :show-select="showselected" v-model="selected" density="compact" :headers="table_headers()" :items="items" class="elevation-1" :sort-by="[{ key: 'datetime', order: 'asc' }]" fixed-header :height="$attrs.height"  :items-per-page="items_per_page" fixed-footer>
-
             <template #item.datetime="{item}">
                 <div >{{ localtime(item.datetime)}}</div>
             </template>          
