@@ -126,7 +126,7 @@
     import { localtime, f} from 'vuetify_rules'
     import { parseResponseError, localcurrency_html, myheaders } from '@/functions'
     import {sumBy} from "lodash-es"
-    import { StrategiesTypes } from '../types.js'
+
     export default {
         components:{
             MyMenuInline,
@@ -140,7 +140,6 @@
         },
         data(){ 
             return{
-                StrategiesTypes,
                 showActive:true,
                 strategies_headers: [
                     { title: this.$t('Name'), sortable: true, key: 'name'},
@@ -239,7 +238,6 @@
             empty_strategy_fast_operations,
             empty_strategy_generic,
             empty_strategy_products_range,
-            empty_strategy_pairs,
             sumBy,
             editItem (item) {
                 this.strategy=item
