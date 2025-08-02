@@ -12,7 +12,8 @@
     "coverage": "vitest --ui --coverage",
     "cypress": "DISABLE_COVERAGE=true  cypress open",
     "cypress_console": "DISABLE_COVERAGE=true  cypress run",
-    "cypress_coverage": "cypress run"
+    "cypress_coverage": "cypress run",
+    "playwright": "playwright test --ui"
   },
   "dependencies": {
     "@cypress/vue": "^6.0.2",
