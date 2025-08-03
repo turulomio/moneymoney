@@ -5,10 +5,12 @@ import pluginPlaywright from 'eslint-plugin-playwright';
 
 export default [
   {
+    ignores: ["dist/*", "test/**/*.js", "cypress/**", "coverage/**"],
+  },
+  {
     languageOptions: { 
       globals: {
         ...globals.browser,
-        // ...pluginCypress.environments.globals.globals,// LA tuve que localizar apelo, aun no funciona, esperar futras versiones
       }
     },
   },
@@ -17,6 +19,14 @@ export default [
   {
     files: ['playwright/tests/*.spec.js'],
     ...pluginPlaywright.configs['flat/recommended'],
+  },
+  {
+    files: ['playwright.config.js', 'vite.config.js', 'eslint.config.mjs', 'src/scripts/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node, //Allow process variable
+      }
+    }
   },
   {
     rules: {
