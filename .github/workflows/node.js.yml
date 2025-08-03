@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "463-test-action-fails" ]
+    branches: [ "508-add-coverage-to-playwright" ]
   pull_request:
     branches: [ "main" ]
 
@@ -72,8 +72,17 @@ jobs:
       run: |
         npm install
         npm run build --if-present
+
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
     - name: Moneymoney e2e test
       run: |
         npm run dev &
         sleep 10
-        npm run cypress_console
+        npm run playwright_console
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
