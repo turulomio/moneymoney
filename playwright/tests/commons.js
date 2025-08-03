@@ -54,3 +54,14 @@ export async function intercept_post(page, url, field){
         return interceptedItemId    
     }) 
 }
+
+
+export async function account_add_from_AccountsList(page){
+  await page.getByTestId('MyMenuInline_Button').click();
+  await page.getByTestId('MyMenuInline_Header0_Item0').click();
+  v_text_input_settext(page, "AccountsCU_Name", "Permanent Account")
+  v_autocomplete_selection(page, "AccountsCU_Bank")
+  await page.getByTestId('AccountsCU_Button').click()
+  await page.getByTestId('AccountsCU_Button').isHidden()
+  intercept_post(page, "/api/accounts/", "id")
+}

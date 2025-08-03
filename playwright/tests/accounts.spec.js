@@ -2,6 +2,7 @@
 // import { test, expect } from '@playwright/test';
 // import { login } from '../utils/auth.js'; // Adjust path as needed
 import { test, expect } from './fixtures.js'; // Import from your fixtures file
+import {account_add_from_AccountsList} from "./commons"
 
 // test.describe('Dashboard Tests (requires login)', () => {
 //   test.beforeEach(async ({ page }) => {
@@ -19,6 +20,9 @@ import { test, expect } from './fixtures.js'; // Import from your fixtures file
 
     await page.getByTestId('LateralIcon').click();
     await page.getByTestId('LateralAccounts').click();
+    await account_add_from_AccountsList(page)
+
+    //)
 
 
 
