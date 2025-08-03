@@ -1,5 +1,5 @@
 // /full/path/to/playwright/tests/fixtures.js
-import { test as baseTest, expect } from '@playwright/test';
+import { test as baseTest, expect } from 'playwright-test-coverage';
 
 // Define a new test type that includes our authenticated page fixture
 export const test = baseTest.extend({

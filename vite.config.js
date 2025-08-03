@@ -25,7 +25,7 @@ const plugins = [
   plugins.push(
     istanbul({
       include: 'src/**/*', // specify the files you want to instrument
-      exclude: ['node_modules', 'test/*', 'cypress'],
+      exclude: ['node_modules', 'test/*', 'cypress', 'playwrigth/e2e'],
       extension: ['.js', '.vue'], // include your file extensions
       playwright: true,
     }))
@@ -77,6 +77,6 @@ export default defineConfig({
   //   }
   // },
   build: {
-    sourcemap: "inline", // Options: true, 'inline', 'hidden'
+    sourcemap: "true", // Options: true, 'inline', 'hidden'
   },
 })
