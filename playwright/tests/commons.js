@@ -1,5 +1,5 @@
 
-import { expect } from '@playwright/test';
+import { expect } from './fixtures.js';
 
 
 export async function v_autocomplete_selection(page, name, item_text){

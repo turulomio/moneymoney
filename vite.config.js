@@ -7,7 +7,7 @@ import vuetify from 'vite-plugin-vuetify'
 // Utilities
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
-import eslintPlugin from 'vite-plugin-eslint';
+import eslintPlugin from 'vite-plugin-eslint'
 import istanbul from 'vite-plugin-istanbul';
 // import VueDevTools from 'vite-plugin-vue-devtools'
 
@@ -18,19 +18,14 @@ const plugins = [
     autoImport: true,
   }),
   eslintPlugin(),
-];
 
-// Condicionalmente agrega el plugin istanbul
-// if (process.env.DISABLE_COVERAGE !== 'true') {
-  plugins.push(
-    istanbul({
-      include: 'src/**/*', // specify the files you want to instrument
-      exclude: ['node_modules', 'test/*', 'cypress', 'playwrigth/e2e'],
-      extension: ['.js', '.vue'], // include your file extensions
-      playwright: true,
-    }))
-  // );
-
+  istanbul({
+        include: 'src/**/*.{js,vue}',
+        exclude: ['node_modules', 'src/main.ts'],
+        extension: ['.js', '.vue'],
+        forceBuild: true,
+      }),
+]
 
 export default defineConfig({
   plugins,
@@ -59,23 +54,24 @@ export default defineConfig({
     host: "127.0.0.1",
     port: 8006,
   },  
-  // test: {
-  //   alias: {
-  //     '@/': new URL('./src/', import.meta.url).pathname, 
-  //   },
-  //   include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
-  //   exclude: ['node_modules', 'dist', '**/examples/**', 'cypress','test'],
-  //   coverage: {
-  //     reporter: ['html','text'],
-  //     // Include specific files or patterns
-  //     include: ['src/functions.js','src/types.js'],
-
-  //     // Exclude specific files or patterns
-  //     exclude: [
-  //       '**/*.spec.js',
-  //     ],
-  //   }
-  // },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    alias: {
+      '@/': new URL('./src/', import.meta.url).pathname,
+    },
+    include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
+    exclude: ['node_modules', 'dist', '**/examples/**', 'cypress', 'test'],
+    coverage: {
+      // provider: 'istanbul',
+      reporter: ['html', 'text', 'lcov'],
+      include: ['src/**/*.{js,vue}'],
+      exclude: [
+        'src/scripts/**',
+        '**/*.spec.js'
+      ]
+    }
+  },
   build: {
     sourcemap: "true", // Options: true, 'inline', 'hidden'
   },

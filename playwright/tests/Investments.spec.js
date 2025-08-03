@@ -1,7 +1,7 @@
 // /full/path/to/playwright/tests/dashboard.spec.js
 // import { test, expect } from '@playwright/test';
 // import { login } from '../utils/auth.js'; // Adjust path as needed
-import { test, expect } from './fixtures.js'; // Import from your fixtures file
+import { test } from './fixtures.js'; // Import from your fixtures file
 
 // test.describe('Dashboard Tests (requires login)', () => {
 //   test.beforeEach(async ({ page }) => {
