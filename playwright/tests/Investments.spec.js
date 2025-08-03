@@ -1,45 +1,66 @@
-// /full/path/to/playwright/tests/dashboard.spec.js
-// import { test, expect } from '@playwright/test';
-// import { login } from '../utils/auth.js'; // Adjust path as needed
-import { test } from './fixtures.js'; // Import from your fixtures file
+import { test, expect } from './fixtures.js'; // Import from your fixtures file
+import {
+  investment_add_from_InvestmentsList,
+  investmentoperation_add_from_InvestmentsView,
+  quote_add_from_InvestmentsList
+} from "./commons"
 
-// test.describe('Dashboard Tests (requires login)', () => {
-//   test.beforeEach(async ({ page }) => {
-//     // Perform login before each test in this describe block
-//     await login(page, 'testuser', 'secretpassword');
-//   });
 
-  // No explicit beforeEach for login is needed here if the fixture handles it.
-  // The 'page' object provided to the test function will already be logged in.
-  // If you still need a beforeEach for other reasons specific to this describe block,
-  // it will run *after* the fixture setup.
-  test('Investments list', async ({ page }) => {
-    // User is already logged in by beforeEach
-    // Example: Check for a welcome message specific to the logged-in user
+test('Investments list', async ({ page }) => {
+  await page.getByTestId('LateralIcon').click();
+  await page.getByTestId('LateralInvestments').click();
 
-    await page.getByTestId('LateralIcon').click();
-    await page.getByTestId('LateralInvestments').click();
+  const investments_id=await investment_add_from_InvestmentsList(page)
+  await quote_add_from_InvestmentsList(page, investments_id)
+  await expect(page.getByTestId(`Investments_Table_Row${investments_id}`)).toBeVisible();
+  await page.getByTestId(`Investments_Table_Row${investments_id}`).click()
+  await investmentoperation_add_from_InvestmentsView(page)
 
 
 
 
-    // login_test_User(cy)
-    // //Open lateral menu
-    // cy.getDataTest('LateralIcon').click()
-    // cy.getDataTest('LateralAccounts').click()
+  // login_test_User(cy)
+
+  // // Add investments
+  // add_investmentoperation_from_Home(cy)
+
+  // cy.wait(5000)
+
+  // // Add dividend
+  // add_dividend_from_InvestmentView(cy)
+
+  // // See investments chart
+  // component_pointable("InvestmentsView_MyMenuInline_Button")
+  // cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
+  // cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item0').click()
+  // cy.getDataTest('ChartInvestments_ButtonClose').click()
+
+  // // Change investment active status twice
+  // cy.wait(5000)
+  // component_pointable("InvestmentsView_MyMenuInline_Button")
+  // cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
+  // cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item1').click()
 
 
-    // // Add account
-    // add_account_from_AccountsList(cy)
+  // cy.wait(5000)
+  // component_pointable("InvestmentsView_MyMenuInline_Button")
+  // cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
+  // cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item1').click()
+
+  // // Evolution chart
+  // cy.wait(5000)
+  // component_pointable("InvestmentsView_MyMenuInline_Button")
+  // cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
+  // cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item2').click()
+  // cy.getDataTest('ChartInvestmentsoperationsEvolution_ButtonClose').should("be.visible").click()
+  // cy.getDataTest('InvestmentsView_MyMenuInline_Button').should('have.css', 'cursor', 'pointer'); // Is pointable o clickable
 
 
-    // // Add search accountsoperations dialog
-    // cy.getDataTest('MyMenuInline_Button').last().click()
-    // cy.getDataTest('MyMenuInline_Header1_Item0').click()
-    // cy.getDataTest('AccountsoperationsSearch_Search').type("comment")
-    // cy.getDataTest('AccountsoperationsSearch_Button').click()
-    
+  // // Open show evolution chart
+  // component_pointable("InvestmentsView_MyMenuInline_Button")
+  // cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
+  // cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item3').click()
 
 
-  })
+})
 

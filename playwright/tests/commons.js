@@ -11,7 +11,7 @@ export async function v_autocomplete_selection(page, name, item_text){
   // Wait for the dropdown option to appear and click it.
   // Vuetify often renders the options overlay detached from the input.
   // We locate the item by its title text. Using a RegExp ensures an exact match.
-  await page.locator('.v-list-item-title', { hasText: new RegExp(`^${item_text}$`) }).click();
+  await page.locator('.v-list-item-title').filter( { hasText: item_text }).click();
 }
 
 
@@ -60,16 +60,43 @@ export async function account_add_from_AccountsList(page){
   await expect(page.getByTestId('AccountsCU_Button')).toBeHidden();
 }
 
-export async function investment_add_from_InvestmentsList(page){InvestmentsList_MyMenuInline
+export async function investment_add_from_InvestmentsList(page){
   // This is a placeholder implementation based on the function name.
   // You may need to adjust the selectors and values.
   await mymenuinline_selection(page, "InvestmentsList_MyMenuInline", 0, 0)
   const idPromise = promise_to_get_id_from_post_response(page, "/api/investments/");
   await v_text_input_settext(page, "InvestmentsCU_Name", "New Test Investment");
-  await v_autocomplete_selection(page, "InvestmentsCU_Type", "Stocks");
+  await v_autocomplete_selection(page, "InvestmentsCU_Accounts", "Cash");
+  await v_autocomplete_selection(page, "InvestmentsCU_Products", "LYXOR IBEX DOBLE APALANCADO (Madrid Stock Exchange)");
   await page.getByTestId('InvestmentsCU_Button').click();
+  return await idPromise
+}
+export async function quote_add_from_InvestmentsList(page, investment_id){
+  await expect(page.getByTestId(`Investments_Table_ButtonAddQuote${investment_id}`)).toBeVisible();
+  await page.getByTestId(`Investments_Table_ButtonAddQuote${investment_id}`).click()
+  await v_text_input_settext(page, "QuotesCU_Quote", "10");
+  await page.getByTestId('QuotesCU_Button').click();
+  await expect(page.getByTestId('QuotesCU_Button')).toBeHidden()
 }
 
+export async function investmentoperation_add_from_InvestmentsView(page){
+  await expect(page.getByTestId('InvestmentsView_ButtonClose')).toBeVisible({timeout: 15000});
+  await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 2, 0)
+  await v_text_input_settext(page, "InvestmentsoperationsCU_Shares", "100")
+  await v_text_input_settext(page, "InvestmentsoperationsCU_Price", "9");
+  const idPromise = promise_to_get_id_from_post_response(page, "/api/investmentsoperations/");
+  await page.getByTestId('InvestmentsoperationsCU_Button').click();
+  const id= await idPromise
+  await expect(page.getByTestId('InvestmentsoperationsCU_Button')).toBeHidden()
+  return id
+}
+
+export async function dividend_add_from_InvestmentsView(page){
+  
+  await v_autocomplete_selection(page, "InvestmentsCU_Type", "Stocks");
+  await page.getByTestId('InvestmentsCU_Button').click();
+  return await idPromise
+}
 
 
 

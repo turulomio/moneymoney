@@ -148,7 +148,7 @@ export function add_investmentoperation_from_InvestmentView(
     price="9"
 ){
 
-    cy.getDataTest('InvestmentsView_MyMenuInline_Button').should("be.visible")
+    cy.getDataTest('InvestmentsView_MyMenuInline').should("be.visible")
     cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
     cy.getDataTest('InvestmentsView_MyMenuInline_Header2_Item0').click()
     cy.getDataTest("InvestmentsoperationsCU_Shares").type("{backspace}").type(shares)
