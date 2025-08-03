@@ -121,6 +121,7 @@
     import StrategyProductsRangeCU from './StrategyProductsRangeCU.vue'
     import StrategyPairsCU from './StrategyPairsCU.vue'
     import ProductsRanges from './ProductsRanges.vue'
+    import { StrategiesTypes } from '@/types'
     import TableAccountOperations from './TableAccountOperations.vue'
     import {empty_products_ranges, empty_strategy_fast_operations, empty_strategy_products_range, empty_strategy_generic, empty_strategy_pairs} from '../empty_objects.js'
     import { localtime, f} from 'vuetify_rules'
@@ -237,6 +238,7 @@
             empty_products_ranges,
             empty_strategy_fast_operations,
             empty_strategy_generic,
+            empty_strategy_pairs,
             empty_strategy_products_range,
             sumBy,
             editItem (item) {
