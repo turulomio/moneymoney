@@ -54,24 +54,24 @@ export default defineConfig({
     host: "127.0.0.1",
     port: 8006,
   },  
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    alias: {
-      '@/': new URL('./src/', import.meta.url).pathname,
-    },
-    include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
-    exclude: ['node_modules', 'dist', '**/examples/**', 'cypress', 'test'],
-    coverage: {
-      // provider: 'istanbul',
-      reporter: ['html', 'text', 'lcov'],
-      include: ['src/**/*.{js,vue}'],
-      exclude: [
-        'src/scripts/**',
-        '**/*.spec.js'
-      ]
-    }
-  },
+  // test: {
+  //   globals: true,
+  //   environment: 'jsdom',
+  //   alias: {
+  //     '@/': new URL('./src/', import.meta.url).pathname,
+  //   },
+  //   include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
+  //   exclude: ['node_modules', 'dist', '**/examples/**', 'cypress', 'test'],
+  //   coverage: {
+  //     // provider: 'istanbul',
+  //     reporter: ['html', 'text', 'lcov'],
+  //     include: ['src/**/*.{js,vue}'],
+  //     exclude: [
+  //       'src/scripts/**',
+  //       '**/*.spec.js'
+  //     ]
+  //   }
+  // },
   build: {
     sourcemap: "true", // Options: true, 'inline', 'hidden'
   },
