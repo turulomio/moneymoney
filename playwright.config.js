@@ -47,17 +47,17 @@ export default defineConfig({
       use: { ...devices['Desktop Firefox'] },
     },
 
-    {
-      name: 'setup',
-      // Run only the setup file(s) in this project
-      testMatch: /.*setup\.js/,
-    },
+    // {
+    //   name: 'setup',
+    //   // Run only the setup file(s) in this project
+    //   testMatch: /.*setup\.js/,
+    // },
     {
       name: 'e2e-tests',
       // Run all other tests
       testMatch: /tests\/.*\.spec\.js/,
       // Make this project wait for the 'setup' project to complete
-      dependencies: ['setup'],
+      // dependencies: ['setup'],
     },
   ],
     // {
