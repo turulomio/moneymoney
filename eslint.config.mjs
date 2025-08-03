@@ -1,7 +1,7 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
 import pluginVue from "eslint-plugin-vue";
-import pluginCypress from "eslint-plugin-cypress";
+// import pluginCypress from "eslint-plugin-cypress";
 
 
 // console.log("GLOBALS", globals.browser)
@@ -14,7 +14,7 @@ export default [
     languageOptions: { 
       globals: {
         ...globals.browser,
-        ...pluginCypress.environments.globals.globals,// LA tuve que localizar apelo, aun no funciona, esperar futras versiones
+        // ...pluginCypress.environments.globals.globals,// LA tuve que localizar apelo, aun no funciona, esperar futras versiones
       }
     },
   },

@@ -3,6 +3,23 @@ import { test as baseTest, expect } from '@playwright/test';
 
 // Define a new test type that includes our authenticated page fixture
 export const test = baseTest.extend({
+
+
+  coverage: [async ({ page }, use) => {
+    // START of the test
+    console.log('Starting JavaScript coverage collection...');
+    await page.coverage.startJSCoverage();
+
+    // Call 'use()' to run the test body
+    await use();
+
+    // END of the test
+    console.log('Stopping JavaScript coverage collection and saving data...');
+    const jsCoverage = await page.coverage.stopJSCoverage();
+    await saveCoverage(jsCoverage);
+  }, { auto: true }], // The 'auto: true' option is key!
+
+
   // 'page' fixture will be overridden here for tests that use this 'test' object
   page: async ({ page }, use) => {
     // Perform login
@@ -28,5 +45,21 @@ export const test = baseTest.extend({
     // await expect(page).toHaveURL(/.*\/login/);
   },
 });
+
+import { promises as fs } from 'fs';
+import path from 'path';
+
+// This is the same function from the previous answer
+export async function saveCoverage(coverageData) {
+  const coverageDir = 'coverage/e2e';
+  const filePath = path.join(coverageDir, `coverage-${Date.now()}.json`);
+  
+  await fs.mkdir(coverageDir, { recursive: true });
+  await fs.writeFile(filePath, JSON.stringify(coverageData));
+  console.log(`Coverage data saved to: ${filePath}`);
+}
+
+
+
 
 export { expect }; // Re-export expect for convenience

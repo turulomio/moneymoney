@@ -13,7 +13,8 @@
     "cypress": "DISABLE_COVERAGE=true  cypress open",
     "cypress_console": "DISABLE_COVERAGE=true  cypress run",
     "cypress_coverage": "cypress run",
-    "playwright": "playwright test --ui"
+    "playwright": "playwright test --ui",
+    "playwright_coverage": "nyc report --temp-dir=coverage/e2e --report-dir=coverage/report --reporter=html --reporter=text"
   },
   "dependencies": {
     "@cypress/vue": "^6.0.2",

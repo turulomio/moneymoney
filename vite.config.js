@@ -21,15 +21,16 @@ const plugins = [
 ];
 
 // Condicionalmente agrega el plugin istanbul
-if (process.env.DISABLE_COVERAGE !== 'true') {
+// if (process.env.DISABLE_COVERAGE !== 'true') {
   plugins.push(
     istanbul({
       include: 'src/*', // specify the files you want to instrument
-      exclude: ['node_modules', 'test/*'],
+      exclude: ['node_modules', 'test/*', 'cypress'],
       extension: ['.js', '.vue'], // include your file extensions
-    })
-  );
-}
+      playwright: true,
+    }))
+  // );
+
 
 export default defineConfig({
   plugins,
