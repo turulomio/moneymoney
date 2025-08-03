@@ -24,7 +24,7 @@ const plugins = [
 // if (process.env.DISABLE_COVERAGE !== 'true') {
   plugins.push(
     istanbul({
-      include: 'src/*', // specify the files you want to instrument
+      include: 'src/**/*', // specify the files you want to instrument
       exclude: ['node_modules', 'test/*', 'cypress'],
       extension: ['.js', '.vue'], // include your file extensions
       playwright: true,
@@ -59,23 +59,23 @@ export default defineConfig({
     host: "127.0.0.1",
     port: 8006,
   },  
-  test: {
-    alias: {
-      '@/': new URL('./src/', import.meta.url).pathname, 
-    },
-    include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
-    exclude: ['node_modules', 'dist', '**/examples/**'],
-    coverage: {
-      reporter: ['html','text'],
-      // Include specific files or patterns
-      include: ['src/functions.js','src/types.js'],
+  // test: {
+  //   alias: {
+  //     '@/': new URL('./src/', import.meta.url).pathname, 
+  //   },
+  //   include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
+  //   exclude: ['node_modules', 'dist', '**/examples/**', 'cypress','test'],
+  //   coverage: {
+  //     reporter: ['html','text'],
+  //     // Include specific files or patterns
+  //     include: ['src/functions.js','src/types.js'],
 
-      // Exclude specific files or patterns
-      exclude: [
-        '**/*.spec.js',
-      ],
-    }
-  },
+  //     // Exclude specific files or patterns
+  //     exclude: [
+  //       '**/*.spec.js',
+  //     ],
+  //   }
+  // },
   build: {
     sourcemap: "inline", // Options: true, 'inline', 'hidden'
   },

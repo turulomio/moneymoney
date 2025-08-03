@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:coverage": "VITE_COVERAGE=true vite",
     "build": "node --max-old-space-size=8192 node_modules/.bin/vite build",
     "preview": "vite preview",
     "release": "node src/scripts/release.js",
@@ -14,7 +15,9 @@
     "cypress_console": "DISABLE_COVERAGE=true  cypress run",
     "cypress_coverage": "cypress run",
     "playwright": "playwright test --ui",
-    "playwright_coverage": "nyc report --temp-dir=coverage/e2e --report-dir=coverage/report --reporter=html --reporter=text"
+    "playwright_coverage": "c8 --reports-dir coverage/report --reporter=html --reporter=text --temp-directory **coverage/e2e** report",
+
+    "test:e2e-coverage": "nyc --reporter=lcov playwright test"
   },
   "dependencies": {
     "@cypress/vue": "^6.0.2",
@@ -54,6 +57,8 @@
     "eslint-plugin-vue": "^10.4.0",
     "globals": "^16.3.0",
     "npm-check-updates": "^18.0.2",
+    "nyc": "^17.1.0",
+    "playwright-test-coverage": "^1.2.12",
     "vite": "^7.0.6",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-istanbul": "^7.1.0",
