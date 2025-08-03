@@ -93,7 +93,7 @@
         <!-- EVOLUTION CHART TIME SERIES -->
         <v-dialog v-model="dialog_evolution_chart_timeseries">
             <v-card class="pa-4">
-                <ChartInvestmentsoperationsEvolutionTimeseries :investment="investment" :key="key" ></ChartInvestmentsoperationsEvolutionTimeseries>
+                <ChartInvestmentsoperationsEvolutionTimeseries :investment="investment" :key="key" @close="on_ChartInvestmentsoperationsEvolutionTimeseries_close" />
             </v-card>
         </v-dialog>
 
@@ -231,8 +231,8 @@
                                     axios.put(this.investment.url, this.investment,  this.myheaders())
                                     .then((response) => {
                                         this.useStore().investments.set(response.data.url, response.data)
-                                        this.update_all()
                                         this.$emit("cruded")
+                                        this.update_all()
                                     }, (error) => {
                                         this.parseResponseError(error)
                                     })
@@ -566,6 +566,9 @@
             },
             on_ChartInvestmentsoperationsEvolution_close(){
                 this.dialog_evolution_chart=false
+            },
+            on_ChartInvestmentsoperationsEvolutionTimeseries_close(){
+                this.dialog_evolution_chart_timeseries=false
             },
             on_ChartInvestments_close(){
                 this.dialog_investment_chart=false

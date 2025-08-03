@@ -1,7 +1,7 @@
 <template>
     <div data-test="AccountsView">
         <h1>
-            {{ f($t("Account details of '[0]'"), [account.localname]) }}<MyMenuInline :items="items" />  
+            {{ f($t("Account details of '[0]'"), [account.localname]) }}<MyMenuInline data-test="AccountsView_MyMenuInline" :items="items" />  
             <v-btn data-test="AccountsView_ButtonClose" small style="color:darkgrey" icon="mdi-close" class="elevation-0" @click="$emit('close')"/>
         </h1>
         <DisplayValues :items="displayvalues"></DisplayValues>
