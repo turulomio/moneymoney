@@ -2,7 +2,9 @@ import { test, expect } from './fixtures.js'; // Import from your fixtures file
 import {
   investment_add_from_InvestmentsList,
   investmentoperation_add_from_InvestmentsView,
-  quote_add_from_InvestmentsList
+  quote_add_from_InvestmentsList,
+  dividend_add_from_InvestmentView,
+  mymenuinline_selection,
 } from "./commons"
 
 
@@ -15,51 +17,36 @@ test('Investments list', async ({ page }) => {
   await expect(page.getByTestId(`Investments_Table_Row${investments_id}`)).toBeVisible();
   await page.getByTestId(`Investments_Table_Row${investments_id}`).click()
   await investmentoperation_add_from_InvestmentsView(page)
+  await dividend_add_from_InvestmentView(page)
 
-
-
-
-  // login_test_User(cy)
-
-  // // Add investments
-  // add_investmentoperation_from_Home(cy)
-
-  // cy.wait(5000)
-
-  // // Add dividend
-  // add_dividend_from_InvestmentView(cy)
-
-  // // See investments chart
-  // component_pointable("InvestmentsView_MyMenuInline_Button")
-  // cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
-  // cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item0').click()
+  // See investments chart  BUG DJANGO_MONEYMONEY
+  // await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 0)
+  // await expect(page.getByTestId('ChartInvestments_ButtonClose')).toBeVisible();
   // cy.getDataTest('ChartInvestments_ButtonClose').click()
 
-  // // Change investment active status twice
-  // cy.wait(5000)
-  // component_pointable("InvestmentsView_MyMenuInline_Button")
-  // cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
-  // cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item1').click()
+  // Change investment active status twice
+  await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 1)
+  await expect(page.getByText('Active: false')).toBeVisible();
+  await expect(page.getByTestId('InvestmentsView_MyMenuInline_Header0_Item1')).toBeHidden();
+
+  await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 1)
+  await expect(page.getByText('Active: true')).toBeVisible();
+  await expect(page.getByTestId('InvestmentsView_MyMenuInline_Header0_Item1')).toBeHidden();
+
+  // Evolution chart
+  await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 2)
+  await expect(page.getByTestId('ChartInvestmentsoperationsEvolution_ButtonClose')).toBeVisible();
+  await page.getByTestId('ChartInvestmentsoperationsEvolution_ButtonClose').click()
+  await expect(page.getByTestId('ChartInvestmentsoperationsEvolution_ButtonClose')).toBeHidden();
 
 
-  // cy.wait(5000)
-  // component_pointable("InvestmentsView_MyMenuInline_Button")
-  // cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
-  // cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item1').click()
-
-  // // Evolution chart
-  // cy.wait(5000)
-  // component_pointable("InvestmentsView_MyMenuInline_Button")
-  // cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
-  // cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item2').click()
-  // cy.getDataTest('ChartInvestmentsoperationsEvolution_ButtonClose').should("be.visible").click()
-  // cy.getDataTest('InvestmentsView_MyMenuInline_Button').should('have.css', 'cursor', 'pointer'); // Is pointable o clickable
+  // Evolution chart with time series
+  await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 3)
+  await expect(page.getByTestId('ChartInvestmentsoperationsEvolutionTimeseries_ButtonClose')).toBeVisible();
+  await page.getByTestId('ChartInvestmentsoperationsEvolutionTimeseries_ButtonClose').click()
+  await expect(page.getByTestId('ChartInvestmentsoperationsEvolutionTimeseries_ButtonClose')).toBeHidden();
 
 
-  // // Open show evolution chart
-  // component_pointable("InvestmentsView_MyMenuInline_Button")
-  // cy.getDataTest('InvestmentsView_MyMenuInline_Button').click()
-  // cy.getDataTest('InvestmentsView_MyMenuInline_Header0_Item3').click()
 
 
 })

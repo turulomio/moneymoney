@@ -91,6 +91,26 @@ export async function investmentoperation_add_from_InvestmentsView(page){
   return id
 }
 
+
+
+export async function dividend_add_from_InvestmentView(
+    page,
+    gross="10",
+    net="9",
+    taxes="1"
+){
+    await expect(page.getByTestId('InvestmentsView_ButtonClose')).toBeVisible({timeout: 15000});
+    await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 3, 0)
+    await v_autocomplete_selection(page, "DividendsCU_Concepts", "Dividends. Sale of rights");
+    await v_text_input_settext(page, "DividendsCU_Gross", gross);
+    await v_text_input_settext(page, "DividendsCU_Net", net);
+    await v_text_input_settext(page, "DividendsCU_Taxes", taxes);
+    await page.getByTestId('DividendsCU_Button').click();
+    await expect(page.getByTestId('DividendsCU_Button')).toBeHidden()
+
+}
+
+
 export async function dividend_add_from_InvestmentsView(page){
   
   await v_autocomplete_selection(page, "InvestmentsCU_Type", "Stocks");
