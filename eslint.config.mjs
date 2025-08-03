@@ -1,13 +1,7 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
 import pluginVue from "eslint-plugin-vue";
-// import pluginCypress from "eslint-plugin-cypress";
-
-
-// console.log("GLOBALS", globals.browser)
-// console.log("PLUGINCYPRESS", pluginCypress)
-// console.log("GLOBALSCYPRESS", pluginCypress.environments.globals.globals
-// )
+import pluginPlaywright from 'eslint-plugin-playwright';
 
 export default [
   {
@@ -20,6 +14,10 @@ export default [
   },
   pluginJs.configs.recommended,
   ...pluginVue.configs["flat/essential"],
+  {
+    files: ['playwright/tests/*.spec.js'],
+    ...pluginPlaywright.configs['flat/recommended'],
+  },
   {
     rules: {
       "vue/multi-word-component-names": "off",

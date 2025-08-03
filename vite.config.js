@@ -1,5 +1,3 @@
-/// <reference types="vitest" />
-
 // Plugins
 import vue from '@vitejs/plugin-vue'
 import vuetify from 'vite-plugin-vuetify'
@@ -9,7 +7,6 @@ import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 import eslintPlugin from 'vite-plugin-eslint'
 import istanbul from 'vite-plugin-istanbul';
-// import VueDevTools from 'vite-plugin-vue-devtools'
 
 const plugins = [
   vue(),
@@ -18,7 +15,6 @@ const plugins = [
     autoImport: true,
   }),
   eslintPlugin(),
-
   istanbul({
         include: 'src/**/*.{js,vue}',
         exclude: ['node_modules', 'src/main.ts'],
@@ -54,7 +50,7 @@ export default defineConfig({
     host: "127.0.0.1",
     port: 8006,
   },  
-  // test: {
+  // test: { // To use with vitest but better with nyc
   //   globals: true,
   //   environment: 'jsdom',
   //   alias: {
