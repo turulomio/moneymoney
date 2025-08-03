@@ -23,7 +23,7 @@ export async function v_text_input_settext(page, name, text){
 }
   
 // This helper waits for a POST request to a given URL and returns the 'id' from the JSON response.
-async function get_id_from_post_response(page, url) {
+export async function promise_to_get_id_from_post_response(page, url) {
   const responsePromise = page.waitForResponse(
     response => response.url().includes(url) && response.request().method() === 'POST'
   );
@@ -39,7 +39,7 @@ export async function account_add_from_AccountsList(page){
   await page.getByTestId('MyMenuInline_Header0_Item0').click();
 
   // Set up the promise to wait for the response *before* the action.
-  const idPromise = get_id_from_post_response(page, "/api/accounts/");
+  const idPromise = promise_to_get_id_from_post_response(page, "/api/accounts/");
 
   await v_text_input_settext(page, "AccountsCU_Name", "Permanent Account");
   await v_autocomplete_selection(page, "AccountsCU_Bank", "Personal Management");
@@ -54,4 +54,27 @@ export async function account_add_from_AccountsList(page){
 
   // Wait for the dialog to close.
   await expect(page.getByTestId('AccountsCU_Button')).toBeHidden();
+}
+
+export async function investment_add_from_InvestmentsList(page){
+  // This is a placeholder implementation based on the function name.
+  // You may need to adjust the selectors and values.
+  await page.getByTestId('MyMenuInline_Button').first().click();
+  await page.getByTestId('MyMenuInline_Header0_Item0').click();
+
+  const idPromise = promise_to_get_id_from_post_response(page, "/api/investments/");
+  await v_text_input_settext(page, "InvestmentsCU_Name", "New Test Investment");
+  await v_autocomplete_selection(page, "InvestmentsCU_Type", "Stocks");
+  await page.getByTestId('InvestmentsCU_Button').click();
+  await idPromise; // Wait for the request to complete.
+}
+
+export async function expect_native_confirm_and_accept_it(page){
+  /**
+   * Must be before action raises it
+   */
+      page.on('dialog', dialog => { 
+        console.log(dialog.message())
+        dialog.accept()
+    })
 }
