@@ -1,25 +1,33 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
 import pluginVue from "eslint-plugin-vue";
-import pluginCypress from "eslint-plugin-cypress";
-
-
-// console.log("GLOBALS", globals.browser)
-// console.log("PLUGINCYPRESS", pluginCypress)
-// console.log("GLOBALSCYPRESS", pluginCypress.environments.globals.globals
-// )
+import pluginPlaywright from 'eslint-plugin-playwright';
 
 export default [
+  {
+    ignores: ["dist/*", "test/**/*.js", "cypress/**", "coverage/**"],
+  },
   {
     languageOptions: { 
       globals: {
         ...globals.browser,
-        ...pluginCypress.environments.globals.globals,// LA tuve que localizar apelo, aun no funciona, esperar futras versiones
       }
     },
   },
   pluginJs.configs.recommended,
   ...pluginVue.configs["flat/essential"],
+  {
+    files: ['playwright/tests/*.spec.js'],
+    ...pluginPlaywright.configs['flat/recommended'],
+  },
+  {
+    files: ['playwright.config.js', 'vite.config.js', 'eslint.config.mjs', 'src/scripts/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node, //Allow process variable
+      }
+    }
+  },
   {
     rules: {
       "vue/multi-word-component-names": "off",

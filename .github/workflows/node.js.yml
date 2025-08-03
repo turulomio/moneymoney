@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "463-test-action-fails" ]
+    branches: [ "508-add-coverage-to-playwright" ]
   pull_request:
     branches: [ "main" ]
 
@@ -59,9 +59,9 @@ jobs:
         cd ..
         git clone https://github.com/turulomio/django_moneymoney
         cd django_moneymoney
-        sudo python3.12 -m venv .python3.12
-        sudo .python3.12/bin/pip install .
-        sudo .python3.12/bin/python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport 8004 &
+        python3.12 -m venv .python3.12
+        .python3.12/bin/pip install .
+        E2E_TESTING=1 .python3.12/bin/python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport 8004 &
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
@@ -72,8 +72,11 @@ jobs:
       run: |
         npm install
         npm run build --if-present
+
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
     - name: Moneymoney e2e test
       run: |
         npm run dev &
         sleep 10
-        npm run cypress_console
+        npx playwright test
