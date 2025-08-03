@@ -66,7 +66,21 @@ export async function investment_add_from_InvestmentsList(page){
   await v_text_input_settext(page, "InvestmentsCU_Name", "New Test Investment");
   await v_autocomplete_selection(page, "InvestmentsCU_Type", "Stocks");
   await page.getByTestId('InvestmentsCU_Button').click();
-  await idPromise; // Wait for the request to complete.
+}
+
+
+
+
+export async function accountoperation_add_from_AccountsView(page){
+  await page.getByTestId('AccountsView_MyMenuInline_Button').click();
+  await page.getByTestId('AccountsView_MyMenuInline_Header1_Item0').click(); 
+  await v_autocomplete_selection(page, "AccountsoperationsCU_Concepts", "Supermarket");
+  await v_text_input_settext(page, "AccountsoperationsCU_Amount", "-100")
+  await v_text_input_settext(page, "AccountsoperationsCU_Comment", "This is a comment")
+  
+  const idPromise = promise_to_get_id_from_post_response(page, "/api/accountsoperations/");
+  await page.getByTestId('AccountsoperationsCU_Button').click()
+  return await idPromise
 }
 
 export async function expect_native_confirm_and_accept_it(page){
