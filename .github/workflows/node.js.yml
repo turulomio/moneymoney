@@ -63,6 +63,8 @@ jobs:
         sudo .python3.12/bin/pip install .
     - name: Launch django_moneymoney server
       run: |
+        ls -la .python3.12/bin/
+        python --version
         sudo E2E_TESTING=1 .python3.12/bin/python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport 8004 &
 
     - name: Use Node.js ${{ matrix.node-version }}
