@@ -33,10 +33,14 @@ export async function promise_to_get_id_from_post_response(page, url) {
   return responseBody.id;
 }
 
+export async function mymenuinline_selection(page, name,header,item){
+  await page.getByTestId(`${name}_Button`).click();
+  await page.getByTestId(`${name}_Header${header}_Item${item}`).click();
+}
+
 
 export async function account_add_from_AccountsList(page){
-  await page.getByTestId('MyMenuInline_Button').click();
-  await page.getByTestId('MyMenuInline_Header0_Item0').click();
+  await mymenuinline_selection(page, "AccountsList_MyMenuInline", 0, 0)
 
   // Set up the promise to wait for the response *before* the action.
   const idPromise = promise_to_get_id_from_post_response(page, "/api/accounts/");
@@ -56,12 +60,10 @@ export async function account_add_from_AccountsList(page){
   await expect(page.getByTestId('AccountsCU_Button')).toBeHidden();
 }
 
-export async function investment_add_from_InvestmentsList(page){
+export async function investment_add_from_InvestmentsList(page){InvestmentsList_MyMenuInline
   // This is a placeholder implementation based on the function name.
   // You may need to adjust the selectors and values.
-  await page.getByTestId('MyMenuInline_Button').first().click();
-  await page.getByTestId('MyMenuInline_Header0_Item0').click();
-
+  await mymenuinline_selection(page, "InvestmentsList_MyMenuInline", 0, 0)
   const idPromise = promise_to_get_id_from_post_response(page, "/api/investments/");
   await v_text_input_settext(page, "InvestmentsCU_Name", "New Test Investment");
   await v_autocomplete_selection(page, "InvestmentsCU_Type", "Stocks");
@@ -72,8 +74,7 @@ export async function investment_add_from_InvestmentsList(page){
 
 
 export async function accountoperation_add_from_AccountsView(page){
-  await page.getByTestId('AccountsView_MyMenuInline_Button').click();
-  await page.getByTestId('AccountsView_MyMenuInline_Header1_Item0').click(); 
+  await mymenuinline_selection(page, "AccountsView_MyMenuInline", 1, 0)
   await v_autocomplete_selection(page, "AccountsoperationsCU_Concepts", "Supermarket");
   await v_text_input_settext(page, "AccountsoperationsCU_Amount", "-100")
   await v_text_input_settext(page, "AccountsoperationsCU_Comment", "This is a comment")

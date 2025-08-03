@@ -1,7 +1,8 @@
 import { test,expect } from './fixtures.js'; // Import from your fixtures file
 import {
     accountoperation_add_from_AccountsView,
-    v_text_input_settext
+    v_text_input_settext,
+    mymenuinline_selection
 } from "./commons"
 
   test('Accounts list', async ({ page }) => {
@@ -26,8 +27,8 @@ import {
     // Exits AccountsView and make search
     await page.getByTestId('AccountsView_ButtonClose').click();
     await expect(page.getByTestId('AccountsView_ButtonClose')).toBeHidden()
-    await page.getByTestId('AccountsList_MyMenuInline_Button').click();
-    await page.getByTestId('AccountsList_MyMenuInline_Header1_Item0').click();
+
+    await mymenuinline_selection(page, "AccountsList_MyMenuInline", 1, 0)
     await v_text_input_settext(page, "AccountsoperationsSearch_Search", "comment")
     await page.getByTestId('AccountsoperationsSearch_Button').click()
 
