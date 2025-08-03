@@ -39,7 +39,7 @@
                 <template #bottom ></template>
             </v-data-table>
         </v-card>
-        <v-dialog v-model="dialog" width="35%">
+        <v-dialog data-test="BanksList_BanksCU_Dialog" v-model="dialog" width="35%">
             <v-card class="pa-4">
                 <BanksCU :bank="bank" :mode="bank_mode" :key="key" @cruded="on_BanksCU_cruded"></BanksCU>
             </v-card>

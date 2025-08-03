@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig, devices } from '@playwright/test';
+import { cpus } from 'os';
 
 /**
  * Read environment variables from file.
@@ -15,13 +16,13 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './playwright',
   /* Run tests in files in parallel */
-  fullyParallel: false,
+  fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: 1, //process.env.CI ? 1 : undefined,
+  workers: cpus().length, //process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -46,17 +47,17 @@ export default defineConfig({
       use: { ...devices['Desktop Firefox'] },
     },
 
-    {
-      name: 'setup',
-      // Run only the setup file(s) in this project
-      testMatch: /.*setup\.js/,
-    },
+    // {
+    //   name: 'setup',
+    //   // Run only the setup file(s) in this project
+    //   testMatch: /.*setup\.js/,
+    // },
     {
       name: 'e2e-tests',
       // Run all other tests
       testMatch: /tests\/.*\.spec\.js/,
       // Make this project wait for the 'setup' project to complete
-      dependencies: ['setup'],
+      // dependencies: ['setup'],
     },
   ],
     // {
