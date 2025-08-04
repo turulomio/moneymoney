@@ -24,16 +24,18 @@ test('Investments list', async ({ page }) => {
   // await expect(page.getByTestId('ChartInvestments_ButtonClose')).toBeVisible();
   // cy.getDataTest('ChartInvestments_ButtonClose').click()
 
-  // Change investment active status twice
+  // Change investment active status 
   await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 1)
   await expect(page.getByText('Active: false')).toBeVisible();
   await expect(page.getByTestId('InvestmentsView_MyMenuInline_Header0_Item1')).toBeHidden();
-
+  // Change status again
+  await page.waitForTimeout(500); 
   await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 1)
   await expect(page.getByText('Active: true')).toBeVisible();
   await expect(page.getByTestId('InvestmentsView_MyMenuInline_Header0_Item1')).toBeHidden();
 
   // Evolution chart
+  await page.waitForTimeout(500); 
   await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 2)
   await expect(page.getByTestId('ChartInvestmentsoperationsEvolution_ButtonClose')).toBeVisible();
   await page.getByTestId('ChartInvestmentsoperationsEvolution_ButtonClose').click()
@@ -45,7 +47,6 @@ test('Investments list', async ({ page }) => {
   await expect(page.getByTestId('ChartInvestmentsoperationsEvolutionTimeseries_ButtonClose')).toBeVisible();
   await page.getByTestId('ChartInvestmentsoperationsEvolutionTimeseries_ButtonClose').click()
   await expect(page.getByTestId('ChartInvestmentsoperationsEvolutionTimeseries_ButtonClose')).toBeHidden();
-
 
 
 

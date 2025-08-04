@@ -17,7 +17,7 @@ const test = baseTest.extend({
     if (coverage) {
       // if you're using multiple tests, you can merge coverage data here
       await saveCoverage(coverage, testInfo.title);
-      console.log('JavaScript coverage data collected and saved.');
+      // console.log('JavaScript coverage data collected and saved.');
     } else {
       console.warn('No coverage data (window.__coverage__) found.');
       console.warn('Ensure your code is instrumented, e.g., with vite-plugin-istanbul.');

@@ -37,6 +37,7 @@ export async function mymenuinline_selection(page, name,header,item){
   await expect(page.getByTestId(`${name}_Button`)).toBeVisible()
   await expect(page.getByTestId(`${name}_Button`)).toBeEnabled()
   await page.getByTestId(`${name}_Button`).click();
+  await expect(page.getByTestId(`${name}_Header${header}_Item${item}`)).toBeVisible();
   await page.getByTestId(`${name}_Header${header}_Item${item}`).click();
 }
 
@@ -150,7 +151,7 @@ export async function expect_native_confirm_and_accept_it(page){
    * Must be before action raises it
    */
       page.on('dialog', dialog => { 
-        console.log(dialog.message())
+        // console.log(dialog.message())
         dialog.accept()
     })
 }

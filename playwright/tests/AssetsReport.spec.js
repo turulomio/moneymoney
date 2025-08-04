@@ -4,6 +4,7 @@ import {
 } from "./commons.js";
 
   test('Assets report', async ({ page }) => {
+    test.setTimeout(120000);
     // 1. Navigate to settings to configure name
     await page.getByTestId('LateralSettings').click();
     await v_text_input_settext(page, "Settings_FirstName", "Paco");
