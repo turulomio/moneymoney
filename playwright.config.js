@@ -6,7 +6,7 @@ import { defineConfig } from '@playwright/test';
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  testDir: './playwright',
+  testDir: './tests/playwright/',
   timeout: 30000, // 30 seconds maximum for each test
   globalTimeout: 3600000, //All tests timeout
   /* Run tests in files in parallel */
@@ -35,7 +35,7 @@ export default defineConfig({
     {
       name: 'e2e-tests',
       // Run all other tests
-      testMatch: /tests\/.*\.spec\.js/,
+      testMatch: "*.spec.js",
       // Make this project wait for the 'setup' project to complete
       // dependencies: ['setup'],
     },
