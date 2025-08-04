@@ -50,24 +50,24 @@ export default defineConfig({
     host: "127.0.0.1",
     port: 8006,
   },  
-  // test: { // To use with vitest but better with nyc
-  //   globals: true,
-  //   environment: 'jsdom',
-  //   alias: {
-  //     '@/': new URL('./src/', import.meta.url).pathname,
-  //   },
-  //   include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
-  //   exclude: ['node_modules', 'dist', '**/examples/**', 'cypress', 'test'],
-  //   coverage: {
-  //     // provider: 'istanbul',
-  //     reporter: ['html', 'text', 'lcov'],
-  //     include: ['src/**/*.{js,vue}'],
-  //     exclude: [
-  //       'src/scripts/**',
-  //       '**/*.spec.js'
-  //     ]
-  //   }
-  // },
+  test: { // To use with vitest but better with nyc
+    globals: true,
+    // environment: 'jsdom',
+    alias: {
+      '@/': new URL('./src/', import.meta.url).pathname,
+    },
+    include: ['**/*.test.js'],
+    exclude: ['node_modules', 'dist', '**/examples/**', 'cypress', 'test'],
+    coverage: {
+      provider: 'istanbul',
+      reporter: ['html', 'text', 'lcov'],
+      include: ['src/**/*.js'],
+      exclude: [
+        'src/scripts/**',
+        '**/*.spec.js'
+      ]
+    }
+  },
   build: {
     sourcemap: "true", // Options: true, 'inline', 'hidden'
   },
