@@ -29,13 +29,13 @@ test('Investments list', async ({ page }) => {
   await expect(page.getByText('Active: false')).toBeVisible();
   await expect(page.getByTestId('InvestmentsView_MyMenuInline_Header0_Item1')).toBeHidden();
   // Change status again
-  await page.waitForTimeout(500); 
+  await page.waitForTimeout(500); //Due to rapid text change. Doesn't close menu
   await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 1)
   await expect(page.getByText('Active: true')).toBeVisible();
   await expect(page.getByTestId('InvestmentsView_MyMenuInline_Header0_Item1')).toBeHidden();
 
   // Evolution chart
-  await page.waitForTimeout(500); 
+  await page.waitForTimeout(500); //Due to rapid text change. Doesn't close menu
   await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 2)
   await expect(page.getByTestId('ChartInvestmentsoperationsEvolution_ButtonClose')).toBeVisible();
   await page.getByTestId('ChartInvestmentsoperationsEvolution_ButtonClose').click()
@@ -48,7 +48,11 @@ test('Investments list', async ({ page }) => {
   await page.getByTestId('ChartInvestmentsoperationsEvolutionTimeseries_ButtonClose').click()
   await expect(page.getByTestId('ChartInvestmentsoperationsEvolutionTimeseries_ButtonClose')).toBeHidden();
 
-
+  // Navegate through tabs
+    await page.getByTestId('InvestmentsView_TabCurrent').click();
+    await page.getByTestId('InvestmentsView_TabOperations').click();
+    await page.getByTestId('InvestmentsView_TabHistorical').click();
+    await page.getByTestId('InvestmentsView_TabDividends').click();
 
 })
 
