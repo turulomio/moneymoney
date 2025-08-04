@@ -34,6 +34,8 @@ export async function promise_to_get_id_from_post_response(page, url) {
 }
 
 export async function mymenuinline_selection(page, name,header,item){
+  await expect(page.getByTestId(`${name}_Button`)).toBeVisible()
+  await expect(page.getByTestId(`${name}_Button`)).toBeEnabled()
   await page.getByTestId(`${name}_Button`).click();
   await page.getByTestId(`${name}_Header${header}_Item${item}`).click();
 }
@@ -79,6 +81,16 @@ export async function quote_add_from_InvestmentsList(page, investment_id){
   await page.getByTestId('QuotesCU_Button').click();
   await expect(page.getByTestId('QuotesCU_Button')).toBeHidden()
 }
+
+
+
+export async function quote_add_from_ProductsView(page, price="10"){
+    await mymenuinline_selection(page, "ProductsView_MyMenuInline", 0, 0)
+    await v_text_input_settext(page, "QuotesCU_Quote", price);
+    await page.getByTestId('QuotesCU_Button').click();
+    await expect(page.getByTestId('QuotesCU_Button')).toBeHidden()
+}
+
 
 export async function investmentoperation_add_from_InvestmentsView(page){
   await expect(page.getByTestId('InvestmentsView_ButtonClose')).toBeVisible({timeout: 15000});

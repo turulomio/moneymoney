@@ -17,7 +17,7 @@
         <v-card >
             <v-data-table density="compact" :headers="tableHeaders" :items="filtered_products" class="elevation-1 cursorpointer" :sort-by="[{key:'name',order:'asc'}]" fixed-header height="650" :loading="loading"  @click:row="viewProduct"    :items-per-page="10000" >
                 <template #item.name="{item}">
-                    <v-icon :class="'mr-2 fi fib fi-'+item.flag" small :title="this.getCountryNameByCode(item.flag)"></v-icon><span :class="class_name(item)">{{item.name}}</span>
+                    <v-icon :class="'mr-2 fi fib fi-'+item.flag" small :title="this.getCountryNameByCode(item.flag)"></v-icon><span :data-test="`ProductsSearch_Table_Row${item.id}`" :class="class_name(item)">{{item.name}}</span>
                 </template>  
             <template #item.type="{item}">
                     {{ this.useStore().productstypes.get(item.productstypes).localname }}
