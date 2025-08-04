@@ -34,5 +34,5 @@ import {
     await page.getByTestId(`BanksList_Table_ButtonDelete${banks_id}`).click();
     expect_native_confirm_and_accept_it(page)
     await page.getByTestId('BanksCU_Button').click(); // Assuming this is the confirmation button in a dialog
-    await expect(created_row).not.toBeVisible()
+    await expect(created_row).toBeHidden()
   });

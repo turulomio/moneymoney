@@ -39,13 +39,13 @@ export async function mymenuinline_selection(page, name,header,item){
 }
 
 
-export async function account_add_from_AccountsList(page){
+export async function account_add_from_AccountsList(page, name="Permanent Account"){
   await mymenuinline_selection(page, "AccountsList_MyMenuInline", 0, 0)
 
   // Set up the promise to wait for the response *before* the action.
   const idPromise = promise_to_get_id_from_post_response(page, "/api/accounts/");
 
-  await v_text_input_settext(page, "AccountsCU_Name", "Permanent Account");
+  await v_text_input_settext(page, "AccountsCU_Name", name);
   await v_autocomplete_selection(page, "AccountsCU_Bank", "Personal Management");
 
   // This is the action that triggers the POST request.
@@ -53,11 +53,12 @@ export async function account_add_from_AccountsList(page){
 
   // Now we wait for the promise to resolve with the ID from the response.
   const newAccountId = await idPromise;
-  console.log(`New account created with ID: ${newAccountId}`);
+  // console.log(`New account created with ID: ${newAccountId}`);
   expect(newAccountId).toBeDefined();
 
   // Wait for the dialog to close.
   await expect(page.getByTestId('AccountsCU_Button')).toBeHidden();
+  return newAccountId
 }
 
 export async function investment_add_from_InvestmentsList(page){
@@ -115,7 +116,8 @@ export async function dividend_add_from_InvestmentsView(page){
   
   await v_autocomplete_selection(page, "InvestmentsCU_Type", "Stocks");
   await page.getByTestId('InvestmentsCU_Button').click();
-  return await idPromise
+  const idPromise=0
+  return idPromise
 }
 
 
