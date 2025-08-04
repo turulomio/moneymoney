@@ -30,3 +30,4 @@ cypress/screenshots/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+output

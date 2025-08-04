@@ -9,9 +9,10 @@
     "preview": "vite preview",
     "release": "node src/scripts/release.js",
     "translate": "vue-i18n-extract --vueFiles './src/**/*.?(js|vue)' --languageFiles './src/locales/**/*.?(json|yaml|yml|js)' --add true --remove true --separator '###'  --missingTranslationString 'MISSING'",
+    "vitest": "vitest --passWithNoTests",
     "playwright": "playwright test --ui",
-    "playwright_console": "playwright test",
-    "playwright_coverage": "nyc --reporter=lcov playwright test"
+    "playwright_console": "playwright test --output output/playwright",
+    "playwright_coverage": "nyc --reporter=lcov --report-dir  output/coverage  playwright test"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
