@@ -29,13 +29,13 @@ test('Investments list', async ({ page }) => {
   await expect(page.getByText('Active: false')).toBeVisible();
   await expect(page.getByTestId('InvestmentsView_MyMenuInline_Header0_Item1')).toBeHidden();
   // Change status again
-  await page.waitForTimeout(1000); //Due to rapid text change. Doesn't close menu
+  await page.waitForTimeout(2000); //Due to rapid text change. Doesn't close menu
   await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 1)
   await expect(page.getByText('Active: true')).toBeVisible();
   await expect(page.getByTestId('InvestmentsView_MyMenuInline_Header0_Item1')).toBeHidden();
 
   // Evolution chart
-  await page.waitForTimeout(1000); //Due to rapid text change. Doesn't close menu
+  await page.waitForTimeout(2000); //Due to rapid text change. Doesn't close menu
   await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 2)
   await expect(page.getByTestId('ChartInvestmentsoperationsEvolution_ButtonClose')).toBeVisible();
   await page.getByTestId('ChartInvestmentsoperationsEvolution_ButtonClose').click()
