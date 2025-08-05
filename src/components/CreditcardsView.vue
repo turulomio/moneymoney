@@ -2,7 +2,7 @@
 <template>
     <div>    
         <h1 class="mb-4">{{ f($t("Credit card details of '[0]'"), [cc.name]) }}
-            <MyMenuInline :items="menuinline_items"/>
+            <MyMenuInline data-test="CreditCardsView_MyMenuInline" :items="menuinline_items"/>
         </h1>
         <v-tabs  bg-color="secondary" dark v-model="tab" grow>
             <v-tab key="cco">{{ $t('Current credit card operations') }}</v-tab>

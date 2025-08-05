@@ -81,6 +81,26 @@ export async function creditcard_add_from_AccountsView(page, name, deferred){
     return cc_id
 }
 
+export async function creditcardoperation_add_from_CreditCardsView(page, concepts, follow=false){
+  /*
+    follow to use ButtonFollow or not
+  */
+    await mymenuinline_selection(page, "CreditCardsView_MyMenuInline", 0, 0)
+
+    await v_autocomplete_selection(page, "CreditcardsoperationsCU_Concepts", concepts);
+    await v_text_input_settext(page, "CreditcardsoperationsCU_Amount", "-100")
+    await v_text_input_settext(page, "CreditcardsoperationsCU_Comment", "This is a comment")
+    const cc_id_promise = promise_to_get_id_from_post_response(page, "/api/creditcardsoperations/");
+    if (follow){
+      await page.getByTestId('CreditcardsoperationsCU_ButtonFollow').click();
+    } else {
+      await expect(page.getByTestId('CreditcardsoperationsCU_Button')).toBeHidden();
+      await expect(page.getByTestId(`CreditCardsView_Tablecc_Row${cc_id}`)).toBeVisible();
+    }
+    const cc_id= await cc_id_promise;
+    return cc_id
+}
+
 export async function concept_add_from_ConceptsCatalog(page, name="My first personal concept"){
     await mymenuinline_selection(page, "ConceptsCatalog_MyMenuInline", 0, 0)
     await v_text_input_settext(page, "ConceptsCU_Name", name);
@@ -92,12 +112,6 @@ export async function concept_add_from_ConceptsCatalog(page, name="My first pers
     await expect(page.getByTestId(`ConceptsCatalog_Table_ButtonUpdate${concept_id}`)).toBeVisible();
     return concept_id
 }
-
-
-
-
-
-
 
 export async function investment_add_from_InvestmentsList(page){
   // This is a placeholder implementation based on the function name.
