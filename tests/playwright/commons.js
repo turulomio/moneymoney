@@ -66,6 +66,21 @@ export async function account_add_from_AccountsList(page, name="Permanent Accoun
 
 
 
+export async function creditcard_add_from_AccountsView(page, name, deferred){
+    await mymenuinline_selection(page, "AccountsView_MyMenuInline", 2, 0)
+    await v_text_input_settext(page, "CreditcardsCU_Name", name);
+    await v_text_input_settext(page, "CreditcardsCU_Number", "1234567890123456");
+    await v_text_input_settext(page, "CreditcardsCU_MaximumBalance", "1000");
+    await page.getByTestId('CreditcardsCU_Active').getByRole("checkbox").check();
+    if (deferred) await page.getByTestId('CreditcardsCU_Deferred').getByRole("checkbox").check();
+    const cc_id_promise = promise_to_get_id_from_post_response(page, "/api/creditcards/");
+    await page.getByTestId('CreditcardsCU_Button').click(); 
+    const cc_id= await cc_id_promise;
+    await expect(page.getByTestId('CreditcardsCU_Button')).toBeHidden();
+    await expect(page.getByTestId(`AccountsView_Tablecc_Row${cc_id}`)).toBeVisible();
+    return cc_id
+}
+
 export async function concept_add_from_ConceptsCatalog(page, name="My first personal concept"){
     await mymenuinline_selection(page, "ConceptsCatalog_MyMenuInline", 0, 0)
     await v_text_input_settext(page, "ConceptsCU_Name", name);
