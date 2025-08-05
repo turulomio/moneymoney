@@ -5,7 +5,7 @@ import {
     mymenuinline_selection
 } from "./commons"
 
-  test('Accounts list', async ({ page }) => {
+  test('Accounts View', async ({ page }) => {
 
     await page.getByTestId('LateralIcon').click();
     await page.getByTestId('LateralAccounts').click();

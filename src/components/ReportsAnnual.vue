@@ -11,12 +11,12 @@
             <p>{{ last_year_balance_string }}</p>
 
             <v-tabs bg-color="secondary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
-                <v-tab key="0">{{ $t("Month evolution") }}</v-tab>
-                <v-tab key="1">{{ $t("Income report") }}</v-tab>
-                <v-tab key="2">{{ $t("Gains by product type") }}</v-tab>
-                <v-tab key="3">{{ $t("Annual target") }}</v-tab>
-                <v-tab key="4">{{ $t("Invest or work") }}</v-tab>
-                <v-tab key="5">{{ $t("Make ends meet") }}</v-tab>
+                <v-tab data-test="ReportsAnnual_Tab0" key="0">{{ $t("Month evolution") }}</v-tab>
+                <v-tab data-test="ReportsAnnual_Tab1" key="1">{{ $t("Income report") }}</v-tab>
+                <v-tab data-test="ReportsAnnual_Tab2" key="2">{{ $t("Gains by product type") }}</v-tab>
+                <v-tab data-test="ReportsAnnual_Tab3" key="3">{{ $t("Annual target") }}</v-tab>
+                <v-tab data-test="ReportsAnnual_Tab4" key="4">{{ $t("Invest or work") }}</v-tab>
+                <v-tab data-test="ReportsAnnual_Tab5" key="5">{{ $t("Make ends meet") }}</v-tab>
             </v-tabs>
             <v-window v-model="tab">
                 <v-window-item key="0"> <!-- MONTH EVOLUTION -->
@@ -55,7 +55,7 @@
                     <v-card outlined>            
                         <v-data-table density="compact" :headers="total_annual_incomes_headers" :items="total_annual_incomes"  class="elevation-1 cursorpointer" :loading="loading_annual_incomes" @click:row="incomeDetails"    :items-per-page="10000" >     
                             <template #item.expenses="{item}">
-                                <div class="text-right" v-html="localcurrency_html(item.expenses)"></div>
+                                <div :data-test="`ReportsAnnual_TableIncome_row${item.month_number}`" class="text-right" v-html="localcurrency_html(item.expenses)"></div>
                             </template>      
                             <template #item.incomes="{item}">
                                 <div class="text-right" v-html="localcurrency_html(item.incomes)"></div>
@@ -204,7 +204,7 @@
         <!-- REPORT ANNUAL INCOME DETAIL-->
         <v-dialog v-model="dialog_income_details">
             <v-card class="pa-3">
-                <ReportsAnnualIncomeDetail :year="year" :month="month" :key="key" ></ReportsAnnualIncomeDetail>
+                <ReportsAnnualIncomeDetail :year="year" :month="month" :key="key" @close="dialog_income_details=false" />
             </v-card>
         </v-dialog>
     </div>
