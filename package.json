@@ -10,7 +10,7 @@
     "release": "node src/scripts/release.js",
     "translate": "vue-i18n-extract --vueFiles './src/**/*.?(js|vue)' --languageFiles './src/locales/**/*.?(json|yaml|yml|js)' --add true --remove true --separator '###'  --missingTranslationString 'MISSING'",
     "vitest": "vitest --passWithNoTests",
-    "playwright": "playwright test --ui",
+    "playwright": "playwright test --ui --output output/playwright",
     "playwright_console": "playwright test --output output/playwright",
     "playwright_coverage": "nyc --reporter=lcov --report-dir  output/coverage  playwright test"
   },

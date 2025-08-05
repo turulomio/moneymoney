@@ -64,6 +64,26 @@ export async function account_add_from_AccountsList(page, name="Permanent Accoun
   return newAccountId
 }
 
+
+
+export async function concept_add_from_ConceptsCatalog(page, name="My first personal concept"){
+    await mymenuinline_selection(page, "ConceptsCatalog_MyMenuInline", 0, 0)
+    await v_text_input_settext(page, "ConceptsCU_Name", name);
+    await v_autocomplete_selection(page, "ConceptsCU_OperationsTypes", "Expense");
+
+    const concept_id_promise = promise_to_get_id_from_post_response(page, "/api/concepts/");
+    await page.getByTestId('ConceptsCU_Button').click();
+    const concept_id= await concept_id_promise;
+    await expect(page.getByTestId(`ConceptsCatalog_Table_ButtonUpdate${concept_id}`)).toBeVisible();
+    return concept_id
+}
+
+
+
+
+
+
+
 export async function investment_add_from_InvestmentsList(page){
   // This is a placeholder implementation based on the function name.
   // You may need to adjust the selectors and values.
