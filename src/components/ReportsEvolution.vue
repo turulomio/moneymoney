@@ -8,8 +8,8 @@
         </div>
         <div class="ma-4">
             <v-tabs  bg-color="secondary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
-                <v-tab key="0">{{ $t("Assets evolution report") }}</v-tab>
-                <v-tab key="1">{{ $t("Invested assets evolution report") }}</v-tab>
+                <v-tab data-test="ReportsEvolution_TabAssets" key="0">{{ $t("Assets evolution report") }}</v-tab>
+                <v-tab data-test="ReportsEvolution_TabInvested" key="1">{{ $t("Invested assets evolution report") }}</v-tab>
             </v-tabs>
             <v-window v-model="tab">
                 <v-window-item key="0">
