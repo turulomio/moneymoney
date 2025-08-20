@@ -71,18 +71,24 @@
                 <div class="text-right" v-html="currency_html(item.gains_net_investment, item.currency_product)"></div>
             </template>           
             <template #tbody>
-                <tr class="totalrow" v-if="items.length>0 && showtotal">
-                    <td>{{ f($t("Total ([0] registers)"), [items.length])}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items,'gains_gross_' + output), total_currency)"></td>
-                    <td v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items,'commissions_' + output), total_currency)"></td>
-                    <td v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items,'taxes_' + output), total_currency)"></td>
-                    <td v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items,'gains_net_' + output), total_currency)"></td>
-
+                <tr class="totalrow" v-if="items.length > 0 && showtotal">
+                    <td v-for="(header, index) in table_headers()" :key="index" :class="header.class || ''">
+                        <template v-if="header.key === 'dt_end'">
+                            {{ f($t("Total ([0] registers)"), [items.length]) }}
+                        </template>
+                        <template v-else-if="header.key === 'gains_gross_' + output">
+                            <div v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items, 'gains_gross_' + output), total_currency)"></div>
+                        </template>
+                        <template v-else-if="header.key === 'commissions_' + output">
+                            <div v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items, 'commissions_' + output), total_currency)"></div>
+                        </template>
+                        <template v-else-if="header.key === 'taxes_' + output">
+                            <div v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items, 'taxes_' + output), total_currency)"></div>
+                        </template>
+                        <template v-else-if="header.key === 'gains_net_' + output">
+                            <div v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items, 'gains_net_' + output), total_currency)"></div>
+                        </template>
+                    </td>
                 </tr>
             </template>
                 <template #bottom ></template>   
