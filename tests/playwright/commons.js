@@ -64,6 +64,25 @@ export async function account_add_from_AccountsList(page, name="Permanent Accoun
   return newAccountId
 }
 
+export async function accountoperation_add_from_AccountsView(page, concept, amount, comment){
+  await mymenuinline_selection(page, "AccountsView_MyMenuInline", 1, 0)
+  await v_autocomplete_selection(page, "AccountsoperationsCU_Concepts", concept);
+  await v_text_input_settext(page, "AccountsoperationsCU_Amount", amount);
+  await v_text_input_settext(page, "AccountsoperationsCU_Comment", comment);
+
+  // Set up the promise to wait for the response *before* the action.
+  const idPromise = promise_to_get_id_from_post_response(page, "/api/accountsoperations/");
+  // This is the action that triggers the POST request.
+  await page.getByTestId('AccountsoperationsCU_Button').click();
+  // Now we wait for the promise to resolve with the ID from the response.
+  const newId = await idPromise;
+  expect(newId).toBeDefined();
+
+  // Wait for the dialog to close.
+  await expect(page.getByTestId('AccountsoperationsCU_Button')).toBeHidden();
+  return newId
+}
+
 
 
 export async function creditcard_add_from_AccountsView(page, name, deferred){
@@ -180,19 +199,6 @@ export async function dividend_add_from_InvestmentsView(page){
   await page.getByTestId('InvestmentsCU_Button').click();
   const idPromise=0
   return idPromise
-}
-
-
-
-export async function accountoperation_add_from_AccountsView(page){
-  await mymenuinline_selection(page, "AccountsView_MyMenuInline", 1, 0)
-  await v_autocomplete_selection(page, "AccountsoperationsCU_Concepts", "Supermarket");
-  await v_text_input_settext(page, "AccountsoperationsCU_Amount", "-100")
-  await v_text_input_settext(page, "AccountsoperationsCU_Comment", "This is a comment")
-  
-  const idPromise = promise_to_get_id_from_post_response(page, "/api/accountsoperations/");
-  await page.getByTestId('AccountsoperationsCU_Button').click()
-  return await idPromise
 }
 
 export async function expect_native_confirm_and_accept_it(page){
