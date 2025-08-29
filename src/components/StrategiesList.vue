@@ -7,11 +7,11 @@
             <v-checkbox data-test="StrategiesList_CheckActive" v-model="showActive" :label="setCheckboxLabel()" />
             <v-data-table density="compact" :headers="strategies_headers" :items="strategies_items" class="elevation-1 cursorpointer" :loading="loading_strategies" :key="key" @click:row="detailedviewItem" :items-per-page="10000" >
                 <template v-slot:[`item.name`]="{ item }">
-                    <v-tooltip :text="item.strategy.comment">
+                    <v-tooltip>
                         <template v-slot:activator="{ props }">
                             <div v-bind="props">{{ item.strategy.name }}</div>
                         </template>
-                        <span>{{ item.strategy.comment }}</span>
+                        <div style="white-space: pre-wrap;">{{ item.strategy.comment }}</div>
                     </v-tooltip>
                 </template>
                 <template #item.dt_from="{item}">
@@ -111,7 +111,8 @@
 
     </div>
 </template>
-<script>
+
+<script setup>
     import axios from 'axios'
     import { useStore } from "@/store"
     import MyMenuInline from './MyMenuInline.vue'
@@ -127,211 +128,187 @@
     import { localtime, f} from 'vuetify_rules'
     import { parseResponseError, localcurrency_html, myheaders } from '@/functions'
     import {sumBy} from "lodash-es"
+    import { ref, onMounted, watch } from 'vue'
+    import { useI18n } from 'vue-i18n'
 
-    export default {
-        components:{
-            MyMenuInline,
-            StrategiesView,
-            StrategyFastOperationsCU,
-            StrategyGenericCU,
-            StrategyPairsCU,
-            StrategyProductsRangeCU,
-            ProductsRanges,
-            TableAccountOperations,
+    const { t } = useI18n()
+    const store = useStore()
+
+    const showActive = ref(true)
+    const strategies_headers = ref([
+        { title: t('Name'), sortable: true, key: 'name'},
+        { title: t('Date and time from'), sortable: true, key: 'dt_from',  width: "10%"},
+        { title: t('Date and time to'), key: 'dt_to',  width: "10%"},
+        { title: t('Type'), key: 'type',  width: "7%"},
+        { title: t('Invested'), key: 'invested',  width: "7%", align:'end'},
+        { title: t('Current net gains'), key: 'gains_current_net_user',  width: "7%", align:'end'},
+        { title: t('Historical net gains'), key: 'gains_historical_net_user',  width: "7%", align:'end'},
+        { title: t('Net dividends'), key: 'dividends_net_user',  width: "7%", align:'end'},
+        { title: t('Total'), key: 'total_net_user',  width: "7%", align:'end'},
+        { title: t('Actions'), key: 'actions', sortable: false , width: "7%", align:'end'},
+    ])
+    const strategies_items = ref([])
+    const menuinline_items = ref([
+        {
+            subheader: t("Strategy options"),
+            children: [
+                {
+                    name: t("Add a new fast operations strategy"),
+                    icon: "mdi-pencil",
+                    code: () => {
+                        strategy.value = empty_strategy_fast_operations()
+                        strategy_mode.value = "C"
+                        key.value = key.value + 1
+                        dialog_strategy_fast_operations_cu.value = true
+                    }
+                },
+                {
+                    name: t("Add a new products range strategy"),
+                    icon: "mdi-pencil",
+                    code: () => {
+                        strategy.value = empty_strategy_products_range()
+                        strategy_mode.value = "C"
+                        key.value = key.value + 1
+                        dialog_strategy_products_range_cu.value = true
+                    }
+                },
+                {
+                    name: t("Add a new pairs in same account strategy"),
+                    icon: "mdi-plus",
+                    code: () => {
+                        strategy.value = empty_strategy_pairs()
+                        strategy_mode.value = "C"
+                        key.value = key.value + 1
+                        dialog_strategy_pairs_cu.value = true
+                    }
+                },
+                {
+                    name: t("Add a new generic strategy"),
+                    icon: "mdi-plus",
+                    code: () => {
+                        strategy.value = empty_strategy_generic()
+                        strategy_mode.value = "C"
+                        key.value = key.value + 1
+                        dialog_strategy_generic_cu.value = true
+                    }
+                },
+            ]
         },
-        data(){ 
-            return{
-                showActive:true,
-                strategies_headers: [
-                    { title: this.$t('Name'), sortable: true, key: 'name'},
-                    { title: this.$t('Date and time from'), sortable: true, key: 'dt_from',  width: "10%"},
-                    { title: this.$t('Date and time to'), key: 'dt_to',  width: "10%"},
-                    { title: this.$t('Type'), key: 'type',  width: "7%"},
-                    { title: this.$t('Invested'), key: 'invested',  width: "7%", align:'end'},
-                    { title: this.$t('Current net gains'), key: 'gains_current_net_user',  width: "7%", align:'end'},
-                    { title: this.$t('Historical net gains'), key: 'gains_historical_net_user',  width: "7%", align:'end'},
-                    { title: this.$t('Net dividends'), key: 'dividends_net_user',  width: "7%", align:'end'},
-                    { title: this.$t('Total'), key: 'total_net_user',  width: "7%", align:'end'},
-                    { title: this.$t('Actions'), key: 'actions', sortable: false , width: "7%", align:'end'},
-                ],
-                strategies_items:[],
-                menuinline_items: [
-                    {
-                        subheader: this.$t("Strategy options"),
-                        children: [
-                            {
-                                name: this.$t("Add a new fast operations strategy"),
-                                icon: "mdi-pencil",
-                                code: function(){
-                                    this.strategy=this.empty_strategy_fast_operations()
-                                    this.strategy_mode="C"
-                                    this.key=this.key+1
-                                    this.dialog_strategy_fast_operations_cu=true
-                                }.bind(this),
-                            },
-                            {
-                                name: this.$t("Add a new products range strategy"),
-                                icon: "mdi-pencil",
-                                code: function(){
-                                    this.strategy=this.empty_strategy_products_range()
-                                    this.strategy_mode="C"
-                                    this.key=this.key+1
-                                    this.dialog_strategy_products_range_cu=true
-                                }.bind(this),
-                            },
-                            {
-                                name: this.$t("Add a new pairs in same account strategy"),
-                                icon: "mdi-plus",
-                                code: function(){
-                                    this.strategy=this.empty_strategy_pairs()
-                                    this.strategy_mode="C"
-                                    this.key=this.key+1
-                                    this.dialog_strategy_pairs_cu=true
-                                }.bind(this),
-                            },
-                            {
-                                name: this.$t("Add a new generic strategy"),
-                                icon: "mdi-plus",
-                                code: function(){
-                                    this.strategy=this.empty_strategy_generic()
-                                    this.strategy_mode="C"
-                                    this.key=this.key+1
-                                    this.dialog_strategy_generic_cu=true
-                                }.bind(this),
-                            },
-                        ]
-                    },
-                ],
-                // STRATEGY CU
-                dialog_strategy_fast_operations_cu:false,
-                dialog_strategy_products_range_cu:false,
-                dialog_strategy_generic_cu:false,
-                dialog_strategy_pairs_cu:false,
-                strategy: null,
-                strategy_mode: null,
+    ])
+    const dialog_strategy_fast_operations_cu = ref(false)
+    const dialog_strategy_products_range_cu = ref(false)
+    const dialog_strategy_generic_cu = ref(false)
+    const dialog_strategy_pairs_cu = ref(false)
+    const strategy = ref(null)
+    const strategy_mode = ref(null)
+    const loading_strategies = ref(false)
+    const dialog_view = ref(false)
+    const key = ref(0)
+    const dialog_detailedview = ref(false)
+    const pr = ref(null)
+    const dialog_detailedview_fo = ref(false)
+    const detailed_fo = ref(null)
 
-                loading_strategies:false,
-                dialog_view:false,
-                key:0,
+    watch(showActive, () => {
+        update_table()
+    })
 
-                //Detailed view
-                dialog_detailedview: false,
-                pr: null,
-
-                // Detailed view for fast operations strategy
-                dialog_detailedview_fo:false,
-                detailed_fo: null,
-            }
-        },
-        watch:{
-            showActive(){
-                this.update_table()
-            }
-        },
-        methods: {
-            useStore,
-            localtime,
-            parseResponseError,
-            localcurrency_html,
-            myheaders,
-            f,
-            empty_products_ranges,
-            empty_strategy_fast_operations,
-            empty_strategy_generic,
-            empty_strategy_pairs,
-            empty_strategy_products_range,
-            sumBy,
-            editItem (item) {
-                this.strategy=item
-                this.strategy_mode="U"
-                this.key=this.key+1
-                if (this.strategy.strategy.type==StrategiesTypes.FastOperations){//FAST OPERATIONS
-                    this.dialog_strategy_fast_operations_cu=true
-                } else if (this.strategy.strategy.type==StrategiesTypes.Ranges){//RANGES
-                    this.dialog_strategy_products_range_cu=true
-                } else if (this.strategy.strategy.type==StrategiesTypes.Generic){//GENERIC
-                    this.dialog_strategy_generic_cu=true
-                } else if (this.strategy.strategy.type==StrategiesTypes.PairsInSameAccount){
-                    this.dialog_strategy_pairs_cu=true
-                }
-            },
-            deleteItem(item){
-                this.strategy=item
-                this.strategy_mode="D"
-                this.key=this.key+1
-                if (this.strategy.strategy.type==StrategiesTypes.FastOperations){//FAST OPERATIONS
-                    this.dialog_strategy_fast_operations_cu=true
-                } else if (this.strategy.strategy.type==StrategiesTypes.Ranges){//RANGES
-                    this.dialog_strategy_products_range_cu=true
-                } else if (this.strategy.strategy.type==StrategiesTypes.Generic){//GENERIC
-                    this.dialog_strategy_generic_cu=true
-                } else if (this.strategy.strategy.type==StrategiesTypes.PairsInSameAccount){
-                    this.dialog_strategy_pairs_cu=true
-                }
-            },
-            viewItem (item) {
-                this.strategy=item
-                this.key=this.key+1
-                this.dialog_view=true
-            },
-            detailedviewItem (event,object) {
-                console.log(object.item)
-                if (object.item.strategy.type==StrategiesTypes.Ranges){//RANGES
-                    this.pr=this.empty_products_ranges()
-                    this.pr.product=object.item.product
-                    this.pr.percentage_between_ranges=object.item.percentage_between_ranges
-                    this.pr.percentage_gains=object.item.percentage_gains
-                    this.pr.amount_to_invest=object.item.amount
-                    this.pr.recomendation_methods=object.item.recomendation_method
-                    this.pr.totalized_operations=object.item.only_first
-                    this.pr.investments=object.item.investments
-                    this.key=this.key+1
-                    this.dialog_detailedview=true
-                } else if (object.item.strategy.type==StrategiesTypes.FastOperations){//FAST OPERATIONS
-                    axios.get(`${object.item.url}detailed/`, this.myheaders())
-                    .then((response) => {
-                        this.detailed_fo=response.data
-                        this.key=this.key+1
-                        this.dialog_detailedview_fo=true
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    });
-                } else {
-                    alert(this.$t("Detailed view for this strategy type is not developed yet"))
-                }
-            },
-            update_table(){
-                this.loading_strategies=true
-                axios.get(`${this.useStore().apiroot}/api/strategies/withbalance/?active=${this.showActive}`, this.myheaders())
-                .then((response) => {
-                    this.strategies_items=response.data
-                    console.log(this.strategies_items)
-                    this.loading_strategies=false
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
-            on_StrategyCU_cruded(){
-                this.dialog_strategy_fast_operations_cu=false
-                this.dialog_strategy_products_range_cu=false
-                this.dialog_strategy_generic_cu=false
-                this.dialog_strategy_pairs_cu=false
-                this.update_table()
-            },
-            setCheckboxLabel(){
-                if (this.showActive== true){
-                    return this.$t("Uncheck to see inactive strategies")
-                } else {
-                    return this.$t("Check to see active strategies")
-                }
-            },
-
-            on_TableAccountsoperations_cruded(){
-                this.update_table()
-            }
-        },
-        mounted(){
-            this.update_table()
+    function editItem (item) {
+        strategy.value = item
+        strategy_mode.value = "U"
+        key.value = key.value + 1
+        if (strategy.value.strategy.type==StrategiesTypes.FastOperations){//FAST OPERATIONS
+            dialog_strategy_fast_operations_cu.value = true
+        } else if (strategy.value.strategy.type==StrategiesTypes.Ranges){//RANGES
+            dialog_strategy_products_range_cu.value = true
+        } else if (strategy.value.strategy.type==StrategiesTypes.Generic){//GENERIC
+            dialog_strategy_generic_cu.value = true
+        } else if (strategy.value.strategy.type==StrategiesTypes.PairsInSameAccount){
+            dialog_strategy_pairs_cu.value = true
         }
     }
+
+    function deleteItem(item){
+        strategy.value = item
+        strategy_mode.value = "D"
+        key.value = key.value + 1
+        if (strategy.value.strategy.type==StrategiesTypes.FastOperations){//FAST OPERATIONS
+            dialog_strategy_fast_operations_cu.value = true
+        } else if (strategy.value.strategy.type==StrategiesTypes.Ranges){//RANGES
+            dialog_strategy_products_range_cu.value = true
+        } else if (strategy.value.strategy.type==StrategiesTypes.Generic){//GENERIC
+            dialog_strategy_generic_cu.value = true
+        } else if (strategy.value.strategy.type==StrategiesTypes.PairsInSameAccount){
+            dialog_strategy_pairs_cu.value = true
+        }
+    }
+
+    function viewItem (item) {
+        strategy.value = item
+        key.value = key.value + 1
+        dialog_view.value = true
+    }
+
+    function detailedviewItem (event,object) {
+        console.log(object.item)
+        if (object.item.strategy.type==StrategiesTypes.Ranges){//RANGES
+            pr.value = empty_products_ranges()
+            pr.value.product=object.item.product
+            pr.value.percentage_between_ranges=object.item.percentage_between_ranges
+            pr.value.percentage_gains=object.item.percentage_gains
+            pr.value.amount_to_invest=object.item.amount
+            pr.value.recomendation_methods=object.item.recomendation_method
+            pr.value.totalized_operations=object.item.only_first
+            pr.value.investments=object.item.investments
+            key.value = key.value + 1
+            dialog_detailedview.value = true
+        } else if (object.item.strategy.type==StrategiesTypes.FastOperations){//FAST OPERATIONS
+            axios.get(`${object.item.url}detailed/`, myheaders())
+            .then((response) => {
+                detailed_fo.value = response.data
+                key.value = key.value + 1
+                dialog_detailedview_fo.value = true
+            }, (error) => {
+                parseResponseError(error)
+            });
+        } else {
+            alert(t("Detailed view for this strategy type is not developed yet"))
+        }
+    }
+
+    function update_table(){
+        loading_strategies.value = true
+        axios.get(`${store.apiroot}/api/strategies/withbalance/?active=${showActive.value}`, myheaders())
+        .then((response) => {
+            strategies_items.value = response.data
+            console.log(strategies_items.value)
+            loading_strategies.value = false
+        }, (error) => {
+            parseResponseError(error)
+        });
+    }
+
+    function on_StrategyCU_cruded(){
+        dialog_strategy_fast_operations_cu.value = false
+        dialog_strategy_products_range_cu.value = false
+        dialog_strategy_generic_cu.value = false
+        dialog_strategy_pairs_cu.value = false
+        update_table()
+    }
+
+    function setCheckboxLabel(){
+        if (showActive.value == true){
+            return t("Uncheck to see inactive strategies")
+        } else {
+            return t("Check to see active strategies")
+        }
+    }
+
+    function on_TableAccountsoperations_cruded(){
+        update_table()
+    }
+
+    onMounted(() => {
+        update_table()
+    })
 </script>
