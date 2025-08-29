@@ -7,11 +7,11 @@
             <v-checkbox data-test="StrategiesList_CheckActive" v-model="showActive" :label="setCheckboxLabel()" />
             <v-data-table density="compact" :headers="strategies_headers" :items="strategies_items" class="elevation-1 cursorpointer" :loading="loading_strategies" :key="key" @click:row="detailedviewItem" :items-per-page="10000" >
                 <template v-slot:[`item.name`]="{ item }">
-                    <v-tooltip :text="item.strategy.comment">
+                    <v-tooltip>
                         <template v-slot:activator="{ props }">
                             <div v-bind="props">{{ item.strategy.name }}</div>
                         </template>
-                        <span>{{ item.strategy.comment }}</span>
+                        <div style="white-space: pre-wrap;">{{ item.strategy.comment }}</div>
                     </v-tooltip>
                 </template>
                 <template #item.dt_from="{item}">
