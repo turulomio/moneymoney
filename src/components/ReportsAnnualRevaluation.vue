@@ -1,7 +1,7 @@
 <template>
     <div class="pa-4">
         <h1 class="mb-3">{{ $t("Investments operations annual revaluation report") }}</h1>
-        <v-checkbox v-model="only_zero" :label="$t('Show only investments operations from zero risk investments')" />
+        <v-checkbox data-test="ReportsAnnualRevaluation_OnlyZero" v-model="only_zero" :label="$t('Show only investments operations from zero risk investments')" />
         <v-data-table density="compact"  :headers="headers" :items="list_io" class="elevation-1" :sort-by="[{key:'datetime',order:'asc'}]" fixed-header height="800" :loading="$attrs.loading" :items-per-page="10000" hide-default-footer :key="key">
         <template #item.datetime="{item}">
             <div>{{ localtime(item.datetime)}}</div>

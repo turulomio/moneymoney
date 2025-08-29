@@ -1,5 +1,5 @@
 {
-  "name": "Money Money",
+  "name": "moneymoney",
   "version": "1.3.0",
   "type": "module",
   "scripts": {
@@ -9,9 +9,10 @@
     "preview": "vite preview",
     "release": "node src/scripts/release.js",
     "translate": "vue-i18n-extract --vueFiles './src/**/*.?(js|vue)' --languageFiles './src/locales/**/*.?(json|yaml|yml|js)' --add true --remove true --separator '###'  --missingTranslationString 'MISSING'",
-    "playwright": "playwright test --ui",
-    "playwright_console": "playwright test",
-    "playwright_coverage": "nyc --reporter=lcov playwright test"
+    "vitest": "vitest --passWithNoTests",
+    "playwright": "playwright test --ui --output output/playwright",
+    "playwright_console": "playwright test --output output/playwright",
+    "playwright_coverage": "nyc --reporter=lcov --report-dir  output/coverage  playwright test"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
@@ -25,6 +26,7 @@
     "pdfmake": "^0.3.0-beta.8",
     "pinia": "^3.0.3",
     "roboto-fontface": "*",
+    "vitest": "^3.2.4",
     "vue": "^3.5.18",
     "vue-i18n": "^11.1.11",
     "vue-router": "^4.5.1",

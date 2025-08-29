@@ -32,7 +32,7 @@ type puede ser redirection or command
     <div style="display: inline-block;">
         <v-menu offset-y>
             <template  v-slot:activator="{ props }">
-                <v-btn :data-test="`${dataTest}_Button`" text dark v-bind="props" style="color:darkgrey" class="elevation-0">
+                <v-btn :data-test="`${dataTest}_Button`" :disabled="!button_enabled" text dark v-bind="props" style="color:darkgrey" class="elevation-0">
                     <v-icon>mdi-menu</v-icon>
                 </v-btn>
             </template>
@@ -60,6 +60,7 @@ type puede ser redirection or command
         data: function(){
             return {
                 new_items:null,
+                button_enabled:true
             }
         },
         props: {
@@ -73,7 +74,9 @@ type puede ser redirection or command
         },
         methods: {
             on_item_click(item){
+                this.button_enabled=false
                 item.code()
+                this.button_enabled=true
             },
         },
         created() {

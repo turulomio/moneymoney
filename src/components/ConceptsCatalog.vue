@@ -1,7 +1,7 @@
 <template>
     <div>    
         <h1>{{ $t('Concepts catalog') }}
-            <MyMenuInline :items="menuinline_items"></MyMenuInline>
+            <MyMenuInline data-test="ConceptsCatalog_MyMenuInline" :items="menuinline_items"></MyMenuInline>
         </h1>
         <v-data-table density="compact" :headers="investments_headers" :search="search" :items="concepts" :sort-by="[{key:'id',order:'asc'}]" class="elevation-1 ma-4" :loading="loading" :key="key"    :items-per-page="10000" >
             <template #item.editable="{item}">

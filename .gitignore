@@ -23,10 +23,9 @@ pnpm-debug.log*
 *.sw?
 coverage
 .nyc_output
-cypress/downloads/
-cypress/screenshots/
 # Playwright
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+output

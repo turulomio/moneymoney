@@ -6,17 +6,17 @@
 
         <div class="mx-4">
             <v-tabs  bg-color="secondary" dark v-model="tab">
-                <v-tab key="positivechart">{{ $t("Positive balance chart") }}</v-tab>
-                <v-tab key="negativechart">{{ $t("Negative balance chart") }}</v-tab>
-                <v-tab key="positive">{{ $t("Positive balance concepts") }}</v-tab>
-                <v-tab key="negative">{{ $t("Negative balance concepts") }}</v-tab>
+                <v-tab data-test="ReportConcepts_TabPositiveChart" key="positivechart">{{ $t("Positive balance chart") }}</v-tab>
+                <v-tab data-test="ReportConcepts_TabNegativeChart" key="negativechart">{{ $t("Negative balance chart") }}</v-tab>
+                <v-tab data-test="ReportConcepts_TabPositive" key="positive">{{ $t("Positive balance concepts") }}</v-tab>
+                <v-tab data-test="ReportConcepts_TabNegative" key="negative">{{ $t("Negative balance concepts") }}</v-tab>
             </v-tabs>
             <v-window v-model="tab">
                 <v-window-item key="positivechart">
-                        <ChartPie v-if="showpie" name="Positive balance concepts" :items="piedataPositive" :key="`A${key}`" />
+                        <ChartPie data-test="ReportConcepts_PositiveChart" v-if="showpie" name="Positive balance concepts" :items="piedataPositive" :key="`A${key}`" />
                 </v-window-item>
                 <v-window-item key="negativechart">
-                        <ChartPie v-if="showpie" name="Negative balance concepts" :items="piedataNegative" :key="`B${key}`" />
+                        <ChartPie data-test="ReportConcepts_NegativeChart" v-if="showpie" name="Negative balance concepts" :items="piedataNegative" :key="`B${key}`" />
                 </v-window-item>
                 <v-window-item key="positive">
                     <v-card>

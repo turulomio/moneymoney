@@ -6,7 +6,9 @@ import { defineConfig } from '@playwright/test';
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  testDir: './playwright',
+  testDir: './tests/playwright/',
+  timeout: 30000, // 30 seconds maximum for each test
+  globalTimeout: 3600000, //All tests timeout
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -14,13 +16,15 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 1 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : 3,
+  workers: process.env.CI ? 1 : 2,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [
+    ['html', { outputFolder: 'output/playwright-report' }]
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://localhost:3000',
+    baseURL: 'http://127.0.0.1:8006/moneymoney/',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -33,7 +37,7 @@ export default defineConfig({
     {
       name: 'e2e-tests',
       // Run all other tests
-      testMatch: /tests\/.*\.spec\.js/,
+      testMatch: "*.spec.js",
       // Make this project wait for the 'setup' project to complete
       // dependencies: ['setup'],
     },

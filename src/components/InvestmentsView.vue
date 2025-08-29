@@ -6,10 +6,10 @@
         </h1>
         <DisplayValues v-if="ios_id" :items="displayvalues" :key="key" />
         <v-tabs  bg-color="secondary" dark v-model="tab" show-arrows>
-            <v-tab key="current">{{ $t('Current investment operations') }}</v-tab>
-            <v-tab key="operations">{{ $t('Investment operations') }}</v-tab>
-            <v-tab key="historical">{{ $t('Historical investment operations') }}</v-tab>
-            <v-tab key="dividends">{{ $t('Dividends') }}</v-tab>
+            <v-tab data-test="InvestmentsView_TabCurrent" key="current">{{ $t('Current investment operations') }}</v-tab>
+            <v-tab data-test="InvestmentsView_TabOperations" key="operations">{{ $t('Investment operations') }}</v-tab>
+            <v-tab data-test="InvestmentsView_TabHistorical" key="historical">{{ $t('Historical investment operations') }}</v-tab>
+            <v-tab data-test="InvestmentsView_TabDividends" key="dividends">{{ $t('Dividends') }}</v-tab>
         </v-tabs>
         <v-window v-model="tab">
             <v-window-item key="current">      

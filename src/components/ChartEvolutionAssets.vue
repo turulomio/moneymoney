@@ -3,7 +3,7 @@
         <h1>{{ $t("Evolution assets chart")}}</h1>
         <div class="d-flex justify-center mb-4 mt-4" >
             <v-card width="30%" variant="flat">
-                <v-select class="pa-4" :disabled="loading" :loading="loading" :label="$t('Select the year from which to display the report')" v-model="from" :items="years()" />
+                <v-select data-test="ChartEvolutionAssets_From" class="pa-4" :disabled="loading" :loading="loading" :label="$t('Select the year from which to display the report')" v-model="from" :items="years()" />
             </v-card>
         </div>
         <v-card class="ma-4 pa-4" >

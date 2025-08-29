@@ -3,13 +3,15 @@
 -->
 <template>
     <div>
-        <h1>{{ f($t("Annual incomes detail ([0]-[1])"), [this.year, this.month]) }}</h1>
+        <h1>{{ f($t("Annual incomes detail ([0]-[1])"), [this.year, this.month]) }}
+            <v-btn data-test="ReportsAnnualIncomeDetail_ButtonClose" small style="color:darkgrey" icon="mdi-close" class="elevation-0" @click="$emit('close')"/>
+        </h1>
         <v-tabs class="mt-4" v-model="tab" bg-color="secondary" dark next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
-            <v-tab key="incomes">{{ $t('Incomes') }}</v-tab>
-            <v-tab key="expenses">{{ $t('Expenses') }}</v-tab>
-            <v-tab key="dividends">{{ $t('Dividends') }}</v-tab>
-            <v-tab key="gains">{{ $t('Gains') }}</v-tab>
-            <v-tab key="fast_operations">{{ $t('Fast operations') }}</v-tab>
+            <v-tab data-test="ReportsAnnualIncomeDetail_TabIncomes" key="incomes">{{ $t('Incomes') }}</v-tab>
+            <v-tab data-test="ReportsAnnualIncomeDetail_TabExpenses" key="expenses">{{ $t('Expenses') }}</v-tab>
+            <v-tab data-test="ReportsAnnualIncomeDetail_TabDividends" key="dividends">{{ $t('Dividends') }}</v-tab>
+            <v-tab data-test="ReportsAnnualIncomeDetail_TabGains" key="gains">{{ $t('Gains') }}</v-tab>
+            <v-tab data-test="ReportsAnnualIncomeDetail_TabFastOperations" key="fast_operations">{{ $t('Fast operations') }}</v-tab>
         </v-tabs>
         <v-window v-model="tab">
             <v-window-item key="incomes">        
