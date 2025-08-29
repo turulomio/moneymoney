@@ -6,7 +6,7 @@
     - Create a new branch: git checkout -b moneymoney-${process.env.npm_package_version}
     - npm run translate
     - Edit src/locales/* if necesary
-    - npm run cypress_console
+    - npm run playwright_console
     - git commit -am moneymoney-${process.env.npm_package_version}
     - git push 
     - Create Pull request in github checking it has no problem github actions

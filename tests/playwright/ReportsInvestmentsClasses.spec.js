@@ -15,6 +15,7 @@ test('Reports Investments Classes', async ({ page }) => {
     await page.getByTestId(`Investments_Table_Row${investments_id}`).click()
     await investmentoperation_add_from_InvestmentsView(page)
     await page.getByTestId(`InvestmentsView_ButtonClose`).click()
+    await expect(page.getByTestId(`InvestmentsView_ButtonClose)`)).toBeHidden()
 
     await page.getByTestId('LateralIcon').click();
     await page.getByTestId('LateralReports').click();

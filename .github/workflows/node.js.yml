@@ -53,7 +53,7 @@ jobs:
         done
 
 
-    - name: Install python dependencies for 3.12 and launch django_moneymoney cypress_test_server
+    - name: Install python dependencies for 3.12 and launch django_moneymoney testserver_e2e
       run: |
         sudo apt-get install python3.12 python3.12-venv
         cd ..

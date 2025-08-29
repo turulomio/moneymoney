@@ -5,7 +5,7 @@ import pluginPlaywright from 'eslint-plugin-playwright';
 
 export default [
   {
-    ignores: ["dist/*", "test/**/*.js", "cypress/**", "coverage/**", "playwright-report/**"],
+    ignores: ["dist/*", "output/**"],
   },
   {
     languageOptions: { 

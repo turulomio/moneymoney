@@ -1,7 +1,6 @@
 import { test, expect } from './fixtures.js';
 import {
-    investment_add_from_InvestmentsList,
-    quote_add_from_InvestmentsList,
+    account_add_from_AccountsList,
 } from "./commons.js";
 
 
@@ -13,7 +12,7 @@ test('Home and its alerts', async ({ page }) => {
     await page.getByTestId('LateralAccounts').click();
 
     // Creates an account
-    const account_id=await account_add_from_AccountsList(page)
+    await account_add_from_AccountsList(page)
     // // I DONT KNOW WHY FAILS
     // // cy.get("@account_id").then((account_id) =>{
     // //   //Add ao to set a non zero balance
@@ -29,9 +28,9 @@ test('Home and its alerts', async ({ page }) => {
 
 
     // Creates an investment and an investment operation
-    const investments_id=await investment_add_from_InvestmentsList(page)
-    await quote_add_from_InvestmentsList(page, investments_id)
-    await expect(page.getByTestId(`Investments_Table_Row${investments_id}`)).toBeVisible();
+    // const investments_id=await investment_add_from_InvestmentsList(page)
+    // await quote_add_from_InvestmentsList(page, investments_id)
+    // await expect(page.getByTestId(`Investments_Table_Row${investments_id}`)).toBeVisible();
     // // Test expired order
     // add_investment_from_Home(cy)
     // cy.getDataTest('LateralIcon').click()

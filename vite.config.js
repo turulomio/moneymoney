@@ -57,7 +57,7 @@ export default defineConfig({
       '@/': new URL('./src/', import.meta.url).pathname,
     },
     include: ['**/*.test.js'],
-    exclude: ['node_modules', 'dist', '**/examples/**', 'cypress', 'test'],
+    exclude: ['node_modules', 'dist', '**/examples/**', 'test'],
     coverage: {
       provider: 'istanbul',
       reporter: ['html', 'text', 'lcov'],
