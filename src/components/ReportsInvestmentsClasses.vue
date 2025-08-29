@@ -5,11 +5,11 @@
         <v-card class="pa-5">
             <v-select label="Select a method to calculate charts" v-model="method" :items="method_products" @change="key=key+1"></v-select>
                 <v-tabs  bg-color="secondary" dark v-model="tab" next-icon="mdi-arrow-right-bold-box-outline" prev-icon="mdi-arrow-left-bold-box-outline" show-arrows>
-                    <v-tab key="product">{{ $t("By investment product") }}</v-tab>
+                    <v-tab data-test="ReportsInvestmentsClasses_TabProduct" key="product">{{ $t("By investment product") }}</v-tab>
                     <v-tab data-test="ReportsInvestmentsClasses_TabPCI" key="pci">{{ $t("By Put / Call / Inline") }}</v-tab>
-                    <v-tab key="percentage">{{ $t("By variable percentage") }}</v-tab>
-                    <v-tab key="type">{{ $t("By investment type") }}</v-tab>
-                    <v-tab key="leverage">{{ $t("By leverage") }}</v-tab>
+                    <v-tab data-test="ReportsInvestmentsClasses_TabPercentage" key="percentage">{{ $t("By variable percentage") }}</v-tab>
+                    <v-tab data-test="ReportsInvestmentsClasses_TabType" key="type">{{ $t("By investment type") }}</v-tab>
+                    <v-tab data-test="ReportsInvestmentsClasses_TabLeverage" key="leverage">{{ $t("By leverage") }}</v-tab>
                 </v-tabs>
                 <v-window v-model="tab" v-if="data!=null">
                     <v-window-item key="product">
