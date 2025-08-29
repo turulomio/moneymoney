@@ -11,7 +11,7 @@ import {
     await page.getByTestId('LateralAccounts').click();
     await page.getByTestId('AccountsList_Table_Row4').click();
 
-    const accountoperation_id=await accountoperation_add_from_AccountsView(page)
+    const accountoperation_id=await accountoperation_add_from_AccountsView(page, "Supermarket", "-100", "This is a comment")
     
     // Capture ao_id from last post and copy this ao
     await page.getByTestId(`TableAccountOperations_ButtonCopy${accountoperation_id}`).click();
