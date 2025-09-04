@@ -136,6 +136,13 @@
                 <InvestmentsoperationsReinvest :shares="reinvest_shares" :price="reinvest_price" :ios_id="ios_id" :key="key"></InvestmentsoperationsReinvest>
             </v-card>
         </v-dialog>
+
+        <!-- Investments transfers -->
+        <v-dialog v-model="dialog_investments_transfers">
+            <v-card class="pa-4">
+                <InvestmentsTransfers :investment="investment" :key="key" />
+            </v-card>
+        </v-dialog>
     </div>  
 </template>
 <script>
@@ -158,6 +165,7 @@
     import TableInvestmentOperations from './TableInvestmentOperations.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
+    import InvestmentsTransfers from './InvestmentsTransfers.vue'
     export default {
         components:{
             ChartInvestments,
@@ -171,6 +179,7 @@
             TableInvestmentOperationsHistorical,
             TableDividends,
             InvestmentsoperationsCU,
+            InvestmentsTransfers,
             ChartInvestmentsoperationsEvolution,
             ChartInvestmentsoperationsEvolutionTimeseries,
             InvestmentsChangeSellingPrice,
@@ -261,6 +270,13 @@
                                 code: function(){
                                     this.key=this.key+1
                                     this.dialog_io_sameproduct=true
+                                }.bind(this)
+                            },
+                            {
+                                name:this.$t('Investments transfers'),
+                                icon: "mdi-transfer",
+                                code: function(){
+                                    this.dialog_investments_transfers=true
                                 }.bind(this)
                             },
                         ]
@@ -402,6 +418,9 @@
                 divest_investments:[],
                 divest_shares:0,
                 divest_price:0,
+
+                // dialog investments transfers
+                dialog_investments_transfers: false,
             }  
         },
         watch:{
