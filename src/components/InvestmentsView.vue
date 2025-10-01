@@ -140,7 +140,7 @@
         <!-- Investments transfers -->
         <v-dialog v-model="dialog_investments_transfers">
             <v-card class="pa-4">
-                <InvestmentsTransfers :investment="investment" :key="key" />
+                <InvestmentsTransfers :investment="investment" :key="key" @cruded="on_InvestmentsTransfers_cruded" />
             </v-card>
         </v-dialog>
     </div>  
@@ -517,6 +517,10 @@
             on_DividendsCU_cruded(){
                 this.update_all()
                 this.dividends_cu_dialog=false
+            },
+            on_InvestmentsTransfers_cruded(){
+                this.update_all()
+                this.$emit("cruded") //Translated to InvestmentsList
             },
             on_TableDividends_cruded(){
                 this.update_all()

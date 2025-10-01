@@ -2,7 +2,7 @@
 import { expect } from './fixtures.js';
 
 
-export async function v_autocomplete_selection(page, name, item_text){
+export async function v_autocomplete_selection(page, name, item_text, first=false){
   const autocomplete = page.getByTestId(name);
   // Click the input to focus and show the dropdown
   await autocomplete.click();
@@ -11,7 +11,9 @@ export async function v_autocomplete_selection(page, name, item_text){
   // Wait for the dropdown option to appear and click it.
   // Vuetify often renders the options overlay detached from the input.
   // We locate the item by its title text. Using a RegExp ensures an exact match.
-  await page.locator('.v-list-item-title').filter( { hasText: item_text }).click();
+  const locator = page.locator('.v-list-item-title').filter({ hasText: item_text });
+  if (first) await locator.first().click();
+  else await locator.first().click();
 }
 
 

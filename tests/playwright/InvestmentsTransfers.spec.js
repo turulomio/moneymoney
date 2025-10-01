@@ -4,6 +4,9 @@ import {
   investmentoperation_add_from_InvestmentsView,
   quote_add_from_InvestmentsList,
   mymenuinline_selection,
+  v_autocomplete_selection,
+  v_text_input_settext,
+  promise_to_get_id_from_post_response,
 } from "./commons"
 
 
@@ -22,12 +25,27 @@ test('Investments transfers', async ({ page }) => {
     // Preparing investment 2
   const investments2_id=await investment_add_from_InvestmentsList(page, "Test investment transfer 2", "Lyxor UCITS NASDAQ-100 Daily Leverage (Paris Stock Exchange)")
   await quote_add_from_InvestmentsList(page, investments2_id)
+  await expect(page.getByTestId(`Investments_Table_Row${investments2_id}`)).toBeVisible();
+  await page.getByTestId(`Investments_Table_Row${investments2_id}`).click()
 
-  // Change investment active status 
+  // Creating a new investments transfer
   await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 5)
+  await mymenuinline_selection(page, "InvestmentsTransfers_MyMenuInline", 0, 0)
 
+  await v_autocomplete_selection(page, 'InvestmentsTransfersCU_InvestmentsDestiny',"Test investment transfer 2")
 
+  // Fill origin data
+  await v_text_input_settext(page, "InvestmentsTransfersCU_SharesOrigin", "50")
+  await v_text_input_settext(page, "InvestmentsTransfersCU_PriceOrigin", "9")
 
+  // Fill destiny data
+  await v_text_input_settext(page, "InvestmentsTransfersCU_SharesDestiny", "45")
+  await v_text_input_settext(page, "InvestmentsTransfersCU_PriceDestiny", "10")
 
+  const transferIdPromise = promise_to_get_id_from_post_response(page, "/api/investmentstransfers/");
+  await page.getByTestId('InvestmentsTransfersCU_Button').click();
+  const transferId = await transferIdPromise;
+  expect(transferId).toBeDefined();
+
+  await expect(page.getByTestId('InvestmentsTransfersCU_Button')).toBeHidden();
 })
-

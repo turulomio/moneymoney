@@ -1,7 +1,7 @@
 <template>
     <div>    
         <h1>{{ f(t(`'[0]' transfers`), [investment.fullname]) }}
-            <MyMenuInline :items="menuinline_items" data-test="StrategiesList_MyMenuInline"/>
+            <MyMenuInline :items="menuinline_items" data-test="InvestmentsTransfers_MyMenuInline"/>
         </h1>
         <TableInvestmentsTransfers :items="items" :investment="investment" :key="key" :loading="loading" @cruded="update_table" />
 
@@ -18,11 +18,12 @@
     import { useStore } from "@/store"
     import MyMenuInline from './MyMenuInline.vue'    
     import { parseResponseError, myheaders } from '@/functions'
-    import { ref, onMounted, defineProps } from 'vue'
+    import { ref, onMounted, defineProps, defineEmits } from 'vue'
     import { useI18n } from 'vue-i18n'
     import { f } from 'vuetify_rules'
     import TableInvestmentsTransfers from './TableInvestmentsTransfers.vue'
     import InvestmentsTransfersCU from './InvestmentsTransfersCU.vue'
+    import { empty_investment_transfer } from '@/empty_objects'
 
     const { t } = useI18n()
     const store = useStore()
@@ -30,6 +31,8 @@
     const props = defineProps({
         investment: Object, // Investment object
     })
+
+    const emit = defineEmits(['cruded'])
     const items = ref([])
     const dialog_transfers_cu=ref(false)
     const transfer=ref(null)
@@ -44,7 +47,8 @@
                     name: t("Add a new investment transfer"),
                     icon: "mdi-plus",
                     code: () => {
-                        transfer.value = null
+                        transfer.value = empty_investment_transfer()
+                        transfer.value.investments_origin = props.investment.url
                         transfer_mode.value = "C"
                         key.value++
                         dialog_transfers_cu.value = true
@@ -64,10 +68,11 @@
 
     function update_table(){
         loading.value = true
-        axios.get(`${store.apiroot}/api/investmentstransfers/?investments=${props.investment.url}`, myheaders())
+        axios.get(`${store.apiroot}/api/investmentstransfers/?investment=${props.investment.url}`, myheaders())
         .then((response) => {
             items.value = response.data
             loading.value = false
+            emit("cruded")
             key.value++
         }, (error) => {
             parseResponseError(error)
