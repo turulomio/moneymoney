@@ -89,7 +89,7 @@ export function parseResponseError(error){
                 console.log(error.response)
             }
         } else if (error.response.status == 400){ // Used for developer or app errors
-            alert (this.$t("Something wrong with your request")+ "\n" + error.response.data)
+            alert (this.$t("Something wrong with your request")+ "\n" + JSON.stringify(error.response.data));
             console.log(error.response)
         } else if (error.response.status == 403){ // Used for developer or app errors
             alert (this.$t("You've done something forbidden"))

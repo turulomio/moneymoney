@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table density="compact" v-model="selected" :headers="table_headers()" :items="items" class="elevation-1" :sort-by="[{key:'datetime',order:'asc'}]" fixed-header :height="$attrs.height" ref="table_o" :key="$attrs.key" :loading="$attrs.loading"    :items-per-page="10000" >
+        <v-data-table density="compact" v-model="selected" :headers="tableHeaders" :items="props.items" class="elevation-1" :sort-by="[{key:'datetime',order:'asc'}]" fixed-header :height="$attrs.height" ref="table_o" :key="$attrs.key" :loading="$attrs.loading"    :items-per-page="10000" >
 
             <template #item.datetime="{item}">
               <div>{{ localtime(item.datetime)}}</div>
@@ -54,157 +54,186 @@
             <v-card class="pa-3">
                 <InvestmentsoperationsCU :io="io" :mode="io_mode" :key="key"  @cruded="on_InvestmentsoperationsCU_cruded()" />
             </v-card>
+        </v-dialog> 
+        <!-- InvestmentsTransfersCU DIALOG -->
+        <v-dialog v-model="transfer_crud_dialog" width="80%">
+            <v-card class="pa-3">
+                <InvestmentsTransfersCU :transfer="transfer" :mode="transfer_crud_mode" :key="key"  @cruded="on_InvestmentsTransfersCU_cruded()"></InvestmentsTransfersCU>
+            </v-card>
         </v-dialog>
     </div>
 </template>
 
-<script>
+<script setup>
+    import axios from "axios"
+    import { ref, computed, onMounted } from 'vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import { useStore } from "@/store"
     import { empty_investment_operation } from '@/empty_objects.js'
     import { localtime } from 'vuetify_rules'
-    import { hyperlinked_url, getMapObjectById, currency_string } from '@/functions'
-    export default {
-        name:"TableInvestmentOperations",
-        components:{
-            InvestmentsoperationsCU,
-        },
-        props: {
-            items: {
-                required: true
-            },
-            showactions:{ //Used to edit io operation
-                required:false,
-                default:true
-            },
-            output:{ // "investmnt", account or user to see table ouput
-                required:true,
-                default: "investment",
-            },
-            showinvestment:{// Items must have accounts attribute
-                type: Boolean,
-                required:false,
-                default: false,
-            },
-        },
-        data: function(){
-            return {
-                selected: [],
-                key:0,  
+    import { hyperlinked_url, getMapObjectById, currency_string, myheaders, parseResponseError } from '@/functions'
+    import InvestmentsTransfersCU from './InvestmentsTransfersCU.vue'
+    import { useI18n } from 'vue-i18n'
 
-                dialog_io:false,
-                io:null,
-                io_mode:null,
-            }
+    const props = defineProps({
+        items: {
+            required: true
         },
-        methods: {
-            hyperlinked_url,
-            useStore,
-            localtime,
-            getMapObjectById,
-            currency_string,
-            // Currencies are part of the item
-            currency(item){
-                if (this.output=="account"){
-                    return item.currency_account
-                } else if (this.output=="investment"){
-                    return item.currency_product
-                } else if (this.output=="user"){
-                    return item.currency_user
-                }
-            },
-            empty_investment_operation,
-            table_headers(){
-                var r
-                if (this.output=="account"){
-                    r= [
-                        { title: this.$t('Date and time'), key: 'datetime',sortable: true },
-                        { title: this.$t('Operation'), key: 'operationstypes',sortable: true },
-                        { title: this.$t('Shares'), key: 'shares',sortable: false, align:'end'},
-                        { title: this.$t('Price'), key: 'price',sortable: false, align:'end'},
-                        { title: this.$t('Gross'), key: 'gross_account',sortable: false, align:'end'},
-                        { title: this.$t('Commission'), key: 'commission',sortable: false, align:'end'},
-                        { title: this.$t('Taxes'), key: 'taxes',sortable: false, align:'end'},
-                        { title: this.$t('Net'), key: 'net_account',sortable: false, align:'end'},
-                        { title: this.$t('Currency factor'), key: 'currency_conversion',sortable: false, align:'end'},
-                        { title: this.$t('Comment'), key: 'comment',sortable: false},
-                    ]
-                } else if (this.output=="investment"){                
-                    r= [
-                        { title: this.$t('Date and time'), key: 'datetime',sortable: true },
-                        { title: this.$t('Operation'), key: 'operationstypes',sortable: true },
-                        { title: this.$t('Shares'), key: 'shares',sortable: false, align:'end'},
-                        { title: this.$t('Price'), key: 'price',sortable: false, align:'end'},
-                        { title: this.$t('Gross'), key: 'gross_investment',sortable: false, align:'end'},
-                        { title: this.$t('Commission'), key: 'commission',sortable: false, align:'end'},
-                        { title: this.$t('Taxes'), key: 'taxes',sortable: false, align:'end'},
-                        { title: this.$t('Net'), key: 'net_investment',sortable: false, align:'end'},
-                        { title: this.$t('Currency factor'), key: 'currency_conversion',sortable: false, align:'end'},
-                        { title: this.$t('Comment'), key: 'comment',sortable: false},
-                    ]
-                } else if (this.output=="user"){
-                    r= [
-                        { title: this.$t('Date and time'), key: 'datetime',sortable: true },
-                        { title: this.$t('Operation'), key: 'operationstypes',sortable: true },
-                        { title: this.$t('Shares'), key: 'shares',sortable: false, align:'end'},
-                        { title: this.$t('Price'), key: 'price',sortable: false, align:'end'},
-                        { title: this.$t('Gross'), key: 'gross_user',sortable: false, align:'end'},
-                        { title: this.$t('Commission'), key: 'commission',sortable: false, align:'end'},
-                        { title: this.$t('Taxes'), key: 'taxes',sortable: false, align:'end'},
-                        { title: this.$t('Net'), key: 'net_user',sortable: false, align:'end'},
-                        { title: this.$t('Currency factor'), key: 'currency_conversion',sortable: false, align:'end'},
-                        { title: this.$t('Comment'), key: 'comment',sortable: false},
-                    ]
-                }
+        showactions:{ //Used to edit io operation
+            type: Boolean,
+            required:false,
+            default:true
+        },
+        output:{ // "investmnt", account or user to see table ouput
+            type: String,
+            required:true,
+            default: "investment",
+        },
+        showinvestment:{// Items must have accounts attribute
+            type: Boolean,
+            required:false,
+            default: false,
+        },
+    })
 
-                if (this.showactions==true){
-                    r.push({ title: this.$t('Actions'), key: 'actions', sortable: false })
-                }
-                
-                // if (this.currency_product==this.currency_account){
-                //     r.splice(8,1)
-                // }
-                if (this.showinvestment==true){
-                    r.splice(1, 0, { title: this.$t('Name'), key: 'name',sortable: true });
-                }
-                return r
-            },
-            copyIO(item){
-                this.io=this.empty_investment_operation()
-                this.io.operationstypes=this.hyperlinked_url("operationstypes",item.operationstypes_id)
-                this.io.shares=item.shares
-                this.io.taxes=item.taxes
-                this.io.commission=item.commission
-                this.io.price=item.price
-                this.io.comment=item.comment
-                this.io.currency_conversion=item.currency_conversion
-                this.io.investments=this.hyperlinked_url("investments",item.investments_id)
-                this.io_mode="C"
-                this.key=this.key+1
-                this.dialog_io=true
-            },
-            editIO(item){
-                this.io=item
-                this.io_mode="U"
-                this.key=this.key+1
-                this.dialog_io=true
-            },
-            deleteIO(item){
-                this.io=item
-                this.io_mode="D"
-                this.key=this.key+1
-                this.dialog_io=true
-            },
-            gotoLastRow(){
-                //this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs.table_o.$el.childNodes[0] }) 
-            },
-            on_InvestmentsoperationsCU_cruded(){
-                this.dialog_io=false
-                this.$emit("cruded")
-            }
-        },
-        mounted(){
-            this.gotoLastRow()
+    const emit = defineEmits(['cruded'])
+    const { t } = useI18n()
+
+    const selected = ref([])
+    const key = ref(0)
+    const table_o = ref(null)
+
+    // IO CU
+    const dialog_io = ref(false)
+    const io = ref(null)
+    const io_mode = ref(null)
+
+    // InvestmentsTransfersCU
+    const transfer_crud_dialog = ref(false)
+    const transfer_crud_mode = ref(null)
+    const transfer = ref(null)
+
+    // Currencies are part of the item
+    function currency(item){
+        if (props.output=="account"){
+            return item.currency_account
+        } else if (props.output=="investment"){
+            return item.currency_product
+        } else if (props.output=="user"){
+            return item.currency_user
         }
     }
+
+    const tableHeaders = computed(() => {
+        var r
+        if (props.output=="account"){
+            r= [
+                { title: t('Date and time'), key: 'datetime',sortable: true },
+                { title: t('Operation'), key: 'operationstypes',sortable: true },
+                { title: t('Shares'), key: 'shares',sortable: false, align:'end'},
+                { title: t('Price'), key: 'price',sortable: false, align:'end'},
+                { title: t('Gross'), key: 'gross_account',sortable: false, align:'end'},
+                { title: t('Commission'), key: 'commission',sortable: false, align:'end'},
+                { title: t('Taxes'), key: 'taxes',sortable: false, align:'end'},
+                { title: t('Net'), key: 'net_account',sortable: false, align:'end'},
+                { title: t('Currency factor'), key: 'currency_conversion',sortable: false, align:'end'},
+                { title: t('Comment'), key: 'comment',sortable: false},
+            ]
+        } else if (props.output=="investment"){                
+            r= [
+                { title: t('Date and time'), key: 'datetime',sortable: true },
+                { title: t('Operation'), key: 'operationstypes',sortable: true },
+                { title: t('Shares'), key: 'shares',sortable: false, align:'end'},
+                { title: t('Price'), key: 'price',sortable: false, align:'end'},
+                { title: t('Gross'), key: 'gross_investment',sortable: false, align:'end'},
+                { title: t('Commission'), key: 'commission',sortable: false, align:'end'},
+                { title: t('Taxes'), key: 'taxes',sortable: false, align:'end'},
+                { title: t('Net'), key: 'net_investment',sortable: false, align:'end'},
+                { title: t('Currency factor'), key: 'currency_conversion',sortable: false, align:'end'},
+                { title: t('Comment'), key: 'comment',sortable: false},
+            ]
+        } else if (props.output=="user"){
+            r= [
+                { title: t('Date and time'), key: 'datetime',sortable: true },
+                { title: t('Operation'), key: 'operationstypes',sortable: true },
+                { title: t('Shares'), key: 'shares',sortable: false, align:'end'},
+                { title: t('Price'), key: 'price',sortable: false, align:'end'},
+                { title: t('Gross'), key: 'gross_user',sortable: false, align:'end'},
+                { title: t('Commission'), key: 'commission',sortable: false, align:'end'},
+                { title: t('Taxes'), key: 'taxes',sortable: false, align:'end'},
+                { title: t('Net'), key: 'net_user',sortable: false, align:'end'},
+                { title: t('Currency factor'), key: 'currency_conversion',sortable: false, align:'end'},
+                { title: t('Comment'), key: 'comment',sortable: false},
+            ]
+        }
+
+        if (props.showactions==true){
+            r.push({ title: t('Actions'), key: 'actions', sortable: false })
+        }
+        
+        if (props.showinvestment==true){
+            r.splice(1, 0, { title: t('Name'), key: 'name',sortable: true });
+        }
+        return r
+    })
+
+    function copyIO(item){
+        io.value=empty_investment_operation()
+        io.value.operationstypes=hyperlinked_url("operationstypes",item.operationstypes_id)
+        io.value.shares=item.shares
+        io.value.taxes=item.taxes
+        io.value.commission=item.commission
+        io.value.price=item.price
+        io.value.comment=item.comment
+        io.value.currency_conversion=item.currency_conversion
+        io.value.investments=hyperlinked_url("investments",item.investments_id)
+        io_mode.value="C"
+        key.value=key.value+1
+        dialog_io.value=true
+    }
+
+    function editIO(item){
+        if (item.associated_it_id){ //Investment transfer
+            axios.get(`${useStore().apiroot}/api/investmentstransfers/${item.associated_it_id}/`, myheaders())
+            .then((response) => {
+                transfer.value=response.data
+                transfer_crud_mode.value="U"
+                key.value=key.value+1
+                transfer_crud_dialog.value=true
+            }, (error) => {
+                parseResponseError(error)
+            });
+        } else {
+            io.value=item
+            io_mode.value="U"
+            key.value=key.value+1
+            dialog_io.value=true
+        }
+    }
+
+    function deleteIO(item){
+        io.value=item
+        io_mode.value="D"
+        key.value=key.value+1
+        dialog_io.value=true
+    }
+
+    function on_InvestmentsoperationsCU_cruded(){
+        dialog_io.value=false
+        emit("cruded")
+    }
+
+    function on_InvestmentsTransfersCU_cruded(){
+        transfer_crud_dialog.value = false
+        emit("cruded")
+    }
+
+    function gotoLastRow(){
+        //this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs.table_o.$el.childNodes[0] }) 
+    }
+
+    onMounted(() => {
+        gotoLastRow()
+    })
+
 </script>

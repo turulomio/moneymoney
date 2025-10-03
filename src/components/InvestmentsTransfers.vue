@@ -63,6 +63,7 @@
     function on_cruded(){
         dialog_transfers_cu.value=false
         update_table()
+        emit("cruded")
     }
 
 
@@ -72,7 +73,6 @@
         .then((response) => {
             items.value = response.data
             loading.value = false
-            emit("cruded")
             key.value++
         }, (error) => {
             parseResponseError(error)

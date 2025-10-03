@@ -58,8 +58,9 @@
         { title: t('Date'), key: 'datetime_origin', sortable: true, width:"20%"},
         { title: t('Origin'), key: 'origin_investment_name', sortable: true, width:"20%"},
         { title: t('Destination'), key: 'destination_investment_name', sortable: true, width:"20%"},
-        { title: t('Amount origin'), key: 'amount_origin', sortable: true, align:'end' , width:"15%"},
-        { title: t('Amount destiny'), key: 'amount_destiny', sortable: true, align:'end' , width:"15%"},
+        { title: t('Amount origin'), key: 'amount_origin', sortable: true, align:'end' , width:"10%"},
+        { title: t('Amount destiny'), key: 'amount_destiny', sortable: true, align:'end' , width:"10%"},
+        { title: t('Comment'), key: 'comment', sortable: true, width:"10%"},
         { title: t('Actions'), key: 'actions', sortable: false , width:"10%"},
     ])
 
