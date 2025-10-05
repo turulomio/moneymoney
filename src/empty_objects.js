@@ -359,7 +359,7 @@ export function empty_investment_transfer(){
         currency_conversion_origin: 1,
 
         investments_destiny: null,
-        datetime_destiny: new Date(),
+        datetime_destiny: null,
         shares_destiny: null,
         price_destiny: null,
         commission_destiny: 0,

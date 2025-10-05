@@ -5,7 +5,7 @@
         </h1>
         <TableInvestmentsTransfers :items="items" :investment="investment" :key="key" :loading="loading" @cruded="update_table" />
 
-        <v-dialog v-model="dialog_transfers_cu" width="35%">
+        <v-dialog v-model="dialog_transfers_cu" width="60%">
             <v-card class="pa-3">
                 <InvestmentsTransfersCU :transfer="transfer" :mode="transfer_mode" :key="key" @cruded="on_cruded" />
             </v-card>

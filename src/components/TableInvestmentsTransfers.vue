@@ -11,7 +11,8 @@
                 <div>{{ currency_string( item.shares_origin*item.price_origin, useStore().products.get(useStore().investments.get(item.investments_origin).products).currency) }} </div>
             </template>  
             <template #item.amount_destiny="{item}">
-                <div>{{ currency_string( item.shares_destiny*item.price_destiny,  useStore().products.get(useStore().investments.get(item.investments_origin).products).currency) }} </div>
+                <div v-if="item.finished">{{ currency_string( item.shares_destiny*item.price_destiny,  useStore().products.get(useStore().investments.get(item.investments_origin).products).currency) }} </div>
+                <div v-if="!item.finished" class="boldred">{{ t("Unfinished") }}</div>
             </template>       
             <template #item.actions="{item}">
                 <v-icon small class="mr-2" @click="editTransfer(item)">mdi-pencil</v-icon>
@@ -20,7 +21,7 @@
                 <template #bottom ></template>   
         </v-data-table>   
         <!-- InvestmentsTransfersCU DIALOG -->
-        <v-dialog v-model="transfer_crud_dialog" width="80%">
+        <v-dialog v-model="transfer_crud_dialog" width="60%">
             <v-card class="pa-3">
                 <InvestmentsTransfersCU :transfer="transfer" :mode="transfer_crud_mode" :key="key"  @cruded="on_InvestmentsTransfersCU_cruded()"></InvestmentsTransfersCU>
             </v-card>

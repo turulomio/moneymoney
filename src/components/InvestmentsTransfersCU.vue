@@ -4,7 +4,7 @@
             <h1 class="mb-4">{{ title() }}</h1>
             <v-form ref="form" v-model="form_valid">
                 <v-row>
-                    <v-col cols="12" sm="6">
+                    <v-col >
                         <h2 class="mb-2">{{ $t("Origin") }}</h2>
                         <v-autocomplete data-test="InvestmentsTransfersCU_InvestmentsOrigin" :readonly="mode=='D'" :items="getArrayFromMap(useStore().investments)" v-model="new_transfer.investments_origin" :label="$t('Origin investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                         <MyDateTimePicker data-test="InvestmentsTransfersCU_DateTimeOrigin" :readonly="mode=='D'" v-model="new_transfer.datetime_origin" :label="$t('Set origin date and time')" />
@@ -14,10 +14,10 @@
                         <v-text-field data-test="InvestmentsTransfersCU_TaxesOrigin" :readonly="mode=='D'" v-model.number="new_transfer.taxes_origin"  :label="$t('Taxes')" :rules="RulesFloatGEZ(12,true,origin_investment_account.decimals)" counter="12"/>
                         <CurrencyFactor data-test="InvestmentsTransfersCU_CurrencyConversionOrigin" :readonly="mode=='D'" :label="$t('Currency conversion factor')" v-model="new_transfer.currency_conversion_origin" :currency_from="origin_investment_product.currency" :currency_to="origin_investment_account.currency"></CurrencyFactor>
                     </v-col>
-                    <v-col cols="12" sm="6">
+                    <v-col>
                         <h2 class="mb-2">{{ $t("Destination") }}</h2>
                         <v-autocomplete data-test="InvestmentsTransfersCU_InvestmentsDestiny" :readonly="mode=='D'" :items="getArrayFromMap(useStore().investments)" v-model="new_transfer.investments_destiny" :label="$t('Destination investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                        <MyDateTimePicker data-test="InvestmentsTransfersCU_DateTimeDestiny" :readonly="mode=='D'" v-model="new_transfer.datetime_destiny" :label="$t('Set destination date and time')" />
+                        <MyDateTimePicker data-test="InvestmentsTransfersCU_DateTimeDestiny" :readonly="mode=='D'" v-model="new_transfer.datetime_destiny" :label="$t('Set destination date and time. Clear for unfinished transfers')" clearable />
                         <v-text-field data-test="InvestmentsTransfersCU_SharesDestiny" :readonly="mode=='D'" v-model.number="new_transfer.shares_destiny"  :label="$t('Shares')" :rules="RulesFloat(15,true,6)" counter="15"/>
                         <v-text-field data-test="InvestmentsTransfersCU_PriceDestiny" :readonly="mode=='D'" v-model.number="new_transfer.price_destiny"  :label="$t('Price')" :rules="RulesFloatGEZ(15,true, destination_investment_product.decimals)" counter="15"/>
                         <v-text-field data-test="InvestmentsTransfersCU_CommissionDestiny" :readonly="mode=='D'" v-model.number="new_transfer.commission_destiny"  :label="$t('Commission')" :rules="RulesFloatGEZ(12,true,destination_investment_account.decimals)" counter="12"/>
