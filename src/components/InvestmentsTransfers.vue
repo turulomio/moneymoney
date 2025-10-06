@@ -29,7 +29,7 @@
     const store = useStore()
 
     const props = defineProps({
-        investment: Object, // Investment object
+        investment: null, // Investment object
     })
 
     const emit = defineEmits(['cruded'])
@@ -50,7 +50,6 @@
                         transfer.value = empty_investment_transfer()
                         transfer.value.investments_origin = props.investment.url
                         transfer_mode.value = "C"
-                        key.value++
                         dialog_transfers_cu.value = true
                     }
                 },
