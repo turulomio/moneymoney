@@ -7,7 +7,9 @@ export async function v_autocomplete_selection(page, name, item_text, first=fals
   // Click the input to focus and show the dropdown
   await autocomplete.click();
   // Type the text to filter the options
-  await autocomplete.getByRole("textbox").fill(item_text);
+  // Wait for the dropdown to be visible and then type the text to filter the options
+  await page.locator('.v-overlay-container .v-list').waitFor();
+  await autocomplete.getByRole("combobox").last().fill(item_text);
   // Wait for the dropdown option to appear and click it.
   // Vuetify often renders the options overlay detached from the input.
   // We locate the item by its title text. Using a RegExp ensures an exact match.
@@ -21,7 +23,6 @@ export async function v_text_input_settext(page, name, text){
   const v_text_input=page.getByTestId(name)
   await v_text_input.click()
   await v_text_input.getByRole("textbox").fill(text);
-//   await expect(v_text_input).toHaveValue(text);
 }
   
 // This helper waits for a POST request to a given URL and returns the 'id' from the JSON response.

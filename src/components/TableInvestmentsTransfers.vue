@@ -29,7 +29,7 @@
     </div>
 </template>
 <script setup>
-    import { ref } from 'vue'
+    import { ref, defineExpose } from 'vue'
     import { useStore } from "@/store"
     import InvestmentsTransfersCU from './InvestmentsTransfersCU.vue'
     import { useI18n } from 'vue-i18n'
@@ -71,8 +71,7 @@
         key.value++
         transfer_crud_dialog.value = true
     }
-    addTransfer
-
+    defineExpose({addTransfer})
 
     function editTransfer(item){
         transfer.value = item

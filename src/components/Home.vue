@@ -32,7 +32,7 @@
             <v-alert class="mx-15 px-10 mb-2" type="error" variant="outlined" v-if="alerts.investments_transfers_unfinished.length>0"> 
                 <p>{{t("Unfinished investments transfers:")}}</p>
                 <ul>    
-                    <li v-for="(investment,i) in alerts.investments_transfers_unfinished" :key="i">    - {{ item.alert }}.  </li> 
+                    <li v-for="(it,i) in alerts.investments_transfers_unfinished" :key="i">    - {{ f(t(`Investments transfer started at '[0]' from '[1]'`), [localtime(it.datetime_origin), useStore().investments.get(it.investments_origin).fullname])}}.  </li> 
                 </ul>
             </v-alert>
             <v-alert class="mx-15 px-10 mb-2" type="success" variant="outlined" v-if="(alerts.banks_inactive_with_balance.length + alerts.investments_inactive_with_balance.length + alerts.orders_expired.length + alerts.accounts_inactive_with_balance.length + alerts.investments_transfers_unfinished.length)==0"> 
@@ -47,7 +47,7 @@
     import { useStore } from "@/store"
     import imgUrl from '@/assets/moneymoney.png'
     import { myheaders, currency_string, newParseResponseError } from '@/functions'
-    import { f } from 'vuetify_rules'
+    import { f, localtime } from 'vuetify_rules'
     import { ref, computed } from 'vue'
     import { useI18n } from 'vue-i18n'
 
@@ -66,6 +66,7 @@
         axios.get(`${useStore().apiroot}/alerts/`, myheaders())
         .then((response) => {
             alerts.value = response.data
+            console.log(alerts.value)
             let local = new Date()
             let server = new Date(alerts.value.server_time)
             diff_time.value = local - server
