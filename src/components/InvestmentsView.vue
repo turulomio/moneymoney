@@ -138,9 +138,9 @@
         </v-dialog>
 
         <!-- Investments transfers -->
-        <v-dialog v-model="dialog_investments_transfers">
+        <v-dialog v-model="dialog_investments_transfers"  @click:outside="on_DialogInvestmentsTransfers_clickoutside">
             <v-card class="pa-4">
-                <InvestmentsTransfers :investment="investment" :key="key" @cruded="on_InvestmentsTransfers_cruded" />
+                <InvestmentsTransfers :investment="investment" :key="key"/>
             </v-card>
         </v-dialog>
     </div>  
@@ -484,9 +484,6 @@
                 } else {
                     return this.$t("Check to see all investment operations")
                 }
-
-
-                
             },
 
             chkShowAllDividends_label(){
@@ -518,7 +515,8 @@
                 this.update_all()
                 this.dividends_cu_dialog=false
             },
-            on_InvestmentsTransfers_cruded(){
+            on_DialogInvestmentsTransfers_clickoutside(){
+                console.log("on_DialogInvestmentsTransfers_clickoutside")
                 this.update_all()
                 this.$emit("cruded") //Translated to InvestmentsList
             },

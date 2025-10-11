@@ -65,6 +65,15 @@
         { title: t('Actions'), key: 'actions', sortable: false , width:"10%"},
     ])
 
+    function addTransfer(item){
+        transfer.value = item
+        transfer_crud_mode.value = "C"
+        key.value++
+        transfer_crud_dialog.value = true
+    }
+    addTransfer
+
+
     function editTransfer(item){
         transfer.value = item
         transfer_crud_mode.value = "U"
