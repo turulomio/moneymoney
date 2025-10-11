@@ -11,11 +11,11 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import MyMenuInline from './MyMenuInline.vue'    
+    import TableInvestmentsTransfers from './TableInvestmentsTransfers.vue'
     import { myheaders, newParseResponseError } from '@/functions'
     import { ref, onMounted } from 'vue'
     import { useI18n } from 'vue-i18n'
     import { f } from 'vuetify_rules'
-    import TableInvestmentsTransfers from './TableInvestmentsTransfers.vue'
 
     const { t } = useI18n()
 
@@ -35,6 +35,7 @@
                     name: t("Add a new investment transfer"),
                     icon: "mdi-plus",
                     code: () => {
+                        console.log(table_it.value)
                         table_it.value.addTransfer()
                     }
                 },
