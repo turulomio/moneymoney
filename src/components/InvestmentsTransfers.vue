@@ -18,7 +18,7 @@
     import { useStore } from "@/store"
     import MyMenuInline from './MyMenuInline.vue'    
     import { parseResponseError, myheaders } from '@/functions'
-    import { ref, onMounted, defineProps, defineEmits } from 'vue'
+    import { ref, onMounted } from 'vue'
     import { useI18n } from 'vue-i18n'
     import { f } from 'vuetify_rules'
     import TableInvestmentsTransfers from './TableInvestmentsTransfers.vue'

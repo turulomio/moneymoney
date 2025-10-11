@@ -40,7 +40,7 @@
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import CurrencyFactor from './CurrencyFactor.vue'
     import { RulesSelection,RulesFloat,RulesFloatGEZ,RulesString } from 'vuetify_rules'
-    import { parseResponseError, myheaders, getArrayFromMap } from '@/functions.js'
+    import { newParseResponseError, myheaders, getArrayFromMap } from '@/functions.js'
     import { empty_investment_transfer } from '@/empty_objects.js'
     import { ref, computed } from 'vue'
     import { useI18n } from 'vue-i18n'
@@ -125,14 +125,14 @@
             .then(() => {
                     emit("cruded")
             }, (error) => {
-                parseResponseError(error)
+                newParseResponseError(error,t,useStore())
             })
         } else if (props.mode=="C") {
             axios.post(`${store.apiroot}/api/investmentstransfers/`, new_transfer.value,  myheaders())
             .then(() => {
                     emit("cruded")
             }, (error) => {
-                parseResponseError(error)
+                newParseResponseError(error,t,useStore())
             })
         } else if (props.mode=="D") {
             var r = confirm(t("Do you want to delete this investment transfer?"))
@@ -143,7 +143,7 @@
             .then(() => {
                 emit("cruded")
             }, (error) => {
-                parseResponseError(error)
+                newParseResponseError(error,t,useStore())
             })
         }
     }
