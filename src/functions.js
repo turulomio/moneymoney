@@ -89,7 +89,7 @@ export function parseResponseError(error){
                 console.log(error.response)
             }
         } else if (error.response.status == 400){ // Used for developer or app errors
-            alert (this.$t("Something wrong with your request")+ "\n" + error.response.data)
+            alert (this.$t("Something wrong with your request")+ "\n" + JSON.stringify(error.response.data));
             console.log(error.response)
         } else if (error.response.status == 403){ // Used for developer or app errors
             alert (this.$t("You've done something forbidden"))
@@ -104,6 +104,47 @@ export function parseResponseError(error){
     } else if (error.request) {
         console.log("The request was made but no response was received")
         alert (this.$t("Server couldn't answer this request"))
+      // The request was made but no response was received
+      console.log(error.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+        console.log("OTROS")
+        console.log('Error', error.message);
+    }
+}
+
+
+
+export function newParseResponseError(error, t, store){
+    if (error.response) {
+      // Request made and server responded
+        console.log("made and responded")
+        if (error.response.status == 401){
+            if (store.token==null){ // Not logged yet
+                alert(t("Wrong credentials"))
+            } else {
+                alert (t("You aren't authorized to do this request"))
+                store.token=null;
+                store.logged=false;
+                // if (this.$router.currentRoute.name != "about") this.$router.push("about")
+                console.log(error.response)
+            }
+        } else if (error.response.status == 400){ // Used for developer or app errors
+            alert (t("Something wrong with your request")+ "\n" + JSON.stringify(error.response.data));
+            console.log(error.response)
+        } else if (error.response.status == 403){ // Used for developer or app errors
+            alert (t("You've done something forbidden"))
+            store.token=null;
+            store.logged=false;
+            //if (this.$router.currentRoute.name != "about") this.$router.push("about")
+            console.log(error.response)
+        } else if (error.response.status == 500){
+            alert (t("There is a server error"))
+            console.log(error.response)
+        }
+    } else if (error.request) {
+        console.log("The request was made but no response was received")
+        alert (t("Server couldn't answer this request"))
       // The request was made but no response was received
       console.log(error.request);
     } else {

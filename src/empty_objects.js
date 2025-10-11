@@ -343,3 +343,29 @@ export function empty_fast_operations_coverage(){
         comment:""
     }
 }
+
+
+
+export function empty_investment_transfer(){
+    return {
+        id: null,
+        url: null,
+        investments_origin: null,
+        datetime_origin: new Date(),
+        shares_origin: null,
+        price_origin: null,
+        commission_origin: 0,
+        taxes_origin: 0,
+        currency_conversion_origin: 1,
+
+        investments_destiny: null,
+        datetime_destiny: null,
+        shares_destiny: null,
+        price_destiny: null,
+        commission_destiny: 0,
+        taxes_destiny: 0,
+        currency_conversion_destiny: 1,
+
+        comment: "",
+    }
+}
