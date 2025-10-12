@@ -22,3 +22,12 @@ export const RecomendationMethods = Object.freeze({
   SMA_5: 9,
   HMA_10: 10,
 });
+
+
+export const ConceptsTypes = Object.freeze({
+  AccountOperationRefund: 67
+});
+export const OperationsTypes = Object.freeze({
+  Expense: 1,
+  Income: 2,
+});
