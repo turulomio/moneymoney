@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table  ref="table_ao" :show-select="props.showselected" v-model="selected" density="compact" :headers="table_headers" :items="props.items" class="elevation-1" :sort-by="[{ key: 'datetime', order: 'asc' }]" fixed-header :height="$attrs.height"  :items-per-page="items_per_page" fixed-footer>
+        <v-data-table ref="table_ao" :show-select="props.showselected" v-model="selected" density="compact" :headers="table_headers" :items="props.items" class="elevation-1" :sort-by="[{ key: 'datetime', order: 'asc' }]" fixed-header :height="$attrs.height"  :items-per-page="items_per_page" fixed-footer>
             <template #item.datetime="{item}">
                 {{ localtime(item.datetime) }}
             </template>  
@@ -24,7 +24,7 @@
                 <v-icon small class="mr-2" @click="deleteAO(item)">mdi-delete</v-icon>
             </template>
             <template #body.append v-if="props.showtotal && props.items.length>0">
-                <tr id="bottom" class=" v-data-table__tr totalrow">
+                <tr class="v-data-table__tr totalrow">
                     <td>{{ f($t("Total ([0] registers)"), [props.items.length])}}</td>
                     <td></td>
                     <td v-if="showaccount"></td>
@@ -137,6 +137,7 @@
     const { t } = useI18n()
 
     const selected = ref([])
+    const table_ao = ref(null)
     const key = ref(0)
     const items_per_page = ref(500000000)
 
@@ -186,7 +187,6 @@
 
     function can_make_a_refund(item){
         let concept_object=store.concepts.get(item.concepts)
-        console.log(id_from_hyperlinked_url(concept_object.operationstypes))
         if (id_from_hyperlinked_url(concept_object.operationstypes)==OperationsTypes.Expense) return true
         return false
     }
@@ -308,9 +308,9 @@
 
     async function gotoLastRow() {
         await nextTick()
-        const bottom = document.getElementById("bottom")
-        if (bottom) {
-            bottom.scrollIntoView({ behavior: "auto", block: "end", inline: "nearest" })
+        const tableWrapper = table_ao.value?.$el?.querySelector('.v-table__wrapper')
+        if (tableWrapper) {
+            tableWrapper.scrollTop = tableWrapper.scrollHeight
         }
     }
 

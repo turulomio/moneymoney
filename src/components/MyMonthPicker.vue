@@ -51,8 +51,6 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 const { t } = useI18n();
-console.log("AHORRAÑ")
-console.log(props.modelValue, "HORITA2")
 const months = computed(() => [
     { title: t('January'), value: 1 },
     { title: t('February'), value: 2 },
