@@ -295,10 +295,10 @@
             },
         },
         mounted(){
-            // this.refreshTable() Not needed due to a MyMonthPicker Input
+            var d=new Date()
+            this.ym = {year: d.getFullYear(), month: d.getMonth()+1}
             this.refreshTable()
             this.refreshTableCC()
         }
     }
 </script>
-
