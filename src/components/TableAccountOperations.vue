@@ -76,7 +76,7 @@
         </v-dialog>
 
         <!-- VIEW SHOW REFUNDS dialog -->
-        <v-dialog v-model="dialog_show_refunds">
+        <v-dialog v-model="dialog_show_refunds" @click:outside="emit('cruded')">
             <v-card class="pa-4">
                 <AccountsoperationsShowRefunds :ao="ao" :key="key" />
             </v-card>
