@@ -1,10 +1,10 @@
 <template>
-    <v-autocomplete :readonly="props.readonly" :items="items" v-model="new_value" :label="mylabel"  item-title="localname" :return-object="props.returnObject" item-value="url">
+    <v-autocomplete :readonly="props.readonly" :items="items" v-model="new_value" :label="mylabel"  item-title="name" :return-object="props.returnObject" item-value="url">
         <template v-slot:item="{ props, item }">
-            <v-list-item v-bind="props" :prepend-icon="mr-3" :title="item.raw.localname" />
+            <v-list-item v-bind="props" :title="item.raw.name" />
         </template>
         <template v-slot:selection="{ props, item }">
-            <v-list-item v-bind="props" :prepend-icon="pl-6" :title="item.raw.localname" />
+            <v-list-item v-bind="props" :title="item.raw.name" />
         </template>
     </v-autocomplete>
 </template>
@@ -48,7 +48,7 @@ const items= ref([])
 if (props.type == 1) {
     items.value=getArrayFromMap(useStore().operationstypes).filter( o => [1,2].includes(o.id))
 } else if (props.type == 2) {
-    items.value=getArrayFromMap(useStore().operationstypes).filter( o => [4,5,6,9,10].includes(o.id))
+    items.value=getArrayFromMap(useStore().operationstypes).filter( o => [4,5,6].includes(o.id))
 }
 
 
