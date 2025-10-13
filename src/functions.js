@@ -312,12 +312,6 @@ export function getInvestmentsByProduct(product) {
     return getArrayFromMap(useStore().investments).filter(o => o.products==product)
 }
 
-
-export function getOperationstypesForInvestmentsOperations() { 
-    return getArrayFromMap(useStore().operationstypes).filter( o => [4,5,6,8,9,10].includes(o.id))
-}
-
-
 export function getMapObjectById(catalog,id) { 
     // If id doesn't exists return undefined
     var url=hyperlinked_url(catalog,id)
