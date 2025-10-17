@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table ref="table" density="compact" :headers="table_headers" :items="items" class="elevation-1" :sort-by="[{key:'datetime',order:'asc'}]" fixed-header :height="$attrs.height" :items-per-page="10000" >
+        <v-data-table ref="table" density="compact" :headers="table_headers" :items="props.items" class="elevation-1" :sort-by="[{key:'datetime',order:'asc'}]" fixed-header :height="$attrs.height" :items-per-page="10000" >
             <template #item.datetime="{item}">
                 {{ localtime(item.datetime) }}
             </template>                 
@@ -40,7 +40,6 @@
 
     const emit = defineEmits(['cruded'])
 
-    const store = useStore()
     const { t } = useI18n()
 
     const table = ref(null)
