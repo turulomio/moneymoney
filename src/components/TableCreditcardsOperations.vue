@@ -22,7 +22,7 @@
                 <v-icon small class="mr-2" @click="deleteCCO(item)">mdi-delete</v-icon>
             </template>
             <template #tbody v-if="showtotal && items.length>0">
-                <tr id="bottom" class=" v-data-table__tr totalrow">
+                <tr class=" v-data-table__tr totalrow">
                     <td>{{ f($t("Total ([0] registers)"), [items.length])}}</td>
                     <td v-if="showcc"></td>
                     <td></td>
@@ -165,12 +165,12 @@
                 }
                 return r
             },        
-            async gotoLastRow(){ 
-                const bottom = document.getElementById("bottom")
+            async gotoLastRow(){
                 await this.$nextTick();
-                if (bottom){ 
-                    bottom.scrollIntoView({ behavior: "auto", block: "end", inline: "nearest" })
-                }       
+                const tableWrapper = this.$refs.table?.$el?.querySelector('.v-table__wrapper')
+                if (tableWrapper) {
+                    tableWrapper.scrollTop = tableWrapper.scrollHeight
+                }
             },
             on_CreditcardsoperationsCU_cruded(){
                 this.$emit("cruded")

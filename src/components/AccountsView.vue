@@ -222,8 +222,10 @@
             refreshTable(){
                 axios.get(`${this.useStore().apiroot}/api/accountsoperations/?account=${this.account.url}&year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())                
                 .then((response) => {
-                    this.items_ao=response.data;
-                    if (this.$refs.tao) this.$refs.tao.gotoLastRow()
+                    this.items_ao = response.data;
+                    this.$nextTick(() => {
+                        if (this.$refs.tao) this.$refs.tao.gotoLastRow()
+                    });
                 }) 
                 .catch((error) => {
                     this.parseResponseError(error)
