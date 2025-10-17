@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table density="compact" :headers="table_headers()" :items="items" class="elevation-1" :sort-by="[{key:'datetime',order:'asc'}]" fixed-header :height="$attrs.height"     :items-per-page="10000" >
+        <v-data-table ref="table" density="compact" :headers="table_headers" :items="props.items" class="elevation-1" :sort-by="[{key:'datetime',order:'asc'}]" fixed-header :height="$attrs.height" :items-per-page="10000" >
             <template #item.datetime="{item}">
                 <div>{{ localtime(item.datetime)}}</div>
             </template>         
@@ -28,13 +28,13 @@
                 <v-icon small class="mr-2" @click="deleteDividend(item)">mdi-delete</v-icon>
             </template>
             <template #tbody>
-                <tr class="totalrow" v-if="items.length>0">
-                    <td>{{ f($t("Total ([0] registers)"), [items.length])}}</td>
+                <tr class="totalrow" v-if="props.items.length > 0">
+                    <td>{{ f($t("Total ([0] registers)"), [props.items.length])}}</td>
                     <td></td>
-                    <td v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items,'gross'),total_currency)"></td>
-                    <td v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items,'net'), total_currency)"></td>
-                    <td v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items,'commission'), total_currency)"></td>
-                    <td v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(items,'taxes'), total_currency)"></td>
+                    <td v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(props.items, 'gross'), total_currency)"></td>
+                    <td v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(props.items, 'net'), total_currency)"></td>
+                    <td v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(props.items, 'commission'), total_currency)"></td>
+                    <td v-if="all_items_has_same_currency" class="text-right" v-html="currency_html(listobjects_sum(props.items, 'taxes'), total_currency)"></td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -44,116 +44,115 @@
         <!-- DIVIDEND CU-->
         <v-dialog v-model="dividends_cu_dialog" width="35%">
             <v-card class="pa-3">
-                <DividendsCU :dividend="dividend" :mode="dividends_cu_mode" :key="key"  @cruded="on_DividendsCU_cruded()"></DividendsCU>
+                <DividendsCU :dividend="dividend" :mode="dividends_cu_mode" :key="key"  @cruded="on_DividendsCU_cruded"></DividendsCU>
             </v-card>
         </v-dialog>
     </div>
 </template>
-<script>
+<script setup>
+    import { ref, computed, onMounted, nextTick } from 'vue'
     import DividendsCU from './DividendsCU.vue'
     import { useStore } from "@/store"
     import { empty_dividend } from '../empty_objects.js'
     import { localtime, f } from 'vuetify_rules'
     import { listobjects_sum, currency_html } from '@/functions'
-    export default {
-        components:{
-            DividendsCU,
+    import { useI18n } from 'vue-i18n'
+
+    const props = defineProps({
+        items: {
+            required: true
         },
-        props: {
-            items: {
-                required: true
-            },
-            showinvestment:{ //Only hides account if true
-                type: Boolean,
-                required:false,
-                default:false,
-            },
-        },        
-        computed:{
-            // To sum amounts
-            all_items_has_same_currency(){
-                if (this.items.length==0) return false
-                var first_currency=this.items[0].currency
-                var r=true
-                this.items.forEach(item => {//For Each doesn't allow to return false
-                    if (item.currency!=first_currency)  {
-                        r=false
-                    }
-                });
-                return r
-            },
-            total_currency: function(){
-                if (this.items.length==0) return "Bad currency"
-                return this.items[0].currency
-            }
+        showinvestment:{ //Only hides account if true
+            type: Boolean,
+            required:false,
+            default:false,
         },
-        data: function(){
-            return {
-                dividends_cu_dialog:false,
-                dividend: null,
-                dividends_cu_mode: null,
-                key: 0,
-            }
-        },
-        methods: {
-            useStore,
-            f,
-            localtime,
-            listobjects_sum,
-            currency_html,
-            copyDividend(item){
-                this.dividend=this.empty_dividend()
-                this.dividend.gross=item.gross
-                this.dividend.net=item.net
-                this.dividend.taxes=item.taxes
-                this.dividend.commission=item.commission
-                this.dividend.dps=item.dps
-                this.dividend.investments=item.investments
-                this.dividend.concepts=item.concepts
-                this.dividend.currency_conversion=item.currency_conversion
-                this.dividends_cu_mode="C"
-                this.key=this.key+1
-                this.dividends_cu_dialog=true
-            },
-            editDividend(item){
-                this.dividend=item
-                this.dividends_cu_mode="U"
-                this.key=this.key+1
-                this.dividends_cu_dialog=true
-            },
-            empty_dividend,
-            deleteDividend(item){
-                this.dividend=item
-                this.dividends_cu_mode="D"
-                this.key=this.key+1
-                this.dividends_cu_dialog=true
-            },
-            table_headers(){
-                var r= [
-                    { title: this.$t('Date and time'), key: 'datetime', sortable: true },
-                    { title: this.$t('Investment'), key: 'investments',sortable: true },
-                    { title: this.$t('Concept'), key: 'concepts', sortable: true },
-                    { title: this.$t('Gross'), key: 'gross', sortable: false, align:'end'},
-                    { title: this.$t('Net'), key: 'net', sortable: false, align:'end'},
-                    { title: this.$t('Commission'), key: 'commission', sortable: true , align:'end'},
-                    { title: this.$t('Taxes'), key: 'taxes', sortable: true , align:'end'},
-                    { title: this.$t('DPS'), key: 'dps', sortable: true , align:'end'},
-                    { title: this.$t('Actions'), key: 'actions', sortable: false },
-                ]
-                if (this.showinvestment==false){
-                    r.splice(1, 1)
-                }
-                return r
-            },
-            gotoLastRow(){
-                //if (this.$refs[this.$vnode.tag]) this.$vuetify.goTo(1000000, { container:  this.$refs[this.$vnode.tag].$el.childNodes[0] }) 
-            },
-            on_DividendsCU_cruded(){
-                this.$emit("cruded")
-            }
-        },
-        mounted(){
-             this.gotoLastRow()
+    })
+
+    const emit = defineEmits(['cruded'])
+
+    const { t } = useI18n()
+
+    const table = ref(null)
+    const dividends_cu_dialog = ref(false)
+    const dividend = ref(null)
+    const dividends_cu_mode = ref(null)
+    const key = ref(0)
+
+    // To sum amounts
+    const all_items_has_same_currency = computed(() => {
+        if (props.items.length === 0) return false
+        const first_currency = props.items[0].currency
+        return props.items.every(item => item.currency === first_currency)
+    })
+
+    const total_currency = computed(() => {
+        if (props.items.length === 0) return "Bad currency"
+        return props.items[0].currency
+    })
+
+    function copyDividend(item){
+        dividend.value = empty_dividend()
+        dividend.value.gross = item.gross
+        dividend.value.net = item.net
+        dividend.value.taxes = item.taxes
+        dividend.value.commission = item.commission
+        dividend.value.dps = item.dps
+        dividend.value.investments = item.investments
+        dividend.value.concepts = item.concepts
+        dividend.value.currency_conversion = item.currency_conversion
+        dividends_cu_mode.value = "C"
+        key.value++
+        dividends_cu_dialog.value = true
+    }
+
+    function editDividend(item){
+        dividend.value = item
+        dividends_cu_mode.value = "U"
+        key.value++
+        dividends_cu_dialog.value = true
+    }
+
+    function deleteDividend(item){
+        dividend.value = item
+        dividends_cu_mode.value = "D"
+        key.value++
+        dividends_cu_dialog.value = true
+    }
+
+    const table_headers = computed(() => {
+        var r = [
+            { title: t('Date and time'), key: 'datetime', sortable: true },
+            { title: t('Investment'), key: 'investments',sortable: true },
+            { title: t('Concept'), key: 'concepts', sortable: true },
+            { title: t('Gross'), key: 'gross', sortable: false, align:'end'},
+            { title: t('Net'), key: 'net', sortable: false, align:'end'},
+            { title: t('Commission'), key: 'commission', sortable: true , align:'end'},
+            { title: t('Taxes'), key: 'taxes', sortable: true , align:'end'},
+            { title: t('DPS'), key: 'dps', sortable: true , align:'end'},
+            { title: t('Actions'), key: 'actions', sortable: false },
+        ]
+        if (props.showinvestment === false){
+            r.splice(1, 1)
+        }
+        return r
+    })
+
+    async function gotoLastRow(){
+        await nextTick()
+        const tableWrapper = table.value?.$el?.querySelector('.v-table__wrapper')
+        if (tableWrapper) {
+            tableWrapper.scrollTop = tableWrapper.scrollHeight
         }
     }
+
+    function on_DividendsCU_cruded(){
+        dividends_cu_dialog.value = false
+        emit("cruded")
+        gotoLastRow()
+    }
+
+    onMounted(() => {
+         gotoLastRow()
+    })
 </script>
