@@ -97,7 +97,6 @@
 <script setup>
     import { ref, computed, onMounted, nextTick } from 'vue'
     import { localtime, f } from 'vuetify_rules'
-    import { useStore } from "@/store"
     import {listobjects_sum, currency_html, getMapObjectById} from "@/functions"
     import { useI18n } from 'vue-i18n'
 
@@ -205,5 +204,4 @@
     onMounted(() => {
         gotoLastRow()
     })
-</script>
 </script>
