@@ -1,5 +1,5 @@
 <template>
-        <v-data-table density="compact" :headers="table_headers()" :items="items" class="elevation-1" :sort-by="[{key:'dt_end',order:'asc'}]" fixed-header :height="$attrs.height" ref="table"
+        <v-data-table density="compact" :headers="table_headers" :items="items" class="elevation-1" :sort-by="[{key:'dt_end',order:'asc'}]" fixed-header :height="$attrs.height" ref="table"
            :items-per-page="10000" >
 
             <template #item.dt_end="{item}">
@@ -72,7 +72,7 @@
             </template>           
             <template #tbody>
                 <tr class="totalrow" v-if="items.length > 0 && showtotal">
-                    <td v-for="(header, index) in table_headers()" :key="index" :class="header.class || ''">
+                    <td v-for="(header, index) in table_headers" :key="index" :class="header.class || ''">
                         <template v-if="header.key === 'dt_end'">
                             {{ f($t("Total ([0] registers)"), [items.length]) }}
                         </template>
@@ -94,122 +94,116 @@
                 <template #bottom ></template>   
         </v-data-table>  
 </template>
-<script>    
+<script setup>
+    import { ref, computed, onMounted, nextTick } from 'vue'
     import { localtime, f } from 'vuetify_rules'
     import { useStore } from "@/store"
     import {listobjects_sum, currency_html, getMapObjectById} from "@/functions"
-    export default {
-        name: "TableInvestmentOperationsHistorical",
-        props: {
-            items: {
-                required: true
-            },
-            output:{
-                required:true,
-            },
-            showtotal:{// Items must have currency attribute
-                type: Boolean,
-                required:false,
-                default: false,
-            },
-            showinvestment:{// Items must have accounts attribute
-                type: Boolean,
-                required:false,
-                default: false,
-            },
+    import { useI18n } from 'vue-i18n'
+
+    const props = defineProps({
+        items: {
+            required: true
         },
-        data: function(){
-            return {
-            }
-        },        
-        computed:{
-            // To sum amounts
-            all_items_has_same_currency(){
-                if (this.items.length==0) return false
-                var first_currency=this.currency(this.items[0])
-                var r=true
-                this.items.forEach(item => {//For Each doesn't allow to return false
-                    if (this.currency(item)!=first_currency)  {
-                        r=false
-                    }
-                });
-                return r
-            },
-            total_currency: function(){
-                if (this.items.length==0) return "Bad currency"
-                return this.currency(this.items[0])
-            }
+        output:{
+            required:true,
         },
-        methods: {
-            useStore,
-            // Currencies are part of the item
-            f,
-            localtime,
-            listobjects_sum,
-            currency_html,
-            getMapObjectById, 
-            currency(item){
-                if (this.output=="account"){
-                    return item.currency_account
-                } else if (this.output=="investment"){
-                    return item.currency_product
-                } else if (this.output=="user"){
-                    return item.currency_user
-                }
-            },
-            table_headers(){
-                var r
-                if (this.output=="account"){
-                    r= [
-                        { title: this.$t('Date and time'), key: 'dt_end',sortable: true },
-                        { title: this.$t('Years'), key: 'years',sortable: true },
-                        { title: this.$t('Operation'), key: 'operationstypes',sortable: true },
-                        { title: this.$t('Shares'), key: 'shares',sortable: false, align:'end'},
-                        { title: this.$t('Gross start'), key: 'gross_start_account',sortable: false, align:'end'},
-                        { title: this.$t('Gross end'), key: 'gross_end_account',sortable: false, align:'end'},
-                        { title: this.$t('Gains gross'), key: 'gains_gross_account',sortable: false, align:'end'},
-                        { title: this.$t('Commission'), key: 'commissions_account',sortable: false, align:'end'},
-                        { title: this.$t('Taxes'), key: 'taxes_account',sortable: false, align:'end'},
-                        { title: this.$t('Gains'), key: 'gains_net_account',sortable: false, align:'end'},
-                    ]
-                } else if (this.output=="investment"){
-                    r= [
-                        { title: this.$t('Date and time'), key: 'dt_end',sortable: true },
-                        { title: this.$t('Years'), key: 'years',sortable: true },
-                        { title: this.$t('Operation'), key: 'operationstypes',sortable: true },
-                        { title: this.$t('Shares'), key: 'shares',sortable: false, align:'end'},
-                        { title: this.$t('Gross start'), key: 'gross_start_investment',sortable: false, align:'end'},
-                        { title: this.$t('Gross end'), key: 'gross_end_investment',sortable: false, align:'end'},
-                        { title: this.$t('Gains gross'), key: 'gains_gross_investment',sortable: false, align:'end'},
-                        { title: this.$t('Commission'), key: 'commissions_investment',sortable: false, align:'end'},
-                        { title: this.$t('Taxes'), key: 'taxes_investment',sortable: false, align:'end'},
-                        { title: this.$t('Gains'), key: 'gains_net_investment',sortable: false, align:'end'},
-                    ]
-                } else if (this.output=="user"){
-                    r= [
-                        { title: this.$t('Date and time'), key: 'dt_end',sortable: true },
-                        { title: this.$t('Years'), key: 'years',sortable: true },
-                        { title: this.$t('Operation'), key: 'operationstypes',sortable: true },
-                        { title: this.$t('Shares'), key: 'shares',sortable: false, align:'end'},
-                        { title: this.$t('Gross start'), key: 'gross_start_user',sortable: false, align:'end'},
-                        { title: this.$t('Gross end'), key: 'gross_end_user',sortable: false, align:'end'},
-                        { title: this.$t('Gains gross'), key: 'gains_gross_user',sortable: false, align:'end'},
-                        { title: this.$t('Commission'), key: 'commissions_user',sortable: false, align:'end'},
-                        { title: this.$t('Taxes'), key: 'taxes_user',sortable: false, align:'end'},
-                        { title: this.$t('Gains'), key: 'gains_net_user',sortable: false, align:'end'},
-                    ] 
-                }
-                if (this.showinvestment==true){
-                    r.splice(2, 0, { title: this.$t('Investment'), key: 'investments',sortable: true });
-                }
-                return r
-            },
-            gotoLastRow(){
-                // if (this.$refs.table) this.$vuetify.goTo(1000000, { container:  this.$refs.table.$el.childNodes[0] }) 
-            },
+        showtotal:{// Items must have currency attribute
+            type: Boolean,
+            required:false,
+            default: false,
         },
-        mounted(){
-            this.gotoLastRow()
+        showinvestment:{// Items must have accounts attribute
+            type: Boolean,
+            required:false,
+            default: false,
+        },
+    })
+
+    const { t } = useI18n()
+    const table = ref(null)
+
+    // To sum amounts
+    const all_items_has_same_currency = computed(() => {
+        if (props.items.length==0) return false
+        const first_currency=currency(props.items[0])
+        return props.items.every(item => currency(item) === first_currency)
+    })
+
+    const total_currency = computed(() => {
+        if (props.items.length==0) return "Bad currency"
+        return currency(props.items[0])
+    })
+
+    // Currencies are part of the item
+    function currency(item){
+        if (props.output=="account"){
+            return item.currency_account
+        } else if (props.output=="investment"){
+            return item.currency_product
+        } else if (props.output=="user"){
+            return item.currency_user
         }
     }
+
+    const table_headers = computed(() => {
+        let r
+        if (props.output=="account"){
+            r= [
+                { title: t('Date and time'), key: 'dt_end',sortable: true },
+                { title: t('Years'), key: 'years',sortable: true },
+                { title: t('Operation'), key: 'operationstypes',sortable: true },
+                { title: t('Shares'), key: 'shares',sortable: false, align:'end'},
+                { title: t('Gross start'), key: 'gross_start_account',sortable: false, align:'end'},
+                { title: t('Gross end'), key: 'gross_end_account',sortable: false, align:'end'},
+                { title: t('Gains gross'), key: 'gains_gross_account',sortable: false, align:'end'},
+                { title: t('Commission'), key: 'commissions_account',sortable: false, align:'end'},
+                { title: t('Taxes'), key: 'taxes_account',sortable: false, align:'end'},
+                { title: t('Gains'), key: 'gains_net_account',sortable: false, align:'end'},
+            ]
+        } else if (props.output=="investment"){
+            r= [
+                { title: t('Date and time'), key: 'dt_end',sortable: true },
+                { title: t('Years'), key: 'years',sortable: true },
+                { title: t('Operation'), key: 'operationstypes',sortable: true },
+                { title: t('Shares'), key: 'shares',sortable: false, align:'end'},
+                { title: t('Gross start'), key: 'gross_start_investment',sortable: false, align:'end'},
+                { title: t('Gross end'), key: 'gross_end_investment',sortable: false, align:'end'},
+                { title: t('Gains gross'), key: 'gains_gross_investment',sortable: false, align:'end'},
+                { title: t('Commission'), key: 'commissions_investment',sortable: false, align:'end'},
+                { title: t('Taxes'), key: 'taxes_investment',sortable: false, align:'end'},
+                { title: t('Gains'), key: 'gains_net_investment',sortable: false, align:'end'},
+            ]
+        } else if (props.output=="user"){
+            r= [
+                { title: t('Date and time'), key: 'dt_end',sortable: true },
+                { title: t('Years'), key: 'years',sortable: true },
+                { title: t('Operation'), key: 'operationstypes',sortable: true },
+                { title: t('Shares'), key: 'shares',sortable: false, align:'end'},
+                { title: t('Gross start'), key: 'gross_start_user',sortable: false, align:'end'},
+                { title: t('Gross end'), key: 'gross_end_user',sortable: false, align:'end'},
+                { title: t('Gains gross'), key: 'gains_gross_user',sortable: false, align:'end'},
+                { title: t('Commission'), key: 'commissions_user',sortable: false, align:'end'},
+                { title: t('Taxes'), key: 'taxes_user',sortable: false, align:'end'},
+                { title: t('Gains'), key: 'gains_net_user',sortable: false, align:'end'},
+            ] 
+        }
+        if (props.showinvestment==true){
+            r.splice(2, 0, { title: t('Investment'), key: 'investments',sortable: true });
+        }
+        return r
+    })
+
+    async function gotoLastRow(){
+        await nextTick()
+        const tableWrapper = table.value?.$el?.querySelector('.v-table__wrapper')
+        if (tableWrapper) {
+            tableWrapper.scrollTop = tableWrapper.scrollHeight
+        }
+    }
+
+    onMounted(() => {
+        gotoLastRow()
+    })
+</script>
 </script>

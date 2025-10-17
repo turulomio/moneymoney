@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table density="compact" :headers="table_headers()" :items="items" class="elevation-1" :sort-by="[{key:'datetime',order:'asc'}]" fixed-header :height="$attrs.height" :items-per-page="10000" >
+        <v-data-table ref="table" density="compact" :headers="table_headers" :items="items" class="elevation-1" :sort-by="[{key:'datetime',order:'asc'}]" fixed-header :height="$attrs.height" :items-per-page="10000" >
             <template #item.datetime="{item}">
                 <div>{{ localtime(item.datetime)}}</div>
             </template>        
@@ -23,58 +23,66 @@
         </v-data-table>
     </div>
 </template>
-<script>    
+<script setup>
+    import { ref, computed, onMounted, nextTick, defineExpose } from 'vue'
     import axios from 'axios'
     import { useStore } from "@/store"
     import { localtime } from 'vuetify_rules'
     import { parseResponseError, currency_html, myheaders } from '@/functions'
-    export default {
-        props: {
-            items: {
-                required: true
-            },
-            product: {   // Must be a product object
-                required: true
-            },
+    import { useI18n } from 'vue-i18n'
+
+    const props = defineProps({
+        items: {
+            required: true
         },
-        data: function(){
-            return {
-                key: 0,
-            }
+        product: {   // Must be a product object
+            required: true
         },
-        methods: {
-            useStore,
-            localtime,
-            parseResponseError,
-            currency_html,
-            myheaders,
-            deleteOHCL(item){
-               var r = confirm(this.$t("Do you want to delete this OHCL quotes?"))
-               if(r == false) {
-                  return
-               } 
-                var headers={...this.myheaders(),data:{product:this.product.url,date:item.date}}
-                axios.delete(`${this.useStore().apiroot}/products/quotes/ohcl/`, headers)
-                .then(() => {
-                    this.$emit("cruded")
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
-            table_headers(){
-                var r= [
-                    { title: this.$t('Date and time'), key: 'date', sortable: true },
-                    { title: this.$t('Open'), key: 'open', sortable: true },
-                    { title: this.$t('High'), key: 'high', sortable: true },
-                    { title: this.$t('Close'), key: 'close', sortable: true },
-                    { title: this.$t('Low'), key: 'low', sortable: true },
-                    { title: this.$t('Actions'), key: 'actions', sortable: false },
-                ]
-                return r
-            },
-            gotoLastRow(){
-                this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs[this.$vnode.tag].$el.childNodes[0] }) 
-            },
-        },
+    })
+
+    const emit = defineEmits(['cruded'])
+
+    const store = useStore()
+    const { t } = useI18n()
+
+    const table = ref(null)
+
+    function deleteOHCL(item){
+        var r = confirm(t("Do you want to delete this OHCL quotes?"))
+        if(r == false) {
+            return
+        } 
+        var headers={...myheaders(),data:{product:props.product.url,date:item.date}}
+        axios.delete(`${store.apiroot}/products/quotes/ohcl/`, headers)
+        .then(() => {
+            emit("cruded")
+        }, (error) => {
+            parseResponseError(error)
+        });
     }
+
+    const table_headers = computed(() => [
+        { title: t('Date and time'), key: 'date', sortable: true },
+        { title: t('Open'), key: 'open', sortable: true },
+        { title: t('High'), key: 'high', sortable: true },
+        { title: t('Close'), key: 'close', sortable: true },
+        { title: t('Low'), key: 'low', sortable: true },
+        { title: t('Actions'), key: 'actions', sortable: false },
+    ])
+
+    async function gotoLastRow(){
+        await nextTick()
+        const tableWrapper = table.value?.$el?.querySelector('.v-table__wrapper')
+        if (tableWrapper) {
+            tableWrapper.scrollTop = tableWrapper.scrollHeight
+        }
+    }
+
+    onMounted(() => {
+        gotoLastRow()
+    })
+
+    defineExpose({
+        gotoLastRow,
+    })
 </script>

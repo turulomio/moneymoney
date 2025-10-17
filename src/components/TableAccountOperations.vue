@@ -85,7 +85,7 @@
 </template>
 
 <script setup>
-    import { ref, computed, watch, onMounted, nextTick } from 'vue'
+    import { ref, computed, watch, onMounted, nextTick , defineExpose} from 'vue'
     import axios from 'axios'
     import { useStore } from "@/store"
     import {  empty_account_operation } from '../empty_objects.js'
@@ -345,5 +345,9 @@
 
     onMounted(() => {
         gotoLastRow()
+    })
+
+    defineExpose({
+        gotoLastRow,
     })
 </script>

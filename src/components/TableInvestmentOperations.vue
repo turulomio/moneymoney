@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table density="compact" v-model="selected" :headers="tableHeaders" :items="props.items" class="elevation-1" :sort-by="[{key:'datetime',order:'asc'}]" fixed-header :height="$attrs.height" ref="table_o" :key="$attrs.key" :loading="$attrs.loading"    :items-per-page="10000" >
+        <v-data-table density="compact" v-model="selected" :headers="tableHeaders" :items="props.items" class="elevation-1" :sort-by="[{key:'datetime',order:'asc'}]" fixed-header :height="$attrs.height" ref="table_o" :key="$attrs.key" :loading="$attrs.loading" :items-per-page="10000" >
 
             <template #item.datetime="{item}">
               <div>{{ localtime(item.datetime)}}</div>
@@ -66,7 +66,7 @@
 
 <script setup>
     import axios from "axios"
-    import { ref, computed, onMounted } from 'vue'
+    import { ref, computed, onMounted, nextTick } from 'vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import { useStore } from "@/store"
     import { empty_investment_operation } from '@/empty_objects.js'
@@ -220,16 +220,20 @@
 
     function on_InvestmentsoperationsCU_cruded(){
         dialog_io.value=false
+        gotoLastRow()
         emit("cruded")
     }
 
     function on_InvestmentsTransfersCU_cruded(){
         transfer_crud_dialog.value = false
+        gotoLastRow()
         emit("cruded")
     }
 
-    function gotoLastRow(){
-        //this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs.table_o.$el.childNodes[0] }) 
+    async function gotoLastRow(){
+        await nextTick()
+        const tableWrapper = table_o.value?.$el?.querySelector('.v-table__wrapper')
+        if (tableWrapper) tableWrapper.scrollTop = tableWrapper.scrollHeight
     }
 
     onMounted(() => {

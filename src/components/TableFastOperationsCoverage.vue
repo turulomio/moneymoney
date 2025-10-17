@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table density="compact" :headers="table_headers()" :items="items" class="elevation-1" :sort-by="[{key:'year',order:'asc'}]" fixed-header :height="$attrs.height"    :items-per-page="10000" >
+        <v-data-table ref="table" density="compact" :headers="table_headers" :items="props.items" class="elevation-1" :sort-by="[{key:'datetime',order:'asc'}]" fixed-header :height="$attrs.height" :items-per-page="10000" >
             <template #item.datetime="{item}">
                 {{ localtime(item.datetime) }}
             </template>                 
@@ -19,72 +19,72 @@
         <!-- DIVIDEND CU-->
         <v-dialog v-model="dialog_foc" width="35%">
             <v-card class="pa-3">
-                <FastOperationsCoverageCU :foc="foc" :mode="foc_mode" :key="key"  @cruded="on_FastOperationsCoverageCU_cruded" />
+                <FastOperationsCoverageCU :foc="foc" :mode="foc_mode" :key="key" @cruded="on_FastOperationsCoverageCU_cruded" />
             </v-card>
         </v-dialog>
     </div>
 </template>
-<script>
+<script setup>
+    import { ref, computed, onMounted, nextTick } from 'vue'
     import FastOperationsCoverageCU from './FastOperationsCoverageCU.vue'
     import { useStore } from "@/store"
     import { localtime } from 'vuetify_rules'
-    import { currency_html} from '@/functions'
+    import { currency_html } from '@/functions'
+    import { useI18n } from 'vue-i18n'
 
-    export default {
-        components:{
-            FastOperationsCoverageCU,
+    const props = defineProps({
+        items: {
+            required: true
         },
-        props: {
-            items: {
-                required: true
-            },
-        },
-        data: function(){
-            return {
-                dialog_foc:false,
-                foc: null,
-                foc_mode: null,
-                key: 0,
-            }
-        },
-        methods: {
-            useStore,
-            localtime,
-            currency_html,
-            currency(value){
-                return this.currency_html(value, this.product.currency)
-            },
-            editFOC(item){
-                this.foc=item
-                this.foc_mode="U"
-                this.dialog_foc=true
-                this.key=this.key+1
-            },
-            deleteFOC(item){
-                this.foc=item
-                this.foc_mode="D"
-                this.dialog_foc=true
-                this.key=this.key+1
-            },
-            table_headers(){
-                var r= [
-                    { title: this.$t('Date and time'), key: 'datetime', sortable: true },
-                    { title: this.$t('Investment'), key: 'investments', sortable: true,align:'end' },
-                    { title: this.$t('Amount'), key: 'amount', sortable: true,align:'end' },
-                    { title: this.$t('Comment'), key: 'comment', sortable: true, align:'end' },
-                    { title: this.$t('Actions'), key: 'actions', sortable: false , width:"6%"},
-                ]
-                return r
-            },
-            gotoLastRow(){
-                //this.$vuetify.goTo(this.$refs[this.items.length-1], { container:  this.$refs[this.$vnode.tag].$el.childNodes[0] }) 
-            },
-            on_FastOperationsCoverageCU_cruded(){
-                this.$emit("cruded")
-                this.dialog_foc=false
-            },
-        },
-        created(){
+    })
+
+    const emit = defineEmits(['cruded'])
+
+    const { t } = useI18n()
+
+    const table = ref(null)
+    const dialog_foc = ref(false)
+    const foc = ref(null)
+    const foc_mode = ref(null)
+    const key = ref(0)
+
+    function editFOC(item) {
+        foc.value = item
+        foc_mode.value = "U"
+        dialog_foc.value = true
+        key.value++
+    }
+
+    function deleteFOC(item) {
+        foc.value = item
+        foc_mode.value = "D"
+        dialog_foc.value = true
+        key.value++
+    }
+
+    const table_headers = computed(() => [
+        { title: t('Date and time'), key: 'datetime', sortable: true },
+        { title: t('Investment'), key: 'investments', sortable: true, align: 'end' },
+        { title: t('Amount'), key: 'amount', sortable: true, align: 'end' },
+        { title: t('Comment'), key: 'comment', sortable: true, align: 'end' },
+        { title: t('Actions'), key: 'actions', sortable: false, width: "6%" },
+    ])
+
+    async function gotoLastRow() {
+        await nextTick()
+        const tableWrapper = table.value?.$el?.querySelector('.v-table__wrapper')
+        if (tableWrapper) {
+            tableWrapper.scrollTop = tableWrapper.scrollHeight
         }
     }
+
+    function on_FastOperationsCoverageCU_cruded() {
+        emit("cruded")
+        dialog_foc.value = false
+        gotoLastRow()
+    }
+
+    onMounted(() => {
+        gotoLastRow()
+    })
 </script>
