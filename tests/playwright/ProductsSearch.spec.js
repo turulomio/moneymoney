@@ -1,7 +1,7 @@
 import { test, expect } from './fixtures.js';
 import {
   v_text_input_settext,
-  v_autocomplete_selection,
+  v_autocomplete_selection_with_role_option,
   mymenuinline_selection,
 } from "./commons.js";
 
@@ -15,18 +15,18 @@ test('Products List', async ({ page }) => {
     // Add a personal product
     await mymenuinline_selection(page, "ProductsSearch_MyMenuInline", 0, 0)
     await v_text_input_settext(page, "ProductsCU_Name", "New product personal")
-    await v_autocomplete_selection(page, "ProductsCU_Currency", "Eur")
-    await v_autocomplete_selection(page, "ProductsCU_ProductsTypes", "ETF")
-    await v_autocomplete_selection(page, "ProductsCU_Stockmarkets", "Madrid")
+    await v_autocomplete_selection_with_role_option(page, "ProductsCU_Currency", "Eur")
+    await v_autocomplete_selection_with_role_option(page, "ProductsCU_ProductsTypes", "ETF")
+    await v_autocomplete_selection_with_role_option(page, "ProductsCU_Stockmarkets", "Madrid")
     await page.getByTestId('ProductsCU_Button').click();
     await expect( page.getByTestId('ProductsCU_Button')).toBeHidden();
 
     // Add a system product
     await mymenuinline_selection(page, "ProductsSearch_MyMenuInline", 0, 1)
     await v_text_input_settext(page, "ProductsCU_Name", "New product system")
-    await v_autocomplete_selection(page, "ProductsCU_Currency", "Eur")
-    await v_autocomplete_selection(page, "ProductsCU_ProductsTypes", "ETF")
-    await v_autocomplete_selection(page, "ProductsCU_Stockmarkets", "Madrid")
+    await v_autocomplete_selection_with_role_option(page, "ProductsCU_Currency", "Eur")
+    await v_autocomplete_selection_with_role_option(page, "ProductsCU_ProductsTypes", "ETF")
+    await v_autocomplete_selection_with_role_option(page, "ProductsCU_Stockmarkets", "Madrid")
     await page.getByTestId('ProductsCU_Button').click();
     await expect( page.getByTestId('ProductsCU_Button')).toBeHidden();
 

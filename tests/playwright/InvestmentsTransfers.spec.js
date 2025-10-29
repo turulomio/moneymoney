@@ -4,7 +4,7 @@ import {
   investmentoperation_add_from_InvestmentsView,
   quote_add_from_InvestmentsList,
   mymenuinline_selection,
-  v_autocomplete_selection,
+  v_autocomplete_selection_with_role_listbox,
   v_text_input_settext,
   promise_to_get_id_from_post_response,
 } from "./commons"
@@ -32,7 +32,8 @@ test('Investments transfers', async ({ page }) => {
   await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 5)
   await mymenuinline_selection(page, "InvestmentsTransfers_MyMenuInline", 0, 0)
 
-  await v_autocomplete_selection(page, 'InvestmentsTransfersCU_InvestmentsDestiny',"Test investment transfer 2")
+  await v_autocomplete_selection_with_role_listbox(page, 'InvestmentsTransfersCU_InvestmentsOrigin',"Test investment transfer 1")
+  await v_autocomplete_selection_with_role_listbox(page, 'InvestmentsTransfersCU_InvestmentsDestiny',"Test investment transfer 2")
 
   // Fill origin data
   await v_text_input_settext(page, "InvestmentsTransfersCU_SharesOrigin", "50")
