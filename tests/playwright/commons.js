@@ -107,7 +107,7 @@ export async function creditcard_add_from_AccountsView(page, name, deferred){
     await v_text_input_settext(page, "CreditcardsCU_Name", name);
     await v_text_input_settext(page, "CreditcardsCU_Number", "1234567890123456");
     await v_text_input_settext(page, "CreditcardsCU_MaximumBalance", "1000");
-    await page.getByTestId('CreditcardsCU_Active').getByRole("checkbox").check();o
+    await page.getByTestId('CreditcardsCU_Active').getByRole("checkbox").check();
     if (deferred) await page.getByTestId('CreditcardsCU_Deferred').getByRole("checkbox").check();
     const cc_id_promise = promise_to_get_id_from_post_response(page, "/api/creditcards/");
     await page.getByTestId('CreditcardsCU_Button').click(); 
