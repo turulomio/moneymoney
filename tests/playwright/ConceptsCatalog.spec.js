@@ -1,7 +1,7 @@
 import { test, expect } from './fixtures.js';
 import {
   v_text_input_settext,
-  v_autocomplete_selection,
+  v_autocomplete_selection_with_role_option,
   concept_add_from_ConceptsCatalog,
   expect_native_confirm_and_accept_it,
 } from "./commons.js";
@@ -31,7 +31,7 @@ test('Concepts catalog', async ({ page }) => {
     // Migrate concept
     const concept2_id=await concept_add_from_ConceptsCatalog(page, "My second personal concept")
     await page.getByTestId(`ConceptsCatalog_Table_ButtonMigrate${concept2_id}`).click();
-    await v_autocomplete_selection(page, "ConceptsMigration_To", "Negative");
+    await v_autocomplete_selection_with_role_option(page, "ConceptsMigration_To", "Negative");
     await page.getByTestId('ConceptsMigration_Button').click();
     await expect(page.getByTestId('ConceptsMigration_Button')).toBeHidden();
 });

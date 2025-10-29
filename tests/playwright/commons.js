@@ -2,20 +2,34 @@
 import { expect } from './fixtures.js';
 
 
-export async function v_autocomplete_selection(page, name, item_text, first=false){
-  const autocomplete = page.getByTestId(name);
-  // Click the input to focus and show the dropdown
+export async function v_autocomplete_selection_with_role_option(page, testId, optionText, first = true) {
+  const autocomplete = page.getByTestId(testId);
+
+  // 1. Click the component to open the dropdown.
   await autocomplete.click();
-  // Type the text to filter the options
-  // Wait for the dropdown to be visible and then type the text to filter the options
-  await page.locator('.v-overlay-container .v-list').waitFor();
-  await autocomplete.getByRole("combobox").last().fill(item_text);
-  // Wait for the dropdown option to appear and click it.
-  // Vuetify often renders the options overlay detached from the input.
-  // We locate the item by its title text. Using a RegExp ensures an exact match.
-  const locator = page.locator('.v-list-item-title').filter({ hasText: item_text });
-  if (first) await locator.first().click();
-  else await locator.first().click();
+
+  // 2. The actual input is inside the component. We can find it by its role and type.
+  await autocomplete.locator('input[type="text"]').fill(optionText);
+
+  // 3. Wait for the desired option to appear in the dropdown and click it.
+  const option = page.getByRole('option', { name: optionText, exact: false,  });
+  if (first) await option.first().click();
+  else await option.last().click();
+}
+
+export async function v_autocomplete_selection_with_role_listbox(page, testId, optionText, first = true) {
+  const autocomplete = page.getByTestId(testId);
+
+  // 1. Click the component to open the dropdown.
+  await autocomplete.click();
+
+  // 2. The actual input is inside the component. We can find it by its role and type.
+  await autocomplete.locator('input[type="text"]').fill(optionText);
+
+  // 3. Wait for the desired option to appear in the dropdown and click it.
+  const option = page.getByRole('listbox').filter({ hasText: optionText }).locator('div').nth(1)
+  if (first) await option.first().click();
+  else await option.last().click();
 }
 
 
@@ -52,7 +66,7 @@ export async function account_add_from_AccountsList(page, name="Permanent Accoun
   const idPromise = promise_to_get_id_from_post_response(page, "/api/accounts/");
 
   await v_text_input_settext(page, "AccountsCU_Name", name);
-  await v_autocomplete_selection(page, "AccountsCU_Bank", "Personal Management");
+  await v_autocomplete_selection_with_role_option(page, "AccountsCU_Bank", "Personal Management");
 
   // This is the action that triggers the POST request.
   await page.getByTestId('AccountsCU_Button').click();
@@ -69,7 +83,7 @@ export async function account_add_from_AccountsList(page, name="Permanent Accoun
 
 export async function accountoperation_add_from_AccountsView(page, concept, amount, comment){
   await mymenuinline_selection(page, "AccountsView_MyMenuInline", 1, 0)
-  await v_autocomplete_selection(page, "AccountsoperationsCU_Concepts", concept);
+  await v_autocomplete_selection_with_role_option(page, "AccountsoperationsCU_Concepts", concept);
   await v_text_input_settext(page, "AccountsoperationsCU_Amount", amount);
   await v_text_input_settext(page, "AccountsoperationsCU_Comment", comment);
 
@@ -109,7 +123,7 @@ export async function creditcardoperation_add_from_CreditCardsView(page, concept
   */
     await mymenuinline_selection(page, "CreditCardsView_MyMenuInline", 0, 0)
 
-    await v_autocomplete_selection(page, "CreditcardsoperationsCU_Concepts", concepts);
+    await v_autocomplete_selection_with_role_option(page, "CreditcardsoperationsCU_Concepts", concepts);
     await v_text_input_settext(page, "CreditcardsoperationsCU_Amount", "-100")
     await v_text_input_settext(page, "CreditcardsoperationsCU_Comment", "This is a comment")
     const cc_id_promise = promise_to_get_id_from_post_response(page, "/api/creditcardsoperations/");
@@ -126,7 +140,7 @@ export async function creditcardoperation_add_from_CreditCardsView(page, concept
 export async function concept_add_from_ConceptsCatalog(page, name="My first personal concept"){
     await mymenuinline_selection(page, "ConceptsCatalog_MyMenuInline", 0, 0)
     await v_text_input_settext(page, "ConceptsCU_Name", name);
-    await v_autocomplete_selection(page, "ConceptsCU_OperationsTypes", "Expense");
+    await v_autocomplete_selection_with_role_listbox(page, "ConceptsCU_OperationsTypes", "Expense", true);
 
     const concept_id_promise = promise_to_get_id_from_post_response(page, "/api/concepts/");
     await page.getByTestId('ConceptsCU_Button').click();
@@ -141,8 +155,8 @@ export async function investment_add_from_InvestmentsList(page, name="New Test I
   await mymenuinline_selection(page, "InvestmentsList_MyMenuInline", 0, 0)
   const idPromise = promise_to_get_id_from_post_response(page, "/api/investments/");
   await v_text_input_settext(page, "InvestmentsCU_Name", name);
-  await v_autocomplete_selection(page, "InvestmentsCU_Accounts", "Cash");
-  await v_autocomplete_selection(page, "InvestmentsCU_Products", product_name);
+  await v_autocomplete_selection_with_role_listbox(page, "InvestmentsCU_Accounts", "Cash");
+  await v_autocomplete_selection_with_role_listbox(page, "InvestmentsCU_Products", product_name);
   await page.getByTestId('InvestmentsCU_Button').click();
   return await idPromise
 }
@@ -187,7 +201,7 @@ export async function dividend_add_from_InvestmentView(
 ){
     await expect(page.getByTestId('InvestmentsView_ButtonClose')).toBeVisible({timeout: 15000});
     await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 3, 0)
-    await v_autocomplete_selection(page, "DividendsCU_Concepts", "Dividends. Sale of rights");
+    await v_autocomplete_selection_with_role_option(page, "DividendsCU_Concepts", "Dividends. Sale of rights");
     await v_text_input_settext(page, "DividendsCU_Gross", gross);
     await v_text_input_settext(page, "DividendsCU_Net", net);
     await v_text_input_settext(page, "DividendsCU_Taxes", taxes);
@@ -199,7 +213,7 @@ export async function dividend_add_from_InvestmentView(
 
 export async function dividend_add_from_InvestmentsView(page){
   
-  await v_autocomplete_selection(page, "InvestmentsCU_Type", "Stocks");
+  await v_autocomplete_selection_with_role_option(page, "InvestmentsCU_Type", "Stocks");
   await page.getByTestId('InvestmentsCU_Button').click();
   const idPromise=0
   return idPromise

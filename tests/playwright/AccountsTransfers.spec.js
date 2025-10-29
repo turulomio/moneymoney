@@ -3,7 +3,7 @@ import {
   v_text_input_settext,
   account_add_from_AccountsList,
   mymenuinline_selection,
-  v_autocomplete_selection,
+  v_autocomplete_selection_with_role_option,
 } from "./commons.js";
 
 test('Accounts transfers', async ({ page }) => {
@@ -16,7 +16,7 @@ test('Accounts transfers', async ({ page }) => {
     await expect(page.getByTestId(`AccountsList_Table_Row${account_id}`)).toBeVisible()
     await page.getByTestId(`AccountsList_Table_Row${account_id}`).click();
     await mymenuinline_selection(page, "AccountsView_MyMenuInline", 0, 0)
-    await v_autocomplete_selection(page, 'AccountsTransfer_Destiny', 'Cash')
+    await v_autocomplete_selection_with_role_option(page, 'AccountsTransfer_Destiny', 'Cash')
     await v_text_input_settext(page, 'AccountsTransfer_Amount', '1000' )
     await v_text_input_settext(page, 'AccountsTransfer_Commission', '1' )
     await page.getByTestId('AccountsTransfer_Button').click();

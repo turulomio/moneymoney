@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "508-add-coverage-to-playwright" ]
+    branches: [ "531-fix-playwright-tests-with-errors" ]
   pull_request:
     branches: [ "main" ]
 
@@ -71,7 +71,7 @@ jobs:
     - name: Moneymoney install and test build
       run: |
         npm install
-        npm run build --if-present
+        npm run build
 
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
@@ -79,4 +79,4 @@ jobs:
       run: |
         npm run dev &
         sleep 10
-        npx playwright test
+        npm run playwright_console
