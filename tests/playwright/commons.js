@@ -2,20 +2,19 @@
 import { expect } from './fixtures.js';
 
 
-export async function v_autocomplete_selection(page, name, item_text, first=false){
-  const autocomplete = page.getByTestId(name);
-  // Click the input to focus and show the dropdown
+export async function v_autocomplete_selection(page, testId, optionText, first = false) {
+  const autocomplete = page.getByTestId(testId);
+
+  // 1. Click the component to open the dropdown.
   await autocomplete.click();
-  // Type the text to filter the options
-  // Wait for the dropdown to be visible and then type the text to filter the options
-  await page.locator('.v-overlay-container .v-list').waitFor();
-  await autocomplete.getByRole("combobox").last().fill(item_text);
-  // Wait for the dropdown option to appear and click it.
-  // Vuetify often renders the options overlay detached from the input.
-  // We locate the item by its title text. Using a RegExp ensures an exact match.
-  const locator = page.locator('.v-list-item-title').filter({ hasText: item_text });
-  if (first) await locator.first().click();
-  else await locator.first().click();
+
+  // 2. The actual input is inside the component. We can find it by its role and type.
+  await autocomplete.locator('input[type="text"]').fill(optionText);
+
+  // 3. Wait for the desired option to appear in the dropdown and click it.
+  const option = page.getByRole('option', { name: optionText, exact: true });
+  if (first) await option.first().click();
+  else await option.last().click();
 }
 
 
