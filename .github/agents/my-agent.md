@@ -4,4 +4,4 @@ description:
 ---
 
 # My Agent
-Detectar ineficiencias en el codigo orm de django
+Detectar codigo o funciones en el codigo que puedan ser sustituidas por lodash-es 
