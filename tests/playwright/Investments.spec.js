@@ -4,8 +4,10 @@ import {
   investmentoperation_add_from_InvestmentsView,
   quote_add_from_InvestmentsList,
   dividend_add_from_InvestmentView,
+} from "./commons.js"
+import {
   mymenuinline_selection,
-} from "./commons"
+} from "./playwright_vuetify.js"
 
 
 test('Investments list', async ({ page }) => {

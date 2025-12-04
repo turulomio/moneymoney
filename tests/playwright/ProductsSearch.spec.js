@@ -4,7 +4,7 @@ import {
   v_autocomplete_selection_with_role_option,
   mymenuinline_selection,
   v_autocomplete_selection_with_role_listbox,
-} from "./commons.js";
+} from "./playwright_vuetify.js";
 
 test('Products List', async ({ page }) => {
     // Navegate to component

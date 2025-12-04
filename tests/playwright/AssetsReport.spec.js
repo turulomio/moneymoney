@@ -1,7 +1,7 @@
 import { test, expect } from './fixtures.js';
 import {
   v_text_input_settext,
-} from "./commons.js";
+} from "./playwright_vuetify.js";
 
   test('Assets report', async ({ page }) => {
     test.setTimeout(120000);
