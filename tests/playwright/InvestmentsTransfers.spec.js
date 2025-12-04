@@ -1,12 +1,14 @@
 import { test, expect } from './fixtures.js'; // Import from your fixtures file
 import {
-  investment_add_from_InvestmentsList,
-  investmentoperation_add_from_InvestmentsView,
-  quote_add_from_InvestmentsList,
   mymenuinline_selection,
   v_autocomplete_selection_with_role_listbox,
   v_text_input_settext,
   promise_to_get_id_from_post_response,
+} from "./playwright_vuetify.js"
+import {
+  investment_add_from_InvestmentsList,
+  investmentoperation_add_from_InvestmentsView,
+  quote_add_from_InvestmentsList,
 } from "./commons"
 
 

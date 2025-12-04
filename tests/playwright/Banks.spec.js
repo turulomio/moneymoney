@@ -3,7 +3,7 @@ import {
   promise_to_get_id_from_post_response,
   v_text_input_settext,
   expect_native_confirm_and_accept_it
-} from "./commons.js";
+} from "./playwright_vuetify.js";
 
   test('Banks CRUD', async ({ page }) => {
 

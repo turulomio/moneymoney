@@ -1,10 +1,14 @@
 import { test, expect } from './fixtures.js';
 import {
+  concept_add_from_ConceptsCatalog,
+} from "./commons.js";
+
+import {
   v_text_input_settext,
   v_autocomplete_selection_with_role_option,
-  concept_add_from_ConceptsCatalog,
   expect_native_confirm_and_accept_it,
-} from "./commons.js";
+} from "./playwright_vuetify.js";
+
 
 test('Concepts catalog', async ({ page }) => {
     // Navigate to concepts catalog
