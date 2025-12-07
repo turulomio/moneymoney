@@ -7,6 +7,9 @@ import {
 } from "./commons.js"
 import {
   mymenuinline_selection,
+  expect_native_prompt_and_set_value,
+  click_outside_dialog,
+  expect_native_alert_and_accept_it
 } from "./playwright_vuetify.js"
 
 
@@ -21,10 +24,39 @@ test('Investments list', async ({ page }) => {
   await investmentoperation_add_from_InvestmentsView(page)
   await dividend_add_from_InvestmentView(page)
 
-  // See investments chart  BUG DJANGO_MONEYMONEY
-  // await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 0)
-  // await expect(page.getByTestId('ChartInvestments_ButtonClose')).toBeVisible();
-  // cy.getDataTest('ChartInvestments_ButtonClose').click()
+  // Open Reinvest dialog
+  await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 2, 3)
+  
+  // Shares from amount
+  await expect_native_prompt_and_set_value(page, "10")
+  await mymenuinline_selection(page, "InvestmentsoperationsReinvest_MyMenuInline", 0, 0)
+  await page.getByTestId('InvestmentsoperationsReinvest_ButtonSimulate').click()
+  await expect(page.getByText("10.99 %")).toBeVisible()
+
+  // Shares with decimals from amount
+  await expect_native_prompt_and_set_value(page, "12")
+  await mymenuinline_selection(page, "InvestmentsoperationsReinvest_MyMenuInline", 0, 1)
+  await page.getByTestId('InvestmentsoperationsReinvest_ButtonSimulate').click()
+  await expect(page.getByText("10.96 %")).toBeVisible()
+
+  // Calculate shares from loss amount from reinvest
+  await expect_native_alert_and_accept_it(page)
+  await mymenuinline_selection(page, "InvestmentsoperationsReinvest_MyMenuInline", 1, 0)
+
+  // Float shares to consolidate losses from reinvest
+  await expect_native_alert_and_accept_it(page)
+  await mymenuinline_selection(page, "InvestmentsoperationsReinvest_MyMenuInline", 1, 1)
+  
+
+  //Exit Reinvest Dialog
+  await click_outside_dialog(page, "InvestmentsView_InvesmentsoperationsReinvest_Dialog")
+
+
+  // See investments chart  
+  await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 0)
+  await expect(page.getByTestId('ChartInvestments_ButtonClose')).toBeVisible();
+  await page.getByTestId('ChartInvestments_ButtonClose').click()
+  await expect(page.getByTestId('ChartInvestments_ButtonClose')).toBeHidden();
 
   // Change investment active status 
   await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 1)
@@ -49,6 +81,10 @@ test('Investments list', async ({ page }) => {
   await expect(page.getByTestId('ChartInvestmentsoperationsEvolutionTimeseries_ButtonClose')).toBeVisible();
   await page.getByTestId('ChartInvestmentsoperationsEvolutionTimeseries_ButtonClose').click()
   await expect(page.getByTestId('ChartInvestmentsoperationsEvolutionTimeseries_ButtonClose')).toBeHidden();
+
+
+
+
 
   // Navegate through tabs
     await page.getByTestId('InvestmentsView_TabCurrent').click();

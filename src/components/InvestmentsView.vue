@@ -131,7 +131,7 @@
         </v-dialog>
 
         <!-- Reinvest dialog -->
-        <v-dialog v-model="dialog_reinvest">
+        <v-dialog v-model="dialog_reinvest" data-test="InvestmentsView_InvesmentsoperationsReinvest_Dialog">
             <v-card class="pa-4">
                 <InvestmentsoperationsReinvest :shares="reinvest_shares" :price="reinvest_price" :ios_id="ios_id" :key="key"></InvestmentsoperationsReinvest>
             </v-card>
@@ -365,7 +365,7 @@
                                 name:this.$t('Reinvest/Divest operation'),
                                 code: function(){
                                     this.reinvest_shares=0
-                                    this.reinvest_price=this.investment.last
+                                    this.reinvest_price=this.ios_id.data.basic_results.last
                                     this.key=this.key+1                        
                                     this.dialog_reinvest=true
                                 }.bind(this),
@@ -578,6 +578,7 @@
 
                     this.ios_id=resIO.data[this.investment_id]
                     this.on_chkShowAllIO_click()
+                    console.log(this.ios_id)
 
                     this.dividends=resDividends.data
                     this.on_chkDividends()

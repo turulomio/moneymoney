@@ -57,13 +57,40 @@ export async function mymenuinline_selection(page, name,header,item){
   await page.getByTestId(`${name}_Header${header}_Item${item}`).click();
 }
 
+export async function expect_native_alert_and_accept_it(page){
+  /**
+   * Must be before action raises it
+   * Value is a string
+   */
+  page.once('dialog', dialog => { 
+    dialog.accept();
+    console.log(`Dialog message: ${dialog.message()} accepted`)
+  });
+}
 
 export async function expect_native_confirm_and_accept_it(page){
   /**
    * Must be before action raises it
    */
-      page.on('dialog', dialog => { 
+      page.once('dialog', dialog => { 
         // console.log(dialog.message())
         dialog.accept()
+        console.log(`Dialog message: ${dialog.message()} accepted`)
     })
+}
+
+export async function expect_native_prompt_and_set_value(page, value){
+  /**
+   * Must be before action raises it
+   * Value is a string
+   */
+  page.once('dialog', dialog => { 
+    dialog.accept(value);
+    console.log(`Dialog message: ${dialog.message()}. Set value: ${value}`)
+  });
+}
+
+export async function click_outside_dialog(page, name){
+  await page.locator('.v-overlay__scrim').last().click({ force: true, position: { x: 0, y: 0}});
+  await expect(page.getByTestId(name)).toBeHidden()
 }
