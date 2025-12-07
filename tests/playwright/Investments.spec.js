@@ -21,10 +21,26 @@ test('Investments list', async ({ page }) => {
   await investmentoperation_add_from_InvestmentsView(page)
   await dividend_add_from_InvestmentView(page)
 
-  // See investments chart  BUG DJANGO_MONEYMONEY
-  // await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 0)
-  // await expect(page.getByTestId('ChartInvestments_ButtonClose')).toBeVisible();
-  // cy.getDataTest('ChartInvestments_ButtonClose').click()
+  // Reinvest dialog
+  await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 2, 3)
+  // Reinvest menu Check Integer shares for ammount to reinvest
+  page.on('dialog', async dialog => {
+    await dialog.accept('10');
+  });
+  await mymenuinline_selection(page, "InvestmentsoperationsReinvest_MyMenuInline", 0, 0)
+  await page.getByTestId('InvestmentsoperationsReinvest_ButtonSimulate').click()
+  await expect(page.getByText("10.99 %")).toBeVisible()
+
+  //Exit Reinvest Dialog
+  await page.locator('.v-overlay__scrim').last().click({ force: true, position: { x: 0, y: 0}});
+  await expect(page.getByTestId('InvestmentsView_InvesmentsoperationsReinvest_Dialog')).toBeHidden()
+
+
+  // See investments chart  
+  await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 0)
+  await expect(page.getByTestId('ChartInvestments_ButtonClose')).toBeVisible();
+  await page.getByTestId('ChartInvestments_ButtonClose').click()
+  await expect(page.getByTestId('ChartInvestments_ButtonClose')).toBeHidden();
 
   // Change investment active status 
   await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 1)
@@ -49,6 +65,10 @@ test('Investments list', async ({ page }) => {
   await expect(page.getByTestId('ChartInvestmentsoperationsEvolutionTimeseries_ButtonClose')).toBeVisible();
   await page.getByTestId('ChartInvestmentsoperationsEvolutionTimeseries_ButtonClose').click()
   await expect(page.getByTestId('ChartInvestmentsoperationsEvolutionTimeseries_ButtonClose')).toBeHidden();
+
+
+
+
 
   // Navegate through tabs
     await page.getByTestId('InvestmentsView_TabCurrent').click();

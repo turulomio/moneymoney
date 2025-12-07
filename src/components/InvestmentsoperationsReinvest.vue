@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ title }}
-            <MyMenuInline :items="items"/>
+            <MyMenuInline data-test="InvestmentsoperationsReinvest_MyMenuInline" :items="items"/>
         </h1>                
         <v-select class="mr-5" :items="re_or_di_items" v-model="re_or_di" :label="$t('Do you want to reinvest or divest?')"  item-title="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables"></v-select>  
 
@@ -20,8 +20,8 @@
 
                 <v-text-field class="mr-5" autoindex="1" :disabled="loading" v-model.number="gains_value"  :label="$t('Gains method value')" :placeholder="$t('Gains method value')" :rules="RulesFloat(8,true,6)" counter="8"/>
 
-                <v-btn class="mr-5" color="primary" @click="make_all_axios_after">{{ $t("Simulate") }}</v-btn>
-                <v-btn v-if="this.newinvestments.length==1" color="error" @click="add_order">{{ $t("Add order") }}</v-btn>                 
+                <v-btn data-test="InvestmentsoperationsReinvest_ButtonSimulate" class="mr-5" color="primary" @click="make_all_axios_after">{{ $t("Simulate") }}</v-btn>
+                <v-btn data-test="InvestmentsoperationsReinvest_ButtonAddOrder" v-if="this.newinvestments.length==1" color="error" @click="add_order">{{ $t("Add order") }}</v-btn>                 
             </v-row>
             </v-form>  
 
@@ -142,8 +142,8 @@
                                     var losses=this.parseNumber(prompt( this.$t("Please set losses to consolidate (Positive amount)"), 500 ));
 
                                     var resultado=0
-                                    for (var i = 0; i < this.ios_before.io_current.length; i++) {
-                                        var o=this.ios_before.io_current[i]
+                                    for (var i = 0; i < this.ios_id.io_current.length; i++) {
+                                        var o=this.ios_id.io_current[i]
                                         var gains=o.gains_gross_investment
                                         if (losses+gains==0){
                                             resultado=resultado+o.shares
