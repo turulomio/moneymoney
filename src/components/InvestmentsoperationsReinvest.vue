@@ -140,7 +140,7 @@
                                 name:this.$t('Calculate shares from losses amount'),
                                 code: function(){
                                     if (this.re_or_di==1){
-                                        alert(this.$t("Please select disinvest to use this option"))
+                                        alert(this.$t("Please select divest option to use this action"))
                                         return
                                     }
                                     
@@ -172,14 +172,14 @@
                                 code: function(){
 
                                     if (this.re_or_di==1){
-                                        alert(this.$t("Please select disinvest to use this option"))
+                                        alert(this.$t("Please select divest option to use this action"))
                                         return
                                     }
                                     var losses=this.parseNumber(prompt( this.$t("Please set losses to consolidate (Positive amount)"), 500 ));
 
                                     var resultado=0
-                                    for (var i = 0; i < this.ios_before.io_current.length; i++) {
-                                        var o=this.ios_before.io_current[i]
+                                    for (var i = 0; i < this.ios_id.io_current.length; i++) {
+                                        var o=this.ios_id.io_current[i]
                                         var gains=o.gains_gross_investment
                                         if (losses+gains==0){
                                             resultado=resultado+o.shares
