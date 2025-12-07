@@ -3,26 +3,23 @@
         <h1>{{ title }}
             <MyMenuInline data-test="InvestmentsoperationsReinvest_MyMenuInline" :items="items"/>
         </h1>                
-        <v-select class="mr-5" :items="re_or_di_items" v-model="re_or_di" :label="$t('Do you want to reinvest or divest?')"  item-title="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables"></v-select>  
 
         <v-card class="pa-4 mb-3 mt-3"  >
             <v-form ref="form" v-model="form_valid" class="pa-4">
+                <v-row>
+                    <v-select class="mr-5" :items="re_or_di_items" v-model="re_or_di" :label="$t('Do you want to reinvest or divest?')"  item-title="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables"></v-select>  
+                    <v-select class="mr-5" :disabled="loading || (ios_id_after==null)" :items="viewoptions" v-model="viewoption" :label="$t('Set a view option')"  item-title="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables"></v-select>  
+                </v-row>
                 <v-row>                
-                    <AutocompleteProducts class="mr-5" v-model="product" :rules="RulesSelection(true)"  />
                     <v-text-field class="mr-5" v-model.number="newprice"  :label="$t('Set order price')" :placeholder="$t('Set order price')" :rules="RulesFloatGEZ(10,true, product.decimals)" counter="10"/>
                     <v-text-field v-model.number="newshares"  :label="$t('Set order shares')" :placeholder="$t('Set order shares')" :rules="RulesFloat(14,true,6)" counter="14"/>
                 </v-row>
-
-            <v-row>
-                <v-select class="mr-5" :disabled="loading || (ios_id_after==null)" :items="viewoptions" v-model="viewoption" :label="$t('Set a view option')"  item-title="name" item-value="id" :rules="RulesSelection(true)" @change="refreshTables"></v-select>  
-                <v-select class="mr-5" :items="gains_methods" v-model="gains_method" :label="$t('Set a method to calculate gains')"  item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
-
-
-                <v-text-field class="mr-5" autoindex="1" :disabled="loading" v-model.number="gains_value"  :label="$t('Gains method value')" :placeholder="$t('Gains method value')" :rules="RulesFloat(8,true,6)" counter="8"/>
-
-                <v-btn data-test="InvestmentsoperationsReinvest_ButtonSimulate" class="mr-5" color="primary" @click="make_all_axios_after">{{ $t("Simulate") }}</v-btn>
-                <v-btn data-test="InvestmentsoperationsReinvest_ButtonAddOrder" v-if="this.newinvestments.length==1" color="error" @click="add_order">{{ $t("Add order") }}</v-btn>                 
-            </v-row>
+                <v-row>
+                    <v-select class="mr-5" :items="gains_methods" v-model="gains_method" :label="$t('Set a method to calculate gains')"  item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
+                    <v-text-field class="mr-5" autoindex="1" :disabled="loading" v-model.number="gains_value"  :label="$t('Gains method value')" :placeholder="$t('Gains method value')" :rules="RulesFloat(8,true,6)" counter="8"/>
+                    <v-btn data-test="InvestmentsoperationsReinvest_ButtonAddOrder" class="ml-5" color="error" @click="add_order">{{ $t("Add order") }}</v-btn>                 
+                    <v-btn data-test="InvestmentsoperationsReinvest_ButtonSimulate" class="ml-5" color="primary" @click="make_all_axios_after">{{ $t("Simulate") }}</v-btn>               
+                </v-row>
             </v-form>  
 
         </v-card>
@@ -66,7 +63,7 @@
         <!-- Order CU dialog -->
         <v-dialog v-model="dialog_order_cu" max-width="550">
             <v-card class="pa-4">
-                <OrdersCU :order="order" mode="C" :key="key" @cruded="on_OrdersCU_cruded" :investments="getArrayFromMap(useStore().investments)"></OrdersCU>
+                <OrdersCU :order="order" mode="C" :key="key" @cruded="on_OrdersCU_cruded" :investments="[investment,]"></OrdersCU>
             </v-card>
         </v-dialog>
     </div>
@@ -79,7 +76,6 @@
     import { my_round, RulesSelection,RulesFloat,RulesFloatGEZ,parseNumber,f } from 'vuetify_rules'
     import ChartInvestments from './ChartInvestments.vue'
     import OrdersCU from './OrdersCU.vue'
-    import AutocompleteProducts from './AutocompleteProducts.vue'
     import TableInvestmentOperations from './TableInvestmentOperations.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
@@ -93,7 +89,6 @@
             TableInvestmentOperations,
             TableInvestmentOperationsHistorical,
             TableInvestmentOperationsCurrent,
-            AutocompleteProducts,
         },
         props: {
             ios_id: { //object plinvestmentsoperations id can be investment or virtual investment (Merged)
@@ -137,7 +132,7 @@
                         subheader:this.$t('Options to divest'),
                         children: [
                             {
-                                name:this.$t('Calculate shares from losses amount'),
+                                name: this.$t('Integer shares to consolidate losses'),
                                 code: function(){
                                     if (this.re_or_di==1){
                                         alert(this.$t("Please select divest option to use this action"))
@@ -168,7 +163,7 @@
                                 icon: "mdi-book-plus",
                             },
                             {
-                                name:this.$t('Float shares to consolidate losses'),
+                                name:this.$t('Decimal shares to consolidate losses'),
                                 code: function(){
 
                                     if (this.re_or_di==1){
@@ -195,22 +190,6 @@
 
 
                                     this.newshares=-this.my_round(resultado,6)
-                                }.bind(this),
-                                icon: "mdi-book-plus",
-                            },
-                        ]
-                    },
-                    {
-                        subheader:this.$t('Options to select investments'),
-                        children: [
-                            {
-                                name:this.$t('Add all active investments of the same product'),
-                                code: function(){
-                                    this.useStore().investments.forEach(o=>{
-                                        if (this.product==o.products && o.active && !this.newinvestments.includes(o.url)){
-                                            this.newinvestments.push(o.url)
-                                        }
-                                    })
                                 }.bind(this),
                                 icon: "mdi-book-plus",
                             },
@@ -244,8 +223,6 @@
                 order: null,
 
                 //Form
-                product: null,
-                newinvestments: [],
                 newshares:0,                
                 newprice:0,
 
@@ -268,6 +245,12 @@
                     return this.ios_id_after
                 }
             },
+            product: function(){
+                return this.getMapObjectById("products", this.ios_id_current.data.products_id)
+            },
+            investment: function(){ //Solo debe haber una ccambiar con virtuales y esconder orden
+                return this.getMapObjectById("investments", this.ios_id_current.data.investments_id)
+            }
         },
         methods: {
             useStore,
@@ -296,6 +279,7 @@
                 this.order=this.empty_order()
                 this.order.price=this.newprice
                 this.order.shares=this.newshares
+                this.order.investments=this.investment.url
                 this.key=this.key+1
                 this.dialog_order_cu=true
 
@@ -407,10 +391,9 @@
             //This components
             this.newshares=this.shares
             this.newprice=this.price
-            this.product=this.getMapObjectById("products", this.ios_id_current.data.products_id)
             this.make_all_axios_before()
+            console.log(this.investment)
         }
-        
     }
 </script>
 
