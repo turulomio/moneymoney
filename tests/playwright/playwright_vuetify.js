@@ -67,3 +67,18 @@ export async function expect_native_confirm_and_accept_it(page){
         dialog.accept()
     })
 }
+
+export async function expect_native_prompt_and_set_value(page, value){
+  /**
+   * Must be before action raises it
+   * Value is a string
+   */
+  page.on('dialog', async dialog => {
+    await dialog.accept(value);
+  });
+}
+
+export async function click_outside_dialog(page, name){
+  await page.locator('.v-overlay__scrim').last().click({ force: true, position: { x: 0, y: 0}});
+  await expect(page.getByTestId(name)).toBeHidden()
+}

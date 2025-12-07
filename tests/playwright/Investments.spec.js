@@ -7,6 +7,8 @@ import {
 } from "./commons.js"
 import {
   mymenuinline_selection,
+  expect_native_prompt_and_set_value,
+  click_outside_dialog
 } from "./playwright_vuetify.js"
 
 
@@ -23,17 +25,13 @@ test('Investments list', async ({ page }) => {
 
   // Reinvest dialog
   await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 2, 3)
-  // Reinvest menu Check Integer shares for ammount to reinvest
-  page.on('dialog', async dialog => {
-    await dialog.accept('10');
-  });
+  await expect_native_prompt_and_set_value(page, "10")
   await mymenuinline_selection(page, "InvestmentsoperationsReinvest_MyMenuInline", 0, 0)
   await page.getByTestId('InvestmentsoperationsReinvest_ButtonSimulate').click()
   await expect(page.getByText("10.99 %")).toBeVisible()
 
   //Exit Reinvest Dialog
-  await page.locator('.v-overlay__scrim').last().click({ force: true, position: { x: 0, y: 0}});
-  await expect(page.getByTestId('InvestmentsView_InvesmentsoperationsReinvest_Dialog')).toBeHidden()
+  await click_outside_dialog(page, "InvestmentsView_InvesmentsoperationsReinvest_Dialog")
 
 
   // See investments chart  
