@@ -19,8 +19,7 @@
                     :rules="RulesSelection(true)"></v-select>
                 <v-textarea data-test="StrategyProductsRangeCU_Comment" :readonly="mode == 'D'"
                     v-model="new_strategy.strategy.comment" :label="$t('Set strategy comment')"
-                    :placeholder="$t('Set strategy comment')" :rules="RulesString(200, false)"
-                    counter="200"></v-textarea>
+                    :placeholder="$t('Set strategy comment')" ></v-textarea>
 
                 <AutocompleteProducts data-test="StrategyProductsRangeCU_Product" v-model="new_strategy.product" />
                 <AutocompleteInvestments data-test="StrategyProductsRangeCU_Investments"

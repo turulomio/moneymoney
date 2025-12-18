@@ -9,7 +9,7 @@
                     <MyDateTimePicker data-test="StrategyGenericCU_DtTo" :readonly="mode == 'D'" v-model="new_strategy.strategy.dt_to" :label="$t('Date and time strategy end')" :clearable="true" />
                 </v-row>
                 <v-select data-test="StrategyGenericCU_Type" readonly :items="getArrayFromMap(useStore().strategiestypes)" v-model="new_strategy.strategy.type" :label="$t('Select strategy type')" item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>
-                <v-textarea data-test="StrategyGenericCU_Comment" :readonly="mode == 'D'" v-model="new_strategy.strategy.comment" :label="$t('Set strategy comment')" :placeholder="$t('Set strategy comment')" :rules="RulesString(200, false)" counter="200"></v-textarea>
+                <v-textarea data-test="StrategyGenericCU_Comment" :readonly="mode == 'D'" v-model="new_strategy.strategy.comment" :label="$t('Set strategy comment')" :placeholder="$t('Set strategy comment')"></v-textarea>
                 <AutocompleteInvestments data-test="StrategyGenericCU_Investments" v-model="new_strategy.investments" multiple />
             </v-form>
             <v-card-actions>
