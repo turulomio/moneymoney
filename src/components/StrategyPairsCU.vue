@@ -9,7 +9,7 @@
                     <MyDateTimePicker data-test="StrategyPairsCU_DtTo" :readonly="mode === 'D'" v-model="new_strategy.strategy.dt_to" :label="t('Date and time strategy end')" :clearable="true" />
                 </v-row>
                 <v-select data-test="StrategyPairsCU_Type" readonly :items="getArrayFromMap(store.strategiestypes)" v-model="new_strategy.strategy.type" :label="t('Select strategy type')" item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>
-                <v-textarea data-test="StrategyPairsCU_Comment" :readonly="mode === 'D'" v-model="new_strategy.strategy.comment" :label="t('Set strategy comment')" :placeholder="t('Set strategy comment')" :rules="RulesString(200, false)" counter="200"></v-textarea>
+                <v-textarea data-test="StrategyPairsCU_Comment" :readonly="mode === 'D'" v-model="new_strategy.strategy.comment" :label="t('Set strategy comment')" :placeholder="t('Set strategy comment')"></v-textarea>
                 <AutocompleteAccounts data-test="StrategyPairsCU_Account" v-model="new_strategy.account" :readonly="mode === 'D'" />
                 <AutocompleteProducts data-test="StrategyPairsCU_BetterProduct" :readonly="mode === 'D'" v-model="new_strategy.better_product" />
                 <AutocompleteProducts data-test="StrategyPairsCU_WorseProduct" :readonly="mode === 'D'" v-model="new_strategy.worse_product" />
