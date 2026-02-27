@@ -43,5 +43,7 @@ test('Strategies Products Range CRUD', async ({ page }) => {
 
     // Create another strategy
     const other_strategy_id = await strategy_products_range_add_from_StrategiesList(page, "Another Range strategy", "Test investment", "LYXOR IBEX DOBLE APALANCADO (Madrid Stock Exchange)", "The second best");
+    await page.getByTestId(`StrategiesList_Table_Row${other_strategy_id}`).click();
+    await expect(page.getByTestId('ProductsRanges')).toBeVisible();
 
 });

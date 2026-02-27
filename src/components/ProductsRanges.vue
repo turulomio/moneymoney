@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div data-test="ProductsRanges">
         <h1> {{ $t('Product ranges') }}</h1>
         <v-card class="ma-4 pa-4">   
             
