@@ -162,3 +162,16 @@ export async function dividend_add_from_InvestmentView(
     await expect(page.getByTestId('DividendsCU_Button')).toBeHidden()
 
 }
+
+export async function strategy_products_range_add_from_StrategiesList(page, name, investment_name, product_name, comment){
+    await mymenuinline_selection(page, "StrategiesList_MyMenuInline", 0, 1)
+    const strategy_id_promise = promise_to_get_response(page, "/api/strategies_productsrange/", "POST");
+    await v_text_input_settext(page, "StrategyProductsRangeCU_Name", name);
+    await v_autocomplete_selection_with_role_listbox(page, "StrategyProductsRangeCU_Investments", investment_name);
+    await v_autocomplete_selection_with_role_listbox(page, "StrategyProductsRangeCU_Product", product_name);
+    await v_text_input_settext(page, "StrategyProductsRangeCU_Comment", comment);
+    await page.getByTestId('StrategyProductsRangeCU_Button').click();
+    const strategy_id = (await strategy_id_promise).strategy.id;
+    await expect(page.getByTestId(`StrategiesList_Table_Row${strategy_id}`)).toBeVisible();
+    return strategy_id
+}
