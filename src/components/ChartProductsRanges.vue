@@ -106,6 +106,7 @@
             this.chart = echarts.init(this.$refs.chart);
             this.chart.setOption(this.chart_option())
             this.loading=false
+            console.log(this.prdata)
         }
     }
 
