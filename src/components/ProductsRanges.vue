@@ -6,19 +6,19 @@
             <v-form ref="form" v-model="form_valid">             
                 <v-row class="d-flex pl-5 pr-5 mx-auto">
                 <AutocompleteProducts data-test="ProductsRanges_Product" class="mr-5" v-model="newpr.product" :rules="RulesSelection(true)"  />
-                <v-autocomplete class="mr-5" :items="this.getInvestmentsByProduct(newpr.product)" v-model="newpr.investments" :label="$t('Select investments to include')" item-title="fullname" item-value="url" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
+                <v-autocomplete data-test="ProductsRanges_Investments" class="mr-5" :items="this.getInvestmentsByProduct(newpr.product)" v-model="newpr.investments" :label="$t('Select investments to include')" item-title="fullname" item-value="url" multiple :rules="RulesSelection(true)" chips></v-autocomplete>
 
                 </v-row>
                 <v-row class="pl-5 pr-5">                
-                <v-select class="mr-5" :items="getArrayFromMap(useStore().recomendation_methods)" v-model="newpr.recomendation_methods" :label="$t('Set recomendation method')"  item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
+                <v-select data-test="ProductsRanges_RecomendationMethod" class="mr-5" :items="getArrayFromMap(useStore().recomendation_methods)" v-model="newpr.recomendation_methods" :label="$t('Set recomendation method')"  item-title="name" item-value="id" :rules="RulesSelection(true)"></v-select>  
 
-                <v-text-field class="mr-5" v-model.number="newpr.percentage_between_ranges"  :label="$t('Set percentage between ranges')" :placeholder="$t('Set percentage between ranges')" :rules="RulesFloat(10,true,6)" counter="10"/>
-                <v-text-field class="mr-5" v-model.number="newpr.percentage_gains"  :label="$t('Set percentage gains')" :placeholder="$t('Set percentage gains')" :rules="RulesFloat(10,true,6)" counter="10"/>
-                <v-text-field class="mr-5" v-model.number="newpr.amount_to_invest"  :label="$t('Set the amount to invest')" :placeholder="$t('Set the amount to invest')" :rules="RulesFloat(10,true,6)" counter="10"/>
+                <v-text-field data-test="ProductsRanges_PercentageBetweenRanges" class="mr-5" v-model.number="newpr.percentage_between_ranges"  :label="$t('Set percentage between ranges')" :placeholder="$t('Set percentage between ranges')" :rules="RulesFloat(10,true,6)" counter="10"/>
+                <v-text-field data-test="ProductsRanges_PercentageGains" class="mr-5" v-model.number="newpr.percentage_gains"  :label="$t('Set percentage gains')" :placeholder="$t('Set percentage gains')" :rules="RulesFloat(10,true,6)" counter="10"/>
+                <v-text-field data-test="ProductsRanges_AmountToInvest" class="mr-5" v-model.number="newpr.amount_to_invest"  :label="$t('Set the amount to invest')" :placeholder="$t('Set the amount to invest')" :rules="RulesFloat(10,true,6)" counter="10"/>
 
-                <v-text-field class="mr-5" v-model.number="newpr.additional_ranges"  :label="$t('Additional ranges to show')" :placeholder="$t('Additional ranges to show')" :rules="RulesInteger(2,true)" counter="2"/>
-                <v-checkbox class="mr-5" v-model="newpr.totalized_operations" :label="$t('Show totalized investments operations?')" ></v-checkbox>
-                <v-btn class="mt-2" color="primary" @click="accept()" :disabled="!form_valid">{{ $t("Show ranges") }}</v-btn>
+                <v-text-field data-test="ProductsRanges_AdditionalRanges" class="mr-5" v-model.number="newpr.additional_ranges"  :label="$t('Additional ranges to show')" :placeholder="$t('Additional ranges to show')" :rules="RulesInteger(2,true)" counter="2"/>
+                <v-checkbox data-test="ProductsRanges_TotalizedOperations" class="mr-5" v-model="newpr.totalized_operations" :label="$t('Show totalized investments operations?')" ></v-checkbox>
+                <v-btn data-test="ProductsRanges_ButtonShow" class="mt-2" color="primary" @click="accept()" :disabled="!form_valid">{{ $t("Show ranges") }}</v-btn>
 
                 </v-row>
             </v-form>
@@ -27,13 +27,13 @@
 
         <v-card flat class="ma-4 pa-4">
             <v-tabs v-model="tab" grow bg-color="secondary">
-                <v-tab key="0">{{ $t('Product ranges table') }}</v-tab>
-                <v-tab key="1">{{ $t('Product ranges chart') }}</v-tab>
+                <v-tab key="0" data-test="ProductsRanges_TabTable">{{ $t('Product ranges table') }}</v-tab>
+                <v-tab key="1" data-test="ProductsRanges_TabChart">{{ $t('Product ranges chart') }}</v-tab>
             </v-tabs>
             <v-window v-model="tab">
             <v-window-item key="0">
                 <v-card flat>
-                    <v-data-table density="compact" :headers="tableHeaders" :items="tableData" class="elevation-1" :sort-by="['value']" :sort-type="['desc']" fixed-header height="360"     :items-per-page="10000" >
+                    <v-data-table data-test="ProductsRanges_Table" density="compact" :headers="tableHeaders" :items="tableData" class="elevation-1" :sort-by="['value']" :sort-type="['desc']" fixed-header height="360"     :items-per-page="10000" >
                         <template #item.value="{item}">
                             <div  @click="showLimits(item)" :class="item.current_in_range ? 'boldgreen' : ''">{{currency_string(item.value, prdata.product.currency) }}</div>
                         </template>    
@@ -47,15 +47,15 @@
                             <div  v-for="o in item.orders_inside" :key="o.name" @click="on_orders_inside_click(o)">{{ f($t("[0]. Amount: [1]"), [o.name, currency_string(o.amount, prdata.product.currency)]) }}<br></div>
                         </template>
                             <template #item.actions="{item}">
-                            <v-icon small class="mr-2" @click="addOrder(item)" :color="(item.recomendation_invest) ? '' : 'red'">mdi-cart</v-icon>
+                            <v-icon :data-test="`ProductsRanges_Table_IconAddOrder${item.id}`" small class="mr-2" @click="addOrder(item)" :color="(item.recomendation_invest) ? '' : 'red'">mdi-cart</v-icon>
                         </template>
                         <template #bottom ></template>   
                     </v-data-table>   
                     </v-card>
                 </v-window-item>
                 <v-window-item key="1" >
-                    <div style="height: 600px;">
-                        <ChartProductsRanges v-if="showchart" :prdata="prdata" autoresize />
+                    <div style="height: 600px;" data-test="ProductsRanges_Chart">
+                        <ChartProductsRanges v-if="showchart" :prdata="prdata" autoresize data-test="ProductsRanges_Chart_Component" />
                     </div>
                 </v-window-item>
             </v-window>

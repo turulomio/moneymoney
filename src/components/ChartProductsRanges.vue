@@ -94,6 +94,47 @@
                         itemStyle: (this.prdata.pr[i].recomendation_invest==true) ? {color: 'rgba(255, 213, 213, 0.4)'} :  {color: 'rgba(217, 217, 217, 0.4)'},
                     })
                 }
+
+                var orders = []
+                if (this.prdata.orders) {
+                    orders = this.prdata.orders
+                } else if (this.prdata.pr) {
+                    this.prdata.pr.forEach(range => {
+                        if (range.orders_inside) {
+                            orders = orders.concat(range.orders_inside)
+                        }
+                    })
+                }
+
+                var normal_orders = []
+                var up_orders = []
+                var down_orders = []
+
+                orders.forEach(o => {
+                    var item = [o.date, o.price, o.name]
+                    if (o.type === 'Up') {
+                        up_orders.push(item)
+                    } else if (o.type === 'Down') {
+                        down_orders.push(item)
+                    } else {
+                        normal_orders.push(item)
+                    }
+                })
+
+                var aspa = 'path://M3.5,3.5L20.5,20.5M3.5,20.5L20.5,3.5'
+
+                if (normal_orders.length > 0) {
+                    r.push({ type: 'scatter', name: 'Orders', data: normal_orders, itemStyle: { color: 'grey' }, symbol: 'circle', symbolSize: 8, tooltip: { formatter: (params) => { return params.data[2] } } })
+                }
+
+                if (up_orders.length > 0) {
+                    r.push({ type: 'scatter', name: 'Up Orders', data: up_orders, itemStyle: { color: 'green' }, symbol: aspa, symbolSize: 10, tooltip: { formatter: (params) => { return params.data[2] } } })
+                }
+
+                if (down_orders.length > 0) {
+                    r.push({ type: 'scatter', name: 'Down Orders', data: down_orders, itemStyle: { color: 'red' }, symbol: aspa, symbolSize: 10, tooltip: { formatter: (params) => { return params.data[2] } } })
+                }
+
                 return r
             },
         },
@@ -112,4 +153,3 @@
 
 
 </script>
-
