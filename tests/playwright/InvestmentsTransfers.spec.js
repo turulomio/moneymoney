@@ -3,7 +3,7 @@ import {
   mymenuinline_selection,
   v_autocomplete_selection_with_role_listbox,
   v_text_input_settext,
-  promise_to_get_id_from_post_response,
+  promise_to_get_response,
 } from "./playwright_vuetify.js"
 import {
   investment_add_from_InvestmentsList,
@@ -45,9 +45,9 @@ test('Investments transfers', async ({ page }) => {
   await v_text_input_settext(page, "InvestmentsTransfersCU_SharesDestiny", "45")
   await v_text_input_settext(page, "InvestmentsTransfersCU_PriceDestiny", "10")
 
-  const transferIdPromise = promise_to_get_id_from_post_response(page, "/api/investmentstransfers/");
+  const transferIdPromise = promise_to_get_response(page, "/api/investmentstransfers/", "POST");
   await page.getByTestId('InvestmentsTransfersCU_Button').click();
-  const transferId = await transferIdPromise;
+  const transferId = (await transferIdPromise).id;
   expect(transferId).toBeDefined();
 
   await expect(page.getByTestId('InvestmentsTransfersCU_Button')).toBeHidden();

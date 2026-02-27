@@ -38,15 +38,14 @@ export async function v_text_input_settext(page, name, text){
   await v_text_input.getByRole("textbox").fill(text);
 }
   
-// This helper waits for a POST request to a given URL and returns the 'id' from the JSON response.
-export async function promise_to_get_id_from_post_response(page, url) {
+// This helper waits for a request to a given URL and returns the JSON response.
+export async function promise_to_get_response(page, url, method) {
   const responsePromise = page.waitForResponse(
-    response => response.url().includes(url) && response.request().method() === 'POST'
+    response => response.url().includes(url) && response.request().method() === method
   );
   const response = await responsePromise;
   const responseBody = await response.json();
-  expect(responseBody).toHaveProperty('id');
-  return responseBody.id;
+  return responseBody;
 }
 
 export async function mymenuinline_selection(page, name,header,item){

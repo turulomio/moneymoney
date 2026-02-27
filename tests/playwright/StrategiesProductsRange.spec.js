@@ -3,27 +3,14 @@ import {
     investment_add_from_InvestmentsList,
     quote_add_from_InvestmentsList,
 } from "./commons.js";
+import {
+    mymenuinline_selection,
+    v_text_input_settext,
+    v_autocomplete_selection_with_role_listbox,
+    promise_to_get_response,
+} from "./playwright_vuetify.js";
 
 
-    // //Open strategies lateral menu
-    // cy.wait(1000)
-    // cy.getDataTest('LateralIcon').should('be.visible').click()
-    // cy.getDataTest('LateralStrategies').click()
-
-    // // Add a new strategy ranged
-    // component_pointable('StrategiesList_MyMenuInline_Button')
-    // cy.getDataTest('StrategiesList_MyMenuInline_Button').click()
-    // cy.getDataTest('StrategiesList_MyMenuInline_Header0_Item1').click()
-    // cy.getDataTest('StrategyProductsRangeCU_Name').type("Range strategy")
-    // cy.getDataTest('StrategyProductsRangeCU_Investments').type("Perm{downArrow}{enter}")
-    // cy.wait(1000) // A lot of products, needed more time
-    // cy.getDataTest('StrategyProductsRangeCU_Product').type("Apalanc{downArrow}{enter}")
-    // cy.getDataTest('StrategyProductsRangeCU_Comment').type("The best too")
-    // cy.intercept({ method:'POST', url:'http://127.0.0.1:8004/api/strategies_productsrange/', times:1,}).as("post_strategies")
-    // cy.getDataTest('StrategyProductsRangeCU_Button').click()
-    // cy.wait('@post_strategies').then((interception)=>{
-    //     cy.wrap(interception.response.body.strategy.id).as('strategy_id') // Stores the captured ID for later us
-    // })
 
     // cy.get("@strategy_id").then((strategy_id)  =>{
     //   // Opens strategy view
@@ -66,8 +53,21 @@ test('Strategies Products Range', async ({ page }) => {
 
     // Creates an investment and an investment operation
     const investments_id=await investment_add_from_InvestmentsList(page, "Test investment", "LYXOR IBEX DOBLE APALANCADO (Madrid Stock Exchange)")
-    await quote_add_from_InvestmentsList(page, investments_id)
     await expect(page.getByTestId(`Investments_Table_Row${investments_id}`)).toBeVisible();
+    await quote_add_from_InvestmentsList(page, investments_id)
+
+    await page.getByTestId('LateralIcon').click();
+    await page.getByTestId('LateralStrategies').click();
+
+    await mymenuinline_selection(page, "StrategiesList_MyMenuInline", 0, 1)
+    const strategy_id_promise = promise_to_get_response(page, "/api/strategies_productsrange/", "POST");
+    await v_text_input_settext(page, "StrategyProductsRangeCU_Name", "Range strategy");
+    await v_autocomplete_selection_with_role_listbox(page, "StrategyProductsRangeCU_Investments", "Test investment");
+    await v_autocomplete_selection_with_role_listbox(page, "StrategyProductsRangeCU_Product", "LYXOR IBEX DOBLE APALANCADO (Madrid Stock Exchange)");
+    await v_text_input_settext(page, "StrategyProductsRangeCU_Comment", "The best too");
+    await page.getByTestId('StrategyProductsRangeCU_Button').click();
+    const strategy_id = (await strategy_id_promise).strategy.id;
+    await expect(page.getByTestId(`StrategiesList_Table_Row${strategy_id}`)).toBeVisible();
 
 
 

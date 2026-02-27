@@ -4,7 +4,7 @@ import {
   v_autocomplete_selection_with_role_option,
   v_autocomplete_selection_with_role_listbox,
   v_text_input_settext,
-  promise_to_get_id_from_post_response,
+  promise_to_get_response,
   mymenuinline_selection,
 } from "./playwright_vuetify.js";
 
@@ -16,7 +16,7 @@ export async function account_add_from_AccountsList(page, name="Permanent Accoun
   await mymenuinline_selection(page, "AccountsList_MyMenuInline", 0, 0)
 
   // Set up the promise to wait for the response *before* the action.
-  const idPromise = promise_to_get_id_from_post_response(page, "/api/accounts/");
+  const idPromise = promise_to_get_response(page, "/api/accounts/", "POST");
 
   await v_text_input_settext(page, "AccountsCU_Name", name);
   await v_autocomplete_selection_with_role_option(page, "AccountsCU_Bank", "Personal Management");
@@ -25,7 +25,7 @@ export async function account_add_from_AccountsList(page, name="Permanent Accoun
   await page.getByTestId('AccountsCU_Button').click();
 
   // Now we wait for the promise to resolve with the ID from the response.
-  const newAccountId = await idPromise;
+  const newAccountId = (await idPromise).id;
   // console.log(`New account created with ID: ${newAccountId}`);
   expect(newAccountId).toBeDefined();
 
@@ -41,11 +41,11 @@ export async function accountoperation_add_from_AccountsView(page, concept, amou
   await v_text_input_settext(page, "AccountsoperationsCU_Comment", comment);
 
   // Set up the promise to wait for the response *before* the action.
-  const idPromise = promise_to_get_id_from_post_response(page, "/api/accountsoperations/");
+  const idPromise = promise_to_get_response(page, "/api/accountsoperations/", "POST");
   // This is the action that triggers the POST request.
   await page.getByTestId('AccountsoperationsCU_Button').click();
   // Now we wait for the promise to resolve with the ID from the response.
-  const newId = await idPromise;
+  const newId = (await idPromise).id;
   expect(newId).toBeDefined();
 
   // Wait for the dialog to close.
@@ -62,9 +62,9 @@ export async function creditcard_add_from_AccountsView(page, name, deferred){
     await v_text_input_settext(page, "CreditcardsCU_MaximumBalance", "1000");
     await page.getByTestId('CreditcardsCU_Active').getByRole("checkbox").check();
     if (deferred) await page.getByTestId('CreditcardsCU_Deferred').getByRole("checkbox").check();
-    const cc_id_promise = promise_to_get_id_from_post_response(page, "/api/creditcards/");
+    const cc_id_promise = promise_to_get_response(page, "/api/creditcards/", "POST");
     await page.getByTestId('CreditcardsCU_Button').click(); 
-    const cc_id= await cc_id_promise;
+    const cc_id= (await cc_id_promise).id;
     await expect(page.getByTestId('CreditcardsCU_Button')).toBeHidden();
     await expect(page.getByTestId(`AccountsView_Tablecc_Row${cc_id}`)).toBeVisible();
     return cc_id
@@ -79,14 +79,14 @@ export async function creditcardoperation_add_from_CreditCardsView(page, concept
     await v_autocomplete_selection_with_role_option(page, "CreditcardsoperationsCU_Concepts", concepts);
     await v_text_input_settext(page, "CreditcardsoperationsCU_Amount", "-100")
     await v_text_input_settext(page, "CreditcardsoperationsCU_Comment", "This is a comment")
-    const cc_id_promise = promise_to_get_id_from_post_response(page, "/api/creditcardsoperations/");
+    const cc_id_promise = promise_to_get_response(page, "/api/creditcardsoperations/", "POST");
     if (follow){
       await page.getByTestId('CreditcardsoperationsCU_ButtonFollow').click();
     } else {
       await expect(page.getByTestId('CreditcardsoperationsCU_Button')).toBeHidden();
       await expect(page.getByTestId(`CreditCardsView_Tablecc_Row${cc_id}`)).toBeVisible();
     }
-    const cc_id= await cc_id_promise;
+    const cc_id= (await cc_id_promise).id;
     return cc_id
 }
 
@@ -95,9 +95,9 @@ export async function concept_add_from_ConceptsCatalog(page, name="My first pers
     await v_text_input_settext(page, "ConceptsCU_Name", name);
     await v_autocomplete_selection_with_role_listbox(page, "ConceptsCU_OperationsTypes", "Expense", true);
 
-    const concept_id_promise = promise_to_get_id_from_post_response(page, "/api/concepts/");
+    const concept_id_promise = promise_to_get_response(page, "/api/concepts/", "POST");
     await page.getByTestId('ConceptsCU_Button').click();
-    const concept_id= await concept_id_promise;
+    const concept_id= (await concept_id_promise).id;
     await expect(page.getByTestId(`ConceptsCatalog_Table_ButtonUpdate${concept_id}`)).toBeVisible();
     return concept_id
 }
@@ -106,12 +106,12 @@ export async function investment_add_from_InvestmentsList(page, name="New Test I
   // This is a placeholder implementation based on the function name.
   // You may need to adjust the selectors and values.
   await mymenuinline_selection(page, "InvestmentsList_MyMenuInline", 0, 0)
-  const idPromise = promise_to_get_id_from_post_response(page, "/api/investments/");
+  const idPromise = promise_to_get_response(page, "/api/investments/", "POST");
   await v_text_input_settext(page, "InvestmentsCU_Name", name);
   await v_autocomplete_selection_with_role_listbox(page, "InvestmentsCU_Accounts", "Cash");
   await v_autocomplete_selection_with_role_listbox(page, "InvestmentsCU_Products", product_name);
   await page.getByTestId('InvestmentsCU_Button').click();
-  return await idPromise
+  return (await idPromise).id
 }
 
 export async function quote_add_from_InvestmentsList(page, investment_id){
@@ -137,9 +137,9 @@ export async function investmentoperation_add_from_InvestmentsView(page){
   await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 2, 0)
   await v_text_input_settext(page, "InvestmentsoperationsCU_Shares", "100")
   await v_text_input_settext(page, "InvestmentsoperationsCU_Price", "9");
-  const idPromise = promise_to_get_id_from_post_response(page, "/api/investmentsoperations/");
+  const idPromise = promise_to_get_response(page, "/api/investmentsoperations/", "POST");
   await page.getByTestId('InvestmentsoperationsCU_Button').click();
-  const id= await idPromise
+  const id= (await idPromise).id
   await expect(page.getByTestId('InvestmentsoperationsCU_Button')).toBeHidden()
   return id
 }
@@ -162,4 +162,3 @@ export async function dividend_add_from_InvestmentView(
     await expect(page.getByTestId('DividendsCU_Button')).toBeHidden()
 
 }
-
