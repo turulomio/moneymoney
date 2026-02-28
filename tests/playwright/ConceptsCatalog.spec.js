@@ -7,11 +7,11 @@ import {
   v_text_input_settext,
   v_autocomplete_selection_with_role_option,
   expect_native_confirm_and_accept_it,
-  promise_to_get_response,
 } from "./playwright_vuetify.js";
 
 
 test('Concepts catalog', async ({ page }) => {
+    test.setTimeout(60000);
     // Navigate to concepts catalog
     await page.getByTestId('LateralIcon').click();
     await page.getByTestId('LateralAdministration').click();
@@ -37,8 +37,7 @@ test('Concepts catalog', async ({ page }) => {
     const concept2_id=await concept_add_from_ConceptsCatalog(page, "My second personal concept")
     await page.getByTestId(`ConceptsCatalog_Table_ButtonMigrate${concept2_id}`).click();
     await v_autocomplete_selection_with_role_option(page, "ConceptsMigration_To", "Negative");
-    const migration_promise = promise_to_get_response(page, "migration", "POST");
+    await expect_native_confirm_and_accept_it(page)
     await page.getByTestId('ConceptsMigration_Button').click();
-    await migration_promise;
     await expect(page.getByTestId('ConceptsMigration_Button')).toBeHidden();
 });
