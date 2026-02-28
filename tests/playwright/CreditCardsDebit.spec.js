@@ -4,7 +4,6 @@ import {
 } from "./commons.js";
 import {
   v_text_input_settext,
-  expect_native_confirm_and_accept_it,
 } from "./playwright_vuetify.js";
 
 test('Credit cards debit', async ({ page }) => {
@@ -29,8 +28,13 @@ test('Credit cards debit', async ({ page }) => {
     await page.getByTestId('AccountsView_ShowActiveCC').getByRole("checkbox").uncheck();
     await expect(page.getByTestId(`AccountsView_Tablecc_Row${cc_id}`)).toBeVisible();
     await page.getByTestId(`AccountsView_Tablecc_ButtonDelete${cc_id}`).click();
-    await expect_native_confirm_and_accept_it(page)
+
+    const dialogHandler = async dialog => await dialog.accept();
+    page.on('dialog', dialogHandler);
+    const responsePromise = page.waitForResponse(response => response.url().includes('/api/creditcards/') && response.request().method() === 'DELETE');
     await page.getByTestId('CreditcardsCU_Button').click();
+    await responsePromise;
+    page.removeListener('dialog', dialogHandler);
     await expect(page.getByTestId('CreditcardsCU_Button')).toBeHidden();
     await expect(page.getByTestId(`AccountsView_Tablecc_Row${cc_id}`)).toBeHidden();
 

@@ -7,9 +7,7 @@ import {
 } from "./commons.js";
 import {
     expect_native_confirm_and_accept_it,
-    v_text_input_settext,
-    promise_to_get_response,
-    v_autocomplete_selection_with_role_listbox
+    v_text_input_settext
 } from "./playwright_vuetify.js";
 
 
