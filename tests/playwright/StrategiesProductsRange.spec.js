@@ -1,72 +1,69 @@
 import { test, expect } from './fixtures.js';
 import {
     investment_add_from_InvestmentsList,
+    quote_add_from_InvestmentsList,
+    strategy_products_range_add_from_StrategiesList,
+    investmentoperation_add_from_InvestmentsView,
 } from "./commons.js";
-
-
-    // //Open strategies lateral menu
-    // cy.wait(1000)
-    // cy.getDataTest('LateralIcon').should('be.visible').click()
-    // cy.getDataTest('LateralStrategies').click()
-
-    // // Add a new strategy ranged
-    // component_pointable('StrategiesList_MyMenuInline_Button')
-    // cy.getDataTest('StrategiesList_MyMenuInline_Button').click()
-    // cy.getDataTest('StrategiesList_MyMenuInline_Header0_Item1').click()
-    // cy.getDataTest('StrategyProductsRangeCU_Name').type("Range strategy")
-    // cy.getDataTest('StrategyProductsRangeCU_Investments').type("Perm{downArrow}{enter}")
-    // cy.wait(1000) // A lot of products, needed more time
-    // cy.getDataTest('StrategyProductsRangeCU_Product').type("Apalanc{downArrow}{enter}")
-    // cy.getDataTest('StrategyProductsRangeCU_Comment').type("The best too")
-    // cy.intercept({ method:'POST', url:'http://127.0.0.1:8004/api/strategies_productsrange/', times:1,}).as("post_strategies")
-    // cy.getDataTest('StrategyProductsRangeCU_Button').click()
-    // cy.wait('@post_strategies').then((interception)=>{
-    //     cy.wrap(interception.response.body.strategy.id).as('strategy_id') // Stores the captured ID for later us
-    // })
-
-    // cy.get("@strategy_id").then((strategy_id)  =>{
-    //   // Opens strategy view
-    //   cy.getDataTest(`StrategiesList_Table_IconView${strategy_id}`).click()
-
-    //   // Closes strategy view
-    //   component_pointable('StrategiesView_ButtonClose')
-    //   cy.getDataTest('StrategiesView_ButtonClose').click()
-
-    //   // // Opens strategy product range
-    //   // cy.wait(2000)
-    //   // component_pointable(`StrategiesList_Table_Row${strategy_id}`)
-    //   // cy.getDataTest(`StrategiesList_Table_Row${strategy_id}`).click()
-
-    //   // // Returns to strategy view buscando un typeable para hacer uno dos esc y vuelve a StrategyList
-    //   // cy.getDataTest('ProductsRanges_Product').type("{esc}{esc}")
-
-    //   // Sets an strategy inactive (dt_end not null)
-    //   cy.getDataTest(`StrategiesList_Table_IconEdit${strategy_id}`).click()
-
-    //   // component_pointable('StrategyProductsRangeCU_DtTo_Icon')
-    //   cy.getDataTest('StrategyProductsRangeCU_DtTo_Icon').should('have.css', 'cursor', 'pointer').click()
-    //   // cy.get('[data-test="StrategyProductsRangeCU_DtTo"] > .d-flex > .v-input > .v-input__prepend > .mdi-calendar-clock').click()
-    //   cy.getDataTest('StrategyProductsRangeCU_Button').click()  
-    //   cy.getDataTest(`StrategiesList_Table_IconEdit${strategy_id}`).should('not.exist');
-    //    // Select elements whose ID starts with 'checkbox'
-    //   cy.get('[id^="checkbox"]').first().click()
-    //   cy.getDataTest(`StrategiesList_Table_IconEdit${strategy_id}`).should('exist');
-    //   //Deletes it
-    //   cy.getDataTest(`StrategiesList_Table_IconDelete${strategy_id}`).click()
-    //   cy.getDataTest('StrategyProductsRangeCU_ButtonDelete').click()
+import {
+    expect_native_confirm_and_accept_it,
+    v_text_input_settext
+} from "./playwright_vuetify.js";
 
 
 
-test('Home and its alerts', async ({ page }) => {
+test('Strategies Products Range CRUD', async ({ page }) => {
 
     await page.getByTestId('LateralIcon').click();
     await page.getByTestId('LateralInvestments').click();
 
 
     // Creates an investment and an investment operation
-    const investments_id=await investment_add_from_InvestmentsList(page, "Test investment", "LYXOR IBEX DOBLE APALANCADO (Madrid Stock Exchange)")
+    const investments_id=await investment_add_from_InvestmentsList(page, "Test investment", "LYXOR IBEX DOBLE APALANCADO (Madrid Stock Exchange)");
     await expect(page.getByTestId(`Investments_Table_Row${investments_id}`)).toBeVisible();
+    await quote_add_from_InvestmentsList(page, investments_id);
+    await page.getByTestId(`Investments_Table_Row${investments_id}`).click();
+    await investmentoperation_add_from_InvestmentsView(page);
+    await page.getByTestId('InvestmentsView_ButtonClose').click();
+    
 
+    await page.getByTestId('LateralIcon').click();
+    await page.getByTestId('LateralStrategies').click();
+
+    const strategy_id = await strategy_products_range_add_from_StrategiesList(page, "Range strategy", "Test investment", "LYXOR IBEX DOBLE APALANCADO (Madrid Stock Exchange)", "The best too");
+
+    // Update the strategy
+    await page.getByTestId(`StrategiesList_Table_IconEdit${strategy_id}`).click();
+    await v_text_input_settext(page, "StrategyProductsRangeCU_Name", "Range strategy updated");
+    await page.getByTestId('StrategyProductsRangeCU_Button').click();
+    const row = page.getByRole('row').filter({ has: page.getByTestId(`StrategiesList_Table_IconEdit${strategy_id}`) });
+    await expect(row).toContainText("Range strategy updated");
+
+    // Delete the strategy
+    await page.getByTestId(`StrategiesList_Table_IconDelete${strategy_id}`).click();
+    await expect(page.getByTestId('StrategyProductsRangeCU_Button')).toBeVisible();
+    expect_native_confirm_and_accept_it(page);
+    await page.getByTestId('StrategyProductsRangeCU_Button').click();
+    await expect(page.getByTestId(`StrategiesList_Table_Row${strategy_id}`)).toBeHidden();
+
+    // Create another strategy
+    const other_strategy_id = await strategy_products_range_add_from_StrategiesList(page, "Another Range strategy", "Test investment", "LYXOR IBEX DOBLE APALANCADO (Madrid Stock Exchange)", "The second best");
+    await page.getByTestId(`StrategiesList_Table_Row${other_strategy_id}`).click();
+    await expect(page.getByTestId('ProductsRanges')).toBeVisible();
+
+    // // Add an order
+    // await page.getByTestId('ProductsRanges_TabTable').click();
+    // const order_id_promise = promise_to_get_response(page, "/api/orders/", "POST");
+    // await page.getByTestId(/^ProductsRanges_Table_IconAddOrder/).first().click();
+    // await v_autocomplete_selection_with_role_listbox(page, "OrdersCU_Investments", "Test investment");
+    // await page.getByTestId('OrdersCU_Button').click();
+    // const order_id = (await order_id_promise).id;
+    // await expect(page.getByTestId('OrdersCU_Button')).toBeHidden();
+
+    // Shows chart
+    await page.getByTestId('ProductsRanges_TabChart').click();
+    await expect(page.getByTestId('ProductsRanges_Chart')).toBeVisible();
+    await expect(page.getByTestId('ProductsRanges_Chart_Component')).toBeVisible();
 
 
 });

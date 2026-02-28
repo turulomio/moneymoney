@@ -11,6 +11,7 @@ import {
 
 
 test('Concepts catalog', async ({ page }) => {
+    test.setTimeout(60000);
     // Navigate to concepts catalog
     await page.getByTestId('LateralIcon').click();
     await page.getByTestId('LateralAdministration').click();
@@ -36,6 +37,7 @@ test('Concepts catalog', async ({ page }) => {
     const concept2_id=await concept_add_from_ConceptsCatalog(page, "My second personal concept")
     await page.getByTestId(`ConceptsCatalog_Table_ButtonMigrate${concept2_id}`).click();
     await v_autocomplete_selection_with_role_option(page, "ConceptsMigration_To", "Negative");
+    await expect_native_confirm_and_accept_it(page)
     await page.getByTestId('ConceptsMigration_Button').click();
     await expect(page.getByTestId('ConceptsMigration_Button')).toBeHidden();
 });

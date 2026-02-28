@@ -15,7 +15,7 @@
                     </v-tooltip>
                 </template>
                 <template #item.dt_from="{item}">
-                    <div :data-test="`StrategiesList_Table_Row${item.id}`" v-html="localtime(item.strategy.dt_from )"></div>
+                    <div :data-test="`StrategiesList_Table_Row${item.strategy.id}`" v-html="localtime(item.strategy.dt_from )"></div>
                 </template>        
                 <template #item.dt_to="{item}">
                     <div v-html="localtime(item.strategy.dt_to )"></div>

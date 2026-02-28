@@ -24,6 +24,14 @@
 
             }
         },
+        watch: {
+            prdata: {
+                handler(){
+                    this.updateChart()
+                },
+                deep: true
+            }
+        },
         methods: {
             arrayobjects_to_array,
             chart_option(){
@@ -94,21 +102,86 @@
                         itemStyle: (this.prdata.pr[i].recomendation_invest==true) ? {color: 'rgba(255, 213, 213, 0.4)'} :  {color: 'rgba(217, 217, 217, 0.4)'},
                     })
                 }
+
+                var orders = []
+                if (this.prdata.orders && this.prdata.orders.length > 0) {
+                    orders = this.prdata.orders
+                } else if (this.prdata.pr) {
+                    this.prdata.pr.forEach(range => {
+                        if (range.orders_inside) {
+                            orders = orders.concat(range.orders_inside)
+                        }
+                    })
+                }
+
+                var normal_orders = []
+                var up_orders = []
+                var down_orders = []
+
+                orders.forEach(o => {
+                    var item = [o.date, parseFloat(o.price), o.name]
+                    if (o.type === 'Up') {
+                        up_orders.push(item)
+                    } else if (o.type === 'Down') {
+                        down_orders.push(item)
+                    } else {
+                        normal_orders.push(item)
+                    }
+                })
+
+                var aspa = 'path://M3.5,3.5L20.5,20.5M3.5,20.5L20.5,3.5'
+
+                if (normal_orders.length > 0) {
+                    r.push({ type: 'scatter', name: 'Orders', data: normal_orders, itemStyle: { color: 'grey' }, symbol: 'circle', symbolSize: 8, tooltip: { formatter: (params) => { return params.data[2] } } })
+                }
+
+                if (up_orders.length > 0) {
+                    r.push({ type: 'scatter', name: 'Up Orders', data: up_orders, itemStyle: { color: 'green' }, symbol: aspa, symbolSize: 10, tooltip: { formatter: (params) => { return params.data[2] } } })
+                }
+
+                if (down_orders.length > 0) {
+                    r.push({ type: 'scatter', name: 'Down Orders', data: down_orders, itemStyle: { color: 'red' }, symbol: aspa, symbolSize: 10, tooltip: { formatter: (params) => { return params.data[2] } } })
+                }
+
+                var operations = []
+                if (this.prdata.operations && this.prdata.operations.length > 0) {
+                    operations = this.prdata.operations
+                } else if (this.prdata.pr) {
+                    this.prdata.pr.forEach(range => {
+                        if (range.investments_inside) {
+                            operations = operations.concat(range.investments_inside)
+                        }
+                    })
+                }
+
+                var normal_operations = []
+                operations.forEach(o => {
+                    var item = [o.date, parseFloat(o.price), o.name]
+                    normal_operations.push(item)
+                })
+
+                if (normal_operations.length > 0) {
+                    r.push({ type: 'scatter', name: 'Operations', data: normal_operations, itemStyle: { color: 'blue' }, symbol: 'diamond', symbolSize: 10, tooltip: { formatter: (params) => { return params.data[2] } } })
+                }
+
                 return r
             },
+            updateChart(){
+                if (!this.prdata || !this.prdata.dataframe) return
+                this.indicators=Object.keys(this.prdata.dataframe[0]).filter(key => !["date", "open", "high", "low", "products_id"].includes(key))
+                this.legends=Object.keys(this.prdata.dataframe[0]).filter(key => !["date", "open", "high", "low", "products_id"].includes(key))
+                this.legends[0]=this.prdata.product.name
+                if (!this.chart) {
+                    this.chart = echarts.init(this.$refs.chart);
+                }
+                this.chart.setOption(this.chart_option(), true)
+                this.loading=false
+            }
         },
         mounted(){
-            this.indicators=Object.keys(this.prdata.dataframe[0]).filter(key => !["date", "open", "high", "low", "products_id"].includes(key))
-            this.legends=Object.keys(this.prdata.dataframe[0]).filter(key => !["date", "open", "high", "low", "products_id"].includes(key))
-            console.log(this.indicators)
-            this.legends[0]=this.prdata.product.name
-            console.log(this.legends)
-            this.chart = echarts.init(this.$refs.chart);
-            this.chart.setOption(this.chart_option())
-            this.loading=false
+            this.updateChart()
         }
     }
 
 
 </script>
-

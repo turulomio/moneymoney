@@ -1,6 +1,6 @@
 import { test, expect } from './fixtures.js';
 import {
-  promise_to_get_id_from_post_response,
+  promise_to_get_response,
   v_text_input_settext,
   expect_native_confirm_and_accept_it
 } from "./playwright_vuetify.js";
@@ -16,10 +16,10 @@ import {
     await page.getByTestId('MyMenuInline_Button').last().click();
     await page.getByTestId('MyMenuInline_Header0_Item0').click();
 
-    const banks_id_promise = promise_to_get_id_from_post_response(page, "/api/banks/");
+    const banks_id_promise = promise_to_get_response(page, "/api/banks/", "POST");
     await v_text_input_settext(page, "BanksCU_Name", "New Bank");
     await page.getByTestId('BanksCU_Button').click();
-    const banks_id = await banks_id_promise;
+    const banks_id = (await banks_id_promise).id;
     await expect(page.getByTestId(`BanksList_Table_Row${banks_id}`)).toBeVisible();
     const created_row=page.getByTestId(`BanksList_Table_Row${banks_id}`)
 
