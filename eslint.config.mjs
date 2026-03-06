@@ -2,32 +2,36 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 import pluginVue from "eslint-plugin-vue";
 import pluginPlaywright from 'eslint-plugin-playwright';
-import pluginI18n from '@intlify/eslint-plugin-vue-i18n'; // 1. Import the plugin
+import pluginI18n from '@intlify/eslint-plugin-vue-i18n';
 
 export default [
   {
     ignores: ["dist/*", "output/**"],
   },
+  // 1. Apply recommended configs FIRST so they don't override your custom languageOptions
+  pluginJs.configs.recommended,
+  ...pluginVue.configs["flat/essential"],
+  ...pluginI18n.configs["flat/recommended"],
+
+  // 2. Define your global language options AFTER recommended configs
   {
     languageOptions: { 
       globals: {
         ...globals.browser,
-      }
+      },
+      ecmaVersion: 2020,
+      sourceType: "module", // Required for import.meta
     },
   },
-  pluginJs.configs.recommended,
-  ...pluginVue.configs["flat/essential"],
   
-  // 2. Define the i18n settings and plugin registration
   {
     plugins: {
       '@intlify/vue-i18n': pluginI18n,
     },
     settings: {
-      '@intlify/vue-i18n': {
-        // Adjust this path to where your JSON/YAML translation files actually live
-        localeDir: './src/locales/*.{json,json5,yaml,yml}', 
-        messageSyntaxVersion: '^9.0.0', // Standard for Vue 3
+      'vue-i18n': {
+        localeDir: './src/locales/**/*.{json,json5,yaml,yml}', 
+        messageSyntaxVersion: '^9.0.0',
       },
     },
   },
@@ -51,7 +55,6 @@ export default [
       "vue/valid-v-slot": "off",
       "vue/no-unused-vars": "warn",
       
-      // 3. Updated i18n rules with correct severity levels
       "@intlify/vue-i18n/no-missing-keys": "error",
       "@intlify/vue-i18n/no-unused-keys": "warn",
       "@intlify/vue-i18n/no-duplicate-keys-in-locale": "error",
