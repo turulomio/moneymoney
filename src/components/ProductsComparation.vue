@@ -7,7 +7,7 @@
         <v-card class="d-flex flex-row mx-auto pa-4" flat width="65%">
             <v-text-field density="compact" class="mr-4"  v-model.number="seconds_apart" :label="$t('Time interval in seconds allowed to compare the prices of both products')" :placeholder="$t('Time interval in seconds allowed to compare the prices of both products')" :rules="RulesInteger(4,true)" counter="4"/>
             <v-btn class="mr-6" @click="filter_data">{{ $t("Select pairs") }}</v-btn>
-            <p>{{ $t(`${dbdata.length} pairs of quotes were compared. ${dbdata_filtered.length} pairs were selected.`) }}</p>
+            <p>{{ f($t("[0] pairs of quotes were compared. [1] pairs were selected."), [dbdata.length, dbdata_filtered.length]) }}</p>
         </v-card>
 
         <v-tabs v-model="tab"  bg-color="secondary" dark>
