@@ -4,6 +4,7 @@
             {{ f($t("Account details of '[0]'"), [account.localname]) }}<MyMenuInline data-test="AccountsView_MyMenuInline" :items="items" />  
             <v-btn data-test="AccountsView_ButtonClose" small style="color:darkgrey" icon="mdi-close" class="elevation-0" @click="$emit('close')"/>
         </h1>
+        {{ $t("Account details for mddf e") }}
         <DisplayValues :items="displayvalues"></DisplayValues>
 
         <v-tabs v-model="tab" bg-color="secondary" grow>
