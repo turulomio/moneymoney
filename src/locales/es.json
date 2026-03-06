@@ -16,7 +16,9 @@
   "'[0]' evolution": "Evolución de '[0]'",
   "[0]. Invested: [1]": "[0]. Invertido: [1]",
   "[0] (Real: [1])": "[0] (Real: [1])",
+  "[0] pairs of quotes were compared. [1] pairs were selected.": "Se compararon [0] pares de cotizaciones. Se seleccionaron [1] pares.",
   "[0] were paid [1] ([2] operations)": "[0] fuero pagados [1] ([2] operaciones)",
+  "[0], to gain [1]": "[0], para ganar [1]",
   "About": "Acerca de",
   "About Money Money": "Acerca de Money Money",
   "Account balance": "Saldo de cuenta",
@@ -342,6 +344,7 @@
   "Month evolution": "Evolución mensual",
   "Month gains": "Ganancias mensuales",
   "Month": "Mes",
+  "Must Invest": "Debe invertir",
   "Month target": "Objetivo mensual",
   "Name": "Nombre",
   "Negative balance concepts": "Conceptos con saldo negativo",
@@ -641,7 +644,6 @@
   "Quote better to": "Hasta el valor de la cotización del mejor",
   "Select the year from which to display the report": "Establece el año desde el cual mostrar el informe",
   "Total ([0] registers)": "Total ([0] registros)",
-  "[0], to gain [1]": "[0], para ganar [1]",
   "Account decimals": "Decimales de cuentaº",
   "Add an account": "Añade una cuenta",
   "Update an account": "Actualiza una cuenta",
@@ -854,7 +856,5 @@
   "Unfinished": "Sin finalizar",
   "Amount origin": "Cantidad origen",
   "Amount destiny": "Cantidad destino",
-  "Value": "",
-  "Must Invest": "",
-  "[0] pairs of quotes were compared. [1] pairs were selected.": ""
+  "Value": "Valor"
 }
