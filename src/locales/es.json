@@ -853,5 +853,8 @@
   "Seconds apart": "Segundos de diferencia",
   "Unfinished": "Sin finalizar",
   "Amount origin": "Cantidad origen",
-  "Amount destiny": "Cantidad destino"
+  "Amount destiny": "Cantidad destino",
+  "Value": "",
+  "Must Invest": "",
+  "[0] pairs of quotes were compared. [1] pairs were selected.": ""
 }
