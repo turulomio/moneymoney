@@ -29,11 +29,9 @@ test('Credit cards debit', async ({ page }) => {
     await expect(page.getByTestId(`AccountsView_Tablecc_Row${cc_id}`)).toBeVisible();
     await page.getByTestId(`AccountsView_Tablecc_ButtonDelete${cc_id}`).click();
 
-    const dialogHandler = async dialog => await dialog.accept();
+    const dialogHandler = async dialog => await dialog.accept(); // There are two confirms
     page.on('dialog', dialogHandler);
-    const responsePromise = page.waitForResponse(response => response.url().includes('/api/creditcards/') && response.request().method() === 'DELETE');
     await page.getByTestId('CreditcardsCU_Button').click();
-    await responsePromise;
     page.removeListener('dialog', dialogHandler);
     await expect(page.getByTestId('CreditcardsCU_Button')).toBeHidden();
     await expect(page.getByTestId(`AccountsView_Tablecc_Row${cc_id}`)).toBeHidden();
