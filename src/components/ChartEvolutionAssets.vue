@@ -67,12 +67,11 @@
                             }
                         },
                         formatter: (params) => {
-                            return params[0].axisValueLabel + "<br>" +
-                                params[0].marker + params[0].seriesName + ": " + this.localcurrency_string(params[0].data[1])  + "<br>"  + 
-                                params[1].marker + params[1].seriesName + ": " + this.localcurrency_string(params[1].data[1])  + "<br>"  + 
-                                params[2].marker + params[2].seriesName + ": " + this.localcurrency_string(params[2].data[1])  + "<br>"  + 
-                                params[3].marker + params[3].seriesName + ": " + this.localcurrency_string(params[3].data[1])  + "<br>"  + 
-                                params[4].marker + params[4].seriesName + ": " + this.localcurrency_string(params[4].data[1]) 
+                            let tooltip = params[0].axisValueLabel + "<br>";
+                            params.forEach(param => {
+                                tooltip += param.marker + param.seriesName + ": " + this.localcurrency_string(param.data[1]) + "<br>";
+                            });
+                            return tooltip;
                         }
                     },
                     xAxis: {

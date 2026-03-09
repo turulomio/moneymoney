@@ -136,7 +136,7 @@
     const change_foot = computed(() => {
         if (!new_io.value) return ""
         var gross=new_io.value.shares*new_io.value.price
-        var net=0
+        var net
         if (new_io.value.shares>0){
             net=gross+new_io.value.taxes+new_io.value.commission
         } else {
