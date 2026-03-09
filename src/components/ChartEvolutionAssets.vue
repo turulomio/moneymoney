@@ -7,7 +7,7 @@
             </v-card>
         </div>
         <v-card class="ma-4 pa-4" >
-            <div ref="chart" style="width:100%;height:600px;"  ></div>
+            <div ref="chart" style="width:100%;height:600px;" data-test="ChartEvolutionAssets_Chart" ></div>
          </v-card>
     </div>
 
@@ -16,7 +16,7 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     import * as echarts from 'echarts'
-    import { parseResponseError, myheaders } from '@/functions'
+    import { parseResponseError, myheaders, localcurrency_string } from '@/functions'
     export default {
         props: {
             hidden:{
@@ -48,6 +48,7 @@
             useStore,
             parseResponseError,
             myheaders,
+            localcurrency_string,
             chart_option(){
                 // var =this
                 return {
