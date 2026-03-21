@@ -31,6 +31,8 @@ jobs:
 
     - name: Set up Python
       uses: actions/setup-python@v5
+      with:
+        python-version: 3.12
 
     - name: Install PL/Python in the PostgreSQL container (Old migrations)
       run: |
@@ -51,14 +53,15 @@ jobs:
         done
 
 
-    - name: Install and launch django_moneymoney testserver_e2e
+    - name: Install python dependencies for 3.12 and launch django_moneymoney testserver_e2e
       run: |
+        sudo apt-get install python3.12 python3.12-venv
         cd ..
         git clone https://github.com/turulomio/django_moneymoney
         cd django_moneymoney
-        sudo python -m venv .python
-        sudo .python/bin/pip install .
-        E2E_TESTING=1 sudo .python/bin/python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport 8004 &
+        python3.12 -m venv .python3.12
+        .python3.12/bin/pip install .
+        E2E_TESTING=1 .python3.12/bin/python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport 8004 &
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
