@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { myheaders, sortObjectsArray, getArrayFromMap} from './functions.js'
-import CurrencyList from 'currency-list'
 import { capitalizeFirstLetter } from 'vuetify_rules'
 
 import countries from 'flag-icons/country.json'
@@ -121,11 +120,58 @@ export const useStore = defineStore('global', {
          localStorage.locale="en"
         }
         console.log(localStorage.locale)
-        var currencies_object=CurrencyList.getAll(localStorage.locale)
-        var currencies_list=[]
-        Object.entries(currencies_object).forEach(o => currencies_list.push(o[1]))
-        currencies_list.forEach(o=> o["fullname"]=`${capitalizeFirstLetter(o.name)} (${o.code} - ${o.symbol})`)
+        
+        const locale = localStorage.locale;
+        const currencyCodes = Intl.supportedValuesOf("currency");
+        const currencies_list = [];
+
+        // Intl.DisplayNames se usa para obtener nombres de moneda localizados
+        const displayNames = new Intl.DisplayNames([locale], { type: 'currency' });
+
+        currencyCodes.forEach(code => {
+            let symbol = code; // Valor de respaldo predeterminado para el símbolo
+            let decimal_digits = 2; // Valor de respaldo predeterminado para los dígitos decimales
+            let name = code.toLowerCase(); // Valor de respaldo predeterminado para el nombre
+            let name_plural = code.toLowerCase() + 's'; // Heurística predeterminada para el nombre en plural
+
+            try {
+                // Usar Intl.NumberFormat para obtener el símbolo de la moneda y los dígitos decimales
+                const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency: code, minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                const parts = formatter.formatToParts(0);
+                const symbolPart = parts.find(part => part.type === 'currency');
+                if (symbolPart) {
+                    symbol = symbolPart.value;
+                }
+
+                const resolvedOptions = new Intl.NumberFormat(locale, { style: 'currency', currency: code }).resolvedOptions();
+                decimal_digits = resolvedOptions.minimumFractionDigits;
+
+                // Obtener el nombre localizado de la moneda
+                const intlName = displayNames.of(code);
+                if (intlName) {
+                    name = intlName.toLowerCase();
+                    // Nota: Intl no proporciona formas plurales directamente. Esta es una heurística simple.
+                    name_plural = name + 's'; 
+                }
+
+            } catch (e) {
+                console.warn(`Error procesando la moneda ${code} para el locale ${locale}: ${e.message}`);
+                // Los valores de respaldo ya están establecidos arriba
+            }
+
+            currencies_list.push({
+                code: code,
+                decimal_digits: decimal_digits,
+                name: name,
+                name_plural: name_plural,
+                rounding: 0, // Intl no proporciona directamente una propiedad 'rounding' para las monedas
+                symbol: symbol,
+                symbol_native: symbol, // Intl no proporciona un 'symbol_native' distinto fácilmente, se usa 'symbol'
+                fullname: `${capitalizeFirstLetter(name)} (${code} - ${symbol})`
+            });
+        });
         this.currencies=currencies_list
+        console.log(this.currencies)
         console.log(`Updated ${currencies_list.length} currencies in ${new Date()-start} ms`)
     },
     updateInvestments() {
