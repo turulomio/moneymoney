@@ -90,6 +90,12 @@
     import { RulesSelection, RulesInteger, RulesFloat, f } from 'vuetify_rules'
     import axios from 'axios'
     import { parseResponseError, currency_string, myheaders, getArrayFromMap, getInvestmentsByProduct } from '@/functions.js'
+    import ChartProductsRanges from './ChartProductsRanges.vue'
+    import OrdersCU from './OrdersCU.vue'
+    import OrdersList from './OrdersList.vue'
+    import InvestmentsView from './InvestmentsView.vue'
+    import AutocompleteProducts from './AutocompleteProducts.vue'
+
 
     const props = defineProps({
         pr:{

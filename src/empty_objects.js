@@ -1,5 +1,5 @@
 import {RecomendationMethods, StrategiesTypes} from '@/types.js'
-
+import { useStore } from "@/store"
 
 export function empty_account(){
     return {
@@ -86,7 +86,7 @@ export function empty_estimation_dps(){
 export function empty_investment_operation(){
     return {
         datetime: new Date(),
-        operationstypes: `${this.useStore().apiroot}/api/operationstypes/4/`,
+        operationstypes: `${useStore().apiroot}/api/operationstypes/4/`,
         shares:0,
         taxes:0,
         commission:0,
@@ -124,8 +124,8 @@ export function empty_product(){
         address:null,
         phone:null,
         mail:null,
-        productsstrategies:`${this.useStore().apiroot}/api/productsstrategies/1/`,
-        leverages:`${this.useStore().apiroot}/api/leverages/1/`,
+        productsstrategies:`${useStore().apiroot}/api/productsstrategies/1/`,
+        leverages:`${useStore().apiroot}/api/leverages/1/`,
         percentage:100,
         stockmarkets: null,
         comment: null,
