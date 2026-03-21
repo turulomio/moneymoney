@@ -1,10 +1,10 @@
 <template>
     <v-autocomplete :readonly="readonly" :items="new_accounts" v-model="new_value" :label="mylabel"  item-title="fullname" :return-object="returnObject" item-value="url" :multiple="multiple">
       <template v-slot:item="{ props, item }">
-            <v-list-item v-bind="props" :title="item.raw.fullname" :class="!item.raw.active ? 'text-grey' : ''" />
+            <v-list-item v-bind="props" :title="item.fullname" :class="!item.active ? 'text-grey' : ''" />
         </template>         
         <template v-slot:selection="{ props, item }">
-            <v-list-item v-bind="props" :title="item.raw.fullname" />
+            <v-list-item v-bind="props" :title="item.fullname" />
         </template> 
     </v-autocomplete>
 </template>
