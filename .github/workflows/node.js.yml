@@ -16,7 +16,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:16.4
+        image: postgres:lastest
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -27,12 +27,10 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-    - name: Set up Python 3.12
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.12
+    - name: Set up Python
+      uses: actions/setup-python@v5
 
     - name: Install PL/Python in the PostgreSQL container (Old migrations)
       run: |
@@ -53,15 +51,14 @@ jobs:
         done
 
 
-    - name: Install python dependencies for 3.12 and launch django_moneymoney testserver_e2e
+    - name: Install and launch django_moneymoney testserver_e2e
       run: |
-        sudo apt-get install python3.12 python3.12-venv
         cd ..
         git clone https://github.com/turulomio/django_moneymoney
         cd django_moneymoney
-        python3.12 -m venv .python3.12
-        .python3.12/bin/pip install .
-        E2E_TESTING=1 .python3.12/bin/python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport 8004 &
+        sudo python -m venv .python
+        sudo .python/bin/pip install .
+        E2E_TESTING=1 sudo .python/bin/python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport 8004 &
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
