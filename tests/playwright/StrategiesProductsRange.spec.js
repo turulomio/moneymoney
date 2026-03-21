@@ -63,7 +63,7 @@ test('Strategies Products Range CRUD', async ({ page }) => {
     // Shows chart
     await page.getByTestId('ProductsRanges_TabChart').click();
     await expect(page.getByTestId('ProductsRanges_Chart')).toBeVisible();
-    await expect(page.getByTestId('ProductsRanges_Chart_Component')).toBeVisible();
+    await expect(page.getByTestId('ProductsRanges_Chart_Component')).toBeVisible(); // Re-assert visibility
 
 
 });
