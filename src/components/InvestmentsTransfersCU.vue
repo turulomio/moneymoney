@@ -8,7 +8,7 @@
                         <h2 class="mb-2">{{ $t("Origin") }}</h2>
                         <v-autocomplete data-test="InvestmentsTransfersCU_InvestmentsOrigin" :readonly="mode=='D'" :items="getArrayFromMap(store.investments)" v-model="new_transfer.investments_origin" :label="$t('Origin investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                         <MyDateTimePicker data-test="InvestmentsTransfersCU_DateTimeOrigin" :readonly="mode=='D'" v-model="new_transfer.datetime_origin" :label="$t('Set origin date and time')" />
-                        <v-text-field data-test="InvestmentsTransfersCU_SharesOrigin" :readonly="mode=='D'" v-model.number="new_transfer.shares_origin"  :label="$t('Shares')" :rules="RulesFloat(15,true,origin_investment.decimals)" counter="15"/>
+                        <v-text-field data-test="InvestmentsTransfersCU_SharesOrigin" :readonly="mode=='D'" v-model.number="new_transfer.shares_origin"  :label="$t('Shares')" :rules="RulesFloat(15,true,origin_investment?.decimals ?? 2)" counter="15"/>
                         <v-text-field data-test="InvestmentsTransfersCU_PriceOrigin" :readonly="mode=='D'" v-model.number="new_transfer.price_origin"  :label="$t('Price')" :rules="RulesFloatGEZ(15,true, origin_investment_product.decimals)" counter="15"/>
                         <v-text-field data-test="InvestmentsTransfersCU_CommissionOrigin" :readonly="mode=='D'" v-model.number="new_transfer.commission_origin"  :label="$t('Commission')" :rules="RulesFloatGEZ(12,true,origin_investment_account.decimals)" counter="12"/>
                         <v-text-field data-test="InvestmentsTransfersCU_TaxesOrigin" :readonly="mode=='D'" v-model.number="new_transfer.taxes_origin"  :label="$t('Taxes')" :rules="RulesFloatGEZ(12,true,origin_investment_account.decimals)" counter="12" />
@@ -18,7 +18,7 @@
                         <h2 class="mb-2">{{ $t("Destination") }}</h2>
                         <v-autocomplete data-test="InvestmentsTransfersCU_InvestmentsDestiny" :readonly="mode=='D'" :items="getArrayFromMap(store.investments)" v-model="new_transfer.investments_destiny" :label="$t('Destination investment')" item-title="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                         <MyDateTimePicker data-test="InvestmentsTransfersCU_DateTimeDestiny" :readonly="mode=='D'" v-model="new_transfer.datetime_destiny" :label="$t('Set destination date and time. Clear for unfinished transfers')" clearable />
-                        <v-text-field data-test="InvestmentsTransfersCU_SharesDestiny" :readonly="mode=='D'" v-model.number="new_transfer.shares_destiny"  :label="$t('Shares')" :rules="RulesFloat(15,true,destination_investment.decimals)" counter="15"/>
+                        <v-text-field data-test="InvestmentsTransfersCU_SharesDestiny" :readonly="mode=='D'" v-model.number="new_transfer.shares_destiny"  :label="$t('Shares')" :rules="RulesFloat(15,true,destination_investment?.decimals ?? 2)" counter="15"/>
                         <v-text-field data-test="InvestmentsTransfersCU_PriceDestiny" :readonly="mode=='D'" v-model.number="new_transfer.price_destiny"  :label="$t('Price')" :rules="RulesFloatGEZ(15,true, destination_investment_product.decimals)" counter="15"/>
                         <v-text-field data-test="InvestmentsTransfersCU_CommissionDestiny" :readonly="mode=='D'" v-model.number="new_transfer.commission_destiny"  :label="$t('Commission')" :rules="RulesFloatGEZ(12,true,destination_investment_account.decimals)" counter="12"/>
                         <v-text-field data-test="InvestmentsTransfersCU_TaxesDestiny" :readonly="mode=='D'" v-model.number="new_transfer.taxes_destiny"  :label="$t('Taxes')" :rules="RulesFloatGEZ(12,true,destination_investment_account.decimals)" counter="12"/>
@@ -73,12 +73,12 @@
     })
 
     const origin_investment_account = computed(() => {
-        if (origin_investment.value) return store.accounts.get(origin_investment.value.accounts)
+        if (origin_investment.value) return store.accounts.get(origin_investment.value.accounts) || {decimals:2}
         return {decimals:2} //Default value
     })
 
     const origin_investment_product = computed(() => {
-        if (origin_investment.value) return store.products.get(origin_investment.value.products)
+        if (origin_investment.value) return store.products.get(origin_investment.value.products) || {currency: store.profile.currency, decimals:2}
         return {currency: store.profile.currency, decimals:2} //Default value
     })
 
@@ -88,12 +88,12 @@
     })
 
     const destination_investment_account = computed(() => {
-        if (destination_investment.value) return store.accounts.get(destination_investment.value.accounts)
+        if (destination_investment.value) return store.accounts.get(destination_investment.value.accounts) || {decimals:2}
         return {decimals:2} //Default value
     })
 
     const destination_investment_product = computed(() => {
-        if (destination_investment.value) return store.products.get(destination_investment.value.products)
+        if (destination_investment.value) return store.products.get(destination_investment.value.products) || {currency: store.profile.currency, decimals:2}
         return {currency: store.profile.currency, decimals:2} //Default value
     })
 
