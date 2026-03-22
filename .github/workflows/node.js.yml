@@ -1,17 +1,17 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Node.js CI
+name: Django CI
 
 on:
   push:
-    branches: [ "543-productrangechart-show-investment-operation-with-an-x" ]
+    branches: [ "main", "146-fix-github-test-action" ]
   pull_request:
     branches: [ "main" ]
 
+env:
+  DJANGO_TEST_SERVER_PORT: 8004
+  NODE_DEV_SERVER_PORT: 8006
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     services:
@@ -26,20 +26,26 @@ jobs:
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
+    strategy:
+      matrix:
+        python-version: ["3.12"] # Specify Python version explicitly
+        node-version: ["20.x"] # Specify Node.js version explicitly
+
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Python 3.12
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
-        python-version: 3.12
+        python-version: ${{ matrix.python-version }}
 
     - name: Install PL/Python in the PostgreSQL container (Old migrations)
       run: |
         # Version can change see in docker page wich is postgres:latest
         docker exec ${{ job.services.postgres.id }} bash -c "apt-get update && apt-get install -y postgresql-plpython3-16"
 
-    - name: Create PL/Python extension
+
+    - name: Create PL/Python Extension
       run: |
         docker exec ${{ job.services.postgres.id }} bash -c "PGPASSWORD=postgres psql -h localhost -U postgres -c 'CREATE EXTENSION plpython3u;'"
         docker exec ${{ job.services.postgres.id }} bash -c "PGPASSWORD=postgres createdb -h localhost -U postgres xulpymoney"
@@ -47,36 +53,48 @@ jobs:
 
     - name: Wait for PostgreSQL
       run: |
-        until pg_isready -h localhost -p 5432; do
+        until PGPASSWORD=postgres pg_isready -h localhost -p 5432 -U postgres; do
           echo "Waiting for PostgreSQL to become ready..."
           sleep 2
         done
 
-
-    - name: Install python dependencies for 3.12 and launch django_moneymoney testserver_e2e
+    - name: Clone django_moneymoney backend
       run: |
-        sudo apt-get install python3.12 python3.12-venv
-        cd ..
+        # Clone the backend repository into a specific directory
         git clone https://github.com/turulomio/django_moneymoney
         cd django_moneymoney
-        python3.12 -m venv .python3.12
-        .python3.12/bin/pip install .
-        E2E_TESTING=1 .python3.12/bin/python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport 8004 &
+        python -m venv .python
+        .python/bin/pip install .
+
+    - name: Run E2E django_moneymoney test server
+      # Set working directory to the cloned backend repo
+      working-directory: ./django_moneymoney
+      run: |
+        E2E_TESTING=1 .python/bin/python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport ${{ env.DJANGO_TEST_SERVER_PORT }} &
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+
+    - name: Cache Node.js modules
+      uses: actions/cache@v3
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-${{ matrix.node-version }}-
+
     - name: Moneymoney install and test build
       run: |
         npm install
         npm run build
 
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      run: npx playwright install
     - name: Moneymoney e2e test
       run: |
         npm run dev &
-        sleep 10
+        sleep 5
         npm run playwright_console
