@@ -60,6 +60,7 @@ jobs:
 
     - name: Run E2E django_moneymoney test server
       run: |
+        cd django_moneymoney
         E2E_TESTING=1 .python3.12/bin/python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport 8004 &
 
     - name: Use Node.js ${{ matrix.node-version }}
