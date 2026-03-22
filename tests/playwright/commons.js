@@ -53,6 +53,21 @@ export async function accountoperation_add_from_AccountsView(page, concept, amou
   return newId
 }
 
+export async function accountstransfer_from_AccountsView(page, destiny_account_name, amount, commission) {
+  // Assumes the test is already in the AccountsView of the source account
+  await mymenuinline_selection(page, "AccountsView_MyMenuInline", 0, 0)
+  await v_autocomplete_selection_with_role_option(page, 'AccountsTransfer_Destiny', destiny_account_name)
+  await v_text_input_settext(page, 'AccountsTransfer_Amount', amount)
+  await v_text_input_settext(page, 'AccountsTransfer_Commission', commission)
+
+  const idPromise = promise_to_get_response(page, "/api/accountstransfers/", "POST");
+  await page.getByTestId('AccountsTransfer_Button').click()
+  const newId = (await idPromise).id;
+  await expect(page.getByTestId('AccountsTransfer_Button')).toBeHidden()
+  return newId
+}
+
+
 
 
 export async function creditcard_add_from_AccountsView(page, name, deferred){
