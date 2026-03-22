@@ -51,3 +51,4 @@ test('Accounts transfers CRUD', async ({ page }) => {
     await expect(page.getByTestId('AccountsTransfer_Button')).toBeHidden(); // Wait for dialog to close
     await expect(page.getByTestId(`TableAccountOperations_ButtonUpdate${updated_transfer_ao_origin_id}`)).toBeHidden();
 });
+
