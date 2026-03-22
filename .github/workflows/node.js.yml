@@ -57,11 +57,14 @@ jobs:
         cd django_moneymoney
         sudo python3.12 -m venv .python3.12
         sudo .python3.12/bin/pip install .
+        sudo pwd
+        sudo ls -la
 
     - name: Run E2E django_moneymoney test server
       run: |
         ls -la 
         sudo ls -la 
+        sudo pwd
         E2E_TESTING=1 sudo .python3.12/bin/python3.12 manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport 8004 &
 
     - name: Use Node.js ${{ matrix.node-version }}
