@@ -52,6 +52,9 @@ jobs:
     - name: Install python dependencies ${{ matrix.python-version }}
       run: |
         sudo apt-get install python3.12 python3.12-venv
+        cd ..
+        git clone https://github.com/turulomio/django_moneymoney
+        cd django_moneymoney
         sudo python3.12 -m venv .python3.12
         sudo .python3.12/bin/pip install .
 
