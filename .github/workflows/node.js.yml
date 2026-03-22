@@ -71,7 +71,6 @@ jobs:
       # Set working directory to the cloned backend repo
       working-directory: ./django_moneymoney
       run: |
-        source .venv/bin/activate
         E2E_TESTING=1 python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport ${{ env.DJANGO_TEST_SERVER_PORT }} &
 
     - name: Use Node.js ${{ matrix.node-version }}
@@ -98,7 +97,8 @@ jobs:
     - name: Moneymoney e2e test
       run: |
         npm run dev &
-        # Wait for the Node.js dev server to be ready
+        # Wait for the Node.js dev server to be ready and django
         npm install -g wait-on # Install wait-on globally for convenience
+        wait-on http://localhost:${{ env.DJANGO_TEST_SERVER_PORT }}
         wait-on http://localhost:${{ env.NODE_DEV_SERVER_PORT }}
         npm run playwright_console
