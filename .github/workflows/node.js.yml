@@ -91,10 +91,10 @@ jobs:
         npm install
         npm run build
 
-    - name: Install Playwright Firefox Browser
-      run: npx playwright install firefox
+    - name: Install Playwright Browsers
+      run: npx playwright install
     - name: Moneymoney e2e test
       run: |
         npm run dev &
-        sleep 10
+        sleep 5
         npm run playwright_console
