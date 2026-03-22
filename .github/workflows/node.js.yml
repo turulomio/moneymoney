@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  # Default port for the Django test server
+  DJANGO_TEST_SERVER_PORT: 8004
+  # Default port for the Node.js dev server (e.g., Vite default)
+  NODE_DEV_SERVER_PORT: 8006
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,13 +28,18 @@ jobs:
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
+    strategy:
+      matrix:
+        python-version: ["3.12"] # Specify Python version explicitly
+        node-version: ["20.x"] # Specify Node.js version explicitly
+
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Python 3.12
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
-        python-version: 3.12
+        python-version: ${{ matrix.python-version }}
 
     - name: Install PL/Python in the PostgreSQL container (Old migrations)
       run: |
@@ -44,35 +55,39 @@ jobs:
 
     - name: Wait for PostgreSQL
       run: |
-        until pg_isready -h localhost -p 5432; do
+        until PGPASSWORD=postgres pg_isready -h localhost -p 5432 -U postgres; do
           echo "Waiting for PostgreSQL to become ready..."
           sleep 2
         done
 
-    - name: Install python dependencies ${{ matrix.python-version }}
+    - name: Clone django_moneymoney backend
       run: |
-        sudo apt-get install python3.12 python3.12-venv
-        cd ..
+        # Clone the backend repository into a specific directory
         git clone https://github.com/turulomio/django_moneymoney
         cd django_moneymoney
-        sudo python3.12 -m venv .python3.12
-        sudo .python3.12/bin/pip install .
-        sudo pwd
-        sudo ls -la
+        sudo pip install .
 
     - name: Run E2E django_moneymoney test server
+      # Set working directory to the cloned backend repo
+      working-directory: ./django_moneymoney
       run: |
-        ls -la 
-        sudo ls -la 
-        sudo pwd
-        cd ../django_moneymoney
-        E2E_TESTING=1 sudo .python3.12/bin/python3.12 manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport 8004 &
+        source .venv/bin/activate
+        E2E_TESTING=1 python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport ${{ env.DJANGO_TEST_SERVER_PORT }} &
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+
+    - name: Cache Node.js modules
+      uses: actions/cache@v3
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-${{ matrix.node-version }}-
+
     - name: Moneymoney install and test build
       run: |
         npm install
@@ -83,5 +98,7 @@ jobs:
     - name: Moneymoney e2e test
       run: |
         npm run dev &
-        sleep 10
+        # Wait for the Node.js dev server to be ready
+        npm install -g wait-on # Install wait-on globally for convenience
+        wait-on http://localhost:${{ env.NODE_DEV_SERVER_PORT }}
         npm run playwright_console
