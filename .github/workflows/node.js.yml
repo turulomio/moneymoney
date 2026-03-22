@@ -7,9 +7,7 @@ on:
     branches: [ "main" ]
 
 env:
-  # Default port for the Django test server
   DJANGO_TEST_SERVER_PORT: 8004
-  # Default port for the Node.js dev server (e.g., Vite default)
   NODE_DEV_SERVER_PORT: 8006
 
 jobs:
@@ -65,13 +63,14 @@ jobs:
         # Clone the backend repository into a specific directory
         git clone https://github.com/turulomio/django_moneymoney
         cd django_moneymoney
-        sudo pip install .
+        python -m venv .python
+        .python/bin/pip install .
 
     - name: Run E2E django_moneymoney test server
       # Set working directory to the cloned backend repo
       working-directory: ./django_moneymoney
       run: |
-        E2E_TESTING=1 python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport ${{ env.DJANGO_TEST_SERVER_PORT }} &
+        E2E_TESTING=1 .python/bin/python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport ${{ env.DJANGO_TEST_SERVER_PORT }} &
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
