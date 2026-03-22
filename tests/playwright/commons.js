@@ -12,14 +12,15 @@ import {
 
 
 
-export async function account_add_from_AccountsList(page, name="Permanent Account"){
+export async function account_add_from_AccountsList(page, name="Permanent Account", currency="Euro (EUR - €)"){
   await mymenuinline_selection(page, "AccountsList_MyMenuInline", 0, 0)
 
   // Set up the promise to wait for the response *before* the action.
   const idPromise = promise_to_get_response(page, "/api/accounts/", "POST");
 
   await v_text_input_settext(page, "AccountsCU_Name", name);
-  await v_autocomplete_selection_with_role_option(page, "AccountsCU_Bank", "Personal Management");
+  await v_autocomplete_selection_with_role_option(page, "AccountsCU_Bank", "Personal Management"); // Assuming "Personal Management" is a default bank
+  await v_autocomplete_selection_with_role_option(page, "AccountsCU_Currency", currency); // Added currency selection
 
   // This is the action that triggers the POST request.
   await page.getByTestId('AccountsCU_Button').click();
@@ -175,6 +176,28 @@ export async function dividend_add_from_InvestmentView(
     await page.getByTestId('DividendsCU_Button').click();
     await expect(page.getByTestId('DividendsCU_Button')).toBeHidden()
 
+}
+
+export async function currency_update_factor_from_CurrenciesList(page, currency_name, factor) {
+  // Find the row containing the currency name
+  // Assuming rows have data-testid like "CurrenciesList_Table_Row${currency_id}"
+  const currencyRow = page.locator(`[data-testid^="CurrenciesList_Table_Row"]`, { hasText: currency_name });
+  await expect(currencyRow).toBeVisible();
+
+  // Extract currency_id from the row's data-testid
+  const rowTestId = await currencyRow.getAttribute('data-testid');
+  const currency_id = rowTestId.replace('CurrenciesList_Table_Row', '');
+
+  // Click the update button for the specific currency's quote
+  // Assuming the button testId is `CurrenciesList_Table_ButtonUpdateQuote${currency_id}`
+  await page.getByTestId(`CurrenciesList_Table_ButtonUpdateQuote${currency_id}`).click();
+
+  // Set the factor in the dialog. Reusing `QuotesCU_Quote` as a generic quote input.
+  await v_text_input_settext(page, "QuotesCU_Quote", factor);
+
+  // Click the save button for the dialog. Reusing `QuotesCU_Button`.
+  await page.getByTestId('QuotesCU_Button').click();
+  await expect(page.getByTestId('QuotesCU_Button')).toBeHidden(); // Wait for dialog to close
 }
 
 export async function strategy_products_range_add_from_StrategiesList(page, name, investment_name, product_name, comment){
