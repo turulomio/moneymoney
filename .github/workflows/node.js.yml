@@ -91,13 +91,10 @@ jobs:
         npm install
         npm run build
 
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+    - name: Install Playwright Firefox Browser
+      run: npx playwright install firefox
     - name: Moneymoney e2e test
       run: |
         npm run dev &
-        # Wait for the Node.js dev server to be ready and django
-        npm install -g wait-on # Install wait-on globally for convenience
-        wait-on http://127.0.0.1:${{ env.DJANGO_TEST_SERVER_PORT }}/
-        wait-on http://127.0.0.1:${{ env.NODE_DEV_SERVER_PORT }}/moneymoney/
+        sleep 10
         npm run playwright_console
