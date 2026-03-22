@@ -3,7 +3,8 @@ import axios from 'axios'
 import { myheaders, sortObjectsArray, getArrayFromMap} from './functions.js'
 import { capitalizeFirstLetter } from 'vuetify_rules'
 
-import countries from 'flag-icons/country.json'
+import countries from 'flag-icons/country.json' with { type: 'json' };
+
 
 export const useStore = defineStore('global', {
   state: () => {
