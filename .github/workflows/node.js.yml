@@ -98,6 +98,6 @@ jobs:
         npm run dev &
         # Wait for the Node.js dev server to be ready and django
         npm install -g wait-on # Install wait-on globally for convenience
-        wait-on http://localhost:${{ env.DJANGO_TEST_SERVER_PORT }}
-        wait-on http://localhost:${{ env.NODE_DEV_SERVER_PORT }}
+        wait-on http://127.0.0.1:${{ env.DJANGO_TEST_SERVER_PORT }}/
+        wait-on http://127.0.0.1:${{ env.NODE_DEV_SERVER_PORT }}/moneymoney/
         npm run playwright_console
