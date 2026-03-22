@@ -60,7 +60,8 @@ jobs:
 
     - name: Run E2E django_moneymoney test server
       run: |
-        ls -la .python3.12/bin
+        ls -la 
+        sudo ls -la 
         E2E_TESTING=1 sudo .python3.12/bin/python3.12 manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport 8004 &
 
     - name: Use Node.js ${{ matrix.node-version }}
