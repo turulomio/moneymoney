@@ -12,14 +12,15 @@ import {
 
 
 
-export async function account_add_from_AccountsList(page, name="Permanent Account"){
+export async function account_add_from_AccountsList(page, name="Permanent Account", currency="Euro (EUR - €)"){
   await mymenuinline_selection(page, "AccountsList_MyMenuInline", 0, 0)
 
   // Set up the promise to wait for the response *before* the action.
   const idPromise = promise_to_get_response(page, "/api/accounts/", "POST");
 
   await v_text_input_settext(page, "AccountsCU_Name", name);
-  await v_autocomplete_selection_with_role_option(page, "AccountsCU_Bank", "Personal Management");
+  await v_autocomplete_selection_with_role_option(page, "AccountsCU_Bank", "Personal Management"); // Assuming "Personal Management" is a default bank
+  await v_autocomplete_selection_with_role_option(page, "AccountsCU_Currency", currency); // Added currency selection
 
   // This is the action that triggers the POST request.
   await page.getByTestId('AccountsCU_Button').click();
@@ -51,6 +52,20 @@ export async function accountoperation_add_from_AccountsView(page, concept, amou
   // Wait for the dialog to close.
   await expect(page.getByTestId('AccountsoperationsCU_Button')).toBeHidden();
   return newId
+}
+
+export async function accountstransfer_from_AccountsView(page, destiny_account_name, amount, commission) {
+  // Assumes the test is already in the AccountsView of the source account
+  await mymenuinline_selection(page, "AccountsView_MyMenuInline", 0, 0)
+  await v_autocomplete_selection_with_role_option(page, 'AccountsTransfer_Destiny', destiny_account_name)
+  await v_text_input_settext(page, 'AccountsTransfer_Amount', amount)
+  await v_text_input_settext(page, 'AccountsTransfer_Commission', commission)
+  const object_promised = promise_to_get_response(page, "/api/accountstransfers/", "POST");
+  await page.getByTestId('AccountsTransfer_Button').click()
+  const r = await object_promised;
+  expect(r).toBeDefined();
+  await expect(page.getByTestId('AccountsTransfer_Button')).toBeHidden()
+  return r
 }
 
 
@@ -161,6 +176,19 @@ export async function dividend_add_from_InvestmentView(
     await page.getByTestId('DividendsCU_Button').click();
     await expect(page.getByTestId('DividendsCU_Button')).toBeHidden()
 
+}
+
+export async function quote_add_from_currencies(page, factor) {
+  await page.getByTestId("Currencies_ButtonAdd").first().click()
+  await expect(page.getByTestId('QuotesCU_Button')).toBeVisible(); 
+
+
+  // Set the factor in the dialog. Reusing `QuotesCU_Quote` as a generic quote input.
+  await v_text_input_settext(page, "QuotesCU_Quote", factor);
+
+  // Click the save button for the dialog. Reusing `QuotesCU_Button`.
+  await page.getByTestId('QuotesCU_Button').click();
+  await expect(page.getByTestId('QuotesCU_Button')).toBeHidden(); // Wait for dialog to close
 }
 
 export async function strategy_products_range_add_from_StrategiesList(page, name, investment_name, product_name, comment){

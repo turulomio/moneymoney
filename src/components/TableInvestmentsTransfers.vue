@@ -29,7 +29,7 @@
     </div>
 </template>
 <script setup>
-    import { ref, defineExpose } from 'vue'
+    import { ref } from 'vue'
     import { useStore } from "@/store"
     import InvestmentsTransfersCU from './InvestmentsTransfersCU.vue'
     import { useI18n } from 'vue-i18n'

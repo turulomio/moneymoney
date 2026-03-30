@@ -1,5 +1,5 @@
 <template>
-    <div>    
+    <div data-test="Currencies">    
         <h1>{{ $t('Used currencies') }}</h1>
         <v-card outlined class="pa-4 mx-auto" width="50%" flat>
             <v-data-table density="compact" :headers="headers" :items="items" :sort-by="[{key:'from',order:'asc'}]" class="elevation-1 cursorpointer" :key="key"     :items-per-page="10000" >
@@ -13,7 +13,7 @@
                     {{ my_round(item.quote,6) }}
                 </template>       
                 <template #item.actions="{item}">
-                    <v-icon v-if="item.can_c" small class="mr-2" @click="addItem(item)">mdi-plus</v-icon>
+                    <v-icon data-test="Currencies_ButtonAdd" v-if="item.can_c" small class="mr-2" @click="addItem(item)">mdi-plus</v-icon>
                     <v-icon v-if="item.can_rud" small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                     <v-icon v-if="item.can_rud" small @click="deleteItem(item)">mdi-delete</v-icon>
                 </template>
@@ -77,6 +77,7 @@
                 this.dialog_quotescu=true
             },
             addItem (item) {
+                console.log(item)
                 this.quote= {
                     url: null,
                     datetime: new Date(),
