@@ -121,7 +121,7 @@
             <v-spacer />
             <h1 class="font-weight-black text-no-wrap text-truncate" >{{ $t("Money Money. Another way to manage your finances") }}</h1>
             <v-spacer />            
-            <v-btn  data-test="LateralCurrrencies" :to="{ name: 'currencies'}" v-if="useStore().logged"><v-icon icon="mdi-currency-eur" dark></v-icon></v-btn>
+            <v-btn  data-test="LateralCurrencies" :to="{ name: 'currencies'}" v-if="useStore().logged"><v-icon icon="mdi-currency-eur" dark></v-icon></v-btn>
             <BtnSwitchLanguages  data-test="LateralSwitchLanguages" />
             <BtnLogIn  data-test="LateralLogIn" v-show="!useStore().logged" class="mr-4"/>
             <BtnLogOut data-test="LateralLogOut" v-show="useStore().logged" class="mr-4"/>

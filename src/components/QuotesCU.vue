@@ -1,149 +1,144 @@
 <template>
     <div>    
-        <h1>{{ title() }}
+        <h1>{{ title }}
             <MyMenuInline :items="menuinline_items"/>
         </h1>           
         <div class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid">                
-                <MyDateTimePicker :readonly="mode=='D'" v-model="new_quote.datetime" :label="$t('Set quote date and time')" />
+                <MyDateTimePicker :readonly="mode=='D'" v-model="new_quote.datetime" :label="t('Set quote date and time')" />
                 <AutocompleteProducts :readonly="mode=='D'" v-model="new_quote.products" :rules="RulesSelection(true)"  />
-                <v-text-field data-test="QuotesCU_Quote"  :readonly="mode=='D'" v-model.number="new_quote.quote"  :label="$t('Set quote')" :placeholder="$t('Set quote')" :rules="RulesFloatGEZ(12,true,product_object.decimals)" counter="12" autofocus/>
+                <v-text-field data-test="QuotesCU_Quote"  :readonly="mode=='D'" v-model.number="new_quote.quote"  :label="t('Set quote')" :placeholder="t('Set quote')" :rules="RulesFloatGEZ(12,true,product_object.decimals)" counter="12" autofocus/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn data-test="QuotesCU_Button" color="primary" @click="accept()">{{ button() }}</v-btn>
+                <v-btn data-test="QuotesCU_Button" color="primary" @click="accept()">{{ button }}</v-btn>
             </v-card-actions>
         </div>
     </div>
 </template>
-<script>
+<script setup>
     import axios from 'axios'
     import { useStore } from "@/store"
-    import {empty_quote} from '../empty_objects.js'
     import { RulesSelection,RulesFloatGEZ } from 'vuetify_rules'
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import moment from 'moment-timezone';
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import { myheaders, parseResponseError } from '@/functions.js'
-    export default {
-        components: {
-            MyDateTimePicker,
-            MyMenuInline,
-            AutocompleteProducts,
-        },
-        props: {
-            quote: { //A quote object
-                required: true 
-            },
-            mode: {
-                requited: true
-            }
-        },
-        computed:{
-            product_object: function(){
+    import { ref, computed } from 'vue';
+    import { useI18n } from 'vue-i18n'
 
-                return this.useStore().products.get(this.new_quote.products)
-            },
-            product_stockmarket: function(){
-                return this.useStore().stockmarkets.get(this.product_object.stockmarkets)
-            },
+
+    const props = defineProps({
+        quote: { //A quote object
+            required: true 
         },
-        data(){ 
-            return {
-                form_valid:false,
-                new_quote: null,
-                editing:false,
-                menuinline_items: [
-                    {
-                        subheader: this.$t("Date and time options"),
-                        children: [
-                            {
-                                name: this.$t("Set the time at the start of the futures stock market"),
-                                icon: "mdi-calendar",
-                                code: function(){
-                                   this.new_quote.datetime=moment(`${this.new_quote.datetime.slice(0,10)}T${this.product_stockmarket.starts_futures}`).toISOString()
-                                }.bind(this),
-                            },
-                            {
-                                name: this.$t("Set the time at the start of the stock market"),
-                                icon: "mdi-calendar ",
-                                code: function(){
-                                   this.new_quote.datetime=moment(`${this.new_quote.datetime.slice(0,10)}T${this.product_stockmarket.starts}`).toISOString()
-                                }.bind(this),
-                            },
-                            {
-                                name: this.$t("Set the time at the close of the stock market"),
-                                icon: "mdi-calendar ",
-                                code: function(){
-                                   this.new_quote.datetime=moment(`${this.new_quote.datetime.slice(0,10)}T${this.product_stockmarket.closes}Z`).toISOString()
-                                }.bind(this),
-                            },
-                            {
-                                name: this.$t("Set the time at the close of the futures stock market"),
-                                icon: "mdi-calendar ",
-                                code: function(){
-                                   this.new_quote.datetime=moment(`${this.new_quote.datetime.slice(0,10)}T${this.product_stockmarket.closes_futures}`).toISOString()
-                                }.bind(this),
-                            },
-                        ]
+        mode: {
+            required: true // Corrected typo from 'requited'
+        }
+    });
+
+    const emit = defineEmits(['cruded']);
+
+    const { t } = useI18n()
+
+    const store = useStore();
+
+    const form_valid = ref(false);
+    const new_quote = ref(Object.assign({}, props.quote));
+    console.log(new_quote.value)
+    console.log(product_object.value)
+    const form = ref(null); // Reference for the v-form component
+
+    const product_object = computed(() => {
+        return store.products.get(new_quote.value.products);
+    });
+
+    const product_stockmarket = computed(() => {
+        return store.stockmarkets.get(product_object.value.stockmarkets);
+    });
+
+    const menuinline_items = [
+        {
+            subheader: t("Date and time options"),
+            children: [
+                {
+                    name: t("Set the time at the start of the futures stock market"),
+                    icon: "mdi-calendar",
+                    code: () => {
+                       new_quote.value.datetime = moment(`${new_quote.value.datetime.slice(0,10)}T${product_stockmarket.value.starts_futures}`).toISOString();
                     },
-                ],
-            }
+                },
+                {
+                    name: t("Set the time at the start of the stock market"),
+                    icon: "mdi-calendar ",
+                    code: () => {
+                       new_quote.value.datetime = moment(`${new_quote.value.datetime.slice(0,10)}T${product_stockmarket.value.starts}`).toISOString();
+                    },
+                },
+                {
+                    name: t("Set the time at the close of the stock market"),
+                    icon: "mdi-calendar ",
+                    code: () => {
+                       new_quote.value.datetime = moment(`${new_quote.value.datetime.slice(0,10)}T${product_stockmarket.value.closes}Z`).toISOString();
+                    },
+                },
+                {
+                    name: t("Set the time at the close of the futures stock market"),
+                    icon: "mdi-calendar ",
+                    code: () => {
+                       new_quote.value.datetime = moment(`${new_quote.value.datetime.slice(0,10)}T${product_stockmarket.value.closes_futures}`).toISOString();
+                    },
+                },
+            ]
         },
-        methods: {
-            useStore,
-            RulesSelection,
-            RulesFloatGEZ,
-            empty_quote,
-            parseResponseError,
-            myheaders,
-            title(){
-                if (this.mode=="C") return this.$t("Add a quote")
-                if (this.mode=="U") return this.$t("Update quote")
-                if (this.mode=="D") return this.$t("Delete quote")
-            },
-            button(){
-                if (this.mode=="C") return this.$t("Add")
-                if (this.mode=="U") return this.$t("Update")
-                if (this.mode=="D") return this.$t("Delete")
-            },
-            accept(){
-                if (this.form_valid!=true) {
-                    this.$refs.form.validate()
-                    return
-                }
-                if (this.mode=="U"){
-                    axios.put(this.new_quote.url, this.new_quote,  this.myheaders())
+    ];
+
+    const title = computed(() => {
+        if (props.mode === "C") return t("Add a quote");
+        if (props.mode === "U") return t("Update quote");
+        if (props.mode === "D") return t("Delete quote");
+        return ''; // Default return for unexpected modes
+    });
+
+    const button = computed(() => {
+        if (props.mode === "C") return t("Add");
+        if (props.mode === "U") return t("Update");
+        if (props.mode === "D") return t("Delete");
+        return ''; // Default return for unexpected modes
+    });
+
+    async function accept() {
+        const { valid } = await form.value.validate();
+        if (!valid) {
+            return;
+        }
+
+        if (props.mode === "U"){
+            axios.put(new_quote.value.url, new_quote.value, myheaders())
                     .then(() => {
-                            this.$emit("cruded")
+                            emit("cruded");
                     }, (error) => {
-                        this.parseResponseError(error)
+                        parseResponseError(error);
                     })
-                } else if (this.mode=="C") {
-                    axios.post(`${this.useStore().apiroot}/api/quotes/`, this.new_quote,  this.myheaders())
+                } else if (props.mode === "C") {
+                    axios.post(`${store.apiroot}/api/quotes/`, new_quote.value, myheaders())
                     .then(() => {
-                            this.$emit("cruded")
+                            emit("cruded");
                     }, (error) => {
-                        this.parseResponseError(error)
+                        parseResponseError(error);
                     })
-                } else if (this.mode=="D") {
-                    var r = confirm(this.$t("Do you want to delete this quote?"))
-                    if(r == false) {
+                } else if (props.mode === "D") {
+                    const r = confirm(t("Do you want to delete this quote?"));
+                    if(r === false) {
                         return
                     } 
-                    axios.delete(this.new_quote.url, this.myheaders())
+                    axios.delete(new_quote.value.url, myheaders())
                     .then(() => {
-                        this.$emit("cruded")
+                        emit("cruded");
                     }, (error) => {
-                        this.parseResponseError(error)
+                        parseResponseError(error);
                     })
                 }
-            },
-        },
-        created(){
-            this.new_quote=Object.assign({},this.quote)
-        }
     }
 </script>
-

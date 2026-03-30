@@ -178,19 +178,10 @@ export async function dividend_add_from_InvestmentView(
 
 }
 
-export async function currency_update_factor_from_CurrenciesList(page, currency_name, factor) {
-  // Find the row containing the currency name
-  // Assuming rows have data-testid like "CurrenciesList_Table_Row${currency_id}"
-  const currencyRow = page.locator(`[data-testid^="CurrenciesList_Table_Row"]`, { hasText: currency_name });
-  await expect(currencyRow).toBeVisible();
+export async function quote_add_from_currencies(page, factor) {
+  await page.getByTestId("Currencies_ButtonAdd").first().click()
+  await expect(page.getByTestId('QuotesCU_Button')).toBeVisible(); 
 
-  // Extract currency_id from the row's data-testid
-  const rowTestId = await currencyRow.getAttribute('data-testid');
-  const currency_id = rowTestId.replace('CurrenciesList_Table_Row', '');
-
-  // Click the update button for the specific currency's quote
-  // Assuming the button testId is `CurrenciesList_Table_ButtonUpdateQuote${currency_id}`
-  await page.getByTestId(`CurrenciesList_Table_ButtonUpdateQuote${currency_id}`).click();
 
   // Set the factor in the dialog. Reusing `QuotesCU_Quote` as a generic quote input.
   await v_text_input_settext(page, "QuotesCU_Quote", factor);

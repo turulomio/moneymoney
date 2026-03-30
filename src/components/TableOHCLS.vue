@@ -24,7 +24,7 @@
     </div>
 </template>
 <script setup>
-    import { ref, computed, onMounted, nextTick } from 'vue'
+    import { ref, computed, onMounted, nextTick  } from 'vue'
     import axios from 'axios'
     import { useStore } from "@/store"
     import { localtime } from 'vuetify_rules'
