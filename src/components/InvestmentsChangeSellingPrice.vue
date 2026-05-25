@@ -201,7 +201,11 @@
                     }
                 })
                 return r
-            }
+            },
+            expected_gains(){
+                if (!this.product) return 0
+                return (this.selected_selling_price-this.selected_average_price)*this.selected_shares*this.product.real_leveraged_multiplier
+            },
         },
         methods:{
             useStore,
@@ -278,6 +282,7 @@
                 r=r+"<li>" + this.$t("Investment") + `: ${this.investment.fullname}</li>`
                 r=r+"<li>" + this.$t("Shares") + `: ${this.selected_shares}</li>`
                 r=r+"<li>" + this.$t("Price") + `: ${this.currency_string(this.selected_selling_price, this.product.currency, this.product.decimals)}</li>`
+                r=r+"<li>" + this.$t("Gains") + `: ${this.currency_string(this.expected_gains, this.product.currency, 2)}</li>`
                 if (this.selling_expiration) r=r+"<li>" + this.$t("Expiration") + `: ${this.selling_expiration}</li>`
                 r=r +"</ul>"
                 this.snackbar_message=r
@@ -315,10 +320,9 @@
                 } else if (this.tab==3) {
                     this.selected_selling_price=this.strategy_range
                 }
-                var gai=(this.selected_selling_price-this.selected_average_price)*this.selected_shares*this.product.real_leveraged_multiplier
                 this.button_text=f(this.$t("Set selected investments selling price to [0] to gain [1]"), [
                     this.currency_string(this.selected_selling_price, this.product.currency, this.product.decimals),
-                    this.currency_string(gai,this.product.currency, 2)
+                    this.currency_string(this.expected_gains,this.product.currency, 2)
                 ])
 
             },
