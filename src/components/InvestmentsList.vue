@@ -94,7 +94,7 @@
         </v-dialog>
 
         <!-- INVESTMENT change selling price-->
-        <v-dialog v-model="dialog_change_selling_price">
+        <v-dialog v-model="dialog_change_selling_price" width="80%">
             <v-card class="pa-3">
                 <InvestmentsChangeSellingPrice :investment="investment" :key="key" @cruded="on_InvestmentsChangeSellingPrice_cruded"></InvestmentsChangeSellingPrice>
             </v-card>

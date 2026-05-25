@@ -124,7 +124,7 @@
             </v-card>
         </v-dialog>
         <!-- INVESTMENT change selling price-->
-        <v-dialog v-model="dialog_io_sameproduct" v-if="ios_id">
+        <v-dialog v-model="dialog_io_sameproduct" v-if="ios_id" width="80%">
             <v-card class="pa-3">
                 <InvestmentsChangeSellingPrice :product="product.url" :investment="investment" :key="key" @cruded="on_InvestmentsChangeSellingPrice_cruded"></InvestmentsChangeSellingPrice>
             </v-card>
@@ -446,7 +446,7 @@
                         this.ios_id.data.real_leverages
                 ])
             },
-            selling_expiration_message(){
+            selling_point_message(){
                 if (!this.product || !this.ios_id) return ""
                 var gains_at_selling_point_investment=(this.investment.selling_price-this.ios_id.total_io_current.average_price_investment)*this.ios_id.total_io_current.shares*this.ios_id.data.real_leverages
                 return f(this.$t("[0], to gain [1]"), [
@@ -455,7 +455,7 @@
                 ])
 
             },
-            selling_point_message(){
+            selling_expiration_message(){
                 var r= `${this.investment.selling_expiration}`
                 if (new Date(this.investment.selling_expiration).setHours(0,0,0,0)<new Date().setHours(0,0,0,0)){
                     r=r+ '.<span class="vuered"> '+ this.$t('You must set a new selling order.') + '</span>'
