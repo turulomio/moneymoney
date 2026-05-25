@@ -1,66 +1,76 @@
 <template>
     <div>
         <h1 class="mb-2">{{ $t("Change selling price") }}</h1>
-        <div v-html="$t('Table with all investments with the same product as current investment:')"></div>
-        <v-data-table ref="table" v-model="selected_ids" show-select :headers="tableHeaders" :items="data" class="elevation-1 mt-2" density="compact" height="300" fixed-header :items-per-page="10000" >
-            <template #item.fullname="{item}">
-                {{ useStore().investments.get(item.url).fullname }}
-            </template>            
-            <template #item.selling_price="{item}">
-                <div class="text-right">{{ currency_string(item.selling_price, item.currency)}}</div>
-            </template>
-            <template #item.average_price="{item}">
-                <div class="text-right">{{ currency_string(item.average_price, item.currency)}}</div>
-            </template>
-            <template #item.invested_investment="{item}">
-                <div class="text-right">{{ currency_string(item.invested_investment, item.currency)}}</div>
-            </template>
-            <template #item.balance_investment="{item}">
-                <div class="text-right">{{ currency_string(item.balance_investment, item.currency)}}</div>
-            </template>
-            <template #bottom ></template>   
-        </v-data-table>
-        <DisplayValues :items="displayvalues()" :minimized_items="5" :key="key"></DisplayValues>
+        <div v-if="snackbar_message==''">
+            <div v-html="$t('Table with all investments with the same product as current investment:')"></div>
+            <v-data-table ref="table" v-model="selected_ids" show-select :headers="tableHeaders" :items="data" class="elevation-1 mt-2" density="compact" height="300" fixed-header :items-per-page="10000" >
+                <template #item.fullname="{item}">
+                    {{ useStore().investments.get(item.url).fullname }}
+                </template>            
+                <template #item.selling_price="{item}">
+                    <div class="text-right">{{ currency_string(item.selling_price, item.currency)}}</div>
+                </template>
+                <template #item.average_price="{item}">
+                    <div class="text-right">{{ currency_string(item.average_price, item.currency)}}</div>
+                </template>
+                <template #item.invested_investment="{item}">
+                    <div class="text-right">{{ currency_string(item.invested_investment, item.currency)}}</div>
+                </template>
+                <template #item.balance_investment="{item}">
+                    <div class="text-right">{{ currency_string(item.balance_investment, item.currency)}}</div>
+                </template>
+                <template #bottom ></template>   
+            </v-data-table>
+            <DisplayValues :items="displayvalues()" :minimized_items="5" :key="key"></DisplayValues>
 
-        <v-tabs  bg-color="secondary" dark v-model="tab" grow>
-            <v-tab key="percentage">{{ $t("Set a gains percentage") }}</v-tab>
-            <v-tab key="gain">{{ $t("Set a gain") }}</v-tab>
-            <v-tab key="price">{{ $t("Set a price") }}</v-tab>
-            <v-tab key="range" v-if="this.selected_ids.length==1 && this.investment.id==this.selected_ids[0]">{{ $t("Set a range for current investment strategy") }}</v-tab>
-        </v-tabs>
-        <v-window v-model="tab">
-            <v-window-item key="percentage">      
-                <v-card class="pa-3" outlined>
-                    <v-text-field :name="this.$t('Set a gains percentage')" v-model.number="percentage" :counter="10" :label="this.$t('Set a gains percentage')" :placeholder="this.$t('Enter an amount')" :rules="this.RulesFloat(10,true,6)" autofocus></v-text-field>
-                </v-card>
-            </v-window-item>
-            <v-window-item key="gain">     
-                <v-card class="pa-3" outlined>
-                    <v-text-field :name="this.$t('Set a gain')" v-model.number="gains" :counter="10" :label="this.$t('Set a gain')" :placeholder="this.$t('Enter an amount')" :rules="this.RulesFloat(10,true,6)"></v-text-field>
-                </v-card>
-            </v-window-item>
-            <v-window-item key="price">     
-                <v-card class="pa-3" outlined>
-                    <v-text-field :name="this.$t('Set a price')" v-model.number="price" :counter="10" :label="this.$t('Set a price')" :placeholder="this.$t('Enter an amount')" :rules="this.RulesFloat(10,true,6)"></v-text-field>
-                </v-card>
-            </v-window-item>
-            <v-window-item key="range">     
-                <v-card class="pa-3" outlined>
-                    <v-select :items="strategies" v-model="strategy" :label="$t('Set current investment strategy')"  item-title="name" return-object :rules="RulesSelection(true)"></v-select>  
-                    <v-select :items="strategy_ranges" v-model="strategy_range" :label="$t('Set a strategy range')"  item-title="name" item-value="value" :rules="RulesSelection(true)"></v-select>  
-                </v-card>
-            </v-window-item>
-        </v-window>    
-        <div class="pa-4" width="100%">
-            <v-form ref="form" v-model="form_valid">
-                <MyDatePicker v-model="selling_expiration" :label="$t('Selling expiration')" :clearable="true"/>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" @click="submit()">{{ button_text }}</v-btn>
-                    <v-btn color="error" @click="submit_null()">{{ $t("Set null values") }}</v-btn>
-                    <v-spacer></v-spacer>
-                </v-card-actions>
-            </v-form>
+            <v-tabs  bg-color="secondary" dark v-model="tab" grow>
+                <v-tab key="percentage">{{ $t("Set a gains percentage") }}</v-tab>
+                <v-tab key="gain">{{ $t("Set a gain") }}</v-tab>
+                <v-tab key="price">{{ $t("Set a price") }}</v-tab>
+                <v-tab key="range" v-if="this.selected_ids.length==1 && this.investment.id==this.selected_ids[0]">{{ $t("Set a range for current investment strategy") }}</v-tab>
+            </v-tabs>
+            <v-window v-model="tab">
+                <v-window-item key="percentage">      
+                    <v-card class="pa-3" outlined>
+                        <v-text-field :name="this.$t('Set a gains percentage')" v-model.number="percentage" :counter="10" :label="this.$t('Set a gains percentage')" :placeholder="this.$t('Enter an amount')" :rules="this.RulesFloat(10,true,6)" autofocus></v-text-field>
+                    </v-card>
+                </v-window-item>
+                <v-window-item key="gain">     
+                    <v-card class="pa-3" outlined>
+                        <v-text-field :name="this.$t('Set a gain')" v-model.number="gains" :counter="10" :label="this.$t('Set a gain')" :placeholder="this.$t('Enter an amount')" :rules="this.RulesFloat(10,true,6)"></v-text-field>
+                    </v-card>
+                </v-window-item>
+                <v-window-item key="price">     
+                    <v-card class="pa-3" outlined>
+                        <v-text-field data-test="InvestmentsChangeSellingPrice_Price" :name="this.$t('Set a price')" v-model.number="price" :counter="10" :label="this.$t('Set a price')" :placeholder="this.$t('Enter an amount')" :rules="this.RulesFloat(10,true,6)"></v-text-field>
+                    </v-card>
+                </v-window-item>
+                <v-window-item key="range">     
+                    <v-card class="pa-3" outlined>
+                        <v-select :items="strategies" v-model="strategy" :label="$t('Set current investment strategy')"  item-title="name" return-object :rules="RulesSelection(true)"></v-select>  
+                        <v-select :items="strategy_ranges" v-model="strategy_range" :label="$t('Set a strategy range')"  item-title="name" item-value="value" :rules="RulesSelection(true)"></v-select>  
+                    </v-card>
+                </v-window-item>
+            </v-window>    
+            <div class="pa-4" width="100%">
+                <v-form ref="form" v-model="form_valid">
+                    <MyDatePicker v-model="selling_expiration" :label="$t('Selling expiration')" :clearable="true"/>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn data-test="InvestmentsChangeSellingPrice_ButtonSubmit" color="primary" @click="submit()">{{ button_text }}</v-btn>
+                        <v-btn data-test="InvestmentsChangeSellingPrice_ButtonSubmitNull" color="error" @click="submit_null()">{{ $t("Set null values") }}</v-btn>
+                        <v-spacer></v-spacer>
+                    </v-card-actions>
+                </v-form>
+            </div>
+        </div>
+        <div v-else>
+            <div v-html="snackbar_message"></div>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn data-test="InvestmentsChangeSellingPrice_ButtonCloseMessage" color="error" @click="on_message_close()">{{ $t("Close message")}}</v-btn>
+                <v-spacer></v-spacer>
+            </v-card-actions>
         </div>
     </div>
 </template>
@@ -120,6 +130,7 @@
                 percentage: 10,
                 key:0,
                 loading_ios:false,
+                snackbar_message:"",
 
                 product:null, // Object loaded at created
 
@@ -254,12 +265,26 @@
                     })
                     this.loading_ios=false
                     this.key=this.key+1
-                    alert(this.$t("Remember to set your order in the bank"))
-                    this.$emit("cruded")
+                    this.show_snackbar_message()
                 }, (error) => {
                     this.parseResponseError(error)
                 });
 
+            },
+            show_snackbar_message(){
+                var r= "<p>" + this.$t("Selling price was updated sucessfully.") + "</p>"
+                r= r + "<p>" + this.$t("Don't forget to set this order in your bank:") + "</p>"
+                r=r +"<ul>"
+                r=r+"<li>" + this.$t("Investment") + `: ${this.investment.fullname}</li>`
+                r=r+"<li>" + this.$t("Shares") + `: ${this.selected_shares}</li>`
+                r=r+"<li>" + this.$t("Price") + `: ${this.currency_string(this.selected_selling_price, this.product.currency, this.product.decimals)}</li>`
+                if (this.selling_expiration) r=r+"<li>" + this.$t("Expiration") + `: ${this.selling_expiration}</li>`
+                r=r +"</ul>"
+                this.snackbar_message=r
+            },
+            on_message_close(){
+                this.snackbar_message=""
+                this.$emit("cruded")
             },
             calculate(){
                 this.selected_shares=0
