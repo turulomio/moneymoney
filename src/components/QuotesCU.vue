@@ -46,8 +46,6 @@
 
     const form_valid = ref(false);
     const new_quote = ref(Object.assign({}, props.quote));
-    console.log(new_quote.value)
-    console.log(product_object.value)
     const form = ref(null); // Reference for the v-form component
 
     const product_object = computed(() => {

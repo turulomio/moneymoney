@@ -118,15 +118,19 @@ export async function concept_add_from_ConceptsCatalog(page, name="My first pers
 }
 
 export async function investment_add_from_InvestmentsList(page, name="New Test Investment", product_name="LYXOR IBEX DOBLE APALANCADO (Madrid Stock Exchange)"){
-  // This is a placeholder implementation based on the function name.
-  // You may need to adjust the selectors and values.
   await mymenuinline_selection(page, "InvestmentsList_MyMenuInline", 0, 0)
-  const idPromise = promise_to_get_response(page, "/api/investments/", "POST");
+  
+  const promise = promise_to_get_response(page, "/api/investments/", "POST");
+  
   await v_text_input_settext(page, "InvestmentsCU_Name", name);
   await v_autocomplete_selection_with_role_listbox(page, "InvestmentsCU_Accounts", "Cash");
   await v_autocomplete_selection_with_role_listbox(page, "InvestmentsCU_Products", product_name);
+  
   await page.getByTestId('InvestmentsCU_Button').click();
-  return (await idPromise).id
+  
+  const o = await promise  
+  await expect(page.getByTestId('InvestmentsCU_Button')).toBeHidden();
+  return o
 }
 
 export async function quote_add_from_InvestmentsList(page, investment_id){
@@ -135,6 +139,7 @@ export async function quote_add_from_InvestmentsList(page, investment_id){
   await v_text_input_settext(page, "QuotesCU_Quote", "10");
   await page.getByTestId('QuotesCU_Button').click();
   await expect(page.getByTestId('QuotesCU_Button')).toBeHidden()
+  await expect(page.getByTestId(`Investments_Table_ButtonAddQuote${investment_id}`)).toBeVisible();
 }
 
 
