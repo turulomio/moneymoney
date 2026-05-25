@@ -20,8 +20,8 @@
                 <v-icon v-if="item.has_refunds" class="mr-2" @click="show_refunds(item)">mdi-cash-refund</v-icon>              
                 <v-icon :data-test="`TableAccountOperations_ButtonRefund${item.id}`" v-if="can_make_a_refund(item)" small class="mr-2" @click="refund(item)">mdi-arrow-u-left-top-bold</v-icon>
                 <v-icon :data-test="`TableAccountOperations_ButtonCopy${item.id}`" small class="mr-2" @click="copyAO(item)">mdi-content-copy</v-icon>
-                <v-icon small class="mr-2" @click="editAO(item)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" @click="deleteAO(item)">mdi-delete</v-icon>
+                <v-icon :data-test="`TableAccountOperations_ButtonUpdate${item.id}`" small class="mr-2" @click="editAO(item)">mdi-pencil</v-icon>
+                <v-icon :data-test="`TableAccountOperations_ButtonDelete${item.id}`" small class="mr-2" @click="deleteAO(item)">mdi-delete</v-icon>
             </template>
             <template #body.append v-if="props.showtotal && props.items.length>0">
                 <tr class="v-data-table__tr totalrow">
@@ -85,7 +85,7 @@
 </template>
 
 <script setup>
-    import { ref, computed, watch, onMounted, nextTick , defineExpose} from 'vue'
+    import { ref, computed, watch, onMounted, nextTick} from 'vue'
     import axios from 'axios'
     import { useStore } from "@/store"
     import {  empty_account_operation } from '../empty_objects.js'

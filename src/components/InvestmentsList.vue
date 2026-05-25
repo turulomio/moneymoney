@@ -51,9 +51,9 @@
             </template>              
             <template #item.actions="{item}">
                 <v-icon :data-test="`Investments_Table_ButtonAddQuote${item.id}`" small class="ml-1" @click.stop="addQuote(item)">mdi-plus</v-icon>
-                <v-icon small class="ml-1" @click.stop="editItem(item)">mdi-pencil</v-icon>
-                <v-icon small class="ml-1" @click.stop="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
-                <v-icon small class="ml-1" v-if="(new Date().setHours(0,0,0,0)>new Date(item.selling_expiration).setHours(0,0,0,0)) && item.selling_expiration!=null" @click.stop="changeSellingPrice(item)" color="#9933ff" style="font-weight:bold">mdi-alarm</v-icon>     
+                <v-icon :data-test="`Investments_Table_ButtonEdit${item.id}`" small class="ml-1" @click.stop="editItem(item)">mdi-pencil</v-icon>
+                <v-icon :data-test="`Investments_Table_ButtonDelete${item.id}`" small class="ml-1" @click.stop="deleteItem(item)" v-if="item.is_deletable">mdi-delete</v-icon>
+                <v-icon :data-test="`Investments_Table_ButtonChangeSellingPrice${item.id}`" small class="ml-1" v-if="(new Date().setHours(0,0,0,0)>new Date(item.selling_expiration).setHours(0,0,0,0)) && item.selling_expiration!=null" @click.stop="changeSellingPrice(item)" color="#9933ff" style="font-weight:bold">mdi-alarm</v-icon>     
             </template>
             
          <template #bottom ></template>

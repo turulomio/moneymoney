@@ -17,18 +17,18 @@ test('Investments transfers', async ({ page }) => {
   await page.getByTestId('LateralInvestments').click();
 
   // Preparing investment 1
-  const investments1_id=await investment_add_from_InvestmentsList(page, "Test investment transfer 1", "LYXOR IBEX DOBLE APALANCADO (Madrid Stock Exchange)");
-  await quote_add_from_InvestmentsList(page, investments1_id)
-  await expect(page.getByTestId(`Investments_Table_Row${investments1_id}`)).toBeVisible();
-  await page.getByTestId(`Investments_Table_Row${investments1_id}`).click()
+  const investment1=await investment_add_from_InvestmentsList(page, "Test investment transfer 1", "LYXOR IBEX DOBLE APALANCADO (Madrid Stock Exchange)");
+  await quote_add_from_InvestmentsList(page, investment1.id)
+  await expect(page.getByTestId(`Investments_Table_Row${investment1.id}`)).toBeVisible();
+  await page.getByTestId(`Investments_Table_Row${investment1.id}`).click()
   await investmentoperation_add_from_InvestmentsView(page)
   await page.getByTestId("InvestmentsView_ButtonClose").click()
 
     // Preparing investment 2
-  const investments2_id=await investment_add_from_InvestmentsList(page, "Test investment transfer 2", "Lyxor UCITS NASDAQ-100 Daily Leverage (Paris Stock Exchange)")
-  await quote_add_from_InvestmentsList(page, investments2_id)
-  await expect(page.getByTestId(`Investments_Table_Row${investments2_id}`)).toBeVisible();
-  await page.getByTestId(`Investments_Table_Row${investments2_id}`).click()
+  const investment2=await investment_add_from_InvestmentsList(page, "Test investment transfer 2", "Lyxor UCITS NASDAQ-100 Daily Leverage (Paris Stock Exchange)")
+  await quote_add_from_InvestmentsList(page, investment2.id)
+  await expect(page.getByTestId(`Investments_Table_Row${investment2.id}`)).toBeVisible();
+  await page.getByTestId(`Investments_Table_Row${investment2.id}`).click()
 
   // Creating a new investments transfer
   await mymenuinline_selection(page, "InvestmentsView_MyMenuInline", 0, 5)

@@ -18,9 +18,9 @@ test('Chart Evolution Assets', async ({ page }) => {
     // Add investment operations
     await page.getByTestId('LateralIcon').click();
     await page.getByTestId('LateralInvestments').click();
-    const investments_id = await investment_add_from_InvestmentsList(page, "Test investment", "LYXOR IBEX DOBLE APALANCADO (Madrid Stock Exchange)");
-    await quote_add_from_InvestmentsList(page, investments_id);
-    await page.getByTestId(`Investments_Table_Row${investments_id}`).click();
+    const investment = await investment_add_from_InvestmentsList(page, "Test investment", "LYXOR IBEX DOBLE APALANCADO (Madrid Stock Exchange)");
+    await quote_add_from_InvestmentsList(page, investment.id);
+    await page.getByTestId(`Investments_Table_Row${investment.id}`).click();
     await investmentoperation_add_from_InvestmentsView(page);
     await page.getByTestId('InvestmentsView_ButtonClose').click();
 
