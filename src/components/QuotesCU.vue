@@ -34,7 +34,7 @@
             required: true 
         },
         mode: {
-            required: true // Corrected typo from 'requited'
+            required: true // CRUD
         }
     });
 
@@ -114,29 +114,29 @@
 
         if (props.mode === "U"){
             axios.put(new_quote.value.url, new_quote.value, myheaders())
-                    .then(() => {
-                            emit("cruded");
-                    }, (error) => {
-                        parseResponseError(error);
-                    })
-                } else if (props.mode === "C") {
-                    axios.post(`${store.apiroot}/api/quotes/`, new_quote.value, myheaders())
-                    .then(() => {
-                            emit("cruded");
-                    }, (error) => {
-                        parseResponseError(error);
-                    })
-                } else if (props.mode === "D") {
-                    const r = confirm(t("Do you want to delete this quote?"));
-                    if(r === false) {
-                        return
-                    } 
-                    axios.delete(new_quote.value.url, myheaders())
-                    .then(() => {
-                        emit("cruded");
-                    }, (error) => {
-                        parseResponseError(error);
-                    })
-                }
+            .then(() => {
+                    emit("cruded");
+            }, (error) => {
+                parseResponseError(error);
+            })
+        } else if (props.mode === "C") {
+            axios.post(`${store.apiroot}/api/quotes/`, new_quote.value, myheaders())
+            .then(() => {
+                    emit("cruded");
+            }, (error) => {
+                parseResponseError(error);
+            })
+        } else if (props.mode === "D") {
+            const r = confirm(t("Do you want to delete this quote?"));
+            if(r === false) {
+                return
+            } 
+            axios.delete(new_quote.value.url, myheaders())
+            .then(() => {
+                emit("cruded");
+            }, (error) => {
+                parseResponseError(error);
+            })
+        }
     }
 </script>

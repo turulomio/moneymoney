@@ -13,9 +13,9 @@
                     {{ my_round(item.quote,6) }}
                 </template>       
                 <template #item.actions="{item}">
-                    <v-icon data-test="Currencies_ButtonAdd" v-if="item.can_c" small class="mr-2" @click="addItem(item)">mdi-plus</v-icon>
-                    <v-icon v-if="item.can_rud" small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon v-if="item.can_rud" small @click="deleteItem(item)">mdi-delete</v-icon>
+                    <v-icon data-test="Currencies_ButtonAdd" v-if="item.direct_supported" small class="mr-2" @click="addItem(item)">mdi-plus</v-icon>
+                    <v-icon v-if="item.direct_supported" small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+                    <v-icon v-if="item.direct_supported" small @click="deleteItem(item)">mdi-delete</v-icon>
                 </template>
                 <template #bottom ></template>   
             </v-data-table>
@@ -77,7 +77,6 @@
                 this.dialog_quotescu=true
             },
             addItem (item) {
-                console.log(item)
                 this.quote= {
                     url: null,
                     datetime: new Date(),
@@ -103,6 +102,7 @@
                 axios.get(`${this.useStore().apiroot}/currencies/`, this.myheaders())
                 .then((response) => {
                     this.items=response.data
+                    console.log(this.items)
                 }, (error) => {
                     this.parseResponseError(error)
                 });
