@@ -27,22 +27,22 @@
                 <v-tab key="percentage">{{ $t("Set a gains percentage") }}</v-tab>
                 <v-tab key="gain">{{ $t("Set a gain") }}</v-tab>
                 <v-tab key="price">{{ $t("Set a price") }}</v-tab>
-                <v-tab key="range" v-if="this.selected_ids.length==1 && this.investment.id==this.selected_ids[0]">{{ $t("Set a range for current investment strategy") }}</v-tab>
+                <v-tab key="range" v-if="selected_ids.length==1 && investment.id==selected_ids[0]">{{ $t("Set a range for current investment strategy") }}</v-tab>
             </v-tabs>
             <v-window v-model="tab">
                 <v-window-item key="percentage">      
                     <v-card class="pa-3" outlined>
-                        <v-text-field :name="this.$t('Set a gains percentage')" v-model.number="percentage" :counter="10" :label="this.$t('Set a gains percentage')" :placeholder="this.$t('Enter an amount')" :rules="this.RulesFloat(10,true,6)" autofocus></v-text-field>
+                        <v-text-field :name="$t('Set a gains percentage')" v-model.number="percentage" :counter="10" :label="$t('Set a gains percentage')" :placeholder="$t('Enter an amount')" :rules="RulesFloat(10,true,6)" autofocus></v-text-field>
                     </v-card>
                 </v-window-item>
                 <v-window-item key="gain">     
                     <v-card class="pa-3" outlined>
-                        <v-text-field :name="this.$t('Set a gain')" v-model.number="gains" :counter="10" :label="this.$t('Set a gain')" :placeholder="this.$t('Enter an amount')" :rules="this.RulesFloat(10,true,6)"></v-text-field>
+                        <v-text-field :name="$t('Set a gain')" v-model.number="gains" :counter="10" :label="$t('Set a gain')" :placeholder="$t('Enter an amount')" :rules="RulesFloat(10,true,6)"></v-text-field>
                     </v-card>
                 </v-window-item>
                 <v-window-item key="price">     
                     <v-card class="pa-3" outlined>
-                        <v-text-field data-test="InvestmentsChangeSellingPrice_Price" :name="this.$t('Set a price')" v-model.number="price" :counter="10" :label="this.$t('Set a price')" :placeholder="this.$t('Enter an amount')" :rules="this.RulesFloat(10,true,6)"></v-text-field>
+                        <v-text-field data-test="InvestmentsChangeSellingPrice_Price" :name="$t('Set a price')" v-model.number="price" :counter="10" :label="$t('Set a price')" :placeholder="$t('Enter an amount')" :rules="RulesFloat(10,true,6)"></v-text-field>
                     </v-card>
                 </v-window-item>
                 <v-window-item key="range">     
@@ -74,315 +74,273 @@
         </div>
     </div>
 </template>
-<script>
+
+<script setup>
+    import { ref, watch, computed, onMounted } from 'vue'
     import axios from 'axios'
     import { useStore } from "@/store"
     import DisplayValues from './DisplayValues.vue'
     import MyDatePicker from './MyDatePicker.vue'
-    import {empty_products_ranges,empty_ios} from '../empty_objects.js'
-    import { my_round,RulesSelection, RulesFloat,f } from 'vuetify_rules'
+    import { empty_products_ranges, empty_ios } from '../empty_objects.js'
+    import { my_round, RulesSelection, RulesFloat, f } from 'vuetify_rules'
     import { hyperlinked_url, parseResponseError, currency_string, myheaders, getMapObjectById } from '@/functions.js'
+    import { useI18n } from 'vue-i18n'
 
-    
-    export default {
-        props:{
-            //Current investment to be selected by default.
-            //Investment object
-            // Needs:
-            // - url
-            // - product url
-            // - selling_price
-            // - selling_expiration
-            investment:{
-                required:true,
-            }
-        },
-        components:{
-            MyDatePicker,
-            DisplayValues,
-        },
-        data(){ 
-            return{
-                tab:2,
-                form_valid:false,
-                plio:null,
-                data:[],
-                selected_ids:[],
-                tableHeaders: [
-                    { title: this.$t('Id'), key: 'id', sortable: true },
-                    { title: this.$t('Name'), key: 'fullname', sortable: true},
-                    { title: this.$t('Shares'), key: 'shares', sortable: true, align: 'end'},
-                    { title: this.$t('Selling price'), key: 'selling_price', sortable: true, align: 'end'},
-                    { title: this.$t('Selling expiration'), key: 'selling_expiration', sortable: true, align: 'end'},
-                    { title: this.$t('Average price'), key: 'average_price', sortable: true, align: 'end'},
-                    { title: this.$t('Invested'), key: 'invested_investment', sortable: true, align: 'end'},
-                    { title: this.$t('Balance'), key: 'balance_investment', sortable: true, align: 'end'},
-                ],
-                selected_invested:0,
-                selling_expiration: new Date().toISOString().substring(0, 10),
-                menu_selling_expiration: false,
-                selected_selling_price: NaN,
-                selected_average_price:0,
-                selected_shares:0,
-                button_text: this.$t("Calculate your selling price"),
-                gains:500,
-                price: 0,
-                percentage: 10,
-                key:0,
-                loading_ios:false,
-                snackbar_message:"",
+    const { t } = useI18n()
+    const emit = defineEmits(['cruded'])
 
-                product:null, // Object loaded at created
-
-                //Strategies for product ranges
-                strategies:[],
-                strategy: null,
-                strategy_ranges:[],
-                strategy_range: null,
-                
-            }
-        },
-        watch: {
-            gains: function() {
-                this.calculate()
-            },
-            percentage: function() {
-                this.calculate()
-            },
-            price: function() {
-                this.calculate()
-            },
-            tab: function(){
-                this.calculate()
-            },
-            strategy: function(item){
-                var pr=this.empty_products_ranges()
-                pr.product=`${this.useStore().apiroot}/api/products/${item.additional1}/`
-                pr.percentage_between_ranges=item.additional2
-                pr.percentage_gains=item.additional3
-                pr.amount_to_invest=item.additional4
-                pr.recomendation_methods=item.additional5
-                pr.totalized_operations=item.additional6
-                pr.investments=item.investments // Is a string due tu uses api/strategies an in db is a string
-                var headers={...this.myheaders(),params:pr}
-                axios.get(`${this.useStore().apiroot}/products/ranges/`, headers)
-                .then((response) => {
-                    this.strategy_ranges=[]
-
-
-                    response.data.pr.forEach(element => {
-
-                        var investments_string=""
-                        element.investments_inside.forEach(o => {
-                            investments_string=investments_string+ o.name
-                        })
-                        this.strategy_ranges.push({name:`${element.value} ${investments_string}`, value: element.value})
-                        
-                    });
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
-            strategy_range: function(){
-                this.calculate()
-            },
-            selected_ids(){
-                this.calculate()
-            }
-        },
-        computed:{
-
-            investments_same_product(){
-                //Returns an array of integers
-                var r=[]
-                this.useStore().investments.forEach(inv=>{
-                    if (inv.products==this.product.url && inv.active){
-                        r.push(inv.id)
-                    }
-                })
-                return r
-            },
-            expected_gains(){
-                if (!this.product) return 0
-                return (this.selected_selling_price-this.selected_average_price)*this.selected_shares*this.product.real_leveraged_multiplier
-            },
-        },
-        methods:{
-            useStore,
-            f,
-            my_round,
-            currency_string,
-            myheaders,
-            getMapObjectById,
-            parseResponseError,
-            RulesFloat,
-            RulesSelection,
-            displayvalues(){
-                return [
-                    {title:this.$t('Selected invested amount'), value: this.currency_string(this.selected_invested,this.product.currency)},
-                    {title:this.$t('Number of shares selected'), value: this.selected_shares},
-                    {title:this.$t('Average price of selected shares'), value: this.currency_string(this.selected_average_price,this.product.currency)},
-                    {title:this.$t('Product leverage'), value: this.useStore().leverages.get(this.product.leverages).multiplier},
-                    {title:this.$t('Product real leverage'), value: this.product.real_leveraged_multiplier},
-                ]
-            },
-            empty_ios,
-            empty_products_ranges,
-            hyperlinked_url,
-            selling_price_to_gain_money(money){
-                var PF=0
-                if (this.selected_shares>0){
-                    PF=(money+this.selected_average_price*this.selected_shares*this.product.real_leveraged_multiplier)/(this.selected_shares*this.product.real_leveraged_multiplier)        
-                } 
-                else if (this.selected_shares<0){
-                    PF=(-money+this.selected_average_price*this.selected_shares*this.product.real_leveraged_multiplier)/(this.selected_shares*this.product.real_leveraged_multiplier)        
-                }
-                return PF
-            },    
-            selling_price_to_gain_percentage_of_invested(percentage){
-                var gains=this.selected_invested*percentage/100
-                return this.selling_price_to_gain_money(gains)
-            },
-            submit(){           
-                this.submit_method(this.selected_selling_price,this.selling_expiration)
-            },
-            submit_null(){   
-                this.submit_method(null,null)   
-            },
-            submit_method(price,expiration){
-                this.selling_expiration=expiration
-                if (this.selling_expiration != null && new Date(this.selling_expiration).setHours(0,0,0,0)<new Date().setHours(0,0,0,0)) {
-                    alert(this.$t("Selling expiration date is in the past"))
-                }
-
-                var s= new Array()
-                this.selected_ids.forEach(v=> s.push(this.hyperlinked_url("investments", v)))
-                var p={
-                    selling_expiration:this.selling_expiration,
-                    investments: s,
-                    selling_price: this.my_round(price,  this.product.decimals),
-                }
-                axios.post(`${this.useStore().apiroot}/investments/changesellingprice/`, p, this.myheaders())
-                .then((response) => {//api/investments serializer
-                    response.data.forEach(o=>{
-                        this.useStore().investments.set(o.url,o)
-                    })
-                    this.loading_ios=false
-                    this.key=this.key+1
-                    this.show_snackbar_message()
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-
-            },
-            show_snackbar_message(){
-                var r= "<p>" + this.$t("Selling price was updated sucessfully.") + "</p>"
-                r= r + "<p>" + this.$t("Don't forget to set this order in your bank:") + "</p>"
-                r=r +"<ul>"
-                r=r+"<li>" + this.$t("Investment") + `: ${this.investment.fullname}</li>`
-                r=r+"<li>" + this.$t("Shares") + `: ${this.selected_shares}</li>`
-                r=r+"<li>" + this.$t("Price") + `: ${this.currency_string(this.selected_selling_price, this.product.currency, this.product.decimals)}</li>`
-                r=r+"<li>" + this.$t("Gains") + `: ${this.currency_string(this.expected_gains, this.product.currency, 2)}</li>`
-                if (this.selling_expiration) r=r+"<li>" + this.$t("Expiration") + `: ${this.selling_expiration}</li>`
-                r=r +"</ul>"
-                this.snackbar_message=r
-            },
-            on_message_close(){
-                this.snackbar_message=""
-                this.$emit("cruded")
-            },
-            calculate(){
-                this.selected_shares=0
-                this.selected_invested=0
-                this.data.forEach(o=>{
-                    if (this.selected_ids.includes(o.id)) {
-                        this.selected_shares=this.selected_shares + o.shares
-                        this.selected_invested=this.selected_invested + o.invested_investment
-                    }
-                })
-                if (this.selected_shares!=0){
-                    var selected_sharesbyaverage=0
-                    this.data.forEach(o=>{
-                        if (this.selected_ids.includes(o.id)) {
-                            selected_sharesbyaverage=selected_sharesbyaverage+o.shares*o.average_price
-                        }
-                    })
-                    this.selected_average_price=selected_sharesbyaverage/this.selected_shares
-                } else {
-                    this.selected_average_price=0
-                }
-                if (this.tab==0){
-                    this.selected_selling_price=this.selling_price_to_gain_percentage_of_invested(this.percentage)
-                } else if (this.tab==1) {
-                    this.selected_selling_price=this.selling_price_to_gain_money(this.gains)
-                } else if (this.tab==2) {
-                    this.selected_selling_price=this.price
-                } else if (this.tab==3) {
-                    this.selected_selling_price=this.strategy_range
-                }
-                this.button_text=f(this.$t("Set selected investments selling price to [0] to gain [1]"), [
-                    this.currency_string(this.selected_selling_price, this.product.currency, this.product.decimals),
-                    this.currency_string(this.expected_gains,this.product.currency, 2)
-                ])
-
-            },
-            refreshInvestments(select_current){
-                this.loading_ios=true
-                var simulation=this.empty_ios()
-                simulation.investments=this.investments_same_product
-                simulation.currency=this.useStore().profile.currency
-                simulation.mode=2
-                return axios.post(`${this.useStore().apiroot}/ios/`, simulation, this.myheaders())
-                .then((response) => {
-                    this.plio=response.data
-                    var o
-                    var ios_id
-
-                    this.investments_same_product.forEach( investments_id => {
-                        ios_id=this.plio[investments_id.toString()]
-                        var inv=this.getMapObjectById("investments",investments_id)
-                        o={
-                            id: investments_id,
-                            url: inv.url,
-                            name: (this.investment.url==inv.url) ? inv.fullname+" (current)" : inv.fullname,
-                            shares: ios_id.total_io_current.shares,
-                            selling_price: inv.selling_price,
-                            selling_expiration: inv.selling_expiration,
-                            average_price: ios_id.total_io_current.average_price_investment,
-                            invested_investment: ios_id.total_io_current.invested_investment,
-                            balance_investment: ios_id.total_io_current.balance_investment,
-                            currency: ios_id.data.currency_product,
-                            
-                        }
-                        this.data.push(o)
-                        //Adds current invesment to selection
-                        if (select_current == true && o.url==this.investment.url){
-                            this.selected_ids.push(o.id)
-                        }
-                        this.calculate()
-
-                    })
-                    this.loading_ios=false
-                    this.key=this.key+1
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
-            refreshStrategies(){
-                axios.get(`${this.useStore().apiroot}/api/strategies/?investment=${this.investment.url}&active=true&type=2`, this.myheaders())
-                .then((response) => {
-                    this.strategies=response.data
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
-        },
-        created(){
-            this.product=this.useStore().products.get(this.investment.products)
-            this.selling_expiration=this.investment.selling_expiration
-            this.price=this.investment.selling_price
-            this.refreshStrategies()
-            this.refreshInvestments(true)
+    const props = defineProps({
+        investment: {
+            required: true,
         }
+    })
+
+    const tab = ref(2)
+    const form_valid = ref(false)
+    const plio = ref(null)
+    const data = ref([])
+    const selected_ids = ref([])
+    const tableHeaders = [
+        { title: t('Id'), key: 'id', sortable: true },
+        { title: t('Name'), key: 'fullname', sortable: true },
+        { title: t('Shares'), key: 'shares', sortable: true, align: 'end' },
+        { title: t('Selling price'), key: 'selling_price', sortable: true, align: 'end' },
+        { title: t('Selling expiration'), key: 'selling_expiration', sortable: true, align: 'end' },
+        { title: t('Average price'), key: 'average_price', sortable: true, align: 'end' },
+        { title: t('Invested'), key: 'invested_investment', sortable: true, align: 'end' },
+        { title: t('Balance'), key: 'balance_investment', sortable: true, align: 'end' },
+    ]
+    const selected_invested = ref(0)
+    const selling_expiration = ref(props.investment.selling_expiration || new Date().toISOString().substring(0, 10))
+    const selected_selling_price = ref(NaN)
+    const selected_average_price = ref(0)
+    const selected_shares = ref(0)
+    const button_text = ref(t("Calculate your selling price"))
+    const gains = ref(500)
+    const price = ref(props.investment.selling_price || 0)
+    const percentage = ref(10)
+    const key = ref(0)
+    const loading_ios = ref(false)
+    const snackbar_message = ref("")
+
+    const product = ref(useStore().products.get(props.investment.products))
+
+    const strategies = ref([])
+    const strategy = ref(null)
+    const strategy_ranges = ref([])
+    const strategy_range = ref(null)
+
+    const investments_same_product = computed(() => {
+        var r = []
+        if (!product.value) return r
+        useStore().investments.forEach(inv => {
+            if (inv.products == product.value.url && inv.active) {
+                r.push(inv.id)
+            }
+        })
+        return r
+    })
+
+    const expected_gains = computed(() => {
+        if (!product.value || isNaN(selected_selling_price.value) || isNaN(selected_average_price.value)) return 0
+        return (selected_selling_price.value - selected_average_price.value) * selected_shares.value * product.value.real_leveraged_multiplier
+    })
+
+    const displayvalues = () => {
+        if (!product.value) return []
+        return [
+            { title: t('Selected invested amount'), value: currency_string(selected_invested.value, product.value.currency) },
+            { title: t('Number of shares selected'), value: selected_shares.value },
+            { title: t('Average price of selected shares'), value: currency_string(selected_average_price.value, product.value.currency) },
+            { title: t('Product leverage'), value: useStore().leverages.get(product.value.leverages).multiplier },
+            { title: t('Product real leverage'), value: product.value.real_leveraged_multiplier },
+        ]
     }
+
+    const selling_price_to_gain_money = (money) => {
+        var PF = 0
+        if (selected_shares.value > 0) {
+            PF = (money + selected_average_price.value * selected_shares.value * product.value.real_leveraged_multiplier) / (selected_shares.value * product.value.real_leveraged_multiplier)
+        }
+        else if (selected_shares.value < 0) {
+            PF = (-money + selected_average_price.value * selected_shares.value * product.value.real_leveraged_multiplier) / (selected_shares.value * product.value.real_leveraged_multiplier)
+        }
+        return PF
+    }
+
+    const selling_price_to_gain_percentage_of_invested = (percentage_val) => {
+        var gains_val = selected_invested.value * percentage_val / 100
+        return selling_price_to_gain_money(gains_val)
+    }
+
+    const calculate = () => {
+        selected_shares.value = 0
+        selected_invested.value = 0
+        data.value.forEach(o => {
+            if (selected_ids.value.includes(o.id)) {
+                selected_shares.value = selected_shares.value + o.shares
+                selected_invested.value = selected_invested.value + o.invested_investment
+            }
+        })
+        if (selected_shares.value != 0) {
+            var selected_sharesbyaverage = 0
+            data.value.forEach(o => {
+                if (selected_ids.value.includes(o.id)) {
+                    selected_sharesbyaverage = selected_sharesbyaverage + o.shares * o.average_price
+                }
+            })
+            selected_average_price.value = selected_sharesbyaverage / selected_shares.value
+        } else {
+            selected_average_price.value = 0
+        }
+        if (tab.value == 0) {
+            selected_selling_price.value = selling_price_to_gain_percentage_of_invested(percentage.value)
+        } else if (tab.value == 1) {
+            selected_selling_price.value = selling_price_to_gain_money(gains.value)
+        } else if (tab.value == 2) {
+            selected_selling_price.value = price.value
+        } else if (tab.value == 3) {
+            selected_selling_price.value = strategy_range.value
+        }
+        button_text.value = f(t("Set selected investments selling price to [0] to gain [1]"), [
+            currency_string(selected_selling_price.value, product.value.currency, product.value.decimals),
+            currency_string(expected_gains.value, product.value.currency, 2)
+        ])
+    }
+
+    const show_snackbar_message = () => {
+        var r = "<p>" + t("Selling price was updated sucessfully.") + "</p>"
+        r = r + "<p>" + t("Don't forget to set this order in your bank:") + "</p>"
+        r = r + "<ul>"
+        r = r + "<li>" + t("Investment") + `: ${props.investment.fullname}</li>`
+        r = r + "<li>" + t("Shares") + `: ${selected_shares.value}</li>`
+        r = r + "<li>" + t("Price") + `: ${currency_string(selected_selling_price.value, product.value.currency, product.value.decimals)}</li>`
+        if (selling_expiration.value) r = r + "<li>" + t("Expiration") + `: ${selling_expiration.value}</li>`
+        r = r + "</ul>"
+        r = r + "<p>" + t("Expected gains") + `: ${currency_string(expected_gains.value, product.value.currency, 2)}</p>`
+
+        snackbar_message.value = r
+    }
+
+    const submit_method = (price_val, expiration_val) => {
+        selling_expiration.value = expiration_val
+        if (selling_expiration.value != null && new Date(selling_expiration.value).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) {
+            alert(t("Selling expiration date is in the past"))
+        }
+
+        var s = new Array()
+        selected_ids.value.forEach(v => s.push(hyperlinked_url("investments", v)))
+        var p = {
+            selling_expiration: selling_expiration.value,
+            investments: s,
+            selling_price: my_round(price_val, product.value.decimals),
+        }
+        axios.post(`${useStore().apiroot}/investments/changesellingprice/`, p, myheaders())
+            .then((response) => {
+                response.data.forEach(o => {
+                    useStore().investments.set(o.url, o)
+                })
+                loading_ios.value = false
+                key.value = key.value + 1
+                show_snackbar_message()
+            }, (error) => {
+                parseResponseError(error)
+            });
+    }
+
+    const submit = () => {
+        submit_method(selected_selling_price.value, selling_expiration.value)
+    }
+
+    const submit_null = () => {
+        submit_method(null, null)
+    }
+
+    const on_message_close = () => {
+        snackbar_message.value = ""
+        emit("cruded")
+    }
+
+    const refreshInvestments = (select_current) => {
+        loading_ios.value = true
+        var simulation = empty_ios()
+        simulation.investments = investments_same_product.value
+        simulation.currency = useStore().profile.currency
+        simulation.mode = 2
+        return axios.post(`${useStore().apiroot}/ios/`, simulation, myheaders())
+            .then((response) => {
+                plio.value = response.data
+                var o
+                var ios_id
+
+                investments_same_product.value.forEach(investments_id => {
+                    ios_id = plio.value[investments_id.toString()]
+                    var inv = getMapObjectById("investments", investments_id)
+                    o = {
+                        id: investments_id,
+                        url: inv.url,
+                        name: (props.investment.url == inv.url) ? inv.fullname + " (current)" : inv.fullname,
+                        shares: ios_id.total_io_current.shares,
+                        selling_price: inv.selling_price,
+                        selling_expiration: inv.selling_expiration,
+                        average_price: ios_id.total_io_current.average_price_investment,
+                        invested_investment: ios_id.total_io_current.invested_investment,
+                        balance_investment: ios_id.total_io_current.balance_investment,
+                        currency: ios_id.data.currency_product,
+                    }
+                    data.value.push(o)
+                    if (select_current == true && o.url == props.investment.url) {
+                        selected_ids.value.push(o.id)
+                    }
+                    calculate()
+                })
+                loading_ios.value = false
+                key.value = key.value + 1
+            }, (error) => {
+                parseResponseError(error)
+            });
+    }
+
+    const refreshStrategies = () => {
+        axios.get(`${useStore().apiroot}/api/strategies/?investment=${props.investment.url}&active=true&type=2`, myheaders())
+            .then((response) => {
+                strategies.value = response.data
+            }, (error) => {
+                parseResponseError(error)
+            });
+    }
+
+    watch([gains, percentage, price, tab, strategy_range, selected_ids], () => {
+        calculate()
+    })
+
+    watch(strategy, (item) => {
+        var pr = empty_products_ranges()
+        pr.product = `${useStore().apiroot}/api/products/${item.additional1}/`
+        pr.percentage_between_ranges = item.additional2
+        pr.percentage_gains = item.additional3
+        pr.amount_to_invest = item.additional4
+        pr.recomendation_methods = item.additional5
+        pr.totalized_operations = item.additional6
+        pr.investments = item.investments
+        var headers = { ...myheaders(), params: pr }
+        axios.get(`${useStore().apiroot}/products/ranges/`, headers)
+            .then((response) => {
+                strategy_ranges.value = []
+                response.data.pr.forEach(element => {
+                    var investments_string = ""
+                    element.investments_inside.forEach(o => {
+                        investments_string = investments_string + o.name
+                    })
+                    strategy_ranges.value.push({ name: `${element.value} ${investments_string}`, value: element.value })
+                });
+            }, (error) => {
+                parseResponseError(error)
+            });
+    })
+
+    onMounted(() => {
+        refreshStrategies()
+        refreshInvestments(true)
+    })
 </script>
