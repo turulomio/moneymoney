@@ -13,7 +13,7 @@ test('Reports Annual', async ({ page }) => {
     await page.getByTestId('LateralIcon').click();
     await page.getByTestId('LateralInvestments').click();
 
-    const investment.id=await investment_add_from_InvestmentsList(page, "Test investment", "LYXOR IBEX DOBLE APALANCADO (Madrid Stock Exchange)")
+    const investment=await investment_add_from_InvestmentsList(page, "Test investment", "LYXOR IBEX DOBLE APALANCADO (Madrid Stock Exchange)")
     await quote_add_from_InvestmentsList(page, investment.id)
     await expect(page.getByTestId(`Investments_Table_Row${investment.id}`)).toBeVisible();
     await page.getByTestId(`Investments_Table_Row${investment.id}`).click()
