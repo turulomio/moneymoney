@@ -11,7 +11,7 @@
                     <v-select data-test="InvestmentsoperationsReinvest_ViewOption" class="mr-5" :disabled="loading || (ios_id_after==null)" :items="viewoptions" v-model="viewoption" :label="t('Set a view option')"  item-title="name" item-value="id" :rules="RulesSelection(true)" @update:model-value="refreshTables"></v-select>  
                 </v-row>
                 <v-row>                
-                    <v-text-field data-test="InvestmentsoperationsReinvest_NewPrice" class="mr-5" v-model.number="newprice"  :label="t('Set order price')" :placeholder="t('Set order price')" :rules="RulesFloatGEZ(10,true, product.decimals)" counter="10"/>
+                    <v-text-field data-test="InvestmentsoperationsReinvest_NewPrice" class="mr-5" v-model.number="newprice"  :label="t('Set order price')" :placeholder="t('Set order price')" :rules="RulesFloatGEZ(10,true, product?.decimals)" counter="10"/>
                     <v-text-field data-test="InvestmentsoperationsReinvest_NewShares" v-model.number="newshares"  :label="t('Set order shares')" :placeholder="t('Set order shares')" :rules="RulesFloat(14,true,6)" counter="14"/>
                 </v-row>
                 <v-row>
@@ -220,13 +220,13 @@
     })
 
     const product = computed(() => {
-        if (!ios_id_current.value) return 
-        return getMapObjectById("products", ios_id_current.value.data.products_id)
+        if (!ios_id_current.value) return {}
+        return getMapObjectById("products", ios_id_current.value.data.products_id) || {}
     })
 
     const investment = computed(() => {
-        if (!ios_id_current.value) return null
-        return getMapObjectById("investments", ios_id_current.value.data.investments_id)
+        if (!ios_id_current.value) return {}
+        return getMapObjectById("investments", ios_id_current.value.data.investments_id) || {}
     })
 
     function set_title(){
@@ -298,11 +298,11 @@
             await myAlert(f(t("You're divesting the whole investment shares ([0])"), [Math.abs(newshares.value)]))
             return
         }
-        viewoption.value=2
         loading.value=true
         axios.all([simulateOrderAfter(),])
         .then(([resAfter,]) => {
             ios_id_after.value=resAfter.data[props.ios_id.data.investments_id]
+            viewoption.value=2
             loading.value=false
             refreshTables()
         });
@@ -326,7 +326,8 @@
             if (gains_method.value==1){
                 ll.sell=ll.average*(1+gains_value.value/100)
             } else {//P_f={P_o Ac Ap +G } over {Ac Ap } Fixed amount
-                ll.sell=(ll.average*shares_before*product.value.real_leveraged_multiplier+gains_value.value)/(shares_before*product.value.real_leveraged_multiplier)
+                var multiplier = product.value.real_leveraged_multiplier || 1
+                ll.sell=(ll.average*shares_before*multiplier+gains_value.value)/(shares_before*multiplier)
             }
             chart_data.value.limitlines.push(ll)
         }
@@ -343,7 +344,8 @@
             if (gains_method.value==1){
                 ll2.sell=ll2.average*(1+gains_value.value/100)
             } else {//P_f={P_o Ac Ap +G } over {Ac Ap } Fixed amount
-                ll2.sell=(ll2.average*shares_after*product.value.real_leveraged_multiplier+gains_value.value)/(shares_after*product.value.real_leveraged_multiplier)
+                var multiplier2 = product.value.real_leveraged_multiplier || 1
+                ll2.sell=(ll2.average*shares_after*multiplier2+gains_value.value)/(shares_after*multiplier2)
             }
             chart_data.value.limitlines.push(ll2)
         }
