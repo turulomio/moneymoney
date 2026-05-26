@@ -32,6 +32,7 @@ test('Credit cards debit', async ({ page }) => {
 
     await page.getByTestId('CreditcardsCU_Button').click();
     await expect_confirm_and_accept_it(page)
+    await expect_confirm_and_accept_it(page)
     await expect(page.getByTestId('CreditcardsCU_Button')).toBeHidden();
     await expect(page.getByTestId(`AccountsView_Tablecc_Row${cc_id}`)).toBeHidden();
 

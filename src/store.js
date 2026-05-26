@@ -367,27 +367,34 @@ export function myheaders_formdata(){
 // returns true if everything is ok
 // return false if there is something wrong
 export async function parseResponse(response){
+    if (response._parsed) return response._parsed_ok
     const dialogStore = useDialogStore()
     const store = useStore()
     const { t } = i18n.global
+    let result = false
     if (response.status==200){ //Good connection
         if (response.data == "Wrong credentials"){
             store.setToken(null)
             await dialogStore.alert(t("Wrong credentials"))
-            return false
+            result = false
+        } else {
+            result = true
         }
-        return true
     } else if (response.status==201){// Created
-        return true
+        result = true
     } else if (response.status==204){// Deleted
-        return true
+        result = true
     } else {
         await dialogStore.alert (`${response.status}: ${response.data}`)
-        return false
+        result = false
     }
+    response._parsed = true
+    response._parsed_ok = result
+    return result
 }
 
 export async function parseResponseError(error){
+    if (error._handled) return
     const dialogStore = useDialogStore()
     const store = useStore()
     const { t } = i18n.global
@@ -422,6 +429,7 @@ export async function parseResponseError(error){
     } else {
         console.log('Error', error.message);
     }
+    error._handled = true
 }
 
 export function getConceptsForDividends() { 
@@ -516,3 +524,33 @@ export function amount_to_invest( invested ){
     if (limit_23<=invested && invested < limit_34) return s.invest_amount_4
     if (limit_34<=invested && invested < limit_45) return s.invest_amount_5
 }
+
+// Global interceptors
+axios.interceptors.request.use((config) => {
+    if (config.noheaders) return config;
+    const store = useStore();
+    if (store.token && !config.headers.Authorization) {
+        config.headers.Authorization = `Token ${store.token}`;
+    }
+    if (!config.headers['Accept-Language']) {
+        config.headers['Accept-Language'] = `${localStorage.locale}-${localStorage.locale}`;
+    }
+    if (!config.headers['Content-Type']) {
+        config.headers['Content-Type'] = 'application/json';
+    }
+    return config;
+});
+
+axios.interceptors.response.use(
+    async (response) => {
+        if (response.config.noparse) return response;
+        const ok = await parseResponse(response);
+        if (ok) return response;
+        return Promise.reject(response);
+    },
+    async (error) => {
+        if (error.config && error.config.noparse) return Promise.reject(error);
+        await parseResponseError(error);
+        return Promise.reject(error);
+    }
+);
