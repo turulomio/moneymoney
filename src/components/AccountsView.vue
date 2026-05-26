@@ -75,7 +75,7 @@
 </template>  
 <script>     
     import axios from 'axios' 
-    import { useStore, parseResponseError, myheaders, currency_html } from '@/store'
+    import { useStore, currency_html } from '@/store'
     import { useDialogs } from '@/composables/useDialogs'
     import AccountsoperationsCU from './AccountsoperationsCU.vue'
     import AccountsTransfer from './AccountsTransfer.vue'
@@ -98,12 +98,10 @@
             TableAccountOperations,
             CreditcardsCU,
             CreditcardsView,
-            MyMonthPicker,
-        },
+            MyMonthPicker},
         props:{
             account:{
-                required:true,
-            }
+                required:true}
         },
         setup() {
             const { alert, confirm, prompt } = useDialogs();
@@ -196,8 +194,7 @@
                 // DIALOG ACCOUNT OPERATIONS
                 dialog_ao:false,
                 ao: null,
-                ao_mode: null,
-            }  
+                ao_mode: null}  
         },
         watch:{
             ym () {
@@ -205,13 +202,10 @@
             },
             showActiveCC(){
                 this.on_chkActive_cc() 
-            },
-        },
+            }},
         methods: {
             useStore,
             f,
-            parseResponseError,
-            myheaders,
             currency_html,
             empty_account_operation,
             empty_credit_card,
@@ -225,25 +219,19 @@
                 this.dialog_ao=true
             },
             refreshTable(){
-                axios.get(`${this.useStore().apiroot}/api/accountsoperations/?account=${this.account.url}&year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())                
+                axios.get(`${this.useStore().apiroot}/api/accountsoperations/?account=${this.account.url}&year=${this.ym.year}&month=${this.ym.month}`)                
                 .then((response) => {
                     this.items_ao = response.data;
                     this.$nextTick(() => {
                         if (this.$refs.tao) this.$refs.tao.gotoLastRow()
                     });
                 }) 
-                .catch((error) => {
-                    this.parseResponseError(error)
-                });
             },
             refreshTableCC(){
-                axios.get(`${this.useStore().apiroot}/api/creditcards/withbalance/?account=${this.account.id}&active=${this.showActiveCC}`, this.myheaders())                
+                axios.get(`${this.useStore().apiroot}/api/creditcards/withbalance/?account=${this.account.id}&active=${this.showActiveCC}`)                
                 .then((response) => {
                     this.table_cc=response.data;
                 }) 
-                .catch((error) => {
-                    this.parseResponseError(error)
-                });
             },
           
             editCC(item){
@@ -299,8 +287,7 @@
                 } else {
                     return this.$t("Check to see active credit cards")
                 }
-            },
-        },
+            }},
         mounted(){
             var d=new Date()
             this.ym = {year: d.getFullYear(), month: d.getMonth()+1}

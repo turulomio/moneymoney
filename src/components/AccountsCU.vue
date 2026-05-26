@@ -19,7 +19,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, myheaders, parseResponseError } from '@/store'
+    import { useStore } from '@/store'
     import { RulesSelection, RulesInteger, RulesString } from 'vuetify_rules'
     import { getArrayFromMap } from '@/functions'
     import { useDialogs } from '@/composables/useDialogs'
@@ -42,13 +42,10 @@
             return {
                 form_valid:false,
                 new_account: null,
-                editing:false,
-            }
+                editing:false}
         },
         methods: {
             useStore,
-            myheaders,
-            parseResponseError,
             RulesSelection,
             RulesInteger,
             RulesString,
@@ -75,38 +72,31 @@
                     return
                 }
                 if (this.mode=="U"){               
-                    axios.put(this.new_account.url, this.new_account, this.myheaders())
+                    axios.put(this.new_account.url, this.new_account)
                     .then((response) => {
                         this.useStore().accounts.set(response.data.url, response.data)
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="C"){
-                    axios.post(`${this.useStore().apiroot}/api/accounts/`, this.new_account,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/accounts/`, this.new_account)
                     .then((response) => {
                         this.useStore().accounts.set(response.data.url, response.data)
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="D"){
                     if(await this.myConfirm(this.$t("This account will be deleted. Do you want to continue?")) == false) {
                         return
                     } 
-                    axios.delete(this.new_account.url, this.myheaders())
+                    axios.delete(this.new_account.url)
                     .then(() => {
                         this.useStore().accounts.delete(this.new_account.url)
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     });
 
                 }
-            },
-        },
+            }},
         created(){
-            this.new_account=Object.assign({},this.account)
+            this.new_account=Object.assign(,this.account)
         }
     }
 </script>

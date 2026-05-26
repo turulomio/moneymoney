@@ -26,7 +26,7 @@
 <script setup>
     import { ref, computed, onMounted, nextTick  } from 'vue'
     import axios from 'axios'
-    import { useStore, parseResponseError, currency_html, myheaders } from '@/store'
+    import { useStore, currency_html } from '@/store'
     import { localtime } from 'vuetify_rules'
     
     import { useI18n } from 'vue-i18n'
@@ -38,8 +38,7 @@
         },
         product: {   // Must be a product object
             required: true
-        },
-    })
+        }})
 
     const emit = defineEmits(['cruded'])
 
@@ -53,12 +52,10 @@
         if(await myConfirm(t("Do you want to delete this OHCL quotes?")) == false) {
             return
         } 
-        var headers={...myheaders(),data:{product:props.product.url,date:item.date}}
-        axios.delete(`${store.apiroot}/products/quotes/ohcl/`, headers)
+        var config={data:{product:props.product.url,date:item.date}}
+        axios.delete(`${store.apiroot}/products/quotes/ohcl/`, config)
         .then(() => {
             emit("cruded")
-        }, (error) => {
-            parseResponseError(error)
         });
     }
 
@@ -84,6 +81,5 @@
     })
 
     defineExpose({
-        gotoLastRow,
-    })
+        gotoLastRow})
 </script>

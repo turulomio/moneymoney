@@ -8,35 +8,31 @@
 
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
     
     export default {
         components:{
-            TableInvestmentOperationsCurrent,
-        },
+            TableInvestmentOperationsCurrent},
         data(){ 
             return{
                 list_io_current: [],
                 key: 0,
-                loading:false,
-            }
+                loading:false}
         },
         methods:{
             useStore,
-            parseResponseError,
-            myheaders,
+
+
             refreshTable(){
                 this.loading=true
-                axios.get(`${this.useStore().apiroot}/reports/investmentsoperations/current/` , this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/investmentsoperations/current/` )
                 .then( (response)=> {
                     this.list_io_current=response.data;
                     this.key=this.key+1;
                     this.loading=false
                 }) 
-                .catch((error) => {
-                    this.parseResponseError(error)
-                });
+                ;
             }
         },
         mounted(){

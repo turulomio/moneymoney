@@ -21,7 +21,7 @@
 <script setup>
     import { ref, computed, onMounted, nextTick } from 'vue'
     import axios from 'axios'
-    import { useStore, parseResponseError, currency_html, myheaders } from '@/store'
+    import { useStore, currency_html } from '@/store'
     import DpsCRUD from './DpsCRUD.vue'
     
     import { useI18n } from 'vue-i18n'
@@ -29,8 +29,7 @@
     const props = defineProps({
         product: {
             required: true
-        },
-    })
+        }})
 
     const emit = defineEmits(['cruded'])
 
@@ -82,13 +81,11 @@
 
     function refresh() {
         loading.value = true
-        axios.get(`${store.apiroot}/api/dps/?product=${props.product.url}`, myheaders())
+        axios.get(`${store.apiroot}/api/dps/?product=${props.product.url}`)
             .then((response) => {
                 items.value = response.data
                 loading.value = false
                 gotoLastRow()
-            }, (error) => {
-                parseResponseError(error)
             });
     }
 

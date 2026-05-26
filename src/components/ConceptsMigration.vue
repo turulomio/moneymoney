@@ -15,19 +15,17 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import { useDialogs } from '@/composables/useDialogs'
     import { RulesSelection } from 'vuetify_rules'
     import { getArrayFromMap } from '@/functions'
     export default {
-        components: {
-        },
+        components: ,
         props: {
             // An account object
             from: {
                 required: true // Null to create, io object to update
-            },
-        },
+            }},
         setup() {
             const { alert, confirm, prompt } = useDialogs();
             return { myAlert: alert, myConfirm: confirm, myPrompt: prompt };
@@ -36,14 +34,13 @@
             return {
                 form_valid:false,
                 from_url: null,
-                to: null,
-            }
+                to: null}
         },
         methods: {
-            parseResponseError,
+
             useStore,
             RulesSelection,
-            myheaders,
+
             getArrayFromMap,
             async migrate(){
                 if (this.form_valid!=true) {
@@ -60,14 +57,11 @@
                 if(!await this.myConfirm(this.$t("Do you want to migrate this concept?"))) {
                     return
                 }  
-                axios.post(`${this.from_url}data_transfer/`, {to:this.to}, this.myheaders())
+                axios.post(`${this.from_url}data_transfer/`, {to:this.to})
                 .then(() => {
                     this.$emit('cruded')
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
-            },
-        },
+            }},
         created(){
             this.from_url=this.from.url
         }

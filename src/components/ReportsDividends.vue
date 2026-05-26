@@ -45,7 +45,7 @@
 
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders, currency_html, localcurrency_string } from '@/store'
+    import { useStore, currency_html, localcurrency_string   } from '@/store'
     import moment from 'moment'
     import EstimationsDpsCU from './EstimationsDpsCU.vue'
     import {empty_estimation_dps} from '../empty_objects.js'
@@ -53,8 +53,7 @@
     import { percentage_html } from '@/functions'
     export default {
         components:{
-            EstimationsDpsCU,
-        },
+            EstimationsDpsCU},
         data(){ 
             return{
                 alertdays:90,
@@ -64,7 +63,7 @@
                     { title: this.$t('DPS'), key: 'dps',sortable: false, align: 'end', cellClass: "text-nowrap"},
                     { title: this.$t('Shares'), key: 'shares',sortable: false, align: 'end'},
                     { title: this.$t('Estimated balance'), key: 'estimated',sortable: false, align: 'end'},
-                    { title: this.$t('Percentage'), key: 'percentage',sortable: false, align: 'end', },
+                    { title: this.$t('Percentage'), key: 'percentage',sortable: false, align: 'end'},
                     { title: this.$t('Actions'), key: 'actions',sortable: false, align: 'end'},
                 ],
                 items:[],
@@ -75,14 +74,13 @@
                 dialog:false,
                 estimation: null,
                 estimation_mode: null,
-                key: 0,
-            }
+                key: 0}
         },
         methods:{
             useStore,
             f,
-            parseResponseError,
-            myheaders,
+
+
             currency_html,
             percentage_html,
             localcurrency_string,
@@ -108,12 +106,10 @@
             },
             refreshTable(){
                 this.loading_dividends=true
-                axios.get(`${this.useStore().apiroot}/reports/dividends/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/dividends/`)
                 .then((response) => {
                     this.items=response.data
                     this.loading_dividends=false
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             },
             total(){

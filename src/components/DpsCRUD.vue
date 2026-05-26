@@ -19,22 +19,19 @@
 
 <script>
 import axios from 'axios'
-import { useStore, parseResponseError, myheaders } from '@/store'
+import { useStore } from '@/store'
 import { useDialogs } from '@/composables/useDialogs'
 import MyDatePicker from './MyDatePicker.vue'
 import { RulesFloat } from 'vuetify_rules';
 
 export default {
     components:{
-        MyDatePicker,
-    },
+        MyDatePicker},
     props: {
         dps: {
-            required: true,
-        },
+            required: true},
         mode: {
-            required: true,
-        }
+            required: true}
     },
     setup() {
         const { alert, confirm, prompt } = useDialogs();
@@ -43,14 +40,13 @@ export default {
     data() {
         return {
             newdps: null,
-            form_valid: false,
-        };
+            form_valid: false};
     },
     methods: {
         useStore,
-        parseResponseError,
+
         RulesFloat,
-        myheaders,
+
         title(){
             if (this.mode=="C") return this.$t("Add a DPS")
             if (this.mode=="U") return this.$t("Update DPS")
@@ -67,36 +63,29 @@ export default {
                     return
                 }
             if (this.mode == "C") {
-                axios.post(`${this.useStore().apiroot}/api/dps/`, this.newdps, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/api/dps/`, this.newdps)
                     .then(() => {
                     this.$emit("cruded");
-                }, (error) => {
-                    this.parseResponseError(error);
                 });
             }
             else if (this.mode == "U") {
-                axios.put(this.newdps.url, this.newdps, this.myheaders())
+                axios.put(this.newdps.url, this.newdps)
                     .then(() => {
                     this.$emit("cruded");
-                }, (error) => {
-                    this.parseResponseError(error);
                 });
             }
             else if (this.mode == "D") {
                 if (!await this.myConfirm(this.$t("Do you want to delete this DPS?"))) {
                     return;
                 }
-                axios.delete(this.newdps.url, this.myheaders())
+                axios.delete(this.newdps.url)
                 .then(() => {
                     this.$emit("cruded");
-                }, (error) => {
-                    this.parseResponseError(error);
                 });
             }
-        },
-    },
+        }},
     created() {
-        this.newdps = Object.assign({}, this.dps)
+        this.newdps = Object.assign(, this.dps)
     }
 }
 </script>

@@ -32,7 +32,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders, currency_string } from '@/store'
+    import { useStore, currency_string   } from '@/store'
     import MyDatePicker from './MyDatePicker.vue'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import MyMenuInline from './MyMenuInline.vue'
@@ -50,8 +50,7 @@
             InvestmentsoperationsCU,
             MyDatePicker,
             MyDateTimePicker,
-            MyMenuInline,
-        },
+            MyMenuInline},
         props: {
             // An order object
             order: {
@@ -79,16 +78,14 @@
                                     var amount=this.parseNumber(await this.myPrompt( this.$t("Set the amount to invest in this order"), this.$t("Amount"), "", "number", 10000 ));
                                     this.new_order.shares=parseInt(amount/this.new_order.price)
                                 }.bind(this),
-                                icon: "mdi-book-plus",
-                            },
+                                icon: "mdi-book-plus"},
                             {
                                 name:this.$t('Decimal shares from price'),
                                 code: async function(){
                                     var amount=this.parseNumber(await this.myPrompt( this.$t("Set the amount to invest in this order"), this.$t("Amount"), "", "number", 10000 ));
                                     this.new_order.shares=amount/this.new_order.price
                                 }.bind(this),
-                                icon: "mdi-book-plus",
-                            },
+                                icon: "mdi-book-plus"},
                         ]
                     },
                 ],
@@ -99,8 +96,7 @@
                 //Dialog InvestmentsOperationsCU
                 dialog_io_cu:false,
                 io:null,
-                io_mode: null,
-            }
+                io_mode: null}
         },        
         computed:{
             investment: function(){
@@ -124,8 +120,8 @@
             RulesFloatGEZ,
             parseNumber,
             empty_investment_operation,
-            parseResponseError,
-            myheaders,
+
+
             currency_string,
             f,
             title(){
@@ -157,18 +153,14 @@
                 }
                 
                 if (this.mode=="U"){
-                    axios.put(this.new_order.url, this.new_order,  this.myheaders())
+                    axios.put(this.new_order.url, this.new_order)
                     .then(() => {
                             this.show_snackbar_message()
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="C"){
-                    axios.post(`${this.useStore().apiroot}/api/orders/`, this.new_order,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/orders/`, this.new_order)
                     .then(() => {
                             this.show_snackbar_message()
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="E"){
                     this.io=this.empty_investment_operation()
@@ -182,11 +174,9 @@
                     if(await this.myConfirm(this.$t("This order will be deleted. Do you want to continue?")) == false) {
                         return
                     } 
-                    axios.delete(this.new_order.url, this.myheaders())
+                    axios.delete(this.new_order.url)
                     .then(() => {
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     });
                 }
             },
@@ -224,7 +214,7 @@
             on_InvestmentsoperationsCU_cruded(){
                 // Updates order
                 this.new_order.executed=new Date().toISOString()
-                axios.put(this.new_order.url, this.new_order,  this.myheaders())
+                axios.put(this.new_order.url, this.new_order)
                 .then(() => {
                     //Backend changes investments status active, I set it here for frontend
                     var investment=this.useStore().investments.get(this.new_order.investments)
@@ -232,13 +222,10 @@
                     this.useStore().investments.set(this.new_order.investments,investment)
                     this.$emit("cruded")
                     this.dialog_io_cu=false
-                }, (error) => {
-                    this.parseResponseError(error)
                 })
-            },
-        },
+            }},
         created(){
-            this.new_order=Object.assign({},this.order)
+            this.new_order=Object.assign(,this.order)
         }
     }
 </script>

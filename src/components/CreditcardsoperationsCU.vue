@@ -20,19 +20,17 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import { useDialogs } from '@/composables/useDialogs'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection, RulesFloat,RulesString } from 'vuetify_rules'
     import { date2zulu, zulu2date, getArrayFromMap } from '@/functions'
     export default {
         components:{
-            MyDateTimePicker,
-        },
+            MyDateTimePicker},
         props:{
             cco:{
-                required:true,
-            },
+                required:true},
             deleting:{
                 type: Boolean,
                 required:false,
@@ -49,18 +47,17 @@
                 following_cco: false,
                 editing:false,
                 key:0,
-                newcco:null,
-            }
+                newcco:null}
         },
         methods: {
             date2zulu,
-            parseResponseError,
+
             useStore,
             zulu2date,
             RulesSelection,
             RulesFloat,
             RulesString,
-            myheaders,
+
             getArrayFromMap,
             button(){
                 if(this.editing==true){
@@ -82,12 +79,10 @@
                if(!await this.myConfirm(this.$t("Do you want to delete this credit card operation?"))) {
                   return
                }
-                axios.delete(this.newcco.url, this.myheaders())
+                axios.delete(this.newcco.url)
                 .then(() => {
                     this.following_cco=false
                     this.$emit("cruded", this.following_cco)
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             },
             async acceptDialog(){
@@ -109,15 +104,13 @@
                 }
                 //Accept
                 if (this.editing==true){               
-                    axios.put(this.newcco.url, this.newcco, this.myheaders())
+                    axios.put(this.newcco.url, this.newcco)
                     .then(() => {
                             this.following_cco=false
                             this.$emit("cruded", this.following_cco)
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else{
-                    axios.post(`${this.useStore().apiroot}/api/creditcardsoperations/`, this.newcco,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/creditcardsoperations/`, this.newcco)
                     .then((response) => {    
                             console.log(response.data)
                         if (this.following_cco==true){
@@ -127,8 +120,6 @@
                             this.newcco.datetime=this.date2zulu(dt)
                         }
                         this.$emit("cruded", this.following_cco)
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 }
             },
@@ -147,7 +138,7 @@
             } else { // NEW IO BUT SETTING VALUES WITH URL=null
                 this.editing=false
             }
-            this.newcco=Object.assign({}, this.cco)
+            this.newcco=Object.assign(, this.cco)
         }
     }
 </script>

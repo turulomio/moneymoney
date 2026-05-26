@@ -18,7 +18,7 @@
 </template>
 <script setup>
     import axios from 'axios'
-    import { useStore, myheaders, parseResponseError } from '@/store'
+    import { useStore  } from '@/store'
     import { RulesSelection,RulesFloatGEZ } from 'vuetify_rules'
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import moment from 'moment-timezone';
@@ -46,7 +46,7 @@
     const store = useStore();
 
     const form_valid = ref(false);
-    const new_quote = ref(Object.assign({}, props.quote));
+    const new_quote = ref(Object.assign(, props.quote));
     const form = ref(null); // Reference for the v-form component
 
     const product_object = computed(() => {
@@ -66,29 +66,25 @@
                     icon: "mdi-calendar",
                     code: () => {
                        new_quote.value.datetime = moment(`${new_quote.value.datetime.slice(0,10)}T${product_stockmarket.value.starts_futures}`).toISOString();
-                    },
-                },
+                    }},
                 {
                     name: t("Set the time at the start of the stock market"),
                     icon: "mdi-calendar ",
                     code: () => {
                        new_quote.value.datetime = moment(`${new_quote.value.datetime.slice(0,10)}T${product_stockmarket.value.starts}`).toISOString();
-                    },
-                },
+                    }},
                 {
                     name: t("Set the time at the close of the stock market"),
                     icon: "mdi-calendar ",
                     code: () => {
                        new_quote.value.datetime = moment(`${new_quote.value.datetime.slice(0,10)}T${product_stockmarket.value.closes}Z`).toISOString();
-                    },
-                },
+                    }},
                 {
                     name: t("Set the time at the close of the futures stock market"),
                     icon: "mdi-calendar ",
                     code: () => {
                        new_quote.value.datetime = moment(`${new_quote.value.datetime.slice(0,10)}T${product_stockmarket.value.closes_futures}`).toISOString();
-                    },
-                },
+                    }},
             ]
         },
     ];
@@ -114,29 +110,23 @@
         }
 
         if (props.mode === "U"){
-            axios.put(new_quote.value.url, new_quote.value, myheaders())
+            axios.put(new_quote.value.url, new_quote.value)
             .then(() => {
                     emit("cruded");
-            }, (error) => {
-                parseResponseError(error);
             })
         } else if (props.mode === "C") {
-            axios.post(`${store.apiroot}/api/quotes/`, new_quote.value, myheaders())
+            axios.post(`${store.apiroot}/api/quotes/`, new_quote.value)
             .then(() => {
                     emit("cruded");
-            }, (error) => {
-                parseResponseError(error);
             })
         } else if (props.mode === "D") {
             const r = await myConfirm(t("Do you want to delete this quote?"));
             if(r === false) {
                 return
             } 
-            axios.delete(new_quote.value.url, myheaders())
+            axios.delete(new_quote.value.url)
             .then(() => {
                 emit("cruded");
-            }, (error) => {
-                parseResponseError(error);
             })
         }
     }

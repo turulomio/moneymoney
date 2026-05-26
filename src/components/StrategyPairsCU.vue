@@ -24,7 +24,7 @@
 <script setup>
     import { ref, computed } from 'vue'
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import { useI18n } from 'vue-i18n'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import AutocompleteAccounts from '@/components/AutocompleteAccounts.vue'
@@ -40,8 +40,7 @@
         mode: {
             type: String,
             required: true, // C, R, U, D
-        },
-    })
+        }})
 
     const emit = defineEmits(['cruded'])
 
@@ -79,26 +78,20 @@
         if (!valid) return
 
         if (props.mode === "U") {
-            axios.put(new_strategy.value.url, new_strategy.value, myheaders())
+            axios.put(new_strategy.value.url, new_strategy.value)
                 .then(() => {
                     emit("cruded")
-                }, (error) => {
-                    parseResponseError(error)
                 })
         } else if (props.mode === "C") {
-            axios.post(`${store.apiroot}/api/strategies_pairsinsameaccount/`, new_strategy.value, myheaders())
+            axios.post(`${store.apiroot}/api/strategies_pairsinsameaccount/`, new_strategy.value)
                 .then(() => {
                     emit("cruded")
-                }, (error) => {
-                    parseResponseError(error)
                 })
         } else if (props.mode === "D") {
             if (await myConfirm(t("This pairs in same account strategy will be deleted. Do you want to continue?"))) {
-                axios.delete(new_strategy.value.url, myheaders())
+                axios.delete(new_strategy.value.url)
                     .then(() => {
                         emit("cruded")
-                    }, (error) => {
-                        parseResponseError(error)
                     });
             }
         }

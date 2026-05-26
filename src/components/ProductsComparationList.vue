@@ -44,7 +44,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import {empty_products_comparation} from '../empty_objects.js'
     import { RulesSelection } from 'vuetify_rules'
     import MyMenuInline from './MyMenuInline.vue'
@@ -57,8 +57,7 @@
             MyMenuInline,
             ProductsComparation,
             ProductsComparationCU,
-            AutocompleteProducts,
-        },
+            AutocompleteProducts},
         data(){ 
             return {
                 product_a: null,
@@ -88,20 +87,18 @@
                                     this.pc_mode="C"
                                     this.key=this.key+1
                                     this.dialog_cu=true
-                                }.bind(this),
-                            },
+                                }.bind(this)},
                         ]
                     },
                 ],
                 pc:null,
-                pc_mode:null,
-            }
+                pc_mode:null}
         },
         methods:{
             useStore,
             RulesSelection,
-            parseResponseError,
-            myheaders,
+
+
             deletePair(item){
                 this.pc=item
                 this.pc_mode="D"
@@ -133,13 +130,11 @@
             },
             refreshTable(){               
                 this.loading=true
-                axios.get(`${this.useStore().apiroot}/api/productspairs/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/productspairs/`)
                 .then((response) => {
                     this.items=response.data
                     this.loading=false
                     this.key=this.key+1
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             },
             change(){

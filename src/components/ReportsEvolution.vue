@@ -108,7 +108,7 @@
 </template>
 <script>     
     import axios from 'axios'
-    import { useStore, parseResponseError, localcurrency_html, myheaders } from '@/store'
+    import { useStore, localcurrency_html } from '@/store'
     import {f} from 'vuetify_rules'
     import { listobjects_sum, percentage_html } from '@/functions'
     export default {
@@ -142,22 +142,20 @@
                 year: new Date().getFullYear()-3,
                 loading_invested:false,
                 loading_assets:false,
-                key: 0,
-            }
+                key: 0}
         },
         watch:{
             year(){
                 this.refreshTables()
-            },
-        },
+            }},
         methods:{
             useStore,
             f,
-            parseResponseError,
+
             listobjects_sum,
             localcurrency_html,
             percentage_html,
-            myheaders,
+
             years(){
                 var start=1990
                 var end=new Date().getFullYear()
@@ -190,24 +188,19 @@
             refreshTables(){
                 this.loading_assets=true
                 this.loading_invested=true
-                axios.get(`${this.useStore().apiroot}/reports/evolutionassets/${this.year}/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/evolutionassets/${this.year}/`)
                 .then((response) => {
                     this.assetsData=response.data
                     this.loading_assets=false
                     this.key=this.key+1
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
-                axios.get(`${this.useStore().apiroot}/reports/evolutioninvested/${this.year}/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/evolutioninvested/${this.year}/`)
                 .then((response) => {
                     this.investedData=response.data
                     this.loading_invested=false
                     this.key=this.key+1
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
-            },
-        },
+            }},
         mounted(){
             this.refreshTables()
 

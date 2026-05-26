@@ -211,7 +211,7 @@
 </template>
 <script>     
     import axios from 'axios'
-    import { useStore, parseResponseError, localcurrency_html, localcurrency_string, myheaders } from '@/store'
+    import { useStore, localcurrency_html, localcurrency_string } from '@/store'
     import { sumBy } from 'lodash-es';
     import { localtime, RulesFloat,f } from 'vuetify_rules'
     import moment from 'moment'
@@ -219,8 +219,7 @@
     import { percentage_html, listobjects_sum } from '@/functions';
     export default {
         components:{
-            ReportsAnnualIncomeDetail,
-        },
+            ReportsAnnualIncomeDetail},
         data(){
             return {
                 tab:0,   
@@ -296,11 +295,9 @@
                 // INVEST OR WORK
                 loading_invest_or_work: false,
                 // INVEST OR WORK
-                loading_make_ends_meet: false,
-            }
+                loading_make_ends_meet: false}
         },
-        computed:{
-        },
+        computed:,
         watch:{
             target: function(){
                 this.refreshTotalTarget()
@@ -314,12 +311,12 @@
             f,
             localtime,
             RulesFloat,
-            parseResponseError,
+
             listobjects_sum,
             localcurrency_html,
             localcurrency_string,
             percentage_html,
-            myheaders,
+
             years(){
                 var start=1990
                 var end=new Date().getFullYear()
@@ -365,8 +362,7 @@
                         gains: month_gains,
                         expenses: month_expenses,
                         diff: diff,
-                        color_diff:(diff>0)? "boldgreen": "boldred",
-                    })
+                        color_diff:(diff>0)? "boldgreen": "boldred"})
 
                 })
                 this.loading_invest_or_work=false
@@ -383,8 +379,7 @@
                         incomes: o.incomes,
                         expenses: o.expenses,
                         diff: diff,
-                        color_diff:(diff>0)? "boldgreen": "boldred",
-                    })
+                        color_diff:(diff>0)? "boldgreen": "boldred"})
                 })
                 this.loading_make_ends_meet=false
 
@@ -397,9 +392,9 @@
                 }
                 this.loading_target=true
                 //Updates annual_gains_target in profile
-                var new_profile=Object.assign({},this.useStore().profile)
+                var new_profile=Object.assign(,this.useStore().profile)
                 new_profile.annual_gains_target=this.target
-                axios.put(`${this.useStore().apiroot}/profile/`, new_profile, this.myheaders())
+                axios.put(`${this.useStore().apiroot}/profile/`, new_profile)
                 .then(() => {
                     this.useStore().updateProfile().then(() =>{
                         this.total_target=[]
@@ -423,8 +418,7 @@
                                 cumulative_target: cumulative_target,
                                 cumulative_gains: cumulative_gains,
                                 color_month_gains: (this.month_target<month_gains) ? "boldgreen" : "boldred",
-                                color_month_cumulative_gains: (cumulative_target<cumulative_gains) ? "boldgreen" : "boldred",
-                            })
+                                color_month_cumulative_gains: (cumulative_target<cumulative_gains) ? "boldgreen" : "boldred"})
                         }
 
                         var current_percentage=cumulative_gains/this.last_year_balance
@@ -434,8 +428,6 @@
 
                         this.loading_target=false
                     })
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             },
             refreshTables(){
@@ -445,10 +437,10 @@
                 this.last_year_balance_string=""
 
                 axios.all([
-                    axios.get(`${this.useStore().apiroot}/reports/annual/${this.year}/`, this.myheaders()),
-                    axios.get(`${this.useStore().apiroot}/reports/annual/income/${this.year}/`, this.myheaders()),
-                    axios.get(`${this.useStore().apiroot}/reports/annual/gainsbyproductstypes/${this.year}/`, this.myheaders()),
-                    axios.get(`${this.useStore().apiroot}/reports/annual/revaluation/?only_zero=true`, this.myheaders())
+                    axios.get(`${this.useStore().apiroot}/reports/annual/${this.year}/`),
+                    axios.get(`${this.useStore().apiroot}/reports/annual/income/${this.year}/`),
+                    axios.get(`${this.useStore().apiroot}/reports/annual/gainsbyproductstypes/${this.year}/`),
+                    axios.get(`${this.useStore().apiroot}/reports/annual/revaluation/?only_zero=true`)
                 ]).then(([resRA, resRAI, resRAG, resRAR]) => {
                     this.last_year_balance=resRA.data.last_year_balance
                     this.last_year_balance_string=f(this.$t("Last year balance ([0]) is [1]"), [
@@ -465,8 +457,6 @@
                     this.refreshTotalTarget()
                     this.refreshInvestOrWork()
                     this.refreshMakeEndsMeet()
-                }, (error) => {
-                    this.parseResponseError(error)
                 })
             }
         },

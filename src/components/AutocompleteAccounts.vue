@@ -16,13 +16,11 @@
 
     const props = defineProps({
         modelValue: {
-            required: true,
-        },
+            required: true},
         returnObject:{
             type: Boolean,
             required:false,
-            default:false,
-        },
+            default:false},
         readonly: {
             type: Boolean,
             required: false,
@@ -31,13 +29,11 @@
         accounts: {
             type: Array,
             required:false,
-            default: () => [],
-        },
+            default: () => []},
         multiple: {
             type: Boolean,
             required: false,
-            default: false,
-        }
+            default: false}
     })
 
     const emit = defineEmits(['update:modelValue'])

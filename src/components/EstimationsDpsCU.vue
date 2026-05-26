@@ -18,7 +18,7 @@
 
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import { RulesFloat,RulesInteger } from 'vuetify_rules'
     
     import { useDialogs } from '@/composables/useDialogs'
@@ -29,8 +29,7 @@
         },
         props: {
             estimation: {
-                required: true,
-            },
+                required: true},
             mode: {
                 required: true // Can be CUD
             }
@@ -39,15 +38,14 @@
             return{
                 
                 new_estimation: null,
-                form_valid:false,
-            }
+                form_valid:false}
         },
         methods:{
             useStore,
             RulesFloat,
             RulesInteger,
-            parseResponseError,
-            myheaders,  
+
+
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating a DPS estimation")
@@ -72,36 +70,28 @@
                     return
                 }
                 if (this.mode=="C"){   
-                    axios.post(`${this.useStore().apiroot}/api/estimationsdps/`, this.new_estimation, this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/estimationsdps/`, this.new_estimation)
                     .then(() => {
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="U"){
 
-                    axios.put(this.new_estimation.url, this.new_estimation, this.myheaders())
+                    axios.put(this.new_estimation.url, this.new_estimation)
                     .then(() => {
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     });
                 } else if (this.mode=="D"){
                     if(await this.myConfirm(this.$t("Do you want to delete this DPS estimation?")) == false) {
                         return
                     } 
-                    axios.delete(this.new_estimation.url, this.myheaders())
+                    axios.delete(this.new_estimation.url)
                     .then(() => {
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     });
                 }
-            },
-            
-        },
+            }},
         created(){
-            this.new_estimation=Object.assign({},this.estimation)
+            this.new_estimation=Object.assign(,this.estimation)
         }
     }
 </script>

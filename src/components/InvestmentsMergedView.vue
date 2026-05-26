@@ -85,7 +85,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import {empty_investment_operation, empty_dividend,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
     import MyMenuInline from './MyMenuInline.vue'
     import DisplayValues from './DisplayValues.vue'
@@ -102,14 +102,11 @@
             TableInvestmentOperations,
             TableInvestmentOperationsCurrent,
             TableInvestmentOperationsHistorical,
-            TableDividends,
-        },
+            TableDividends},
         props: {
             ios_id: { // Ios_id object. ios["79329"]
                 required: true,
-                type: Object,
-            },
-        },
+                type: Object}},
         data () {
             return {
                 tab:0,
@@ -136,7 +133,7 @@
                                 name:this.$t('Investment chart'),
                                 icon: "mdi-chart-areaspline",
                                 code: function(){
-                                    axios.get(`${this.useStore().apiroot}/products/quotes/ohcl?product=${this.product.url}`, this.myheaders())
+                                    axios.get(`${this.useStore().apiroot}/products/quotes/ohcl?product=${this.product.url}`)
                                     .then((response) => {
                                         this.chart_data=this.empty_investments_chart()
                                         this.chart_data.ohcls=response.data
@@ -152,8 +149,6 @@
                                         this.ohcl=response.data 
                                         this.key=this.key+1
                                         this.dialog_investment_chart=true
-                                    }, (error) => {
-                                        this.parseResponseError(error)
                                     });
                                 }.bind(this)
                             },
@@ -173,8 +168,7 @@
                             },
                         ]
                     },
-                ],
-            }  
+                ]}  
         },
         watch: {
             chkShowAllIO(){
@@ -191,9 +185,9 @@
             empty_investments_chart_limit_line,
             empty_dividend,
             empty_investment_operation,
-            parseResponseError,
+
             hyperlinked_url,
-            myheaders,
+
             on_TableDividends_cruded(){
                 this.update_all()
             },
@@ -249,8 +243,7 @@
             },
             update_dividends(){
                 //Convert this.investments to an array of ids
-                var headers={...this.myheaders(),params:{investments:this.ios_id.data.investments_id}}
-                return axios.get(`${this.useStore().apiroot}/api/dividends/`, headers)
+                return axios.get(`${this.useStore().apiroot}/api/dividends/`, {params:{investments:this.ios_id.data.investments_id}})
             },
             update_all(){
                 this.loading=true

@@ -12,8 +12,7 @@
     export default {
         props:{
             ohcls:{
-                required:true,
-            },
+                required:true},
             product:{   // Must be an object
                 required:true
             }
@@ -21,17 +20,14 @@
         data(){ 
             return{
                 loading:false,
-                tuple_closes:[],
-
-            }
+                tuple_closes:[]}
         },
         methods: {
             chart_option(){
                 return {
                     legend: {
                         data: [this.product.name],
-                        inactiveColor: '#777',
-                    },
+                        inactiveColor: '#777'},
                     tooltip: {
                         trigger: 'axis',
                         axisPointer: {
@@ -60,8 +56,7 @@
                     dataZoom: [{
                             type: 'slider',
                             start: 0,
-                            end: 100,
-                    }],
+                            end: 100}],
                     series: this.series()
                 }
             },
@@ -71,8 +66,7 @@
                     type: 'line',
                     name: this.product.name,
                     data: this.tuple_closes,
-                    showSymbol:false, 
-                })
+                    showSymbol:false})
                 // //SMAS SERIES
                 // this.prdata.smas.forEach(sma=> r.push({
                 //         type:"line",
@@ -113,8 +107,7 @@
                 //     })
                 // }
                 return r
-            },
-        },
+            }},
         created(){
             this.ohcls.forEach(o => this.tuple_closes.push([new Date(o.date),o.close]))
         },

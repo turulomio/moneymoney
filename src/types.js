@@ -20,8 +20,7 @@ export const RecomendationMethods = Object.freeze({
   None: 7,
   SMA_10: 8,
   SMA_5: 9,
-  HMA_10: 10,
-});
+  HMA_10: 10});
 
 
 export const ConceptsTypes = Object.freeze({
@@ -29,5 +28,4 @@ export const ConceptsTypes = Object.freeze({
 });
 export const OperationsTypes = Object.freeze({
   Expense: 1,
-  Income: 2,
-});
+  Income: 2});

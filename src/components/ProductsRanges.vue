@@ -85,7 +85,7 @@
     import { ref, computed, watch } from 'vue'
     import { useI18n } from 'vue-i18n'
     import {empty_products_ranges, empty_order} from '../empty_objects.js'
-    import { useStore, parseResponseError, currency_string, myheaders, getInvestmentsByProduct } from '@/store'
+    import { useStore, currency_string, getInvestmentsByProduct   } from '@/store'
     import { RulesSelection, RulesInteger, RulesFloat, f } from 'vuetify_rules'
     import axios from 'axios'
     import { getArrayFromMap } from '@/functions.js'
@@ -98,8 +98,7 @@
 
     const props = defineProps({
         pr:{
-            required:false,
-        }
+            required:false}
     })
 
     const store = useStore()
@@ -171,8 +170,7 @@
 
     function refreshTable(){
         loading.value=true
-        var headers={...myheaders(),params:newpr.value}
-        axios.get(`${store.apiroot}/products/ranges/`, headers)
+        axios.get(`${store.apiroot}/products/ranges/`, {params:newpr.value})
         .then((response) => {
             console.log("Products ranges", response.data)
             prdata.value=response.data
@@ -182,8 +180,6 @@
                 currentpricelabel.value+= ` ${indicator}: ${currency_string(prdata.value.dataframe[prdata.value.dataframe.length-1][indicator], prdata.value.product.currency)}`
             })
             loading.value=false
-        }, (error) => {
-            parseResponseError(error)
         });
     }
 

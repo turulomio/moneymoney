@@ -19,7 +19,7 @@
 
 <script>
     import axios from 'axios' 
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection, RulesFloat } from 'vuetify_rules'
     import { date2zulu, zulu2date, getArrayFromMap } from '@/functions'
@@ -30,33 +30,27 @@
             return { myAlert: alert, myConfirm: confirm }
         },
         components:{
-            MyDateTimePicker,
-        },
+            MyDateTimePicker},
         props:{
             ao:{
-                required:true,
-            },
+                required:true},
             mode:{ // CRUD
-                required:true,
-            }
+                required:true}
         },
         data () {
             return {
                 account: null,
                 newao:null,
                 form_valid:true,
-                following_ao:false,
-            }
+                following_ao:false}
         },
         methods:{
             date2zulu,
-            parseResponseError,
             getArrayFromMap,
             zulu2date,
             useStore,
             RulesSelection,
             RulesFloat,
-            myheaders,
             async acceptDialogAO(){
                 //Validation
                 if (this.form_valid!=true) {
@@ -77,14 +71,12 @@
 
                 //Accept
                 if (this.mode=='U'){               
-                    axios.put(this.newao.url, this.newao, this.myheaders())
+                    axios.put(this.newao.url, this.newao)
                     .then(() => {
                             this.$emit('cruded', this.following_ao)
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=='C'){ 
-                    axios.post(`${this.useStore().apiroot}/api/accountsoperations/`, this.newao,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/accountsoperations/`, this.newao)
                     .then(() => {             
                         if (this.following_ao==true){
                             var dt=this.zulu2date(this.newao.datetime)
@@ -93,19 +85,15 @@
                             this.newao.datetime=this.date2zulu(dt)
                         }
                         this.$emit('cruded', this.following_ao)
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=='D'){
                     if(await this.myConfirm(this.$t("Do you want to delete this account operation?")) == false) {
                         return
                     }  
                     this.following_ao=false
-                    axios.delete(this.newao.url, this.myheaders())
+                    axios.delete(this.newao.url)
                     .then(() => {
                         this.$emit('cruded', this.following_ao)
-                    }, (error) => {
-                        this.parseResponseError(error)
                     });
                 }
             },
@@ -133,7 +121,7 @@
             }
         },
         created(){
-            this.newao=Object.assign({},this.ao)
+            this.newao=Object.assign(,this.ao)
             this.on_account_change() //Updates  account object
         }
 

@@ -44,7 +44,7 @@
 
 <script setup>
     import axios from 'axios'
-    import { useStore, myheaders, currency_string, parseResponseError } from '@/store'
+    import { useStore, currency_string } from '@/store'
     import imgUrl from '@/assets/moneymoney.png'
     
     import { f, localtime } from 'vuetify_rules'
@@ -63,7 +63,7 @@
 
     function get_alerts(){
         if (!useStore().logged) return
-        axios.get(`${useStore().apiroot}/alerts/`, myheaders())
+        axios.get(`${useStore().apiroot}/alerts/`)
         .then((response) => {
             alerts.value = response.data
             console.log(alerts.value)
@@ -74,8 +74,6 @@
             console.log(`Local time: ${local.toISOString()}`)
             console.log(`Server time: ${server.toISOString()}`)
             console.log(`Difference (ms): ${diff_time.value}`)
-        }, (error) => {
-            parseResponseError(error)
         });
     }
 

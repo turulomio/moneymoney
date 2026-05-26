@@ -18,8 +18,7 @@
         name: "ChartScatterPairPrices",
         props:{
             data:{// empty_chart_scatter_pair_prices
-                required:true,
-            },
+                required:true},
             notitle:{
                 type: Boolean,
                 required: false,
@@ -28,8 +27,7 @@
         },
         data(){ 
             return{
-                loading:false,
-            }
+                loading:false}
         },
         methods: {
             chart_option(){
@@ -40,8 +38,7 @@
                         },
                         {
                             transform: {
-                                type: 'ecStat:regression',
-                            }
+                                type: 'ecStat:regression'}
                         }
                     ],
                     xAxis: {
@@ -90,8 +87,7 @@
                                     return 'green'
  
                                 }.bind(this)
-                            },
-                        },
+                            }},
                         {
                             name: this.$t('Linear regression'),
                             type: 'line',

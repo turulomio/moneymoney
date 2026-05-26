@@ -49,13 +49,11 @@
             },
             readonly: {
                 required: false,
-                default: false,
-            },
+                default: false},
             clearable: { //Hides null icon
                 type: Boolean,
                 required: false,
-                default: false,
-            },
+                default: false},
             dataTest: {
                 type: String,
                 default: 'MyDateTimePicker'
@@ -71,8 +69,7 @@
                 hours:null,
                 minutes:null,
                 seconds:null,
-                microseconds:null,
-            }
+                microseconds:null}
         },
         watch: {
             new_modelValue (newValue) { //Null or iso string
@@ -93,8 +90,7 @@
             },
             microseconds(){
                 this.new_modelValue=this.widget2string()
-            },
-        },
+            }},
         computed: {
             label(){
                 if (this.$attrs.label){
@@ -148,6 +144,5 @@
             this.string2widget(this.modelValue)
             this.new_modelValue=this.modelValue
             
-        },
-    }
+        }}
 </script>

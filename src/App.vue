@@ -149,8 +149,7 @@ export default {
         BtnLogIn,
         BtnLogOut,
         BtnSwitchLanguages,
-        DialogsContainer,
-    },
+        DialogsContainer},
     data () {
         return {
             logged:false,
@@ -160,8 +159,7 @@ export default {
             open_products:false,
             open_reports:false,
             imgAccount:imgAccount,
-            imgInvestment:imgInvestment,
-        }
+            imgInvestment:imgInvestment}
     },
     computed:{
         store(){
@@ -172,8 +170,7 @@ export default {
         open_widgets(){
             this.$router.push({name: "widgets"})
         }   
-    },
-};
+    }};
 </script>
 <style >
 h1   {

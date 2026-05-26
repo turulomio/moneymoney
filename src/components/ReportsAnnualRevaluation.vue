@@ -39,12 +39,11 @@
 
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, localcurrency_html, myheaders, getMapObjectById } from '@/store'
+    import { useStore, localcurrency_htmlgetMapObjectById   } from '@/store'
     import { localtime,f } from 'vuetify_rules'
     import { percentage_html, listobjects_sum } from '@/functions'
     export default {
-        components:{
-        },
+        components:,
         data(){ 
             return{
                 list_io: [],
@@ -60,8 +59,7 @@
                     { title: this.$t('Balance last year or invested'), key: 'balance_last_year_or_invested',sortable: false, align:'end'},
                     { title: this.$t('Annual gains'), key: 'current_year_gains_user',sortable: false, align:'end'},
                     { title: this.$t('% Annual'), key: 'percentage',sortable: false, align:'end'},
-                ],
-            }
+                ]}
         },
         watch:{
             only_zero(){
@@ -72,22 +70,20 @@
             useStore,
             f,
             localtime,
-            parseResponseError,
+
             localcurrency_html,
-            myheaders,
+
             percentage_html,
             listobjects_sum,
             getMapObjectById,
             refreshTable(){
                 this.loading=true
                 var onlyzerostring=(this.only_zero)? "?only_zero=true": ""
-                return axios.get(`${this.useStore().apiroot}/reports/annual/revaluation/${onlyzerostring}`, this.myheaders())
+                return axios.get(`${this.useStore().apiroot}/reports/annual/revaluation/${onlyzerostring}`)
                 .then((response) => {
                     this.list_io=response.data
                     this.loading=false
                     this.key+=1
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             }
         },

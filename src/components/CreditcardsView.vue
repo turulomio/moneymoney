@@ -37,7 +37,7 @@
     </div>
 </template>
 <script>
-    import { parseResponseError, currency_string, myheaders } from '@/store'
+    import { Error, currency_string } from '@/store'
 
     import axios from 'axios'
     import MyMenuInline from './MyMenuInline.vue'
@@ -54,16 +54,12 @@
             CreditcardsoperationsCU,
             TableCreditcardsOperations,
             MyDateTimePicker,
-            CreditcardsPaymentsRefund,         
-        },
+            CreditcardsPaymentsRefund},
         props:{
             cc:{
-                required:true,
-            },
+                required:true},
             account:{
-                required:true,
-            },
-        },
+                required:true}},
         data(){ 
             return{
                 menuinline_items: [
@@ -80,16 +76,14 @@
                                     this.cco.creditcards=this.cc.url
                                     this.key=this.key+1
                                     this.dialog=true
-                                }.bind(this),
-                            },
+                                }.bind(this)},
                             {
                                 name: this.$t("Make a credit card payment"),
                                 icon: "mdi-cart",
                                 code: function(){
                                     this.paying=true
                                     this.key=this.key+1
-                                }.bind(this),
-                            },
+                                }.bind(this)},
                         ]
                     },
                 ],  
@@ -107,16 +101,15 @@
                 //CreditCardsOperationsCU
                 dialog:false,
                 cco:null,
-                cco_deleting:false,
-            }
+                cco_deleting:false}
         },
         methods: {
             empty_cco,
-            myheaders,
+
             f,
             listobjects_sum,
             currency_string,
-            parseResponseError,
+
             changeSelected(selected_items){
                 this.selected_items=selected_items
                 this.paying_string=f(this.$t("Make a payment of [0] operations valued in [1]"), [
@@ -126,13 +119,11 @@
             },
             update_table(refresh_key=true){
                 this.loading_cco=true
-                axios.get(`${this.cc.url}operationswithbalance/?paid=false`, this.myheaders())
+                axios.get(`${this.cc.url}operationswithbalance/?paid=false`)
                 .then((response) => {
                     this.items_cco=response.data
                     this.loading_cco=false 
                     if(refresh_key==true) this.key=this.key+1
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             },
             acceptPayment(){  
@@ -141,15 +132,12 @@
 
                 const data= {
                     cco:ids,
-                    dt_payment: this.dt_payment,
-                }
-                axios.post(`${this.cc.url}pay/`, data, this.myheaders())
+                    dt_payment: this.dt_payment}
+                axios.post(`${this.cc.url}pay/`, data)
                 .then(() => {
                         this.$emit("cruded")
                         this.update_table()     
                         this.dialog=false
-                }, (error) => {
-                    this.parseResponseError(error)
                 })
             },
             on_TableCreditcardsOperations_cruded(){

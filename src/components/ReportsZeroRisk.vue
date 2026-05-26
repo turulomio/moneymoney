@@ -32,14 +32,13 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, getCountryNameByCode, parseResponseError, localcurrency_html, myheaders } from '@/store'
+    import { useStore, getCountryNameByCodeError, localcurrency_html } from '@/store'
     import {f} from 'vuetify_rules'
     import InvestmentsView from './InvestmentsView.vue'
     import { listobjects_sum } from '@/functions'
     export default {
         components:{
-            InvestmentsView,
-        },
+            InvestmentsView},
         data(){ 
             return{
                 investments_headers: [
@@ -52,22 +51,19 @@
                 investment_mode: null,
                 loading:false,
                 dialog_view:false,
-                key:0,
-
-            }
+                key:0}
         },
         watch:{
             showActive () {
                 this.update_table()
-            },
-        },
+            }},
         methods: { 
             useStore,
             f,
             getCountryNameByCode,
-            parseResponseError,
+
             listobjects_sum,
-            myheaders,
+
             localcurrency_html,
             on_InvestmentView_cruded(){
                 this.key=this.key+1
@@ -75,13 +71,11 @@
             },
             update_table(){
                 this.loading=true
-                axios.get(`${this.useStore().apiroot}/reports/zerorisk/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/zerorisk/`)
                 .then((response) => {
                     this.investments_items=response.data
                     this.loading=false
                     this.key=this.key+1
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             },
             viewItem (event,object) {
@@ -89,8 +83,7 @@
                 this.investment=object.item
                 this.key=this.key+1
                 this.dialog_view=true
-            },
-        },
+            }},
         mounted(){
             this.update_table()
         }

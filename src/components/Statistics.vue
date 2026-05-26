@@ -8,33 +8,25 @@
 <script>
     import ChartPie from './ChartPie.vue'
     import axios from "axios"
-    import { useStore, parseResponse, parseResponseError, myheaders } from '@/store'
+    import { useStore  } from '@/store'
 
     export default {
         components: {
-            ChartPie,
-        },
+            ChartPie},
         data () {
             return {
                 items:[],
-                key:0,
-            }
+                key:0}
         },
         methods: {
             useStore,
-            parseResponse,
-            parseResponseError,
-            myheaders,
+
+
+
             async getStatistics(){
-                try {
-                    const response = await axios.get(`${this.useStore().apiroot}/statistics/`, this.myheaders())
-                    if (await this.parseResponse(response)){
-                        this.items=response.data
-                        this.key=this.key+1
-                    }
-                } catch (error) {
-                    await this.parseResponseError(error)
-                }
+                const response = await axios.get(`${this.useStore().apiroot}/statistics/`)
+                this.items=response.data
+                this.key=this.key+1
             }
 
         },

@@ -18,7 +18,7 @@
 
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import { RulesSelection ,RulesInteger, RulesString } from 'vuetify_rules'
     import { getArrayFromMap } from '@/functions.js'
@@ -29,12 +29,10 @@
             return { myConfirm: confirm }
         },
         components:{
-            AutocompleteProducts,
-        },
+            AutocompleteProducts},
         props:{
             investment:{ //Object
-                required:true,
-            },
+                required:true},
             mode: {
                 required: true // Can be CUD
             }
@@ -47,8 +45,8 @@
         },
         methods:{
             useStore,
-            myheaders,
-            parseResponseError,
+
+
             RulesInteger,
             RulesString,
             RulesSelection,
@@ -77,37 +75,30 @@
                     return
                 }
                 if (this.mode=="U"){        
-                    axios.put(this.new_investment.url, this.new_investment, this.myheaders())
+                    axios.put(this.new_investment.url, this.new_investment)
                     .then((response) => {
                         this.useStore().investments.set(response.data.url, response.data)
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="C") {
-                    axios.post(`${this.useStore().apiroot}/api/investments/`, this.new_investment,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/investments/`, this.new_investment)
                     .then((response) => {
                         this.useStore().investments.set(response.data.url, response.data)
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="D") {
                     if(await this.myConfirm(this.$t("Do you want to delete this investment?")) == false) {
                         return
                     } 
-                    axios.delete(this.new_investment.url, this.myheaders())
+                    axios.delete(this.new_investment.url)
                     .then(() => {
                         this.useStore().investments.delete(this.new_investment.url)
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     });
                     }
-            },
-        },
+            }},
         created(){
-            this.new_investment=Object.assign({},this.investment)
+            this.new_investment=Object.assign(,this.investment)
         }
     }
 </script>

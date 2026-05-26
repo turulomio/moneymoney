@@ -68,7 +68,7 @@
     import axios from "axios"
     import { ref, computed, onMounted, nextTick } from 'vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
-    import { useStore, getMapObjectById, currency_string, myheaders, parseResponseError } from '@/store'
+    import { useStore, getMapObjectById, currency_string  } from '@/store'
     import { empty_investment_operation } from '@/empty_objects.js'
     import { localtime } from 'vuetify_rules'
     import { hyperlinked_url } from '@/functions'
@@ -87,14 +87,11 @@
         output:{ // "investmnt", account or user to see table ouput
             type: String,
             required:true,
-            default: "investment",
-        },
+            default: "investment"},
         showinvestment:{// Items must have accounts attribute
             type: Boolean,
             required:false,
-            default: false,
-        },
-    })
+            default: false}})
 
     const emit = defineEmits(['cruded'])
     const { t } = useI18n()
@@ -194,14 +191,12 @@
 
     function editIO(item){
         if (item.associated_it_id){ //Investment transfer
-            axios.get(`${useStore().apiroot}/api/investmentstransfers/${item.associated_it_id}/`, myheaders())
+            axios.get(`${useStore().apiroot}/api/investmentstransfers/${item.associated_it_id}/`)
             .then((response) => {
                 transfer.value=response.data
                 transfer_crud_mode.value="U"
                 key.value=key.value+1
                 transfer_crud_dialog.value=true
-            }, (error) => {
-                parseResponseError(error)
             });
         } else {
             io.value=item

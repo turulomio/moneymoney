@@ -116,7 +116,7 @@
 </template>  
 <script>     
     import axios from 'axios'
-    import { useStore, parseResponseError, currency_html, myheaders } from '@/store'
+    import { useStore, currency_html } from '@/store'
     import MyMenuInline from './MyMenuInline.vue'
     import QuotesCU from './QuotesCU.vue'
     import ChartProduct from './ChartProduct.vue'
@@ -145,14 +145,12 @@
             TableQuotes,
             TableOHCLS,
             DpsCRUD,
-            MyMonthPicker,
-        },
+            MyMonthPicker},
 
         props: {
             product: { //Object
                 required: true
-            },
-        },
+            }},
         data () {
             return {
                 displayvalues:[
@@ -179,16 +177,14 @@
                                     this.quote.products=this.product.url
                                     this.dialog_quotescu=true
                                 }.bind(this),
-                                icon: "mdi-plus",
-                            },
+                                icon: "mdi-plus"},
                             {
                                 name:this.$t('Quotes massive update'),
                                 code: function(){
                                     this.dialog_quotes_massive_update=true
                                     this.key=this.key+1
                                 }.bind(this),
-                                icon: "mdi-update",
-                            },
+                                icon: "mdi-update"},
                         ]
                     },
                     {
@@ -203,8 +199,7 @@
                                     this.key=this.key+1
                                     this.dialog_estimationdps=true
                                 }.bind(this),
-                                icon: "mdi-plus",
-                            },
+                                icon: "mdi-plus"},
                             {
                                 name:this.$t('Add a DPS'),
                                 code: function(){
@@ -214,8 +209,7 @@
                                     this.dps_crud_mode="C"
                                     this.dps_crud_dialog=true
                                 }.bind(this),
-                                icon: "mdi-plus",
-                            },
+                                icon: "mdi-plus"},
                         ]
                     },
                 ],
@@ -282,8 +276,7 @@
                 dps: null,
 
                 //QUOTES MASSIVE UPDATE
-                dialog_quotes_massive_update:false,
-            }
+                dialog_quotes_massive_update:false}
         },
         watch: {
             ohcls_ym(){
@@ -292,45 +285,40 @@
             tab(){
                 this.showchart=false
                 if (this.tab==6) setTimeout(() => {this.showchart=true }, 300)
-            },
-        },
+            }},
         methods: {
             useStore,
             f,
             empty_dps,
             empty_quote,
             empty_estimation_dps,
-            parseResponseError,
+
             percentage_html,
             currency_html,
-            myheaders,
+
             on_EstimationsDpsCU_cruded(){
                 this.key=this.key+1
                 this.dialog_estimationdps=false
             },
             on_monthpicker_quotes_change(){
-                axios.get(`${this.useStore().apiroot}/api/quotes/?product=${this.product.url}&year=${this.quotes_ym.year}&month=${this.quotes_ym.month}`, this.myheaders())                
+                axios.get(`${this.useStore().apiroot}/api/quotes/?product=${this.product.url}&year=${this.quotes_ym.year}&month=${this.quotes_ym.month}`)                
                 .then((response) => {
                     this.quotes_month=response.data
                 }) 
-                .catch((error) => {
-                    this.parseResponseError(error)
-                });
+                ;
             },
             on_monthpicker_ohcls_change(){
-                axios.get(`${this.useStore().apiroot}/products/quotes/ohcl/?product=${this.product.url}&year=${this.ohcls_ym.year}&month=${this.ohcls_ym.month}`, this.myheaders())                
+                axios.get(`${this.useStore().apiroot}/products/quotes/ohcl/?product=${this.product.url}&year=${this.ohcls_ym.year}&month=${this.ohcls_ym.month}`)                
                 .then((response) => {
                     this.ohcls_month=response.data
                 }) 
-                .catch((error) => {
-                    this.parseResponseError(error)
-                });
+                ;
             },
             refreshProductOHCLDaily(){
-                return axios.get(`${this.useStore().apiroot}/products/quotes/ohcl/?product=${this.product.url}`, this.myheaders())
+                return axios.get(`${this.useStore().apiroot}/products/quotes/ohcl/?product=${this.product.url}`)
             },
             refreshInformation(){
-                return axios.get(`${this.product.url}historical_information/`, this.myheaders())
+                return axios.get(`${this.product.url}historical_information/`)
             },
             make_all_axios(){
                 this.loading=true

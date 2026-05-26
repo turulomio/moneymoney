@@ -15,7 +15,7 @@
 </template>  
 <script>     
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import { useDialogs } from '@/composables/useDialogs'
     
     export default {
@@ -26,31 +26,26 @@
         data () {
             return {
                 loading:false,
-                message:"",
-            }
+                message:""}
         },
         methods: {
             useStore,
-            parseResponseError,
-            myheaders,
+
+
             async submmit(internet){
                 if (internet && navigator.onLine==false){
                     await this.myAlert(this.$t("There is some problem with Internet connection"))
                     return
                 }
                 this.loading=true
-                axios.post(`${this.useStore().apiroot}/maintenance/catalogs/update/`, {internet: internet}, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/maintenance/catalogs/update/`, {internet: internet})
                 .then(() => {
                         this.useStore().updateProducts()
                         this.message=this.$t("Catalogs updated")
                         this.key=this.key+1
                         this.loading=false
-                }, (error) => {
-                    this.parseResponseError(error)
                 })
-            },
-
-        }
+            }}
         
     }
 </script>

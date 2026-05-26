@@ -17,9 +17,7 @@
     export default {
         props:{
             data:{ //empty_investments_chart
-                required:true,
-            },
-        },
+                required:true}},
         data(){ 
             return{
                 loading:true,
@@ -50,8 +48,7 @@
                 return {
                     legend: {
                         data: legends,
-                        inactiveColor: '#777',
-                    },
+                        inactiveColor: '#777'},
                     tooltip: {
                         trigger: 'axis',
                         axisPointer: {
@@ -80,8 +77,7 @@
                     dataZoom: [{
                             type: 'slider',
                             start: 0,
-                            end: 100,
-                    }],
+                            end: 100}],
                     series: this.series()
                 }
             },
@@ -91,8 +87,7 @@
                     type: 'line',
                     name: this.product.fullname, 
                     data: this.closes,
-                    showSymbol:false,
-                })
+                    showSymbol:false})
                 //BUYS
                 r.push({
                         name: this.$t("Buys"),
@@ -101,8 +96,7 @@
                         smooth:true,
                         showSymbol:true,
                         symbolSize:10, 
-                        color: "#00FF00",
-                })
+                        color: "#00FF00"})
                 //SELLS
                 r.push({
                         name: this.$t("Sells"),
@@ -111,8 +105,7 @@
                         smooth:true,
                         showSymbol:true,
                         symbolSize:10, 
-                        color: "#FF0000",
-                })
+                        color: "#FF0000"})
 
                 //LIMIT LINES
                 for (var pos = 0; pos < this.data.limitlines.length; pos++) {
@@ -125,8 +118,7 @@
                         lineStyle: {
                             width: 4,
                             type: 'dashed'
-                        },
-                    })
+                        }})
                     r.push({
                         type: 'line',
                         name: this.limitlines_series_name(pos*3+1),
@@ -134,9 +126,7 @@
                         showSymbol:false,
                         color: this.limitlines_series_color(pos*3+1),
                         lineStyle: {
-                            width: 4,
-                        },
-                    })
+                            width: 4}})
                     r.push({
                         type: 'line',
                         name: this.limitlines_series_name(pos*3+2),
@@ -146,8 +136,7 @@
                         lineStyle: {
                             width: 4,
                             type: 'dotted'
-                        },
-                    })
+                        }})
                 }
 
                 return r
@@ -166,8 +155,7 @@
                 var colors=['pink','gray','yellow','orange']
                 var num = ~~(position / 3); //Division integer
                 return colors[num]
-            },
-        },
+            }},
         mounted(){
             this.loading=false
             this.data.ohcls.forEach(o=> {

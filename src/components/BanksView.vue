@@ -50,19 +50,17 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, localcurrency_html, myheaders } from '@/store'
+    import { useStore, localcurrency_html } from '@/store'
     import DisplayValues from './DisplayValues.vue'
     import {f} from "vuetify_rules"
     import { listobjects_sum } from '@/functions'
     export default {
         components: {
-            DisplayValues,
-        },
+            DisplayValues},
         props: {
             bank: {
                 required: true
-            },
-        },
+            }},
         data(){ 
             return{
                 showActive:true,
@@ -80,16 +78,13 @@
                 investments_items:[],
                 loading_accounts:false,
                 loading_investments:false,
-                key:0,
-            }
+                key:0}
         },
         methods: {    
             useStore,    
             f,  
-            parseResponseError,  
             listobjects_sum,  
             localcurrency_html,  
-            myheaders,  
             displayvalues(){
                 return [
                     {title:this.$t('Active'), value: this.bank.active},
@@ -98,28 +93,23 @@
             },
             update_accounts(){
                 this.loading_accounts=true
-                axios.get(`${this.useStore().apiroot}/api/accounts/withbalance/?bank=${this.bank.id}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/accounts/withbalance/?bank=${this.bank.id}`)
                 .then((response) => {
                     this.loading_accounts=false
                     this.accounts_items=response.data
                     this.key=this.key+1
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             },
             update_investments(){
                 this.loading_investments=true
-                axios.get(`${this.useStore().apiroot}/api/investments/withbalance/?bank=${this.bank.id}&active=true`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/investments/withbalance/?bank=${this.bank.id}&active=true`)
                 .then((response) => {
                     this.key=this.key+1
                     this.loading_investments=false
                     this.investments_items=response.data
                     this.key=this.key+1
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
-            },
-        },
+            }},
         mounted(){
             this.update_accounts()
             this.update_investments()

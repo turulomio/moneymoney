@@ -12,14 +12,13 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import { useDialogs } from '@/composables/useDialogs'
     import TableAccountOperations from './TableAccountOperations.vue'
     
     export default {
         components:{
-            TableAccountOperations,
-        },
+            TableAccountOperations},
         setup() {
             const { alert, confirm, prompt } = useDialogs();
             return { myAlert: alert, myConfirm: confirm, myPrompt: prompt };
@@ -36,8 +35,6 @@
         },
         methods: {
             useStore,
-            parseResponseError,
-            myheaders,
             on_TableAccountOperations_cruded(){
                 this.update_table()
             },
@@ -49,14 +46,10 @@
                     await this.myAlert(this.$t("You must enter at least two characters"))
                     return
                 }
-                axios.get(`${this.useStore().apiroot}/api/accountsoperations/?search=${this.search}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/accountsoperations/?search=${this.search}`)
                 .then((response) => {
                     this.items_ao=response.data
                     this.key=this.key+1
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
-            },
-        },
-    }
+            }}}
 </script>

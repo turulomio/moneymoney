@@ -35,8 +35,7 @@
     const props = defineProps({
         items: {
             required: true
-        },
-    })
+        }})
 
     const emit = defineEmits(['cruded'])
 

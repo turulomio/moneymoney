@@ -14,14 +14,11 @@ import * as echarts from 'echarts'
     export default {
         props:{
             product_a:{
-                required:true,
-            },
+                required:true},
             product_b:{
-                required:true,
-            },
+                required:true},
             data:{
-                required:true,
-            },
+                required:true},
             notitle:{
                 type: Boolean,
                 required: false,
@@ -30,8 +27,7 @@ import * as echarts from 'echarts'
         },
         data(){ 
             return{
-                loading:false,
-            }
+                loading:false}
         },
         methods: {
             chart_option(){
@@ -39,8 +35,7 @@ import * as echarts from 'echarts'
                 return {
                     legend: {
                         data: [this.$t("Price ratio")],
-                        inactiveColor: '#777',
-                    },
+                        inactiveColor: '#777'},
                     tooltip: {
                         trigger: 'axis',
                         axisPointer: {
@@ -51,8 +46,7 @@ import * as echarts from 'echarts'
                                 width: 2,
                                 opacity: 1
                             }
-                        },
-                    },
+                        }},
                     xAxis: {
                         type: 'time',
                         axisLine: { lineStyle: { color: '#8392A5' } }
@@ -69,8 +63,7 @@ import * as echarts from 'echarts'
                     dataZoom: [{
                             type: 'slider',
                             start: 0,
-                            end: 100,
-                    }],
+                            end: 100}],
                     series: [
                         {
                             type:"line",
@@ -84,8 +77,7 @@ import * as echarts from 'echarts'
                         },
                     ]
                 }
-            },
-        },
+            }},
         mounted(){
             this.chart = echarts.init(this.$refs.chart);
             this.chart.setOption(this.chart_option())

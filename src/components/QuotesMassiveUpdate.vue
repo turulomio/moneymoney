@@ -24,17 +24,15 @@
 <script>     
 
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import {f} from 'vuetify_rules'
 
     export default {
-        components:{
-        },
+        components:,
         props:{
             product: {
                 required: true
-            },
-        },
+            }},
         data () {
             return {
                 filename:[], //Must be an array 
@@ -44,14 +42,13 @@
                     { title: this.$t('Code'), sortable: true, key: 'code'},
                     { title: this.$t('Product'), sortable: true, key: 'product'},
                     { title: this.$t('Log'), sortable: true, key: 'log'},
-                ],
-            }
+                ]}
         },
         methods: {
             useStore,
             f,      
-            parseResponseError,
-            myheaders,
+
+
             readDocument(file){
                 return new Promise((resolve, reject) => {
                     var reader = new FileReader();
@@ -60,8 +57,7 @@
                         var r={
                             jsdoc: result,
                             doc: result.split(",")[1],
-                            mime: result.split(";base64,")[0].split(":")[1],
-                        }
+                            mime: result.split(";base64,")[0].split(":")[1]}
                         return resolve(r)
                     }
                     reader.onerror=function(error){
@@ -77,12 +73,10 @@
                     var readed= await this.readDocument(this.filename[0])
                     readed.product=this.product.url
                 }
-                axios.post(`${this.useStore().apiroot}/quotes/massive_update/`, readed, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/quotes/massive_update/`, readed)
                 .then((response) => {
                         this.items=response.data
                         this.loading=false
-                }, (error) => {
-                    this.parseResponseError(error)
                 })
             },
             isButtonDisabled(){

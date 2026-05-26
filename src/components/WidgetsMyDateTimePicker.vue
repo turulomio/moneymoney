@@ -21,15 +21,12 @@
     import MyDateTimePicker from './MyDateTimePicker.vue'
     export default {
         components:{
-            MyDateTimePicker,
-        },
+            MyDateTimePicker},
         data(){
             return {
                 mydatetimepicker:null,
                 mydatetimepicker2:null,
                 mydatetimepicker3:null,
-                mydatetimepicker4:null,
-            }
-        },
-    }
+                mydatetimepicker4:null}
+        }}
 </script>

@@ -15,7 +15,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import { RulesString } from 'vuetify_rules'
 
     import { useDialogs } from '@/composables/useDialogs'
@@ -35,14 +35,11 @@
         data(){ 
             return {
                 form_valid:false,
-                new_bank: null,
-            }
+                new_bank: null}
         },
         methods: {
             useStore,
             RulesString,
-            myheaders, 
-            parseResponseError,
             title(){
                 if (this.mode=="U"){
                     return this.$t("Updating bank")
@@ -64,38 +61,31 @@
             async acceptDialog(){
                 if (this.$refs.form.validate()==false) return
                 if (this.mode=='U'){               
-                    axios.put(this.new_bank.url, this.new_bank, this.myheaders())
+                    axios.put(this.new_bank.url, this.new_bank)
                     .then((response) => {
                         this.useStore().banks.set(response.data.url, response.data)
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="C"){
-                    axios.post(`${this.useStore().apiroot}/api/banks/`, this.new_bank,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/banks/`, this.new_bank)
                     .then((response) => {
                         this.useStore().banks.set(response.data.url, response.data)
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="D"){
                     if(await this.myConfirm(this.$t("This bank will be deleted. Do you want to continue?")) == false) {
                         return
                     } 
-                    axios.delete(this.new_bank.url, this.myheaders())
+                    axios.delete(this.new_bank.url)
                     .then(() => {
                         this.useStore().banks.delete(this.new_bank.url)
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    });
+                    })
                 }
 
-            },
-        },
+            }},
         created(){
-            this.new_bank=Object.assign({},this.bank)
+            this.new_bank=Object.assign(,this.bank)
         }
     }
 </script>

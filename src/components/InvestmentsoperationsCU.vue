@@ -34,7 +34,7 @@
 <script setup>
     import { ref, computed } from 'vue'
     import axios from 'axios' 
-    import { useStore, parseResponseError, myheaders, getMapObjectById, currency_html } from '@/store'
+    import { useStore, getMapObjectById, currency_html   } from '@/store'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import CurrencyFactor from './CurrencyFactor.vue'
@@ -72,8 +72,7 @@
                     code: async () => {
                         var amount=parseNumber(await myPrompt( t("Set total balance of this investment operation"), t("Amount"), "", "number" ));
                         new_io.value.commission=round(Math.abs(Math.abs(amount)-Math.abs(new_io.value.shares*new_io.value.price)), account.value.decimals)
-                    },
-                },
+                    }},
                 {
                     name: t("Fill price from shares and amount"),
                     icon: "mdi-plus",
@@ -82,8 +81,7 @@
                         var shares=round(parseNumber(await myPrompt( t("Set shares operation"), t("Shares"), "", "number" )), product.value.decimals)
                         new_io.value.shares=shares
                         new_io.value.price=round(amount/new_io.value.shares, product.value.decimals)
-                    },
-                },
+                    }},
             ]
         },
     ]
@@ -104,7 +102,7 @@
     })
 
     const new_io=ref(null)
-    new_io.value=Object.assign({},props.io) //Can come from plio or empty_investment_operation
+    new_io.value=Object.assign(,props.io) //Can come from plio or empty_investment_operation
     if ("investments" in new_io.value==false){//Plio misses investments it has investments_id, url and operationstypes
         new_io.value.investments=getMapObjectById("investments", new_io.value.investments_id).url
         new_io.value.url=hyperlinked_url("investmentsoperations",new_io.value.id)
@@ -150,28 +148,22 @@
 
     async function accept(){
         if (props.mode=="U"){   
-            axios.put(new_io.value.url, new_io.value,  myheaders())
+            axios.put(new_io.value.url, new_io.value)
             .then(() => {
                     emit("cruded")
-            }, (error) => {
-                parseResponseError(error)
             })
         } else if (props.mode=="C") {
-            axios.post(`${store.apiroot}/api/investmentsoperations/`, new_io.value,  myheaders())
+            axios.post(`${store.apiroot}/api/investmentsoperations/`, new_io.value)
             .then(() => {
                     emit("cruded")
-            }, (error) => {
-                parseResponseError(error)
             })
         } else if (props.mode=="D") {
             if (!await myConfirm(t("Do you want to delete this investment operation?"))) {
                 return
             } 
-            axios.delete(new_io.value.url, myheaders())
+            axios.delete(new_io.value.url)
             .then(() => {
                 emit("cruded")
-            }, (error) => {
-                parseResponseError(error)
             })
         }
     }

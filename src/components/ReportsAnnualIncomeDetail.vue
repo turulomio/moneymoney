@@ -50,7 +50,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, localcurrency_html, myheaders } from '@/store'
+    import { useStore, localcurrency_html } from '@/store'
     import TableAccountOperations from './TableAccountOperations.vue'
     import TableDividends from './TableDividends.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
@@ -60,15 +60,13 @@
         components:{
             TableAccountOperations,
             TableDividends,
-            TableInvestmentOperationsHistorical,
-        },
+            TableInvestmentOperationsHistorical},
         props: {
             year: {
                 required: true
             },
             month: {
-                required:true,
-            }
+                required:true}
         },
         data () {
             return {
@@ -79,21 +77,19 @@
                 gains:[],
                 fast_operations:[],
                 key:0,
-                tab:3,
-            }  
+                tab:3}  
         },
-        watch:{
-        },
+        watch:,
         methods: {
             useStore,
             f,
-            parseResponseError,
+
             localcurrency_html,
             listobjects_sum,   
-            myheaders,
+
             refreshTable(){
                 this.loading=true
-                axios.get(`${this.useStore().apiroot}/reports/annual/income/details/${this.year}/${this.month}/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/annual/income/details/${this.year}/${this.month}/`)
                 .then((response) => {
                     this.expenses=response.data.expenses
                     this.gains=response.data.gains
@@ -102,11 +98,8 @@
                     this.fast_operations=response.data.fast_operations
                     this.key=this.key+1
                     this.loading=false
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
-            },
-        },
+            }},
         created(){
             this.refreshTable()
 

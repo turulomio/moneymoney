@@ -28,21 +28,18 @@
             readonly: {
                 type: Boolean,
                 required: false,
-                default: false,
-            },
+                default: false},
             clearable: { //Hides null icon
                 type: Boolean,
                 required: false,
-                default: false,
-            }
+                default: false}
         },
         emits: ['update:modelValue'],
         data: function(){
             return {
                 dt: null,
                 new_value: null,
-                menu:false,
-            }
+                menu:false}
         },
         watch: {
             new_value (newValue) {
@@ -78,13 +75,11 @@
             on_click_prepend_icon(){
                 if (this.readonly) return
                 this.new_value=this.dt2string(new Date())
-            },
-        },
+            }},
         created(){
             this.new_clearable=this.clearable
             if (this.readonly) this.new_clearable=false // If readonly can't be clearable
             this.new_value=this.modelValue
             this.dt=this.string2dt(this.new_value)
-        },
-    }
+        }}
 </script>

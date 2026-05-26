@@ -27,7 +27,7 @@
 
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders, getMapObjectById, localcurrency_html, localcurrency_string } from '@/store'
+    import { useStore, getMapObjectById, localcurrency_html, localcurrency_string } from '@/store'
     import ChartEvolutionAssets from './ChartEvolutionAssets.vue'
     import ChartPie from './ChartPie.vue'
     import { my_round, f, localtime } from 'vuetify_rules'
@@ -42,8 +42,7 @@
     export default {
         components:{
             ChartPie,
-            ChartEvolutionAssets,
-        },
+            ChartEvolutionAssets},
         data(){
             return {
                 reportdate:new Date(),
@@ -56,9 +55,7 @@
                 password:"",
 
                 method:"Current",
-                results:{},
-
-            }
+                results:}
         },
         computed:{
             /// COPIED FROM REPORTSINVESTMENTSCLASSES
@@ -117,8 +114,7 @@
                 }
                 adapted=adapted.filter(o => o.value!=0)
                 return adapted
-            },
-        },
+            }},
         methods:{
             useStore,
             localtime,
@@ -126,11 +122,9 @@
             f,
             orderBy,
             sumBy,
-            myheaders,
             localcurrency_html,
             localcurrency_string,
             getMapObjectById,
-            parseResponseError,
             pdfmake_convertImageToDataURL,
             pdfmake_loo_to_table,
             pdfmake_loo_to_table_guess_headers,
@@ -144,8 +138,7 @@
                         title: this.$t("Money Money assets report"),
                         author: `Money Money v${this.useStore().version}`,
                         subject: this.$t("Money Money assets report"),
-                        keywords: 'assets report',
-                    },
+                        keywords: 'assets report'},
                      content: [    
                         { image: await pdfmake_convertImageToDataURL(imgMoneymoney), width: 200, alignment: 'center', margin: [0, 125, 0, 0] },
                         { text: 'Assets report', style: 'header1', alignment:'center' },
@@ -195,8 +188,7 @@
                         body: { fontSize: 11 ,margin:[0,2,0,2], alignment:"justify"},
                         table5: {fontSize:5,margin:[0,4,0,4]},
                         table8: {fontSize:8,margin:[0,4,0,4]},
-                        table12: {fontSize:12,margin:[0,4,0,4]},
-                    },
+                        table12: {fontSize:12,margin:[0,4,0,4]}},
 
                     footer: function(currentPage, pageCount) {
                         return (currentPage>2)? { text: currentPage.toString() + this.$t(' of ') + pageCount, alignment: 'center' }:""
@@ -373,7 +365,7 @@
             },
             report_investments(){
                 var r=[]
-                r.push({ text: this.$t('4. Current investments'), id:'current_investments', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+                r.push({ text: this.$t('4. Current investments'), id:'current_investments', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before"}) // Set this page to landscape})
                 r.push({ text: this.$t('4.1. Investments list'), id:'investments_list', style: 'header2', tocItem: true }) 
                 r.push({ text: this.$t('Next list is sorted by the distance in percent to the selling point.'), style: 'body' }) 
 
@@ -416,7 +408,7 @@
             },            
             report_investmentsoperations(){
                 var r=[]
-                r.push({ text: this.$t('4.2. Current investments operations'), id:'current_investments_operations', style: 'header2', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+                r.push({ text: this.$t('4.2. Current investments operations'), id:'current_investments_operations', style: 'header2', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before"}) // Set this page to landscape})
 
                 this.results.current_investments_operations.forEach(o=>{
                     o["datetime"]=this.localtime(o["datetime"])
@@ -454,7 +446,7 @@
             },
             report_investements_freerisk_revaluation(){
                 var r=[]
-                r.push({ text: this.$t('4.3. Current free-risk investments revaluation'), id:'current_investments_freerisk_revaluation', style: 'header2', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+                r.push({ text: this.$t('4.3. Current free-risk investments revaluation'), id:'current_investments_freerisk_revaluation', style: 'header2', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before"}) // Set this page to landscape})
                 this.results.revaluation_free_risk.forEach(o=>{
                     o["localdatetime"]=this.localtime(o["datetime"])
                     o["operationstypes"]=this.getMapObjectById("operationstypes", o["operationstypes_id"]).localname
@@ -491,7 +483,7 @@
             },
             report_orders(){
                 var r=[]
-                r.push({ text: this.$t('5. Investments orders'), id:'investments_orders', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+                r.push({ text: this.$t('5. Investments orders'), id:'investments_orders', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before"}) // Set this page to landscape})
 
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.orders, ["date","expiration","investmentsname","shares", "price", "amount","percentage_from_price"])
                 headers[0].title=this.$t("Date")
@@ -516,7 +508,7 @@
             },
             report_dividends(){
                 var r=[]
-                r.push({ text: this.$t('6. Dividend estimations report'), id:'dividend_estimations_report', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
+                r.push({ text: this.$t('6. Dividend estimations report'), id:'dividend_estimations_report', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before"}) // Set this page to landscape})
 
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.dividends, ["name","current_price","dps","shares", "estimated", "percentage"])
 
@@ -549,7 +541,7 @@
             },              
             report_ranking(){
                 var r=[]
-                r.push({ text: this.$t('7. Historical investment ranking'), id:'historical_investment_ranking', style: 'header1', tocItem: true ,pageOrientation: 'portrait', pageBreak:"before",}) // Set this page to landscape})
+                r.push({ text: this.$t('7. Historical investment ranking'), id:'historical_investment_ranking', style: 'header1', tocItem: true ,pageOrientation: 'portrait', pageBreak:"before"}) // Set this page to landscape})
 
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.ranking, ["ranking","name","current_net_gains","historical_net_gains", "dividends", "total"])
 
@@ -589,8 +581,7 @@
                             historical_net_gains: e.total_io_historical.gains_net_user,
                             dividends: e.data.dividends,
                             total: e.total_io_current.gains_net_user+ e.total_io_historical.gains_net_user + e.data.dividends,
-                            products_id: e.data.products_id,
-                        })
+                            products_id: e.data.products_id})
                     })
                     r=orderBy(r,["ranking"], ["asc"])
                     return r
@@ -598,18 +589,18 @@
 
                 const year=new Date().getFullYear()
                 axios.all([
-                    axios.get(`${this.useStore().apiroot}/investments/classes/`, this.myheaders()),//resPies
-                    axios.get(`${this.useStore().apiroot}/api/banks/withbalance/?active=true`, this.myheaders()),//resBWB
-                    axios.get(`${this.useStore().apiroot}/reports/annual/${year}/`, this.myheaders()),//resRA
-                    axios.get(`${this.useStore().apiroot}/reports/annual/income/${year}/`, this.myheaders()),//resRAI
-                    axios.get(`${this.useStore().apiroot}/reports/annual/gainsbyproductstypes/${year}/`, this.myheaders()),//resRAG
-                    axios.get(`${this.useStore().apiroot}/reports/annual/revaluation/?only_zero=true`, this.myheaders()),//resRAR
-                    axios.get(`${this.useStore().apiroot}/api/accounts/withbalance/?active=true`, this.myheaders()),//resAWB
-                    axios.get(`${this.useStore().apiroot}/api/investments/withbalance/?active=true`, this.myheaders()),//resIWB
-                    axios.get(`${this.useStore().apiroot}/reports/investmentsoperations/current/` , this.myheaders()),// resIOC
-                    axios.get(`${this.useStore().apiroot}/api/orders/?active=true`, this.myheaders()),//resOrders
-                    axios.get(`${this.useStore().apiroot}/reports/dividends/`, this.myheaders()), //resDividends
-                    axios.get(`${this.useStore().apiroot}/reports/ranking/`, this.myheaders()), //resRanking
+                    axios.get(`${this.useStore().apiroot}/investments/classes/`),//resPies
+                    axios.get(`${this.useStore().apiroot}/api/banks/withbalance/?active=true`),//resBWB
+                    axios.get(`${this.useStore().apiroot}/reports/annual/${year}/`),//resRA
+                    axios.get(`${this.useStore().apiroot}/reports/annual/income/${year}/`),//resRAI
+                    axios.get(`${this.useStore().apiroot}/reports/annual/gainsbyproductstypes/${year}/`),//resRAG
+                    axios.get(`${this.useStore().apiroot}/reports/annual/revaluation/?only_zero=true`),//resRAR
+                    axios.get(`${this.useStore().apiroot}/api/accounts/withbalance/?active=true`),//resAWB
+                    axios.get(`${this.useStore().apiroot}/api/investments/withbalance/?active=true`),//resIWB
+                    axios.get(`${this.useStore().apiroot}/reports/investmentsoperations/current/` ),// resIOC
+                    axios.get(`${this.useStore().apiroot}/api/orders/?active=true`),//resOrders
+                    axios.get(`${this.useStore().apiroot}/reports/dividends/`), //resDividends
+                    axios.get(`${this.useStore().apiroot}/reports/ranking/`), //resRanking
                 ]).then(([resPies, resBWB, resRA, resRAI, resRAG, resRAR, resAWB, resIWB,resIOC,resOrders,resDividends, resRanking]) => {
                     this.results.pies=resPies.data
                     this.results.last_year_balance=resRA.data.last_year_balance
@@ -636,11 +627,8 @@
 
                     console.log("RESULTS", this.results)
                     this.loading=false
-                }, (error) => {
-                    this.parseResponseError(error)
                 })
-            },
-        },
+            }},
         created(){
             this.get_report_data()
         }

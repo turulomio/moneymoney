@@ -86,7 +86,7 @@
 <script setup>
     import { ref, computed, watch, onMounted, nextTick} from 'vue'
     import axios from 'axios'
-    import { useStore, parseResponseError, currency_html, myheaders } from '@/store'
+    import { useStore, currency_html } from '@/store'
     import {  empty_account_operation } from '../empty_objects.js'
     import AccountsoperationsCU from './AccountsoperationsCU.vue'
     import AccountsTransfer from './AccountsTransfer.vue'
@@ -107,28 +107,23 @@
         showtotal:{// Items must have currency attribute
             type: Boolean,
             required:false,
-            default: false,
-        },
+            default: false},
         showaccount:{// Items must have accounts attribute
             type: Boolean,
             required:false,
-            default: false,
-        },
+            default: false},
         showbalance:{// Items must have balance attribute
             type: Boolean,
             required:false,
-            default: false,
-        },
+            default: false},
         showselected:{
             type: Boolean,
             required:false,
-            default: false,
-        },
+            default: false},
         hideactions:{
             type: Boolean,
             required:false,
-            default: false,
-        }
+            default: false}
     })
 
     const emit = defineEmits(['changeSelected', 'cruded'])
@@ -208,34 +203,28 @@
     async function editAO(item) {
         if (item.is_editable === false) { // Account operation is not editable
             if (item.associated_io) { // It's an investment operation
-                axios.get(item.associated_io, myheaders())
+                axios.get(item.associated_io)
                     .then((response) => {
                         io.value = response.data
                         io_mode.value = "U"
                         key.value++
                         dialog_io.value = true
-                    }, (error) => {
-                        parseResponseError(error)
                     });
             } else if (item.associated_transfer) { // Try to find account transfer to edit it
-                axios.get(item.associated_transfer, myheaders())
+                axios.get(item.associated_transfer)
                     .then((response) => {
                         at.value = response.data
                         at_mode.value = "U"
                         key.value++
                         dialog_transfer.value = true
-                    }, (error) => {
-                        parseResponseError(error)
                     })
             } else if (item.associated_dividend) {
-                axios.get(item.associated_dividend, myheaders())
+                axios.get(item.associated_dividend)
                     .then((response) => {
                         dividend.value = response.data
                         dividends_cu_mode.value = "U"
                         key.value++
                         dividends_cu_dialog.value = true
-                    }, (error) => {
-                        parseResponseError(error)
                     })
             } else { // It's not a special comment
                 await myAlert(t("You can't edit this account operation"))
@@ -250,14 +239,12 @@
 
     async function deleteAO(item) {
         if (item.associated_transfer) { // Tries to find transfer to delete it
-            axios.get(item.associated_transfer, myheaders())
+            axios.get(item.associated_transfer)
                 .then((response) => {
                     at.value = response.data
                     at_mode.value = "D"
                     key.value++
                     dialog_transfer.value = true
-                }, (error) => {
-                    parseResponseError(error)
                 })
         } else if (item.is_editable === false) { // Rest of non-editables
             await myAlert(t("You can't delete this account operation"))
@@ -345,6 +332,5 @@
     })
 
     defineExpose({
-        gotoLastRow,
-    })
+        gotoLastRow})
 </script>

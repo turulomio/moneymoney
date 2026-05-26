@@ -71,7 +71,7 @@
 <script setup>
     import { ref, computed, onMounted } from 'vue'
     import axios from 'axios'
-    import { useStore, myheaders, getMapObjectById } from '@/store'
+    import { useStore, getMapObjectById  } from '@/store'
     import { useI18n } from 'vue-i18n'
     import MyMenuInline from './MyMenuInline.vue'
     import {empty_order, empty_ios,empty_ios_simulation_operation,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
@@ -88,18 +88,15 @@
     const props = defineProps({
         ios_id: { //object plinvestmentsoperations id can be investment or virtual investment (Merged)
                     //it uses only current_operations to make simulation 
-            required: true,
-        },
+            required: true},
         shares: {
             type: Number,
             required: false,
-            default: 0,
-        },
+            default: 0},
         price: {
             type: Number,
             required: false,
-            default: 0,
-        }
+            default: 0}
     })
 
     const { t } = useI18n()
@@ -146,16 +143,14 @@
                         var amount=parseNumber(await myPrompt( t("Please set the amount to invest in this order"), t("Amount"), "", "number", 10000 ));
                         newshares.value=parseInt(amount/newprice.value)
                     },
-                    icon: "mdi-book-plus",
-                },
+                    icon: "mdi-book-plus"},
                 {
                     name: t('Decimal shares from amount to reinvest'),
                     code: async () => {
                         var amount=parseNumber(await myPrompt( t("Please set the amount to invest in this order"), t("Amount"), "", "number", 10000 ));
                         newshares.value=amount/newprice.value
                     },
-                    icon: "mdi-book-plus",
-                },
+                    icon: "mdi-book-plus"},
             ]
         },
         {
@@ -188,8 +183,7 @@
                         }
                         newshares.value=-resultado
                     },
-                    icon: "mdi-book-plus",
-                },
+                    icon: "mdi-book-plus"},
                 {
                     name: t('Decimal shares to consolidate losses'),
                     code: async () => {
@@ -216,8 +210,7 @@
                         }
                         newshares.value=-my_round(resultado,6)
                     },
-                    icon: "mdi-book-plus",
-                },
+                    icon: "mdi-book-plus"},
             ]
         },
     ]
@@ -227,7 +220,7 @@
     })
 
     const product = computed(() => {
-        if (!ios_id_current.value) return {}
+        if (!ios_id_current.value) return 
         return getMapObjectById("products", ios_id_current.value.data.products_id)
     })
 
@@ -258,7 +251,7 @@
     }
 
     function refreshProductQuotes(){
-        return axios.get(`${store.apiroot}/products/quotes/ohcl?product=${product.value.url}`, myheaders())
+        return axios.get(`${store.apiroot}/products/quotes/ohcl?product=${product.value.url}`)
     }
 
     function simulateOrderAfter(){
@@ -272,7 +265,7 @@
         operation.comment="Simulation 1"
         operation.investments_id=parseInt(props.ios_id.data.investments_id)
         simulation.simulation.push(operation)
-        return axios.post(`${store.apiroot}/ios/`, simulation, myheaders())
+        return axios.post(`${store.apiroot}/ios/`, simulation)
     }
 
     function make_all_axios_before(){

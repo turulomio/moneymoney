@@ -31,8 +31,7 @@
             tab(val){
                 if (val==0) setTimeout(() => {this.show1=true }, 300)
                 if (val==1) setTimeout(() => {this.show2=true }, 300)
-            },
-        },
+            }},
         data(){
             return {
                 show1:true,
@@ -53,6 +52,5 @@
 
                 ]
             }
-        },
-    }
+        }}
 </script>

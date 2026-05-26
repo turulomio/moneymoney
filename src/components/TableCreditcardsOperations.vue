@@ -60,23 +60,19 @@
         showtotal:{// Items must have currency attribute
             type: Boolean,
             required:false,
-            default: false,
-        },
+            default: false},
         showcc:{// Items must have accounts attribute
             type: Boolean,
             required:false,
-            default: false,
-        },
+            default: false},
         showselected:{
             type: Boolean,
             required:false,
-            default: false,
-        },
+            default: false},
         hideactions:{
             type: Boolean,
             required:false,
-            default: false,
-        }
+            default: false}
     })
 
     const emit = defineEmits(['cruded', 'changeSelected'])

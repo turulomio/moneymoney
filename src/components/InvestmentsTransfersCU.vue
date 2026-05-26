@@ -36,7 +36,7 @@
 </template>
 <script setup>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import CurrencyFactor from './CurrencyFactor.vue'
     import { RulesSelection,RulesFloat,RulesFloatGEZ,RulesString } from 'vuetify_rules'
@@ -66,7 +66,7 @@
     if (props.transfer == null) {
         new_transfer.value = empty_investment_transfer()
     } else {
-        new_transfer.value = Object.assign({}, props.transfer)
+        new_transfer.value = Object.assign(, props.transfer)
     }
 
     const origin_investment = computed(() => {
@@ -123,28 +123,22 @@
 
     async function accept(){
         if (props.mode=="U"){   
-            axios.put(new_transfer.value.url, new_transfer.value,  myheaders())
+            axios.put(new_transfer.value.url, new_transfer.value)
             .then(() => {
                     emit("cruded")
-            }, (error) => {
-                parseResponseError(error)
             })
         } else if (props.mode=="C") {
-            axios.post(`${store.apiroot}/api/investmentstransfers/`, new_transfer.value,  myheaders())
+            axios.post(`${store.apiroot}/api/investmentstransfers/`, new_transfer.value)
             .then(() => {
                     emit("cruded")
-            }, (error) => {
-                parseResponseError(error)
             })
         } else if (props.mode=="D") {
             if (!await myConfirm(t("Do you want to delete this investment transfer?"))) {
                 return
             } 
-            axios.delete(new_transfer.value.url, myheaders())
+            axios.delete(new_transfer.value.url)
             .then(() => {
                 emit("cruded")
-            }, (error) => {
-                parseResponseError(error)
             })
         }
     }

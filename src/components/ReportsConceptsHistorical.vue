@@ -80,19 +80,17 @@
 
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, localcurrency_html, myheaders } from '@/store'
+    import { useStore, localcurrency_html } from '@/store'
     import ReportsConceptsHistoricalDetail from './ReportsConceptsHistoricalDetail.vue'
     import { listobjects_sum, getArrayFromMap } from '@/functions'
     export default {
         name:"ReportsConceptsHistorical",
         components:{
-            ReportsConceptsHistoricalDetail,
-        },
+            ReportsConceptsHistoricalDetail},
         props:{
             concept:{
                 required:false,
-                default:null,
-            }
+                default:null}
         },
         watch:{
             selected_concept: function(){
@@ -128,20 +126,19 @@
                 //Historical concept detail
                 dialog_historical_concepts_detail:false,
                 year:null,
-                month:null,
-            }
+                month:null}
         },
         methods:{
             useStore,
-            parseResponseError,
+
             listobjects_sum,
             localcurrency_html,
-            myheaders,
+
             getArrayFromMap,
 
             refreshTable(){
                 this.loading=true
-                axios.get(`${this.selected_concept}historical_report/`, this.myheaders())
+                axios.get(`${this.selected_concept}historical_report/`)
                 .then( (response)=> {
                     this.tableData=response.data.data
                     this.total=response.data.total
@@ -150,9 +147,7 @@
                     this.key=this.key+1
                     this.loading=false
                 }) 
-                .catch((error) => {
-                    this.parseResponseError(error)
-                });
+                ;
             },
             showConceptsHistoricalDetail(item,month=null){
                 this.year=item.year

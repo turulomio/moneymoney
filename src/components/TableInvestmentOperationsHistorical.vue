@@ -106,19 +106,15 @@
             required: true
         },
         output:{
-            required:true,
-        },
+            required:true},
         showtotal:{// Items must have currency attribute
             type: Boolean,
             required:false,
-            default: false,
-        },
+            default: false},
         showinvestment:{// Items must have accounts attribute
             type: Boolean,
             required:false,
-            default: false,
-        },
-    })
+            default: false}})
 
     const { t } = useI18n()
     const table = ref(null)

@@ -11,7 +11,7 @@
 
 </template>
 <script>
-    import { parseResponseError, myheaders } from '@/store'
+    import { Error } from '@/store'
 
     import * as echarts from 'echarts'
     import axios from 'axios'
@@ -20,14 +20,12 @@
     export default {
         props:{
             investment:{
-                required:true,
-            },
+                required:true},
             height: {
                 type: Number,
                 required: false,
                 default:600
-            },
-        },
+            }},
         data(){ 
             return{
                 balance: [],
@@ -36,26 +34,22 @@
                 gains:[],
                 gains_dividends:[],
                 dividends:[],
-                loading:true,
-
-            }
+                loading:true}
         },
         methods: {
             f,
-            myheaders,
-            parseResponseError,
+
+
             chart_option(){
                 return  {
                     legend: {
                         data: [ this.$t("Invested"), this.$t("Balance"), this.$t("Gains and dividends"),  this.$t("Gains"),  this.$t("Dividends")],
-                        inactiveColor: '#777',
-                    },
+                        inactiveColor: '#777'},
                     tooltip: {
                         trigger: 'axis',
                         axisPointer: {
                             animation: false,
-                            type: 'cross',
-                        }
+                            type: 'cross'}
                     },
                     xAxis: {
                         type: 'time',
@@ -75,51 +69,44 @@
                             dataZoom: {
                                 yAxisIndex: 'none'
                             },
-                            saveAsImage: {}
+                            saveAsImage: 
                         }
                     },
                     dataZoom: [{
                             type: 'slider',
                             start: 0,
-                            end: 100,
-                    }],
+                            end: 100}],
                     series: [
                         {
                             type: 'line',
                             name: this.$t("Invested"),
-                            data: this.invested,
-                        },                
+                            data: this.invested},                
 
                         {
                             type: 'line',
                             name: this.$t("Balance"),
-                            data: this.balance,
-                        },             
+                            data: this.balance},             
                         {
                             type: 'line',
                             name: this.$t("Gains and dividends"),
-                            data: this.gains_dividends,
-                        },             
+                            data: this.gains_dividends},             
                         {
                             type: 'line',
                             name: this.$t("Gains"),
-                            data: this.gains,
-                        },             
+                            data: this.gains},             
                         {
                             type: 'line',
                             name: this.$t("Dividends"),
-                            data: this.dividends,
-                        },                
+                            data: this.dividends},                
                     ]
                 }
             },
             styleheight: function(){
                 return `height: ${this.height}px`
-            },
-        },
+            }},
         mounted(){
 
-            axios.get(`${this.investment.url}operations_evolution_chart/`, this.myheaders())
+            axios.get(`${this.investment.url}operations_evolution_chart/`)
             .then((response) => {
                 this.invested=[]    
                 this.dividends=[]
@@ -136,8 +123,6 @@
                     this.chart.setOption(this.chart_option())
                 }
                 this.loading=false
-            }, (error) => {
-                this.parseResponseError(error)
             });
         }
     }
