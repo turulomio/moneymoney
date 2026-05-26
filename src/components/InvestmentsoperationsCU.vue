@@ -34,7 +34,7 @@
 <script setup>
     import { ref, computed } from 'vue'
     import axios from 'axios' 
-    import { useStore, newParseResponseError, myheaders, getMapObjectById, currency_html } from '@/store'
+    import { useStore, parseResponseError, myheaders, getMapObjectById, currency_html } from '@/store'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import CurrencyFactor from './CurrencyFactor.vue'
@@ -143,8 +143,8 @@
             net=gross-new_io.value.taxes-new_io.value.commission
         }
         return f(t("Operation gross balance: [0]<br>Operation net balance: [1]"), [
-             currency_html(gross, product.value.currency),
-             currency_html(net, product.value.currency)
+             currency_html(net, product.value.currency),
+             currency_html(gross, product.value.currency)
         ])
     })
 
@@ -154,14 +154,14 @@
             .then(() => {
                     emit("cruded")
             }, (error) => {
-                newParseResponseError(error, t, store)
+                parseResponseError(error)
             })
         } else if (props.mode=="C") {
             axios.post(`${store.apiroot}/api/investmentsoperations/`, new_io.value,  myheaders())
             .then(() => {
                     emit("cruded")
             }, (error) => {
-                newParseResponseError(error, t, store)
+                parseResponseError(error)
             })
         } else if (props.mode=="D") {
             if (!await myConfirm(t("Do you want to delete this investment operation?"))) {
@@ -171,7 +171,7 @@
             .then(() => {
                 emit("cruded")
             }, (error) => {
-                newParseResponseError(error, t, store)
+                parseResponseError(error)
             })
         }
     }

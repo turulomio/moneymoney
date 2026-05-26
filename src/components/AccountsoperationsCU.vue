@@ -20,7 +20,7 @@
 <script setup>
     import { ref, computed } from 'vue'
     import axios from 'axios' 
-    import { useStore, myheaders, newParseResponseError } from '@/store'
+    import { useStore, myheaders, parseResponseError } from '@/store'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection, RulesFloat } from 'vuetify_rules'
     import { date2zulu, zulu2date, getArrayFromMap, hyperlinked_url } from '@/functions'
@@ -86,7 +86,7 @@
             .then(() => {
                     emit('cruded', following_ao.value)
             }, (error) => {
-                newParseResponseError(error, t,useStore())
+                parseResponseError(error)
             })
         } else if (props.mode=='C'){ 
             axios.post(`${store.apiroot}/api/accountsoperations/`, newao.value,  myheaders())
@@ -99,7 +99,7 @@
                 }
                 emit('cruded', following_ao.value)
             }, (error) => {
-                newParseResponseError(error, t,useStore())
+                parseResponseError(error)
             })
         } else if (props.mode=='D'){
             if (!await myConfirm(t("Do you want to delete this account operation?"))) {
@@ -110,7 +110,7 @@
             .then(() => {
                 emit('cruded', following_ao.value)
             }, (error) => {
-                newParseResponseError(error, t,useStore())
+                parseResponseError(error)
             });
         } else if (props.mode=='F'){
 
@@ -125,7 +125,7 @@
             .then(() => {
                 emit('cruded', following_ao.value)
             }, (error) => {
-                newParseResponseError(error, t,useStore())
+                parseResponseError(error)
             });
         }
     }

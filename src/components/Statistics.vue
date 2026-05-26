@@ -28,12 +28,12 @@
             async getStatistics(){
                 try {
                     const response = await axios.get(`${this.useStore().apiroot}/statistics/`, this.myheaders())
-                    if (await this.parseResponse(response, this.useStore())){
+                    if (await this.parseResponse(response)){
                         this.items=response.data
                         this.key=this.key+1
                     }
                 } catch (error) {
-                    await this.parseResponseError(error, this.useStore())
+                    await this.parseResponseError(error)
                 }
             }
 

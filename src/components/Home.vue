@@ -44,7 +44,7 @@
 
 <script setup>
     import axios from 'axios'
-    import { useStore, myheaders, currency_string, newParseResponseError } from '@/store'
+    import { useStore, myheaders, currency_string, parseResponseError } from '@/store'
     import imgUrl from '@/assets/moneymoney.png'
     
     import { f, localtime } from 'vuetify_rules'
@@ -75,7 +75,7 @@
             console.log(`Server time: ${server.toISOString()}`)
             console.log(`Difference (ms): ${diff_time.value}`)
         }, (error) => {
-            newParseResponseError(error, t, useStore())
+            parseResponseError(error)
         });
     }
 

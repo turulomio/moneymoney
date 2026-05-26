@@ -11,7 +11,7 @@
 <script setup>
     import axios from 'axios'
     import { ref, onMounted } from 'vue'
-    import { useStore, newParseResponseError, myheaders, currency_generic_string } from '@/store'
+    import { useStore, parseResponseError, myheaders, currency_generic_string } from '@/store'
     import TableAccountOperations from './TableAccountOperations.vue'
     import { listobjects_sum } from '@/functions'
     import { useI18n } from 'vue-i18n'
@@ -39,7 +39,7 @@
                 items.value = response.data
                 key.value++
             }, (error) => {
-                newParseResponseError(error, t, store)
+                parseResponseError(error)
             });
     }
 

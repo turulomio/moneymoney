@@ -15,7 +15,7 @@
 </template>
 <script setup>
     import axios from 'axios'
-    import { useStore, newParseResponseError, myheaders } from '@/store'
+    import { useStore, parseResponseError, myheaders } from '@/store'
     import { RulesSelection, RulesString } from 'vuetify_rules'
     
     import AutocompleteOperationstypes from './AutocompleteOperationstypes.vue'
@@ -66,7 +66,7 @@
                     store.concepts.set(response.data.url, response.data)
                     emit("cruded")
                 }, (error) => {
-                    newParseResponseError(error, t, store)
+                    parseResponseError(error)
                 })
         } else if (props.mode === "C") {
             axios.post(`${store.apiroot}/api/concepts/`, new_concept.value, myheaders())
@@ -74,7 +74,7 @@
                     store.concepts.set(response.data.url, response.data)
                     emit("cruded")
                 }, (error) => {
-                    newParseResponseError(error, t, store)
+                    parseResponseError(error)
                 })
         } else if (props.mode === "D") {
             if (!await myConfirm(t("Do you want to delete this concept?"))) {
@@ -85,7 +85,7 @@
                     store.concepts.delete(response.data.url, response.data)
                     emit("cruded")
                 }, (error) => {
-                    newParseResponseError(error, t, store)
+                    parseResponseError(error)
                 })
         }
     }

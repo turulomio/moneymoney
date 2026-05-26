@@ -9,7 +9,7 @@
 
 <script setup>
     import axios from 'axios'
-    import { useStore, myheaders, newParseResponseError } from '@/store'
+    import { useStore, myheaders, parseResponseError } from '@/store'
     import MyMenuInline from './MyMenuInline.vue'    
     import TableInvestmentsTransfers from './TableInvestmentsTransfers.vue'
     
@@ -57,7 +57,7 @@
             loading.value = false
             key.value++
         }, (error) => {
-            newParseResponseError(error, t, useStore())
+            parseResponseError(error)
         });
     }
 

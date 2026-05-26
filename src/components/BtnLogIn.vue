@@ -51,7 +51,7 @@ export default {
             this.loading=true
             try {
                 const response = await axios.post(`${this.useStore().apiroot}/login/`, {username: this.user, password:this.password}, this.myheaders_noauth())
-                if (await this.parseResponse(response, this.useStore())==true){
+                if (await this.parseResponse(response)==true){
                     console.log("Authenticated");
                     this.useStore().setToken(response.data)
                     await this.useStore().updateAll()
@@ -68,7 +68,7 @@ export default {
                     }, 2000);
                 }
             } catch (error) {
-                await this.parseResponseError(error, this.useStore())
+                await this.parseResponseError(error)
                 setTimeout(() => { //Delay of 1 second
                     this.$refs.form.reset()
                     this.dialog=false

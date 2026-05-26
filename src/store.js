@@ -100,7 +100,7 @@ export const useStore = defineStore('global', {
           this.catalog_manager=response.data
           console.log(`Updated catalog manager in ${new Date()-start} ms`)
       }, (error) => {
-          parseResponseError(error, this)
+          parseResponseError(error)
       });
     },
     updateCreditCards() {
@@ -366,13 +366,13 @@ export function myheaders_formdata(){
 
 // returns true if everything is ok
 // return false if there is something wrong
-export async function parseResponse(response, store = null){
+export async function parseResponse(response){
     const dialogStore = useDialogStore()
-    const s = store || useStore()
+    const store = useStore()
     const { t } = i18n.global
     if (response.status==200){ //Good connection
         if (response.data == "Wrong credentials"){
-            s.setToken(null)
+            store.setToken(null)
             await dialogStore.alert(t("Wrong credentials"))
             return false
         }
@@ -387,17 +387,17 @@ export async function parseResponse(response, store = null){
     }
 }
 
-export async function parseResponseError(error, store = null){
+export async function parseResponseError(error){
     const dialogStore = useDialogStore()
-    const s = store || useStore()
+    const store = useStore()
     const { t } = i18n.global
     if (error.response) {
         if (error.response.status == 401){
-            if (s.token==null){ // Not logged yet
+            if (store.token==null){ // Not logged yet
                 await dialogStore.alert(t("Wrong credentials"))
             } else {
                 await dialogStore.alert (t("You aren't authorized to do this request"))
-                s.setToken(null)
+                store.setToken(null)
                 const { router } = await import('./routes.js')
                 if (router.currentRoute.name != "about") router.push("about")
                 console.log(error.response)
@@ -407,7 +407,7 @@ export async function parseResponseError(error, store = null){
             console.log(error.response)
         } else if (error.response.status == 403){ // Used for developer or app errors
             await dialogStore.alert (t("You've done something forbidden"))
-            s.setToken(null)
+            store.setToken(null)
             const { router } = await import('./routes.js')
             if (router.currentRoute.name != "about") router.push("about")
             console.log(error.response)
@@ -422,10 +422,6 @@ export async function parseResponseError(error, store = null){
     } else {
         console.log('Error', error.message);
     }
-}
-
-export async function newParseResponseError(error, t, store){
-    return parseResponseError(error, store)
 }
 
 export function getConceptsForDividends() { 
