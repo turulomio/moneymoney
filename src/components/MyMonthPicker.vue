@@ -22,8 +22,7 @@ const props = defineProps({
     readonly: {
         type: Boolean,
         required: false,
-        default: false,
-    },
+        default: false},
     rules: {
         type: Array,
         required: false
@@ -31,13 +30,11 @@ const props = defineProps({
     fromyear: {
         type: Number,
         required: false,
-        default: 1900,
-    },
+        default: 1900},
     frommonth: {
         type: Number,
         required: false,
-        default: 1,
-    },
+        default: 1},
     toyear: {
         type: Number,
         required: false,
@@ -46,9 +43,7 @@ const props = defineProps({
     tomonth: {
         type: Number,
         required: false,
-        default: 12,
-    },
-});
+        default: 12}});
 
 const emit = defineEmits(['update:modelValue']);
 const { t } = useI18n();

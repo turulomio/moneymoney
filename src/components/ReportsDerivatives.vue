@@ -72,7 +72,7 @@
 </template>
 <script>     
     import axios from 'axios'
-    import { useStore, myheaders, localcurrency_html } from '@/store'
+    import { useStore, localcurrency_html  } from '@/store'
     import FastOperationsCoverageCU from './FastOperationsCoverageCU.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import MyMonthPicker from './MyMonthPicker.vue'
@@ -85,8 +85,7 @@
             MyMonthPicker,
             TableFastOperationsCoverage,
             FastOperationsCoverageCU,
-            MyMenuInline,
-        },
+            MyMenuInline},
         data(){
             return {
                 tab:2,
@@ -129,30 +128,26 @@
 
                 //Dialog FOCCU
                 dialog_foc:false,
-                foc:null,
-
-            }
+                foc:null}
         },
-        computed:{
-        },
+        
         watch:{
             ym () {
                 this.refreshTables()
-            },
-        },
+            }},
         methods:{
             useStore,
             empty_fast_operations_coverage,
             f,
             listobjects_sum,
-            myheaders,
+
             localcurrency_html,
             refreshTables(){
                 this.loading=true
 
                 axios.all([
-                    axios.get(`${this.useStore().apiroot}/derivatives/`, this.myheaders()),
-                    axios.get(`${this.useStore().apiroot}/api/fastoperationscoverage/?year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())
+                    axios.get(`${this.useStore().apiroot}/derivatives/`),
+                    axios.get(`${this.useStore().apiroot}/api/fastoperationscoverage/?year=${this.ym.year}&month=${this.ym.month}`)
                 ])
                 .then(([resDerivatives, resFOC]) => {
                     this.items=resDerivatives.data

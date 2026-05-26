@@ -65,9 +65,7 @@
         showinvestment:{ //Only hides account if true
             type: Boolean,
             required:false,
-            default:false,
-        },
-    })
+            default:false}})
 
     const emit = defineEmits(['cruded'])
 

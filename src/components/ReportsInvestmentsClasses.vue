@@ -33,14 +33,13 @@
 </template>
 <script>      
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import ChartPie from './ChartPie.vue'
     import { my_round } from 'vuetify_rules'
     
     export default {
         components:{
-            ChartPie,
-        },
+            ChartPie},
         data(){ 
             return {
                 showpie:true,
@@ -49,8 +48,7 @@
                 method: "Current",
                 method_products:["Invested", "Current"],
                 data:null,
-                loading:false,
-            }
+                loading:false}
         },
         computed:{
             echart_products_items: function(){
@@ -114,25 +112,21 @@
             tab(){
                 this.showpie=false
                 setTimeout(() => {this.showpie=true }, 300)
-            },
-        },
+            }},
         methods:{
             useStore,
             my_round,
-            myheaders,
-            parseResponseError,
+
+
             update_table(){
                 this.loading=true
-                axios.get(`${this.useStore().apiroot}/investments/classes/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/investments/classes/`)
                 .then((response) => {
                     this.data=response.data
                     this.loading=false
                     this.key=this.key+1
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
-            },
-        },
+            }},
         created(){
             this.update_table()
         }

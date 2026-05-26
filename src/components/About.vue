@@ -7,7 +7,7 @@
         <v-container  class="paragraph">
             <p class="paragraph mb-3">{{ $t("Money Money is a personal finances application") }}</p>
             
-            <p class="paragraph mb-3" ref="github">{{  }}</p>
+            <p class="paragraph mb-3" ref="github"></p>
             <p class="paragraph mb-3">{{ $t("Main features:") }}</p>
             
             <ul class="paragraph mb-3">
@@ -25,8 +25,7 @@
         name: 'About',
         data(){
             return {
-                imgUrl:imgUrl,
-            }
+                imgUrl:imgUrl}
         },
         computed:{
             store(){

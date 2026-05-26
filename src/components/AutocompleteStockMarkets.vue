@@ -18,19 +18,16 @@ export default {
     name: "AutocompleteProducts",
     props:{
         modelValue: { 
-            required: true,
-        },
+            required: true},
         returnObject:{
             type: Boolean,
             required:false,
-            default:false,
-        },
+            default:false},
         readonly: {
             type: Boolean,
             required: false,
             default: false
-        },
-    },
+        }},
     emits: ['update:modelValue'],
     computed:{
         mylabel(){
@@ -40,8 +37,7 @@ export default {
     },
     data(){ 
         return {
-            new_value:null,
-        }
+            new_value:null}
     },
     watch:{
         value(newValue){
@@ -49,12 +45,10 @@ export default {
         },
         new_value(newValue){
             this.$emit('update:modelValue', newValue)
-        },
-    },
+        }},
     methods:{
         getArrayFromMap,
-        useStore,
-    },
+        useStore},
     created(){
         this.new_value=this.modelValue
     }

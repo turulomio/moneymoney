@@ -13,7 +13,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, localcurrency_html, myheaders } from '@/store'
+    import { useStore, localcurrency_html } from '@/store'
     import { defineAsyncComponent } from 'vue'
     import {f} from 'vuetify_rules'
     import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
@@ -22,26 +22,21 @@
         name: "ReportsConceptsHistoricalDetail",
         components:{
             "TableAccountOperations": defineAsyncComponent(() => import('./TableAccountOperations.vue')), //To remove circular dependency
-            TableCreditcardsOperations,
-        },
+            TableCreditcardsOperations},
         props:{
             concept: {//url
                 required: true
             },
             year: {
                 type: Number,
-                required: true,
-            },
+                required: true},
             month:{ //Only hides account if true
                 type: Number,
-                required:false,
-            },
-        },
+                required:false}},
         data(){ 
             return {
                 data: {ao: [],cco:[]},
-                key:0,
-            }
+                key:0}
         },
         computed:{
             title: function(){
@@ -61,10 +56,10 @@
         methods: {
             useStore,
             f,
-            parseResponseError,
+
             listobjects_sum,
             localcurrency_html,
-            myheaders,
+
             on_TableAccountsoperations_cruded(){
                 this.update_table()
             },
@@ -72,16 +67,13 @@
                 this.update_table()
             },
             update_table(){
-                axios.get(`${this.concept}historical_report_detail/?year=${this.year}&month=${this.month}` , this.myheaders())
+                axios.get(`${this.concept}historical_report_detail/?year=${this.year}&month=${this.month}` )
                 .then( (response)=> {
                     this.data=response.data
                     this.key=this.key+1
                 }) 
-                .catch((error) => {
-                    this.parseResponseError(error)
-                });
-            },
-        },
+                ;
+            }},
         async created(){
             await this.update_table()
         }

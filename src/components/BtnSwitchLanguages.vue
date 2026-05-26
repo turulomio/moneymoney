@@ -28,8 +28,7 @@
                     { text: "Español", value: "es", flag:"es"},
                     { text: "English", value: "en", flag:"us"},
                 ],
-                current: null,
-            }
+                current: null}
         },  
         methods:{
             switchLocale(item){

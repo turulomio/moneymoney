@@ -30,8 +30,7 @@
     
     export default {
         components:{
-            QuotesCU,
-        },
+            QuotesCU},
         props: {
             items: { //List of object with  datetime, quote, id, product (url), decimal, currency, name attributes
                 required: true
@@ -39,21 +38,16 @@
             show_name:{ // Show product name
                 type: Boolean,
                 required: false,
-                default: false,
-            },
+                default: false},
             no_delete_confirmation:{
                 type: Boolean,
                 required: false,
-                default: false,
-            },
-            
-        },
+                default: false}},
         data: function(){
             return {
                 dialog_quotes_cu:false,
                 quote: null,
-                key: 0,
-            }
+                key: 0}
         },
         methods: {
             localtime,
@@ -83,6 +77,5 @@
                 this.dialog_quotes_cu=false
                 this.$emit("cruded")
             }
-        },
-    }
+        }}
 </script>

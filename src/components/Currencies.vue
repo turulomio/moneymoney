@@ -31,7 +31,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import { localtime, my_round } from 'vuetify_rules'
     import QuotesCU from './QuotesCU.vue'
     import {empty_quote} from '../empty_objects.js'
@@ -39,8 +39,7 @@
     export default {
         name:"Currencies",
         components:{
-            QuotesCU,
-        },
+            QuotesCU},
         data(){ 
             return{
                 headers: [
@@ -55,23 +54,21 @@
                 dialog_quotescu:false,
                 quote:null,
                 quote_mode: null,
-                key:0,
-            }
+                key:0}
         },
         methods: {
             useStore,
             localtime,
             my_round,
-            parseResponseError,
+
             empty_quote,
-            myheaders,
+
             editItem (item) {
                 this.quote= {
                     url: item.quote_url,
                     datetime: item.datetime,
                     quote: item.quote,
-                    products: item.product_url,
-                }
+                    products: item.product_url}
                 this.quote_mode="U"
                 this.key=this.key+1
                 this.dialog_quotescu=true
@@ -81,8 +78,7 @@
                     url: null,
                     datetime: new Date(),
                     quote: null,
-                    products: item.product_url,
-                }
+                    products: item.product_url}
                 this.quote_mode="C"
                 this.key=this.key+1
                 this.dialog_quotescu=true
@@ -92,19 +88,16 @@
                     url: item.quote_url,
                     datetime: item.datetime,
                     quote: item.quote,
-                    products: item.product_url,
-                }
+                    products: item.product_url}
                 this.quote_mode="D"
                 this.key=this.key+1
                 this.dialog_quotescu=true
             },
             update_table(){
-                axios.get(`${this.useStore().apiroot}/currencies/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/currencies/`)
                 .then((response) => {
                     this.items=response.data
                     console.log(this.items)
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             },
             on_AccountsoperationsSearch_cruded(){
@@ -113,8 +106,7 @@
             on_QuotesCU_cruded(){
                 this.dialog_quotescu=false
                 this.update_table()
-            },
-        },
+            }},
         mounted(){
             this.update_table()
         }

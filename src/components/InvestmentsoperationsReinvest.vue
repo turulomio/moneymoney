@@ -11,7 +11,7 @@
                     <v-select data-test="InvestmentsoperationsReinvest_ViewOption" class="mr-5" :disabled="loading || (ios_id_after==null)" :items="viewoptions" v-model="viewoption" :label="t('Set a view option')"  item-title="name" item-value="id" :rules="RulesSelection(true)" @update:model-value="refreshTables"></v-select>  
                 </v-row>
                 <v-row>                
-                    <v-text-field data-test="InvestmentsoperationsReinvest_NewPrice" class="mr-5" v-model.number="newprice"  :label="t('Set order price')" :placeholder="t('Set order price')" :rules="RulesFloatGEZ(10,true, product.decimals)" counter="10"/>
+                    <v-text-field data-test="InvestmentsoperationsReinvest_NewPrice" class="mr-5" v-model.number="newprice"  :label="t('Set order price')" :placeholder="t('Set order price')" :rules="RulesFloatGEZ(10,true, product?.decimals)" counter="10"/>
                     <v-text-field data-test="InvestmentsoperationsReinvest_NewShares" v-model.number="newshares"  :label="t('Set order shares')" :placeholder="t('Set order shares')" :rules="RulesFloat(14,true,6)" counter="14"/>
                 </v-row>
                 <v-row>
@@ -71,7 +71,7 @@
 <script setup>
     import { ref, computed, onMounted } from 'vue'
     import axios from 'axios'
-    import { useStore, myheaders, getMapObjectById } from '@/store'
+    import { useStore, getMapObjectById  } from '@/store'
     import { useI18n } from 'vue-i18n'
     import MyMenuInline from './MyMenuInline.vue'
     import {empty_order, empty_ios,empty_ios_simulation_operation,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
@@ -88,18 +88,15 @@
     const props = defineProps({
         ios_id: { //object plinvestmentsoperations id can be investment or virtual investment (Merged)
                     //it uses only current_operations to make simulation 
-            required: true,
-        },
+            required: true},
         shares: {
             type: Number,
             required: false,
-            default: 0,
-        },
+            default: 0},
         price: {
             type: Number,
             required: false,
-            default: 0,
-        }
+            default: 0}
     })
 
     const { t } = useI18n()
@@ -146,16 +143,14 @@
                         var amount=parseNumber(await myPrompt( t("Please set the amount to invest in this order"), t("Amount"), "", "number", 10000 ));
                         newshares.value=parseInt(amount/newprice.value)
                     },
-                    icon: "mdi-book-plus",
-                },
+                    icon: "mdi-book-plus"},
                 {
                     name: t('Decimal shares from amount to reinvest'),
                     code: async () => {
                         var amount=parseNumber(await myPrompt( t("Please set the amount to invest in this order"), t("Amount"), "", "number", 10000 ));
                         newshares.value=amount/newprice.value
                     },
-                    icon: "mdi-book-plus",
-                },
+                    icon: "mdi-book-plus"},
             ]
         },
         {
@@ -188,8 +183,7 @@
                         }
                         newshares.value=-resultado
                     },
-                    icon: "mdi-book-plus",
-                },
+                    icon: "mdi-book-plus"},
                 {
                     name: t('Decimal shares to consolidate losses'),
                     code: async () => {
@@ -216,8 +210,7 @@
                         }
                         newshares.value=-my_round(resultado,6)
                     },
-                    icon: "mdi-book-plus",
-                },
+                    icon: "mdi-book-plus"},
             ]
         },
     ]
@@ -228,12 +221,12 @@
 
     const product = computed(() => {
         if (!ios_id_current.value) return {}
-        return getMapObjectById("products", ios_id_current.value.data.products_id)
+        return getMapObjectById("products", ios_id_current.value.data.products_id) || {}
     })
 
     const investment = computed(() => {
-        if (!ios_id_current.value) return null
-        return getMapObjectById("investments", ios_id_current.value.data.investments_id)
+        if (!ios_id_current.value) return {}
+        return getMapObjectById("investments", ios_id_current.value.data.investments_id) || {}
     })
 
     function set_title(){
@@ -258,7 +251,7 @@
     }
 
     function refreshProductQuotes(){
-        return axios.get(`${store.apiroot}/products/quotes/ohcl?product=${product.value.url}`, myheaders())
+        return axios.get(`${store.apiroot}/products/quotes/ohcl?product=${product.value.url}`)
     }
 
     function simulateOrderAfter(){
@@ -272,7 +265,7 @@
         operation.comment="Simulation 1"
         operation.investments_id=parseInt(props.ios_id.data.investments_id)
         simulation.simulation.push(operation)
-        return axios.post(`${store.apiroot}/ios/`, simulation, myheaders())
+        return axios.post(`${store.apiroot}/ios/`, simulation)
     }
 
     function make_all_axios_before(){
@@ -305,11 +298,11 @@
             await myAlert(f(t("You're divesting the whole investment shares ([0])"), [Math.abs(newshares.value)]))
             return
         }
-        viewoption.value=2
         loading.value=true
         axios.all([simulateOrderAfter(),])
         .then(([resAfter,]) => {
             ios_id_after.value=resAfter.data[props.ios_id.data.investments_id]
+            viewoption.value=2
             loading.value=false
             refreshTables()
         });
@@ -333,7 +326,8 @@
             if (gains_method.value==1){
                 ll.sell=ll.average*(1+gains_value.value/100)
             } else {//P_f={P_o Ac Ap +G } over {Ac Ap } Fixed amount
-                ll.sell=(ll.average*shares_before*product.value.real_leveraged_multiplier+gains_value.value)/(shares_before*product.value.real_leveraged_multiplier)
+                var multiplier = product.value.real_leveraged_multiplier || 1
+                ll.sell=(ll.average*shares_before*multiplier+gains_value.value)/(shares_before*multiplier)
             }
             chart_data.value.limitlines.push(ll)
         }
@@ -350,7 +344,8 @@
             if (gains_method.value==1){
                 ll2.sell=ll2.average*(1+gains_value.value/100)
             } else {//P_f={P_o Ac Ap +G } over {Ac Ap } Fixed amount
-                ll2.sell=(ll2.average*shares_after*product.value.real_leveraged_multiplier+gains_value.value)/(shares_after*product.value.real_leveraged_multiplier)
+                var multiplier2 = product.value.real_leveraged_multiplier || 1
+                ll2.sell=(ll2.average*shares_after*multiplier2+gains_value.value)/(shares_after*multiplier2)
             }
             chart_data.value.limitlines.push(ll2)
         }

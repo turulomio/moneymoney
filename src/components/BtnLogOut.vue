@@ -8,23 +8,18 @@
 
 <script>
     import axios from 'axios'
-    import { useStore, myheaders, parseResponseError } from "@/store"
+    import { useStore } from "@/store"
     export default {
 
         methods: {
             useStore,
-            myheaders,
-            parseResponseError,
             logout(){
-                axios.post(`${this.useStore().apiroot}/logout/`, {'key': this.useStore().token},this.myheaders())
+                axios.post(`${this.useStore().apiroot}/logout/`, {'key': this.useStore().token})
                 .then(() => {
                     this.useStore().token=null;
                     this.useStore().logged=false;
                     this.$router.push({name:'home'})
-                }, (error) => {
-                    this.parseResponseError(error)
-                    });
+                });
             }
-        },
-    }
+        }}
 </script>

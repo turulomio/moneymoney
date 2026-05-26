@@ -23,7 +23,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders, getConceptsForDividends } from '@/store'
+    import { useStore, getConceptsForDividends   } from '@/store'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection,RulesFloat,RulesFloatGEZ } from 'vuetify_rules'
     import { getArrayFromMap } from '@/functions'
@@ -34,8 +34,7 @@
             return { myAlert: alert, myConfirm: confirm }
         },
         components: {
-            MyDateTimePicker,
-        },
+            MyDateTimePicker},
         props: {
             dividend: {
                 required: true
@@ -47,16 +46,15 @@
         data(){ 
             return {
                 form_valid: false,
-                newdividend: null,
-            }
+                newdividend: null}
         },
         methods: {
             useStore,
-            parseResponseError,
+
             RulesSelection,
             RulesFloat,
             RulesFloatGEZ,
-            myheaders,
+
             getArrayFromMap,
             getConceptsForDividends,
             title(){
@@ -95,34 +93,27 @@
                 }
 
                 if (this.mode=="U"){
-                    axios.put(this.newdividend.url, this.newdividend,  this.myheaders())
+                    axios.put(this.newdividend.url, this.newdividend)
                     .then(() => {
                             this.$emit("cruded")
                             this.editing=false
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="C"){
-                    axios.post(`${this.useStore().apiroot}/api/dividends/`, this.newdividend,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/dividends/`, this.newdividend)
                     .then(() => {
                             this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="D"){
 
                     if(await this.myConfirm(this.$t("Do you want to delete this dividend?")) == false) {
                         return
                     } 
-                        axios.delete(this.newdividend.url, this.myheaders())
+                        axios.delete(this.newdividend.url)
                         .then(() => {
                             this.$emit("cruded")
-                        }, (error) => {
-                            this.parseResponseError(error)
                         });
                 }
-            },
-        },
+            }},
         created(){
             this.newdividend=Object.assign({},this.dividend)
         }

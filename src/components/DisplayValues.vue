@@ -25,12 +25,10 @@
 export default {
     props:{
         items:{
-            required:true,
-        },
+            required:true},
         minimized_items:{
             required:false,
-            default: 3,
-        },
+            default: 3},
         width:{
             required:false,
             default: "50%"
@@ -39,8 +37,7 @@ export default {
     data(){ 
         return{
             minimized:true,
-            icon:"mdi-arrow-down-bold-outline",
-        }
+            icon:"mdi-arrow-down-bold-outline"}
     },
     methods:{
         width_method(){

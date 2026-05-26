@@ -22,7 +22,7 @@
 
 <script>
 import axios from 'axios'
-import { useStore, myheaders_noauth, parseResponse, parseResponseError } from "@/store"
+import { useStore } from "@/store"
 import { RulesString } from "vuetify_rules"
 export default {
     data () {
@@ -32,15 +32,11 @@ export default {
             dialog: false,         
             loading:false,       
             
-            form_valid:false,
-        }
+            form_valid:false}
     },
     methods: {
         useStore,
-        myheaders_noauth,
         RulesString,
-        parseResponse,
-        parseResponseError,
         async login(){
             var start=new Date()
                 if (this.form_valid!=true) {
@@ -50,26 +46,17 @@ export default {
             if (this.loading==true) return
             this.loading=true
             try {
-                const response = await axios.post(`${this.useStore().apiroot}/login/`, {username: this.user, password:this.password}, this.myheaders_noauth())
-                if (await this.parseResponse(response)==true){
-                    console.log("Authenticated");
-                    this.useStore().setToken(response.data)
-                    await this.useStore().updateAll()
-                    this.$refs.form.reset()
-                    this.loading=false
-                    this.$router.push({name:'home'})
-                    console.log(`Login and catalogs load took ${new Date()-start} ms`)
-                    this.dialog=false
-                } else { //Response=false 
-                    setTimeout(() => { //Delay of 1 second
-                        this.$refs.form.reset()
-                        this.dialog=false
-                        this.loading=false
-                    }, 2000);
-                }
-            } catch (error) {
-                await this.parseResponseError(error)
-                setTimeout(() => { //Delay of 1 second
+                const response = await axios.post(`${this.useStore().apiroot}/login/`, {username: this.user, password:this.password}, { noheaders: true })
+                console.log("Authenticated");
+                this.useStore().setToken(response.data)
+                await this.useStore().updateAll()
+                this.$refs.form.reset()
+                this.loading=false
+                this.$router.push({name:'home'})
+                console.log(`Login and catalogs load took ${new Date()-start} ms`)
+                this.dialog=false
+            } catch {
+                setTimeout(() => { //Delay of 2 seconds
                     this.$refs.form.reset()
                     this.dialog=false
                     this.loading=false

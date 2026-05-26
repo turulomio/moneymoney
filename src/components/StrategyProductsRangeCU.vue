@@ -59,7 +59,7 @@
 </template>
 <script>
 import axios from 'axios'
-import { useStore, parseResponseError, myheaders } from '@/store'
+import { useStore } from '@/store'
 import MyDateTimePicker from './MyDateTimePicker.vue'
 import AutocompleteProducts from './AutocompleteProducts.vue'
 import AutocompleteInvestments from '@/components/AutocompleteInvestments.vue'
@@ -74,8 +74,7 @@ export default {
     components: {
         MyDateTimePicker,
         AutocompleteProducts,
-        AutocompleteInvestments,
-    },
+        AutocompleteInvestments},
     props: {
         // An account object
         strategy: {
@@ -83,14 +82,11 @@ export default {
         },
         mode: {
             type: String,
-            required: false,
-        },
-    },
+            required: false}},
     data() {
         return {
             form_valid: false,
-            new_strategy: null,
-        }
+            new_strategy: null}
     },
     methods: {
         useStore,
@@ -99,8 +95,8 @@ export default {
         RulesFloat,
         RulesInteger,
         RulesString,
-        parseResponseError,
-        myheaders,
+
+
         title() {
             if (this.mode == "U") {
                 return this.$t("Updating strategy")
@@ -125,36 +121,28 @@ export default {
                 return
             }
             if (this.mode == "U") {
-                axios.put(this.new_strategy.url, this.new_strategy, this.myheaders())
+                axios.put(this.new_strategy.url, this.new_strategy)
                     .then(() => {
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
             } else if (this.mode == "C") {
-                axios.post(`${this.useStore().apiroot}/api/strategies_productsrange/`, this.new_strategy, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/api/strategies_productsrange/`, this.new_strategy)
                     .then(() => {
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
             } else if (this.mode == "D") {
                 if (await this.myConfirm(this.$t("This products range strategy will be deleted. Do you want to continue?")) == false) {
                     return
                 }
-                axios.delete(this.new_strategy.url, this.myheaders())
+                axios.delete(this.new_strategy.url)
                     .then(() => {
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     });
             }
 
-        },
-    },
+        }},
     created() {
         this.new_strategy = Object.assign({}, this.strategy)
         console.log(this.new_strategy)
-    },
-}
+    }}
 </script>

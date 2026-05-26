@@ -25,7 +25,7 @@
 <script setup>
     import { ref, computed, nextTick } from 'vue'
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders, currency_html } from '@/store'
+    import { useStore, currency_html   } from '@/store'
     import EstimationsDpsCU from './EstimationsDpsCU.vue'
     
     import { useI18n } from 'vue-i18n'
@@ -33,8 +33,7 @@
     const props = defineProps({
         product: {
             required: true
-        },
-    })
+        }})
 
     const store = useStore()
     const { t } = useI18n()
@@ -89,14 +88,12 @@
 
     function refresh() {
         loading.value = true
-        axios.get(`${store.apiroot}/api/estimationsdps/?product=${props.product.url}`, myheaders())
+        axios.get(`${store.apiroot}/api/estimationsdps/?product=${props.product.url}`)
             .then((response) => {
                 items.value = response.data
                 key.value++
                 loading.value = false
                 gotoLastRow()
-            }, (error) => {
-                parseResponseError(error)
             });
     }
 

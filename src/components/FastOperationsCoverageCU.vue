@@ -20,7 +20,7 @@
 
 <script>
     import axios from 'axios'
-    import { useStore, myheaders, parseResponseError } from '@/store'
+    import { useStore  } from '@/store'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection ,RulesFloat, RulesString} from 'vuetify_rules'
     import { getArrayFromMap } from '@/functions'
@@ -31,12 +31,10 @@
             return { myConfirm: confirm }
         },
         components:{
-            MyDateTimePicker,
-        },
+            MyDateTimePicker},
         props: {
             foc: {
-                required: true,
-            },
+                required: true},
             mode: {
                 required: true // Can be CUD
             }
@@ -45,16 +43,15 @@
             return{
                 
                 new_foc: null,
-                form_valid:false,
-            }
+                form_valid:false}
         },
         methods:{
             useStore,
             RulesSelection,
             RulesFloat,
             RulesString,
-            myheaders,
-            parseResponseError,
+
+
             getArrayFromMap,
             title(){
                 if (this.mode=="U"){
@@ -80,34 +77,26 @@
                     return
                 }
                 if (this.mode=="C"){   
-                    axios.post(`${this.useStore().apiroot}/api/fastoperationscoverage/`, this.new_foc, this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/fastoperationscoverage/`, this.new_foc)
                     .then(() => {
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="U"){
 
-                    axios.put(this.new_foc.url, this.new_foc, this.myheaders())
+                    axios.put(this.new_foc.url, this.new_foc)
                     .then(() => {
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     });
                 } else if (this.mode=="D"){
                     if(await this.myConfirm(this.$t("Do you want to delete this fast operations coverage?")) == false) {
                         return
                     } 
-                    axios.delete(this.new_foc.url, this.myheaders())
+                    axios.delete(this.new_foc.url)
                     .then(() => {
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     });
                 }
-            },
-            
-        },
+            }},
         created(){
             this.new_foc=Object.assign({},this.foc)
         }

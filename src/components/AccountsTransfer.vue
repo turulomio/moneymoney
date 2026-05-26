@@ -19,7 +19,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import { RulesSelection, RulesFloatGEZ, RulesFloatGZ } from 'vuetify_rules'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { getArrayFromMap } from '@/functions'
@@ -30,8 +30,7 @@
             return { myAlert: alert, myConfirm: confirm }
         },
         components: {
-            MyDateTimePicker,
-        },
+            MyDateTimePicker},
         props: {
             // An account object
             at: { // An account transfer object
@@ -39,8 +38,7 @@
             },
             mode: {
                 type: String,
-                required: true,
-            }
+                required: true}
         },
         data(){ 
             return{
@@ -49,17 +47,13 @@
 
                 query_ao_origin: null,
                 query_ao_destiny: null,
-                query_ao_commission: null,
-
-            }
+                query_ao_commission: null}
         },
         methods: {
             useStore,
-            parseResponseError,
             RulesSelection,
             RulesFloatGEZ,
             RulesFloatGZ,
-            myheaders,
             getArrayFromMap,
             button(){
                 if (this.mode=="C") return this.$t('Add')
@@ -84,28 +78,22 @@
                 }
 
                 if (this.mode=="C"){
-                    axios.post(`${this.useStore().apiroot}/api/accountstransfers/`, this.new_at,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/accountstransfers/`, this.new_at)
                     .then(() => {
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 }
                 if (this.mode=="U"){
-                    axios.put(this.new_at.url, this.new_at,  this.myheaders())
+                    axios.put(this.new_at.url, this.new_at)
                     .then(() => {
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 }
                 if (this.mode=="D"){             
                     if(await this.myConfirm(this.$t("Do you want to delete this transfer?"))) {
-                        axios.delete(this.new_at.url, this.myheaders())
+                        axios.delete(this.new_at.url)
                         .then(() => {
                             this.$emit("cruded")
-                        }, (error) => {
-                            this.parseResponseError(error)
                         })
                     }
                 }
@@ -115,9 +103,9 @@
                 this.loading=true
                 if (this.new_at.ao_commission){ //With Commission 
                     axios.all([
-                        axios.get(this.new_at.ao_origin, this.myheaders()), 
-                        axios.get(this.new_at.ao_destiny, this.myheaders()), 
-                        axios.get(this.new_at.ao_commission, this.myheaders())
+                        axios.get(this.new_at.ao_origin), 
+                        axios.get(this.new_at.ao_destiny), 
+                        axios.get(this.new_at.ao_commission)
                     ]).then(([resAoOrigin, resAoDestiny, resAoCommission]) => {
                         this.new_at.origin=resAoOrigin.data.accounts
                         this.new_at.destiny=resAoDestiny.data.accounts
@@ -128,8 +116,8 @@
                     });
                 } else { //Without Commission
                     axios.all([
-                        axios.get(this.new_at.ao_origin, this.myheaders()), 
-                        axios.get(this.new_at.ao_destiny, this.myheaders())
+                        axios.get(this.new_at.ao_origin), 
+                        axios.get(this.new_at.ao_destiny)
                     ]).then(([resAoOrigin, resAoDestiny]) => {
                         this.new_at.origin=resAoOrigin.data.accounts
                         this.new_at.destiny=resAoDestiny.data.accounts

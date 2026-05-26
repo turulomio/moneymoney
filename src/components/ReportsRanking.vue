@@ -49,13 +49,12 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, localcurrency_html, myheaders } from '@/store'
+    import { useStore, localcurrency_html } from '@/store'
     import InvestmentsMergedView from './InvestmentsMergedView.vue'
     import { listobjects_sum } from '@/functions'
     export default {
         components:{
-            InvestmentsMergedView,
-        },
+            InvestmentsMergedView},
         data(){ 
             return{
                 headers: [
@@ -76,8 +75,7 @@
                 // Investments merged view
                 dialog_investments_merged_view:false,
                 ios_id:null,
-                key:0,
-            }
+                key:0}
         },
         watch: {
             only_current_investments(){
@@ -86,10 +84,10 @@
         },
         methods: {
             useStore,
-            parseResponseError,
+
             listobjects_sum,
             localcurrency_html,
-            myheaders,
+
             viewInvestmentsMerged (event,object) {
                 this.ios_id=this.ios[object.item.products_id]
                 this.key=this.key+1
@@ -98,13 +96,11 @@
             update_table(){
                 this.loading_table=true
 
-                axios.get(`${this.useStore().apiroot}/reports/ranking/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/ranking/`)
                 .then((response) => {
                     this.ios=response.data
                     this.filter_data()
                     this.loading_table=false
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             },
             filter_data(){
@@ -129,8 +125,7 @@
                     historical_net_gains: e.total_io_historical.gains_net_user,
                     dividends: e.data.dividends,
                     total: e.total_io_current.gains_net_user+ e.total_io_historical.gains_net_user + e.data.dividends,
-                    products_id: e.data.products_id,
-                }
+                    products_id: e.data.products_id}
             }
         },
         created(){

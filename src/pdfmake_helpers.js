@@ -128,17 +128,16 @@ export function pdfmake_loo_to_table(loo,headers,style){
                 widths:widths,
                 body: body
             },
-            style: style,
-        }
+            style: style}
     return r
 }
 
 export function pdfmake_percentage_string(num, decimals){
     if (num==null || isNaN(num)) return "- - - %"
     if (num>=0){
-        return {text:`${round(num*100,decimals).toLocaleString(localStorage.locale,{ minimumFractionDigits: decimals,  })} %`}
+        return {text:`${round(num*100,decimals).toLocaleString(localStorage.locale,{ minimumFractionDigits: decimals})} %`}
     } else {
-        return {text:`${round(num*100,decimals).toLocaleString(localStorage.locale,{ minimumFractionDigits: decimals,  })} %`, color:"red"}
+        return {text:`${round(num*100,decimals).toLocaleString(localStorage.locale,{ minimumFractionDigits: decimals})} %`, color:"red"}
 
     }
 }

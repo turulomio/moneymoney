@@ -54,7 +54,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, localcurrency_html, myheaders } from '@/store'
+    import { useStore, localcurrency_html } from '@/store'
     import MyMenuInline from './MyMenuInline.vue'
     import BanksCU from './BanksCU.vue'
     import BanksView from './BanksView.vue'
@@ -65,8 +65,7 @@
         components:{
             MyMenuInline,
             BanksCU,
-            BanksView,
-        },
+            BanksView},
         data(){ 
             return{
                 showActive:true,
@@ -93,8 +92,7 @@
                                     this.bank=this.empty_bank()
                                     this.key=this.key+1
                                     this.dialog=true
-                                }.bind(this),
-                            },
+                                }.bind(this)},
                         ]
                     },
                 ],
@@ -104,20 +102,16 @@
                 loading_table:false,
 
                 dialog_view:false,
-                key:0,
-            }
+                key:0}
         },
         watch:{
             showActive () {
                 this.update_table()
-            },
-        },
+            }},
         methods: {
             useStore,
             f,
-            parseResponseError,
             empty_bank, 
-            myheaders,
             listobjects_sum,
             localcurrency_html,
             deleteItem (item) {
@@ -145,20 +139,16 @@
                 } else {
                     this.chkLabel=this.$t("Check to see active banks")
                 }
-                axios.get(`${this.useStore().apiroot}/api/banks/withbalance/?active=${this.showActive}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/banks/withbalance/?active=${this.showActive}`)
                 .then((response) => {
                     this.data=response.data
                     this.loading_table=false
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             },
             on_BanksCU_cruded(){
                 this.dialog=false
                 this.update_table()
-            },
-
-        },
+            }},
         mounted(){
             this.update_table()
         }

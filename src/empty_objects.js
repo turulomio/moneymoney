@@ -9,8 +9,7 @@ export function empty_account(){
         currency: "EUR",    
         banks:null,
         url:null,
-        decimals:2,
-    }
+        decimals:2}
 }
 
 export function empty_account_operation(){
@@ -21,8 +20,7 @@ export function empty_account_operation(){
         amount: 0,
         comment: "",    
         accounts: null,
-        url: null,
-    }
+        url: null}
 }
 
 export function empty_account_transfer(){
@@ -34,23 +32,20 @@ export function empty_account_transfer(){
         ao_destiny:null,
         ao_commission:null,
         amount: 0,
-        commission:0,
-    }
+        commission:0}
 }
 
 export function empty_bank(){
     return {
         name: "",
-        active: true,
-    }
+        active: true}
 }
 
 export function empty_concept(){
     return {
         name: "",
         editable: true,
-        operationstypes: null,
-    }
+        operationstypes: null}
 }
 export function empty_credit_card(){
     return {
@@ -60,8 +55,7 @@ export function empty_credit_card(){
         maximumbalance: 0,
         active: true,   
         accounts: null,
-        url: null,
-    }
+        url: null}
 }
 
 export function empty_dps(){
@@ -70,16 +64,14 @@ export function empty_dps(){
         paydate: new Date().toISOString().slice(0,10),
         gross: 0,
         products: null,
-        url: null,
-    }
+        url: null}
 }
 
 export function empty_estimation_dps(){
     return {
         year: new Date().getFullYear(),
         estimation: 0,
-        products: null,
-    }
+        products: null}
 }
 
 
@@ -94,8 +86,7 @@ export function empty_investment_operation(){
         comment:"",
         currency_conversion:1,
         investments: null,
-        url: null,
-    }
+        url: null}
 }
 
       
@@ -135,8 +126,7 @@ export function empty_product(){
         ticker_morningstar: null,
         ticker_google: null,
         ticker_quefondos: null,
-        ticker_investingcom: null,
-    }
+        ticker_investingcom: null}
 }
 
 export function empty_products_comparation(){
@@ -144,8 +134,7 @@ export function empty_products_comparation(){
         url: null,
         name: null,
         a:null,
-        b:null,
-    }
+        b:null}
 }
 
 export function empty_cco(){
@@ -156,8 +145,7 @@ export function empty_cco(){
         comment: "",    
         creditcards: null,
         paid:false,
-        paid_datetime:null,
-    }
+        paid_datetime:null}
 }
 
 export function empty_quote(){
@@ -178,8 +166,7 @@ export function empty_products_ranges(){
         amount_to_invest: 10000,
         recomendation_methods: 1,
         investments: [], // List of integers. In db is strategy einvestmeents is a string of integers
-        additional_ranges: 3,
-    }
+        additional_ranges: 3}
 }
 
 
@@ -191,8 +178,7 @@ export function empty_ios(){
         mode:1, 
         currency: "EUR", 
         simulation:[], //Array of empty_ios_simulation_operation
-        addition_current_year_gains:false,
-    }
+        addition_current_year_gains:false}
 }
 
 export function empty_ios_simulation_operation(){
@@ -230,8 +216,7 @@ export function empty_investments_chart_limit_line(){
     return {
         buy:null,
         average: null, 
-        sell:null,
-    }
+        sell:null}
 }
 
 
@@ -247,8 +232,7 @@ export function empty_dividend(){
         accountsoperations: null,
         concepts: null,
         currency_conversion:1,
-        url: null,
-    }
+        url: null}
 }
 
 export function empty_investment(){
@@ -262,8 +246,7 @@ export function empty_investment(){
         balance_percentage: 100,
         accounts: null,
         url: null,
-        decimals: 2,
-    }
+        decimals: 2}
 }
 
 export function empty_strategy_fast_operations(){
@@ -273,10 +256,8 @@ export function empty_strategy_fast_operations(){
             dt_to: null,
             name: "",
             type: StrategiesTypes.FastOperations,
-            comment: "",
-        },
-        accounts: [],
-    }
+            comment: ""},
+        accounts: []}
 }
 
 export function empty_strategy_products_range(){
@@ -286,16 +267,14 @@ export function empty_strategy_products_range(){
             dt_to: null,
             name: "",
             type: StrategiesTypes.Ranges,
-            comment: "",
-        },
+            comment: ""},
         product: null,
         investments: [],
         percentage_between_ranges: 0.5,
         percentage_gains: 0.10,
         amount: 10000,
         recomendation_method: RecomendationMethods.All,
-        only_first: false,
-    }
+        only_first: false}
 }
 
 export function empty_strategy_generic(){
@@ -305,10 +284,8 @@ export function empty_strategy_generic(){
             dt_to: null,
             name: "",
             type: StrategiesTypes.Generic,
-            comment: "",
-        },
-        investments: [],
-    }
+            comment: ""},
+        investments: []}
 }
 
 export function empty_strategy_pairs(){
@@ -318,12 +295,10 @@ export function empty_strategy_pairs(){
             dt_to: null,
             name: "",
             type: StrategiesTypes.PairsInSameAccount,
-            comment: "",
-        },
+            comment: ""},
         worse_product: null,
         better_product: null,
-        account: null,
-    }
+        account: null}
 }
 
 
@@ -366,6 +341,5 @@ export function empty_investment_transfer(){
         taxes_destiny: 0,
         currency_conversion_destiny: 1,
 
-        comment: "",
-    }
+        comment: ""}
 }

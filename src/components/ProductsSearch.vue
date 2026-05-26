@@ -57,7 +57,7 @@
 </template>  
 <script>     
     import axios from 'axios'
-    import { useStore, getCountryNameByCode, currency_html, parseResponseError, myheaders } from '@/store'
+    import { useStore, getCountryNameByCode, currency_html } from '@/store'
     import {empty_product} from '../empty_objects.js'
     import { localtime, RulesSelection } from 'vuetify_rules'
     import MyMenuInline from './MyMenuInline.vue'
@@ -74,8 +74,7 @@
         components:{
             MyMenuInline,
             ProductsView,
-            ProductsCU,
-        },
+            ProductsCU},
         data () {
             return {
                 search: ":FAVORITES",
@@ -113,8 +112,7 @@
                 //DIALOG PRODUCTS CU
                 dialog_products_cu:false,
                 product_cu_mode:null,
-                product_cu_system:null,
-            }
+                product_cu_system:null}
         },
         computed:{
             disabled_check: function (){
@@ -130,14 +128,13 @@
                     return this.products.filter(o=> o.obsolete==true)
                 }
                 return this.products
-            },
-        },
+            }},
         methods: {
             useStore,
-            myheaders,
+
             RulesSelection,
             localtime,
-            parseResponseError,
+
             currency_html,
             percentage_html,
             getCountryNameByCode,
@@ -155,8 +152,7 @@
                                     this.key=this.key+1
                                     this.dialog_products_cu=true
                                 }.bind(this),
-                                icon: "mdi-plus",
-                            },
+                                icon: "mdi-plus"},
                             {
                                 name:this.$t('Add a system product'),
                                 code: function(){
@@ -181,32 +177,28 @@
                                     this.search=":FAVORITES"
                                     this.refreshSearch()
                                 }.bind(this),
-                                icon: "mdi-star-outline",
-                            },
+                                icon: "mdi-star-outline"},
                             {
                                 name:this.$t('Active investments products'),
                                 code: function(){
                                     this.search=":ACTIVE_INVESTMENTS"
                                     this.refreshSearch()
                                 }.bind(this),
-                                icon: "mdi-plus",
-                            },
+                                icon: "mdi-plus"},
                             {
                                 name:this.$t('All investments products'),
                                 code: function(){
                                     this.search=":INVESTMENTS"
                                     this.refreshSearch()
                                 }.bind(this),
-                                icon: "mdi-plus",
-                            },
+                                icon: "mdi-plus"},
                             {
                                 name:this.$t('Personal products'),
                                 code: function(){
                                     this.search=":PERSONAL"
                                     this.refreshSearch()
                                 }.bind(this),
-                                icon: "mdi-plus",
-                            },
+                                icon: "mdi-plus"},
                         ]
                     },
                     {
@@ -218,40 +210,35 @@
                                     this.search=":INDICES"
                                     this.refreshSearch()
                                 }.bind(this),
-                                icon: "mdi-chart-line",
-                            },
+                                icon: "mdi-chart-line"},
                             {
                                 name:this.$t('CFD & Futures'),
                                 code: function(){
                                     this.search=":CFD_FUTURES"
                                     this.refreshSearch()
                                 }.bind(this),
-                                icon: "mdi-chart-line",
-                            },
+                                icon: "mdi-chart-line"},
                             {
                                 name:this.$t('ETF'),
                                 code: function(){
                                     this.search=":ETF"
                                     this.refreshSearch()
                                 }.bind(this),
-                                icon: "mdi-chart-line",
-                            },
+                                icon: "mdi-chart-line"},
                             {
                                 name:this.$t('Bonds'),
                                 code: function(){
                                     this.search=":BONDS"
                                     this.refreshSearch()
                                 }.bind(this),
-                                icon: "mdi-chart-line",
-                            },
+                                icon: "mdi-chart-line"},
                             {
                                 name:this.$t('Currencies'),
                                 code: function(){
                                     this.search=":CURRENCIES"
                                     this.refreshSearch()
                                 }.bind(this),
-                                icon: "mdi-chart-line",
-                            },
+                                icon: "mdi-chart-line"},
                         ]
                     },
                 ]
@@ -309,7 +296,7 @@
                     this.loading=false
                 } else {
 
-                    axios.get(`${this.useStore().apiroot}/api/products/search_with_quotes/?search=${this.search}`, this.myheaders())
+                    axios.get(`${this.useStore().apiroot}/api/products/search_with_quotes/?search=${this.search}`)
                     .then((response) => {
                             response.data.forEach(o=>{
                                 var p=this.useStore().products.get(o.product)
@@ -319,25 +306,19 @@
                                 this.products.push(p)
                             })
                             this.loading=false
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 }
             },
             toggleFavorite(item){
                 this.useStore().profile.toggle_favorite=item.url //Adds toggle_favorite
-                return axios.put(`${this.useStore().apiroot}/profile/`, this.useStore().profile, this.myheaders())
+                return axios.put(`${this.useStore().apiroot}/profile/`, this.useStore().profile)
                 .then(() => {
                         this.useStore().updateProfile()
                         .then(() => {
                             this.refreshSearch()
                         })
-                }, (error) => {
-                    this.parseResponseError(error)
                 })
-            },
-
-        },
+            }},
         created(){
             this.refreshSearch()
 

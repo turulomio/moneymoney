@@ -17,13 +17,11 @@ import {getArrayFromMap} from "@/functions"
 
 const props = defineProps({
     modelValue: {
-        required: true,
-    },
+        required: true},
     returnObject:{
         type: Boolean,
         required:false,
-        default:false,
-    },
+        default:false},
     readonly: {
         type: Boolean,
         required: false,
@@ -36,8 +34,7 @@ const props = defineProps({
         *    2: For Investments Operations
         */
         type: Number,
-        required: true,
-    }
+        required: true}
 })
 
 const emit = defineEmits(['update:modelValue'])

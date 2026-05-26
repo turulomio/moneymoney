@@ -81,7 +81,7 @@ export function arrayobjects_to_array(l, key){
 
 export function percentage_generic_string(num, locale, decimals=2){
     if (num==null || isNaN(num)) return "- - - %"
-    return `${my_round(num*100,decimals).toLocaleString(locale,{ minimumFractionDigits: decimals,  })} %`
+    return `${my_round(num*100,decimals).toLocaleString(locale,{ minimumFractionDigits: decimals})} %`
 }
 
 export function percentage_generic_html(num, locale, decimals=2){
@@ -152,8 +152,7 @@ export function getBase64(file) {
             var r={
                 jsimage: result,
                 image: result.split(",")[1],
-                mime: result.split(";base64,")[0].split(":")[1],
-            }
+                mime: result.split(";base64,")[0].split(":")[1]}
             return resolve(r)
         };
         reader.onerror = function (error) {

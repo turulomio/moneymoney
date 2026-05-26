@@ -98,7 +98,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders, currency_html } from '@/store'
+    import { useStore, currency_html   } from '@/store'
     import {empty_chart_scatter_pair_prices,empty_quote} from '../empty_objects.js'
     import ChartPriceRatio from './ChartPriceRatio.vue'
     import ChartScatterPairPrices from './ChartScatterPairPrices.vue'
@@ -115,8 +115,7 @@
             DisplayValues,
             MyMenuInline,
             QuotesCU,
-            ProductsView,
-        },
+            ProductsView},
         props: {
             pc: {
                 required: true // Null to create, pc object to update
@@ -170,8 +169,7 @@
 
                 //Products view
                 dialog_productview:false,
-                product: null,
-            }
+                product: null}
         },
         computed:{
 
@@ -195,8 +193,7 @@
                                     this.key=this.key+1
                                     this.dialog_productview=true
                                 }.bind(this),
-                                icon: "mdi-magnify",
-                    })
+                                icon: "mdi-magnify"})
                     r[1].children.push({
                         name: f(this.$t("View '[0]'"), [this.product_a.name]),
                         code: function(){
@@ -204,8 +201,7 @@
                             this.key=this.key+1
                             this.dialog_productview=true
                         }.bind(this),
-                        icon: "mdi-magnify",
-                    })
+                        icon: "mdi-magnify"})
                 }
                 if (this.product_b){
                     r[0].children.push({
@@ -217,8 +213,7 @@
                             this.quote.products=this.product_b.url
                             this.key=this.key+1
                             this.dialog_quotescu=true
-                        }.bind(this),
-                    })
+                        }.bind(this)})
                     r[1].children.push({
                         name: f(this.$t("View '[0]'"), [this.product_b.name]),
                         code: function(){
@@ -226,32 +221,29 @@
                             this.product=this.useStore().products.get(this.product_b.url)
                             this.dialog_productview=true
                         }.bind(this),
-                        icon: "mdi-magnify",
-                    })
+                        icon: "mdi-magnify"})
                 }
                 return r
-            },
-        },
+            }},
 
         watch:{
             tab(){
                 this.showchart=false
                 if (this.tab==1 || this.tab==2) setTimeout(() => {this.showchart=true }, 300)
-            },
-        },
+            }},
         methods:{
             useStore,
             empty_chart_scatter_pair_prices,
             empty_quote,
             localtime,
-            myheaders,
+
             currency_html,
             percentage_html,
             my_round,
             RulesFloat,
             RulesInteger,
             f,
-            parseResponseError,
+
             display_values(){
                 return [
                     {title:this.$t('Better product'), value: this.product_a.name},
@@ -264,12 +256,10 @@
 
             pairReport(){               
                 this.loading=true
-                axios.get(`${this.useStore().apiroot}/products/pairs/?a=${this.pc.a}&b=${this.pc.b}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/products/pairs/?a=${this.pc.a}&b=${this.pc.b}`)
                 .then((response) => {
                     this.dbdata=response.data.data
                     this.filter_data()
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             },
             on_QuotesCU_cruded(){

@@ -61,7 +61,7 @@
 
 <script>
     import axios from 'axios'
-    import { useStore, amount_to_invest, parseResponseError, myheaders } from '@/store'
+    import { useStore, amount_to_invest } from '@/store'
     import { RulesSelection, RulesEmail, RulesInteger,RulesPassword,RulesString, f} from 'vuetify_rules'
     import { useDialogs } from '@/composables/useDialogs'
     
@@ -80,8 +80,7 @@
                 dupnewp:"",
                 example_invested:0,
                 example_amount_to_invest:0,
-                loading:false,
-            }
+                loading:false}
         },
         watch:{
             example_invested: function (){
@@ -92,8 +91,7 @@
             useStore,
             amount_to_invest,
 
-            parseResponseError,
-            myheaders,  
+
             f,
             RulesEmail, 
             RulesInteger,
@@ -112,7 +110,7 @@
                 }
                 let succesmessage=this.$t("Settings saved")
 
-                axios.put(`${this.useStore().apiroot}/profile/`, this.new_profile, this.myheaders())
+                axios.put(`${this.useStore().apiroot}/profile/`, this.new_profile)
                 .then(async () => {
                     await this.myAlert(succesmessage)
                     this.new_profile.newp=""
@@ -120,12 +118,10 @@
                     .then(() =>{
                         this.$router.push({name:"home"})
                     })
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             },
             promise_load_timezones(){
-                return axios.get(`${this.useStore().apiroot}/timezones/`, this.myheaders())
+                return axios.get(`${this.useStore().apiroot}/timezones/`)
             },
             make_all_axios(){
                 this.loading=true
@@ -133,9 +129,7 @@
                 .then(([resTimezones]) => {
                     this.timezones=resTimezones.data
                 });
-            },
-
-        },
+            }},
         created(){
             this.make_all_axios()
             this.new_profile=Object.assign({},this.useStore().profile)

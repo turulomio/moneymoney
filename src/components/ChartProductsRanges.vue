@@ -15,14 +15,10 @@
     export default {
         props:{
             prdata:{
-                required:true,
-            },
-        },
+                required:true}},
         data(){ 
             return{
-                loading:true,
-
-            }
+                loading:true}
         },
         watch: {
             prdata: {
@@ -38,8 +34,7 @@
                 return {
                     legend: {
                         data: this.legends,
-                        inactiveColor: '#777',
-                    },
+                        inactiveColor: '#777'},
                     tooltip: {
                         trigger: 'axis',
                         axisPointer: {
@@ -68,8 +63,7 @@
                     dataZoom: [{
                             type: 'slider',
                             start: 90,
-                            end: 100,
-                    }],
+                            end: 100}],
                     series: this.series()
                 }
             },
@@ -96,11 +90,9 @@
                         type:"line",
                         data: dat,
                         tooltip: {
-                            show:false,
-                        },
+                            show:false},
                         showSymbol:false, 
-                        itemStyle: (this.prdata.pr[i].recomendation_invest==true) ? {color: 'rgba(255, 213, 213, 0.4)'} :  {color: 'rgba(217, 217, 217, 0.4)'},
-                    })
+                        itemStyle: (this.prdata.pr[i].recomendation_invest==true) ? {color: 'rgba(255, 213, 213, 0.4)'} :  {color: 'rgba(217, 217, 217, 0.4)'}})
                 }
 
                 var orders = []

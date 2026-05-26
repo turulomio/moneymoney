@@ -33,8 +33,7 @@ export const useStore = defineStore('global', {
         profile: null,
         stockmarkets:new Map(),
         strategiestypes:new Map(),
-        recomendation_methods:new Map(),
-    }
+        recomendation_methods:new Map()}
   },
   getters:{
     getOperationstypesForNewConcepts(state) { 
@@ -68,53 +67,45 @@ export const useStore = defineStore('global', {
     },
     updateAccounts() {
         var start=new Date()
-        return axios.get(`${this.apiroot}/api/accounts/`, myheaders())
+        return axios.get(`${this.apiroot}/api/accounts/`)
         .then((response)=>{
           this.accounts.clear()
           response.data.forEach(o=>{
             this.accounts.set(o.url, o)
           })  
           console.log(`Updated ${response.data.length} accounts in ${new Date()-start} ms`)
-        }, (error) => {
-          console.log(error)
-      });
+        });
     },
     updateBanks() {
         var start=new Date()
-        return axios.get(`${this.apiroot}/api/banks/`, myheaders())
+        return axios.get(`${this.apiroot}/api/banks/`)
         .then((response)=>{
           this.banks.clear()
           response.data.forEach(o=>{
             this.banks.set(o.url, o)
           })  
           console.log(`Updated ${response.data.length} banks in ${new Date()-start} ms`)
-        }, (error) => {
-          console.log(error)
-      });
+        });
     },
 
     updateCatalogManager(){
       var start=new Date()
-      return axios.get(`${this.apiroot}/catalog_manager/`, myheaders())
+      return axios.get(`${this.apiroot}/catalog_manager/`)
       .then((response) => {
           this.catalog_manager=response.data
           console.log(`Updated catalog manager in ${new Date()-start} ms`)
-      }, (error) => {
-          parseResponseError(error)
       });
     },
     updateCreditCards() {
         var start=new Date()
-        return axios.get(`${this.apiroot}/api/creditcards/`, myheaders())
+        return axios.get(`${this.apiroot}/api/creditcards/`)
         .then((response)=>{
           this.creditcards.clear()
           response.data.forEach(o=>{
             this.creditcards.set(o.url, o)
           })  
           console.log(`Updated ${response.data.length} credit cards in ${new Date()-start} ms`)
-        }, (error) => {
-          console.log(error)
-      });
+        });
     },
     updateCurrencies(){
         var start=new Date()
@@ -178,130 +169,110 @@ export const useStore = defineStore('global', {
     },
     updateInvestments() {
         var start=new Date()
-        return axios.get(`${this.apiroot}/api/investments/`, myheaders())
+        return axios.get(`${this.apiroot}/api/investments/`)
         .then((response)=>{
           this.investments.clear()
           response.data.forEach(o=>{
             this.investments.set(o.url, o)
           })  
           console.log(`Updated ${response.data.length} investments in ${new Date()-start} ms`)
-        }, (error) => {
-          console.log(error)
-      });
+        });
     },
     updateLeverages() {
         var start=new Date()
-        return axios.get(`${this.apiroot}/api/leverages/`, myheaders())
+        return axios.get(`${this.apiroot}/api/leverages/`)
         .then((response)=>{
           this.leverages.clear()
           response.data.forEach(o=>{
             this.leverages.set(o.url, o)
           })  
           console.log(`Updated ${response.data.length} leverages in ${new Date()-start} ms`)
-        }, (error) => {
-          console.log(error)
-      });
+        });
     },
     updateConcepts() {
         var start=new Date()
         this.concepts.clear()
-        return axios.get(`${this.apiroot}/api/concepts/`, myheaders())
+        return axios.get(`${this.apiroot}/api/concepts/`)
         .then((response)=>{
           response.data.forEach(o=>{
             this.concepts.set(o.url, o)
           })  
           console.log(`Updated ${response.data.length} concepts in ${new Date()-start} ms`)
-        }, (error) => {
-          console.log(error)
-      });
+        });
     },
     updateOperationstypes() {
         var start=new Date()
-        return axios.get(`${this.apiroot}/api/operationstypes/`, myheaders())
+        return axios.get(`${this.apiroot}/api/operationstypes/`)
         .then((response)=>{
           this.operationstypes.clear()
           response.data.forEach(o=>{
             this.operationstypes.set(o.url, o)
           })
           console.log(`Updated ${response.data.length} operations types in ${new Date()-start} ms`)
-        }, (error) => {
-          console.log(error)
-      });
+        });
     },
     updateProducts() {
         var start=new Date()
-        return axios.get(`${this.apiroot}/api/products/`, myheaders())
+        return axios.get(`${this.apiroot}/api/products/`)
         .then((response)=>{
           this.products.clear()
           response.data.forEach(o=>{
             this.products.set(o.url, o)
           })  
           console.log(`Updated ${response.data.length} products in ${new Date()-start} ms`)
-        }, (error) => {
-          console.log(error)
-      });
+        });
     },
     updateProductstypes() {
         var start=new Date()
-        return axios.get(`${this.apiroot}/api/productstypes/`, myheaders())
+        return axios.get(`${this.apiroot}/api/productstypes/`)
         .then((response)=>{
           this.productstypes.clear()
           response.data.forEach(o=>{
             this.productstypes.set(o.url, o)
           })  
           console.log(`Updated ${response.data.length} products types in ${new Date()-start} ms`)
-        }, (error) => {
-          console.log(error)
-      });
+        });
     },
     updateProductsstrategies() {
         var start=new Date()
-        return axios.get(`${this.apiroot}/api/productsstrategies/`, myheaders())
+        return axios.get(`${this.apiroot}/api/productsstrategies/`)
         .then((response)=>{
           this.productsstrategies.clear()
           response.data.forEach(o=>{
             this.productsstrategies.set(o.url, o)
           })  
           console.log(`Updated ${response.data.length} products strategies in ${new Date()-start} ms`)
-        }, (error) => {
-          console.log(error)
-      });
+        });
     },
     updateRecomendationsMethos() {
         var start=new Date()
-        return axios.get(`${this.apiroot}/recomendationmethods/`, myheaders())
+        return axios.get(`${this.apiroot}/recomendationmethods/`)
         .then((response)=>{
           this.recomendation_methods.clear()
           sortObjectsArray(response.data, "name").forEach(o=>{
             this.recomendation_methods.set(o.id, o)
           })  
           console.log(`Updated ${response.data.length} recomendation methods in ${new Date()-start} ms`)
-        }, (error) => {
-          console.log(error)
-      });
+        });
     },
     updateProfile() {
         var start=new Date()
-        return axios.get(`${this.apiroot}/profile/`, myheaders())
+        return axios.get(`${this.apiroot}/profile/`)
         .then((response)=>{
           this.profile = response.data
           console.log(`Updated profile in ${new Date()-start} ms`)
-        }, (error) => {
-          console.log(error)
-      });
+        });
     },
     updateStockmarkets() {
         var start=new Date()
-        return axios.get(`${this.apiroot}/api/stockmarkets/`, myheaders())
+        return axios.get(`${this.apiroot}/api/stockmarkets/`)
         .then((response)=>{
           this.stockmarkets.clear()
           response.data.forEach(o=>{
             this.stockmarkets.set(o.url, o)
           })  
           console.log(`Updated ${response.data.length} stock markets in ${new Date()-start} ms`)
-        }, (error) => {
-          console.log(error)
-      });
+        });
     },
     updateStrategiestypes() {
         var start=new Date()
@@ -331,38 +302,8 @@ export const useStore = defineStore('global', {
         this.updateStockmarkets(),
         this.updateStrategiestypes(),
       ])
-    },
-  }
+    }}
 })
-
-export function myheaders(){
-    return {
-        headers:{
-            'Authorization': `Token ${useStore().token}`,
-            'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
-            'Content-Type':'application/json'
-        }
-    }
-}
-
-export function myheaders_noauth(){
-    return {
-        headers:{
-            'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
-            'Content-Type':'application/json'
-        }
-    }
-}
-
-export function myheaders_formdata(){
-    return {
-        headers:{
-            'Authorization': `Token ${useStore().token}`,
-            'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
-            'Content-Type': 'multipart/form-data'
-        }
-    }
-}
 
 // returns true if everything is ok
 // return false if there is something wrong
@@ -462,7 +403,7 @@ export function currency_generic_string(num, currency, locale, decimals=2){
     if (num ==null || isNaN(num)){
         return `- - - ${getCurrencyPropertyByCode(currency,"symbol_native")}`
     } else {
-        return `${my_round(num,decimals).toLocaleString(locale, { minimumFractionDigits: decimals,  })} ${getCurrencyPropertyByCode(currency,"symbol_native")}`
+        return `${my_round(num,decimals).toLocaleString(locale, { minimumFractionDigits: decimals})} ${getCurrencyPropertyByCode(currency,"symbol_native")}`
     }
 }
 export function currency_generic_html(num, currency, locale, decimals=2){
@@ -516,3 +457,33 @@ export function amount_to_invest( invested ){
     if (limit_23<=invested && invested < limit_34) return s.invest_amount_4
     if (limit_34<=invested && invested < limit_45) return s.invest_amount_5
 }
+
+// Global interceptors
+axios.interceptors.request.use((config) => {
+    if (config.noheaders) return config;
+    const store = useStore();
+    if (store.token && !config.headers.Authorization) {
+        config.headers.Authorization = `Token ${store.token}`;
+    }
+    if (!config.headers['Accept-Language']) {
+        config.headers['Accept-Language'] = `${localStorage.locale}-${localStorage.locale}`;
+    }
+    if (!config.headers['Content-Type']) {
+        config.headers['Content-Type'] = 'application/json';
+    }
+    return config;
+});
+
+axios.interceptors.response.use(
+    async (response) => {
+        if (response.config.noparse) return response;
+        const ok = await parseResponse(response);
+        if (ok) return response;
+        return Promise.reject(response);
+    },
+    async (error) => {
+        if (error.config && error.config.noparse) return Promise.reject(error);
+        await parseResponseError(error);
+        return Promise.reject(error);
+    }
+);

@@ -27,13 +27,9 @@
 <script>     
 
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders, myheaders_formdata } from '@/store'
+    import { useStore  } from '@/store'
 
     export default {
-        components:{
-        },
-        props:{
-        },
         data () {
             return {
                 filename:[], //Must be an array 
@@ -43,35 +39,27 @@
                     { title: this.$t('Code'), sortable: true, key: 'code'},
                     { title: this.$t('Product'), sortable: true, key: 'product'},
                     { title: this.$t('Log'), sortable: true, key: 'log'},
-                ],
-            }
+                ]}
         },
         methods: {
             useStore,
-            parseResponseError,
-            myheaders,
-            myheaders_formdata,
             submmit(){
                 this.loading=true
                 let data=new FormData()
                 data.append('csv_file1', this.filename)
-                axios.post(`${this.useStore().apiroot}/products/update/`, data, this.myheaders_formdata())
+                axios.post(`${this.useStore().apiroot}/products/update/`, data, { headers: { 'Content-Type': 'multipart/form-data' } })
                 .then((response) => {
                         this.items=response.data
                         this.filename=[]
                         this.loading=false
-                }, (error) => {
-                    this.parseResponseError(error)
                 })
             },
             submmit_auto(){
                 this.loading=true
-                axios.post(`${this.useStore().apiroot}/products/update/`, {auto:true,}, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/products/update/`, {auto:true})
                 .then((response) => {
                         this.items=response.data
                         this.loading=false
-                }, (error) => {
-                    this.parseResponseError(error)
                 })
             },
             isButtonDisabled(){

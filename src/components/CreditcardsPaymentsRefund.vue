@@ -12,7 +12,7 @@
 <script setup>
     import { ref, watch, onMounted } from 'vue'
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders, currency_string } from '@/store'
+    import { useStore, currency_string   } from '@/store'
     import { useI18n } from 'vue-i18n'
     import { localtime, RulesSelection, f } from 'vuetify_rules'
     import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
@@ -22,8 +22,7 @@
     const props = defineProps({
         cc: {
             required: true
-        },
-    })
+        }})
 
     const emit = defineEmits(['cruded'])
 
@@ -40,11 +39,9 @@
 
     watch(payment, (newValue) => {
         if (newValue) {
-            axios.get(`${props.cc.url}operationswithbalance/?accountsoperations_id=${newValue}`, myheaders())
+            axios.get(`${props.cc.url}operationswithbalance/?accountsoperations_id=${newValue}`)
             .then((response) => {
                 items_cco.value = response.data
-            }, (error) => {
-                parseResponseError(error)
             });
         } else {
             items_cco.value = []
@@ -52,7 +49,7 @@
     })
 
     async function refundPayment() {
-        axios.post(`${store.apiroot}/api/accountsoperations/${payment.value}/ccpaymentrefund/`, {}, myheaders())
+        axios.post(`${store.apiroot}/api/accountsoperations/${payment.value}/ccpaymentrefund/`, )
         .then(async () => {
             items_cco.value = []
             payment.value = null
@@ -60,26 +57,20 @@
             emit("cruded")
             key.value++
             await myAlert(t("Payment was refund"))
-        }, (error) => {
-            parseResponseError(error)
         });
     }
 
     function updatePayments(){
         loading.value = true
-        axios.get(`${props.cc.url}payments/`, myheaders())
+        axios.get(`${props.cc.url}payments/`)
         .then((response) => {
             payments.value = []
             response.data.forEach(o=> {
                 payments.value.push({
                     id: o.accountsoperations_id,
-                    name: f(t("[0] were paid [1] ([2] operations)"), [localtime(o.datetime), currency_string(o.amount, account.value.currency), o.count]),
-                })
+                    name: f(t("[0] were paid [1] ([2] operations)"), [localtime(o.datetime), currency_string(o.amount, account.value.currency), o.count])})
             });
             loading.value = false
-        }, (error) => {
-            loading.value = false
-            parseResponseError(error)
         });
     }
 

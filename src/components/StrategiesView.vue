@@ -45,7 +45,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders, getMapObjectById } from '@/store'
+    import { useStore, getMapObjectById   } from '@/store'
     import {empty_strategy_simulation, empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
     import MyMenuInline from './MyMenuInline.vue'
     import DisplayValues from './DisplayValues.vue'
@@ -62,13 +62,11 @@
             TableInvestmentOperations,
             TableInvestmentOperationsCurrent,
             TableInvestmentOperationsHistorical,
-            TableDividends,
-        },
+            TableDividends},
         props: {
             strategy: { //Object
                 required: true
-            },
-        },
+            }},
         data () {
             return {
                 tab:0,
@@ -89,7 +87,7 @@
                                 name:this.$t('Investment chart'),
                                 icon: "mdi-chart-areaspline",
                                 code: function(){
-                                    axios.get(`${this.useStore().apiroot}/products/quotes/ohcl?product=${this.product.url}`, this.myheaders())
+                                    axios.get(`${this.useStore().apiroot}/products/quotes/ohcl?product=${this.product.url}`)
                                     .then((response) => {
                                         this.chart_data=this.empty_investments_chart()
                                         this.chart_data.ohcls=response.data
@@ -105,8 +103,6 @@
                                         this.ohcl=response.data 
                                         this.key=this.key+1
                                         this.dialog_investment_chart=true
-                                    }, (error) => {
-                                        this.parseResponseError(error)
                                     });
                                 }.bind(this)
                             },
@@ -128,8 +124,7 @@
                     },
                 ],
 
-                ios:null,
-            }  
+                ios:null}  
         },
         computed:{
             product: function (){
@@ -143,8 +138,8 @@
             useStore,
             f,
             localtime,
-            parseResponseError,
-            myheaders,
+
+
             empty_investments_chart,
             empty_investments_chart_limit_line,
             empty_strategy_simulation,
@@ -167,10 +162,10 @@
                 return r
             },
             update_investmentsoperations(){
-                return axios.get(`${this.strategy.url}detailed/`, this.myheaders())
+                return axios.get(`${this.strategy.url}detailed/`)
             },
             update_dividends(){
-                var headers={...this.myheaders(),params:{investments:this.strategy.investments}}
+                var headers={params:{investments:this.strategy.investments}}
                 return axios.get(`${this.useStore().apiroot}/api/dividends/`, headers)
             },
             update_all(){

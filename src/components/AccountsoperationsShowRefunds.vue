@@ -11,7 +11,7 @@
 <script setup>
     import axios from 'axios'
     import { ref, onMounted } from 'vue'
-    import { parseResponseError, myheaders, currency_generic_string } from '@/store'
+    import { currency_generic_string } from '@/store'
     import TableAccountOperations from './TableAccountOperations.vue'
     import { listobjects_sum } from '@/functions'
     import { useI18n } from 'vue-i18n'
@@ -19,9 +19,7 @@
 
     const props = defineProps({
         ao: { // Account operation object
-            required: true,
-        },
-    })
+            required: true}})
 
     const { t } = useI18n()
 
@@ -33,12 +31,10 @@
     }
 
     function update_table(){
-        axios.get(`${props.ao.url}get_refunds/`, myheaders())
+        axios.get(`${props.ao.url}get_refunds/`)
             .then((response) => {
                 items.value = response.data
                 key.value++
-            }, (error) => {
-                parseResponseError(error)
             });
     }
 

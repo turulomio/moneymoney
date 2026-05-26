@@ -147,7 +147,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, currency_string, localcurrency_string, myheaders, getMapObjectById } from '@/store'
+    import { useStore, currency_string, localcurrency_string, getMapObjectById   } from '@/store'
     import {empty_investment_operation,empty_dividend,empty_investments_chart,empty_investments_chart_limit_line,empty_ios} from '../empty_objects.js'
     import { parseNumber,f } from 'vuetify_rules'
     import { percentage_string, listobjects_average_ponderated, listobjects_sum } from '@/functions.js'
@@ -187,13 +187,11 @@
             InvestmentsTransfers,
             ChartInvestmentsoperationsEvolution,
             ChartInvestmentsoperationsEvolutionTimeseries,
-            InvestmentsChangeSellingPrice,
-        },
+            InvestmentsChangeSellingPrice},
         props: {
             investment_id: { //investment id
                 required: true
-            },
-        },
+            }},
         data () {
             return {
                 investment:null,//Object of $store
@@ -218,7 +216,7 @@
                                 name:this.$t('Investment chart'),
                                 icon: "mdi-chart-areaspline",
                                 code: function(){
-                                    axios.get(`${this.useStore().apiroot}/products/quotes/ohcl?product=${this.product.url}`, this.myheaders())
+                                    axios.get(`${this.useStore().apiroot}/products/quotes/ohcl?product=${this.product.url}`)
                                     .then((response) => {
                                         this.chart_data=this.empty_investments_chart()
                                         this.chart_data.ohcls=response.data
@@ -233,8 +231,6 @@
                                         }
                                         this.key=this.key+1
                                         this.dialog_investment_chart=true
-                                    }, (error) => {
-                                        this.parseResponseError(error)
                                     });
                                 }.bind(this)
                             },
@@ -242,17 +238,14 @@
                                 name:this.$t('Change active status'),
                                 code: function(){
                                     this.investment.active=!this.investment.active
-                                    axios.put(this.investment.url, this.investment,  this.myheaders())
+                                    axios.put(this.investment.url, this.investment)
                                     .then((response) => {
                                         this.useStore().investments.set(response.data.url, response.data)
                                         this.$emit("cruded")
                                         this.update_all()
-                                    }, (error) => {
-                                        this.parseResponseError(error)
                                     })
                                 }.bind(this),
-                                icon: "mdi-pencil",
-                            },
+                                icon: "mdi-pencil"},
                             {
                                 name:this.$t('Show evolution chart'),
                                 icon: "mdi-chart-areaspline",
@@ -295,21 +288,17 @@
                                     this.key=this.key+1
                                     this.dialog_productview=true
                                 }.bind(this),
-                                icon: "mdi-magnify",
-                            },
+                                icon: "mdi-magnify"},
                             {
                                 name:this.$t('Delete last quote'),
                                 code: function(){
-                                    axios.post(`${this.useStore().apiroot}/api/products/${this.product.id}/delete_last_quote/`, [], this.myheaders())
+                                    axios.post(`${this.useStore().apiroot}/api/products/${this.product.id}/delete_last_quote/`, [])
                                     .then(() => {
                                         this.key=this.key+1
                                         this.$emit("cruded") 
-                                    }, (error) => {
-                                        this.parseResponseError(error)
                                     });
                                 }.bind(this),
-                                icon: "mdi-delete",
-                            },
+                                icon: "mdi-delete"},
                         ]
                     },
                     {
@@ -324,8 +313,7 @@
                                     this.key=this.key+1
                                     this.dialog_io=true
                                 }.bind(this),
-                                icon: "mdi-book-plus",
-                            },
+                                icon: "mdi-book-plus"},
                             {
                                 name:this.$t('Add an investment operation adjusting currency conversion factor'),
                                 code: async function(){
@@ -344,8 +332,7 @@
                                      
                                     this.dialog_io=true
                                 }.bind(this),
-                                icon: "mdi-book-plus",
-                            },
+                                icon: "mdi-book-plus"},
                             {
                                 name:this.$t('Sell/Buy all shares to selling price'),
                                 code: function(){
@@ -364,8 +351,7 @@
                                      
                                     this.dialog_io=true
                                 }.bind(this),
-                                icon: "mdi-book-plus",
-                            },
+                                icon: "mdi-book-plus"},
                             {
                                 name:this.$t('Reinvest/Divest operation'),
                                 code: function(){
@@ -374,8 +360,7 @@
                                     this.key=this.key+1                        
                                     this.dialog_reinvest=true
                                 }.bind(this),
-                                icon: "mdi-book-plus",
-                            },
+                                icon: "mdi-book-plus"},
                         ]
                     },
                     {
@@ -390,8 +375,7 @@
                                     this.key=this.key+1                        
                                     this.dividends_cu_dialog=true
                                 }.bind(this),
-                                icon: "mdi-book-plus",
-                            },
+                                icon: "mdi-book-plus"},
                         ]
                     },
                 ],
@@ -425,8 +409,7 @@
                 divest_price:0,
 
                 // dialog investments transfers
-                dialog_investments_transfers: false,
-            }  
+                dialog_investments_transfers: false}  
         },
         watch:{
             chkShowAllIO(){
@@ -497,8 +480,7 @@
                 } else {
                     return this.$t("Check to see all dividends")
                 }
-            },
-        },
+            }},
         methods: {
             useStore,
             f,
@@ -511,11 +493,11 @@
             empty_ios,
             empty_investment_operation,
             getMapObjectById,
-            parseResponseError,
+
             currency_string,
             localcurrency_string,
             listobjects_sum,
-            myheaders,
+
             on_DividendsCU_cruded(){
                 this.update_all()
                 this.dividends_cu_dialog=false
@@ -568,11 +550,10 @@
                 var simulation=this.empty_ios()
                 simulation.investments.push(parseInt(this.investment_id))
                 simulation.currency=this.useStore().profile.currency
-                return axios.post(`${this.useStore().apiroot}/ios/`, simulation, this.myheaders())
+                return axios.post(`${this.useStore().apiroot}/ios/`, simulation)
             },
             update_dividends(){
-                var headers={...this.myheaders(),params:{investments:[this.investment_id,]}}
-                return axios.get(`${this.useStore().apiroot}/api/dividends/`, headers)
+                return axios.get(`${this.useStore().apiroot}/api/dividends/`, {params:{investments:[this.investment_id,]}})
             },
             update_all(){
                 this.loading=true
@@ -615,8 +596,7 @@
                         this.percentage_string(invested_percentage)
                     ]
                 )
-            },
-        },
+            }},
         created(){
             this.update_all()
         }

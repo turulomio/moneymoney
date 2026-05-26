@@ -26,8 +26,7 @@ const vuetify = createVuetify({
     defaultSet: 'mdi',
     aliases,
     sets: {
-      mdi,
-    }
+      mdi}
   },
   theme: {
     themes: {
@@ -36,11 +35,6 @@ const vuetify = createVuetify({
           primary: '#546e7a',
           secondary: '#728c98',
           accent: '#8c9eff',
-          error: '#b71c1c',
-        },
-      },
-    },
-  },
-})
+          error: '#b71c1c'}}}}})
 
 export default vuetify;

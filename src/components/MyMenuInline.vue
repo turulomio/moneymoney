@@ -77,8 +77,7 @@ type puede ser redirection or command
                 this.button_enabled=false
                 item.code()
                 this.button_enabled=true
-            },
-        },
+            }},
         created() {
             this.new_items=[]
             var new_item

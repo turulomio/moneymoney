@@ -36,7 +36,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import AutocompleteStockMarkets from './AutocompleteStockMarkets.vue'
     import { RulesSelection, RulesInteger, RulesString} from 'vuetify_rules'
     import { getArrayFromMap } from '@/functions'
@@ -55,29 +55,24 @@
                 required: true // Null to create, io object to update
             },
             mode: { // C R U D
-                required: true,
-                
-            },
+                required: true},
             system: {  // true for system products, false for personal products
                 required: false,
-                default: false,
-            }
+                default: false}
         },
         data(){ 
             return {
                 form_valid:false,
-                new_product: null,
-
-            }
+                new_product: null}
         },
         methods: {
             useStore,
             RulesSelection,
             RulesInteger,
             RulesString,
-            parseResponseError,
+
             getArrayFromMap,
-            myheaders,
+
             title(){
                 if (this.system){
                     if (this.mode=="D") {
@@ -114,40 +109,32 @@
                 }
                 this.new_product.system=this.system
                 if (this.mode=="U"){
-                    axios.put(this.new_product.url, this.new_product,  this.myheaders())
+                    axios.put(this.new_product.url, this.new_product)
                     .then((response) => {
                         this.useStore().products.set(response.data.url,response.data)
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="C"){
-                    axios.post(`${this.useStore().apiroot}/api/products/`, this.new_product,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/products/`, this.new_product)
                     .then((response) => {
                         console.log(response.data)
                         this.useStore().products.set(response.data.url,response.data)
                         console.log(this.useStore().products.get(response.data.url))
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="D"){
                     if(await this.myConfirm(this.$t("This product will be deleted. Do you want to continue?")) == false) {
                         return
                     } 
-                    axios.delete(this.product.url, this.myheaders())
+                    axios.delete(this.product.url)
                     .then((response) => {
                         this.useStore().products.delete(response.data.url,response.data)
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     });
                 }
-            },
-        },
+            }},
         created(){
             this.new_product=Object.assign({},this.product)
-        },
-    }
+        }}
 </script>
 

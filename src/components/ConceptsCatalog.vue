@@ -39,8 +39,9 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders, localcurrency_html } from '@/store'
+    import { useStore, localcurrency_html   } from '@/store'
     import MyMenuInline from './MyMenuInline.vue'
+
     import ConceptsCU from './ConceptsCU.vue'
     import ConceptsMigration from './ConceptsMigration.vue'
     import {empty_concept} from '../empty_objects.js'
@@ -49,8 +50,7 @@
         components:{
             MyMenuInline,
             ConceptsCU,
-            ConceptsMigration,
-        },
+            ConceptsMigration},
         data(){ 
             return{
                 showActive:true,
@@ -75,8 +75,7 @@
                                     this.key=this.key+1
                                     this.concept_mode="C"
                                     this.dialog_concepts_cu=true
-                                }.bind(this),
-                            },
+                                }.bind(this)},
                         ]
                     },
                 ],
@@ -97,9 +96,9 @@
         },
         methods: {
             useStore,
-            myheaders,
+
             localcurrency_html, 
-            parseResponseError,
+
             deleteItem (item) {
                 this.concept=item
                 this.key=this.key+1
@@ -128,15 +127,13 @@
             },
             update_table(){
                 this.loading=true
-                axios.get(`${this.useStore().apiroot}/api/concepts/used/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/concepts/used/`)
                 .then((response) => {
                     this.concepts=response.data
                     this.loading=false
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
-            },
-        },
+            }},
+
         mounted(){
             this.update_table()
         }

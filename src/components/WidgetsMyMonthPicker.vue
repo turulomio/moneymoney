@@ -13,12 +13,9 @@
     import MyMonthPicker from './MyMonthPicker.vue'
     export default {
         components:{
-            MyMonthPicker,
-        },
+            MyMonthPicker},
         data(){
             return {
-                MyMonthPicker: null,
-            }
-        },
-    }
+                MyMonthPicker: null}
+        }}
 </script>

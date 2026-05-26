@@ -17,7 +17,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import { RulesSelection, RulesString } from 'vuetify_rules'
     import { useDialogs } from '@/composables/useDialogs'
@@ -28,8 +28,7 @@
             return { myConfirm: confirm }
         },
         components: {
-            AutocompleteProducts,
-        },
+            AutocompleteProducts},
         props: {
             pc: {
                 required: true // PC object
@@ -41,15 +40,13 @@
         data(){ 
             return {
                 form_valid:false,
-                newpc:null,
-            }
+                newpc:null}
         },
         methods: {
             useStore,
             RulesSelection,
             RulesString,
-            parseResponseError,
-            myheaders,
+
 
             title(){
                 if (this.mode=="U"){
@@ -71,33 +68,25 @@
             },     
             async accept(){
                 if (this.mode=="U"){
-                    axios.put(this.newpc.url, this.newpc,  this.myheaders())
+                    axios.put(this.newpc.url, this.newpc)
                     .then(() => {
                             this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="C"){
-                    axios.post(`${this.useStore().apiroot}/api/productspairs/`, this.newpc,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/productspairs/`, this.newpc)
                     .then(() => {
                             this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="D"){
                     if(await this.myConfirm(this.$t("Do you want to delete this products comparation?")) == false) {
                         return
                     } 
-                    axios.delete(this.newpc.url, this.myheaders())
+                    axios.delete(this.newpc.url)
                     .then(() => {
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     });
                 }
-            },
-
-        },
+            }},
         created(){
             this.newpc=Object.assign({},this.pc)
         }

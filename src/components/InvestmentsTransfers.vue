@@ -9,7 +9,7 @@
 
 <script setup>
     import axios from 'axios'
-    import { useStore, myheaders, parseResponseError } from '@/store'
+    import { useStore  } from '@/store'
     import MyMenuInline from './MyMenuInline.vue'    
     import TableInvestmentsTransfers from './TableInvestmentsTransfers.vue'
     
@@ -51,13 +51,11 @@
 
     function update_table(){
         loading.value = true
-        axios.get(`${useStore().apiroot}/api/investmentstransfers/?investment=${props.investment.url}`, myheaders())
+        axios.get(`${useStore().apiroot}/api/investmentstransfers/?investment=${props.investment.url}`)
         .then((response) => {
             items.value = response.data
             loading.value = false
             key.value++
-        }, (error) => {
-            parseResponseError(error)
         });
     }
 

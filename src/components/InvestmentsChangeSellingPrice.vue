@@ -78,7 +78,7 @@
 <script setup>
     import { ref, watch, computed, onMounted } from 'vue'
     import axios from 'axios'
-    import { useStore, parseResponseError, currency_string, myheaders, getMapObjectById } from '@/store'
+    import { useStore, currency_string, getMapObjectById   } from '@/store'
     import DisplayValues from './DisplayValues.vue'
     import MyDatePicker from './MyDatePicker.vue'
     import { empty_products_ranges, empty_ios } from '../empty_objects.js'
@@ -93,8 +93,7 @@
 
     const props = defineProps({
         investment: {
-            required: true,
-        }
+            required: true}
     })
 
     const tab = ref(2)
@@ -235,9 +234,8 @@
         var p = {
             selling_expiration: selling_expiration.value,
             investments: s,
-            selling_price: my_round(price_val, product.value.decimals),
-        }
-        axios.post(`${useStore().apiroot}/investments/changesellingprice/`, p, myheaders())
+            selling_price: my_round(price_val, product.value.decimals)}
+        axios.post(`${useStore().apiroot}/investments/changesellingprice/`, p)
             .then((response) => {
                 response.data.forEach(o => {
                     useStore().investments.set(o.url, o)
@@ -245,8 +243,6 @@
                 loading_ios.value = false
                 key.value = key.value + 1
                 show_snackbar_message()
-            }, (error) => {
-                parseResponseError(error)
             });
     }
 
@@ -269,7 +265,7 @@
         simulation.investments = investments_same_product.value
         simulation.currency = useStore().profile.currency
         simulation.mode = 2
-        return axios.post(`${useStore().apiroot}/ios/`, simulation, myheaders())
+        return axios.post(`${useStore().apiroot}/ios/`, simulation)
             .then((response) => {
                 plio.value = response.data
                 var o
@@ -288,8 +284,7 @@
                         average_price: ios_id.total_io_current.average_price_investment,
                         invested_investment: ios_id.total_io_current.invested_investment,
                         balance_investment: ios_id.total_io_current.balance_investment,
-                        currency: ios_id.data.currency_product,
-                    }
+                        currency: ios_id.data.currency_product}
                     data.value.push(o)
                     if (select_current == true && o.url == props.investment.url) {
                         selected_ids.value.push(o.id)
@@ -298,17 +293,13 @@
                 })
                 loading_ios.value = false
                 key.value = key.value + 1
-            }, (error) => {
-                parseResponseError(error)
             });
     }
 
     const refreshStrategies = () => {
-        axios.get(`${useStore().apiroot}/api/strategies/?investment=${props.investment.url}&active=true&type=2`, myheaders())
+        axios.get(`${useStore().apiroot}/api/strategies/?investment=${props.investment.url}&active=true&type=2`)
             .then((response) => {
                 strategies.value = response.data
-            }, (error) => {
-                parseResponseError(error)
             });
     }
 
@@ -325,8 +316,7 @@
         pr.recomendation_methods = item.additional5
         pr.totalized_operations = item.additional6
         pr.investments = item.investments
-        var headers = { ...myheaders(), params: pr }
-        axios.get(`${useStore().apiroot}/products/ranges/`, headers)
+        axios.get(`${useStore().apiroot}/products/ranges/`, { params: pr })
             .then((response) => {
                 strategy_ranges.value = []
                 response.data.pr.forEach(element => {
@@ -336,8 +326,6 @@
                     })
                     strategy_ranges.value.push({ name: `${element.value} ${investments_string}`, value: element.value })
                 });
-            }, (error) => {
-                parseResponseError(error)
             });
     })
 

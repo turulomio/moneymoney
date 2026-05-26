@@ -40,8 +40,7 @@
         },
         investment: { // To get the product and currency
             required: true
-        },
-    })
+        }})
 
     const emit = defineEmits(['cruded'])
 

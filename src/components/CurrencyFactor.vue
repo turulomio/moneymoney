@@ -50,8 +50,7 @@
                 new_value: null,
                 currency_from_value: 1,
                 currency_to_value: 1,
-                representation:"",
-            }
+                representation:""}
         },
         watch: {
             currency_from_value(){
@@ -59,8 +58,7 @@
             },
             currency_to_value(){
                 this.update_value()
-            },
-        },
+            }},
         methods: {
             my_round,
             update_value(){
@@ -77,11 +75,9 @@
             update_internal_values(){
                 this.currency_to_value=1
                 this.currency_from_value=this.my_round(1/this.new_value, this.decimals)
-            },
-        },
+            }},
         created(){
             this.new_value=this.modelValue
             this.update_internal_values()
-        },
-    }
+        }}
 </script>

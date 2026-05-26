@@ -84,7 +84,7 @@
 </template>
 <script>     
     import axios from 'axios'
-    import { useStore, parseResponseError, localcurrency_html, myheaders } from '@/store'
+    import { useStore, localcurrency_html } from '@/store'
     import ReportsConceptsHistorical from './ReportsConceptsHistorical'
     import MyMonthPicker from './MyMonthPicker.vue'
     import ChartPie from './ChartPie.vue'
@@ -94,8 +94,7 @@
         components:{
             ReportsConceptsHistorical,
             MyMonthPicker,
-            ChartPie,
-        },
+            ChartPie},
         data(){
             return {
                 tab:0,
@@ -114,8 +113,7 @@
                 loading:false,
                 key: 0,
                 dialog_historical: false,
-                concept:null,
-            }
+                concept:null}
         },
         watch:{
             ym(){
@@ -124,18 +122,17 @@
             tab(){
                 this.showpie=false
                 setTimeout(() => {this.showpie=true }, 300)
-            },
-        },
+            }},
         methods:{
             useStore,
-            parseResponseError,
+
             listobjects_sum,
             percentage_html,
-            myheaders,
+
             localcurrency_html,
             refreshTables(){
                 this.loading=true
-                axios.get(`${this.useStore().apiroot}/reports/concepts/?year=${this.ym.year}&month=${this.ym.month}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/reports/concepts/?year=${this.ym.year}&month=${this.ym.month}`)
                 .then((response) => {
                     this.itemsPositive=response.data.positive
                     this.itemsNegative=response.data.negative
@@ -151,8 +148,6 @@
                     this.showpie=true
                     this.loading=false
                     this.key=this.key+1
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             },
             viewHistoricalReport(event,object){

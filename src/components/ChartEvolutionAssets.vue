@@ -14,7 +14,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, myheaders, localcurrency_string } from '@/store'
+    import { useStore, localcurrency_string } from '@/store'
     import * as echarts from 'echarts'
     
     export default {
@@ -22,8 +22,7 @@
             hidden:{
                 type: Boolean,
                 required:false,
-                default:false,
-            }
+                default:false}
         },
         data(){ 
             return{
@@ -36,26 +35,21 @@
                 investments:[],
                 invested:[],
                 zerorisk:[],
-                from: new Date().getFullYear()-3,
-            }
+                from: new Date().getFullYear()-3}
         },        
         watch:{
             from() {
                 this.refreshChart()
-            },
-        },
+            }},
         methods: {
             useStore,
-            parseResponseError,
-            myheaders,
             localcurrency_string,
             chart_option(){
                 // var =this
                 return {
                     legend: {
                         data: [this.$t("Balance"),this.$t("Accounts"),this.$t("Investments"),this.$t("Invested"),this.$t("Zero risk")],
-                        inactiveColor: '#777',
-                    },
+                        inactiveColor: '#777'},
                     tooltip: {
                         trigger: 'axis',
                         axisPointer: {
@@ -91,8 +85,7 @@
                     dataZoom: [{
                             type: 'slider',
                             start: 0,
-                            end: 100,
-                    }],
+                            end: 100}],
                     series: [
                         {
                             type:"line",
@@ -166,7 +159,7 @@
                 }
 
                 this.chartReadyPromise = new Promise((resolve, reject) => {
-                    axios.get(`${this.useStore().apiroot}/reports/evolutionassets/chart/?from=${this.from}`, this.myheaders())
+                    axios.get(`${this.useStore().apiroot}/reports/evolutionassets/chart/?from=${this.from}`)
                     .then((response) => {
                         this.balance = [];
                         this.accounts = [];
@@ -196,7 +189,6 @@
                         console.log("Chart refreshed and options set. Instance:", this.chart);
                         resolve(this.chart);
                     }, (error) => {
-                        this.parseResponseError(error);
                         this.loading = false;
                         reject(error);
                     });
@@ -240,8 +232,7 @@
                     console.log("downloadChart: Chart already reported as finished.");
                 }
                 return this.chart.getDataURL({ pixelRatio: 6, backgroundColor: '#fff' });
-            },
-        },
+            }},
         mounted(){
 
             this.refreshChart()

@@ -104,7 +104,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, getCountryNameByCode, parseResponseError, currency_string, currency_html, localcurrency_html, myheaders } from '@/store'
+    import { useStore, getCountryNameByCode, currency_string, currency_html, localcurrency_html } from '@/store'
     import MyMenuInline from './MyMenuInline.vue'
     import InvestmentsCU from './InvestmentsCU.vue'
     import InvestmentsChangeSellingPrice from './InvestmentsChangeSellingPrice.vue'
@@ -119,8 +119,7 @@
             InvestmentsCU,
             InvestmentsView,
             QuotesCU,
-            InvestmentsChangeSellingPrice,
-        },
+            InvestmentsChangeSellingPrice},
         data(){ 
             return{
                 items_per_page:5000000,
@@ -151,8 +150,7 @@
                                     this.investment_mode="C"
                                     this.key=this.key+1
                                     this.dialog=true
-                                }.bind(this),
-                            },
+                                }.bind(this)},
                         ]
                     },
                 ],
@@ -177,17 +175,15 @@
 
                 //Products auto update
                 products_updating:false,
-                update_errors:0,
-            }
+                update_errors:0}
         },
         watch:{
             showActive () {
                 this.update_table()
-            },
-        },
+            }},
         methods: { 
             useStore,
-            parseResponseError,
+
             localtime,
             getCountryNameByCode,
             f,
@@ -196,7 +192,7 @@
             currency_html,
             localcurrency_html,
             percentage_html,
-            myheaders,
+
             empty_investment,
             empty_quote,
             addQuote(item){
@@ -268,14 +264,12 @@
             },
             update_table(){
                 this.loading=true
-                axios.get(`${this.useStore().apiroot}/api/investments/withbalance/?active=${this.showActive}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/investments/withbalance/?active=${this.showActive}`)
                 .then((response) => {
                     this.investments_items=response.data
                     this.update_foot()
                     this.loading=false
                     this.key=this.key+1
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             },
             viewItem (event,object) {
@@ -292,7 +286,7 @@
             },
             products_autoupdate(){
                 this.products_updating=true
-                axios.post(`${this.useStore().apiroot}/products/update/`, {auto:true,}, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/products/update/`, {auto:true})
                 .then((response) => {
                         this.update_errors=0
                         response.data.forEach(o=>{
@@ -300,11 +294,8 @@
                         })
                         this.update_table()
                         this.products_updating=false
-                }, (error) => {
-                    this.parseResponseError(error)
                 })
-            },
-        },
+            }},
         mounted(){
             this.update_table()
         }

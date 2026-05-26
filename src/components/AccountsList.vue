@@ -68,7 +68,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, currency_html, localcurrency_html, myheaders } from '@/store'
+    import { useStore, currency_html, localcurrency_html } from '@/store'
     import MyMenuInline from './MyMenuInline.vue'
     import AccountsoperationsSearch from './AccountsoperationsSearch.vue'
     import AccountsCU from './AccountsCU.vue'
@@ -84,8 +84,7 @@
             AccountsCU,
             AccountsView,
             AccountsTransfer,
-            AccountsoperationsSearch,
-        },
+            AccountsoperationsSearch},
         data(){ 
             return{
                 showActive:true,
@@ -112,8 +111,7 @@
                                     this.account=this.empty_account()
                                     this.account_mode="C"
                                     this.dialog=true
-                                }.bind(this),
-                            },
+                                }.bind(this)},
                             { 
                                 name:this.$t('Add an account transfer'), 
                                 code: function(){
@@ -134,8 +132,7 @@
                                 code: function(){
                                     this.key=this.key+1
                                     this.dialog_search=true
-                                }.bind(this),
-                            },
+                                }.bind(this)},
                         ]
                     },
                 ],
@@ -153,14 +150,12 @@
 
                 //AccountsTransfer
                 at:null,
-                dialog_transfer:false,
-            }
+                dialog_transfer:false}
         },
         watch:{
             showActive () {
                 this.update_table()
-            },
-        },
+            }},
         methods: {
             useStore,
             empty_account,
@@ -170,8 +165,6 @@
             localcurrency_html,
             f,
             localtime,
-            myheaders,
-            parseResponseError,
             editItem (item) {
                 this.account=item
                 this.account_mode="U"
@@ -196,12 +189,10 @@
                     this.chkLabel=this.$t("Check to see active accounts")
                 }
                 this.loading_accounts=true
-                axios.get(`${this.useStore().apiroot}/api/accounts/withbalance/?active=${this.showActive}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/accounts/withbalance/?active=${this.showActive}`)
                 .then((response) => {
                     this.accounts_items=response.data
                     this.loading_accounts=false
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             },
             on_AccountsoperationsSearch_cruded(){
@@ -217,8 +208,7 @@
             on_AccountTransfer_cruded(){
                 this.dialog_transfer=false
                 this.update_table()
-            },
-        },
+            }},
         mounted(){
             this.update_table()
         }

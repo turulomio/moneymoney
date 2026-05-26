@@ -20,7 +20,7 @@
 <script setup>
     import { ref, computed } from 'vue'
     import axios from 'axios' 
-    import { useStore, myheaders, parseResponseError } from '@/store'
+    import { useStore } from '@/store'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection, RulesFloat } from 'vuetify_rules'
     import { date2zulu, zulu2date, getArrayFromMap, hyperlinked_url } from '@/functions'
@@ -30,11 +30,9 @@
 
     const props = defineProps({
         ao:{
-            required:true,
-        },
+            required:true},
         mode:{ // CRUD F:Refund
-            required:true,
-        }
+            required:true}
     })
 
     const emit = defineEmits(['cruded'])
@@ -82,14 +80,12 @@
 
         //Accept
         if (props.mode=='U'){               
-            axios.put(newao.value.url, newao.value, myheaders())
+            axios.put(newao.value.url, newao.value)
             .then(() => {
                     emit('cruded', following_ao.value)
-            }, (error) => {
-                parseResponseError(error)
             })
         } else if (props.mode=='C'){ 
-            axios.post(`${store.apiroot}/api/accountsoperations/`, newao.value,  myheaders())
+            axios.post(`${store.apiroot}/api/accountsoperations/`, newao.value)
             .then(() => {             
                 if (following_ao.value == true){
                     var dt = zulu2date(newao.value.datetime)
@@ -98,34 +94,27 @@
                     newao.value.datetime = date2zulu(dt)
                 }
                 emit('cruded', following_ao.value)
-            }, (error) => {
-                parseResponseError(error)
             })
         } else if (props.mode=='D'){
             if (!await myConfirm(t("Do you want to delete this account operation?"))) {
                 return
             }  
             following_ao.value = false
-            axios.delete(newao.value.url, myheaders())
+            axios.delete(newao.value.url)
             .then(() => {
                 emit('cruded', following_ao.value)
-            }, (error) => {
-                parseResponseError(error)
             });
         } else if (props.mode=='F'){
 
             let payload={
                 datetime:newao.value.datetime,
                 refund_amount:newao.value.amount,
-                comment:newao.value.comment,
-            }
+                comment:newao.value.comment}
 
             following_ao.value = false
-            axios.post(props.ao.url+ "create_refund/", payload,  myheaders())
+            axios.post(props.ao.url+ "create_refund/", payload)
             .then(() => {
                 emit('cruded', following_ao.value)
-            }, (error) => {
-                parseResponseError(error)
             });
         }
     }

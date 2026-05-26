@@ -67,7 +67,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, parseResponseError, currency_html, myheaders } from '@/store'
+    import { useStore, currency_html } from '@/store'
     import OrdersCU from './OrdersCU.vue'
     import InvestmentsoperationsReinvest from './InvestmentsoperationsReinvest.vue'
     import MyMenuInline from './MyMenuInline.vue'
@@ -78,8 +78,7 @@
         components:{
             MyMenuInline,
             OrdersCU,
-            InvestmentsoperationsReinvest,
-        },
+            InvestmentsoperationsReinvest},
         data(){ 
             return{
                 items_state: [
@@ -112,8 +111,7 @@
                                     this.order_mode="C"
                                     this.dialog_cu=true
                                     this.key=this.key+1
-                                }.bind(this),
-                            },
+                                }.bind(this)},
                         ]
                     },
                 ],
@@ -127,14 +125,12 @@
                 key:0,
                 //Products auto update
                 products_updating:false,
-                update_errors:0,
-            }
+                update_errors:0}
         },
         watch:{
             state () {
                 this.update_table()
-            },
-        },
+            }},
         methods: {
             useStore,
             localtime,
@@ -143,8 +139,8 @@
             empty_order,
             empty_ios,
             empty_ios_simulation_operation,
-            myheaders,
-            parseResponseError,
+
+
             currency_html,
             percentage_html,
             getArrayFromMap,
@@ -171,13 +167,11 @@
                 var simulation=this.empty_ios()
                 simulation.investments.push(investments_id)
                 simulation.currency=this.useStore().profile.currency
-                return axios.post(`${this.useStore().apiroot}/ios/`, simulation, this.myheaders())
+                return axios.post(`${this.useStore().apiroot}/ios/`, simulation)
                 .then((response)=>{
                     this.ios_id=response.data[investments_id]
                     this.key=this.key+1
                     this.dialog_reinvest=true
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             },
             deleteItem (item) {
@@ -208,12 +202,10 @@
                     url=`${this.useStore().apiroot}/api/orders/?executed=true`
                 }
 
-                axios.get(url, this.myheaders())
+                axios.get(url)
                 .then((response) => {
                     this.data=response.data
                     this.loading_table=false
-                }, (error) => {
-                    this.parseResponseError(error)
                 });
             },
             setCheckboxLabel(){
@@ -226,7 +218,7 @@
 
             products_autoupdate(){
                 this.products_updating=true
-                axios.post(`${this.useStore().apiroot}/products/update/`, {auto:true,}, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/products/update/`, {auto:true})
                 .then((response) => {
                         this.update_errors=0
                         response.data.forEach(o=>{
@@ -234,12 +226,8 @@
                         })
                         this.update_table()
                         this.products_updating=false
-                }, (error) => {
-                    this.parseResponseError(error)
                 })
-            },
-
-        },
+            }},
         mounted(){
             this.update_table()
         }

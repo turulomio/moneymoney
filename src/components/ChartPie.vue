@@ -32,8 +32,7 @@
     export default {
         props: {
             name: {
-                required: true,
-            },
+                required: true},
             items: { // An array of objects [{name: "nombre", value: 1},...]
                 required: true
             },
@@ -45,13 +44,11 @@
             show_data:{
                 type: Boolean,
                 required:false,
-                default:false,
-            },
+                default:false},
             hidden:{ //Hide using visibility==hidden it will take up space
                 type: Boolean,
                 required:false,
-                default:false,
-            }
+                default:false}
         },
         data: function () {
             return {
@@ -63,8 +60,7 @@
                     { title: 'Name', key: 'name',sortable: true },
                     { title: 'Value', key: 'value',sortable: true, align: 'end'},
                     { title: 'Percentage', key: 'percentage',sortable: false, align: 'end'},
-                ],   
-            }
+                ]}
         },
         computed:{
             options: function(){
@@ -73,8 +69,7 @@
                         trigger: "item",
                         formatter: (params) => {
                             return `${params.marker} ${params.data.name}: ${params.data.value} (${this.getPercentage(params.data)})`;
-                        },
-                    },
+                        }},
                     series: [
                         {
                             name: this.name,
@@ -102,9 +97,7 @@
             },
             total: function(){
                 return this.items.reduce((accum,item) => accum + item.value, 0)
-            },
-
-        },
+            }},
         methods: {
             buttonClick(){
                 this.new_show_data=!this.new_show_data
@@ -132,8 +125,7 @@
                 //     await new Promise(resolve => setTimeout(resolve, 100)); // Check every 100ms
                 // }
                 return this.chart.getDataURL({ pixelRatio: 6, backgroundColor: '#fff' });
-            },
-        },
+            }},
         mounted(){
             if (this.hidden){
                 console.log(`Chart ${this.name} has been hidden`)

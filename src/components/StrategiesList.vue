@@ -114,7 +114,7 @@
 
 <script setup>
     import axios from 'axios'
-    import { useStore, parseResponseError, localcurrency_html, myheaders } from '@/store'
+    import { useStore, localcurrency_html } from '@/store'
     import MyMenuInline from './MyMenuInline.vue'
     import StrategiesView from './StrategiesView.vue'
     import StrategyFastOperationsCU from './StrategyFastOperationsCU.vue'
@@ -265,13 +265,11 @@
             key.value = key.value + 1
             dialog_detailedview.value = true
         } else if (object.item.strategy.type==StrategiesTypes.FastOperations){//FAST OPERATIONS
-            axios.get(`${object.item.url}detailed/`, myheaders())
+            axios.get(`${object.item.url}detailed/`)
             .then((response) => {
                 detailed_fo.value = response.data
                 key.value = key.value + 1
                 dialog_detailedview_fo.value = true
-            }, (error) => {
-                parseResponseError(error)
             });
         } else {
             await myAlert(t("Detailed view for this strategy type is not developed yet"))
@@ -280,13 +278,11 @@
 
     function update_table(){
         loading_strategies.value = true
-        axios.get(`${store.apiroot}/api/strategies/withbalance/?active=${showActive.value}`, myheaders())
+        axios.get(`${store.apiroot}/api/strategies/withbalance/?active=${showActive.value}`)
         .then((response) => {
             strategies_items.value = response.data
             console.log(strategies_items.value)
             loading_strategies.value = false
-        }, (error) => {
-            parseResponseError(error)
         });
     }
 

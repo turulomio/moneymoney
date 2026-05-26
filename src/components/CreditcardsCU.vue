@@ -19,15 +19,14 @@
 <script>    
     
     import axios from 'axios' 
-    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useStore } from '@/store'
     import { useDialogs } from '@/composables/useDialogs'
     import { RulesSelection,RulesInteger,RulesString } from 'vuetify_rules'
     import { getArrayFromMap } from '@/functions'
     export default {
         props:{
             cc:{
-                required:true,
-            },
+                required:true},
             mode: {
                 required: true // Can be CUD
             }
@@ -39,16 +38,15 @@
         data () {
             return {
                 new_cc:null,
-                form_valid_cc:true,
-            }
+                form_valid_cc:true}
         },
         methods:{
             useStore,
-            parseResponseError,
+
             RulesSelection,
             RulesInteger,
             RulesString,
-            myheaders,
+
             getArrayFromMap,
             title(){
                 if (this.mode=="U"){
@@ -70,20 +68,16 @@
             },       
             async acceptDialogCC(){
                 if (this.mode=="U"){               
-                    axios.put(this.new_cc.url, this.new_cc, this.myheaders())
+                    axios.put(this.new_cc.url, this.new_cc)
                     .then((response) => {
                         this.useStore().creditcards.set(response.data.url,response.data)
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="C") {
-                    axios.post(`${this.useStore().apiroot}/api/creditcards/`, this.new_cc,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/creditcards/`, this.new_cc)
                     .then((response) => {
                         this.useStore().creditcards.set(response.data.url,response.data)
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     })
                 } else if (this.mode=="D") {
                     if(!await this.myConfirm(this.$t("Do you want to delete this credit card?"))) {
@@ -92,16 +86,13 @@
                     if(!await this.myConfirm(this.$t("Are you sure?. If you used this credit card you should mark it as inactive"))) {
                         return
                     }  
-                    axios.delete(this.new_cc.url, this.myheaders())
+                    axios.delete(this.new_cc.url)
                     .then((response) => {
                         this.useStore().creditcards.delete(response.data.url,response.data)
                         this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
                     });
                 }
-            },
-        },  
+            }},  
         created(){
             this.new_cc=Object.assign({},this.cc)
         }
