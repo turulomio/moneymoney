@@ -11,7 +11,7 @@
 <script setup>
     import axios from 'axios'
     import { ref, onMounted } from 'vue'
-    import { useStore, parseResponseError, myheaders, currency_generic_string } from '@/store'
+    import { parseResponseError, myheaders, currency_generic_string } from '@/store'
     import TableAccountOperations from './TableAccountOperations.vue'
     import { listobjects_sum } from '@/functions'
     import { useI18n } from 'vue-i18n'
@@ -23,7 +23,6 @@
         },
     })
 
-    const store = useStore()
     const { t } = useI18n()
 
     const items = ref([])

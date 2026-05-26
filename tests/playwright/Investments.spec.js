@@ -48,6 +48,7 @@ test('Investments list', async ({ page }) => {
   
 
   //Exit Reinvest Dialog
+  await page.waitForTimeout(2000); //Due to rapid text change. Doesn't close menu
   await click_outside_dialog(page, "InvestmentsView_InvesmentsoperationsReinvest_Dialog")
 
 

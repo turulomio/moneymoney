@@ -35,7 +35,7 @@ export async function v_autocomplete_selection_with_role_listbox(page, testId, o
 export async function v_text_input_settext(page, name, text){
   const v_text_input=page.getByTestId(name)
   await v_text_input.click()
-  await v_text_input.getByRole("textbox").fill(text);
+  await v_text_input.locator('input, textarea').fill(text);
 }
   
 // This helper waits for a request to a given URL and returns the JSON response.

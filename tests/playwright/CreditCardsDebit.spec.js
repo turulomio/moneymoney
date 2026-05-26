@@ -1,6 +1,7 @@
 import { test, expect } from './fixtures.js';
 import {
   creditcard_add_from_AccountsView,
+  expect_confirm_and_accept_it
 } from "./commons.js";
 import {
   v_text_input_settext,
@@ -29,12 +30,8 @@ test('Credit cards debit', async ({ page }) => {
     await expect(page.getByTestId(`AccountsView_Tablecc_Row${cc_id}`)).toBeVisible();
     await page.getByTestId(`AccountsView_Tablecc_ButtonDelete${cc_id}`).click();
 
-    const dialogHandler = async dialog => await dialog.accept();
-    page.on('dialog', dialogHandler);
-    const responsePromise = page.waitForResponse(response => response.url().includes('/api/creditcards/') && response.request().method() === 'DELETE');
     await page.getByTestId('CreditcardsCU_Button').click();
-    await responsePromise;
-    page.removeListener('dialog', dialogHandler);
+    await expect_confirm_and_accept_it(page)
     await expect(page.getByTestId('CreditcardsCU_Button')).toBeHidden();
     await expect(page.getByTestId(`AccountsView_Tablecc_Row${cc_id}`)).toBeHidden();
 

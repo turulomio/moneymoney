@@ -1,6 +1,6 @@
 import { test, expect } from './fixtures.js';
 
-test('Credit cards debit', async ({ page }) => {
+test('Reports evolution', async ({ page }) => {
     // Navegate to component
     await page.getByTestId('LateralIcon').click();
     await page.getByTestId('LateralReports').click();

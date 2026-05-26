@@ -1,5 +1,6 @@
 import { test, expect } from './fixtures.js';
 import {
+  expect_alert_and_accept_it,
   v_text_input_settext,
 } from "./playwright_vuetify.js";
 
@@ -10,6 +11,7 @@ import {
     await v_text_input_settext(page, "Settings_FirstName", "Paco");
     await v_text_input_settext(page, "Settings_LastName", "Pérez Gutiérrez");
     await page.getByTestId('Settings_ButtonSave').click();
+    await expect_alert_and_accept_it(page);
     await expect(page).toHaveURL('home/');
 
     // 2. Launches assets report
