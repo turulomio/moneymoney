@@ -88,7 +88,7 @@
                 }
             }},
         created(){
-            this.newpc=Object.assign(,this.pc)
+            this.newpc=Object.assign({},this.pc)
         }
     }
 </script>

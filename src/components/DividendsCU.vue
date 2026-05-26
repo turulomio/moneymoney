@@ -115,7 +115,7 @@
                 }
             }},
         created(){
-            this.newdividend=Object.assign(,this.dividend)
+            this.newdividend=Object.assign({},this.dividend)
         }
     }
 </script>

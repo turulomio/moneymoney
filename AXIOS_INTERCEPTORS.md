@@ -83,7 +83,5 @@ axios.get(url, { noparse: true })
 
 ---
 
-## 4. Transición Segura
-Se ha implementado un sistema de banderas internas (`_parsed`, `_handled`). Esto significa que:
-1. Si dejas el código antiguo (llamando manualmente a `parseResponse`), **no se mostrará el error dos veces**.
-2. Puedes ir refactorizando los componentes poco a poco a la nueva sintaxis simplificada.
+## 4. Migración Completada
+El código legacy ha sido eliminado de `src/store.js` y de todos los componentes. Ya no es necesario utilizar banderas de transición. Se recomienda utilizar la sintaxis simplificada en todos los nuevos desarrollos.

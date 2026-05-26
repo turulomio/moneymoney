@@ -61,7 +61,7 @@
 
 <script>
     import axios from 'axios'
-    import { useStore, amount_to_investError } from '@/store'
+    import { useStore, amount_to_invest } from '@/store'
     import { RulesSelection, RulesEmail, RulesInteger,RulesPassword,RulesString, f} from 'vuetify_rules'
     import { useDialogs } from '@/composables/useDialogs'
     
@@ -132,7 +132,7 @@
             }},
         created(){
             this.make_all_axios()
-            this.new_profile=Object.assign(,this.useStore().profile)
+            this.new_profile=Object.assign({},this.useStore().profile)
             this.new_profile.newp=""
 
         }

@@ -149,7 +149,7 @@
         },
         created(){
             // Guess crud mode
-            this.new_at=Object.assign(,this.at)
+            this.new_at=Object.assign({},this.at)
             if (["U","D"].includes(this.mode)){
                 this.query_ao()
             }

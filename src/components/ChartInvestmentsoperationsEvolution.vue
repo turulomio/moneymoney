@@ -10,7 +10,6 @@
 
 </template>
 <script>
-    import { Error } from '@/store'
 
     import * as echarts from 'echarts'
     import axios from 'axios'

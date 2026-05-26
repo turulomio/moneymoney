@@ -94,7 +94,7 @@
                 }
             }},  
         created(){
-            this.new_cc=Object.assign(,this.cc)
+            this.new_cc=Object.assign({},this.cc)
         }
     }
 </script>

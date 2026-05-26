@@ -66,7 +66,7 @@
     if (props.transfer == null) {
         new_transfer.value = empty_investment_transfer()
     } else {
-        new_transfer.value = Object.assign(, props.transfer)
+        new_transfer.value = Object.assign({}, props.transfer)
     }
 
     const origin_investment = computed(() => {

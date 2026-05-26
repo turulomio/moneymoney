@@ -85,7 +85,7 @@
 
             }},
         created(){
-            this.new_bank=Object.assign(,this.bank)
+            this.new_bank=Object.assign({},this.bank)
         }
     }
 </script>

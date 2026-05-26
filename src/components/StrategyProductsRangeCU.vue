@@ -142,7 +142,7 @@ export default {
 
         }},
     created() {
-        this.new_strategy = Object.assign(, this.strategy)
+        this.new_strategy = Object.assign({}, this.strategy)
         console.log(this.new_strategy)
     }}
 </script>

@@ -104,7 +104,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, getCountryNameByCodeError, currency_string, currency_html, localcurrency_html } from '@/store'
+    import { useStore, getCountryNameByCode, currency_string, currency_html, localcurrency_html } from '@/store'
     import MyMenuInline from './MyMenuInline.vue'
     import InvestmentsCU from './InvestmentsCU.vue'
     import InvestmentsChangeSellingPrice from './InvestmentsChangeSellingPrice.vue'

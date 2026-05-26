@@ -134,7 +134,7 @@
                 }
             }},
         created(){
-            this.new_product=Object.assign(,this.product)
+            this.new_product=Object.assign({},this.product)
         }}
 </script>
 

@@ -1,55 +1,55 @@
-
 <template>
     <div>    
         <h1>{{ f($t("'[0]' evolution"), [investment.name]) }}
             <v-btn data-test="ChartInvestmentsoperationsEvolutionTimeseries_ButtonClose" small style="color:darkgrey" icon="mdi-close" class="elevation-0" @click="$emit('close')"/>
         </h1>
-        <v-card class="ma-4 pa-4" >
-            <div ref="chart" style="width:100%;height:600px;"  ></div>
-         </v-card>
+        <v-card class="ma-4 pa-4">
+            <div ref="chart" style="width:100%;height:600px;"></div>
+        </v-card>
     </div>
-
 </template>
-<script>
-    import { Error } from '@/store'
 
+<script>
     import * as echarts from 'echarts'
     import axios from 'axios'
-    import {f} from 'vuetify_rules'
+    import { f } from 'vuetify_rules'
     
     export default {
-        props:{
-            investment:{
-                required:true},
+        props: {
+            investment: {
+                required: true
+            },
             height: {
                 type: Number,
                 required: false,
-                default:600
-            }},
-        data(){ 
-            return{
+                default: 600
+            }
+        },
+        data() { 
+            return {
                 balance: [],
-                datetimes:[],
-                invested:[],
-                gains:[],
-                gains_dividends:[],
-                dividends:[],
-                loading:true}
+                datetimes: [],
+                invested: [],
+                gains: [],
+                gains_dividends: [],
+                dividends: [],
+                loading: true
+            }
         },
         methods: {
             f,
-
-
-            chart_option(){
-                return  {
+            chart_option() {
+                return {
                     legend: {
-                        data: [ this.$t("Invested"), this.$t("Balance"), this.$t("Gains and dividends"),  this.$t("Gains"),  this.$t("Dividends")],
-                        inactiveColor: '#777'},
+                        data: [this.$t("Invested"), this.$t("Balance"), this.$t("Gains and dividends"), this.$t("Gains"), this.$t("Dividends")],
+                        inactiveColor: '#777'
+                    },
                     tooltip: {
                         trigger: 'axis',
                         axisPointer: {
                             animation: false,
-                            type: 'cross'}
+                            type: 'cross'
+                        }
                     },
                     xAxis: {
                         type: 'time',
@@ -62,70 +62,73 @@
                     },
                     grid: {
                         bottom: 80, 
-                        left:80
+                        left: 80
                     },
                     toolbox: {
                         feature: {
                             dataZoom: {
                                 yAxisIndex: 'none'
                             },
-                            saveAsImage: 
+                            saveAsImage: {}
                         }
                     },
                     dataZoom: [{
-                            type: 'slider',
-                            start: 0,
-                            end: 100}],
+                        type: 'slider',
+                        start: 0,
+                        end: 100
+                    }],
                     series: [
                         {
                             type: 'line',
                             name: this.$t("Invested"),
-                            data: this.invested},                
-
+                            data: this.invested
+                        },
                         {
                             type: 'line',
                             name: this.$t("Balance"),
-                            data: this.balance},             
+                            data: this.balance
+                        },
                         {
                             type: 'line',
                             name: this.$t("Gains and dividends"),
-                            data: this.gains_dividends},             
+                            data: this.gains_dividends
+                        },
                         {
                             type: 'line',
                             name: this.$t("Gains"),
-                            data: this.gains},             
+                            data: this.gains
+                        },
                         {
                             type: 'line',
                             name: this.$t("Dividends"),
-                            data: this.dividends},                
+                            data: this.dividends
+                        }
                     ]
                 }
             },
-            styleheight: function(){
+            styleheight: function() {
                 return `height: ${this.height}px`
-            }},
-        mounted(){
-
+            }
+        },
+        mounted() {
             axios.get(`${this.investment.url}operations_evolution_chart/`)
-            .then((response) => {
-                this.invested=[]    
-                this.dividends=[]
-                this.gains=[]
-                this.gains_dividends=[]   
-                this.balance=[]  
-                for (var i = 0; i < response.data.datetimes.length; i++) {
-                    this.invested.push([response.data.datetimes[i],response.data.invested[i]])
-                    this.dividends.push([response.data.datetimes[i],response.data.dividends[i]])
-                    this.gains.push([response.data.datetimes[i],response.data.gains[i]])
-                    this.gains_dividends.push([response.data.datetimes[i],response.data.gains_dividends[i]])
-                    this.balance.push([response.data.datetimes[i],response.data.balance[i]])
+                .then((response) => {
+                    this.invested = []    
+                    this.dividends = []
+                    this.gains = []
+                    this.gains_dividends = []   
+                    this.balance = []  
+                    for (var i = 0; i < response.data.datetimes.length; i++) {
+                        this.invested.push([response.data.datetimes[i], response.data.invested[i]])
+                        this.dividends.push([response.data.datetimes[i], response.data.dividends[i]])
+                        this.gains.push([response.data.datetimes[i], response.data.gains[i]])
+                        this.gains_dividends.push([response.data.datetimes[i], response.data.gains_dividends[i]])
+                        this.balance.push([response.data.datetimes[i], response.data.balance[i]])
+                    }
                     this.chart = echarts.init(this.$refs.chart)
                     this.chart.setOption(this.chart_option())
-                }
-                this.loading=false
-            });
+                    this.loading = false
+                });
         }
     }
-
 </script>
-

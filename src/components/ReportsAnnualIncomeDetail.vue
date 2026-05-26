@@ -79,7 +79,7 @@
                 key:0,
                 tab:3}  
         },
-        watch:,
+        
         methods: {
             useStore,
             f,

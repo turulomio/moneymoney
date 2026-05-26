@@ -46,7 +46,7 @@
     const store = useStore();
 
     const form_valid = ref(false);
-    const new_quote = ref(Object.assign(, props.quote));
+    const new_quote = ref(Object.assign({}, props.quote));
     const form = ref(null); // Reference for the v-form component
 
     const product_object = computed(() => {

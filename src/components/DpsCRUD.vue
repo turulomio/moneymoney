@@ -85,7 +85,7 @@ export default {
             }
         }},
     created() {
-        this.newdps = Object.assign(, this.dps)
+        this.newdps = Object.assign({}, this.dps)
     }
 }
 </script>

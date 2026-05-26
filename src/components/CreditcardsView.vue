@@ -37,7 +37,7 @@
     </div>
 </template>
 <script>
-    import { Error, currency_string } from '@/store'
+    import { currency_string } from '@/store'
 
     import axios from 'axios'
     import MyMenuInline from './MyMenuInline.vue'

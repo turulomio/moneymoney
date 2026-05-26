@@ -57,7 +57,7 @@
 </template>  
 <script>     
     import axios from 'axios'
-    import { useStore, getCountryNameByCode, currency_htmlError } from '@/store'
+    import { useStore, getCountryNameByCode, currency_html } from '@/store'
     import {empty_product} from '../empty_objects.js'
     import { localtime, RulesSelection } from 'vuetify_rules'
     import MyMenuInline from './MyMenuInline.vue'

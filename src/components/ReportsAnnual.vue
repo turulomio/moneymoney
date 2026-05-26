@@ -297,7 +297,7 @@
                 // INVEST OR WORK
                 loading_make_ends_meet: false}
         },
-        computed:,
+        
         watch:{
             target: function(){
                 this.refreshTotalTarget()
@@ -392,7 +392,7 @@
                 }
                 this.loading_target=true
                 //Updates annual_gains_target in profile
-                var new_profile=Object.assign(,this.useStore().profile)
+                var new_profile=Object.assign({},this.useStore().profile)
                 new_profile.annual_gains_target=this.target
                 axios.put(`${this.useStore().apiroot}/profile/`, new_profile)
                 .then(() => {

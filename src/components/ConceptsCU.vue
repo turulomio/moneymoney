@@ -38,7 +38,7 @@
     const store = useStore()
 
     const form_valid = ref(false)
-    const new_concept = ref(Object.assign(, props.concept))
+    const new_concept = ref(Object.assign({}, props.concept))
     const editing = ref(false) // Assuming this might be used for readonly logic
     const form = ref(null)
 

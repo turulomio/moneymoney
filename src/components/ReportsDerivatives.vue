@@ -130,7 +130,7 @@
                 dialog_foc:false,
                 foc:null}
         },
-        computed:,
+        
         watch:{
             ym () {
                 this.refreshTables()

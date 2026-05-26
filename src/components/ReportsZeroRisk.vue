@@ -32,7 +32,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore, getCountryNameByCodeError, localcurrency_html } from '@/store'
+    import { useStore, getCountryNameByCode, localcurrency_html } from '@/store'
     import {f} from 'vuetify_rules'
     import InvestmentsView from './InvestmentsView.vue'
     import { listobjects_sum } from '@/functions'

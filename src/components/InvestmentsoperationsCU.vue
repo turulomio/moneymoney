@@ -102,7 +102,7 @@
     })
 
     const new_io=ref(null)
-    new_io.value=Object.assign(,props.io) //Can come from plio or empty_investment_operation
+    new_io.value=Object.assign({},props.io) //Can come from plio or empty_investment_operation
     if ("investments" in new_io.value==false){//Plio misses investments it has investments_id, url and operationstypes
         new_io.value.investments=getMapObjectById("investments", new_io.value.investments_id).url
         new_io.value.url=hyperlinked_url("investmentsoperations",new_io.value.id)

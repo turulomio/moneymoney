@@ -98,7 +98,7 @@
                     }
             }},
         created(){
-            this.new_investment=Object.assign(,this.investment)
+            this.new_investment=Object.assign({},this.investment)
         }
     }
 </script>

@@ -121,7 +121,7 @@
             }
         },
         created(){
-            this.newao=Object.assign(,this.ao)
+            this.newao=Object.assign({},this.ao)
             this.on_account_change() //Updates  account object
         }
 

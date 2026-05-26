@@ -55,7 +55,8 @@
                 password:"",
 
                 method:"Current",
-                results:}
+                results:{}
+            }
         },
         computed:{
             /// COPIED FROM REPORTSINVESTMENTSCLASSES

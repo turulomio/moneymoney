@@ -225,7 +225,7 @@
                 })
             }},
         created(){
-            this.new_order=Object.assign(,this.order)
+            this.new_order=Object.assign({},this.order)
         }
     }
 </script>

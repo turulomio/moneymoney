@@ -138,7 +138,7 @@
             } else { // NEW IO BUT SETTING VALUES WITH URL=null
                 this.editing=false
             }
-            this.newcco=Object.assign(, this.cco)
+            this.newcco=Object.assign({}, this.cco)
         }
     }
 </script>

@@ -96,7 +96,7 @@
                 }
             }},
         created(){
-            this.new_account=Object.assign(,this.account)
+            this.new_account=Object.assign({},this.account)
         }
     }
 </script>

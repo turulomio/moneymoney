@@ -20,7 +20,6 @@
     import { RulesSelection } from 'vuetify_rules'
     import { getArrayFromMap } from '@/functions'
     export default {
-        components: ,
         props: {
             // An account object
             from: {

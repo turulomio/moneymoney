@@ -43,7 +43,7 @@
 
     const form = ref(null)
     const account = ref(null)
-    const newao = ref(Object.assign(,props.ao))
+    const newao = ref(Object.assign({},props.ao))
 
     if (props.mode=="F"){
         newao.value.url=null // New ao

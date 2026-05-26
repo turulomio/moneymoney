@@ -91,7 +91,7 @@
                 }
             }},
         created(){
-            this.new_estimation=Object.assign(,this.estimation)
+            this.new_estimation=Object.assign({},this.estimation)
         }
     }
 </script>

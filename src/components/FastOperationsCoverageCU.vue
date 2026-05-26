@@ -98,7 +98,7 @@
                 }
             }},
         created(){
-            this.new_foc=Object.assign(,this.foc)
+            this.new_foc=Object.assign({},this.foc)
         }
     }
 </script>
