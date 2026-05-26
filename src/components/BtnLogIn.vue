@@ -55,7 +55,7 @@ export default {
                 this.$router.push({name:'home'})
                 console.log(`Login and catalogs load took ${new Date()-start} ms`)
                 this.dialog=false
-            } catch (error) {
+            } catch {
                 setTimeout(() => { //Delay of 2 seconds
                     this.$refs.form.reset()
                     this.dialog=false

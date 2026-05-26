@@ -305,66 +305,30 @@ export const useStore = defineStore('global', {
     }}
 })
 
-export function myheaders(){
-    return {
-        headers:{
-            'Authorization': `Token ${useStore().token}`,
-            'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
-            'Content-Type':'application/json'
-        }
-    }
-}
-
-export function myheaders_noauth(){
-    return {
-        headers:{
-            'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
-            'Content-Type':'application/json'
-        }
-    }
-}
-
-export function myheaders_formdata(){
-    return {
-        headers:{
-            'Authorization': `Token ${useStore().token}`,
-            'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
-            'Content-Type': 'multipart/form-data'
-        }
-    }
-}
-
 // returns true if everything is ok
 // return false if there is something wrong
 export async function parseResponse(response){
-    if (response._parsed) return response._parsed_ok
     const dialogStore = useDialogStore()
     const store = useStore()
     const { t } = i18n.global
-    let result = false
     if (response.status==200){ //Good connection
         if (response.data == "Wrong credentials"){
             store.setToken(null)
             await dialogStore.alert(t("Wrong credentials"))
-            result = false
-        } else {
-            result = true
+            return false
         }
+        return true
     } else if (response.status==201){// Created
-        result = true
+        return true
     } else if (response.status==204){// Deleted
-        result = true
+        return true
     } else {
         await dialogStore.alert (`${response.status}: ${response.data}`)
-        result = false
+        return false
     }
-    response._parsed = true
-    response._parsed_ok = result
-    return result
 }
 
 export async function parseResponseError(error){
-    if (error._handled) return
     const dialogStore = useDialogStore()
     const store = useStore()
     const { t } = i18n.global
@@ -399,7 +363,6 @@ export async function parseResponseError(error){
     } else {
         console.log('Error', error.message);
     }
-    error._handled = true
 }
 
 export function getConceptsForDividends() { 
