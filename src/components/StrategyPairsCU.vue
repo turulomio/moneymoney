@@ -46,7 +46,7 @@
     const emit = defineEmits(['cruded'])
 
     const { t } = useI18n()
-    const { confirm } = useDialogs()
+    const { confirm: myConfirm } = useDialogs()
     const store = useStore()
 
     const form = ref(null)
@@ -93,7 +93,7 @@
                     parseResponseError(error)
                 })
         } else if (props.mode === "D") {
-            if (await confirm(t("This pairs in same account strategy will be deleted. Do you want to continue?"))) {
+            if (await myConfirm(t("This pairs in same account strategy will be deleted. Do you want to continue?"))) {
                 axios.delete(new_strategy.value.url, myheaders())
                     .then(() => {
                         emit("cruded")

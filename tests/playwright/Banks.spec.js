@@ -2,7 +2,7 @@ import { test, expect } from './fixtures.js';
 import {
   promise_to_get_response,
   v_text_input_settext,
-  expect_native_confirm_and_accept_it
+  expect_confirm_and_accept_it
 } from "./playwright_vuetify.js";
 
   test('Banks CRUD', async ({ page }) => {
@@ -32,7 +32,7 @@ import {
 
     // 4. Delete the bank
     await page.getByTestId(`BanksList_Table_ButtonDelete${banks_id}`).click();
-    expect_native_confirm_and_accept_it(page)
-    await page.getByTestId('BanksCU_Button').click(); // Assuming this is the confirmation button in a dialog
+    await page.getByTestId('BanksCU_Button').click(); // This triggers the confirm dialog
+    await expect_confirm_and_accept_it(page)
     await expect(created_row).toBeHidden()
   });

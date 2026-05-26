@@ -133,7 +133,7 @@
     import { useDialogs } from '@/composables/useDialogs'
 
     const { t } = useI18n()
-    const { alert } = useDialogs()
+    const { alert: myAlert } = useDialogs()
     const store = useStore()
 
     const showActive = ref(true)
@@ -251,7 +251,7 @@
         dialog_view.value = true
     }
 
-    function detailedviewItem (event,object) {
+    async function detailedviewItem (event,object) {
         console.log(object.item)
         if (object.item.strategy.type==StrategiesTypes.Ranges){//RANGES
             pr.value = empty_products_ranges()
@@ -274,7 +274,7 @@
                 parseResponseError(error)
             });
         } else {
-            await alert(t("Detailed view for this strategy type is not developed yet"))
+            await myAlert(t("Detailed view for this strategy type is not developed yet"))
         }
     }
 

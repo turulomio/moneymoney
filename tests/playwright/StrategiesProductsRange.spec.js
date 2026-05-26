@@ -6,7 +6,7 @@ import {
     investmentoperation_add_from_InvestmentsView,
 } from "./commons.js";
 import {
-    expect_native_confirm_and_accept_it,
+    expect_confirm_and_accept_it,
     v_text_input_settext
 } from "./playwright_vuetify.js";
 
@@ -42,8 +42,8 @@ test('Strategies Products Range CRUD', async ({ page }) => {
     // Delete the strategy
     await page.getByTestId(`StrategiesList_Table_IconDelete${strategy_id}`).click();
     await expect(page.getByTestId('StrategyProductsRangeCU_Button')).toBeVisible();
-    expect_native_confirm_and_accept_it(page);
-    await page.getByTestId('StrategyProductsRangeCU_Button').click();
+    await page.getByTestId('StrategyProductsRangeCU_Button').click(); // This triggers the confirm dialog
+    await expect_confirm_and_accept_it(page);
     await expect(page.getByTestId(`StrategiesList_Table_Row${strategy_id}`)).toBeHidden();
 
     // Create another strategy

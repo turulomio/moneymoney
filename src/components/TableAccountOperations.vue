@@ -135,7 +135,7 @@
 
     const store = useStore()
     const { t } = useI18n()
-    const { alert } = useDialogs()
+    const { alert: myAlert } = useDialogs()
 
     const selected = ref([])
     const table_ao = ref(null)
@@ -192,7 +192,7 @@
 
     async function copyAO(item) {
         if (item.is_editable === false) {
-            await alert(t("You can't copy this account operation"))
+            await myAlert(t("You can't copy this account operation"))
             return
         }
         ao.value = empty_account_operation()
@@ -238,7 +238,7 @@
                         parseResponseError(error)
                     })
             } else { // It's not a special comment
-                await alert(t("You can't edit this account operation"))
+                await myAlert(t("You can't edit this account operation"))
             }
         } else { // Account operation is editable
             ao.value = item
@@ -260,7 +260,7 @@
                     parseResponseError(error)
                 })
         } else if (item.is_editable === false) { // Rest of non-editables
-            await alert(t("You can't delete this account operation"))
+            await myAlert(t("You can't delete this account operation"))
         } else { // Editables
             ao.value = item
             ao_mode.value = 'D'

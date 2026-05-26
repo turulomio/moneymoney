@@ -56,37 +56,20 @@ export async function mymenuinline_selection(page, name,header,item){
   await page.getByTestId(`${name}_Header${header}_Item${item}`).click();
 }
 
-export async function expect_native_alert_and_accept_it(page){
-  /**
-   * Must be before action raises it
-   * Value is a string
-   */
-  page.once('dialog', dialog => { 
-    dialog.accept();
-    console.log(`Dialog message: ${dialog.message()} accepted`)
-  });
+export async function expect_alert_and_accept_it(page){
+  await expect(page.getByTestId("MessageBox_Close")).toBeVisible();
+  await page.getByTestId("MessageBox_Close").click();
 }
 
-export async function expect_native_confirm_and_accept_it(page){
-  /**
-   * Must be before action raises it
-   */
-      page.once('dialog', dialog => { 
-        // console.log(dialog.message())
-        dialog.accept()
-        console.log(`Dialog message: ${dialog.message()} accepted`)
-    })
+export async function expect_confirm_and_accept_it(page){
+  await expect(page.getByTestId("ConfirmBox_Confirm")).toBeVisible();
+  await page.getByTestId("ConfirmBox_Confirm").click();
 }
 
-export async function expect_native_prompt_and_set_value(page, value){
-  /**
-   * Must be before action raises it
-   * Value is a string
-   */
-  page.once('dialog', dialog => { 
-    dialog.accept(value);
-    console.log(`Dialog message: ${dialog.message()}. Set value: ${value}`)
-  });
+export async function expect_prompt_and_set_value(page, value){
+  await expect(page.getByTestId("InputBox_TextField")).toBeVisible();
+  await v_text_input_settext(page, "InputBox_TextField", value.toString());
+  await page.getByTestId("InputBox_Submit").click();
 }
 
 export async function click_outside_dialog(page, name){

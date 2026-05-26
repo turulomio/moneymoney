@@ -45,12 +45,12 @@
 
     const store = useStore()
     const { t } = useI18n()
-    const { confirm } = useDialogs()
+    const { confirm: myConfirm } = useDialogs()
 
     const table = ref(null)
 
     async function deleteOHCL(item){
-        if(await confirm(t("Do you want to delete this OHCL quotes?")) == false) {
+        if(await myConfirm(t("Do you want to delete this OHCL quotes?")) == false) {
             return
         } 
         var headers={...myheaders(),data:{product:props.product.url,date:item.date}}

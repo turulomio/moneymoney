@@ -104,7 +104,7 @@
 
     const store = useStore()
     const { t } = useI18n()
-    const { alert } = useDialogs()
+    const { alert: myAlert } = useDialogs()
     const form = ref(null)
 
     const showchart = ref(false)
@@ -189,7 +189,7 @@
 
     async function showLimits(item){
         let s=f(t("Range center: [0]"), [currency_string(item.value, prdata.value.product.currency)])
-        await alert(`${s}\n${item.limits}`)
+        await myAlert(`${s}\n${item.limits}`)
     }
 
     function on_OrdersCU_cruded(){

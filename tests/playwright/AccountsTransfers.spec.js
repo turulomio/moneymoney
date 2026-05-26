@@ -8,7 +8,7 @@ import { id_from_hyperlinked_url } from '@/functions.js';
 import {
   v_text_input_settext,
   promise_to_get_response,
-  expect_native_confirm_and_accept_it
+  expect_confirm_and_accept_it
 } from "./playwright_vuetify.js";
 
 
@@ -46,8 +46,8 @@ test('Accounts transfers CRUD', async ({ page }) => {
     
     // --- D: Delete the transfer ---
     await page.getByTestId(`TableAccountOperations_ButtonDelete${updated_transfer_ao_origin_id}`).click();
-    expect_native_confirm_and_accept_it(page); // Handle native browser confirm
-    await page.getByTestId('AccountsTransfer_Button').click(); // Assuming this button confirms deletion in the dialog
+    await page.getByTestId('AccountsTransfer_Button').click(); // This triggers the confirm dialog
+    await expect_confirm_and_accept_it(page);
     await expect(page.getByTestId('AccountsTransfer_Button')).toBeHidden(); // Wait for dialog to close
     await expect(page.getByTestId(`TableAccountOperations_ButtonUpdate${updated_transfer_ao_origin_id}`)).toBeHidden();
 });

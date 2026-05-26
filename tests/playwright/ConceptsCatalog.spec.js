@@ -6,7 +6,7 @@ import {
 import {
   v_text_input_settext,
   v_autocomplete_selection_with_role_option,
-  expect_native_confirm_and_accept_it,
+  expect_confirm_and_accept_it,
 } from "./playwright_vuetify.js";
 
 
@@ -29,15 +29,15 @@ test('Concepts catalog', async ({ page }) => {
 
     // Delete concept
     await page.getByTestId(`ConceptsCatalog_Table_ButtonDelete${concept_id}`).click();
-    expect_native_confirm_and_accept_it(page)
-    await page.getByTestId('ConceptsCU_Button').click();
+    await page.getByTestId('ConceptsCU_Button').click(); // This triggers the confirm dialog
+    await expect_confirm_and_accept_it(page)
     await expect(page.getByTestId('ConceptsCU_Button')).toBeHidden();
 
     // Migrate concept
     const concept2_id=await concept_add_from_ConceptsCatalog(page, "My second personal concept")
     await page.getByTestId(`ConceptsCatalog_Table_ButtonMigrate${concept2_id}`).click();
     await v_autocomplete_selection_with_role_option(page, "ConceptsMigration_To", "Negative");
-    await expect_native_confirm_and_accept_it(page)
-    await page.getByTestId('ConceptsMigration_Button').click();
+    await page.getByTestId('ConceptsMigration_Button').click(); // This triggers the confirm dialog
+    await expect_confirm_and_accept_it(page)
     await expect(page.getByTestId('ConceptsMigration_Button')).toBeHidden();
 });

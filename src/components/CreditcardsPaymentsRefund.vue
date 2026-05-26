@@ -29,7 +29,7 @@
 
     const store = useStore()
     const { t } = useI18n()
-    const { alert } = useDialogs()
+    const { alert: myAlert } = useDialogs()
 
     const account = ref(null)
     const loading = ref(false)
@@ -59,7 +59,7 @@
             updatePayments()
             emit("cruded")
             key.value++
-            await alert(t("Payment was refund"))
+            await myAlert(t("Payment was refund"))
         }, (error) => {
             parseResponseError(error)
         });

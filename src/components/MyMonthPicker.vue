@@ -52,7 +52,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 const { t } = useI18n();
-const { alert } = useDialogs();
+const { alert: myAlert } = useDialogs();
 const months = computed(() => [
     { title: t('January'), value: 1 },
     { title: t('February'), value: 2 },
@@ -85,7 +85,7 @@ function setCurrentMonth() {
 
 async function setDate(year, month) {
     if (isNaN(year) || isNaN(month)) {
-        await alert(t("You've selected a wrong year and month"));
+        await myAlert(t("You've selected a wrong year and month"));
         return;
     }
     new_value.value = { year: year, month: month };

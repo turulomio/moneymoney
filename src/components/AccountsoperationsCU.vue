@@ -41,7 +41,7 @@
 
     const { t } = useI18n()
     const store = useStore()
-    const { confirm } = useDialogs()
+    const { confirm: myConfirm } = useDialogs()
 
     const form = ref(null)
     const account = ref(null)
@@ -102,7 +102,7 @@
                 newParseResponseError(error, t,useStore())
             })
         } else if (props.mode=='D'){
-            if (!await confirm(t("Do you want to delete this account operation?"))) {
+            if (!await myConfirm(t("Do you want to delete this account operation?"))) {
                 return
             }  
             following_ao.value = false
