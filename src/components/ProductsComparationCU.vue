@@ -20,8 +20,13 @@
     import { useStore, parseResponseError, myheaders } from '@/store'
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import { RulesSelection, RulesString } from 'vuetify_rules'
+    import { useDialogs } from '@/composables/useDialogs'
     
     export default {
+        setup() {
+            const { confirm } = useDialogs()
+            return { myConfirm: confirm }
+        },
         components: {
             AutocompleteProducts,
         },
@@ -64,7 +69,7 @@
                     return this.$t("Delete")
                 }
             },     
-            accept(){
+            async accept(){
                 if (this.mode=="U"){
                     axios.put(this.newpc.url, this.newpc,  this.myheaders())
                     .then(() => {
@@ -80,8 +85,7 @@
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=="D"){
-                    var r = confirm(this.$t("Do you want to delete this products comparation?"))
-                    if(r == false) {
+                    if(await this.myConfirm(this.$t("Do you want to delete this products comparation?")) == false) {
                         return
                     } 
                     axios.delete(this.newpc.url, this.myheaders())

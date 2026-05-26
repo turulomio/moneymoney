@@ -13,6 +13,7 @@
 <script setup>
 import { ref, watch, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useDialogs } from '@/composables/useDialogs';
 
 const props = defineProps({
     modelValue: { //object with year and month attribute. Can be Null to set current year and month
@@ -51,6 +52,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 const { t } = useI18n();
+const { alert } = useDialogs();
 const months = computed(() => [
     { title: t('January'), value: 1 },
     { title: t('February'), value: 2 },
@@ -81,9 +83,9 @@ function setCurrentMonth() {
     setDate(d.getFullYear(), d.getMonth() + 1);
 }
 
-function setDate(year, month) {
+async function setDate(year, month) {
     if (isNaN(year) || isNaN(month)) {
-        alert(t("You've selected a wrong year and month"));
+        await alert(t("You've selected a wrong year and month"));
         return;
     }
     new_value.value = { year: year, month: month };

@@ -94,6 +94,7 @@
     import OrdersList from './OrdersList.vue'
     import InvestmentsView from './InvestmentsView.vue'
     import AutocompleteProducts from './AutocompleteProducts.vue'
+    import { useDialogs } from '@/composables/useDialogs'
 
     const props = defineProps({
         pr:{
@@ -103,6 +104,7 @@
 
     const store = useStore()
     const { t } = useI18n()
+    const { alert } = useDialogs()
     const form = ref(null)
 
     const showchart = ref(false)
@@ -185,9 +187,9 @@
         });
     }
 
-    function showLimits(item){
+    async function showLimits(item){
         let s=f(t("Range center: [0]"), [currency_string(item.value, prdata.value.product.currency)])
-        alert(`${s}\n${item.limits}`)
+        await alert(`${s}\n${item.limits}`)
     }
 
     function on_OrdersCU_cruded(){

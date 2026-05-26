@@ -24,7 +24,12 @@
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection ,RulesFloat, RulesString} from 'vuetify_rules'
     import { getArrayFromMap } from '@/functions'
+    import { useDialogs } from '@/composables/useDialogs'
     export default {
+        setup() {
+            const { confirm } = useDialogs()
+            return { myConfirm: confirm }
+        },
         components:{
             MyDateTimePicker,
         },
@@ -69,7 +74,7 @@
                     return this.$t("Delete")
                 }
             },    
-            submit(){
+            async submit(){
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
                     return
@@ -90,8 +95,7 @@
                         this.parseResponseError(error)
                     });
                 } else if (this.mode=="D"){
-                    var r = confirm(this.$t("Do you want to delete this fast operations coverage?"))
-                    if(r == false) {
+                    if(await this.myConfirm(this.$t("Do you want to delete this fast operations coverage?")) == false) {
                         return
                     } 
                     axios.delete(this.new_foc.url, this.myheaders())

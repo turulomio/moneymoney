@@ -26,7 +26,12 @@ import MyDateTimePicker from './MyDateTimePicker.vue'
 import AutocompleteInvestments from '@/components/AutocompleteInvestments.vue'
 import { RulesSelection, RulesInteger, RulesString, RulesFloat } from 'vuetify_rules'
 import { getArrayFromMap } from '@/functions'
+import { useDialogs } from '@/composables/useDialogs'
 export default {
+    setup() {
+        const { confirm } = useDialogs()
+        return { myConfirm: confirm }
+    },
     components: {
         MyDateTimePicker,
         AutocompleteInvestments,
@@ -74,7 +79,7 @@ export default {
                 return this.$t("Delete")
             }
         },
-        accept() {
+        async accept() {
             if (this.form_valid != true) {
                 this.$refs.form.validate()
                 return
@@ -94,8 +99,7 @@ export default {
                         this.parseResponseError(error)
                     })
             } else if (this.mode == "D") {
-                var r = confirm(this.$t("This generic strategy will be deleted. Do you want to continue?"))
-                if (r == false) {
+                if (await this.myConfirm(this.$t("This generic strategy will be deleted. Do you want to continue?")) == false) {
                     return
                 }
                 axios.delete(this.new_strategy.url, this.myheaders())

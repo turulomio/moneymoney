@@ -98,6 +98,7 @@
     import { listobjects_sum, id_from_hyperlinked_url } from '@/functions.js'
     import { OperationsTypes } from '@/types.js'
     import { useI18n } from 'vue-i18n'
+    import { useDialogs } from '@/composables/useDialogs'
 
     const props = defineProps({
         items: {
@@ -134,6 +135,7 @@
 
     const store = useStore()
     const { t } = useI18n()
+    const { alert } = useDialogs()
 
     const selected = ref([])
     const table_ao = ref(null)
@@ -188,9 +190,9 @@
         return false
     }
 
-    function copyAO(item) {
+    async function copyAO(item) {
         if (item.is_editable === false) {
-            alert(t("You can't copy this account operation"))
+            await alert(t("You can't copy this account operation"))
             return
         }
         ao.value = empty_account_operation()
@@ -203,7 +205,7 @@
         dialog_ao.value = true
     }
 
-    function editAO(item) {
+    async function editAO(item) {
         if (item.is_editable === false) { // Account operation is not editable
             if (item.associated_io) { // It's an investment operation
                 axios.get(item.associated_io, myheaders())
@@ -236,7 +238,7 @@
                         parseResponseError(error)
                     })
             } else { // It's not a special comment
-                alert(t("You can't edit this account operation"))
+                await alert(t("You can't edit this account operation"))
             }
         } else { // Account operation is editable
             ao.value = item
@@ -246,7 +248,7 @@
         }
     }
 
-    function deleteAO(item) {
+    async function deleteAO(item) {
         if (item.associated_transfer) { // Tries to find transfer to delete it
             axios.get(item.associated_transfer, myheaders())
                 .then((response) => {
@@ -258,7 +260,7 @@
                     parseResponseError(error)
                 })
         } else if (item.is_editable === false) { // Rest of non-editables
-            alert(t("You can't delete this account operation"))
+            await alert(t("You can't delete this account operation"))
         } else { // Editables
             ao.value = item
             ao_mode.value = 'D'

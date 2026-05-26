@@ -64,7 +64,13 @@
     import ProductsView from './ProductsView.vue'
     import ProductsCU from './ProductsCU.vue'
     import { percentage_html } from '@/functions.js'
+    import { useDialogs } from '@/composables/useDialogs'
+
     export default {
+        setup() {
+            const { alert } = useDialogs()
+            return { myAlert: alert }
+        },
         components:{
             MyMenuInline,
             ProductsView,
@@ -275,8 +281,8 @@
                 this.key=this.key+1
                 this.dialog_products_cu=true
             },
-            deleteSystemProduct(){
-                alert(this.$t("System products never should be deleted. You can set obsolete or rename to Reusable when needed."))
+            async deleteSystemProduct(){
+                await this.myAlert(this.$t("System products never should be deleted. You can set obsolete or rename to Reusable when needed."))
             },
             empty_product,
             viewProduct(event,object){

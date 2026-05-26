@@ -31,6 +31,7 @@
     import AutocompleteProducts from '@/components/AutocompleteProducts.vue'
     import { RulesSelection, RulesString } from 'vuetify_rules'
     import { getArrayFromMap } from '@/functions'
+    import { useDialogs } from '@/composables/useDialogs'
 
     const props = defineProps({
         strategy: {
@@ -45,6 +46,7 @@
     const emit = defineEmits(['cruded'])
 
     const { t } = useI18n()
+    const { confirm } = useDialogs()
     const store = useStore()
 
     const form = ref(null)
@@ -91,7 +93,7 @@
                     parseResponseError(error)
                 })
         } else if (props.mode === "D") {
-            if (confirm(t("This pairs in same account strategy will be deleted. Do you want to continue?"))) {
+            if (await confirm(t("This pairs in same account strategy will be deleted. Do you want to continue?"))) {
                 axios.delete(new_strategy.value.url, myheaders())
                     .then(() => {
                         emit("cruded")

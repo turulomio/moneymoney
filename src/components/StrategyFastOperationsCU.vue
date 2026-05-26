@@ -26,8 +26,13 @@
     import { RulesSelection, RulesInteger,RulesString } from 'vuetify_rules'
     import { getArrayFromMap } from '@/functions'
     import AutocompleteAccounts from '@/components/AutocompleteAccounts.vue'
+    import { useDialogs } from '@/composables/useDialogs'
     
     export default {
+        setup() {
+            const { confirm } = useDialogs()
+            return { myConfirm: confirm }
+        },
         components: {
             MyDateTimePicker,
             AutocompleteAccounts,
@@ -72,7 +77,7 @@
                     return this.$t("Delete")
                 }
             },
-            accept(){
+            async accept(){
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
                     return
@@ -94,8 +99,7 @@
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=="D"){
-                    var r = confirm(this.$t("This fast operations strategy will be deleted. Do you want to continue?"))
-                    if(r == false) {
+                    if(await this.myConfirm(this.$t("This fast operations strategy will be deleted. Do you want to continue?")) == false) {
                         return
                     } 
                     axios.delete(this.new_strategy.url, this.myheaders())

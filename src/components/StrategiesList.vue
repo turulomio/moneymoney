@@ -130,8 +130,10 @@
     import {sumBy} from "lodash-es"
     import { ref, onMounted, watch } from 'vue'
     import { useI18n } from 'vue-i18n'
+    import { useDialogs } from '@/composables/useDialogs'
 
     const { t } = useI18n()
+    const { alert } = useDialogs()
     const store = useStore()
 
     const showActive = ref(true)
@@ -272,7 +274,7 @@
                 parseResponseError(error)
             });
         } else {
-            alert(t("Detailed view for this strategy type is not developed yet"))
+            await alert(t("Detailed view for this strategy type is not developed yet"))
         }
     }
 

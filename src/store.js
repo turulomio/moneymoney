@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import { sortObjectsArray, getArrayFromMap, percentage_generic_string, percentage_generic_html } from './functions.js'
+import { sortObjectsArray, getArrayFromMap } from './functions.js'
 import { capitalizeFirstLetter, my_round } from 'vuetify_rules'
 import { useDialogStore } from './dialogStore.js'
 import i18n from './i18n'

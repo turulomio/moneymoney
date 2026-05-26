@@ -16,8 +16,13 @@
 <script>     
     import axios from 'axios'
     import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useDialogs } from '@/composables/useDialogs'
     
     export default {
+        setup() {
+            const { alert } = useDialogs()
+            return { myAlert: alert }
+        },
         data () {
             return {
                 loading:false,
@@ -28,9 +33,9 @@
             useStore,
             parseResponseError,
             myheaders,
-            submmit(internet){
+            async submmit(internet){
                 if (internet && navigator.onLine==false){
-                    alert(this.$t("There is some problem with Internet connection"))
+                    await this.myAlert(this.$t("There is some problem with Internet connection"))
                     return
                 }
                 this.loading=true

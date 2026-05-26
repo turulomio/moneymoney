@@ -27,6 +27,7 @@
     
     import { ref, computed } from 'vue';
     import { useI18n } from 'vue-i18n'
+    import { useDialogs } from '@/composables/useDialogs'
 
     const props = defineProps({
         quote: { //A quote object
@@ -40,6 +41,7 @@
     const emit = defineEmits(['cruded']);
 
     const { t } = useI18n()
+    const { confirm } = useDialogs()
 
     const store = useStore();
 
@@ -126,7 +128,7 @@
                 parseResponseError(error);
             })
         } else if (props.mode === "D") {
-            const r = confirm(t("Do you want to delete this quote?"));
+            const r = await confirm(t("Do you want to delete this quote?"));
             if(r === false) {
                 return
             } 

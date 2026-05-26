@@ -63,9 +63,14 @@
     import axios from 'axios'
     import { useStore, amount_to_invest, parseResponseError, myheaders } from '@/store'
     import { RulesSelection, RulesEmail, RulesInteger,RulesPassword,RulesString, f} from 'vuetify_rules'
+    import { useDialogs } from '@/composables/useDialogs'
     
     export default {
         name: 'Settings',
+        setup() {
+            const { alert } = useDialogs()
+            return { myAlert: alert }
+        },
         data () {
             return {
                 form_valid: true,
@@ -95,9 +100,9 @@
             RulesPassword,
             RulesString,
             RulesSelection,
-            save_settings(){
+            async save_settings(){
                 if (this.new_profile.newp!=this.dupnewp){
-                    alert(this.$t("Passwords must be equal"))
+                    await this.myAlert(this.$t("Passwords must be equal"))
                     return
                 }
 
@@ -108,8 +113,8 @@
                 let succesmessage=this.$t("Settings saved")
 
                 axios.put(`${this.useStore().apiroot}/profile/`, this.new_profile, this.myheaders())
-                .then(() => {
-                    alert(succesmessage)
+                .then(async () => {
+                    await this.myAlert(succesmessage)
                     this.new_profile.newp=""
                     this.useStore().updateProfile()
                     .then(() =>{
