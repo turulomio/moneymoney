@@ -1,10 +1,10 @@
 import { test, expect } from './fixtures.js';
 import {
-  creditcard_add_from_AccountsView,
-  expect_confirm_and_accept_it
+  creditcard_add_from_AccountsView
 } from "./commons.js";
 import {
   v_text_input_settext,
+  expect_confirm_and_accept_it
 } from "./playwright_vuetify.js";
 
 test('Credit cards debit', async ({ page }) => {
