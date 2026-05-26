@@ -114,7 +114,7 @@
 
 <script setup>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, localcurrency_html, myheaders } from '@/store'
     import MyMenuInline from './MyMenuInline.vue'
     import StrategiesView from './StrategiesView.vue'
     import StrategyFastOperationsCU from './StrategyFastOperationsCU.vue'
@@ -126,7 +126,7 @@
     import TableAccountOperations from './TableAccountOperations.vue'
     import {empty_products_ranges, empty_strategy_fast_operations, empty_strategy_products_range, empty_strategy_generic, empty_strategy_pairs} from '../empty_objects.js'
     import { localtime, f} from 'vuetify_rules'
-    import { parseResponseError, localcurrency_html, myheaders } from '@/functions'
+    
     import {sumBy} from "lodash-es"
     import { ref, onMounted, watch } from 'vue'
     import { useI18n } from 'vue-i18n'

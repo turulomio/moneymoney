@@ -19,10 +19,15 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, myheaders, parseResponseError } from '@/store'
     import { RulesSelection, RulesInteger, RulesString } from 'vuetify_rules'
-    import { myheaders, parseResponseError, getArrayFromMap } from '@/functions'
+    import { getArrayFromMap } from '@/functions'
+    import { useDialogs } from '@/composables/useDialogs'
     export default {
+        setup() {
+            const { alert, confirm } = useDialogs()
+            return { myAlert: alert, myConfirm: confirm }
+        },
         props: {
             // An account object
             account: {
@@ -58,13 +63,12 @@
                 if (this.mode=="U") return this.$t("Update")
                 if (this.mode=="D") return this.$t("Delete")
             },
-            acceptDialog(){
+            async acceptDialog(){
                 var bank=this.useStore().banks.get(this.new_account.banks)
                 if (bank.active==false){
-                    alert(this.$t("You can't use an inactive bank"))
+                    await this.myAlert(this.$t("You can't use an inactive bank"))
                     return
                 }
-
 
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
@@ -87,8 +91,7 @@
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=="D"){
-                    var r = confirm(this.$t("This account will be deleted. Do you want to continue?"))
-                    if(r == false) {
+                    if(await this.myConfirm(this.$t("This account will be deleted. Do you want to continue?")) == false) {
                         return
                     } 
                     axios.delete(this.new_account.url, this.myheaders())

@@ -32,19 +32,22 @@
     </div>
 </template>
 <script setup>
-    import axios from 'axios'
-    import { useStore } from "@/store"
+    import { ref, computed } from 'vue'
+    import axios from 'axios' 
+    import { useStore, newParseResponseError, myheaders, getMapObjectById, currency_html } from '@/store'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import CurrencyFactor from './CurrencyFactor.vue'
     import AutocompleteOperationstypes from './AutocompleteOperationstypes.vue'
     import { RulesSelection,RulesFloat,RulesFloatGEZ,RulesString, parseNumber,f} from 'vuetify_rules'
     import { round } from "lodash-es"
-    import { hyperlinked_url, newParseResponseError, myheaders, getMapObjectById, getArrayFromMap, currency_html } from '@/functions.js'
-    import { ref, computed } from 'vue'
+    import { hyperlinked_url, getArrayFromMap } from '@/functions.js'
     import { useI18n } from 'vue-i18n'
+    import { useDialogs } from '@/composables/useDialogs'
 
+    const {  confirm: myConfirm, prompt: myPrompt } = useDialogs()
     const props = defineProps({
+
         io: { //Null to create, io object with all parameters to update
             required: true 
         },
@@ -66,17 +69,17 @@
                 {
                     name: t("Fill commissions from total balance"),
                     icon: "mdi-plus",
-                    code: () => {
-                        var amount=parseNumber(prompt( t("Set total balance of this investment operation") ));
+                    code: async () => {
+                        var amount=parseNumber(await myPrompt( t("Set total balance of this investment operation"), t("Amount"), "", "number" ));
                         new_io.value.commission=round(Math.abs(Math.abs(amount)-Math.abs(new_io.value.shares*new_io.value.price)), account.value.decimals)
                     },
                 },
                 {
                     name: t("Fill price from shares and amount"),
                     icon: "mdi-plus",
-                    code: () => {
-                        var amount=round(parseNumber(prompt( t("Set gross amount operation") )), account.value.decimals)
-                        var shares=round(parseNumber(prompt( t("Set shares operation") )), product.value.decimals)
+                    code: async () => {
+                        var amount=round(parseNumber(await myPrompt( t("Set gross amount operation"), t("Amount"), "", "number" )), account.value.decimals)
+                        var shares=round(parseNumber(await myPrompt( t("Set shares operation"), t("Shares"), "", "number" )), product.value.decimals)
                         new_io.value.shares=shares
                         new_io.value.price=round(amount/new_io.value.shares, product.value.decimals)
                     },
@@ -100,7 +103,6 @@
         return {decimals:2} //Default value
     })
 
-
     const new_io=ref(null)
     new_io.value=Object.assign({},props.io) //Can come from plio or empty_investment_operation
     if ("investments" in new_io.value==false){//Plio misses investments it has investments_id, url and operationstypes
@@ -108,8 +110,6 @@
         new_io.value.url=hyperlinked_url("investmentsoperations",new_io.value.id)
         new_io.value.operationstypes=getMapObjectById("operationstypes", new_io.value.operationstypes_id).url
     }
-
-
 
     const title = computed(() => {
         if (props.mode=="U"){
@@ -148,7 +148,7 @@
         ])
     })
 
-    function accept(){
+    async function accept(){
         if (props.mode=="U"){   
             axios.put(new_io.value.url, new_io.value,  myheaders())
             .then(() => {
@@ -164,8 +164,7 @@
                 newParseResponseError(error, t, store)
             })
         } else if (props.mode=="D") {
-            var r = confirm(t("Do you want to delete this investment operation?"))
-            if(r == false) {
+            if (!await myConfirm(t("Do you want to delete this investment operation?"))) {
                 return
             } 
             axios.delete(new_io.value.url, myheaders())
@@ -176,6 +175,5 @@
             })
         }
     }
-
 
 </script>

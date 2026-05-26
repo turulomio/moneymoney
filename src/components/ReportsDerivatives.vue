@@ -72,14 +72,14 @@
 </template>
 <script>     
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, myheaders, localcurrency_html } from '@/store'
     import FastOperationsCoverageCU from './FastOperationsCoverageCU.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import MyMonthPicker from './MyMonthPicker.vue'
     import TableFastOperationsCoverage from './TableFastOperationsCoverage.vue'
     import {empty_fast_operations_coverage} from '../empty_objects.js'
     import {f} from 'vuetify_rules'
-    import { listobjects_sum, myheaders, localcurrency_html } from '@/functions'
+    import { listobjects_sum } from '@/functions'
     export default {
         components:{
             MyMonthPicker,

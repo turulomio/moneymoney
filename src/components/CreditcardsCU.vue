@@ -19,9 +19,10 @@
 <script>    
     
     import axios from 'axios' 
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useDialogs } from '@/composables/useDialogs'
     import { RulesSelection,RulesInteger,RulesString } from 'vuetify_rules'
-    import { parseResponseError, myheaders, getArrayFromMap } from '@/functions'
+    import { getArrayFromMap } from '@/functions'
     export default {
         props:{
             cc:{
@@ -30,6 +31,10 @@
             mode: {
                 required: true // Can be CUD
             }
+        },
+        setup() {
+            const { alert, confirm, prompt } = useDialogs();
+            return { myAlert: alert, myConfirm: confirm, myPrompt: prompt };
         },
         data () {
             return {
@@ -63,7 +68,7 @@
                     return this.$t("Delete")
                 }
             },       
-            acceptDialogCC(){
+            async acceptDialogCC(){
                 if (this.mode=="U"){               
                     axios.put(this.new_cc.url, this.new_cc, this.myheaders())
                     .then((response) => {
@@ -81,12 +86,10 @@
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=="D") {
-                    var r = confirm(this.$t("Do you want to delete this credit card?"))
-                    if(r == false) {
+                    if(!await this.myConfirm(this.$t("Do you want to delete this credit card?"))) {
                         return
                     }  
-                    r = confirm(this.$t("Are you sure?. If you used this credit card you should mark it as inactive"))
-                    if(r == false) {
+                    if(!await this.myConfirm(this.$t("Are you sure?. If you used this credit card you should mark it as inactive"))) {
                         return
                     }  
                     axios.delete(this.new_cc.url, this.myheaders())

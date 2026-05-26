@@ -17,10 +17,10 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders } from '@/store'
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import { RulesSelection, RulesString } from 'vuetify_rules'
-    import { parseResponseError, myheaders } from '@/functions'
+    
     export default {
         components: {
             AutocompleteProducts,

@@ -11,10 +11,10 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders } from '@/store'
     import MyMenuInline from './MyMenuInline.vue'
     import TableQuotes from './TableQuotes.vue'
-    import { parseResponseError, myheaders } from '@/functions'
+    
     export default {
         components:{
             MyMenuInline,

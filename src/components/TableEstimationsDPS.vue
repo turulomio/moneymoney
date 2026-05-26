@@ -25,9 +25,9 @@
 <script setup>
     import { ref, computed, nextTick } from 'vue'
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders, currency_html } from '@/store'
     import EstimationsDpsCU from './EstimationsDpsCU.vue'
-    import { parseResponseError, myheaders, currency_html } from '@/functions'
+    
     import { useI18n } from 'vue-i18n'
 
     const props = defineProps({

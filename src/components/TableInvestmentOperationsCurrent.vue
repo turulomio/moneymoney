@@ -30,9 +30,7 @@
         <template #item.gains_gross_user="{item}">
             <div class="text-right" v-html="currency_html(item.gains_gross_user, currency(item))"></div>
         </template>  
-        
 
-         
         <template #item.invested_account="{item}">
             <div class="text-right" v-html="currency_html(item.invested_account, currency(item))"></div>
         </template>  
@@ -99,9 +97,11 @@
     </v-data-table>   
 </template>
 <script setup>
+    import { getMapObjectById, currency_html } from '@/store'
+
     import { ref, computed, onMounted, nextTick } from 'vue'
     import { useI18n } from 'vue-i18n'
-    import { listobjects_sum, listobjects_average_ponderated, getMapObjectById, currency_html, percentage_html } from '@/functions'
+    import { listobjects_sum, listobjects_average_ponderated, percentage_html } from '@/functions'
     import { localtime, f } from 'vuetify_rules'
 
     const props = defineProps({

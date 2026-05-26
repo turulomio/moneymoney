@@ -106,8 +106,6 @@
             </v-card>
         </v-dialog>
 
-
-
         <!-- QUOTES MASSIVE UPDATE -->
         <v-dialog v-model="dialog_quotes_massive_update" width="90%">
             <v-card class="pa-4">
@@ -118,7 +116,7 @@
 </template>  
 <script>     
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, currency_html, myheaders } from '@/store'
     import MyMenuInline from './MyMenuInline.vue'
     import QuotesCU from './QuotesCU.vue'
     import ChartProduct from './ChartProduct.vue'
@@ -133,7 +131,7 @@
     import {empty_quote,empty_estimation_dps,empty_dps} from '../empty_objects.js'
     import {f} from 'vuetify_rules'
     import DpsCRUD from './DpsCRUD.vue'
-    import { parseResponseError, percentage_html, currency_html, myheaders } from '@/functions'
+    import { percentage_html } from '@/functions'
     export default {
         components:{
             ChartProduct,
@@ -261,14 +259,12 @@
                     { title: this.$t('December'), key: 'm12', sortable: true, align:'end' },
                 ],
 
-
                 //Product chart
                 ohcls:[],
                 ohcls_ym:{year:new Date().getFullYear(), month: new Date().getMonth()+1},
                 quotes_ym:{year:new Date().getFullYear(), month: new Date().getMonth()+1},
                 ohcls_month: [],
                 quotes_month:[],
-
 
                 // Quotes CU
                 dialog_quotescu: false,

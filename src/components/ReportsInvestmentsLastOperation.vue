@@ -54,14 +54,12 @@
             </v-card>
         </v-dialog>
 
-
         <!-- Reinvest dialog -->
         <v-dialog v-model="dialog_reinvest">
             <v-card class="pa-4">
                 <InvestmentsoperationsReinvest :shares="reinvest_shares" :price="reinvest_price" :ios_id="ios_id" :key="refreshKey" />
             </v-card>
         </v-dialog>
-
 
         <!-- InvestmentMergedView dialog -->
         <v-dialog v-model="dialog_imv" max-width="100%">
@@ -82,7 +80,7 @@
 
 <script>
     import imgReinvest from '@/assets/reinvest.png'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, localcurrency_html, myheaders } from '@/store'
     import axios from 'axios'
     import { localtime, my_round } from 'vuetify_rules'
     import {empty_order} from '../empty_objects.js'
@@ -90,7 +88,7 @@
     import InvestmentsView from './InvestmentsView.vue'
     import InvestmentsMergedView from './InvestmentsMergedView.vue'
     import InvestmentsoperationsReinvest from './InvestmentsoperationsReinvest.vue'
-    import { hyperlinked_url, parseResponseError, percentage_html, localcurrency_html, myheaders, getArrayFromMap  } from '@/functions.js'
+    import { hyperlinked_url, percentage_html, getArrayFromMap } from '@/functions.js'
     export default {
         components:{
             OrdersCU,
@@ -120,7 +118,6 @@
                 limit: -40,
                 method: 0,
                 refreshKey: 0,
-
 
                 dialog_cu:false,
                 order: null,

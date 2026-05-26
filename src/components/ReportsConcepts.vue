@@ -3,7 +3,6 @@
         <h1>{{ $t("Concepts report") }}</h1>
         <MyMonthPicker v-model="ym"/>
 
-
         <div class="mx-4">
             <v-tabs  bg-color="secondary" dark v-model="tab">
                 <v-tab data-test="ReportConcepts_TabPositiveChart" key="positivechart">{{ $t("Positive balance chart") }}</v-tab>
@@ -85,11 +84,11 @@
 </template>
 <script>     
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, localcurrency_html, myheaders } from '@/store'
     import ReportsConceptsHistorical from './ReportsConceptsHistorical'
     import MyMonthPicker from './MyMonthPicker.vue'
     import ChartPie from './ChartPie.vue'
-    import { parseResponseError, listobjects_sum, percentage_html, localcurrency_html, myheaders } from '@/functions'
+    import { listobjects_sum, percentage_html } from '@/functions'
 
     export default {
         components:{

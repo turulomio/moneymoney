@@ -33,7 +33,6 @@
             </v-data-table>
             <p class="mt-4 ">{{ total() }}</p>
         </div>
-        
 
         <!-- ESTIMATIONS_DPS CU -->
         <v-dialog v-model="dialog" width="35%">
@@ -46,12 +45,12 @@
 
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders, currency_html, localcurrency_string } from '@/store'
     import moment from 'moment'
     import EstimationsDpsCU from './EstimationsDpsCU.vue'
     import {empty_estimation_dps} from '../empty_objects.js'
     import {f} from 'vuetify_rules'
-    import { parseResponseError, myheaders, currency_html, percentage_html, localcurrency_string } from '@/functions'
+    import { percentage_html } from '@/functions'
     export default {
         components:{
             EstimationsDpsCU,
@@ -69,8 +68,7 @@
                     { title: this.$t('Actions'), key: 'actions',sortable: false, align: 'end'},
                 ],
                 items:[],
-                
-                
+
                 loading_dividends:false,
 
                 //Estimations DPS CU

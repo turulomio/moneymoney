@@ -67,7 +67,6 @@
             </v-card>
         </v-dialog>
 
-
         <!-- VIEW HISTORICAL REPORT dialog -->
         <v-dialog v-model="dialog_historical_concepts">
             <v-card class="pa-4">
@@ -87,7 +86,7 @@
 <script setup>
     import { ref, computed, watch, onMounted, nextTick} from 'vue'
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, currency_html, myheaders } from '@/store'
     import {  empty_account_operation } from '../empty_objects.js'
     import AccountsoperationsCU from './AccountsoperationsCU.vue'
     import AccountsTransfer from './AccountsTransfer.vue'
@@ -96,7 +95,7 @@
     import ReportsConceptsHistorical from './ReportsConceptsHistorical.vue'
     import AccountsoperationsShowRefunds from './AccountsoperationsShowRefunds.vue'
     import { localtime, f } from 'vuetify_rules'
-    import { parseResponseError, listobjects_sum, currency_html, myheaders, id_from_hyperlinked_url } from '@/functions.js'
+    import { listobjects_sum, id_from_hyperlinked_url } from '@/functions.js'
     import { OperationsTypes } from '@/types.js'
     import { useI18n } from 'vue-i18n'
 
@@ -168,7 +167,6 @@
     //DIALOG SHOW REFUNDS
     const dialog_show_refunds = ref(false)
 
-
     const total_currency = computed(() => {
         if (props.items.length === 0) return ""
         return props.items[0].currency
@@ -183,7 +181,6 @@
     watch(selected, (newValue) => {
         emit("changeSelected", newValue)
     })
-
 
     function can_make_a_refund(item){
         let concept_object=store.concepts.get(item.concepts)
@@ -282,8 +279,6 @@
         key.value++
         dialog_show_refunds.value = true
     }
-
-
 
     const table_headers = computed(() => {
         const r = [

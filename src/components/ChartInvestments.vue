@@ -10,8 +10,10 @@
     </div>
 </template>
 <script>
+    import { getMapObjectById } from '@/store'
+
     import * as echarts from 'echarts'
-    import { getMapObjectById } from '@/functions'
+    
     export default {
         props:{
             data:{ //empty_investments_chart
@@ -195,7 +197,6 @@
             this.chart.setOption(this.chart_option())
         }
     }
-
 
 </script>
 

@@ -23,11 +23,16 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders, getConceptsForDividends } from '@/store'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection,RulesFloat,RulesFloatGEZ } from 'vuetify_rules'
-    import { parseResponseError, myheaders,getArrayFromMap,getConceptsForDividends } from '@/functions'
+    import { getArrayFromMap } from '@/functions'
+    import { useDialogs } from '@/composables/useDialogs'
     export default {
+        setup() {
+            const { alert, confirm } = useDialogs()
+            return { myAlert: alert, myConfirm: confirm }
+        },
         components: {
             MyDateTimePicker,
         },
@@ -64,7 +69,7 @@
                 if (this.mode=="U") return this.$t("Update")
                 if (this.mode=="D") return this.$t("Delete")
             },
-            accept(){           
+            async accept(){           
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
                     return
@@ -72,20 +77,20 @@
                 var concept=this.useStore().concepts.get(this.newdividend.concepts)
                 var operationtype=this.useStore().operationstypes.get(concept.operationstypes)
                 if (operationtype.id==1 && (this.newdividend.gross>0 || this.newdividend.net >0)){
-                     alert(this.$t("Gross and net must be negative"))
+                     await this.myAlert(this.$t("Gross and net must be negative"))
                      return
                 }
                 if (operationtype.id==2 && (this.newdividend.gross<=0|| this.newdividend.net <=0)) {
-                    alert(this.$t("Amount must be positive"))
+                    await this.myAlert(this.$t("Amount must be positive"))
                     return
                 }
 
                 if (this.newdividend.gross==0 && this.newdividend.net!=0) {
-                    alert(this.$t("Gross shouldn't be 0 when net is not"))
+                    await this.myAlert(this.$t("Gross shouldn't be 0 when net is not"))
                     return 
                 }
                 if (this.newdividend.net==0 && this.newdividend.gross!=0) {
-                    alert(this.$t("Net shouldn't be 0 when gross is not"))
+                    await this.myAlert(this.$t("Net shouldn't be 0 when gross is not"))
                     return
                 }
 
@@ -106,8 +111,7 @@
                     })
                 } else if (this.mode=="D"){
 
-                    var r = confirm(this.$t("Do you want to delete this dividend?"))
-                    if(r == false) {
+                    if(await this.myConfirm(this.$t("Do you want to delete this dividend?")) == false) {
                         return
                     } 
                         axios.delete(this.newdividend.url, this.myheaders())

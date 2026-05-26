@@ -147,10 +147,10 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, currency_string, localcurrency_string, myheaders, getMapObjectById } from '@/store'
     import {empty_investment_operation,empty_dividend,empty_investments_chart,empty_investments_chart_limit_line,empty_ios} from '../empty_objects.js'
     import { parseNumber,f } from 'vuetify_rules'
-    import { percentage_string,listobjects_average_ponderated, parseResponseError, currency_string, localcurrency_string, listobjects_sum, myheaders, getMapObjectById } from '@/functions.js'
+    import { percentage_string, listobjects_average_ponderated, listobjects_sum } from '@/functions.js'
     import ChartInvestments from './ChartInvestments.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import DividendsCU from './DividendsCU.vue'
@@ -166,7 +166,12 @@
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
     import InvestmentsTransfers from './InvestmentsTransfers.vue'
+    import { useDialogs } from '@/composables/useDialogs'
     export default {
+        setup() {
+            const { prompt } = useDialogs()
+            return { myPrompt: prompt }
+        },
         components:{
             ChartInvestments,
             DisplayValues,
@@ -323,9 +328,9 @@
                             },
                             {
                                 name:this.$t('Add an investment operation adjusting currency conversion factor'),
-                                code: function(){
-                                    var selling_price_product_currency=this.parseNumber(prompt( this.$t("Please add the operation close price in product currency"), 0 ));
-                                    var gains_account_currency=this.parseNumber(prompt( this.$t("Please add the final gains in account currency"), 0 ));
+                                code: async function(){
+                                    var selling_price_product_currency=this.parseNumber(await this.myPrompt( this.$t("Please add the operation close price in product currency"), this.$t("Price"), "", "number", 0 ));
+                                    var gains_account_currency=this.parseNumber(await this.myPrompt( this.$t("Please add the final gains in account currency"), this.$t("Gains"), "", "number", 0 ));
                                     var shares=this.listobjects_sum(this.ios_id.io_current,"shares")
                                     var average_price_current_account=this.listobjects_average_ponderated(this.ios_id.io_current,'price_account', 'shares')
                                     var leverage=this.product.leverage_real_multiplier

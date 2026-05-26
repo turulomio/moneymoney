@@ -11,12 +11,11 @@
 <script setup>
     import axios from 'axios'
     import { ref, onMounted } from 'vue'
-    import { useStore } from "@/store"
+    import { useStore, newParseResponseError, myheaders, currency_generic_string } from '@/store'
     import TableAccountOperations from './TableAccountOperations.vue'
-    import { newParseResponseError, myheaders,listobjects_sum, currency_generic_string } from '@/functions'
+    import { listobjects_sum } from '@/functions'
     import { useI18n } from 'vue-i18n'
     import {f} from 'vuetify_rules'
-
 
     const props = defineProps({
         ao: { // Account operation object

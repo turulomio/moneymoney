@@ -9,10 +9,10 @@
 
 <script setup>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, myheaders, newParseResponseError } from '@/store'
     import MyMenuInline from './MyMenuInline.vue'    
     import TableInvestmentsTransfers from './TableInvestmentsTransfers.vue'
-    import { myheaders, newParseResponseError } from '@/functions'
+    
     import { ref, onMounted } from 'vue'
     import { useI18n } from 'vue-i18n'
     import { f } from 'vuetify_rules'
@@ -48,7 +48,6 @@
     function on_cruded(){
         update_table()
     }
-
 
     function update_table(){
         loading.value = true

@@ -23,9 +23,11 @@
     </div>
 </template>
 <script>
+    import { currency_html } from '@/store'
+
     import QuotesCU from './QuotesCU.vue'
     import { localtime } from 'vuetify_rules'
-    import { currency_html } from '@/functions'
+    
     export default {
         components:{
             QuotesCU,

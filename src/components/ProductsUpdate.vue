@@ -27,8 +27,8 @@
 <script>     
 
     import axios from 'axios'
-    import { useStore } from "@/store"
-import { parseResponseError, myheaders, myheaders_formdata } from '@/functions'
+    import { useStore, parseResponseError, myheaders, myheaders_formdata } from '@/store'
+
     export default {
         components:{
         },

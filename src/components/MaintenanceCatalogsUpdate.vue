@@ -15,8 +15,8 @@
 </template>  
 <script>     
     import axios from 'axios'
-    import { useStore } from "@/store"
-    import { parseResponseError, myheaders } from '@/functions'
+    import { useStore, parseResponseError, myheaders } from '@/store'
+    
     export default {
         data () {
             return {

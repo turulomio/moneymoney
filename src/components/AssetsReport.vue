@@ -27,7 +27,7 @@
 
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders, getMapObjectById, localcurrency_html, localcurrency_string } from '@/store'
     import ChartEvolutionAssets from './ChartEvolutionAssets.vue'
     import ChartPie from './ChartPie.vue'
     import { my_round, f, localtime } from 'vuetify_rules'
@@ -37,7 +37,7 @@
     pdfMake.addVirtualFileSystem(pdfFonts);
     import {pdfmake_convertImageToDataURL, pdfmake_percentage_string, pdfmake_loo_to_table, pdfmake_loo_to_table_guess_headers} from "@/pdfmake_helpers"
     import imgMoneymoney from '../assets/moneymoney.png'
-    import { parseResponseError, string_with_localized_now, myheaders, getMapObjectById,localcurrency_html, localcurrency_string, percentage_string} from '@/functions'
+    import { string_with_localized_now, percentage_string } from '@/functions'
 
     export default {
         components:{
@@ -172,7 +172,6 @@
                         ...this.report_investmentsoperations(),
                         ...this.report_investements_freerisk_revaluation(),
 
-
                         { text: this.$t('4.4. Investments group by variable percentage'), id:'investments_by_variable_percentage', style: 'header2', tocItem: true , pageBreak:"before"},
                         { image: await this.$refs.chart_pie_percentage.downloadChart(), width: 1200, alignment: 'center' },
                         { text: this.$t('4.5. Investments group by type'), id:'investments_by_type', style: 'header2', tocItem: true ,pageBreak:"before"},
@@ -219,7 +218,6 @@
                 }
 
                 console.log("PDFMAKE", docDefinition)
-
 
                 var datestring=this.string_with_localized_now(this.useStore().profile.zone)
                 var filename=`${datestring} AssetsReport ${ this.useStore().getProfileUppercaseChars}.pdf`
@@ -378,7 +376,6 @@
                 r.push({ text: this.$t('4. Current investments'), id:'current_investments', style: 'header1', tocItem: true ,pageOrientation: 'landscape', pageBreak:"before",}) // Set this page to landscape})
                 r.push({ text: this.$t('4.1. Investments list'), id:'investments_list', style: 'header2', tocItem: true }) 
                 r.push({ text: this.$t('Next list is sorted by the distance in percent to the selling point.'), style: 'body' }) 
-
 
                 this.results.investments=this.orderBy(this.results.investments,[function(o) { return o["percentage_selling_point"] === null ? -Infinity : o["percentage_selling_point"]; }], ['asc'])
                 var headers=this.pdfmake_loo_to_table_guess_headers(this.results.investments, ["fullname","invested_user","balance_user","gains_user", "percentage_invested", "percentage_selling_point"])
@@ -598,7 +595,6 @@
                     r=orderBy(r,["ranking"], ["asc"])
                     return r
                 }
-
 
                 const year=new Date().getFullYear()
                 axios.all([

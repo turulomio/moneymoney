@@ -15,9 +15,10 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useDialogs } from '@/composables/useDialogs'
     import { RulesSelection } from 'vuetify_rules'
-    import { parseResponseError, myheaders, getArrayFromMap } from '@/functions'
+    import { getArrayFromMap } from '@/functions'
     export default {
         components: {
         },
@@ -26,6 +27,10 @@
             from: {
                 required: true // Null to create, io object to update
             },
+        },
+        setup() {
+            const { alert, confirm, prompt } = useDialogs();
+            return { myAlert: alert, myConfirm: confirm, myPrompt: prompt };
         },
         data(){ 
             return {
@@ -40,7 +45,7 @@
             RulesSelection,
             myheaders,
             getArrayFromMap,
-            migrate(){
+            async migrate(){
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
                     return
@@ -48,14 +53,11 @@
                 var concept_from=this.useStore().concepts.get(this.from_url)
                 var concept_to=this.useStore().concepts.get(this.to)
                 if (concept_from.operationstypes!=concept_to.operationstypes){
-                    alert(this.$t("I can't migrate this concepts due to they have different operation types."))
+                    await this.myAlert(this.$t("I can't migrate this concepts due to they have different operation types."))
                     return
                 }
 
-
-                var r
-                r = confirm(this.$t("Do you want to migrate this concept?"))
-                if(r == false) {
+                if(!await this.myConfirm(this.$t("Do you want to migrate this concept?"))) {
                     return
                 }  
                 axios.post(`${this.from_url}data_transfer/`, {to:this.to}, this.myheaders())

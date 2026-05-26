@@ -18,16 +18,15 @@
 </template>
 <script setup>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, myheaders, parseResponseError } from '@/store'
     import { RulesSelection,RulesFloatGEZ } from 'vuetify_rules'
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import moment from 'moment-timezone';
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import MyMenuInline from './MyMenuInline.vue'
-    import { myheaders, parseResponseError } from '@/functions.js'
+    
     import { ref, computed } from 'vue';
     import { useI18n } from 'vue-i18n'
-
 
     const props = defineProps({
         quote: { //A quote object

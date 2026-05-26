@@ -32,15 +32,20 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders, currency_string } from '@/store'
     import MyDatePicker from './MyDatePicker.vue'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
     import {empty_investment_operation} from '../empty_objects.js'
     import { RulesSelection ,RulesFloatGEZ, parseNumber, f} from 'vuetify_rules'
-    import {parseResponseError, myheaders,currency_string} from '@/functions.js'
+    
+    import { useDialogs } from '@/composables/useDialogs'
     export default {
+        setup() {
+            const { confirm } = useDialogs()
+            return { myConfirm: confirm }
+        },
         components: {
             InvestmentsoperationsCU,
             MyDatePicker,
@@ -70,16 +75,16 @@
                         children: [
                             {
                                 name:this.$t('Integer shares from price'),
-                                code: function(){
-                                    var amount=this.parseNumber(prompt( this.$t("Set the amount to invest in this order"), 10000 ));
+                                code: async function(){
+                                    var amount=this.parseNumber(await this.myPrompt( this.$t("Set the amount to invest in this order"), this.$t("Amount"), "", "number", 10000 ));
                                     this.new_order.shares=parseInt(amount/this.new_order.price)
                                 }.bind(this),
                                 icon: "mdi-book-plus",
                             },
                             {
                                 name:this.$t('Decimal shares from price'),
-                                code: function(){
-                                    var amount=this.parseNumber(prompt( this.$t("Set the amount to invest in this order"), 10000 ));
+                                code: async function(){
+                                    var amount=this.parseNumber(await this.myPrompt( this.$t("Set the amount to invest in this order"), this.$t("Amount"), "", "number", 10000 ));
                                     this.new_order.shares=amount/this.new_order.price
                                 }.bind(this),
                                 icon: "mdi-book-plus",
@@ -145,7 +150,7 @@
                     return this.$t("Delete")
                 }
             },
-            accept(){
+            async accept(){
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
                     return
@@ -174,8 +179,7 @@
                     this.key=this.key+1
                     this.dialog_io_cu=true
                 } else if (this.mode=="D"){
-                    var r = confirm(this.$t("This order will be deleted. Do you want to continue?"))
-                    if(r == false) {
+                    if(await this.myConfirm(this.$t("This order will be deleted. Do you want to continue?")) == false) {
                         return
                     } 
                     axios.delete(this.new_order.url, this.myheaders())

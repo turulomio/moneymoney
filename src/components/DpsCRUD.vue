@@ -19,10 +19,11 @@
 
 <script>
 import axios from 'axios'
-import { useStore } from "@/store"
+import { useStore, parseResponseError, myheaders } from '@/store'
+import { useDialogs } from '@/composables/useDialogs'
 import MyDatePicker from './MyDatePicker.vue'
 import { RulesFloat } from 'vuetify_rules';
-import {parseResponseError, myheaders} from '@/functions'
+
 export default {
     components:{
         MyDatePicker,
@@ -34,6 +35,10 @@ export default {
         mode: {
             required: true,
         }
+    },
+    setup() {
+        const { alert, confirm, prompt } = useDialogs();
+        return { myAlert: alert, myConfirm: confirm, myPrompt: prompt };
     },
     data() {
         return {
@@ -56,7 +61,7 @@ export default {
             if (this.mode=="U") return this.$t("Update")
             if (this.mode=="D") return this.$t("Delete")
         },
-        submit() {
+        async submit() {
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
                     return
@@ -78,8 +83,7 @@ export default {
                 });
             }
             else if (this.mode == "D") {
-                var r = confirm(this.$t("Do you want to delete this DPS?"));
-                if (r == false) {
+                if (!await this.myConfirm(this.$t("Do you want to delete this DPS?"))) {
                     return;
                 }
                 axios.delete(this.newdps.url, this.myheaders())

@@ -20,10 +20,11 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders } from '@/store'
+    import { useDialogs } from '@/composables/useDialogs'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection, RulesFloat,RulesString } from 'vuetify_rules'
-    import { date2zulu, zulu2date, parseResponseError, myheaders, getArrayFromMap } from '@/functions'
+    import { date2zulu, zulu2date, getArrayFromMap } from '@/functions'
     export default {
         components:{
             MyDateTimePicker,
@@ -37,6 +38,10 @@
                 required:false,
                 default:false
             }
+        },
+        setup() {
+            const { alert, confirm, prompt } = useDialogs();
+            return { myAlert: alert, myConfirm: confirm, myPrompt: prompt };
         },
         data(){ 
             return{
@@ -73,9 +78,8 @@
                     return this.$t("Creating a new credit card operation")
                 }
             },
-            deleteCCO () {
-               var r = confirm(this.$t("Do you want to delete this credit card operation?"))
-               if(r == false) {
+            async deleteCCO () {
+               if(!await this.myConfirm(this.$t("Do you want to delete this credit card operation?"))) {
                   return
                }
                 axios.delete(this.newcco.url, this.myheaders())
@@ -86,7 +90,7 @@
                     this.parseResponseError(error)
                 });
             },
-            acceptDialog(){
+            async acceptDialog(){
                 //Validation
                 if (this.form_valid_cco!=true) {
                     this.$refs.form_cco.validate()
@@ -96,11 +100,11 @@
                 var operationtype=this.useStore().operationstypes.get(concept.operationstypes)
                 this.newcco.operationstypes=operationtype.url
                 if (operationtype.id==1 && this.newcco.amount>0){
-                     alert(this.$t("Amount must be negative"))
+                     await this.myAlert(this.$t("Amount must be negative"))
                      return
                 }
                 if (operationtype.id==2 && this.newcco.amount<0) {
-                    alert(this.$t("Amount must be positive"))
+                    await this.myAlert(this.$t("Amount must be positive"))
                     return
                 }
                 //Accept

@@ -15,10 +15,15 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders } from '@/store'
     import { RulesString } from 'vuetify_rules'
-import { parseResponseError, myheaders } from '@/functions'
+
+    import { useDialogs } from '@/composables/useDialogs'
     export default {
+        setup() {
+            const { confirm } = useDialogs()
+            return { myConfirm: confirm }
+        },
         props: {
             bank: { // Bank object
                 required: true 
@@ -56,7 +61,7 @@ import { parseResponseError, myheaders } from '@/functions'
                     return this.$t("Delete")
                 }
             },
-            acceptDialog(){
+            async acceptDialog(){
                 if (this.$refs.form.validate()==false) return
                 if (this.mode=='U'){               
                     axios.put(this.new_bank.url, this.new_bank, this.myheaders())
@@ -75,8 +80,7 @@ import { parseResponseError, myheaders } from '@/functions'
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=="D"){
-                    var r = confirm(this.$t("This bank will be deleted. Do you want to continue?"))
-                    if(r == false) {
+                    if(await this.myConfirm(this.$t("This bank will be deleted. Do you want to continue?")) == false) {
                         return
                     } 
                     axios.delete(this.new_bank.url, this.myheaders())

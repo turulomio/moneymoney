@@ -18,10 +18,15 @@
 
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders } from '@/store'
     import { RulesFloat,RulesInteger } from 'vuetify_rules'
-    import { parseResponseError, myheaders } from '@/functions'
+    
+    import { useDialogs } from '@/composables/useDialogs'
     export default {
+        setup() {
+            const { confirm } = useDialogs()
+            return { myConfirm: confirm }
+        },
         props: {
             estimation: {
                 required: true,
@@ -61,7 +66,7 @@
                     return this.$t("Delete")
                 }
             },    
-            submit(){
+            async submit(){
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
                     return
@@ -82,8 +87,7 @@
                         this.parseResponseError(error)
                     });
                 } else if (this.mode=="D"){
-                    var r = confirm(this.$t("Do you want to delete this DPS estimation?"))
-                    if(r == false) {
+                    if(await this.myConfirm(this.$t("Do you want to delete this DPS estimation?")) == false) {
                         return
                     } 
                     axios.delete(this.new_estimation.url, this.myheaders())

@@ -85,7 +85,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders } from '@/store'
     import {empty_investment_operation, empty_dividend,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
     import MyMenuInline from './MyMenuInline.vue'
     import DisplayValues from './DisplayValues.vue'
@@ -94,7 +94,7 @@
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
     import { f} from 'vuetify_rules'
-    import { hyperlinked_url, parseResponseError, myheaders } from '@/functions.js'
+    import { hyperlinked_url } from '@/functions.js'
     export default {
         components:{
             DisplayValues,
@@ -208,7 +208,6 @@
                 r.push({title:this.$t('Leverage'), value: this.leverage_message})
                 return r
             },
-            
 
             chkShowAllIO_label(){
                 if (this.chkShowAllIO){
@@ -217,8 +216,6 @@
                     return this.$t("Check to see all investment operations")
                 }
 
-
-                
             },
 
             chkShowAllDividends_label(){

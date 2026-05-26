@@ -44,14 +44,14 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders } from '@/store'
     import {empty_products_comparation} from '../empty_objects.js'
     import { RulesSelection } from 'vuetify_rules'
     import MyMenuInline from './MyMenuInline.vue'
     import ProductsComparation from './ProductsComparation.vue'
     import ProductsComparationCU from './ProductsComparationCU.vue'
     import AutocompleteProducts from './AutocompleteProducts.vue'
-import { parseResponseError, myheaders } from '@/functions.js'
+
     export default {
         components:{
             MyMenuInline,

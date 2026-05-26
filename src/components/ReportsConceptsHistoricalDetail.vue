@@ -13,11 +13,11 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, localcurrency_html, myheaders } from '@/store'
     import { defineAsyncComponent } from 'vue'
     import {f} from 'vuetify_rules'
     import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
-    import { parseResponseError, listobjects_sum, localcurrency_html, myheaders } from '@/functions'
+    import { listobjects_sum } from '@/functions'
     export default {
         name: "ReportsConceptsHistoricalDetail",
         components:{

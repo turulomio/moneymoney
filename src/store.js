@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import { myheaders, sortObjectsArray, getArrayFromMap} from './functions.js'
-import { capitalizeFirstLetter } from 'vuetify_rules'
+import { sortObjectsArray, getArrayFromMap, percentage_generic_string, percentage_generic_html } from './functions.js'
+import { capitalizeFirstLetter, my_round } from 'vuetify_rules'
+import { useDialogStore } from './dialogStore.js'
+import i18n from './i18n'
 
 import countries from 'flag-icons/country.json' with { type: 'json' };
-
 
 export const useStore = defineStore('global', {
   state: () => {
@@ -99,7 +100,7 @@ export const useStore = defineStore('global', {
           this.catalog_manager=response.data
           console.log(`Updated catalog manager in ${new Date()-start} ms`)
       }, (error) => {
-          this.$app.parseResponseError(error)
+          parseResponseError(error, this)
       });
     },
     updateCreditCards() {
@@ -333,3 +334,189 @@ export const useStore = defineStore('global', {
     },
   }
 })
+
+export function myheaders(){
+    return {
+        headers:{
+            'Authorization': `Token ${useStore().token}`,
+            'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
+            'Content-Type':'application/json'
+        }
+    }
+}
+
+export function myheaders_noauth(){
+    return {
+        headers:{
+            'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
+            'Content-Type':'application/json'
+        }
+    }
+}
+
+export function myheaders_formdata(){
+    return {
+        headers:{
+            'Authorization': `Token ${useStore().token}`,
+            'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    }
+}
+
+// returns true if everything is ok
+// return false if there is something wrong
+export async function parseResponse(response, store = null){
+    const dialogStore = useDialogStore()
+    const s = store || useStore()
+    const { t } = i18n.global
+    if (response.status==200){ //Good connection
+        if (response.data == "Wrong credentials"){
+            s.setToken(null)
+            await dialogStore.alert(t("Wrong credentials"))
+            return false
+        }
+        return true
+    } else if (response.status==201){// Created
+        return true
+    } else if (response.status==204){// Deleted
+        return true
+    } else {
+        await dialogStore.alert (`${response.status}: ${response.data}`)
+        return false
+    }
+}
+
+export async function parseResponseError(error, store = null){
+    const dialogStore = useDialogStore()
+    const s = store || useStore()
+    const { t } = i18n.global
+    if (error.response) {
+        if (error.response.status == 401){
+            if (s.token==null){ // Not logged yet
+                await dialogStore.alert(t("Wrong credentials"))
+            } else {
+                await dialogStore.alert (t("You aren't authorized to do this request"))
+                s.setToken(null)
+                const { router } = await import('./routes.js')
+                if (router.currentRoute.name != "about") router.push("about")
+                console.log(error.response)
+            }
+        } else if (error.response.status == 400){ // Used for developer or app errors
+            await dialogStore.alert (t("Something wrong with your request")+ "\n" + JSON.stringify(error.response.data));
+            console.log(error.response)
+        } else if (error.response.status == 403){ // Used for developer or app errors
+            await dialogStore.alert (t("You've done something forbidden"))
+            s.setToken(null)
+            const { router } = await import('./routes.js')
+            if (router.currentRoute.name != "about") router.push("about")
+            console.log(error.response)
+        } else if (error.response.status == 500){
+            await dialogStore.alert (t("There is a server error"))
+            console.log(error.response)
+        }
+    } else if (error.request) {
+        console.log("The request was made but no response was received")
+        await dialogStore.alert (t("Server couldn't answer this request"))
+      console.log(error.request);
+    } else {
+        console.log('Error', error.message);
+    }
+}
+
+export async function newParseResponseError(error, t, store){
+    return parseResponseError(error, store)
+}
+
+export function getConceptsForDividends() { 
+    return getArrayFromMap(useStore().concepts).filter( o => [39,50,59,62,63,65,66,68,70,72,75,76,77].includes(o.id))
+}
+
+export function getInvestmentsActive() { 
+    return getArrayFromMap(useStore().investments).filter(o => o.active==true)
+}
+export function getInvestmentsByProduct(product) { 
+    return getArrayFromMap(useStore().investments).filter(o => o.products==product)
+}
+
+export function getMapObjectById(catalog,id) { 
+    const store = useStore()
+    const url = `${store.apiroot}/api/${catalog}/${id}/`
+    return store[catalog].get(url)
+}
+
+export function getCurrencyByCode(code,default_=null) {
+    var r=useStore()['currencies'].find(o => o.code==code)
+    if (r==null){
+        return default_
+    } else {
+        return r
+    }
+}
+export function getCurrencyPropertyByCode(code,property,default_="???") {
+    var r=getCurrencyByCode(code)
+    if (r==null){
+        if (code=='u') return "u"
+        return default_
+    } else {
+        return r[property]
+    }
+}
+export function currency_generic_string(num, currency, locale, decimals=2){
+    if (num ==null || isNaN(num)){
+        return `- - - ${getCurrencyPropertyByCode(currency,"symbol_native")}`
+    } else {
+        return `${my_round(num,decimals).toLocaleString(locale, { minimumFractionDigits: decimals,  })} ${getCurrencyPropertyByCode(currency,"symbol_native")}`
+    }
+}
+export function currency_generic_html(num, currency, locale, decimals=2){
+    if (num<0){
+        return `<span class='vuered'>${currency_generic_string(num, currency, locale, decimals)}</span>`
+    } else {
+        return currency_generic_string(num, currency, locale, decimals)
+    }
+}
+export function getCountryNameByCode(code) { 
+    var r=useStore()['countries'].find(o => o.code==code)
+    if (r==null){
+        return ""
+    } else {
+        return r.name
+    }
+}
+  
+export function currency_string(num, currency, decimals=2){
+    return currency_generic_string(num, currency, localStorage.locale,decimals )
+}
+export function currency_html(num, currency, decimals=2){
+    return currency_generic_html(num, currency, localStorage.locale,decimals )
+}
+export function localcurrency_string(num, decimals=2){
+    return currency_generic_string(num, useStore().profile.currency, localStorage.locale,decimals )
+}
+export function localcurrency_html(num, decimals=2){
+    return currency_generic_html(num, useStore().profile.currency, localStorage.locale,decimals )
+}
+
+export function amount_to_invest( invested ){
+    let s=useStore().profile
+
+    let sum_1=s.invest_amount_1
+    let sum_2=(s.invest_amount_1+s.invest_amount_2)
+    let sum_3=(s.invest_amount_1+s.invest_amount_2+s.invest_amount_3)
+    let sum_4=(s.invest_amount_1+s.invest_amount_2+s.invest_amount_3+s.invest_amount_4)
+    let sum_5=(s.invest_amount_1+s.invest_amount_2+s.invest_amount_3+s.invest_amount_4+s.invest_amount_5)
+
+    let limit_01=sum_1*1/2
+    let limit_12=sum_1+(sum_2-sum_1)*1/2
+    let limit_23=sum_2+(sum_3-sum_2)*1/2
+    let limit_34=sum_3+(sum_4-sum_3)*1/2
+    let limit_45=sum_4+(sum_5-sum_4)*1/2
+
+
+    if (0< invested && invested < limit_01) return s.invest_amount_1
+    if (limit_01<=invested && invested < limit_12) return s.invest_amount_2
+    if (limit_12<=invested && invested < limit_23) return s.invest_amount_3
+    if (limit_23<=invested && invested < limit_34) return s.invest_amount_4
+    if (limit_34<=invested && invested < limit_45) return s.invest_amount_5
+}

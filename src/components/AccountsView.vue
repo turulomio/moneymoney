@@ -75,7 +75,8 @@
 </template>  
 <script>     
     import axios from 'axios' 
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders, currency_html } from '@/store'
+    import { useDialogs } from '@/composables/useDialogs'
     import AccountsoperationsCU from './AccountsoperationsCU.vue'
     import AccountsTransfer from './AccountsTransfer.vue'
     import DisplayValues from './DisplayValues.vue'
@@ -86,7 +87,7 @@
     import TableAccountOperations from './TableAccountOperations.vue'
     import {empty_account_operation,empty_credit_card, empty_account_transfer} from '../empty_objects.js'
     import { f} from 'vuetify_rules'
-    import { parseResponseError, myheaders, currency_html } from '@/functions'
+    
     export default {
         name:"AccountsView",
         components:{
@@ -103,6 +104,10 @@
             account:{
                 required:true,
             }
+        },
+        setup() {
+            const { alert, confirm, prompt } = useDialogs();
+            return { myAlert: alert, myConfirm: confirm, myPrompt: prompt };
         },
         data () {
             return {
@@ -247,9 +252,9 @@
                 this.key=this.key+1
                 this.dialog_cc=true
             },
-            viewCC(event,object){
+            async viewCC(event,object){
                 if (object.item.deferred==false){
-                    alert(this.$t("This is a debit credit card. Your operations are added to account directly"))
+                    await this.myAlert(this.$t("This is a debit credit card. Your operations are added to account directly"))
                     return
                 }
                 this.cc=object.item

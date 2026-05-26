@@ -45,7 +45,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders, getMapObjectById } from '@/store'
     import {empty_strategy_simulation, empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
     import MyMenuInline from './MyMenuInline.vue'
     import DisplayValues from './DisplayValues.vue'
@@ -54,7 +54,7 @@
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
     import { localtime ,f} from 'vuetify_rules'
-    import { parseResponseError, myheaders, getMapObjectById} from '@/functions.js'
+    
     export default {
         components:{
             DisplayValues,

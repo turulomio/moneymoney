@@ -97,7 +97,8 @@
 <script setup>
     import { ref, computed, onMounted, nextTick } from 'vue'
     import { localtime, f } from 'vuetify_rules'
-    import {listobjects_sum, currency_html, getMapObjectById} from "@/functions"
+    import {listobjects_sum} from "@/functions"
+    import { currency_html, getMapObjectById } from "@/store"
     import { useI18n } from 'vue-i18n'
 
     const props = defineProps({

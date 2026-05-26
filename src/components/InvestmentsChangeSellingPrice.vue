@@ -78,15 +78,17 @@
 <script setup>
     import { ref, watch, computed, onMounted } from 'vue'
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, currency_string, myheaders, getMapObjectById } from '@/store'
     import DisplayValues from './DisplayValues.vue'
     import MyDatePicker from './MyDatePicker.vue'
     import { empty_products_ranges, empty_ios } from '../empty_objects.js'
     import { my_round, RulesSelection, RulesFloat, f } from 'vuetify_rules'
-    import { hyperlinked_url, parseResponseError, currency_string, myheaders, getMapObjectById } from '@/functions.js'
+    import { hyperlinked_url } from '@/functions.js'
     import { useI18n } from 'vue-i18n'
+    import { useDialogs } from '@/composables/useDialogs'
 
     const { t } = useI18n()
+    const { alert: myAlert } = useDialogs()
     const emit = defineEmits(['cruded'])
 
     const props = defineProps({
@@ -222,10 +224,10 @@
         snackbar_message.value = r
     }
 
-    const submit_method = (price_val, expiration_val) => {
+    const submit_method = async (price_val, expiration_val) => {
         selling_expiration.value = expiration_val
         if (selling_expiration.value != null && new Date(selling_expiration.value).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) {
-            alert(t("Selling expiration date is in the past"))
+            await myAlert(t("Selling expiration date is in the past"))
         }
 
         var s = new Array()

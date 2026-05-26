@@ -20,13 +20,13 @@
 <script setup>
     import { ref, computed } from 'vue'
     import axios from 'axios' 
-    import { useStore } from "@/store"
+    import { useStore, myheaders, newParseResponseError } from '@/store'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection, RulesFloat } from 'vuetify_rules'
-    import { date2zulu , zulu2date, myheaders, getArrayFromMap, newParseResponseError, hyperlinked_url } from '@/functions'
+    import { date2zulu, zulu2date, getArrayFromMap, hyperlinked_url } from '@/functions'
     import { useI18n } from 'vue-i18n'
     import { ConceptsTypes } from '@/types.js'
-
+    import { useDialogs } from '@/composables/useDialogs'
 
     const props = defineProps({
         ao:{
@@ -41,6 +41,7 @@
 
     const { t } = useI18n()
     const store = useStore()
+    const { confirm } = useDialogs()
 
     const form = ref(null)
     const account = ref(null)
@@ -53,8 +54,6 @@
         newao.value.amount=0
         newao.value.concepts=useStore().concepts.get(hyperlinked_url("concepts", ConceptsTypes.AccountOperationRefund))
     }
-
-
 
     const form_valid = ref(true)
     const following_ao = ref(false)
@@ -103,7 +102,7 @@
                 newParseResponseError(error, t,useStore())
             })
         } else if (props.mode=='D'){
-            if (!confirm(t("Do you want to delete this account operation?"))) {
+            if (!await confirm(t("Do you want to delete this account operation?"))) {
                 return
             }  
             following_ao.value = false

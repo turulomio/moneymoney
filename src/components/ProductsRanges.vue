@@ -81,21 +81,19 @@
     </div>
 </template>
 
-
 <script setup>
     import { ref, computed, watch } from 'vue'
     import { useI18n } from 'vue-i18n'
     import {empty_products_ranges, empty_order} from '../empty_objects.js'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, currency_string, myheaders, getInvestmentsByProduct } from '@/store'
     import { RulesSelection, RulesInteger, RulesFloat, f } from 'vuetify_rules'
     import axios from 'axios'
-    import { parseResponseError, currency_string, myheaders, getArrayFromMap, getInvestmentsByProduct } from '@/functions.js'
+    import { getArrayFromMap } from '@/functions.js'
     import ChartProductsRanges from './ChartProductsRanges.vue'
     import OrdersCU from './OrdersCU.vue'
     import OrdersList from './OrdersList.vue'
     import InvestmentsView from './InvestmentsView.vue'
     import AutocompleteProducts from './AutocompleteProducts.vue'
-
 
     const props = defineProps({
         pr:{

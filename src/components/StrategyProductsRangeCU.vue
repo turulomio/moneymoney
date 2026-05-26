@@ -25,7 +25,6 @@
                 <AutocompleteInvestments data-test="StrategyProductsRangeCU_Investments"
                     v-model="new_strategy.investments" multiple />
 
-
                 <v-row class="d-flex flex-row mx-auto" justify="center">
                     <v-text-field class="mr-4" data-test="StrategyProductsRangeCU_PercentageBetweenRanges"
                         :readonly="mode == 'D'" v-model.number="new_strategy.percentage_between_ranges"
@@ -60,12 +59,12 @@
 </template>
 <script>
 import axios from 'axios'
-import { useStore } from "@/store"
+import { useStore, parseResponseError, myheaders } from '@/store'
 import MyDateTimePicker from './MyDateTimePicker.vue'
 import AutocompleteProducts from './AutocompleteProducts.vue'
 import AutocompleteInvestments from '@/components/AutocompleteInvestments.vue'
 import { RulesSelection, RulesInteger, RulesString, RulesFloat } from 'vuetify_rules'
-import { getArrayFromMap, parseResponseError, myheaders } from '@/functions'
+import { getArrayFromMap } from '@/functions'
 export default {
     components: {
         MyDateTimePicker,

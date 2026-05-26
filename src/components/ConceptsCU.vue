@@ -15,13 +15,15 @@
 </template>
 <script setup>
     import axios from 'axios'
-    import { useStore } from '@/store'
+    import { useStore, newParseResponseError, myheaders } from '@/store'
     import { RulesSelection, RulesString } from 'vuetify_rules'
-    import { newParseResponseError, myheaders } from '@/functions'
+    
     import AutocompleteOperationstypes from './AutocompleteOperationstypes.vue'
     import { ref, computed } from 'vue'
     import { useI18n } from 'vue-i18n'
+    import { useDialogs } from '@/composables/useDialogs'
 
+    const { confirm: myConfirm } = useDialogs()
     const props = defineProps({
         concept: {
             required: true // Null to create, io object to update
@@ -52,7 +54,7 @@
         return t("Delete")
     })
 
-    function accept() {
+    async function accept() {
         if (!form_valid.value) {
             form.value.validate()
             return
@@ -75,7 +77,7 @@
                     newParseResponseError(error, t, store)
                 })
         } else if (props.mode === "D") {
-            if (!confirm(t("Do you want to delete this concept?"))) {
+            if (!await myConfirm(t("Do you want to delete this concept?"))) {
                 return
             }
             axios.delete(new_concept.value.url, myheaders())

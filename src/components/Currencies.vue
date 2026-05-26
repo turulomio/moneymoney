@@ -31,11 +31,11 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders } from '@/store'
     import { localtime, my_round } from 'vuetify_rules'
     import QuotesCU from './QuotesCU.vue'
     import {empty_quote} from '../empty_objects.js'
-    import { parseResponseError, myheaders } from '@/functions'
+    
     export default {
         name:"Currencies",
         components:{

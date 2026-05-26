@@ -57,13 +57,13 @@
 </template>  
 <script>     
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, getCountryNameByCode, currency_html, parseResponseError, myheaders } from '@/store'
     import {empty_product} from '../empty_objects.js'
     import { localtime, RulesSelection } from 'vuetify_rules'
     import MyMenuInline from './MyMenuInline.vue'
     import ProductsView from './ProductsView.vue'
     import ProductsCU from './ProductsCU.vue'
-    import { getCountryNameByCode, currency_html, percentage_html, parseResponseError, myheaders } from '@/functions.js'
+    import { percentage_html } from '@/functions.js'
     export default {
         components:{
             MyMenuInline,
@@ -99,7 +99,6 @@
                     {id:3, name: this.$t('All products')},
                 ],       
                 obsolete_filter:1,
-
 
                 //DIALOG PRODUCTS VIEW
                 dialog_productsview:false,

@@ -29,7 +29,6 @@
                         <v-text-field v-model.number="new_profile.invest_amount_4"  :label="$t('Fourth amount to invest')" :placeholder="$t('Fourth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
                         <v-text-field v-model.number="new_profile.invest_amount_5"  :label="$t('Fifth amount to invest')" :placeholder="$t('Fifth amount to invest')" :rules="RulesInteger(10,true)" counter="10"/>
 
-
                     </v-card>                        
 
                     <v-card class="mx-auto pa-6 mt-3">
@@ -62,9 +61,9 @@
 
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, amount_to_invest, parseResponseError, myheaders } from '@/store'
     import { RulesSelection, RulesEmail, RulesInteger,RulesPassword,RulesString, f} from 'vuetify_rules'
-    import { amount_to_invest, parseResponseError, myheaders     } from '@/functions'
+    
     export default {
         name: 'Settings',
         data () {

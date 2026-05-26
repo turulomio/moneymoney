@@ -50,12 +50,12 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, localcurrency_html, myheaders } from '@/store'
     import TableAccountOperations from './TableAccountOperations.vue'
     import TableDividends from './TableDividends.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import {f} from 'vuetify_rules'
-    import { parseResponseError, localcurrency_html,myheaders, listobjects_sum } from '@/functions'
+    import { listobjects_sum } from '@/functions'
     export default {
         components:{
             TableAccountOperations,

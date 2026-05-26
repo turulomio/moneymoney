@@ -36,11 +36,16 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders } from '@/store'
     import AutocompleteStockMarkets from './AutocompleteStockMarkets.vue'
     import { RulesSelection, RulesInteger, RulesString} from 'vuetify_rules'
-    import {parseResponseError, getArrayFromMap, myheaders } from '@/functions'
+    import { getArrayFromMap } from '@/functions'
+    import { useDialogs } from '@/composables/useDialogs'
     export default {
+        setup() {
+            const { confirm } = useDialogs()
+            return { myConfirm: confirm }
+        },
         components: {
             AutocompleteStockMarkets
         },
@@ -101,7 +106,7 @@
                     return this.$t("Create")
                 }
             },
-            accept(){
+            async accept(){
 
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
@@ -127,8 +132,7 @@
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=="D"){
-                    var r = confirm(this.$t("This product will be deleted. Do you want to continue?"))
-                    if(r == false) {
+                    if(await this.myConfirm(this.$t("This product will be deleted. Do you want to continue?")) == false) {
                         return
                     } 
                     axios.delete(this.product.url, this.myheaders())

@@ -19,11 +19,16 @@
 
 <script>
     import axios from 'axios' 
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders } from '@/store'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection, RulesFloat } from 'vuetify_rules'
-    import { date2zulu , parseResponseError, zulu2date, myheaders,getArrayFromMap} from '@/functions'
+    import { date2zulu, zulu2date, getArrayFromMap } from '@/functions'
+    import { useDialogs } from '@/composables/useDialogs'
     export default {
+        setup() {
+            const { alert, confirm } = useDialogs()
+            return { myAlert: alert, myConfirm: confirm }
+        },
         components:{
             MyDateTimePicker,
         },
@@ -52,7 +57,7 @@
             RulesSelection,
             RulesFloat,
             myheaders,
-            acceptDialogAO(){
+            async acceptDialogAO(){
                 //Validation
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
@@ -62,11 +67,11 @@
                 var operationtype=this.useStore().operationstypes.get(concept.operationstypes)
                 this.newao.operationstypes=operationtype.url
                 if (operationtype.id==1 && this.newao.amount>0){
-                     alert(this.$t("Amount must be negative"))
+                     await this.myAlert(this.$t("Amount must be negative"))
                      return
                 }
                 if (operationtype.id==2 && this.newao.amount<0) {
-                    alert(this.$t("Amount must be positive"))
+                    await this.myAlert(this.$t("Amount must be positive"))
                     return
                 }
 
@@ -92,9 +97,7 @@
                         this.parseResponseError(error)
                     })
                 } else if (this.mode=='D'){
-                    var r
-                    r = confirm(this.$t("Do you want to delete this account operation?"))
-                    if(r == false) {
+                    if(await this.myConfirm(this.$t("Do you want to delete this account operation?")) == false) {
                         return
                     }  
                     this.following_ao=false
@@ -133,7 +136,6 @@
             this.newao=Object.assign({},this.ao)
             this.on_account_change() //Updates  account object
         }
-
 
     }
 </script>

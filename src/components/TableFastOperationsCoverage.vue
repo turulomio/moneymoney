@@ -27,9 +27,9 @@
 <script setup>
     import { ref, computed, onMounted, nextTick } from 'vue'
     import FastOperationsCoverageCU from './FastOperationsCoverageCU.vue'
-    import { useStore } from "@/store"
+    import { useStore, currency_html } from '@/store'
     import { localtime } from 'vuetify_rules'
-    import { currency_html } from '@/functions'
+    
     import { useI18n } from 'vue-i18n'
 
     const props = defineProps({

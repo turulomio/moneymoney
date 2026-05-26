@@ -21,9 +21,9 @@
 <script setup>
     import { ref, computed, onMounted, nextTick } from 'vue'
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, currency_html, myheaders } from '@/store'
     import DpsCRUD from './DpsCRUD.vue'
-    import {  parseResponseError, currency_html, myheaders } from '@/functions'
+    
     import { useI18n } from 'vue-i18n'
 
     const props = defineProps({

@@ -108,9 +108,9 @@
 </template>
 <script>     
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, localcurrency_html, myheaders } from '@/store'
     import {f} from 'vuetify_rules'
-    import { parseResponseError, listobjects_sum, localcurrency_html, percentage_html, myheaders } from '@/functions'
+    import { listobjects_sum, percentage_html } from '@/functions'
     export default {
         data(){
             return {

@@ -24,13 +24,13 @@
 <script setup>
     import { ref, computed } from 'vue'
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders } from '@/store'
     import { useI18n } from 'vue-i18n'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import AutocompleteAccounts from '@/components/AutocompleteAccounts.vue'
     import AutocompleteProducts from '@/components/AutocompleteProducts.vue'
     import { RulesSelection, RulesString } from 'vuetify_rules'
-    import { getArrayFromMap, parseResponseError, myheaders } from '@/functions'
+    import { getArrayFromMap } from '@/functions'
 
     const props = defineProps({
         strategy: {

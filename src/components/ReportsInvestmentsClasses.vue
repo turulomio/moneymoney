@@ -33,10 +33,10 @@
 </template>
 <script>      
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders } from '@/store'
     import ChartPie from './ChartPie.vue'
     import { my_round } from 'vuetify_rules'
-    import { parseResponseError, myheaders } from '@/functions'
+    
     export default {
         components:{
             ChartPie,

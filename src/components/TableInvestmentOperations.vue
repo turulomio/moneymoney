@@ -68,10 +68,10 @@
     import axios from "axios"
     import { ref, computed, onMounted, nextTick } from 'vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
-    import { useStore } from "@/store"
+    import { useStore, getMapObjectById, currency_string, myheaders, parseResponseError } from '@/store'
     import { empty_investment_operation } from '@/empty_objects.js'
     import { localtime } from 'vuetify_rules'
-    import { hyperlinked_url, getMapObjectById, currency_string, myheaders, parseResponseError } from '@/functions'
+    import { hyperlinked_url } from '@/functions'
     import InvestmentsTransfersCU from './InvestmentsTransfersCU.vue'
     import { useI18n } from 'vue-i18n'
 

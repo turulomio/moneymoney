@@ -67,13 +67,13 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, currency_html, myheaders } from '@/store'
     import OrdersCU from './OrdersCU.vue'
     import InvestmentsoperationsReinvest from './InvestmentsoperationsReinvest.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import {empty_order,empty_ios_simulation_operation,empty_ios} from '../empty_objects.js'
     import { localtime, f } from 'vuetify_rules'
-    import { id_from_hyperlinked_url , parseResponseError, currency_html, percentage_html, getArrayFromMap, myheaders } from '@/functions'
+    import { id_from_hyperlinked_url, percentage_html, getArrayFromMap } from '@/functions'
     export default {
         components:{
             MyMenuInline,
@@ -207,7 +207,6 @@
                 } else if (this.state==2) { //executed
                     url=`${this.useStore().apiroot}/api/orders/?executed=true`
                 }
-
 
                 axios.get(url, this.myheaders())
                 .then((response) => {

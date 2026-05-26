@@ -11,10 +11,12 @@
 
 </template>
 <script>
+    import { parseResponseError, myheaders } from '@/store'
+
     import * as echarts from 'echarts'
     import axios from 'axios'
     import {f} from 'vuetify_rules'
-    import { parseResponseError,myheaders } from '@/functions'
+    
     export default {
         props:{
             investment:{
@@ -139,7 +141,6 @@
             });
         }
     }
-
 
 </script>
 

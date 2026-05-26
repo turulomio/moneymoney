@@ -32,10 +32,10 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, getCountryNameByCode, parseResponseError, localcurrency_html, myheaders } from '@/store'
     import {f} from 'vuetify_rules'
     import InvestmentsView from './InvestmentsView.vue'
-    import { getCountryNameByCode, parseResponseError, localcurrency_html, listobjects_sum, myheaders } from '@/functions'
+    import { listobjects_sum } from '@/functions'
     export default {
         components:{
             InvestmentsView,

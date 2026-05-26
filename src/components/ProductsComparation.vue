@@ -98,7 +98,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders, currency_html } from '@/store'
     import {empty_chart_scatter_pair_prices,empty_quote} from '../empty_objects.js'
     import ChartPriceRatio from './ChartPriceRatio.vue'
     import ChartScatterPairPrices from './ChartScatterPairPrices.vue'
@@ -107,7 +107,7 @@
     import QuotesCU from './QuotesCU.vue'
     import DisplayValues from './DisplayValues.vue'
     import { localtime, my_round,RulesFloat,RulesInteger,f } from 'vuetify_rules'
-    import { parseResponseError, myheaders, currency_html, percentage_html } from '@/functions.js'
+    import { percentage_html } from '@/functions.js'
     export default {
         components:{
             ChartPriceRatio,
@@ -125,7 +125,6 @@
         data(){ 
             return {
                 showchart:false,
-
 
                 tab:0,
                 seconds_apart:0,

@@ -8,9 +8,9 @@
 
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders } from '@/store'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
-    import { parseResponseError, myheaders } from '@/functions'
+    
     export default {
         components:{
             TableInvestmentOperationsCurrent,

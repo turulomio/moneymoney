@@ -20,10 +20,10 @@
 
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, myheaders, parseResponseError } from '@/store'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import { RulesSelection ,RulesFloat, RulesString} from 'vuetify_rules'
-    import {myheaders, parseResponseError, getArrayFromMap } from '@/functions'
+    import { getArrayFromMap } from '@/functions'
     export default {
         components:{
             MyDateTimePicker,

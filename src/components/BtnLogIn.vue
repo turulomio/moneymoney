@@ -22,9 +22,8 @@
 
 <script>
 import axios from 'axios'
-import { useStore } from "@/store"
-import {RulesString} from "vuetify_rules"
-import {myheaders_noauth,parseResponse,parseResponseError} from "@/functions"
+import { useStore, myheaders_noauth, parseResponse, parseResponseError } from "@/store"
+import { RulesString } from "vuetify_rules"
 export default {
     data () {
         return {
@@ -42,7 +41,7 @@ export default {
         RulesString,
         parseResponse,
         parseResponseError,
-        login(){
+        async login(){
             var start=new Date()
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
@@ -50,20 +49,17 @@ export default {
                 }
             if (this.loading==true) return
             this.loading=true
-            axios.post(`${this.useStore().apiroot}/login/`, {username: this.user, password:this.password}, this.myheaders_noauth())
-            .then((response) => {
-                if (this.parseResponse(response,this.useStore())==true){
+            try {
+                const response = await axios.post(`${this.useStore().apiroot}/login/`, {username: this.user, password:this.password}, this.myheaders_noauth())
+                if (await this.parseResponse(response, this.useStore())==true){
                     console.log("Authenticated");
                     this.useStore().setToken(response.data)
-                    this.useStore().updateAll()
-                    .then(()=>{
-                        this.$refs.form.reset()
-                        this.loading=false
-                        this.$router.push({name:'home'})
-                        console.log(`Login and catalogs load took ${new Date()-start} ms`)
-                        this.dialog=false
-
-                    })
+                    await this.useStore().updateAll()
+                    this.$refs.form.reset()
+                    this.loading=false
+                    this.$router.push({name:'home'})
+                    console.log(`Login and catalogs load took ${new Date()-start} ms`)
+                    this.dialog=false
                 } else { //Response=false 
                     setTimeout(() => { //Delay of 1 second
                         this.$refs.form.reset()
@@ -71,14 +67,14 @@ export default {
                         this.loading=false
                     }, 2000);
                 }
-            }, (error) => {
-                this.parseResponseError(error)
-                    setTimeout(() => { //Delay of 1 second
-                        this.$refs.form.reset()
-                        this.dialog=false
-                        this.loading=false
-                    }, 2000);
-            })
+            } catch (error) {
+                await this.parseResponseError(error, this.useStore())
+                setTimeout(() => { //Delay of 1 second
+                    this.$refs.form.reset()
+                    this.dialog=false
+                    this.loading=false
+                }, 2000);
+            }
         },
         cancel(){
             this.$refs.form.reset()

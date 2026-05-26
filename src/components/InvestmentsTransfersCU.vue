@@ -36,15 +36,17 @@
 </template>
 <script setup>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, newParseResponseError, myheaders } from '@/store'
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import CurrencyFactor from './CurrencyFactor.vue'
     import { RulesSelection,RulesFloat,RulesFloatGEZ,RulesString } from 'vuetify_rules'
-    import { newParseResponseError, myheaders, getArrayFromMap } from '@/functions.js'
+    import { getArrayFromMap } from '@/functions.js'
     import { empty_investment_transfer } from '@/empty_objects.js'
     import { ref, computed } from 'vue'
     import { useI18n } from 'vue-i18n'
+    import { useDialogs } from '@/composables/useDialogs'
 
+    const { confirm: myConfirm } = useDialogs()
     const props = defineProps({
         transfer: { //Null to create, transfer object with all parameters to update
             required: true 
@@ -119,7 +121,7 @@
         return ""
     })
 
-    function accept(){
+    async function accept(){
         if (props.mode=="U"){   
             axios.put(new_transfer.value.url, new_transfer.value,  myheaders())
             .then(() => {
@@ -135,8 +137,7 @@
                 newParseResponseError(error,t,useStore())
             })
         } else if (props.mode=="D") {
-            var r = confirm(t("Do you want to delete this investment transfer?"))
-            if(r == false) {
+            if (!await myConfirm(t("Do you want to delete this investment transfer?"))) {
                 return
             } 
             axios.delete(new_transfer.value.url, myheaders())
@@ -147,6 +148,5 @@
             })
         }
     }
-
 
 </script>

@@ -1,5 +1,6 @@
+import { currency_string } from '@/store'
 import {isNumber,upperFirst,round,sumBy} from "lodash-es"
-import {currency_string, percentage_string} from '@/functions.js'
+import { percentage_string } from '@/functions.js'
 
 export function pdfmake_convertImageToDataURL(url){
     return new Promise((resolve, reject) => {
@@ -20,7 +21,6 @@ export function pdfmake_convertImageToDataURL(url){
       img.src = url;
     });
   }
-
 
   export function pdfmake_loo_to_table_guess_headers(loo, keys_array){
     /**
@@ -71,7 +71,6 @@ export function pdfmake_loo_to_table(loo,headers,style){
     
     var widths=[]
 
-
     headers.forEach(header=>{
         row.push({text:header.title,fillColor:'#888888', bold:true, alignment:"center"})
         widths.push(header.width)
@@ -101,7 +100,6 @@ export function pdfmake_loo_to_table(loo,headers,style){
         body.push(row)
     })
 
-
     // Checks if some header has total
     let showtotal=false
     headers.forEach(header => {
@@ -124,7 +122,6 @@ export function pdfmake_loo_to_table(loo,headers,style){
         body.push(row)
     }
 
-
     var r={ 
             table: {
                 headerRows: 1,
@@ -135,7 +132,6 @@ export function pdfmake_loo_to_table(loo,headers,style){
         }
     return r
 }
-
 
 export function pdfmake_percentage_string(num, decimals){
     if (num==null || isNaN(num)) return "- - - %"

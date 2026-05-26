@@ -30,10 +30,9 @@
 </template>
 <script setup>
     import { ref } from 'vue'
-    import { useStore } from "@/store"
+    import { useStore, currency_string } from '@/store'
     import InvestmentsTransfersCU from './InvestmentsTransfersCU.vue'
     import { useI18n } from 'vue-i18n'
-    import { currency_string } from '@/functions'
 
     const props = defineProps({
         items: {

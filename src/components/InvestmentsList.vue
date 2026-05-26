@@ -104,7 +104,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, getCountryNameByCode, parseResponseError, currency_string, currency_html, localcurrency_html, myheaders } from '@/store'
     import MyMenuInline from './MyMenuInline.vue'
     import InvestmentsCU from './InvestmentsCU.vue'
     import InvestmentsChangeSellingPrice from './InvestmentsChangeSellingPrice.vue'
@@ -112,7 +112,7 @@
     import QuotesCU from './QuotesCU.vue'
     import {empty_quote, empty_investment} from '../empty_objects.js'
     import { localtime ,f} from 'vuetify_rules'
-    import { getCountryNameByCode, parseResponseError, listobjects_sum, currency_string, currency_html, localcurrency_html, percentage_html, myheaders } from '@/functions'
+    import { listobjects_sum, percentage_html } from '@/functions'
     export default {
         components:{
             MyMenuInline,

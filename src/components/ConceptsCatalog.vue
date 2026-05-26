@@ -39,12 +39,12 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders, localcurrency_html } from '@/store'
     import MyMenuInline from './MyMenuInline.vue'
     import ConceptsCU from './ConceptsCU.vue'
     import ConceptsMigration from './ConceptsMigration.vue'
     import {empty_concept} from '../empty_objects.js'
-    import { parseResponseError, myheaders, localcurrency_html } from '@/functions'
+    
     export default {
         components:{
             MyMenuInline,
@@ -92,7 +92,6 @@
 
                 //Dialog ConceptsMigration
                 dialog_concepts_migration:false
-
 
             }
         },

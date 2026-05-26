@@ -50,10 +50,10 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, localcurrency_html, myheaders } from '@/store'
     import DisplayValues from './DisplayValues.vue'
     import {f} from "vuetify_rules"
-    import { parseResponseError, listobjects_sum, localcurrency_html, myheaders } from '@/functions'
+    import { listobjects_sum } from '@/functions'
     export default {
         components: {
             DisplayValues,

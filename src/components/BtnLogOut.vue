@@ -8,10 +8,9 @@
 
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
-    import { myheaders, parseResponseError} from "@/functions"
-
+    import { useStore, myheaders, parseResponseError } from "@/store"
     export default {
+
         methods: {
             useStore,
             myheaders,

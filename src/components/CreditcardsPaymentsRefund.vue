@@ -12,11 +12,12 @@
 <script setup>
     import { ref, watch, onMounted } from 'vue'
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders, currency_string } from '@/store'
     import { useI18n } from 'vue-i18n'
     import { localtime, RulesSelection, f } from 'vuetify_rules'
     import TableCreditcardsOperations from './TableCreditcardsOperations.vue'
-    import { parseResponseError, myheaders, currency_string } from '@/functions'
+    
+    import { useDialogs } from '@/composables/useDialogs'
 
     const props = defineProps({
         cc: {
@@ -28,6 +29,7 @@
 
     const store = useStore()
     const { t } = useI18n()
+    const { alert } = useDialogs()
 
     const account = ref(null)
     const loading = ref(false)
@@ -49,15 +51,15 @@
         }
     })
 
-    function refundPayment() {
+    async function refundPayment() {
         axios.post(`${store.apiroot}/api/accountsoperations/${payment.value}/ccpaymentrefund/`, {}, myheaders())
-        .then(() => {
+        .then(async () => {
             items_cco.value = []
             payment.value = null
             updatePayments()
             emit("cruded")
             key.value++
-            alert(t("Payment was refund"))
+            await alert(t("Payment was refund"))
         }, (error) => {
             parseResponseError(error)
         });

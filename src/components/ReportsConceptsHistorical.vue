@@ -80,9 +80,9 @@
 
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, localcurrency_html, myheaders } from '@/store'
     import ReportsConceptsHistoricalDetail from './ReportsConceptsHistoricalDetail.vue'
-    import { parseResponseError, listobjects_sum, localcurrency_html, myheaders,getArrayFromMap } from '@/functions'
+    import { listobjects_sum, getArrayFromMap } from '@/functions'
     export default {
         name:"ReportsConceptsHistorical",
         components:{

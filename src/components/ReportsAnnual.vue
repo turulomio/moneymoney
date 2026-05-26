@@ -211,12 +211,12 @@
 </template>
 <script>     
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, localcurrency_html, localcurrency_string, myheaders } from '@/store'
     import { sumBy } from 'lodash-es';
     import { localtime, RulesFloat,f } from 'vuetify_rules'
     import moment from 'moment'
     import ReportsAnnualIncomeDetail from './ReportsAnnualIncomeDetail.vue'
-    import { parseResponseError, localcurrency_html, localcurrency_string, percentage_html, listobjects_sum, myheaders } from '@/functions';
+    import { percentage_html, listobjects_sum } from '@/functions';
     export default {
         components:{
             ReportsAnnualIncomeDetail,
@@ -368,7 +368,6 @@
                         color_diff:(diff>0)? "boldgreen": "boldred",
                     })
 
-
                 })
                 this.loading_invest_or_work=false
 
@@ -409,7 +408,6 @@
                         var cumulative_gains=0
                         var month_gains
 
-
                         for (var i=0; i<12; i++){
                             if (i<this.total_annual_incomes.length){
                                 month_gains= this.total_annual_incomes[i].gains + this.total_annual_incomes[i].dividends + this.total_annual_incomes[i].fast_operations
@@ -434,7 +432,6 @@
                         this.current_assets_gains_percentage_message=f(this.$t("Currently, gains annual percentage is [0]."), [this.percentage_html(current_percentage)])+ "<br>" +
                         f(this.$t("Considering gains from risk-free investments ([0]), the annual percentage of gains would be [1]."), [this.localcurrency_html(this.total_zero_risk_revaluation),this.percentage_html(current_percentage_with_revaluation)])
 
-
                         this.loading_target=false
                     })
                 }, (error) => {
@@ -446,7 +443,6 @@
                 this.loading_annual_incomes=true
                 this.loading_annual_gainsbyproductstypes=true
                 this.last_year_balance_string=""
-
 
                 axios.all([
                     axios.get(`${this.useStore().apiroot}/reports/annual/${this.year}/`, this.myheaders()),

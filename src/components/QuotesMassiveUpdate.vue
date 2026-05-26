@@ -24,9 +24,9 @@
 <script>     
 
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders } from '@/store'
     import {f} from 'vuetify_rules'
-import { parseResponseError, myheaders } from '@/functions'
+
     export default {
         components:{
         },

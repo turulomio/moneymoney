@@ -19,11 +19,16 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders } from '@/store'
     import { RulesSelection, RulesFloatGEZ, RulesFloatGZ } from 'vuetify_rules'
     import MyDateTimePicker from './MyDateTimePicker.vue'
-    import { parseResponseError, myheaders, getArrayFromMap } from '@/functions'
+    import { getArrayFromMap } from '@/functions'
+    import { useDialogs } from '@/composables/useDialogs'
     export default {
+        setup() {
+            const { alert, confirm } = useDialogs()
+            return { myAlert: alert, myConfirm: confirm }
+        },
         components: {
             MyDateTimePicker,
         },
@@ -66,14 +71,14 @@
                 if (this.mode=="U") return this.$t('Update account transfer')
                 if (this.mode=="D") return this.$t('Delete account transfer')
             },
-            acceptTransfer(){             
+            async acceptTransfer(){             
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
                     return
                 }  
                 if ( [ "C","U"].includes(this.mode)){ // Due it has not all values
                     if (this.new_at.origin==this.new_at.destiny){
-                        alert(this.$t("Transfer accounts can't be the same"))
+                        await this.myAlert(this.$t("Transfer accounts can't be the same"))
                         return
                     } 
                 }
@@ -95,8 +100,7 @@
                     })
                 }
                 if (this.mode=="D"){             
-                    var r = confirm(this.$t("Do you want to delete this transfer?"))
-                    if(r == true) {
+                    if(await this.myConfirm(this.$t("Do you want to delete this transfer?"))) {
                         axios.delete(this.new_at.url, this.myheaders())
                         .then(() => {
                             this.$emit("cruded")

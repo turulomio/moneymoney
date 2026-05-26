@@ -39,9 +39,9 @@
 
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, localcurrency_html, myheaders, getMapObjectById } from '@/store'
     import { localtime,f } from 'vuetify_rules'
-    import {parseResponseError, localcurrency_html, percentage_html, listobjects_sum, myheaders, getMapObjectById } from '@/functions'
+    import { percentage_html, listobjects_sum } from '@/functions'
     export default {
         components:{
         },

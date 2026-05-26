@@ -44,9 +44,9 @@
 
 <script setup>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, myheaders, currency_string, newParseResponseError } from '@/store'
     import imgUrl from '@/assets/moneymoney.png'
-    import { myheaders, currency_string, newParseResponseError } from '@/functions'
+    
     import { f, localtime } from 'vuetify_rules'
     import { ref, computed } from 'vue'
     import { useI18n } from 'vue-i18n'
@@ -80,6 +80,5 @@
     }
 
     get_alerts()
-
 
 </script>

@@ -71,7 +71,7 @@
 <script setup>
     import { ref, computed, onMounted } from 'vue'
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, myheaders, getMapObjectById } from '@/store'
     import { useI18n } from 'vue-i18n'
     import MyMenuInline from './MyMenuInline.vue'
     import {empty_order, empty_ios,empty_ios_simulation_operation,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
@@ -81,8 +81,10 @@
     import TableInvestmentOperations from './TableInvestmentOperations.vue'
     import TableInvestmentOperationsHistorical from './TableInvestmentOperationsHistorical.vue'
     import TableInvestmentOperationsCurrent from './TableInvestmentOperationsCurrent.vue'
-    import { myheaders, getMapObjectById } from '@/functions'
+    
+    import { useDialogs } from '@/composables/useDialogs'
 
+    const { alert: myAlert, prompt: myPrompt } = useDialogs()
     const props = defineProps({
         ios_id: { //object plinvestmentsoperations id can be investment or virtual investment (Merged)
                     //it uses only current_operations to make simulation 
@@ -140,16 +142,16 @@
             children: [
                 {
                     name: t('Integer shares from amount to reinvest'),
-                    code: () => {
-                        var amount=parseNumber(prompt( t("Please set the amount to invest in this order"), 10000 ));
+                    code: async () => {
+                        var amount=parseNumber(await myPrompt( t("Please set the amount to invest in this order"), t("Amount"), "", "number", 10000 ));
                         newshares.value=parseInt(amount/newprice.value)
                     },
                     icon: "mdi-book-plus",
                 },
                 {
                     name: t('Decimal shares from amount to reinvest'),
-                    code: () => {
-                        var amount=parseNumber(prompt( t("Please set the amount to invest in this order"), 10000 ));
+                    code: async () => {
+                        var amount=parseNumber(await myPrompt( t("Please set the amount to invest in this order"), t("Amount"), "", "number", 10000 ));
                         newshares.value=amount/newprice.value
                     },
                     icon: "mdi-book-plus",
@@ -161,13 +163,13 @@
             children: [
                 {
                     name: t('Integer shares to consolidate losses'),
-                    code: () => {
+                    code: async () => {
                         if (re_or_di.value==1){
-                            alert(t("Please select divest option to use this action"))
+                            await myAlert(t("Please select divest option to use this action"))
                             return
                         }
                         
-                        var losses=parseNumber(prompt( t("Please set losses to consolidate (Positive amount)"), 500 ));
+                        var losses=parseNumber(await myPrompt( t("Please set losses to consolidate (Positive amount)"), t("Losses"), "", "number", 500 ));
 
                         var resultado=0
                         for (var i = 0; i < props.ios_id.io_current.length; i++) {
@@ -190,12 +192,12 @@
                 },
                 {
                     name: t('Decimal shares to consolidate losses'),
-                    code: () => {
+                    code: async () => {
                         if (re_or_di.value==1){
-                            alert(t("Please select divest option to use this action"))
+                            await myAlert(t("Please select divest option to use this action"))
                             return
                         }
-                        var losses=parseNumber(prompt( t("Please set losses to consolidate (Positive amount)"), 500 ));
+                        var losses=parseNumber(await myPrompt( t("Please set losses to consolidate (Positive amount)"), t("Losses"), "", "number", 500 ));
 
                         var resultado=0
                         for (var i = 0; i < props.ios_id.io_current.length; i++) {
@@ -283,7 +285,7 @@
         });
     }
 
-    function make_all_axios_after(){  
+    async function make_all_axios_after(){  
         //Calculate shares before
         var shares_before=0
         props.ios_id.io_current.forEach(o=>{
@@ -291,16 +293,16 @@
         }) 
 
         if (newshares.value<=0 && re_or_di.value==1){
-            alert(t("To reinvest shares must be positive"))
+            await myAlert(t("To reinvest shares must be positive"))
             return
         }
         if (newshares.value>=0 && re_or_di.value==2){
-            alert(t("To divest shares must be negative"))
+            await myAlert(t("To divest shares must be negative"))
             return
         }
 
         if (Math.abs(newshares.value)>=shares_before && re_or_di.value==2){
-            alert(f(t("You're divesting the whole investment shares ([0])"), [Math.abs(newshares.value)]))
+            await myAlert(f(t("You're divesting the whole investment shares ([0])"), [Math.abs(newshares.value)]))
             return
         }
         viewoption.value=2

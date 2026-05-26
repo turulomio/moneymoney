@@ -14,9 +14,9 @@
 </template>
 <script>
     import axios from 'axios'
-    import { useStore } from "@/store"
+    import { useStore, parseResponseError, myheaders, localcurrency_string } from '@/store'
     import * as echarts from 'echarts'
-    import { parseResponseError, myheaders, localcurrency_string } from '@/functions'
+    
     export default {
         props: {
             hidden:{
@@ -248,6 +248,5 @@
 
         }
     }
-
 
 </script>

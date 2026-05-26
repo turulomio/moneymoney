@@ -52,10 +52,10 @@
 <script setup>
     import { ref, computed, onMounted, nextTick } from 'vue'
     import DividendsCU from './DividendsCU.vue'
-    import { useStore } from "@/store"
+    import { useStore, currency_html } from '@/store'
     import { empty_dividend } from '../empty_objects.js'
     import { localtime, f } from 'vuetify_rules'
-    import { listobjects_sum, currency_html } from '@/functions'
+    import { listobjects_sum } from '@/functions'
     import { useI18n } from 'vue-i18n'
 
     const props = defineProps({
