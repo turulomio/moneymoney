@@ -158,9 +158,13 @@ export async function investmentoperation_add_from_InvestmentsView(page){
   await v_text_input_settext(page, "InvestmentsoperationsCU_Shares", "100")
   await v_text_input_settext(page, "InvestmentsoperationsCU_Price", "9");
   const idPromise = promise_to_get_response(page, "/api/investmentsoperations/", "POST");
+  const iosPromise = promise_to_get_response(page, "/ios/", "POST");
+  const dividendsPromise = promise_to_get_response(page, "/api/dividends/", "GET");
   await page.getByTestId('InvestmentsoperationsCU_Button').click();
   const id= (await idPromise).id
   await expect(page.getByTestId('InvestmentsoperationsCU_Button')).toBeHidden()
+  await iosPromise;
+  await dividendsPromise;
   return id
 }
 
@@ -178,9 +182,12 @@ export async function dividend_add_from_InvestmentView(
     await v_text_input_settext(page, "DividendsCU_Gross", gross);
     await v_text_input_settext(page, "DividendsCU_Net", net);
     await v_text_input_settext(page, "DividendsCU_Taxes", taxes);
+    const iosPromise = promise_to_get_response(page, "/ios/", "POST");
+    const dividendsPromise = promise_to_get_response(page, "/api/dividends/", "GET");
     await page.getByTestId('DividendsCU_Button').click();
     await expect(page.getByTestId('DividendsCU_Button')).toBeHidden()
-
+    await iosPromise;
+    await dividendsPromise;
 }
 
 export async function quote_add_from_currencies(page, factor) {

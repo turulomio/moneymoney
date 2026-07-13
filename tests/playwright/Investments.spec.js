@@ -9,7 +9,8 @@ import {
   mymenuinline_selection,
   expect_prompt_and_set_value,
   click_outside_dialog,
-  expect_alert_and_accept_it
+  expect_alert_and_accept_it,
+  promise_to_get_response
 } from "./playwright_vuetify.js"
 
 
@@ -19,7 +20,11 @@ test('Investments list', async ({ page }) => {
 
   const investment=await investment_add_from_InvestmentsList(page, "Test investment", "LYXOR IBEX DOBLE APALANCADO (Madrid Stock Exchange)")
   await quote_add_from_InvestmentsList(page, investment.id)
+  const iosPromise = promise_to_get_response(page, "/ios/", "POST");
+  const dividendsPromise = promise_to_get_response(page, "/api/dividends/", "GET");
   await page.getByTestId(`Investments_Table_Row${investment.id}`).click()
+  await iosPromise;
+  await dividendsPromise;
   await investmentoperation_add_from_InvestmentsView(page)
   await dividend_add_from_InvestmentView(page)
 
