@@ -4,6 +4,7 @@ import {
 } from "./playwright_vuetify.js";
 import {
   quote_add_from_ProductsView,
+  split_add_from_ProductsView,
 } from "./commons.js";
 
 test('Products View', async ({ page }) => {
@@ -31,4 +32,7 @@ test('Products View', async ({ page }) => {
     await page.getByTestId('ProductsView_TabQuotes').click();
     await page.getByTestId('ProductsView_TabSplits').click();
     await page.getByTestId('ProductsView_TabChart').click();
+
+    // 5. Add a split
+    await split_add_from_ProductsView(page, "1", "2", "Test split from tests")
 });

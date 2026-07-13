@@ -208,3 +208,12 @@ export async function strategy_products_range_add_from_StrategiesList(page, name
     await expect(page.getByTestId(`StrategiesList_Table_Row${strategy_id}`)).toBeVisible();
     return strategy_id
 }
+
+export async function split_add_from_ProductsView(page, before="1", after="2", comment="Test Split"){
+    await mymenuinline_selection(page, "ProductsView_MyMenuInline", 2, 0)
+    await v_text_input_settext(page, "SplitsCU_Before", before);
+    await v_text_input_settext(page, "SplitsCU_After", after);
+    await v_text_input_settext(page, "SplitsCU_Comment", comment);
+    await page.getByTestId('SplitsCU_Button').click();
+    await expect(page.getByTestId('SplitsCU_Button')).toBeHidden();
+}

@@ -5,13 +5,13 @@
             <v-form ref="form" v-model="form_valid" v-if="new_split">
                 <v-col>
                     <MyDateTimePicker :readonly="mode=='D'" v-model="new_split.datetime" :label="t('Select split date and time')" />
-                    <v-text-field :readonly="mode=='D'" v-model.number="new_split.before" :label="t('Before')" :rules="[v => !!v || t('Required'), v => Number.isInteger(v) && v > 0 || t('Must be greater than zero')]"></v-text-field>
-                    <v-text-field :readonly="mode=='D'" v-model.number="new_split.after" :label="t('After')" :rules="[v => !!v || t('Required'), v => Number.isInteger(v) && v > 0 || t('Must be greater than zero')]"></v-text-field>
-                    <v-textarea :readonly="mode=='D'" v-model="new_split.comment" :label="t('Comment')" :rules="RulesString(255, false)"></v-textarea>
+                    <v-text-field data-test="SplitsCU_Before" :readonly="mode=='D'" v-model.number="new_split.before" :label="t('Before')" :rules="[v => !!v || t('Required'), v => Number.isInteger(v) && v > 0 || t('Must be greater than zero')]"></v-text-field>
+                    <v-text-field data-test="SplitsCU_After" :readonly="mode=='D'" v-model.number="new_split.after" :label="t('After')" :rules="[v => !!v || t('Required'), v => Number.isInteger(v) && v > 0 || t('Must be greater than zero')]"></v-text-field>
+                    <v-textarea data-test="SplitsCU_Comment" :readonly="mode=='D'" v-model="new_split.comment" :label="t('Comment')" :rules="RulesString(255, false)"></v-textarea>
                 </v-col>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary" @click="submit()" :disabled="!form_valid">{{ button }}</v-btn>
+                    <v-btn data-test="SplitsCU_Button" color="primary" @click="submit()" :disabled="!form_valid">{{ button }}</v-btn>
                 </v-card-actions>
             </v-form>
         </v-card>
