@@ -29,5 +29,6 @@ test('Products View', async ({ page }) => {
     await page.getByTestId('ProductsView_TabDps').click();
     await page.getByTestId('ProductsView_TabOHCLS').click();
     await page.getByTestId('ProductsView_TabQuotes').click();
+    await page.getByTestId('ProductsView_TabSplits').click();
     await page.getByTestId('ProductsView_TabChart').click();
 });
