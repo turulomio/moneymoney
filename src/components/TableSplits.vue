@@ -8,8 +8,8 @@
                 <div>{{ item.before }} : {{ item.after }}</div>
             </template>
             <template #item.actions="{item}">
-                <v-icon small class="mr-2" @click="editSplit(item)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" @click="deleteSplit(item)">mdi-delete</v-icon>
+                <v-icon :data-test="`TableSplits_ButtonUpdate${item.id}`" small class="mr-2" @click="editSplit(item)">mdi-pencil</v-icon>
+                <v-icon :data-test="`TableSplits_ButtonDelete${item.id}`" small class="mr-2" @click="deleteSplit(item)">mdi-delete</v-icon>
             </template>
             <template #bottom ></template>
         </v-data-table>

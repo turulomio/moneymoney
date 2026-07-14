@@ -4,35 +4,45 @@ import {
 } from "./playwright_vuetify.js";
 import {
   quote_add_from_ProductsView,
-  split_add_from_ProductsView,
 } from "./commons.js";
 
+import {
+  split_add_from_ProductsView,
+  split_update_from_ProductsView,
+  split_delete_from_ProductsView
+} from "./commons/split.js";
+
 test('Products View', async ({ page }) => {
-    // 1. Search a product
-    await page.getByTestId('LateralIcon').click();
-    await page.getByTestId('LateralProducts').click();
-    await page.getByTestId('LateralProductsSearch').click();
-    await expect(page).toHaveURL("products/search/");
-    await v_text_input_settext(page, "ProductsSearch_Search", "apalancado");
-    await page.getByTestId('ProductsSearch_Button').click();
+  // 1. Search a product
+  await page.getByTestId('LateralIcon').click();
+  await page.getByTestId('LateralProducts').click();
+  await page.getByTestId('LateralProductsSearch').click();
+  await expect(page).toHaveURL("products/search/");
+  await v_text_input_settext(page, "ProductsSearch_Search", "apalancado");
+  await page.getByTestId('ProductsSearch_Button').click();
 
-    // 2. Enter in Product View 
-    await page.getByTestId('ProductsSearch_Table_Row79228').click();
+  // 2. Enter in Product View 
+  await page.getByTestId('ProductsSearch_Table_Row79228').click();
 
-    // 3. Adds a quote
-    await quote_add_from_ProductsView(page, "10")
-    await quote_add_from_ProductsView(page, "11")
+  // 3. Adds a quote
+  await quote_add_from_ProductsView(page, "10")
+  await quote_add_from_ProductsView(page, "11")
 
-    // 4. Shows all tabs
-    await page.getByTestId('ProductsView_TabPercentageEvolution').click();
-    await page.getByTestId('ProductsView_TabQuotesEvolution').click();
-    await page.getByTestId('ProductsView_TabDpsEstimations').click();
-    await page.getByTestId('ProductsView_TabDps').click();
-    await page.getByTestId('ProductsView_TabOHCLS').click();
-    await page.getByTestId('ProductsView_TabQuotes').click();
-    await page.getByTestId('ProductsView_TabSplits').click();
-    await page.getByTestId('ProductsView_TabChart').click();
+  // 4. Shows all tabs
+  await page.getByTestId('ProductsView_TabPercentageEvolution').click();
+  await page.getByTestId('ProductsView_TabQuotesEvolution').click();
+  await page.getByTestId('ProductsView_TabDpsEstimations').click();
+  await page.getByTestId('ProductsView_TabDps').click();
+  await page.getByTestId('ProductsView_TabOHCLS').click();
+  await page.getByTestId('ProductsView_TabQuotes').click();
 
-    // 5. Add a split
-    await split_add_from_ProductsView(page, "1", "2", "Test split from tests")
+  // 5. Splits tab
+  await page.getByTestId('ProductsView_TabSplits').click();
+  const split = await split_add_from_ProductsView(page, "1", "2", "Test split from tests")
+  await split_update_from_ProductsView(page, split, "3", "2", "Split updated")
+  await split_delete_from_ProductsView(page, split)
+
+
+  await page.getByTestId('ProductsView_TabChart').click();
+
 });
