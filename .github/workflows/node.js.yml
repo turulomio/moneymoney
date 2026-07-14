@@ -72,13 +72,6 @@ jobs:
       run: |
         E2E_TESTING=1 .python/bin/python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport ${{ env.DJANGO_TEST_SERVER_PORT }} &
 
-    - name: Wait for Django backend to be ready
-      run: |
-        until curl -s http://127.0.0.1:${{ env.DJANGO_TEST_SERVER_PORT }}/ > /dev/null; do
-          echo "Waiting for Django backend to be ready..."
-          sleep 3
-        done
-
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:

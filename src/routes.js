@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 export const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: `${import.meta.env.BASE_URL}/`, redirect: `${import.meta.env.BASE_URL}/about/` }, 
+    { path: `${import.meta.env.BASE_URL}/`, redirect: `${import.meta.env.BASE_URL}/home/` },
     { path: `${import.meta.env.BASE_URL}/about/`, name: 'about', component: () => import('./components/About.vue') },
     { path: `${import.meta.env.BASE_URL}/home/`, name: 'home', component: () => import('./components/Home.vue') },
     { path: `${import.meta.env.BASE_URL}/accounts/list/`, name: 'accounts_list', component: () => import('./components/AccountsList.vue') },

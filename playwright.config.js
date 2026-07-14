@@ -7,7 +7,7 @@ import { defineConfig } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests/playwright/',
-  timeout: 120000, // 35 seconds maximum for each test
+  timeout: 30000, // 35 seconds maximum for each test
   globalTimeout: 3600000, //All tests timeout
   expect: {
     timeout: 10000,
