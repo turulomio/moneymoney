@@ -33,6 +33,7 @@ const test = baseTest.extend({
   await page.getByTestId('LateralLogIn').click();
   await page.getByTestId('BtnLogIn_User').getByRole('textbox').fill("test");
   await page.getByTestId('BtnLogIn_Password').getByRole('textbox').fill("test");
+  await expect(page.getByTestId('BtnLogIn_cmd')).toBeEnabled();
   await page.getByTestId('BtnLogIn_cmd').click();
   await page.waitForURL('http://127.0.0.1:8006/moneymoney/home/');
     //await expect(page.getByTestId("LateralAssetsReport")).toBeVisible()
