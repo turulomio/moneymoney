@@ -1,12 +1,12 @@
 <template>
     <div>
-        <v-overlay :model-value="loading_bootstrap" class="align-center justify-center" persistent>
+        <v-overlay data-test="Home_LoadingOverlay" :model-value="loading_bootstrap" class="align-center justify-center" persistent>
             <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
         </v-overlay>
         <h1>{{ t("Wellcome to Money Money") }}</h1>
         <h2>{{ `${useStore().version} (${useStore().versiondate.toISOString().slice(0,10)})` }}</h2>
         <v-img :src="imgUrl" height="200px" contain ></v-img>
-        <div v-if="alerts">
+        <div v-if="alerts" data-test="Home_AlertsContainer">
             <v-alert density="compact" class="mx-15 px-10 mb-2" outlined type="warning" v-if="time_message.length>0"> {{time_message}}</v-alert>   
             <v-alert class="mx-15 px-10 mb-2" type="error" variant="outlined" v-if="alerts.orders_expired.length>0"> 
                 <p>{{f(t("Orders expired in last [0] days :"), [alerts.expired_days])}}</p>

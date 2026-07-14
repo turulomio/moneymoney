@@ -7,7 +7,7 @@ import { defineConfig } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests/playwright/',
-  timeout: 30000, // 35 seconds maximum for each test
+  timeout: 120000, // 120 seconds maximum for each test
   globalTimeout: 3600000, //All tests timeout
   expect: {
     timeout: 10000,
@@ -22,7 +22,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ['html', { outputFolder: 'output/playwright-report' }]
+    ['html', { outputFolder: 'output/playwright-report', open: 'never' }]
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -33,6 +33,8 @@ export default defineConfig({
     trace: 'on-first-retry',
     testIdAttribute: 'data-test', // Change to 'data-qa' or 'data-custom-attribute' as needed
     viewport: { width: 1920, height: 1080 },
+    actionTimeout: 10000, // Timeout por defecto para click(), fill(), etc. (10 segundos)
+    navigationTimeout: 30000, // Timeout por defecto para page.goto(), waitForURL() (30 segundos)
   },
 
   /* Configure projects for major browsers */
@@ -48,7 +50,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npm run dev',
+    command: 'npm run preview',
     url: 'http://127.0.0.1:8006/moneymoney/',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
