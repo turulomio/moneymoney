@@ -343,3 +343,14 @@ export function empty_investment_transfer(){
 
         comment: ""}
 }
+
+export function empty_split(){
+    return {
+        url: null,
+        datetime: new Date().toISOString(),
+        products: null,
+        before: 1,
+        after: 1,
+        comment: ""
+    }
+}
