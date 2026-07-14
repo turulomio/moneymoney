@@ -55,7 +55,8 @@ export default {
                 this.$router.push({name:'home'})
                 console.log(`Login and catalogs load took ${new Date()-start} ms`)
                 this.dialog=false
-            } catch {
+            } catch (error) {
+                console.error("Login failed with error:", error);
                 setTimeout(() => { //Delay of 2 seconds
                     this.$refs.form.reset()
                     this.dialog=false
@@ -67,9 +68,6 @@ export default {
             this.$refs.form.reset()
             this.dialog = false
         }
-    },
-    created(){
-        this.$router.push({name:'about'}) //On reload F5 browser always in home   COMMENT FOR WIDGETS DEBUGGING
     }
 }
 </script>

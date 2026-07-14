@@ -27,7 +27,7 @@ const test = baseTest.extend({
   // 'page' fixture will be overridden here for tests that use this 'test' object
   page: async ({ page }, use) => {
     // Perform login
-
+  page.on('console', msg => console.log('BROWSER CONSOLE:', msg.text()));
 
   await page.goto('http://127.0.0.1:8006/moneymoney/');
   await page.getByTestId('LateralLogIn').click();
