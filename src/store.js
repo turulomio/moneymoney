@@ -33,7 +33,8 @@ export const useStore = defineStore('global', {
       profile: null,
       stockmarkets: new Map(),
       strategiestypes: new Map(),
-      recomendation_methods: new Map()
+      recomendation_methods: new Map(),
+      catalogsLoaded: false
     }
   },
   getters: {
@@ -64,6 +65,7 @@ export const useStore = defineStore('global', {
         this.logged = true
       } else {
         this.logged = false
+        this.catalogsLoaded = false
       }
     },
     updateAccounts() {
@@ -342,7 +344,7 @@ export async function parseResponseError(error) {
         await dialogStore.alert(t("You aren't authorized to do this request"))
         store.setToken(null)
         const { router } = await import('./routes.js')
-        if (router.currentRoute.name != "about") router.push("about")
+        if (router.currentRoute.value.name != "about") router.push({ name: "about" })
         console.log(error.response)
       }
     } else if (error.response.status == 400) { // Used for developer or app errors
@@ -352,7 +354,7 @@ export async function parseResponseError(error) {
       await dialogStore.alert(t("You've done something forbidden"))
       store.setToken(null)
       const { router } = await import('./routes.js')
-      if (router.currentRoute.name != "about") router.push("about")
+      if (router.currentRoute.value.name != "about") router.push({ name: "about" })
       console.log(error.response)
     } else if (error.response.status == 500) {
       await dialogStore.alert(t("There is a server error"))

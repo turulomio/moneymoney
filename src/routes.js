@@ -39,5 +39,6 @@ export const router = createRouter({
     { path: `${import.meta.env.BASE_URL}/widgets/mydatepicker/`, name: 'widgets_mydatepicker', component: () => import('./components/WidgetsMyDatePicker.vue') },
     { path: `${import.meta.env.BASE_URL}/widgets/mydatetimepicker/`, name: 'widgets_mydatetimepicker', component: () => import('./components/WidgetsMyDateTimePicker.vue') },
     { path: `${import.meta.env.BASE_URL}/widgets/mymonthpicker/`, name: 'widgets_mymonthpicker', component: () => import('./components/WidgetsMyMonthPicker.vue') },
+    { path: `${import.meta.env.BASE_URL}/:pathMatch(.*)*`, redirect: `${import.meta.env.BASE_URL}/home/` }
   ]
 })

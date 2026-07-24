@@ -25,6 +25,12 @@ import axios from 'axios'
 import { useStore } from "@/store"
 import { RulesString } from "vuetify_rules"
 export default {
+    props: {
+        nextRoute: {
+            type: String,
+            default: "home"
+        }
+    },
     data () {
         return {
             user: "",
@@ -53,6 +59,7 @@ export default {
                 this.loading=false
                 console.log(`Login and catalogs load took ${new Date()-start} ms`)
                 this.dialog=false
+                this.$router.push({ name: this.nextRoute })
             } catch (error) {
                 console.error("Login failed with error:", error);
                 setTimeout(() => { //Delay of 2 seconds

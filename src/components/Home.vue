@@ -85,10 +85,14 @@
         if (logged) {
             loading_bootstrap.value = true
             try {
-                await Promise.all([
-                    useStore().updateAll(),
-                    get_alerts()
-                ])
+                const store = useStore()
+                const promises = [get_alerts()]
+                if (!store.catalogsLoaded) {
+                    promises.push(store.updateAll().then(() => {
+                        store.catalogsLoaded = true
+                    }))
+                }
+                await Promise.all(promises)
             } catch (error) {
                 console.error("Bootstrap data load failed:", error)
             } finally {
