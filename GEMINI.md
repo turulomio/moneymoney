@@ -17,3 +17,5 @@
 - **E2E Tests:** Located in `tests/playwright/`. Run using `npx playwright test`.
 - **Unit Tests:** Located in `tests/vitest/`. Run using `npm run vitest`.
 - **Testing preference:** The user prefers to run the long test suites themselves. Do not run long test suites locally.
+- **Documentation Rule:** Whenever coding or implementing new features, always remember to update the project documentation (such as `README.md`, `GEMINI.md`, and inline code documentation/comments) detailing the features and changes.
+
