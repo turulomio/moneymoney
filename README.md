@@ -12,12 +12,31 @@ Both parts work together using a unified REST API layer where the frontend autom
 
 ## Key Features
 
-- **Bank & Account Management:** Add and update banks, checking/savings accounts, and track transactions/transfers.
-- **Investment Tracking:** Monitor stock/fund/ETF portfolios, register operations (buy/sell), update daily quotes, and track revaluation history.
-- **Order Management:** Manage active and expired orders with alerts.
-- **Comprehensive Reports:** Generate annual financial summaries, asset evolution charts (powered by ECharts), concept summaries, zero-risk summaries, asset classes, and ranking tables.
-- **Multi-Currency Support:** Convert and visualize values in different currencies with automatic/manual exchange rates.
-- **Investment Strategies:** Set up custom investment rules, product ranges, and catalog catalog update routines.
+- **Bank & Account Management:**
+  - Create and update banks, checkbook accounts, savings accounts, and investment accounts.
+  - Track transaction history, search operations, and execute account-to-account transfers.
+  - Handle credit card operations, deferred/debit cards, and payment refunds.
+  - Track transaction refunds and concept migrations.
+- **Advanced Investment Tracking:**
+  - Monitor stock, fund, and ETF portfolios with live or manual quote updates.
+  - Register purchase, sale, and reinvestment operations.
+  - Track stock splits, dividends, taxes, and dividend estimations (DPS).
+  - Modify selling prices and analyze merged views of different portfolios.
+  - Record transfers between investment accounts.
+- **Order & Alert Management:**
+  - Place buy/sell orders with custom limits and expiration dates.
+  - Automatic alerts for active, filled, or expired orders.
+- **Investment Strategies:**
+  - Set up and evaluate custom strategies.
+  - Supported types: Fast Operations Coverage, Strategy Pairs, Generic Strategies, and Product Ranges.
+- **Comprehensive Reports & Charts:**
+  - Dynamic charts (evolution, price ratio, product history, and scatter pair prices) powered by ECharts.
+  - Detailed annual reports including income details, revaluation metrics, historical concepts, ranking systems, and derivatives.
+  - Zero-risk investment assessments and classifications of assets.
+- **Multi-Currency Support:**
+  - Handle multiple currencies with manual or automatically updated exchange rate factors.
+- **Custom UI Widgets:**
+  - Clean user experience with customized date, datetime, and month pickers, and interactive menu controls.
 
 ## Installation
 
