@@ -30,8 +30,29 @@ python manage.py runserver
 
 ### MoneyMoney installation
 
-Compiles and hot-reloads for development
+Compiles and hot-reloads for development:
 ```bash
 cd moneymoney
 npm run dev
 ```
+
+### Running Tests
+
+- **Unit Tests (Vitest):**
+  ```bash
+  npm run vitest
+  ```
+- **End-to-End Tests (Playwright):**
+  ```bash
+  npx playwright test
+  ```
+
+### Developer Guidelines
+
+- **Translations:**
+  To extract and update translation strings, run:
+  ```bash
+  npm run translate
+  ```
+- **Developer Notes & Fixed Issues:**
+  See [GEMINI.md](file:///home/worky/Proyectos/moneymoney/GEMINI.md) for local dev guidelines, routing issues, and configuration notes.
