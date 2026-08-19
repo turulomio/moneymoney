@@ -5,8 +5,8 @@
         </h1>
         <v-card outlined class="ma-4 pa-4">
             <v-checkbox data-test="StrategiesList_CheckActive" v-model="showActive" :label="setCheckboxLabel()" />
-            <v-data-table density="compact" :headers="strategies_headers" :items="strategies_items" class="elevation-1 cursorpointer" :loading="loading_strategies" :key="key" @click:row="detailedviewItem" :items-per-page="10000" >
-                <template v-slot:[`item.name`]="{ item }">
+            <v-data-table density="compact" :headers="strategies_headers" :items="strategies_items" class="elevation-1 cursorpointer" :loading="loading_strategies" :key="key" @click:row="detailedviewItem" :items-per-page="10000" :sort-by="[{ key: 'strategy.name', order: 'asc' }]">
+                <template v-slot:[`item.strategy.name`]="{ item }">
                     <v-tooltip>
                         <template v-slot:activator="{ props }">
                             <div v-bind="props">{{ item.strategy.name }}</div>
@@ -14,28 +14,28 @@
                         <div style="white-space: pre-wrap;">{{ item.strategy.comment }}</div>
                     </v-tooltip>
                 </template>
-                <template #item.dt_from="{item}">
+                <template #item.strategy.dt_from="{item}">
                     <div :data-test="`StrategiesList_Table_Row${item.strategy.id}`" v-html="localtime(item.strategy.dt_from )"></div>
                 </template>        
-                <template #item.dt_to="{item}">
+                <template #item.strategy.dt_to="{item}">
                     <div v-html="localtime(item.strategy.dt_to )"></div>
                 </template>     
                 <template #item.type="{item}">
                     {{ useStore().strategiestypes.get(item.strategy.type).name }}
                 </template>   
-                <template #item.invested="{item}">
+                <template #item.balance.invested="{item}">
                     <div class="text-right" v-html="localcurrency_html(item.balance.invested)"></div>
                 </template>    
-                <template #item.gains_current_net_user="{item}">
+                <template #item.balance.gains_current_net_user="{item}">
                     <div class="text-right" v-html="localcurrency_html(item.balance.gains_current_net_user)"></div>
                 </template>    
-                <template #item.gains_historical_net_user="{item}">
+                <template #item.balance.gains_historical_net_user="{item}">
                     <div class="text-right" v-html="localcurrency_html(item.balance.gains_historical_net_user)"></div>
                 </template>    
-                <template #item.dividends_net_user="{item}">
+                <template #item.balance.dividends_net_user="{item}">
                     <div class="text-right" v-html="localcurrency_html(item.balance.dividends_net_user)"></div>
                 </template>    
-                <template #item.total_net_user="{item}">
+                <template #item.balance.total_net_user="{item}">
                     <div class="text-right" v-html="localcurrency_html(item.balance.total_net_user)"></div>
                 </template>           
 
@@ -138,16 +138,16 @@
 
     const showActive = ref(true)
     const strategies_headers = ref([
-        { title: t('Name'), sortable: true, key: 'name'},
-        { title: t('Date and time from'), sortable: true, key: 'dt_from',  width: "10%"},
-        { title: t('Date and time to'), key: 'dt_to',  width: "10%"},
-        { title: t('Type'), key: 'type',  width: "7%"},
-        { title: t('Invested'), key: 'invested',  width: "7%", align:'end'},
-        { title: t('Current net gains'), key: 'gains_current_net_user',  width: "7%", align:'end'},
-        { title: t('Historical net gains'), key: 'gains_historical_net_user',  width: "7%", align:'end'},
-        { title: t('Net dividends'), key: 'dividends_net_user',  width: "7%", align:'end'},
-        { title: t('Total'), key: 'total_net_user',  width: "7%", align:'end'},
-        { title: t('Actions'), key: 'actions', sortable: false , width: "7%", align:'end'},
+        { title: t('Name'), key: 'strategy.name'},
+        { title: t('Date and time from'), key: 'strategy.dt_from', width: "10%"},
+        { title: t('Date and time to'), key: 'strategy.dt_to', width: "10%"},
+        { title: t('Type'), key: 'type', value: item => store.strategiestypes.get(item.strategy.type)?.name ?? '', width: "7%"},
+        { title: t('Invested'), key: 'balance.invested', width: "7%", align:'end'},
+        { title: t('Current net gains'), key: 'balance.gains_current_net_user', width: "7%", align:'end'},
+        { title: t('Historical net gains'), key: 'balance.gains_historical_net_user', width: "7%", align:'end'},
+        { title: t('Net dividends'), key: 'balance.dividends_net_user', width: "7%", align:'end'},
+        { title: t('Total'), key: 'balance.total_net_user', width: "7%", align:'end'},
+        { title: t('Actions'), key: 'actions', sortable: false, width: "7%", align:'end'},
     ])
     const strategies_items = ref([])
     const menuinline_items = ref([
