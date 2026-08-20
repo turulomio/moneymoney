@@ -87,7 +87,7 @@
     import { ref, computed, watch, onMounted, nextTick} from 'vue'
     import axios from 'axios'
     import { useStore, currency_html } from '@/store'
-    import {  empty_account_operation } from '../empty_objects.js'
+    import {  empty_account_operation, empty_account_transfer } from '../empty_objects.js'
     import AccountsoperationsCU from './AccountsoperationsCU.vue'
     import AccountsTransfer from './AccountsTransfer.vue'
     import DividendsCU from './DividendsCU.vue'
@@ -187,7 +187,24 @@
 
     async function copyAO(item) {
         if (item.is_editable === false) {
-            await myAlert(t("You can't copy this account operation"))
+            if (item.associated_transfer) {
+                axios.get(item.associated_transfer)
+                    .then((response) => {
+                        const original_transfer = response.data
+                        console.log(original_transfer)
+                        const newTransfer = empty_account_transfer()
+                        newTransfer.origin = original_transfer.origin
+                        newTransfer.destiny = original_transfer.destiny
+                        newTransfer.amount = original_transfer.amount
+                        newTransfer.commission = original_transfer.commission
+                        at.value = newTransfer
+                        at_mode.value = "C"
+                        key.value++
+                        dialog_transfer.value = true
+                    })
+            } else {
+                await myAlert(t("You can't copy this account operation"))
+            }
             return
         }
         ao.value = empty_account_operation()
