@@ -50,6 +50,25 @@ export default defineConfig({
     host: "127.0.0.1",
     port: 8006,
   },  
+  preview: {
+    host: "127.0.0.1",
+    port: 8006,
+  },  
+  optimizeDeps: {
+    include: [
+      'axios',
+      'vue',
+      'vue-router',
+      'pinia',
+      'vue-i18n',
+      'echarts',
+      'lodash-es',
+      'moment-timezone',
+      'pdfmake',
+      'vuetify',
+      'webfontloader'
+    ]
+  },  
   test: { // To use with vitest but better with nyc
     globals: true,
     // environment: 'jsdom',
@@ -69,6 +88,6 @@ export default defineConfig({
     }
   },
   build: {
-    sourcemap: "true", // Options: true, 'inline', 'hidden'
+    sourcemap: true, // Options: true, 'inline', 'hidden'
   },
 })

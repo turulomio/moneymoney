@@ -1,9 +1,12 @@
 <template>
     <div>
+        <v-overlay data-test="Home_LoadingOverlay" :model-value="loading_bootstrap" class="align-center justify-center" persistent>
+            <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
+        </v-overlay>
         <h1>{{ t("Wellcome to Money Money") }}</h1>
         <h2>{{ `${useStore().version} (${useStore().versiondate.toISOString().slice(0,10)})` }}</h2>
         <v-img :src="imgUrl" height="200px" contain ></v-img>
-        <div v-if="alerts">
+        <div v-if="alerts" data-test="Home_AlertsContainer">
             <v-alert density="compact" class="mx-15 px-10 mb-2" outlined type="warning" v-if="time_message.length>0"> {{time_message}}</v-alert>   
             <v-alert class="mx-15 px-10 mb-2" type="error" variant="outlined" v-if="alerts.orders_expired.length>0"> 
                 <p>{{f(t("Orders expired in last [0] days :"), [alerts.expired_days])}}</p>
@@ -48,13 +51,14 @@
     import imgUrl from '@/assets/moneymoney.png'
     
     import { f, localtime } from 'vuetify_rules'
-    import { ref, computed } from 'vue'
+    import { ref, computed, watch } from 'vue'
     import { useI18n } from 'vue-i18n'
 
     const { t } = useI18n()
 
     const diff_time = ref(null)
     const alerts = ref(null)
+    const loading_bootstrap = ref(false)
 
     const time_message = computed(() => {
         if (diff_time.value === null) return ""
@@ -62,8 +66,8 @@
     })
 
     function get_alerts(){
-        if (!useStore().logged) return
-        axios.get(`${useStore().apiroot}/alerts/`)
+        if (!useStore().logged) return Promise.resolve()
+        return axios.get(`${useStore().apiroot}/alerts/`)
         .then((response) => {
             alerts.value = response.data
             console.log(alerts.value)
@@ -77,6 +81,27 @@
         });
     }
 
-    get_alerts()
+    watch(() => useStore().logged,  async (logged) => {
+        if (logged) {
+            loading_bootstrap.value = true
+            try {
+                const store = useStore()
+                const promises = [get_alerts()]
+                if (!store.catalogsLoaded) {
+                    promises.push(store.updateAll().then(() => {
+                        store.catalogsLoaded = true
+                    }))
+                }
+                await Promise.all(promises)
+            } catch (error) {
+                console.error("Bootstrap data load failed:", error)
+            } finally {
+                loading_bootstrap.value = false
+            }
+        } else {
+            alerts.value = null
+            diff_time.value = null
+        }
+    }, { immediate: true })
 
 </script>

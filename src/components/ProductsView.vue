@@ -12,6 +12,7 @@
             <v-tab data-test="ProductsView_TabDps" key="dps">{{ $t("DPS")}}</v-tab>
             <v-tab data-test="ProductsView_TabOHCLS" key="ohcls">{{ $t("Daily OHCL")}}</v-tab>
             <v-tab data-test="ProductsView_TabQuotes" key="quotes">{{ $t("Quotes")}}</v-tab>
+            <v-tab data-test="ProductsView_TabSplits" key="splits">{{ $t("Splits")}}</v-tab>
             <v-tab data-test="ProductsView_TabChart" key="chart">{{ $t("Chart")}}</v-tab>
         </v-tabs>
         <v-window v-model="tab">
@@ -78,6 +79,11 @@
                     <TableQuotes :product="product" :items="quotes_month" :key="key" :height="400" @cruded="on_TableQuotes_cruded()"></TableQuotes>
                 </v-card>
             </v-window-item>
+            <v-window-item key="splits">
+                <v-card class="pa-1" outlined>
+                    <TableSplits ref="tablesplits" :product="product" :key="key" :height="400" @cruded="on_TableSplits_cruded()"></TableSplits>
+                </v-card>
+            </v-window-item>
             <v-window-item key="chart"  >     
                 <v-card class="pa-4" outlined >
                     <ChartProduct v-if="showchart" :ohcls="ohcls" :product="product" :key="key"></ChartProduct>
@@ -112,6 +118,13 @@
                 <QuotesMassiveUpdate :product="product" @cruded="on_QuotesMassiveUpdate_cruded()" :key="key"></QuotesMassiveUpdate>
             </v-card>
         </v-dialog>
+
+        <!-- SPLITS CU -->
+        <v-dialog v-model="splits_crud_dialog" width="35%">
+            <v-card class="pa-4">
+                <SplitsCU :split="split" :mode="splits_crud_mode" @cruded="on_SplitsCU_cruded()" :key="key"></SplitsCU>
+            </v-card>
+        </v-dialog>
     </div>
 </template>  
 <script>     
@@ -128,7 +141,9 @@
     import TableEstimationsDPS from './TableEstimationsDPS.vue'
     import TableOHCLS from './TableOHCLS.vue'
     import TableQuotes from './TableQuotes.vue'
-    import {empty_quote,empty_estimation_dps,empty_dps} from '../empty_objects.js'
+    import TableSplits from './TableSplits.vue'
+    import SplitsCU from './SplitsCU.vue'
+    import {empty_quote,empty_estimation_dps,empty_dps,empty_split} from '../empty_objects.js'
     import {f} from 'vuetify_rules'
     import DpsCRUD from './DpsCRUD.vue'
     import { percentage_html } from '@/functions'
@@ -145,7 +160,9 @@
             TableQuotes,
             TableOHCLS,
             DpsCRUD,
-            MyMonthPicker},
+            MyMonthPicker,
+            TableSplits,
+            SplitsCU},
 
         props: {
             product: { //Object
@@ -208,6 +225,21 @@
                                     this.dps.products=this.product.url
                                     this.dps_crud_mode="C"
                                     this.dps_crud_dialog=true
+                                }.bind(this),
+                                icon: "mdi-plus"},
+                        ]
+                    },
+                    {
+                        subheader:this.$t('Split options'),
+                        children: [
+                            {
+                                name:this.$t('Add a split'),
+                                code: function(){
+                                    this.split=this.empty_split()
+                                    this.split.products=this.product.url
+                                    this.splits_crud_mode="C"
+                                    this.key=this.key+1
+                                    this.splits_crud_dialog=true
                                 }.bind(this),
                                 icon: "mdi-plus"},
                         ]
@@ -275,6 +307,11 @@
                 dps_crud_mode: null,
                 dps: null,
 
+                // Splits CU
+                splits_crud_dialog: false,
+                splits_crud_mode: null,
+                split: null,
+
                 //QUOTES MASSIVE UPDATE
                 dialog_quotes_massive_update:false}
         },
@@ -284,7 +321,7 @@
             },
             tab(){
                 this.showchart=false
-                if (this.tab==6) setTimeout(() => {this.showchart=true }, 300)
+                if (this.tab==7) setTimeout(() => {this.showchart=true }, 300)
             }},
         methods: {
             useStore,
@@ -292,6 +329,7 @@
             empty_dps,
             empty_quote,
             empty_estimation_dps,
+            empty_split,
 
             percentage_html,
             currency_html,
@@ -345,6 +383,16 @@
             on_QuotesCU_cruded(){
                 this.dialog_quotescu=false
                 this.on_TableQuotes_cruded()
+            },
+            on_TableSplits_cruded(){
+                this.make_all_axios()
+                if (this.$refs.tablesplits) {
+                    this.$refs.tablesplits.refresh()
+                }
+            },
+            on_SplitsCU_cruded(){
+                this.splits_crud_dialog=false
+                this.on_TableSplits_cruded()
             }
         },
 
