@@ -82,7 +82,7 @@
     import imgReinvest from '@/assets/reinvest.png'
     import { useStore, localcurrency_html } from '@/store'
     import axios from 'axios'
-    import { localtime, my_round } from 'vuetify_rules'
+    import { localtime, round } from 'vuetify_rules'
     import {empty_order} from '../empty_objects.js'
     import OrdersCU from './OrdersCU.vue'
     import InvestmentsView from './InvestmentsView.vue'
@@ -144,7 +144,7 @@
         methods:{
             useStore,
             localtime,
-            my_round,
+            round,
             empty_order,
 
 
@@ -168,13 +168,13 @@
             },
             orderAtPercentage(item){
                 this.order=this.empty_order()
-                this.order.price=this.my_round(item.data.last_price*(1+this.limit/100), item.decimals)
+                this.order.price=this.round(item.data.last_price*(1+this.limit/100), item.decimals)
                 this.order.investments=this.hyperlinked_url("investments",item.data.investments_id)
                 this.refreshKey=this.refreshKey+1
                 this.dialog_cu=true
             },
             reinvestAtPercentage(item){
-                this.reinvest_price=this.my_round(item.data.last_price*(1+this.limit/100), item.decimals)
+                this.reinvest_price=this.round(item.data.last_price*(1+this.limit/100), item.decimals)
                 this.reinvest_shares=0
                 this.ios_id=item
                 this.refreshKey=this.refreshKey+1

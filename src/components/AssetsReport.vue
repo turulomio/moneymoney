@@ -30,7 +30,7 @@
     import { useStore, getMapObjectById, localcurrency_html, localcurrency_string } from '@/store'
     import ChartEvolutionAssets from './ChartEvolutionAssets.vue'
     import ChartPie from './ChartPie.vue'
-    import { my_round, f, localtime } from 'vuetify_rules'
+    import { round, f, localtime } from 'vuetify_rules'
     import {sumBy, orderBy} from "lodash-es"
     import pdfMake from "pdfmake/build/pdfmake";
     import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -64,9 +64,9 @@
                 var products= this.results.pies.by_product
                 var adapted
                 if (this.method=="Current"){
-                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.round(el.balance, 2)}))
                 } else {//Invested
-                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.invested,2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.round(el.invested,2)}))
                 }
                 adapted=adapted.filter(o => o.value!=0)
                 return adapted
@@ -75,9 +75,9 @@
                 var products= this.results.pies.by_pci
                 var adapted
                 if (this.method=="Current"){
-                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.round(el.balance, 2)}))
                 } else {//Invested
-                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.invested,2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.round(el.invested,2)}))
                 }
                 adapted=adapted.filter(o => o.value!=0)
                 return adapted
@@ -87,9 +87,9 @@
                 var adapted
 
                 if (this.method=="Current"){
-                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.round(el.balance, 2)}))
                 } else {//Invested
-                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.invested,2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.round(el.invested,2)}))
                 }
                 adapted=adapted.filter(o => o.value!=0)
                 return adapted
@@ -98,9 +98,9 @@
                 var products= this.results.pies.by_producttype
                 var adapted
                 if (this.method=="Current"){
-                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.round(el.balance, 2)}))
                 } else {//Invested
-                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.invested,2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.round(el.invested,2)}))
                 }
                 adapted=adapted.filter(o => o.value!=0)
                 return adapted
@@ -109,9 +109,9 @@
                 var products= this.results.pies.by_leverage
                 var adapted
                 if (this.method=="Current"){
-                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.balance, 2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.round(el.balance, 2)}))
                 } else {//Invested
-                    adapted= products.map(el => ({name: el.name, value: this.my_round(el.invested,2)}))
+                    adapted= products.map(el => ({name: el.name, value: this.round(el.invested,2)}))
                 }
                 adapted=adapted.filter(o => o.value!=0)
                 return adapted
@@ -119,7 +119,7 @@
         methods:{
             useStore,
             localtime,
-            my_round,
+            round,
             f,
             orderBy,
             sumBy,

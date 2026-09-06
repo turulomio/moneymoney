@@ -82,7 +82,7 @@
     import DisplayValues from './DisplayValues.vue'
     import MyDatePicker from './MyDatePicker.vue'
     import { empty_products_ranges, empty_ios } from '../empty_objects.js'
-    import { my_round, RulesSelection, RulesFloat, f } from 'vuetify_rules'
+    import { round, RulesSelection, RulesFloat, f } from 'vuetify_rules'
     import { hyperlinked_url } from '@/functions.js'
     import { useI18n } from 'vue-i18n'
     import { useDialogs } from '@/composables/useDialogs'
@@ -234,7 +234,7 @@
         var p = {
             selling_expiration: selling_expiration.value,
             investments: s,
-            selling_price: my_round(price_val, product.value.decimals)}
+            selling_price: round(price_val, product.value.decimals)}
         axios.post(`${useStore().apiroot}/investments/changesellingprice/`, p)
             .then((response) => {
                 response.data.forEach(o => {

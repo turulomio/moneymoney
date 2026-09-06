@@ -75,7 +75,7 @@
     import { useI18n } from 'vue-i18n'
     import MyMenuInline from './MyMenuInline.vue'
     import {empty_order, empty_ios,empty_ios_simulation_operation,empty_investments_chart,empty_investments_chart_limit_line} from '../empty_objects.js'
-    import { my_round, RulesSelection,RulesFloat,RulesFloatGEZ,parseNumber,f } from 'vuetify_rules'
+    import { round, RulesSelection,RulesFloat,RulesFloatGEZ,parseNumber,f } from 'vuetify_rules'
     import ChartInvestments from './ChartInvestments.vue'
     import OrdersCU from './OrdersCU.vue'
     import TableInvestmentOperations from './TableInvestmentOperations.vue'
@@ -208,7 +208,7 @@
                                 break
                             }
                         }
-                        newshares.value=-my_round(resultado,6)
+                        newshares.value=-round(resultado,6)
                     },
                     icon: "mdi-book-plus"},
             ]

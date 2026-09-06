@@ -10,7 +10,7 @@
                     <v-icon small v-if="item.supported" >mdi-check-outline</v-icon>
                 </template>     
                 <template #item.quote="{item}">
-                    {{ my_round(item.quote,6) }}
+                    {{ round(item.quote,6) }}
                 </template>       
                 <template #item.actions="{item}">
                     <v-icon data-test="Currencies_ButtonAdd" v-if="item.direct_supported" small class="mr-2" @click="addItem(item)">mdi-plus</v-icon>
@@ -32,7 +32,7 @@
 <script>
     import axios from 'axios'
     import { useStore } from '@/store'
-    import { localtime, my_round } from 'vuetify_rules'
+    import { localtime, round } from 'vuetify_rules'
     import QuotesCU from './QuotesCU.vue'
     import {empty_quote} from '../empty_objects.js'
     
@@ -59,7 +59,7 @@
         methods: {
             useStore,
             localtime,
-            my_round,
+            round,
 
             empty_quote,
 
