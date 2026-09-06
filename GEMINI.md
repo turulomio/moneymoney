@@ -9,6 +9,14 @@
   1. Pass `import.meta.env.BASE_URL` directly as the base argument to `createWebHistory(import.meta.env.BASE_URL)`.
   2. Simplify all route paths in the routes array to be relative (e.g. `/home/`, `/about/`, `/`). Vue Router now automatically prepends the base URL prefix for routing and correctly handles base prefix stripping.
 
+### Migrated `round` from `vuetify_rules` to `lodash-es`
+
+- **Change:** Replaced all imports of `round` from `vuetify_rules` across the project with `round` from `lodash-es` (`Currencies.vue`, `CurrencyFactor.vue`, `ReportsInvestmentsClasses.vue`, `InvestmentsChangeSellingPrice.vue`, `ReportsInvestmentsLastOperation.vue`, `AssetsReport.vue`, `ProductsComparation.vue`, `InvestmentsoperationsReinvest.vue`).
+
+### Account Balance Display in AccountsView when Empty
+
+- **Change:** In [src/components/AccountsView.vue](file:///home/keko/Proyectos/moneymoney/src/components/AccountsView.vue), when `TableAccountOperations` has no operations (`items_ao.length === 0`), `TableAccountOperations` is hidden and a request to `/api/accounts/${account.id}/balance/?year=${ym.year}&month=${ym.month}` is performed to display a centered label with the balance formatted via `currency_html`.
+
 ---
 
 ## Workspace & Testing Notes

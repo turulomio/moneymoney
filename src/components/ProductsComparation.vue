@@ -106,7 +106,8 @@
     import ProductsView from './ProductsView.vue'
     import QuotesCU from './QuotesCU.vue'
     import DisplayValues from './DisplayValues.vue'
-    import { localtime, my_round,RulesFloat,RulesInteger,f } from 'vuetify_rules'
+    import { localtime, RulesFloat, RulesInteger, f } from 'vuetify_rules'
+    import { round } from 'lodash-es'
     import { percentage_html } from '@/functions.js'
     export default {
         components:{
@@ -239,7 +240,7 @@
 
             currency_html,
             percentage_html,
-            my_round,
+            round,
             RulesFloat,
             RulesInteger,
             f,
@@ -282,8 +283,8 @@
                 this.dbdata_filtered.forEach((o,index) => {
                     this.cspp.prices.push([this.dbdata[index].price_better,this.dbdata[index].price_worse])
                 })
-                this.quote_better_from=this.my_round(this.dbdata[this.dbdata.length-1].price_better*0.99,this.product_a.decimals)
-                this.quote_better_to=this.my_round(this.quote_better_from*1.01,3, this.product_a.decimals)
+                this.quote_better_from=this.round(this.dbdata[this.dbdata.length-1].price_better*0.99,this.product_a.decimals)
+                this.quote_better_to=this.round(this.quote_better_from*1.01,3, this.product_a.decimals)
                 this.compare_by_quote()
                 this.loading=false
                 this.key=this.key+1

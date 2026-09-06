@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import { capitalize, round } from 'lodash-es'
 import { sortObjectsArray, getArrayFromMap } from './functions.js'
-import { capitalizeFirstLetter, my_round } from 'vuetify_rules'
 import { useDialogStore } from './dialogStore.js'
 import i18n from './i18n'
 
@@ -163,7 +163,7 @@ export const useStore = defineStore('global', {
           rounding: 0, // Intl no proporciona directamente una propiedad 'rounding' para las monedas
           symbol: symbol,
           symbol_native: symbol, // Intl no proporciona un 'symbol_native' distinto fácilmente, se usa 'symbol'
-          fullname: `${capitalizeFirstLetter(name)} (${code} - ${symbol})`
+          fullname: `${capitalize(name)} (${code} - ${symbol})`
         });
       });
       this.currencies = currencies_list
@@ -407,7 +407,7 @@ export function currency_generic_string(num, currency, locale, decimals = 2) {
   if (num == null || isNaN(num)) {
     return `- - - ${getCurrencyPropertyByCode(currency, "symbol_native")}`
   } else {
-    return `${my_round(num, decimals).toLocaleString(locale, { minimumFractionDigits: decimals })} ${getCurrencyPropertyByCode(currency, "symbol_native")}`
+    return `${round(num, decimals).toLocaleString(locale, { minimumFractionDigits: decimals })} ${getCurrencyPropertyByCode(currency, "symbol_native")}`
   }
 }
 export function currency_generic_html(num, currency, locale, decimals = 2) {
