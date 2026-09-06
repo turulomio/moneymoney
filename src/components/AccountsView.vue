@@ -14,7 +14,10 @@
             <v-window-item key="ao">     
                 <v-card class="d-flex justify-center flex-column" outlined>
                     <MyMonthPicker v-model="ym" />
-                    <TableAccountOperations ref="tao" showtotal showbalance :items="items_ao" :total_currency="account.currency" height="400" @cruded="on_TableAccountOperations_cruded()" />
+                    <TableAccountOperations v-if="items_ao.length > 0" ref="tao" showtotal showbalance :items="items_ao" :total_currency="account.currency" height="400" @cruded="on_TableAccountOperations_cruded()" />
+                    <div v-else-if="balance !== null" data-test="AccountsView_Balance" class="text-center pa-6 text-h6 font-weight-medium">
+                        {{ $t("Balance") }}: <span v-html="currency_html(balance, account.currency)"></span>
+                    </div>
                 </v-card>
             </v-window-item>
             <v-window-item key="cc">
@@ -120,6 +123,7 @@
                 tab:0,
                 key:0,
                 items_ao: [],           
+                balance: null,
                 items: [
                     { subheader:this.$t('Account orders'), children: [
                             { 
@@ -219,12 +223,21 @@
                 this.dialog_ao=true
             },
             refreshTable(){
+                this.balance = null
                 axios.get(`${this.useStore().apiroot}/api/accountsoperations/?account=${this.account.url}&year=${this.ym.year}&month=${this.ym.month}`)                
                 .then((response) => {
                     this.items_ao = response.data;
-                    this.$nextTick(() => {
-                        if (this.$refs.tao) this.$refs.tao.gotoLastRow()
-                    });
+                    if (this.items_ao.length === 0) {
+                        axios.get(`${this.useStore().apiroot}/api/accounts/${this.account.id}/balance/?year=${this.ym.year}&month=${this.ym.month}`)
+                        .then((balanceResponse) => {
+                            const data = balanceResponse.data;
+                            this.balance = data.balance_account !== undefined ? data.balance_account : (data.balance !== undefined ? data.balance : data);
+                        })
+                    } else {
+                        this.$nextTick(() => {
+                            if (this.$refs.tao) this.$refs.tao.gotoLastRow()
+                        });
+                    }
                 }) 
             },
             refreshTableCC(){
