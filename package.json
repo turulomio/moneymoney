@@ -29,7 +29,7 @@
     "vue-i18n": "^11.4.10",
     "vue-router": "^5.3.1",
     "vuetify": "^4.2.0",
-    "vuetify_rules": "^1.0.0",
+    "vuetify_rules": "^0.7.0",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
