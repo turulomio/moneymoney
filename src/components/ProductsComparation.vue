@@ -106,7 +106,8 @@
     import ProductsView from './ProductsView.vue'
     import QuotesCU from './QuotesCU.vue'
     import DisplayValues from './DisplayValues.vue'
-    import { localtime, round,RulesFloat,RulesInteger,f } from 'vuetify_rules'
+    import { localtime, RulesFloat, RulesInteger, f } from 'vuetify_rules'
+    import { round } from 'lodash-es'
     import { percentage_html } from '@/functions.js'
     export default {
         components:{

@@ -32,7 +32,8 @@
 <script>
     import axios from 'axios'
     import { useStore } from '@/store'
-    import { localtime, round } from 'vuetify_rules'
+    import { localtime } from 'vuetify_rules'
+    import { round } from 'lodash-es'
     import QuotesCU from './QuotesCU.vue'
     import {empty_quote} from '../empty_objects.js'
     

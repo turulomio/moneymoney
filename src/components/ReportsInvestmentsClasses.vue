@@ -35,7 +35,7 @@
     import axios from 'axios'
     import { useStore } from '@/store'
     import ChartPie from './ChartPie.vue'
-    import { round } from 'vuetify_rules'
+    import { round } from 'lodash-es'
     
     export default {
         components:{

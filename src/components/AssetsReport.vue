@@ -30,8 +30,8 @@
     import { useStore, getMapObjectById, localcurrency_html, localcurrency_string } from '@/store'
     import ChartEvolutionAssets from './ChartEvolutionAssets.vue'
     import ChartPie from './ChartPie.vue'
-    import { round, f, localtime } from 'vuetify_rules'
-    import {sumBy, orderBy} from "lodash-es"
+    import { f, localtime } from 'vuetify_rules'
+    import { sumBy, orderBy, round } from "lodash-es"
     import pdfMake from "pdfmake/build/pdfmake";
     import pdfFonts from "pdfmake/build/vfs_fonts";
     pdfMake.addVirtualFileSystem(pdfFonts);

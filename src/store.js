@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import { capitalize } from 'lodash-es'
+import { capitalize, round } from 'lodash-es'
 import { sortObjectsArray, getArrayFromMap } from './functions.js'
-import { round } from 'vuetify_rules'
 import { useDialogStore } from './dialogStore.js'
 import i18n from './i18n'
 

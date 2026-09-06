@@ -25,7 +25,7 @@
     </div>
 </template>
 <script>
-    import { round } from 'vuetify_rules'
+    import { round } from 'lodash-es'
     export default {    
         props: {
             modelValue: {
