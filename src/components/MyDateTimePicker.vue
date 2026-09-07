@@ -38,9 +38,8 @@
     </div>
 </template>
 <script>
-    import { localtime } from 'vuetify_rules'
+    import { localtime, RulesInteger } from 'vuetify_rules'
     import moment from 'moment'
-    import { RulesInteger } from 'vuetify_rules/src/rules'
     export default {    
         name: "MyDateTimePicker",
         props: {
