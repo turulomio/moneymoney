@@ -25,7 +25,7 @@
     import MyDateTimePicker from './MyDateTimePicker.vue'
     import MyMenuInline from './MyMenuInline.vue'
     
-    import { ref, computed } from 'vue';
+    import { ref, computed, watch } from 'vue';
     import { useI18n } from 'vue-i18n'
     import { useDialogs } from '@/composables/useDialogs'
 
@@ -48,6 +48,10 @@
     const form_valid = ref(false);
     const new_quote = ref(Object.assign({}, props.quote));
     const form = ref(null); // Reference for the v-form component
+
+    watch(() => props.quote, (val) => {
+        new_quote.value = Object.assign({}, val);
+    }, { deep: true });
 
     const product_object = computed(() => {
         return store.products.get(new_quote.value.products);

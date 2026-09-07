@@ -38,17 +38,46 @@
                     <li v-for="(it,i) in alerts.investments_transfers_unfinished" :key="i">    - {{ f(t(`Investments transfer started at '[0]' from '[1]'`), [localtime(it.datetime_origin), useStore().investments.get(it.investments_origin).fullname])}}.  </li> 
                 </ul>
             </v-alert>
-            <v-alert class="mx-15 px-10 mb-2" type="success" variant="outlined" v-if="(alerts.banks_inactive_with_balance.length + alerts.investments_inactive_with_balance.length + alerts.orders_expired.length + alerts.accounts_inactive_with_balance.length + alerts.investments_transfers_unfinished.length)==0"> 
+            <v-alert class="mx-15 px-10 mb-2" type="error" variant="outlined" v-if="alerts.products_without_quotes_before_operations && alerts.products_without_quotes_before_operations.length>0"> 
+                <p>{{t("Products without quotes before operations:")}}</p>
+                <ul>    
+                    <li v-for="(product_item,i) in alerts.products_without_quotes_before_operations" :key="i" class="d-flex align-center my-1">
+                        <span class="mr-2">-</span>
+                        <v-icon v-if="product_item.flag" :class="'mr-2 fi fib fi-'+product_item.flag" small :title="getCountryNameByCode(product_item.flag)"></v-icon>
+                        <a href="#" class="cursorpointer font-weight-bold mr-2" :class="product_item.obsolete ? 'text-decoration-line-through' : ''" @click.prevent="openProductView(product_item)">{{ product_item.fullname || product_item.name }}</a>
+                        <v-btn icon="mdi-plus" density="compact" size="small" variant="text" color="primary" :title="t('Add a quote')" @click.stop="openAddQuote(product_item)"></v-btn>
+                    </li> 
+                </ul>
+            </v-alert>
+            <v-alert class="mx-15 px-10 mb-2" type="success" variant="outlined" v-if="(alerts.banks_inactive_with_balance.length + alerts.investments_inactive_with_balance.length + alerts.orders_expired.length + alerts.accounts_inactive_with_balance.length + alerts.investments_transfers_unfinished.length + (alerts.products_without_quotes_before_operations ? alerts.products_without_quotes_before_operations.length : 0))==0"> 
                 <p>{{t("You haven't alerts, everything is fine")}}</p>
             </v-alert>
         </div>
+
+        <!-- DIALOG PRODUCT VIEW -->
+        <v-dialog v-model="dialog_product_view" width="90%">
+            <v-card class="pa-4" v-if="selected_product">
+                <ProductsView :product="selected_product" :key="product_view_key" />
+            </v-card>
+        </v-dialog>
+
+        <!-- DIALOG QUOTE CU -->
+        <v-dialog v-model="dialog_quotes_cu" width="65%">
+            <v-card class="pa-4" v-if="new_quote">
+                <QuotesCU :quote="new_quote" mode="C" :key="quotes_cu_key" @cruded="on_quote_cruded" />
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
 <script setup>
     import axios from 'axios'
-    import { useStore, currency_string } from '@/store'
+    import { useStore, currency_string, getCountryNameByCode } from '@/store'
     import imgUrl from '@/assets/moneymoney.png'
+    import ProductsView from './ProductsView.vue'
+    import QuotesCU from './QuotesCU.vue'
+    import { empty_quote } from '../empty_objects.js'
+    import moment from 'moment'
     
     import { f, localtime } from 'vuetify_rules'
     import { ref, computed, watch } from 'vue'
@@ -59,6 +88,33 @@
     const diff_time = ref(null)
     const alerts = ref(null)
     const loading_bootstrap = ref(false)
+    const dialog_product_view = ref(false)
+    const selected_product = ref(null)
+    const product_view_key = ref(0)
+    const dialog_quotes_cu = ref(false)
+    const new_quote = ref(null)
+    const quotes_cu_key = ref(0)
+
+    function openProductView(product) {
+        selected_product.value = product
+        product_view_key.value++
+        dialog_product_view.value = true
+    }
+
+    function openAddQuote(product) {
+        const q = empty_quote()
+        q.products = product.url
+        const base_time = product.datetime || product.operation_datetime || alerts.value?.server_time || new Date().toISOString()
+        q.datetime = moment(base_time).subtract(1, 'minute').toISOString()
+        new_quote.value = q
+        quotes_cu_key.value++
+        dialog_quotes_cu.value = true
+    }
+
+    function on_quote_cruded() {
+        dialog_quotes_cu.value = false
+        get_alerts()
+    }
 
     const time_message = computed(() => {
         if (diff_time.value === null) return ""
