@@ -66,6 +66,8 @@ export const useStore = defineStore('global', {
       } else {
         this.logged = false
         this.catalogsLoaded = false
+        this.catalog_manager = false
+        this.profile = null
       }
     },
     updateAccounts() {
