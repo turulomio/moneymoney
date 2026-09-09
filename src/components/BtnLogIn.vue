@@ -27,7 +27,7 @@ import { RulesString } from "vuetify_rules"
 export default {
     props: {
         nextRoute: {
-            type: String,
+            type: [String, Object],
             default: "home"
         }
     },
@@ -59,7 +59,15 @@ export default {
                 this.loading=false
                 console.log(`Login and catalogs load took ${new Date()-start} ms`)
                 this.dialog=false
-                this.$router.push({ name: this.nextRoute })
+                if (typeof this.nextRoute === 'string') {
+                    if (this.nextRoute.startsWith('/')) {
+                        this.$router.push(this.nextRoute)
+                    } else {
+                        this.$router.push({ name: this.nextRoute })
+                    }
+                } else {
+                    this.$router.push(this.nextRoute)
+                }
             } catch (error) {
                 console.error("Login failed with error:", error);
                 setTimeout(() => { //Delay of 2 seconds

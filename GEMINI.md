@@ -23,6 +23,14 @@
 - **Products without quotes alert:** Handled the updated backend payload for `alerts.products_without_quotes_before_operations` returning `{ product_url, datetime }` (or first investment operation datetime). The component looks up the product from `store.products` for flag, obsolete style, and fullname display, and configures the `+` button to open [src/components/QuotesCU.vue](file:///home/worky/Proyectos/moneymoney/src/components/QuotesCU.vue) with the datetime set to 1 minute before the first operation datetime.
 - **Independent time synchronization:** Separated the time difference calculation into a dedicated, fast independent request (`check_time_diff()`) with RTT adjustment, avoiding false-positive time skew warnings caused by the computation duration of the heavy `/alerts/` endpoint.
 
+### Return to Home on Lack of Credentials / Disconnection / URL Navigation
+
+- **Change:** Added a global `router.beforeEach` navigation guard in [src/routes.js](file:///home/worky/Proyectos/moneymoney/src/routes.js). When a user is not logged in (`!store.logged`) and attempts to access any non-public route (e.g. on F5 refresh, manual URL editing, or unauthenticated navigation), the router redirects the navigation directly to `/home/`.
+
+### Configurable Post-Login and Post-Logout Redirects
+
+- **Change:** Added support for `nextRoute` (`String` | `Object`, defaults to `"home"`) prop in both [src/components/BtnLogIn.vue](file:///home/worky/Proyectos/moneymoney/src/components/BtnLogIn.vue) and [src/components/BtnLogOut.vue](file:///home/worky/Proyectos/moneymoney/src/components/BtnLogOut.vue), allowing explicit configuration of destination route name (e.g. `"home"`), route path (e.g. `"/home/"` or `"/about/"`), or route object after login and logout actions.
+
 ---
 
 ## Workspace & Testing Notes

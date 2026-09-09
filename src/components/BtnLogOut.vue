@@ -10,7 +10,12 @@
     import axios from 'axios'
     import { useStore } from "@/store"
     export default {
-
+        props: {
+            nextRoute: {
+                type: [String, Object],
+                default: "home"
+            }
+        },
         methods: {
             useStore,
             logout(){
@@ -18,7 +23,15 @@
                 .then(() => {
                     this.useStore().token=null;
                     this.useStore().logged=false;
-                    this.$router.push({name:'home'})
+                    if (typeof this.nextRoute === 'string') {
+                        if (this.nextRoute.startsWith('/')) {
+                            this.$router.push(this.nextRoute)
+                        } else {
+                            this.$router.push({ name: this.nextRoute })
+                        }
+                    } else {
+                        this.$router.push(this.nextRoute)
+                    }
                 });
             }
         }}
