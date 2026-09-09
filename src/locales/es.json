@@ -870,5 +870,8 @@
   "Amount origin": "Cantidad origen",
   "Amount destiny": "Cantidad destino",
   "Value": "Valor",
-  "Products without quotes before operations:": "Productos sin cotizaciones antes de operaciones:"
+  "Products without quotes before operations:": "Productos sin cotizaciones antes de operaciones:",
+  "Products without quotes before investments / currency exchange operations:": "Productos sin cotizaciones antes de operaciones de inversión / cambio de divisas:",
+  "User warnings": "Avisos al usuario",
+  "Loading catalogs...": "Cargando catálogos..."
 }
