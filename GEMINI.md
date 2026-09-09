@@ -17,6 +17,12 @@
 
 - **Change:** In [src/components/AccountsView.vue](file:///home/keko/Proyectos/moneymoney/src/components/AccountsView.vue), when `TableAccountOperations` has no operations (`items_ao.length === 0`), `TableAccountOperations` is hidden and a request to `/api/accounts/${account.id}/balance/?year=${ym.year}&month=${ym.month}` is performed to display a centered label with the balance formatted via `currency_html`.
 
+### Encapsulated Alerts in Alerts.vue
+
+- **Change:** Extracted the entire alerts logic, display banners, time synchronization checks, and related modals (`ProductsView` dialog and `QuotesCU` dialog) from [src/components/Home.vue](file:///home/worky/Proyectos/moneymoney/src/components/Home.vue) into a reusable dedicated component [src/components/Alerts.vue](file:///home/worky/Proyectos/moneymoney/src/components/Alerts.vue). [src/components/Home.vue](file:///home/worky/Proyectos/moneymoney/src/components/Home.vue) now embeds `<Alerts />`.
+- **Products without quotes alert:** Handled the updated backend payload for `alerts.products_without_quotes_before_operations` returning `{ product_url, datetime }` (or first investment operation datetime). The component looks up the product from `store.products` for flag, obsolete style, and fullname display, and configures the `+` button to open [src/components/QuotesCU.vue](file:///home/worky/Proyectos/moneymoney/src/components/QuotesCU.vue) with the datetime set to 1 minute before the first operation datetime.
+- **Independent time synchronization:** Separated the time difference calculation into a dedicated, fast independent request (`check_time_diff()`) with RTT adjustment, avoiding false-positive time skew warnings caused by the computation duration of the heavy `/alerts/` endpoint.
+
 ---
 
 ## Workspace & Testing Notes
@@ -26,5 +32,6 @@
 - **Unit Tests:** Located in `tests/vitest/`. Run using `npm run vitest`.
 - **Testing preference:** The user prefers to run the long test suites themselves. Do not run long test suites locally.
 - **Documentation Rule:** Whenever coding or implementing new features, always remember to update the project documentation (such as `README.md`, `GEMINI.md`, and inline code documentation/comments) detailing the features and changes.
+- **`<script setup>` Documentation Rule:** Always document `<script setup>` code in Vue components using standard **Javadoc / JSDoc** format (`/** ... */`), thoroughly documenting reactive state (`ref`, `computed` with `@type`), functions (`@param`, `@returns`), props, emits, exposed APIs, watchers, and lifecycle hooks.
 
 

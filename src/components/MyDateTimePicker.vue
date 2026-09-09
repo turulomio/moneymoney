@@ -71,6 +71,11 @@
                 microseconds:null}
         },
         watch: {
+            modelValue (newValue) {
+                this.new_modelValue = newValue
+                this.string2widget(newValue)
+                this.set_representation()
+            },
             new_modelValue (newValue) { //Null or iso string
                 this.set_representation()
                 this.$emit('update:modelValue', newValue)
