@@ -17,9 +17,9 @@
 
 - **Change:** In [src/components/AccountsView.vue](file:///home/keko/Proyectos/moneymoney/src/components/AccountsView.vue), when `TableAccountOperations` has no operations (`items_ao.length === 0`), `TableAccountOperations` is hidden and a request to `/api/accounts/${account.id}/balance/?year=${ym.year}&month=${ym.month}` is performed to display a centered label with the balance formatted via `currency_html`.
 
-### Products Without Quotes Before Operations Alert in Home.vue
+### Encapsulated Alerts in Alerts.vue
 
-- **Change:** Added alert in [src/components/Home.vue](file:///home/worky/Proyectos/moneymoney/src/components/Home.vue) to display `alerts.products_without_quotes_before_operations`. Displays each product with its flag icon, strikethrough if obsolete, and a clickable link opening `ProductsView` in a modal dialog. Alongside each product, a `+` icon button is provided to open `QuotesCU` pre-filling the quote date and time with 1 minute before the needed operation datetime (`product.datetime || product.operation_datetime` or alert server time), allowing immediate creation of the missing quote. Also included it in the empty alerts check for the success banner and added translation in [src/locales/es.json](file:///home/worky/Proyectos/moneymoney/src/locales/es.json).
+- **Change:** Extracted the entire alerts logic, display banners, time synchronization checks, and related modals (`ProductsView` dialog and `QuotesCU` dialog) from [src/components/Home.vue](file:///home/worky/Proyectos/moneymoney/src/components/Home.vue) into a reusable dedicated component [src/components/Alerts.vue](file:///home/worky/Proyectos/moneymoney/src/components/Alerts.vue). [src/components/Home.vue](file:///home/worky/Proyectos/moneymoney/src/components/Home.vue) now embeds `<Alerts />`.
 
 ---
 
