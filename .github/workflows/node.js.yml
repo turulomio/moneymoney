@@ -14,63 +14,38 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:16.4
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: github_actions
-        ports:
-          - 5432:5432
-        # needed because the postgres container does not provide a healthcheck
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
     strategy:
       matrix:
-        python-version: ["3.12"] # Specify Python version explicitly
-        node-version: ["20.x"] # Specify Node.js version explicitly
+        node-version: ["20.x"]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install PL/Python in the PostgreSQL container (Old migrations)
+    - name: Run E2E django_moneymoney test server from Docker
       run: |
-        # Version can change see in docker page wich is postgres:latest
-        docker exec ${{ job.services.postgres.id }} bash -c "apt-get update && apt-get install -y postgresql-plpython3-16"
+        docker run -d \
+          --name django_test_server \
+          -p 8004:8000 \
+          -e E2E_TESTING=1 \
+          turulomio/django_moneymoney:e2e
 
-
-    - name: Create PL/Python Extension
+    - name: Wait for Django test server
       run: |
-        docker exec ${{ job.services.postgres.id }} bash -c "PGPASSWORD=postgres psql -h localhost -U postgres -c 'CREATE EXTENSION plpython3u;'"
-        docker exec ${{ job.services.postgres.id }} bash -c "PGPASSWORD=postgres createdb -h localhost -U postgres xulpymoney"
-
-
-    - name: Wait for PostgreSQL
-      run: |
-        until PGPASSWORD=postgres pg_isready -h localhost -p 5432 -U postgres; do
-          echo "Waiting for PostgreSQL to become ready..."
+        for i in $(seq 1 30); do
+          if curl -s http://127.0.0.1:${{ env.DJANGO_TEST_SERVER_PORT }}/ > /dev/null 2>&1; then
+            echo "Django test server is ready and responding!"
+            exit 0
+          fi
+          echo "Waiting for Django test server... ($i/30)"
           sleep 2
         done
+        echo "Django test server failed to start. Logs:"
+        docker logs django_test_server
+        exit 1
 
-    - name: Clone django_moneymoney backend
+    - name: Load Django E2E fixtures
       run: |
-        # Clone the backend repository into a specific directory
-        git clone https://github.com/turulomio/django_moneymoney
-        cd django_moneymoney
-        python -m venv .python
-        .python/bin/pip install .
-
-    - name: Run E2E django_moneymoney test server
-      # Set working directory to the cloned backend repo
-      working-directory: ./django_moneymoney
-      run: |
-        E2E_TESTING=1 .python/bin/python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport ${{ env.DJANGO_TEST_SERVER_PORT }} &
+        docker exec django_test_server python manage.py loaddata moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
@@ -79,7 +54,7 @@ jobs:
         cache: 'npm'
 
     - name: Cache Node.js modules
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: node_modules
         key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
@@ -92,7 +67,13 @@ jobs:
         npm run build
 
     - name: Install Playwright Browsers
-      run: npx playwright install
+      run: npx playwright install --with-deps
+
     - name: Moneymoney e2e test
       run: |
         npm run playwright_console
+
+    - name: Dump Django container logs on failure
+      if: failure()
+      run: |
+        docker logs django_test_server

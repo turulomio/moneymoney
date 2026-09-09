@@ -35,6 +35,16 @@
   - `BtnLogOut`: accepts `label`, `logoutUrl`, `token`, `nextRoute`, and optional `customLogout`; emits `@logged-out` and `@error(error)`.
 - **Integration:** [src/App.vue](file:///home/worky/Proyectos/moneymoney/src/App.vue) passes `login-url`, `logout-url`, `token`, and handles `@logged-in` / `@logged-out` by synchronizing with the global store (`store.setToken`).
 
+### CI / GitHub Actions Optimization with Backend Docker Image
+
+- **Change:** Updated [.github/workflows/node.js.yml](file:///home/worky/Proyectos/moneymoney/.github/workflows/node.js.yml) to run the Django E2E testserver directly using the standalone Docker image `turulomio/django_moneymoney:e2e`. This eliminates the need for the PostgreSQL service container, PL/Python extension installation, DB initialization, and python setup, reducing workflow complexity and test execution time.
+
+### Playwright E2E Authentication Synchronization Fix
+
+- **Problem:** When running Playwright tests, the login fixture clicked `BtnLogIn_cmd` and immediately evaluated `expect(Home_LoadingOverlay).toBeHidden()`. Because `Home_LoadingOverlay` was already hidden prior to login request resolution, this check returned true instantaneously (0ms), causing tests to start before login finished (`store.logged` remained false while navigating or clicking drawer items). Consequently, elements guarded by `v-if="store.logged"` (like `LateralAccounts`) timed out with 10000ms errors.
+- **Solution:** Updated [tests/playwright/fixtures.js](file:///home/worky/Proyectos/moneymoney/tests/playwright/fixtures.js) to explicitly wait for `page.getByTestId('LateralLogOut')` to become visible first (confirming `store.logged = true` has been set), before awaiting `Home_LoadingOverlay` to be hidden (confirming catalog bootstrap is finished).
+- **Fail-fast CI execution:** Added `maxFailures: process.env.CI ? 1 : 0` to [playwright.config.js](file:///home/worky/Proyectos/moneymoney/playwright.config.js) to immediately cancel and stop further test execution upon encountering the first failure on GitHub Actions.
+
 ---
 
 ## Workspace & Testing Notes

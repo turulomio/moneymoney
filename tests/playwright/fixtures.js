@@ -3,6 +3,8 @@ import { test as baseTest, expect } from '@playwright/test';
 
 import { promises as fs } from 'fs';
 import path from 'path';
+import { v_text_input_settext } from './playwright_vuetify.js';
+
 // Define a new test type that includes our authenticated page fixture
 const test = baseTest.extend({
 
@@ -26,15 +28,22 @@ const test = baseTest.extend({
 
   // 'page' fixture will be overridden here for tests that use this 'test' object
   page: async ({ page }, use) => {
-    // Perform login
-    // page.on('console', msg => console.log('BROWSER CONSOLE:', msg.text()));
+    // Log browser console and network failures
+    page.on('console', msg => console.log('BROWSER CONSOLE:', msg.type(), msg.text()));
+    page.on('requestfailed', req => console.log('REQUEST FAILED:', req.method(), req.url(), req.failure()?.errorText));
+    page.on('response', res => {
+      if (res.status() >= 400) console.log('HTTP ERROR RESPONSE:', res.status(), res.url());
+    });
 
     await page.goto('http://127.0.0.1:8006/moneymoney/');
     await page.getByTestId('LateralLogIn').click();
-    await page.getByTestId('BtnLogIn_User').getByRole('textbox').fill("test");
-    await page.getByTestId('BtnLogIn_Password').getByRole('textbox').fill("test");
+    await v_text_input_settext(page, 'BtnLogIn_User', 'test');
+    await v_text_input_settext(page, 'BtnLogIn_Password', 'test');
     await expect(page.getByTestId('BtnLogIn_cmd')).toBeEnabled();
     await page.getByTestId('BtnLogIn_cmd').click();
+
+    // Wait for login to complete and LateralLogOut to become visible
+    await expect(page.getByTestId('LateralLogOut')).toBeVisible();
 
     // Wait for the loading overlay to disappear (which indicates updateAll & get_alerts are finished)
     await expect(page.getByTestId('Home_LoadingOverlay')).toBeHidden();
