@@ -19,20 +19,28 @@
         methods: {
             useStore,
             logout(){
-                axios.post(`${this.useStore().apiroot}/logout/`, {'key': this.useStore().token})
-                .then(() => {
-                    this.useStore().token=null;
-                    this.useStore().logged=false;
-                    if (typeof this.nextRoute === 'string') {
-                        if (this.nextRoute.startsWith('/')) {
-                            this.$router.push(this.nextRoute)
-                        } else {
-                            this.$router.push({ name: this.nextRoute })
-                        }
-                    } else {
+                const token = this.useStore().token;
+                this.useStore().setToken(null);
+
+                if (typeof this.nextRoute === 'string') {
+                    if (this.nextRoute.startsWith('/')) {
                         this.$router.push(this.nextRoute)
+                    } else {
+                        this.$router.push({ name: this.nextRoute })
                     }
-                });
+                } else {
+                    this.$router.push(this.nextRoute)
+                }
+
+                if (token) {
+                    axios.post(
+                        `${this.useStore().apiroot}/logout/`,
+                        { 'key': token },
+                        { noparse: true, noheaders: true }
+                    ).catch((error) => {
+                        console.warn("Logout request completed with:", error);
+                    });
+                }
             }
         }}
 </script>
