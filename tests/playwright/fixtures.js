@@ -36,6 +36,9 @@ const test = baseTest.extend({
     await expect(page.getByTestId('BtnLogIn_cmd')).toBeEnabled();
     await page.getByTestId('BtnLogIn_cmd').click();
 
+    // Wait for login to complete and LateralLogOut to become visible
+    await expect(page.getByTestId('LateralLogOut')).toBeVisible();
+
     // Wait for the loading overlay to disappear (which indicates updateAll & get_alerts are finished)
     await expect(page.getByTestId('Home_LoadingOverlay')).toBeHidden();
 
