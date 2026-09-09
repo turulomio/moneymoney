@@ -14,17 +14,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:16.4
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: github_actions
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
     strategy:
       matrix:
         node-version: ["20.x"]
@@ -32,36 +21,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install PL/Python in the PostgreSQL container (Old migrations)
-      run: |
-        docker exec ${{ job.services.postgres.id }} bash -c "apt-get update && apt-get install -y postgresql-plpython3-16"
-
-    - name: Create PL/Python Extension
-      run: |
-        docker exec ${{ job.services.postgres.id }} bash -c "PGPASSWORD=postgres psql -h localhost -U postgres -c 'CREATE EXTENSION plpython3u;'"
-        docker exec ${{ job.services.postgres.id }} bash -c "PGPASSWORD=postgres createdb -h localhost -U postgres xulpymoney"
-
-    - name: Wait for PostgreSQL
-      run: |
-        until PGPASSWORD=postgres pg_isready -h localhost -p 5432 -U postgres; do
-          echo "Waiting for PostgreSQL to become ready..."
-          sleep 2
-        done
-
     - name: Run E2E django_moneymoney test server from Docker
       run: |
         docker run -d \
           --name django_test_server \
           --network host \
-          -e POSTGRES_HOST=127.0.0.1 \
-          -e POSTGRES_PORT=5432 \
-          -e POSTGRES_DB=xulpymoney \
-          -e POSTGRES_USER=postgres \
-          -e POSTGRES_PASSWORD=postgres \
-          -e E2E_TESTING=1 \
-          -e DJANGO_SETTINGS_MODULE=django_moneymoney.settings_docker \
-          turulomio/django_moneymoney:latest \
-          python manage.py testserver moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json --addrport 0.0.0.0:${{ env.DJANGO_TEST_SERVER_PORT }} --noinput
+          turulomio/django_moneymoney:e2e
 
     - name: Wait for Django test server
       run: |

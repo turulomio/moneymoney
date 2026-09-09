@@ -37,7 +37,7 @@
 
 ### CI / GitHub Actions Optimization with Backend Docker Image
 
-- **Change:** Updated [.github/workflows/node.js.yml](file:///home/worky/Proyectos/moneymoney/.github/workflows/node.js.yml) to run the Django E2E testserver using the published Docker image `turulomio/django_moneymoney:latest`. This eliminates the need to setup Python, clone the backend repo, create venvs, and build dependencies from source on every CI run, drastically reducing test execution time.
+- **Change:** Updated [.github/workflows/node.js.yml](file:///home/worky/Proyectos/moneymoney/.github/workflows/node.js.yml) to run the Django E2E testserver directly using the standalone Docker image `turulomio/django_moneymoney:e2e`. This eliminates the need for the PostgreSQL service container, PL/Python extension installation, DB initialization, and python setup, reducing workflow complexity and test execution time.
 
 ---
 
