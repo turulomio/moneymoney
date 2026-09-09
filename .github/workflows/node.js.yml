@@ -43,6 +43,10 @@ jobs:
         docker logs django_test_server
         exit 1
 
+    - name: Load Django E2E fixtures
+      run: |
+        docker exec django_test_server python manage.py loaddata moneymoney/fixtures/all.json moneymoney/fixtures/test_server.json
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
