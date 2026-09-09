@@ -28,8 +28,12 @@ const test = baseTest.extend({
 
   // 'page' fixture will be overridden here for tests that use this 'test' object
   page: async ({ page }, use) => {
-    // Perform login
-    // page.on('console', msg => console.log('BROWSER CONSOLE:', msg.text()));
+    // Log browser console and network failures
+    page.on('console', msg => console.log('BROWSER CONSOLE:', msg.type(), msg.text()));
+    page.on('requestfailed', req => console.log('REQUEST FAILED:', req.method(), req.url(), req.failure()?.errorText));
+    page.on('response', res => {
+      if (res.status() >= 400) console.log('HTTP ERROR RESPONSE:', res.status(), res.url());
+    });
 
     await page.goto('http://127.0.0.1:8006/moneymoney/');
     await page.getByTestId('LateralLogIn').click();
