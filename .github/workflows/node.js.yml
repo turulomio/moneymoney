@@ -25,7 +25,7 @@ jobs:
       run: |
         docker run -d \
           --name django_test_server \
-          -p 8004:8000 \
+          --network host \
           turulomio/django_moneymoney:e2e
 
     - name: Wait for Django test server

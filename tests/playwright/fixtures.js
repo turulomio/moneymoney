@@ -3,6 +3,8 @@ import { test as baseTest, expect } from '@playwright/test';
 
 import { promises as fs } from 'fs';
 import path from 'path';
+import { v_text_input_settext } from './playwright_vuetify.js';
+
 // Define a new test type that includes our authenticated page fixture
 const test = baseTest.extend({
 
@@ -31,8 +33,8 @@ const test = baseTest.extend({
 
     await page.goto('http://127.0.0.1:8006/moneymoney/');
     await page.getByTestId('LateralLogIn').click();
-    await page.getByTestId('BtnLogIn_User').getByRole('textbox').fill("test");
-    await page.getByTestId('BtnLogIn_Password').getByRole('textbox').fill("test");
+    await v_text_input_settext(page, 'BtnLogIn_User', 'test');
+    await v_text_input_settext(page, 'BtnLogIn_Password', 'test');
     await expect(page.getByTestId('BtnLogIn_cmd')).toBeEnabled();
     await page.getByTestId('BtnLogIn_cmd').click();
 
