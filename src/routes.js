@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useStore } from './store.js'
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,4 +42,15 @@ export const router = createRouter({
     { path: '/widgets/mymonthpicker/', name: 'widgets_mymonthpicker', component: () => import('./components/WidgetsMyMonthPicker.vue') },
     { path: '/:pathMatch(.*)*', redirect: '/home/' }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  const store = useStore()
+  const publicRouteNames = ['home', 'about']
+
+  if (!publicRouteNames.includes(to.name) && !store.logged) {
+    return next({ name: 'home' })
+  }
+
+  next()
 })

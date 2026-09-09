@@ -66,6 +66,8 @@ export const useStore = defineStore('global', {
       } else {
         this.logged = false
         this.catalogsLoaded = false
+        this.catalog_manager = false
+        this.profile = null
       }
     },
     updateAccounts() {
@@ -338,13 +340,16 @@ export async function parseResponseError(error) {
   const { t } = i18n.global
   if (error.response) {
     if (error.response.status == 401) {
-      if (store.token == null) { // Not logged yet
-        await dialogStore.alert(t("Wrong credentials"))
+      if (store.token == null) {
+        // User is not authenticated or already logged out; do not alert "Wrong credentials" for background/in-flight requests
+        console.warn("401 Unauthorized while not logged in:", error.config?.url)
       } else {
         await dialogStore.alert(t("You aren't authorized to do this request"))
         store.setToken(null)
         const { router } = await import('./routes.js')
-        if (router.currentRoute.value.name != "about") router.push({ name: "about" })
+        if (router.currentRoute.value.name != "home" && router.currentRoute.value.name != "about") {
+          router.push({ name: "home" })
+        }
         console.log(error.response)
       }
     } else if (error.response.status == 400) { // Used for developer or app errors
@@ -354,7 +359,9 @@ export async function parseResponseError(error) {
       await dialogStore.alert(t("You've done something forbidden"))
       store.setToken(null)
       const { router } = await import('./routes.js')
-      if (router.currentRoute.value.name != "about") router.push({ name: "about" })
+      if (router.currentRoute.value.name != "home" && router.currentRoute.value.name != "about") {
+        router.push({ name: "home" })
+      }
       console.log(error.response)
     } else if (error.response.status == 500) {
       await dialogStore.alert(t("There is a server error"))

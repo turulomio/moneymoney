@@ -1,5 +1,5 @@
 <template>
-    <div v-if="useStore().catalogsLoaded" class="mx-15 px-10 mb-4" data-test="AlertsContainer">
+    <div v-if="useStore().logged && useStore().catalogsLoaded" class="mx-15 px-10 mb-4" data-test="AlertsContainer">
         <div class="d-flex align-center justify-center my-3">
             <h3 class="text-h6 font-weight-medium mr-2">{{ t("User warnings") }}</h3>
             <v-progress-circular v-if="loading" color="primary" indeterminate size="20" width="2"></v-progress-circular>
@@ -187,7 +187,7 @@
      * @returns {Promise<void>}
      */
     function get_alerts(){
-        if (!useStore().catalogsLoaded) return Promise.resolve()
+        if (!useStore().logged || !useStore().catalogsLoaded) return Promise.resolve()
         loading.value = true
         return axios.get(`${useStore().apiroot}/alerts/`)
         .then((response) => {
@@ -204,7 +204,7 @@
      * @returns {Promise<void>}
      */
     async function check_time_diff() {
-        if (!useStore().catalogsLoaded) return
+        if (!useStore().logged || !useStore().catalogsLoaded) return
         try {
             const t0 = Date.now()
             const response = await axios.get(`${useStore().apiroot}/catalog_manager/`, { noparse: true })
@@ -242,20 +242,20 @@
     })
 
     /**
-     * Fetch alerts on component mount if catalogs are already loaded.
+     * Fetch alerts on component mount if user is logged in and catalogs are already loaded.
      */
     onMounted(() => {
-        if (useStore().catalogsLoaded) {
+        if (useStore().logged && useStore().catalogsLoaded) {
             get_alerts()
             check_time_diff()
         }
     })
 
     /**
-     * Watch catalog loading status to trigger alerts fetch once catalogs are available.
+     * Watch login and catalog loading status to trigger alerts fetch only when authenticated and catalogs are available.
      */
-    watch(() => useStore().catalogsLoaded, (catalogsLoaded) => {
-        if (catalogsLoaded) {
+    watch(() => useStore().logged && useStore().catalogsLoaded, (ready) => {
+        if (ready) {
             get_alerts()
             check_time_diff()
         } else {
