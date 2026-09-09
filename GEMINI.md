@@ -35,6 +35,10 @@
   - `BtnLogOut`: accepts `label`, `logoutUrl`, `token`, `nextRoute`, and optional `customLogout`; emits `@logged-out` and `@error(error)`.
 - **Integration:** [src/App.vue](file:///home/worky/Proyectos/moneymoney/src/App.vue) passes `login-url`, `logout-url`, `token`, and handles `@logged-in` / `@logged-out` by synchronizing with the global store (`store.setToken`).
 
+### CI / GitHub Actions Optimization with Backend Docker Image
+
+- **Change:** Updated [.github/workflows/node.js.yml](file:///home/worky/Proyectos/moneymoney/.github/workflows/node.js.yml) to run the Django E2E testserver using the published Docker image `turulomio/django_moneymoney:latest`. This eliminates the need to setup Python, clone the backend repo, create venvs, and build dependencies from source on every CI run, drastically reducing test execution time.
+
 ---
 
 ## Workspace & Testing Notes
