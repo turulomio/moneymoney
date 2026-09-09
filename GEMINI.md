@@ -27,9 +27,13 @@
 
 - **Change:** Added a global `router.beforeEach` navigation guard in [src/routes.js](file:///home/worky/Proyectos/moneymoney/src/routes.js). When a user is not logged in (`!store.logged`) and attempts to access any non-public route (e.g. on F5 refresh, manual URL editing, or unauthenticated navigation), the router redirects the navigation directly to `/home/`.
 
-### Configurable Post-Login and Post-Logout Redirects
+### Decoupled and Reusable BtnLogIn and BtnLogOut Components
 
-- **Change:** Added support for `nextRoute` (`String` | `Object`, defaults to `"home"`) prop in both [src/components/BtnLogIn.vue](file:///home/worky/Proyectos/moneymoney/src/components/BtnLogIn.vue) and [src/components/BtnLogOut.vue](file:///home/worky/Proyectos/moneymoney/src/components/BtnLogOut.vue), allowing explicit configuration of destination route name (e.g. `"home"`), route path (e.g. `"/home/"` or `"/about/"`), or route object after login and logout actions.
+- **Change:** Refactored [src/components/BtnLogIn.vue](file:///home/worky/Proyectos/moneymoney/src/components/BtnLogIn.vue) and [src/components/BtnLogOut.vue](file:///home/worky/Proyectos/moneymoney/src/components/BtnLogOut.vue) into decoupled, reusable `<script setup>` components with complete Javadoc/JSDoc format documentation.
+- **Props & Emits:**
+  - `BtnLogIn`: accepts `label`, `loginUrl`, `nextRoute`, and optional `customLogin`; emits `@logged-in(token)` and `@error(error)`.
+  - `BtnLogOut`: accepts `label`, `logoutUrl`, `token`, `nextRoute`, and optional `customLogout`; emits `@logged-out` and `@error(error)`.
+- **Integration:** [src/App.vue](file:///home/worky/Proyectos/moneymoney/src/App.vue) passes `login-url`, `logout-url`, `token`, and handles `@logged-in` / `@logged-out` by synchronizing with the global store (`store.setToken`).
 
 ---
 
@@ -41,5 +45,6 @@
 - **Testing preference:** The user prefers to run the long test suites themselves. Do not run long test suites locally.
 - **Documentation Rule:** Whenever coding or implementing new features, always remember to update the project documentation (such as `README.md`, `GEMINI.md`, and inline code documentation/comments) detailing the features and changes.
 - **`<script setup>` Documentation Rule:** Always document `<script setup>` code in Vue components using standard **Javadoc / JSDoc** format (`/** ... */`), thoroughly documenting reactive state (`ref`, `computed` with `@type`), functions (`@param`, `@returns`), props, emits, exposed APIs, watchers, and lifecycle hooks.
+- **Single-Line Template Formatting Rule:** Write Vue components and all their attributes on a single line in template code whenever possible for conciseness and consistency across the codebase.
 
 

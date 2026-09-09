@@ -123,8 +123,8 @@
             <v-spacer />            
             <v-btn  data-test="LateralCurrencies" :to="{ name: 'currencies'}" v-if="store.logged"><v-icon icon="mdi-currency-eur" dark></v-icon></v-btn>
             <BtnSwitchLanguages  data-test="LateralSwitchLanguages" />
-            <BtnLogIn  data-test="LateralLogIn" v-show="!store.logged" class="mr-4"/>
-            <BtnLogOut data-test="LateralLogOut" v-show="store.logged" class="mr-4"/>
+            <BtnLogIn data-test="LateralLogIn" v-show="!store.logged" class="mr-4" :login-url="`${store.apiroot}/login/`" @logged-in="onLoggedIn" />
+            <BtnLogOut data-test="LateralLogOut" v-show="store.logged" class="mr-4" :logout-url="`${store.apiroot}/logout/`" :token="store.token" @logged-out="onLoggedOut" />
 
 
         </v-app-bar>
@@ -167,6 +167,12 @@ export default {
         }
     },
     methods:{
+        onLoggedIn(token){
+            this.store.setToken(token)
+        },
+        onLoggedOut(){
+            this.store.setToken(null)
+        },
         open_widgets(){
             this.$router.push({name: "widgets"})
         }   
