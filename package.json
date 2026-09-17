@@ -2,6 +2,9 @@
   "name": "moneymoney",
   "version": "1.4.0",
   "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "node --max-old-space-size=8192 node_modules/.bin/vite build",
