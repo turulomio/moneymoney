@@ -45,6 +45,10 @@
 - **Solution:** Updated [tests/playwright/fixtures.js](file:///home/worky/Proyectos/moneymoney/tests/playwright/fixtures.js) to explicitly wait for `page.getByTestId('LateralLogOut')` to become visible first (confirming `store.logged = true` has been set), before awaiting `Home_LoadingOverlay` to be hidden (confirming catalog bootstrap is finished).
 - **Fail-fast CI execution:** Added `maxFailures: process.env.CI ? 1 : 0` to [playwright.config.js](file:///home/worky/Proyectos/moneymoney/playwright.config.js) to immediately cancel and stop further test execution upon encountering the first failure on GitHub Actions.
 
+### Node.js >= 22 Requirement
+
+- **Change:** Updated CI matrix in [.github/workflows/node.js.yml](file:///home/worky/Proyectos/moneymoney/.github/workflows/node.js.yml) to `node-version: ["22.x"]` and added `"engines": { "node": ">=22.12.0" }` to [package.json](file:///home/worky/Proyectos/moneymoney/package.json). Dependencies such as `vue-i18n@11.4.12` / `@intlify/*`, `vitest@5.0.1`, and `npm-check-updates@23.1.0` require Node.js 22+.
+
 ---
 
 ## Workspace & Testing Notes
