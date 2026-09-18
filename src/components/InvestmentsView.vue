@@ -4,6 +4,12 @@
             <MyMenuInline data-test="InvestmentsView_MyMenuInline" :items="items" />
             <v-btn data-test="InvestmentsView_ButtonClose" small style="color:darkgrey" icon="mdi-close" class="elevation-0" @click="$emit('close')"/>
         </h1>
+        <v-alert v-if="is_affected_by_splits" class="mb-2 cursorpointer" type="info" variant="outlined" density="compact" data-test="InvestmentsView_SplitAlert" @click="open_operations_without_splits">
+            <p>{{ $t("This investment has been affected by splits:") }}</p>
+            <ul>
+                <li v-for="(split, i) in splits" :key="i">{{ localtime(split.datetime) }}. Ratio: {{ split.before }} : {{ split.after }}. {{ split.comment }}</li>
+            </ul>
+        </v-alert>
         <DisplayValues v-if="ios_id" :items="displayvalues" :key="key" />
         <v-tabs  bg-color="secondary" dark v-model="tab" show-arrows>
             <v-tab data-test="InvestmentsView_TabCurrent" key="current">{{ $t('Current investment operations') }}</v-tab>
@@ -114,7 +120,7 @@
         <!-- PRODUCTS VIEW-->
         <v-dialog v-model="dialog_productview" width="100%" heigth="100%">
             <v-card class="pa-3">
-                <ProductsView :product="product" :key="key" />
+                <ProductsView :product="product" :key="key" @cruded="update_all" />
             </v-card>
         </v-dialog>
         <!-- INVESTMENT CHART-->
@@ -149,7 +155,7 @@
     import axios from 'axios'
     import { useStore, currency_string, localcurrency_string, getMapObjectById   } from '@/store'
     import {empty_investment_operation,empty_dividend,empty_investments_chart,empty_investments_chart_limit_line,empty_ios} from '../empty_objects.js'
-    import { parseNumber,f } from 'vuetify_rules'
+    import { parseNumber, f, localtime } from 'vuetify_rules'
     import { percentage_string, listobjects_average_ponderated, listobjects_sum } from '@/functions.js'
     import ChartInvestments from './ChartInvestments.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
@@ -169,8 +175,8 @@
     import { useDialogs } from '@/composables/useDialogs'
     export default {
         setup() {
-            const { prompt } = useDialogs()
-            return { myPrompt: prompt }
+            const { alert, prompt } = useDialogs()
+            return { myAlert: alert, myPrompt: prompt }
         },
         components:{
             ChartInvestments,
@@ -204,6 +210,7 @@
                 loading:true,
                 dividends: [],
                 dividends_filtered: [],
+                splits: [],
                 io_filtered:[],
                 chkShowAllDividends:false,
                 chkShowAllIO:false,
@@ -480,10 +487,20 @@
                 } else {
                     return this.$t("Check to see all dividends")
                 }
+            },
+
+            is_affected_by_splits() {
+                if (!this.splits || this.splits.length === 0 || !this.ios_id || !this.ios_id.io || this.ios_id.io.length === 0) {
+                    return false
+                }
+                return this.splits.some(split => 
+                    this.ios_id.io.some(op => new Date(op.datetime) <= new Date(split.datetime))
+                )
             }},
         methods: {
             useStore,
             f,
+            localtime,
             listobjects_average_ponderated,
             parseNumber,
             percentage_string,
@@ -555,12 +572,22 @@
             update_dividends(){
                 return axios.get(`${this.useStore().apiroot}/api/dividends/`, {params:{investments:[this.investment_id,]}})
             },
+            update_splits(){
+                if (!this.investment || !this.investment.products) {
+                    return Promise.resolve({ data: [] })
+                }
+                return axios.get(`${this.useStore().apiroot}/api/splits/?product=${this.investment.products}`)
+                    .catch((error) => {
+                        console.error("Error fetching splits:", error)
+                        return { data: [] }
+                    })
+            },
             update_all(){
                 this.loading=true
                 this.investment=this.getMapObjectById("investments",this.investment_id)
 
-                axios.all([this.update_ios(), this.update_dividends()])
-                .then(([resIO, resDividends]) => {
+                axios.all([this.update_ios(), this.update_dividends(), this.update_splits()])
+                .then(([resIO, resDividends, resSplits]) => {
 
                     this.ios_id=resIO.data[this.investment_id]
                     this.on_chkShowAllIO_click()
@@ -568,6 +595,7 @@
 
                     this.dividends=resDividends.data
                     this.on_chkDividends()
+                    this.splits = (resSplits && resSplits.data) ? resSplits.data : []
                     this.loading=false
                     this.key=this.key+1
                 });
@@ -580,6 +608,9 @@
             },
             on_ChartInvestments_close(){
                 this.dialog_investment_chart=false
+            },
+            open_operations_without_splits() {
+                this.myAlert(this.$t("Pending development"))
             },
             gains_with_dividends_message(){
                 let gains=this.ios_id.total_io_current.gains_gross_user

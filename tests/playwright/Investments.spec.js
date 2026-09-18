@@ -22,9 +22,11 @@ test('Investments list', async ({ page }) => {
   await quote_add_from_InvestmentsList(page, investment.id)
   const iosPromise = promise_to_get_response(page, "/ios/", "POST");
   const dividendsPromise = promise_to_get_response(page, "/api/dividends/", "GET");
+  const splitsPromise = promise_to_get_response(page, "/api/splits/", "GET");
   await page.getByTestId(`Investments_Table_Row${investment.id}`).click()
   await iosPromise;
   await dividendsPromise;
+  await splitsPromise;
   await investmentoperation_add_from_InvestmentsView(page)
   await dividend_add_from_InvestmentView(page)
 

@@ -49,6 +49,11 @@
 
 - **Change:** Updated CI matrix in [.github/workflows/node.js.yml](file:///home/worky/Proyectos/moneymoney/.github/workflows/node.js.yml) to `node-version: ["22.x"]` and added `"engines": { "node": ">=22.12.0" }` to [package.json](file:///home/worky/Proyectos/moneymoney/package.json). Dependencies such as `vue-i18n@11.4.12` / `@intlify/*`, `vitest@5.0.1`, and `npm-check-updates@23.1.0` require Node.js 22+.
 
+### Product Splits and Investment Split Information Alert
+
+- **Feature:** Products support corporate stock splits / reverse splits, which are managed through [src/components/TableSplits.vue](file:///home/worky/Proyectos/moneymoney/src/components/TableSplits.vue) and [src/components/SplitsCU.vue](file:///home/worky/Proyectos/moneymoney/src/components/SplitsCU.vue) via the `/api/splits/` endpoint (`before`, `after`, `datetime`, and optional `comment`).
+- **InvestmentsView Split Alert:** In [src/components/InvestmentsView.vue](file:///home/worky/Proyectos/moneymoney/src/components/InvestmentsView.vue), when an investment is loaded, `update_all()` queries `/api/splits/?product=${investment.products}`. If the investment has operations affected by splits (`is_affected_by_splits`), an informational banner (`v-alert` of type `info`, outlined, compact) is displayed listing the splits (date and ratio `before : after`) within a `<ul>`. Clicking on the alert displays a notice indicating that the visualization of investment operations without splits is pending backend development. Modifying splits through the embedded `ProductsView` dialog automatically refreshes `InvestmentsView`.
+
 ---
 
 ## Workspace & Testing Notes
@@ -60,5 +65,6 @@
 - **Documentation Rule:** Whenever coding or implementing new features, always remember to update the project documentation (such as `README.md`, `GEMINI.md`, and inline code documentation/comments) detailing the features and changes.
 - **`<script setup>` Documentation Rule:** Always document `<script setup>` code in Vue components using standard **Javadoc / JSDoc** format (`/** ... */`), thoroughly documenting reactive state (`ref`, `computed` with `@type`), functions (`@param`, `@returns`), props, emits, exposed APIs, watchers, and lifecycle hooks.
 - **Single-Line Template Formatting Rule:** Write Vue components and all their attributes on a single line in template code whenever possible for conciseness and consistency across the codebase.
+- **List Formatting Rule in Alerts / Templates:** Do not prefix text with manual hyphens/dashes (`-`) inside `<li>` list elements within `<ul>` lists (standard list bullets are already provided by HTML/CSS).
 
 
