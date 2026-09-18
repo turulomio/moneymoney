@@ -4,7 +4,7 @@
             <MyMenuInline data-test="InvestmentsView_MyMenuInline" :items="items" />
             <v-btn data-test="InvestmentsView_ButtonClose" small style="color:darkgrey" icon="mdi-close" class="elevation-0" @click="$emit('close')"/>
         </h1>
-        <v-alert v-if="is_affected_by_splits" class="mb-2 cursorpointer" type="info" variant="outlined" density="compact" data-test="InvestmentsView_SplitAlert" @click="open_operations_without_splits">
+        <v-alert v-if="is_affected_by_splits" class="mb-2" type="info" variant="outlined" density="compact" data-test="InvestmentsView_SplitAlert">
             <p>{{ $t("This investment has been affected by splits:") }}</p>
             <ul>
                 <li v-for="(split, i) in splits" :key="i">{{ localtime(split.datetime) }}. Ratio: {{ split.before }} : {{ split.after }}. {{ split.comment }}</li>
@@ -175,8 +175,8 @@
     import { useDialogs } from '@/composables/useDialogs'
     export default {
         setup() {
-            const { alert, prompt } = useDialogs()
-            return { myAlert: alert, myPrompt: prompt }
+            const { prompt } = useDialogs()
+            return { myPrompt: prompt }
         },
         components:{
             ChartInvestments,
@@ -608,9 +608,6 @@
             },
             on_ChartInvestments_close(){
                 this.dialog_investment_chart=false
-            },
-            open_operations_without_splits() {
-                this.myAlert(this.$t("Pending development"))
             },
             gains_with_dividends_message(){
                 let gains=this.ios_id.total_io_current.gains_gross_user
