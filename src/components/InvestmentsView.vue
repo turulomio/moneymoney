@@ -328,7 +328,7 @@
                                     var gains_account_currency=this.parseNumber(await this.myPrompt( this.$t("Please add the final gains in account currency"), this.$t("Gains"), "", "number", 0 ));
                                     var shares=this.listobjects_sum(this.ios_id.io_current,"shares")
                                     var average_price_current_account=this.listobjects_average_ponderated(this.ios_id.io_current,'price_account', 'shares')
-                                    var leverage=this.product.real_leveraged_multiplier || 1
+                                    var leverage=this.product.real_leveraged_multiplier
                                     var currency_conversion=(gains_account_currency+shares*average_price_current_account*leverage)/(shares*selling_price_product_currency*leverage)
 
                                     this.io=this.empty_investment_operation()
