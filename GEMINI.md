@@ -52,7 +52,16 @@
 ### Product Splits and Investment Split Information Alert
 
 - **Feature:** Products support corporate stock splits / reverse splits, which are managed through [src/components/TableSplits.vue](file:///home/worky/Proyectos/moneymoney/src/components/TableSplits.vue) and [src/components/SplitsCU.vue](file:///home/worky/Proyectos/moneymoney/src/components/SplitsCU.vue) via the `/api/splits/` endpoint (`before`, `after`, `datetime`, and optional `comment`).
-- **InvestmentsView Split Alert:** In [src/components/InvestmentsView.vue](file:///home/worky/Proyectos/moneymoney/src/components/InvestmentsView.vue), when an investment is loaded, `update_all()` queries `/api/splits/?product=${investment.products}`. If the investment has operations affected by splits (`is_affected_by_splits`), an informational banner (`v-alert` of type `info`, outlined, compact) is displayed listing the splits (date and ratio `before : after`) within a `<ul>`. Modifying splits through the embedded `ProductsView` dialog automatically refreshes `InvestmentsView`.
+- **InvestmentsView Split Alert:** In [src/components/InvestmentsView.vue](file:///home/worky/Proyectos/moneymoney/src/components/InvestmentsView.vue), when an investment is loaded, `update_all()` queries `/api/splits/?product=${investment.products}`. If the investment has operations affected by splits (`is_affected_by_splits`), an informational banner (`v-alert` of type `info`, outlined, compact, centered with `width: 50%` matching `DisplayValues`) is displayed listing the splits (date and ratio `before : after`) within a `<ul>`. Modifying splits through the embedded `ProductsView` dialog automatically refreshes `InvestmentsView`.
+
+### DisplayValues Spacing & Encapsulation
+ 
+- **DisplayValues Spacing & Encapsulation:** In [src/components/DisplayValues.vue](file:///home/worky/Proyectos/moneymoney/src/components/DisplayValues.vue), conditionally rendered `<p>` tags with `<template v-for>` to avoid empty paragraph elements when items are collapsed/minimized, reduced card padding (`pa-4` -> `pa-2`), and fully encapsulated all `.inform` styles within `<style scoped>` (`line-height: 1.05 !important`, `margin-bottom: 0px !important`, `background-color: white !important`) avoiding unnecessary global overrides.
+
+### Leverage Multiplier Display in InvestmentsView and StrategiesView
+
+- **Problem:** In [src/components/InvestmentsView.vue](file:///home/worky/Proyectos/moneymoney/src/components/InvestmentsView.vue) and [src/components/StrategiesView.vue](file:///home/worky/Proyectos/moneymoney/src/components/StrategiesView.vue), `leverage_message` was attempting to read `this.ios_id.data.multiplier` or `this.product.leverage_multiplier` which was undefined, causing `f("[0] (Real: [1])")` to output literal `[0] (Real: 1)`.
+- **Solution:** Updated `leverage_message` to retrieve the multiplier via `useStore().leverages.get(this.product.leverages)?.multiplier` and the real leverage via `this.product.real_leveraged_multiplier`.
 
 ---
 

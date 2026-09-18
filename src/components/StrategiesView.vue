@@ -154,7 +154,10 @@
                 r.push({title:this.$t('Type'), value: this.useStore()["strategiestypes"].get(this.strategy.strategy.type).name})
                 r.push({title:this.$t('Investments'), value: this.strategy.investments.length})                
                 if (this.strategy.product){//That means it has a product property
-                    this.leverage_message= f(this.$t("[0] (Real: [1])"), [this.product.leverage_multiplier, this.product.leverage_real_multiplier ])
+                    var leverage = this.useStore().leverages.get(this.product.leverages)
+                    var multiplier = leverage ? leverage.multiplier : 1
+                    var real_leverage = this.product.real_leveraged_multiplier ?? 1
+                    this.leverage_message = f(this.$t("[0] (Real: [1])"), [multiplier, real_leverage])
                     r.push({title:this.$t('Currency'), value: this.product.currency})
                     r.push({title:this.$t('Product'), value: this.product.name})
                     r.push({title:this.$t('Leverage'), value: this.leverage_message})

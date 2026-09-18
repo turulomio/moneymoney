@@ -4,7 +4,7 @@
             <MyMenuInline data-test="InvestmentsView_MyMenuInline" :items="items" />
             <v-btn data-test="InvestmentsView_ButtonClose" small style="color:darkgrey" icon="mdi-close" class="elevation-0" @click="$emit('close')"/>
         </h1>
-        <v-alert v-if="is_affected_by_splits" class="mb-2" type="info" variant="outlined" density="compact" data-test="InvestmentsView_SplitAlert">
+        <v-alert v-if="is_affected_by_splits" class="mx-auto mb-2" style="width: 50%;" type="info" variant="outlined" density="compact" data-test="InvestmentsView_SplitAlert">
             <p>{{ $t("This investment has been affected by splits:") }}</p>
             <ul>
                 <li v-for="(split, i) in splits" :key="i">{{ localtime(split.datetime) }}. Ratio: {{ split.before }} : {{ split.after }}. {{ split.comment }}</li>
@@ -328,7 +328,7 @@
                                     var gains_account_currency=this.parseNumber(await this.myPrompt( this.$t("Please add the final gains in account currency"), this.$t("Gains"), "", "number", 0 ));
                                     var shares=this.listobjects_sum(this.ios_id.io_current,"shares")
                                     var average_price_current_account=this.listobjects_average_ponderated(this.ios_id.io_current,'price_account', 'shares')
-                                    var leverage=this.product.leverage_real_multiplier
+                                    var leverage=this.product.real_leveraged_multiplier || 1
                                     var currency_conversion=(gains_account_currency+shares*average_price_current_account*leverage)/(shares*selling_price_product_currency*leverage)
 
                                     this.io=this.empty_investment_operation()
@@ -435,11 +435,11 @@
 
             },
             leverage_message (){
-                if (!this.ios_id) return ""
-                return f(this.$t("[0] (Real: [1])"), [
-                        this.ios_id.data.multiplier,
-                        this.ios_id.data.real_leverages
-                ])
+                if (!this.ios_id || !this.product) return ""
+                var leverage = this.useStore().leverages.get(this.product.leverages)
+                var multiplier = leverage ? leverage.multiplier : 1
+                var real_leverage = this.product.real_leveraged_multiplier ?? this.ios_id.data?.real_leverages ?? 1
+                return f(this.$t("[0] (Real: [1])"), [multiplier, real_leverage])
             },
             selling_point_message(){
                 if (!this.product || !this.ios_id) return ""
