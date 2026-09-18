@@ -227,9 +227,40 @@ span.vuered{
     text-align: center;
 }
 
-.v-application .inform {
+.v-application {
+    line-height: 1.05;
+}
+
+.v-application p {
+    line-height: 1.05;
+    margin-bottom: 0.45rem;
+}
+
+.v-application ul, .v-application ol {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding-left: 20px;
+}
+
+.v-application li {
+    line-height: 1.05;
+}
+
+
+.v-alert p {
+    margin-bottom: 2px;
+    line-height: 1.05;
+}
+
+.v-alert ul {
+    margin-top: 1px;
     margin-bottom: 1px;
-    background-color: white !important;
+    padding-left: 18px;
+}
+
+.v-alert li {
+    line-height: 1.05;
+    margin-bottom: 1px;
 }
 
 .totalrow{

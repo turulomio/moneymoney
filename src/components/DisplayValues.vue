@@ -8,12 +8,12 @@
 -->
 <template>  
         <v-layout style="justify-content: center;" class="ma-4">
-            <v-card class="pa-4" :style="width_method()">
-                <p v-for="(item, index) in items" class="inform" :key="index">
-                    <span v-if="must_be_showed(item,index)">
+            <v-card class="pa-2" :style="width_method()">
+                <template v-for="(item, index) in items" :key="index">
+                    <p v-if="must_be_showed(item,index)" class="inform">
                         <strong>{{ item.title }}: </strong><span v-html="item.value"></span>
-                    </span>
-                </p>
+                    </p>
+                </template>
             </v-card>
             <v-btn small @click="on_button_click()" v-if="items.length>minimized_items" color="white">
                 <v-icon  color="grey">{{icon}}</v-icon>
@@ -65,3 +65,15 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.inform {
+    line-height: 0.6 !important;
+    margin-bottom: 0px !important;
+    background-color: white !important;
+}
+.inform strong,
+.inform span {
+    line-height: 0.6 !important;
+}
+</style>

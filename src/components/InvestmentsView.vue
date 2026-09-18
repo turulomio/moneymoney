@@ -4,6 +4,12 @@
             <MyMenuInline data-test="InvestmentsView_MyMenuInline" :items="items" />
             <v-btn data-test="InvestmentsView_ButtonClose" small style="color:darkgrey" icon="mdi-close" class="elevation-0" @click="$emit('close')"/>
         </h1>
+        <v-alert v-if="is_affected_by_splits" class="mx-auto mb-2" style="width: 50%;" type="info" variant="outlined" density="compact" data-test="InvestmentsView_SplitAlert">
+            <p>{{ $t("This investment has been affected by splits:") }}</p>
+            <ul>
+                <li v-for="(split, i) in splits" :key="i">{{ localtime(split.datetime) }}. Ratio: {{ split.before }} : {{ split.after }}. {{ split.comment }}</li>
+            </ul>
+        </v-alert>
         <DisplayValues v-if="ios_id" :items="displayvalues" :key="key" />
         <v-tabs  bg-color="secondary" dark v-model="tab" show-arrows>
             <v-tab data-test="InvestmentsView_TabCurrent" key="current">{{ $t('Current investment operations') }}</v-tab>
@@ -114,7 +120,7 @@
         <!-- PRODUCTS VIEW-->
         <v-dialog v-model="dialog_productview" width="100%" heigth="100%">
             <v-card class="pa-3">
-                <ProductsView :product="product" :key="key" />
+                <ProductsView :product="product" :key="key" @cruded="update_all" />
             </v-card>
         </v-dialog>
         <!-- INVESTMENT CHART-->
@@ -149,7 +155,7 @@
     import axios from 'axios'
     import { useStore, currency_string, localcurrency_string, getMapObjectById   } from '@/store'
     import {empty_investment_operation,empty_dividend,empty_investments_chart,empty_investments_chart_limit_line,empty_ios} from '../empty_objects.js'
-    import { parseNumber,f } from 'vuetify_rules'
+    import { parseNumber, f, localtime } from 'vuetify_rules'
     import { percentage_string, listobjects_average_ponderated, listobjects_sum } from '@/functions.js'
     import ChartInvestments from './ChartInvestments.vue'
     import InvestmentsoperationsCU from './InvestmentsoperationsCU.vue'
@@ -204,6 +210,7 @@
                 loading:true,
                 dividends: [],
                 dividends_filtered: [],
+                splits: [],
                 io_filtered:[],
                 chkShowAllDividends:false,
                 chkShowAllIO:false,
@@ -321,7 +328,7 @@
                                     var gains_account_currency=this.parseNumber(await this.myPrompt( this.$t("Please add the final gains in account currency"), this.$t("Gains"), "", "number", 0 ));
                                     var shares=this.listobjects_sum(this.ios_id.io_current,"shares")
                                     var average_price_current_account=this.listobjects_average_ponderated(this.ios_id.io_current,'price_account', 'shares')
-                                    var leverage=this.product.leverage_real_multiplier
+                                    var leverage=this.product.real_leveraged_multiplier
                                     var currency_conversion=(gains_account_currency+shares*average_price_current_account*leverage)/(shares*selling_price_product_currency*leverage)
 
                                     this.io=this.empty_investment_operation()
@@ -428,11 +435,11 @@
 
             },
             leverage_message (){
-                if (!this.ios_id) return ""
-                return f(this.$t("[0] (Real: [1])"), [
-                        this.ios_id.data.multiplier,
-                        this.ios_id.data.real_leverages
-                ])
+                if (!this.ios_id || !this.product) return ""
+                var leverage = this.useStore().leverages.get(this.product.leverages)
+                var multiplier = leverage ? leverage.multiplier : 1
+                var real_leverage = this.product.real_leveraged_multiplier ?? this.ios_id.data?.real_leverages ?? 1
+                return f(this.$t("[0] (Real: [1])"), [multiplier, real_leverage])
             },
             selling_point_message(){
                 if (!this.product || !this.ios_id) return ""
@@ -480,10 +487,20 @@
                 } else {
                     return this.$t("Check to see all dividends")
                 }
+            },
+
+            is_affected_by_splits() {
+                if (!this.splits || this.splits.length === 0 || !this.ios_id || !this.ios_id.io || this.ios_id.io.length === 0) {
+                    return false
+                }
+                return this.splits.some(split => 
+                    this.ios_id.io.some(op => new Date(op.datetime) <= new Date(split.datetime))
+                )
             }},
         methods: {
             useStore,
             f,
+            localtime,
             listobjects_average_ponderated,
             parseNumber,
             percentage_string,
@@ -555,12 +572,22 @@
             update_dividends(){
                 return axios.get(`${this.useStore().apiroot}/api/dividends/`, {params:{investments:[this.investment_id,]}})
             },
+            update_splits(){
+                if (!this.investment || !this.investment.products) {
+                    return Promise.resolve({ data: [] })
+                }
+                return axios.get(`${this.useStore().apiroot}/api/splits/?product=${this.investment.products}`)
+                    .catch((error) => {
+                        console.error("Error fetching splits:", error)
+                        return { data: [] }
+                    })
+            },
             update_all(){
                 this.loading=true
                 this.investment=this.getMapObjectById("investments",this.investment_id)
 
-                axios.all([this.update_ios(), this.update_dividends()])
-                .then(([resIO, resDividends]) => {
+                axios.all([this.update_ios(), this.update_dividends(), this.update_splits()])
+                .then(([resIO, resDividends, resSplits]) => {
 
                     this.ios_id=resIO.data[this.investment_id]
                     this.on_chkShowAllIO_click()
@@ -568,6 +595,7 @@
 
                     this.dividends=resDividends.data
                     this.on_chkDividends()
+                    this.splits = (resSplits && resSplits.data) ? resSplits.data : []
                     this.loading=false
                     this.key=this.key+1
                 });
