@@ -91,4 +91,4 @@ npm run dev
   npm run translate
   ```
 - **Developer Notes & Fixed Issues:**
-  See [GEMINI.md](file:///home/worky/Proyectos/moneymoney/GEMINI.md) for local dev guidelines, routing issues, and configuration notes.
+  See [AGENTS.md](file:///home/keko/Proyectos/moneymoney/AGENTS.md) for local dev guidelines, routing issues, and configuration notes.
