@@ -5,7 +5,7 @@
         </h1>           
         <div class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid">                
-                <MyDateTimePicker :readonly="mode=='D'" v-model="new_quote.datetime" :label="t('Set quote date and time')" />
+                <MyDateTimePicker :readonly="mode=='D'" v-model="new_quote.datetime" :label="t('Set quote date and time')" showmicroseconds showtimezone/>
                 <AutocompleteProducts :readonly="mode=='D'" v-model="new_quote.products" :rules="RulesSelection(true)"  />
                 <v-text-field data-test="QuotesCU_Quote"  :readonly="mode=='D'" v-model.number="new_quote.quote"  :label="t('Set quote')" :placeholder="t('Set quote')" :rules="RulesFloatGEZ(12,true,product_object.decimals)" counter="12" autofocus/>
             </v-form>

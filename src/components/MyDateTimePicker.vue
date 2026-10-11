@@ -10,27 +10,27 @@
                     </v-text-field>
                 </div>
             </template>
-            <v-card width="660" class="pa-2">
+            <v-card ref="pickerCardRef" width="660" class="pa-2" @keydown.capture.tab="onCardTab">
                 <div class="d-flex flex-row">
-                    <v-date-picker v-model="date" density="compact" show-adjacent-months hide-header color="primary" class="border-e" />
+                    <v-date-picker v-model="date" density="compact" show-adjacent-months hide-header color="primary" class="border-e no-tab-datepicker" />
                     <div class="pa-3 flex-grow-1 d-flex flex-column justify-space-between">
                         <div>
                             <div class="text-caption text-medium-emphasis mb-2 font-weight-medium">{{ $t('Time') }}</div>
                             <div class="d-flex align-center ga-1 mb-2">
-                                <v-text-field :data-test="`${dataTest}_Hours`" v-model.number="hours" density="compact" variant="outlined" hide-details="auto" :label="$t('Set hours')" :rules="RulesInteger(2, true)" style="max-width: 85px;" @change="onChangeTime" />
+                                <v-number-input :data-test="`${dataTest}_Hours`" v-model="hours" :min="0" :max="23" density="compact" variant="outlined" control-variant="stacked" hide-details="auto" :label="$t('Hours')" style="max-width: 95px;" class="focusable-time-input" @update:model-value="onChangeTime" />
                                 <span class="text-h6 pb-1">:</span>
-                                <v-text-field :data-test="`${dataTest}_Minutes`" v-model.number="minutes" density="compact" variant="outlined" hide-details="auto" :label="$t('Set minutes')" :rules="RulesInteger(2, true)" style="max-width: 85px;" @change="onChangeTime" />
+                                <v-number-input :data-test="`${dataTest}_Minutes`" v-model="minutes" :min="0" :max="59" density="compact" variant="outlined" control-variant="stacked" hide-details="auto" :label="$t('Minutes')" style="max-width: 95px;" class="focusable-time-input" @update:model-value="onChangeTime" />
                                 <span class="text-h6 pb-1">:</span>
-                                <v-text-field :data-test="`${dataTest}_Seconds`" v-model.number="seconds" density="compact" variant="outlined" hide-details="auto" :label="$t('Set seconds')" :rules="RulesInteger(2, true)" style="max-width: 85px;" @change="onChangeTime" />
+                                <v-number-input :data-test="`${dataTest}_Seconds`" v-model="seconds" :min="0" :max="59" density="compact" variant="outlined" control-variant="stacked" hide-details="auto" :label="$t('Seconds')" style="max-width: 95px;" class="focusable-time-input" @update:model-value="onChangeTime" />
                             </div>
-                            <v-text-field v-if="showmicroseconds" :data-test="`${dataTest}_Microseconds`" v-model.number="microseconds" density="compact" variant="outlined" hide-details="auto" class="mb-2" :label="$t('Set microseconds')" :rules="RulesInteger(6, true)" @change="onChangeTime" />
-                            <v-autocomplete v-if="showtimezone" :data-test="`${dataTest}_Timezone`" v-model="inputTimezone" :items="allTimezones" density="compact" variant="outlined" hide-details class="mb-2" :label="$t('Time zone')" @update:model-value="onChangeInputTimezone" />
+                            <v-number-input v-if="showmicroseconds" :data-test="`${dataTest}_Microseconds`" v-model="microseconds" :min="0" :max="999999" density="compact" variant="outlined" control-variant="stacked" hide-details="auto" class="mb-2 focusable-time-input" :label="$t('Set microseconds')" @update:model-value="onChangeTime" />
+                            <v-autocomplete v-if="showtimezone" :data-test="`${dataTest}_Timezone`" v-model="inputTimezone" :items="allTimezones" density="compact" variant="outlined" hide-details class="mb-2 focusable-time-input" :label="$t('Time zone')" @update:model-value="onChangeInputTimezone" />
                         </div>
                         <div class="mt-3 pt-2 border-t">
-                            <v-text-field :data-test="`${dataTest}_RepresentationPreview`" :model-value="representationPreview" density="compact" variant="outlined" bg-color="#f5f5f5" hide-details readonly class="mb-2 representation-preview-text" :label="representationLabel" prepend-inner-icon="mdi-clock-check-outline" />
+                            <v-text-field :data-test="`${dataTest}_RepresentationPreview`" :model-value="representationPreview" density="compact" variant="outlined" bg-color="#f5f5f5" hide-details readonly tabindex="-1" class="mb-2 representation-preview-text" :label="representationLabel" prepend-inner-icon="mdi-clock-check-outline" />
                             <div class="d-flex justify-space-between align-center">
-                                <v-btn size="small" variant="text" prepend-icon="mdi-clock-outline" @click="setCurrentTime">{{ $t('Now') }}</v-btn>
-                                <v-btn size="small" color="primary" variant="tonal" @click="menu = false">{{ $t('Close') }}</v-btn>
+                                <v-btn size="small" variant="text" prepend-icon="mdi-clock-outline" tabindex="-1" @click="setCurrentTime">{{ $t('Now') }}</v-btn>
+                                <v-btn size="small" color="primary" variant="tonal" tabindex="-1" @click="menu = false">{{ $t('Close') }}</v-btn>
                             </div>
                         </div>
                     </div>
@@ -50,7 +50,6 @@
  */
 import { ref, computed, watch, useAttrs } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { RulesInteger } from 'vuetify_rules'
 import moment from 'moment-timezone'
 
 const props = defineProps({
@@ -114,6 +113,8 @@ const effectiveRepresentationTimezone = computed(() => {
 
 /** @type {import('vue').Ref<boolean>} */
 const menu = ref(false)
+/** @type {import('vue').Ref<HTMLElement|null>} */
+const pickerCardRef = ref(null)
 /** @type {import('vue').Ref<Date|null>} */
 const date = ref(null)
 /** @type {import('vue').Ref<number|null>} */
@@ -128,6 +129,54 @@ const microseconds = ref(null)
 const inputTimezone = ref(effectiveRepresentationTimezone.value)
 /** @type {import('vue').Ref<string>} */
 const representation = ref('')
+
+/**
+ * Returns focusable time and timezone input elements inside the card.
+ * @returns {HTMLInputElement[]}
+ */
+function getFocusableTimeInputs() {
+    if (!pickerCardRef.value) return []
+    const cardEl = pickerCardRef.value.$el || pickerCardRef.value
+    // Encuentra los inputs de texto de los v-number-input y del v-autocomplete
+    const inputs = Array.from(cardEl.querySelectorAll('.focusable-time-input input:not([type="hidden"])'))
+    return inputs.filter((el) => !el.disabled && el.offsetParent !== null)
+}
+
+/**
+ * Traps Tab and Shift+Tab navigation strictly within the time/timezone input fields in a loop.
+ * @param {KeyboardEvent} e
+ */
+function onCardTab(e) {
+    const inputs = getFocusableTimeInputs()
+    if (!inputs.length) return
+
+    e.preventDefault()
+    e.stopPropagation()
+
+    const activeEl = document.activeElement
+    let currentIndex = inputs.indexOf(activeEl)
+    if (currentIndex === -1 && activeEl) {
+        currentIndex = inputs.findIndex((inp) => inp.closest('.focusable-time-input') === activeEl.closest('.focusable-time-input'))
+    }
+
+    if (e.shiftKey) {
+        if (currentIndex <= 0) {
+            inputs[inputs.length - 1].focus()
+            inputs[inputs.length - 1].select?.()
+        } else {
+            inputs[currentIndex - 1].focus()
+            inputs[currentIndex - 1].select?.()
+        }
+    } else {
+        if (currentIndex === -1 || currentIndex >= inputs.length - 1) {
+            inputs[0].focus()
+            inputs[0].select?.()
+        } else {
+            inputs[currentIndex + 1].focus()
+            inputs[currentIndex + 1].select?.()
+        }
+    }
+}
 
 /** Label for activator text field showing representation timezone when showtimezone is true */
 const label = computed(() => {
@@ -295,6 +344,25 @@ watch(date, (newDate, oldDate) => {
     }
 })
 
+watch(menu, (isOpen) => {
+    if (isOpen) {
+        // En cuanto el menu se despliega, neutraliza los botones del calendario y los steppers para que no capturen foco
+        const focusHours = () => {
+            const cardEl = pickerCardRef.value?.$el || pickerCardRef.value
+            if (cardEl) {
+                cardEl.querySelectorAll('.no-tab-datepicker button, .v-number-input__control button').forEach((btn) => btn.setAttribute('tabindex', '-1'))
+            }
+            const inputs = getFocusableTimeInputs()
+            if (inputs.length) {
+                inputs[0].focus()
+                inputs[0].select?.()
+            }
+        }
+        setTimeout(focusHours, 40)
+        setTimeout(focusHours, 120)
+    }
+})
+
 // Initialize default value when not clearable and modelValue is null
 if (!props.clearable && props.modelValue == null) {
     setCurrentTime()
@@ -305,5 +373,10 @@ if (!props.clearable && props.modelValue == null) {
 .representation-preview-text :deep(input) {
     color: #424242 !important;
     font-weight: 600 !important;
+}
+
+.no-tab-datepicker :deep(button),
+.no-tab-datepicker :deep([tabindex]) {
+    tabindex: -1 !important;
 }
 </style>
