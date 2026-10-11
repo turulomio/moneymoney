@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useStore } from './store.js'
-import { useDialogStore } from './dialogStore.js'
+import { useDialogStore } from '@/composables/useDialogs'
 import i18n from './i18n.js'
 
 /**
@@ -45,10 +45,11 @@ export async function parseResponseError(error) {
 
   if (error.response) {
     if (error.response.status === 401) {
-      if (store.token == null) {
-        // User is not authenticated or already logged out; do not alert for background requests
-        console.warn('401 Unauthorized while not logged in:', error.config?.url)
-      } else {
+      if (!error.config?.headers?.Authorization) {
+        // Request without authorization header (e.g. login or public endpoints)
+        await dialogStore.alert(t('Wrong credentials'))
+      } else if (store.token != null) {
+        // Authenticated request whose session expired or lacked permission
         await dialogStore.alert(t("You aren't authorized to do this request"))
         store.setToken(null)
         const { router } = await import('./routes.js')
@@ -56,6 +57,9 @@ export async function parseResponseError(error) {
           router.push({ name: 'home' })
         }
         console.log(error.response)
+      } else {
+        // In-flight request finishing after user already logged out
+        console.warn('401 Unauthorized for in-flight request after logout:', error.config?.url)
       }
     } else if (error.response.status === 400) {
       await dialogStore.alert(t('Something wrong with your request') + '\n' + JSON.stringify(error.response.data))
