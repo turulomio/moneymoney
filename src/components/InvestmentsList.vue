@@ -83,7 +83,7 @@
         <!-- DIALOG  VIEW INVESTMERNT -->
         <v-dialog v-model="dialog_view" v-if="investment">
             <v-card class="pa-4">
-                <InvestmentsView :investment_id="investment.id" :key="key" @cruded="on_InvestmentView_cruded" @close="dialog_view=false"></InvestmentsView>
+                <InvestmentsView :investment_id="investment.id" :key="investment.id" @cruded="on_InvestmentView_cruded" @close="dialog_view=false"></InvestmentsView>
             </v-card>
         </v-dialog>
         <!-- DIALOG  ADD QUOTE -->
@@ -221,7 +221,6 @@
                 this.dialog_change_selling_price=true
             },
             on_InvestmentView_cruded(){
-                this.key=this.key+1
                 this.update_table()
             },
             on_QuotesCU_cruded(){

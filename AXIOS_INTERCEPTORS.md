@@ -83,5 +83,5 @@ axios.get(url, { noparse: true })
 
 ---
 
-## 4. Migración Completada
-El código legacy ha sido eliminado de `src/store.js` y de todos los componentes. Ya no es necesario utilizar banderas de transición. Se recomienda utilizar la sintaxis simplificada en todos los nuevos desarrollos.
+## 4. Estructura y Archivos
+Toda la lógica de los interceptores globales reside en `src/axios_interceptors.js` y se registra en la inicialización de la aplicación (`src/main.js` mediante `setupAxiosInterceptors()`). `src/store.js` queda exclusivamente dedicado a la gestión del estado de Pinia y catálogos.

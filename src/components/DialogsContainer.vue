@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { useDialogStore } from '@/dialogStore'
+import { useDialogStore } from '@/composables/useDialogs'
 import MessageBox from './MessageBox.vue'
 import ConfirmBox from './ConfirmBox.vue'
 import InputBox from './InputBox.vue'

@@ -119,6 +119,8 @@ function navigate(target) {
 /**
  * Authenticates user credentials via customLogin or axios post to loginUrl,
  * emits logged-in event, closes the dialog, and navigates to nextRoute.
+ * In case of authentication failure or server error, the global axios interceptor
+ * shows the alert dialog while loading stays active for 2000 ms to mitigate brute-force attempts.
  * @returns {Promise<void>}
  */
 async function login() {
@@ -154,9 +156,10 @@ async function login() {
     } catch (error) {
         console.error('Login failed with error:', error)
         emit('error', error)
+
+        // Global Axios interceptor already triggered the alert dialog.
+        // Keep inputs readonly and submit disabled for 2000 ms to mitigate brute-force attempts.
         setTimeout(() => {
-            formRef.value?.reset()
-            dialog.value = false
             loading.value = false
         }, 2000)
     }

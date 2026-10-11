@@ -16,12 +16,12 @@
 - **Single-Line Templates:** Write Vue components and all their attributes on a single line in template code whenever possible for conciseness and consistency.
 - **`<script setup>` Documentation:** Document all `<script setup>` components with standard **Javadoc / JSDoc** (`/** ... */`) covering reactive state (`@type`), functions (`@param`, `@returns`), props, emits, and lifecycle hooks.
 - **List Elements:** Do not prefix text with manual hyphens (`-`) inside `<li>` elements in `<ul>` lists (standard bullets are already provided by HTML).
-- **Documentation Maintenance:** Keep `README.md`, `GEMINI.md`, and inline comments updated when implementing new features or making architectural changes.
+- **Documentation Maintenance:** Keep `README.md`, `AGENTS.md`, and inline comments updated when implementing new features or making architectural changes.
 
 ## Workspace & Testing
 
 - **Node.js:** Requires Node >= 22.12.0 (`package.json`, CI workflow).
 - **Dev Server:** Vite on `127.0.0.1:8006`, base `/moneymoney`.
 - **E2E & Unit Tests:** Playwright in `tests/playwright/` (`npx playwright test`), Vitest in `tests/vitest/` (`npm run vitest`).
-- **Testing Preference:** The user prefers to run long test suites themselves. Do not run long test suites locally.
+- **Testing & Linting Preference:** The user prefers to run eslint and long test suites themselves. Do not run `npm run eslint` or long test suites locally.
 - **CI / Backend Image:** E2E runs against the standalone backend Docker image `turulomio/django_moneymoney:e2e`.
